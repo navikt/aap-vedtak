@@ -1,0 +1,28 @@
+apiVersion: nais.io/v1alpha1
+kind: Application
+metadata:
+  name: apparat
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  image: {{ image }}
+  replicas:
+    cpuThresholdPercentage: 50
+    disableAutoScaling: true
+    max: 1
+    min: 1
+  resources:
+    limits:
+      cpu: 500m
+      memory: 512Mi
+    requests:
+      cpu: 200m
+      memory: 256Mi
+  liveness:
+    path: /healthy
+  readiness:
+    path: /healthy
+  env:
+    - name: LOG_APPENDER
+      value: json
