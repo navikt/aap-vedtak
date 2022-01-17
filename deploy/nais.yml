@@ -7,6 +7,10 @@ metadata:
     team: aap
 spec:
   image: {{ image }}
+  accessPolicy:
+    inbound:
+      rules:
+        - application: aap-soknad-behandling
   replicas:
     cpuThresholdPercentage: 50
     disableAutoScaling: true
