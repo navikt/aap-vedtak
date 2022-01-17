@@ -2,6 +2,9 @@ package no.nav.aap.app
 
 import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.features.json.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.jackson.*
@@ -23,6 +26,10 @@ fun main() {
 fun Application.server() {
     install(ContentNegotiation) {
         jackson { enable(SerializationFeature.INDENT_OUTPUT) }
+    }
+
+    val søknadClient = HttpClient(CIO) {
+        install(JsonFeature) { serializer = JacksonSerializer() }
     }
 
     val oppgaver = Oppgaver(
