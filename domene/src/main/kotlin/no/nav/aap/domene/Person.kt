@@ -35,7 +35,10 @@ class Sak(
     }
 }
 
-class Søknad
+class Søknad(
+    private val personident: Personident,
+    private val fødselsdato: Fødselsdato,
+)
 
 class Vedtak(
 )
