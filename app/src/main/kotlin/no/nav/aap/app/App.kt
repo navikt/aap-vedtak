@@ -1,6 +1,5 @@
 package no.nav.aap.app
 
-import com.fasterxml.jackson.databind.SerializationFeature
 import io.ktor.application.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
@@ -25,7 +24,7 @@ fun main() {
 
 fun Application.server() {
     install(ContentNegotiation) {
-        jackson { enable(SerializationFeature.INDENT_OUTPUT) }
+        jackson()
     }
 
     val søknadClient = HttpClient(CIO) {
@@ -48,7 +47,7 @@ fun Application.server() {
 
 fun Routing.api(oppgaver: Oppgaver) {
     get("/api/oppgaver") {
-        call.respond(oppgaver.oppgaver)
+        call.respond(oppgaver)
     }
 
     post("/api/vurderAlder") {

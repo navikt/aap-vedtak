@@ -24,6 +24,7 @@ dependencies {
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
     testImplementation(kotlin("test"))
+    testImplementation("io.ktor:ktor-server-test-host:1.6.7")
 }
 
 application {
