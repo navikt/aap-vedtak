@@ -11,8 +11,9 @@ spec:
     inbound:
       rules:
         - application: aap-soknad-behandling
-  tokenx:
-    enabled: true
+  azure:
+    application:
+      enabled: true
   replicas:
     cpuThresholdPercentage: 50
     disableAutoScaling: true
