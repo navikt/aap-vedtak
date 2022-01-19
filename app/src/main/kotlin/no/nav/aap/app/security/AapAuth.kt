@@ -74,6 +74,23 @@ class AapAuth(configuration: Configuration) {
     }
 }
 
+/**
+ * Used to control different auth providers in the exposed routes, e.g.
+ *
+ * ```
+ *  authenticate {
+ *      route("/api") {
+ *          get("/oppgaver") {
+ *              when (call.authIdentity()) {
+ *                  is AzureADProvider.AzureADIdentity -> call.respond(oppgaver.filter{something}))
+ *                  is MaskinportenProvider.Maskinporten -> call.respond(oppgaver)
+ *                  else -> error("unsupported OAuth2 provider")
+ *              }
+ *          }
+ *      }
+ *  }
+ *  ```
+ */
 fun ApplicationCall.authIdentity(): AapAuth.AuthIdentity {
     val principal = authentication.principal<TokenValidationContextPrincipal>()
         ?: error("There is no Principal present, make sure you are in an authenticated route")

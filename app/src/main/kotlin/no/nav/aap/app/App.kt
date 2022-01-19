@@ -21,7 +21,7 @@ import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
 
 fun main() {
-    embeddedServer(Netty, port = 8083, module = Application::server).start(wait = true)
+    embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
 data class Config(val oauth: OAuthConfig)
