@@ -21,10 +21,15 @@ import no.nav.aap.app.modell.Personident
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
+import java.io.File
 import java.net.URL
 
-fun podAzureEnv(fileName: String, subPath: String = "azure/", basePath: String): String =
-    object {}.javaClass.getResource("$basePath$subPath$fileName")!!.readText()
+fun podAzureEnv(
+    fileName: String,
+    subPath: String = "azure/",
+    basePath: String
+): String = runCatching { File("$basePath$subPath$fileName").readText() }
+    .getOrDefault(object {}.javaClass.getResource("$basePath$subPath$fileName")!!.readText())
 
 fun main() {
     embeddedServer(Netty, port = 8083, module = Application::server).start(wait = true)
