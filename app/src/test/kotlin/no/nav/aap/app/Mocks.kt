@@ -5,9 +5,11 @@ import no.nav.security.mock.oauth2.MockOAuth2Server
 
 class Mocks : AutoCloseable {
     val azureAdProvider = AzureMock().apply { start() }
+    val kafka = EmbeddedKafka("aap.aap-soknad-sendt.v1")
 
     override fun close() {
         azureAdProvider.close()
+        kafka.close()
     }
 }
 

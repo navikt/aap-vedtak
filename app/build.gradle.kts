@@ -30,11 +30,18 @@ dependencies {
     implementation("io.ktor:ktor-jackson:1.6.7")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
+    implementation("org.apache.kafka:kafka-clients:2.8.1")
+    // JsonSerializer java 8 LocalDate
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
+
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-test-host:1.6.7")
     testImplementation("no.nav.security:mock-oauth2-server:0.4.0")
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.0")
+    testImplementation("no.nav:kafka-embedded-env:2.8.1") {
+        exclude("io.confluent", "kafka-schema-registry")
+    }
 }
 
 application {

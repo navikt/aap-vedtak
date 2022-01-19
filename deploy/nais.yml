@@ -14,6 +14,8 @@ spec:
   azure:
     application:
       enabled: true
+  kafka:
+    pool: nav-dev
   replicas:
     cpuThresholdPercentage: 50
     disableAutoScaling: true

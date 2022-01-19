@@ -15,6 +15,12 @@
         <appender-ref ref="${LOG_APPENDER:-pretty}"/>
     </logger>
 
+    <logger name="kafka" level="WARN"/>
+    <logger name="org.apache.zookeeper" level="WARN"/>
+    <logger name="org.apache.kafka" level="WARN" additivity="false">
+        <appender-ref ref="${LOG_APPENDER:-pretty}"/>
+    </logger>
+
     <root level="${LOG_LEVEL:-INFO}">
         <appender-ref ref="${LOG_APPENDER:-pretty}"/>
     </root>

@@ -12,20 +12,30 @@ import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
 import no.nav.aap.app.config.loadConfig
-import no.nav.aap.app.modell.Aldersvurdering
-import no.nav.aap.app.modell.Oppgave
-import no.nav.aap.app.modell.Oppgaver
-import no.nav.aap.app.modell.Personident
+import no.nav.aap.app.kafka.KafkaConfig
+import no.nav.aap.app.kafka.KafkaFactory
+import no.nav.aap.app.modell.*
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
+import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.slf4j.Logger
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
+import kotlin.concurrent.thread
+import kotlin.time.DurationUnit
+import kotlin.time.toDuration
+import kotlin.time.toJavaDuration
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-data class Config(val oauth: OAuthConfig)
+data class Config(val oauth: OAuthConfig, val kafka: KafkaConfig)
 data class OAuthConfig(val azure: IssuerConfig)
+
+private val søknader = mutableListOf<KafkaSøknad>()
+private val oppgaver = mutableListOf<Oppgave>()
 
 fun Application.server() {
     val config = loadConfig<Config>()
@@ -33,25 +43,47 @@ fun Application.server() {
     install(ContentNegotiation) { jackson() }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
 
-    val oppgaver = Oppgaver(
-        listOf(
-            Oppgave(1, Personident("11111111111"), 68),
-            Oppgave(2, Personident("12345678910"), 58),
-            Oppgave(3, Personident("01987654321"), 17),
-        )
-    )
+    val kafkaConsumer = KafkaFactory.createConsumer<String, KafkaSøknad>(config.kafka)
+    kafkaConsumer.subscribe(listOf(config.kafka.topic)).also {
+        log.info("subscribed to topic ${config.kafka.topic}")
+        log.info("broker: ${config.kafka.brokers}")
+    }
+
+    søknadKafkaListener(kafkaConsumer, log)
+    environment.monitor.subscribe(ApplicationStopping) { kafkaConsumer.close() }
 
     routing {
-        api(oppgaver)
+        api()
         actuator()
     }
 }
 
-fun Routing.api(oppgaver: Oppgaver) {
+private fun søknadKafkaListener(kafkaConsumer: KafkaConsumer<String, KafkaSøknad>, log: Logger) {
+    thread {
+        while (true) {
+            val records = kafkaConsumer.poll(10.toDuration(DurationUnit.MILLISECONDS).toJavaDuration())
+            records.asSequence()
+                .onEach { log.info("consumed $it") }
+                .filterNotNull()
+                .map { it.value() }
+                .onEach(søknader::add)
+                .map { kafkaSøknad ->
+                    Oppgave(
+                        oppgaveId = kafkaSøknad.hashCode(),
+                        personident = Personident(kafkaSøknad.ident.verdi),
+                        alder = kafkaSøknad.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
+                    )
+                }.toList()
+                .forEach(oppgaver::add)
+        }
+    }
+}
+
+fun Routing.api() {
     authenticate {
         route("/api") {
             get("/oppgaver") {
-                call.respond(oppgaver)
+                call.respond(Oppgaver(oppgaver))
             }
 
             post("/vurderAlder") {
