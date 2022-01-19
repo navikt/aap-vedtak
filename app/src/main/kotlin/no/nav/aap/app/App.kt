@@ -2,9 +2,6 @@ package no.nav.aap.app
 
 import io.ktor.application.*
 import io.ktor.auth.*
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.features.json.*
 import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.jackson.*
@@ -14,6 +11,7 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
+import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.modell.Aldersvurdering
 import no.nav.aap.app.modell.Oppgave
 import no.nav.aap.app.modell.Oppgaver
@@ -21,40 +19,19 @@ import no.nav.aap.app.modell.Personident
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
-import java.io.File
-import java.net.URL
-
-fun podAzureEnv(
-    fileName: String,
-    subPath: String = "azure/",
-    basePath: String
-): String = runCatching { File("$basePath$subPath$fileName").readText() }
-    .getOrDefault(object {}.javaClass.getResource("$basePath$subPath$fileName")!!.readText())
 
 fun main() {
     embeddedServer(Netty, port = 8083, module = Application::server).start(wait = true)
 }
 
-fun Application.server(podEnvBasePath: String = "/var/run/secrets/nais.io/") {
-    install(ContentNegotiation) {
-        jackson()
-    }
+data class Config(val oauth: OAuthConfig)
+data class OAuthConfig(val azure: IssuerConfig)
 
-    install(AapAuth) {
-        val azureMockIssuer = IssuerConfig(
-            name = podAzureEnv(fileName = "AZURE_OPENID_CONFIG_ISSUER", basePath = podEnvBasePath),
-            discoveryUrl = URL(podAzureEnv("AZURE_APP_WELL_KNOWN_URL", basePath = podEnvBasePath)),
-            audience = podAzureEnv("AZURE_APP_CLIENT_ID", basePath = podEnvBasePath),
-            optionalClaims = null // kan brukes til å sjekke AD-grupper
-        )
+fun Application.server() {
+    val config = loadConfig<Config>()
 
-        // with only one realm, default will be azure in `route.authenticate()`
-        providers += AzureADProvider(azureMockIssuer)
-    }
-
-    val søknadClient = HttpClient(CIO) {
-        install(JsonFeature) { serializer = JacksonSerializer() }
-    }
+    install(ContentNegotiation) { jackson() }
+    install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
 
     val oppgaver = Oppgaver(
         listOf(

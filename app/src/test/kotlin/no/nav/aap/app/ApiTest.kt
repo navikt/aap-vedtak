@@ -10,6 +10,7 @@ import no.nav.aap.app.modell.Oppgaver
 import no.nav.aap.app.modell.Personident
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 
 internal class ApiTest {
     companion object {
@@ -59,8 +60,18 @@ internal class ApiTest {
 
 fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R =
     Mocks().use { mocks ->
-        withTestApplication(
-            moduleFunction = { server("/") },
-            test = { test(mocks) },
+
+        // Environment variables populated by nais
+        val externalConfig = mapOf(
+            "AZURE_OPENID_CONFIG_ISSUER" to "azure",
+            "AZURE_APP_WELL_KNOWN_URL" to mocks.azureAdProvider.wellKnownUrl(),
+            "AZURE_APP_CLIENT_ID" to "apparat"
         )
+
+        // Wrap test with external environment variables
+        EnvironmentVariables(externalConfig).execute<R> {
+            withTestApplication(Application::server) {
+                test(mocks)
+            }
+        }
     }

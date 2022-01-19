@@ -1,0 +1,5 @@
+oauth:
+  azure:
+    name: ${AZURE_OPENID_CONFIG_ISSUER}
+    discoveryUrl: ${AZURE_APP_WELL_KNOWN_URL}
+    audience: ${AZURE_APP_CLIENT_ID}

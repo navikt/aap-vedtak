@@ -2,22 +2,18 @@ package no.nav.aap.app
 
 import com.nimbusds.jwt.SignedJWT
 import no.nav.security.mock.oauth2.MockOAuth2Server
-import org.slf4j.LoggerFactory
-import java.lang.invoke.MethodHandles
 
 class Mocks : AutoCloseable {
-    private val log = LoggerFactory.getLogger(MethodHandles.lookup().lookupClass())
-
-    val azureAdProvider = AzureMock().also { log.info("Azure OAuth provider: ${it.wellKnownUrl()}") }
+    val azureAdProvider = AzureMock().apply { start() }
 
     override fun close() {
         azureAdProvider.close()
     }
 }
 
-class AzureMock : AutoCloseable {
-    private val server = MockOAuth2Server().apply { start(8082) }
-    fun wellKnownUrl() = server.wellKnownUrl("azure")
+class AzureMock(private val server: MockOAuth2Server = MockOAuth2Server()) {
+    fun wellKnownUrl(): String = server.wellKnownUrl("azure").toString()
     fun issueAzureToken(): SignedJWT = server.issueToken(issuerId = "azure", audience = "apparat")
-    override fun close() = server.shutdown()
+    fun start() = server.start()
+    fun close() = server.shutdown()
 }
