@@ -30,8 +30,7 @@ fun main() {
     embeddedServer(Netty, port = 8083, module = Application::server).start(wait = true)
 }
 
-//fun Application.server(podEnvBasePath: String = "/var/run/secrets/nais.io/") {
-fun Application.server(podEnvBasePath: String = "/") {
+fun Application.server(podEnvBasePath: String = "/var/run/secrets/nais.io/") {
     install(ContentNegotiation) {
         jackson()
     }
