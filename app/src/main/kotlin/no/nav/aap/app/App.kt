@@ -1,6 +1,7 @@
 package no.nav.aap.app
 
 import io.ktor.application.*
+import io.ktor.auth.*
 import io.ktor.client.*
 import io.ktor.client.engine.cio.*
 import io.ktor.client.features.json.*
@@ -17,14 +18,34 @@ import no.nav.aap.app.modell.Aldersvurdering
 import no.nav.aap.app.modell.Oppgave
 import no.nav.aap.app.modell.Oppgaver
 import no.nav.aap.app.modell.Personident
+import no.nav.aap.app.security.AapAuth
+import no.nav.aap.app.security.AzureADProvider
+import no.nav.aap.app.security.IssuerConfig
+import java.net.URL
+
+fun podAzureEnv(fileName: String, subPath: String = "azure/", basePath: String): String =
+    object {}.javaClass.getResource("$basePath$subPath$fileName")!!.readText()
 
 fun main() {
-    embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
+    embeddedServer(Netty, port = 8083, module = Application::server).start(wait = true)
 }
 
-fun Application.server() {
+//fun Application.server(podEnvBasePath: String = "/var/run/secrets/nais.io/") {
+fun Application.server(podEnvBasePath: String = "/") {
     install(ContentNegotiation) {
         jackson()
+    }
+
+    install(AapAuth) {
+        val azureMockIssuer = IssuerConfig(
+            name = podAzureEnv(fileName = "AZURE_OPENID_CONFIG_ISSUER", basePath = podEnvBasePath),
+            discoveryUrl = URL(podAzureEnv("AZURE_APP_WELL_KNOWN_URL", basePath = podEnvBasePath)),
+            audience = podAzureEnv("AZURE_APP_CLIENT_ID", basePath = podEnvBasePath),
+            optionalClaims = null // kan brukes til å sjekke AD-grupper
+        )
+
+        // with only one realm, default will be azure in `route.authenticate()`
+        providers += AzureADProvider(azureMockIssuer)
     }
 
     val søknadClient = HttpClient(CIO) {
@@ -46,17 +67,21 @@ fun Application.server() {
 }
 
 fun Routing.api(oppgaver: Oppgaver) {
-    get("/api/oppgaver") {
-        call.respond(oppgaver)
-    }
+    authenticate {
+        route("/api") {
+            get("/oppgaver") {
+                call.respond(oppgaver)
+            }
 
-    post("/api/vurderAlder") {
-        val aldersvurdering = call.receive<Aldersvurdering>()
-        when (aldersvurdering.erMellom18og67) {
-            true -> log.info("hen for oppgaveId ${aldersvurdering.oppgaveId} er mellom 18 og 67")
-            false -> log.info("hen for oppgaveId ${aldersvurdering.oppgaveId} er IKKE mellom 18 og 67")
+            post("/vurderAlder") {
+                val aldersvurdering = call.receive<Aldersvurdering>()
+                when (aldersvurdering.erMellom18og67) {
+                    true -> log.info("hen for oppgaveId ${aldersvurdering.oppgaveId} er mellom 18 og 67")
+                    false -> log.info("hen for oppgaveId ${aldersvurdering.oppgaveId} er IKKE mellom 18 og 67")
+                }
+                call.respond(HttpStatusCode.Accepted)
+            }
         }
-        call.respond(HttpStatusCode.Accepted)
     }
 }
 

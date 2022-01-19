@@ -22,8 +22,11 @@ internal class ApiTest {
 
     @Test
     fun `GET oppgaver returns 200 OK`() {
-        withTestApplication(Application::server) {
-            with(handleRequest(HttpMethod.Get, "/api/oppgaver")) {
+        withTestApp { mocks ->
+            with(handleRequest(HttpMethod.Get, "/api/oppgaver") {
+                val token = mocks.azureAdProvider.issueAzureToken()
+                addHeader("Authorization", "Bearer ${token.serialize()}")
+            }) {
                 val expected = Oppgaver(
                     listOf(
                         Oppgave(1, Personident("11111111111"), 68),
@@ -39,9 +42,11 @@ internal class ApiTest {
 
     @Test
     fun `POST vurderAlder returns 202 ACCEPTED`() {
-        withTestApplication(Application::server) {
+        withTestApp { mocks ->
             with(
                 handleRequest(HttpMethod.Post, "/api/vurderAlder") {
+                    val token = mocks.azureAdProvider.issueAzureToken()
+                    addHeader("Authorization", "Bearer ${token.serialize()}")
                     addHeader("Content-Type", "application/json")
                     setBody(resourceFile("/vurder-alder-ok.json"))
                 }
@@ -51,3 +56,11 @@ internal class ApiTest {
         }
     }
 }
+
+fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R =
+    Mocks().use { mocks ->
+        withTestApplication(
+            moduleFunction = { server("/") },
+            test = { test(mocks) },
+        )
+    }
