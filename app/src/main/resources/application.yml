@@ -6,7 +6,7 @@ oauth:
 
 kafka:
   brokers: ${KAFKA_BROKERS}
-  security: ${KAFKA_SECURITY_ENABLED:-"true"}
+  security: ${KAFKA_SECURITY_ENABLED:-true}
   truststorePath: ${KAFKA_TRUSTSTORE_PATH}
   keystorePath: ${KAFKA_KEYSTORE_PATH}
   credstorePsw: ${KAFKA_CREDSTORE_PASSWORD}
