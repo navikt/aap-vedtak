@@ -10,33 +10,23 @@ import org.apache.kafka.common.serialization.StringDeserializer
 import org.apache.kafka.common.serialization.StringSerializer
 
 object KafkaFactory {
-    fun <K, V> createConsumer(
-        config: KafkaConfig,
-        deserializer: KDeserializer = KDeserializer(),
-    ): KafkaConsumer<K, V> {
+    inline fun <reified V : Any> createConsumer(config: KafkaConfig): KafkaConsumer<String, V> {
         val props = kafkaProperties(config) + mapOf(
             ConsumerConfig.GROUP_ID_CONFIG to config.groupId,
-            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to deserializer.key,
-            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to deserializer.value,
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
         )
-        return KafkaConsumer(props)
+        return KafkaConsumer(props, StringDeserializer(), JsonDeserializer(V::class.java))
     }
 
-    fun <K, V> createProducer(
-        config: KafkaConfig,
-        serializer: KSerialiser = KSerialiser(),
-    ): KafkaProducer<K, V> {
+    fun <V : Any> createProducer(config: KafkaConfig): KafkaProducer<String, V> {
         val props = kafkaProperties(config) + mapOf(
-            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to serializer.key,
-            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to serializer.value,
             ProducerConfig.ACKS_CONFIG to "all",
             ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to "true",
         )
-        return KafkaProducer(props)
+        return KafkaProducer(props, StringSerializer(), JsonSerializer<V>())
     }
 
-    private fun kafkaProperties(config: KafkaConfig) =
+    fun kafkaProperties(config: KafkaConfig) =
         when (config.security) {
             false -> mapOf(
                 CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to config.brokers,
@@ -67,14 +57,4 @@ data class KafkaConfig(
     val keystorePath: String,
     val credstorePsw: String,
     val topic: String,
-)
-
-data class KSerialiser(
-    val key: Class<*> = StringSerializer::class.java,
-    val value: Class<*> = JsonSerializer::class.java,
-)
-
-data class KDeserializer(
-    val key: Class<*> = StringDeserializer::class.java,
-    val value: Class<*> = JsonDeserializer::class.java,
 )

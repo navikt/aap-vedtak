@@ -43,7 +43,7 @@ fun Application.server() {
     install(ContentNegotiation) { jackson() }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
 
-    val kafkaConsumer = KafkaFactory.createConsumer<String, KafkaSøknad>(config.kafka)
+    val kafkaConsumer = KafkaFactory.createConsumer<KafkaSøknad>(config.kafka)
     kafkaConsumer.subscribe(listOf(config.kafka.topic)).also {
         log.info("subscribed to topic ${config.kafka.topic}")
         log.info("broker: ${config.kafka.brokers}")
