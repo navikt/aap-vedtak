@@ -1,11 +1,15 @@
 package no.nav.aap.app
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
 import no.nav.aap.app.modell.*
+import no.nav.aap.domene.frontendView.FrontendSak
+import no.nav.aap.domene.frontendView.FrontendVilkår
+import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
@@ -14,7 +18,9 @@ import java.time.temporal.ChronoUnit
 
 internal class ApiTest {
     companion object {
-        private val objectMapper = jacksonObjectMapper()
+        private val objectMapper = jacksonObjectMapper().apply {
+            registerModule(JavaTimeModule())
+        }
 
         inline fun <reified T> TestApplicationResponse.parseBody(): T {
             return content?.let { objectMapper.readValue(it) } ?: error("empty content")
@@ -26,39 +32,25 @@ internal class ApiTest {
         withTestApp { mocks ->
             val record = produceKafkaTestRecords(mocks)
 
-            with(handleRequest(HttpMethod.Get, "/api/oppgaver") {
+            with(handleRequest(HttpMethod.Get, "/api/saker") {
                 val token = mocks.azureAdProvider.issueAzureToken()
                 addHeader("Authorization", "Bearer ${token.serialize()}")
             }) {
-                val expected = Oppgaver(
-                    listOf(
-                        Oppgave(
-                            oppgaveId = record.hashCode(),
-                            personident = Personident("11111111111"),
-                            alder = record.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
+                val expected = listOf(
+                    FrontendSak(
+                        personident = "11111111111",
+                        fødselsdato = LocalDate.of(1990, 1, 1),
+                        vilkårsvurdering = listOf(
+                            FrontendVilkårsvurdering(
+                                vilkår = FrontendVilkår("PARAGRAF_11_4", "LEDD_1"),
+                                tilstand = "OPPFYLT"
+                            )
                         )
-                    )
-                )
+                ))
                 assertEquals(response.status(), HttpStatusCode.OK)
-                assertEquals(expected, response.parseBody<Oppgaver>())
+                assertEquals(expected, response.parseBody<List<FrontendSak>>())
             }
 
-        }
-    }
-
-    @Test
-    fun `POST vurderAlder returns 202 ACCEPTED`() {
-        withTestApp { mocks ->
-            with(
-                handleRequest(HttpMethod.Post, "/api/vurderAlder") {
-                    val token = mocks.azureAdProvider.issueAzureToken()
-                    addHeader("Authorization", "Bearer ${token.serialize()}")
-                    addHeader("Content-Type", "application/json")
-                    setBody(resourceFile("/vurder-alder-ok.json"))
-                }
-            ) {
-                assertEquals(response.status(), HttpStatusCode.Accepted)
-            }
         }
     }
 

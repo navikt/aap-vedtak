@@ -1,11 +1,10 @@
 package no.nav.aap.app
 
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
-import io.ktor.http.*
 import io.ktor.jackson.*
-import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -14,14 +13,17 @@ import io.ktor.util.pipeline.*
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.KafkaConfig
 import no.nav.aap.app.kafka.KafkaFactory
-import no.nav.aap.app.modell.*
+import no.nav.aap.app.modell.KafkaSøknad
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
+import no.nav.aap.domene.Fødselsdato
+import no.nav.aap.domene.Personident
+import no.nav.aap.domene.Søker
+import no.nav.aap.domene.Søknad
+import no.nav.aap.domene.frontendView.FrontendVisitor
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.Logger
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 import kotlin.concurrent.thread
 import kotlin.time.DurationUnit
 import kotlin.time.toDuration
@@ -35,12 +37,17 @@ data class Config(val oauth: OAuthConfig, val kafka: KafkaConfig)
 data class OAuthConfig(val azure: IssuerConfig)
 
 private val søknader = mutableListOf<KafkaSøknad>()
-private val oppgaver = mutableListOf<Oppgave>()
+
+private val søkere = mutableListOf<Søker>()
 
 fun Application.server() {
     val config = loadConfig<Config>()
 
-    install(ContentNegotiation) { jackson() }
+    install(ContentNegotiation) {
+        jackson {
+            registerModule(JavaTimeModule())
+        }
+    }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
 
     val kafkaConsumer = KafkaFactory.createConsumer<KafkaSøknad>(config.kafka)
@@ -67,14 +74,10 @@ private fun søknadKafkaListener(kafkaConsumer: KafkaConsumer<String, KafkaSøkn
                 .filterNotNull()
                 .map { it.value() }
                 .onEach(søknader::add)
-                .map { kafkaSøknad ->
-                    Oppgave(
-                        oppgaveId = kafkaSøknad.hashCode(),
-                        personident = Personident(kafkaSøknad.ident.verdi),
-                        alder = kafkaSøknad.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
-                    )
-                }.toList()
-                .forEach(oppgaver::add)
+                .map { søknad -> Søknad(Personident(søknad.ident.verdi), Fødselsdato(søknad.fødselsdato)) }
+                .map { søknad -> søknad.opprettSøker() to søknad }
+                .onEach { (søker, _) -> søkere.add(søker) }
+                .forEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
         }
     }
 }
@@ -82,17 +85,10 @@ private fun søknadKafkaListener(kafkaConsumer: KafkaConsumer<String, KafkaSøkn
 fun Routing.api() {
     authenticate {
         route("/api") {
-            get("/oppgaver") {
-                call.respond(Oppgaver(oppgaver))
-            }
-
-            post("/vurderAlder") {
-                val aldersvurdering = call.receive<Aldersvurdering>()
-                when (aldersvurdering.erMellom18og67) {
-                    true -> log.info("hen for oppgaveId ${aldersvurdering.oppgaveId} er mellom 18 og 67")
-                    false -> log.info("hen for oppgaveId ${aldersvurdering.oppgaveId} er IKKE mellom 18 og 67")
-                }
-                call.respond(HttpStatusCode.Accepted)
+            get("/saker") {
+                val visitor = FrontendVisitor()
+                søkere.forEach { it.accept(visitor) }
+                call.respond(visitor.saker())
             }
         }
     }

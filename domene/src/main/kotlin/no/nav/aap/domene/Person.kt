@@ -3,7 +3,7 @@ package no.nav.aap.domene
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-internal interface SøkerVisitor : VilkårsvurderingVisitor {
+interface SøkerVisitor : VilkårsvurderingVisitor {
     fun preVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
     fun visitPersonident(ident: String) {}
     fun visitFødselsdato(fødselsdato: LocalDate) {}
@@ -13,13 +13,13 @@ internal interface SøkerVisitor : VilkårsvurderingVisitor {
     fun postVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
 }
 
-internal interface VilkårsvurderingVisitor {
+interface VilkårsvurderingVisitor {
     fun visitVilkårsvurderingIkkeVurdert() {}
     fun visitVilkårsvurderingOppfylt() {}
     fun visitVilkårsvurderingIkkeOppfylt() {}
 }
 
-internal class Søker(
+class Søker(
     private val personident: Personident,
     private val fødselsdato: Fødselsdato
 ) {
@@ -81,7 +81,7 @@ class Søknad(
     private val personident: Personident,
     private val fødselsdato: Fødselsdato
 ) {
-    internal fun opprettSøker() = Søker(personident, fødselsdato)
+    fun opprettSøker() = Søker(personident, fødselsdato)
 }
 
 internal open class Vilkårsvurdering(
