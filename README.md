@@ -1,2 +1,2 @@
-# apparat
+# vedtak
 Vedtaksapplikasjon for AAP
