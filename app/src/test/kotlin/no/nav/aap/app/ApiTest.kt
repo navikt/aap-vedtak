@@ -71,14 +71,14 @@ fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks(
     val externalConfig = mapOf(
         "AZURE_OPENID_CONFIG_ISSUER" to "azure",
         "AZURE_APP_WELL_KNOWN_URL" to mocks.azureAdProvider.wellKnownUrl(),
-        "AZURE_APP_CLIENT_ID" to "apparat",
+        "AZURE_APP_CLIENT_ID" to "vedtak",
         "KAFKA_BROKERS" to mocks.kafka.brokersURL,
         "KAFKA_TRUSTSTORE_PATH" to "",
         "KAFKA_SECURITY_ENABLED" to "false",
         "KAFKA_KEYSTORE_PATH" to "",
         "KAFKA_CREDSTORE_PASSWORD" to "",
-        "KAFKA_CLIENT_ID" to "apparat",
-        "KAFKA_GROUP_ID" to "apparat-1"
+        "KAFKA_CLIENT_ID" to "vedtak",
+        "KAFKA_GROUP_ID" to "vedtak-1"
     )
 
     // Wrap test with external environment variables

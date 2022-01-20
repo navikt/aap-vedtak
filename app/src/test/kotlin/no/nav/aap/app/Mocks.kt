@@ -15,7 +15,7 @@ class Mocks : AutoCloseable {
 
 class AzureMock(private val server: MockOAuth2Server = MockOAuth2Server()) {
     fun wellKnownUrl(): String = server.wellKnownUrl("azure").toString()
-    fun issueAzureToken(): SignedJWT = server.issueToken(issuerId = "azure", audience = "apparat")
+    fun issueAzureToken(): SignedJWT = server.issueToken(issuerId = "azure", audience = "vedtak")
     fun start() = server.start()
     fun close() = server.shutdown()
 }
