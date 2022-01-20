@@ -22,12 +22,11 @@ import no.nav.aap.domene.Personident
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søknad
 import no.nav.aap.domene.frontendView.FrontendVisitor
-import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
+import java.time.Duration
 import kotlin.concurrent.thread
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
-import kotlin.time.toJavaDuration
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
@@ -37,11 +36,12 @@ data class Config(val oauth: OAuthConfig, val kafka: KafkaConfig)
 data class OAuthConfig(val azure: IssuerConfig)
 
 private val søknader = mutableListOf<KafkaSøknad>()
-
 private val søkere = mutableListOf<Søker>()
 
-fun Application.server() {
-    val config = loadConfig<Config>()
+fun Application.server(
+    config: Config = loadConfig(),
+    kafkaConsumer: Consumer<String, KafkaSøknad> = KafkaFactory.createConsumer(config.kafka),
+) {
 
     install(ContentNegotiation) {
         jackson {
@@ -50,13 +50,12 @@ fun Application.server() {
     }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
 
-    val kafkaConsumer = KafkaFactory.createConsumer<KafkaSøknad>(config.kafka)
     kafkaConsumer.subscribe(listOf(config.kafka.topic)).also {
         log.info("subscribed to topic ${config.kafka.topic}")
         log.info("broker: ${config.kafka.brokers}")
     }
 
-    søknadKafkaListener(kafkaConsumer, log)
+    søknadKafkaListener(kafkaConsumer)
     environment.monitor.subscribe(ApplicationStopping) { kafkaConsumer.close() }
 
     routing {
@@ -65,12 +64,14 @@ fun Application.server() {
     }
 }
 
-private fun søknadKafkaListener(kafkaConsumer: KafkaConsumer<String, KafkaSøknad>, log: Logger) {
+fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøknad>) {
+    val timeout = Duration.ofMillis(10L)
+
     thread {
         while (true) {
-            val records = kafkaConsumer.poll(10.toDuration(DurationUnit.MILLISECONDS).toJavaDuration())
+            val records = kafkaConsumer.poll(timeout)
             records.asSequence()
-                .onEach { log.info("consumed $it") }
+                .logConsumed(log)
                 .filterNotNull()
                 .map { it.value() }
                 .onEach(søknader::add)
@@ -101,3 +102,10 @@ private fun Routing.actuator() {
 }
 
 private val PipelineContext<Unit, ApplicationCall>.log get() = application.log
+
+private fun <K, V> Sequence<ConsumerRecord<K, V>?>.logConsumed(log: Logger): Sequence<ConsumerRecord<K, V>?> =
+    onEach { record ->
+        record?.let {
+            log.info("Consumed=${it.topic()} key=${it.key()} offset=${it.offset()} partition=${it.partition()}")
+        }
+    }
