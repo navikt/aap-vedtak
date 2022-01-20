@@ -3,12 +3,20 @@ package no.nav.aap.domene
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 
-internal interface SøkerVisitor {
+internal interface SøkerVisitor : VilkårsvurderingVisitor {
     fun preVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
+    fun visitPersonident(ident: String) {}
+    fun visitFødselsdato(fødselsdato: LocalDate) {}
+    fun preVisitSak() {}
+    fun visitVilkår(paragraf: String, ledd: String) {}
+    fun postVisitSak() {}
+    fun postVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
+}
+
+internal interface VilkårsvurderingVisitor {
     fun visitVilkårsvurderingIkkeVurdert() {}
     fun visitVilkårsvurderingOppfylt() {}
     fun visitVilkårsvurderingIkkeOppfylt() {}
-    fun postVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
 }
 
 internal class Søker(
@@ -19,6 +27,8 @@ internal class Søker(
 
     fun accept(visitor: SøkerVisitor) {
         visitor.preVisitSøker(personident, fødselsdato)
+        personident.accept(visitor)
+        fødselsdato.accept(visitor)
         saker.forEach { it.accept(visitor) }
         visitor.postVisitSøker(personident, fødselsdato)
     }
@@ -32,18 +42,30 @@ internal class Søker(
     internal fun alder() = fødselsdato.alder()
 }
 
-class Personident
+class Personident(
+    private val ident: String
+) {
+    internal fun accept(visitor: SøkerVisitor) {
+        visitor.visitPersonident(ident)
+    }
+}
 
 @JvmInline
 value class Fødselsdato(private val dato: LocalDate) {
     internal fun alder() = dato.until(LocalDate.now(), ChronoUnit.YEARS)
+
+    internal fun accept(visitor: SøkerVisitor) {
+        visitor.visitFødselsdato(dato)
+    }
 }
 
 internal class Sak(private val søker: Søker) {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
 
     fun accept(visitor: SøkerVisitor) {
+        visitor.preVisitSak()
         vilkårsvurderinger.forEach { it.accept(visitor) }
+        visitor.postVisitSak()
     }
 
     fun håndterSøknad(søknad: Søknad) {
@@ -84,6 +106,7 @@ internal open class Vilkårsvurdering(
     }
 
     fun accept(visitor: SøkerVisitor) {
+        vilkår.accept(visitor)
         tilstand.accept(visitor)
     }
 
@@ -98,11 +121,24 @@ internal open class Vilkårsvurdering(
     }
 }
 
-internal open class Vilkår {
+internal abstract class Vilkår(
+    private val paragraf: Paragraf,
+    private val ledd: Ledd,
+) {
+    internal enum class Paragraf {
+        PARAGRAF_11_4
+    }
 
+    internal enum class Ledd {
+        LEDD_1
+    }
+
+    internal fun accept(visitor: SøkerVisitor) {
+        visitor.visitVilkår(paragraf.name, ledd.name)
+    }
 }
 
-internal class `§11-4 første ledd` : Vilkår() {
+internal class `§11-4 første ledd` : Vilkår(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
     fun håndterAlder(alder: Long): Vilkårsvurdering {
         val erMellom18Og67År = alder in 18..67
         val vilkårsvurdering = Vilkårsvurdering(this)
