@@ -2,9 +2,9 @@ package no.nav.aap.app
 
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
-import io.ktor.application.*
 import io.ktor.http.*
 import io.ktor.server.testing.*
+import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.modell.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -24,7 +24,12 @@ internal class ApiTest {
     @Test
     fun `GET oppgaver returns 200 OK`() {
         withTestApp { mocks ->
-            val record = produceKafkaTestRecords(mocks)
+            val søknad = mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
+                KafkaSøknad(
+                    ident = KafkaPersonident("FNR", "11111111111"),
+                    fødselsdato = LocalDate.of(1990, 1, 1)
+                )
+            }
 
             with(handleRequest(HttpMethod.Get, "/api/oppgaver") {
                 val token = mocks.azureAdProvider.issueAzureToken()
@@ -33,9 +38,9 @@ internal class ApiTest {
                 val expected = Oppgaver(
                     listOf(
                         Oppgave(
-                            oppgaveId = record.hashCode(),
+                            oppgaveId = søknad.hashCode(),
                             personident = Personident("11111111111"),
-                            alder = record.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
+                            alder = søknad.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
                         )
                     )
                 )
@@ -61,26 +66,14 @@ internal class ApiTest {
             }
         }
     }
-
-    private fun produceKafkaTestRecords(mocks: Mocks): KafkaSøknad {
-        val record = KafkaSøknad(
-            KafkaPersonident("FNR", "11111111111"),
-            LocalDate.of(1990, 1, 1)
-        )
-        mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111", record)
-        runCatching { Thread.sleep(10_000L) }
-        return record
-    }
 }
 
 fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks().use { mocks ->
-
-    // Environment variables populated by nais
     val externalConfig = mapOf(
         "AZURE_OPENID_CONFIG_ISSUER" to "azure",
         "AZURE_APP_WELL_KNOWN_URL" to mocks.azureAdProvider.wellKnownUrl(),
         "AZURE_APP_CLIENT_ID" to "apparat",
-        "KAFKA_BROKERS" to mocks.kafka.brokersURL,
+        "KAFKA_BROKERS" to "kafka-mock",
         "KAFKA_TRUSTSTORE_PATH" to "",
         "KAFKA_SECURITY_ENABLED" to "false",
         "KAFKA_KEYSTORE_PATH" to "",
@@ -89,10 +82,14 @@ fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks(
         "KAFKA_GROUP_ID" to "apparat-1"
     )
 
-    // Wrap test with external environment variables
     EnvironmentVariables(externalConfig).execute<R> {
-        withTestApplication(Application::server) {
-            test(mocks)
-        }
+        withTestApplication(
+            {
+                val config: Config = loadConfig()
+                val kafkaConsumer = mocks.kafka.createTestConsumer<KafkaSøknad>(config.kafka)
+                server(config, kafkaConsumer)
+            },
+            { test(mocks) }
+        )
     }
 }

@@ -18,14 +18,13 @@ import no.nav.aap.app.modell.*
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
-import org.apache.kafka.clients.consumer.KafkaConsumer
+import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
+import java.time.Duration
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
 import kotlin.concurrent.thread
-import kotlin.time.DurationUnit
-import kotlin.time.toDuration
-import kotlin.time.toJavaDuration
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
@@ -37,19 +36,20 @@ data class OAuthConfig(val azure: IssuerConfig)
 private val søknader = mutableListOf<KafkaSøknad>()
 private val oppgaver = mutableListOf<Oppgave>()
 
-fun Application.server() {
-    val config = loadConfig<Config>()
+fun Application.server(
+    config: Config = loadConfig(),
+    kafkaConsumer: Consumer<String, KafkaSøknad> = KafkaFactory.createConsumer(config.kafka),
+) {
 
     install(ContentNegotiation) { jackson() }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
 
-    val kafkaConsumer = KafkaFactory.createConsumer<KafkaSøknad>(config.kafka)
     kafkaConsumer.subscribe(listOf(config.kafka.topic)).also {
         log.info("subscribed to topic ${config.kafka.topic}")
         log.info("broker: ${config.kafka.brokers}")
     }
 
-    søknadKafkaListener(kafkaConsumer, log)
+    søknadKafkaListener(kafkaConsumer)
     environment.monitor.subscribe(ApplicationStopping) { kafkaConsumer.close() }
 
     routing {
@@ -58,23 +58,27 @@ fun Application.server() {
     }
 }
 
-private fun søknadKafkaListener(kafkaConsumer: KafkaConsumer<String, KafkaSøknad>, log: Logger) {
+fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøknad>) {
+    val timeout = Duration.ofMillis(10L)
+
+    fun toOppgave(søknad: KafkaSøknad): Oppgave = Oppgave(
+        oppgaveId = søknad.hashCode(),
+        personident = Personident(søknad.ident.verdi),
+        alder = søknad.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
+    )
+
     thread {
         while (true) {
-            val records = kafkaConsumer.poll(10.toDuration(DurationUnit.MILLISECONDS).toJavaDuration())
-            records.asSequence()
-                .onEach { log.info("consumed $it") }
-                .filterNotNull()
-                .map { it.value() }
-                .onEach(søknader::add)
-                .map { kafkaSøknad ->
-                    Oppgave(
-                        oppgaveId = kafkaSøknad.hashCode(),
-                        personident = Personident(kafkaSøknad.ident.verdi),
-                        alder = kafkaSøknad.fødselsdato.until(LocalDate.now(), ChronoUnit.YEARS).toInt()
-                    )
-                }.toList()
-                .forEach(oppgaver::add)
+            with(kafkaConsumer.poll(timeout)) {
+                asSequence()
+                    .logConsumed(log)
+                    .filterNotNull()
+                    .map(ConsumerRecord<String, KafkaSøknad>::value)
+                    .onEach(søknader::add)
+                    .map(::toOppgave)
+                    .toList()
+                    .forEach(oppgaver::add)
+            }
         }
     }
 }
@@ -105,3 +109,10 @@ private fun Routing.actuator() {
 }
 
 private val PipelineContext<Unit, ApplicationCall>.log get() = application.log
+
+private fun <K, V> Sequence<ConsumerRecord<K, V>?>.logConsumed(log: Logger): Sequence<ConsumerRecord<K, V>?> =
+    onEach { record ->
+        record?.let {
+            log.info("Consumed=${it.topic()} key=${it.key()} offset=${it.offset()} partition=${it.partition()}")
+        }
+    }
