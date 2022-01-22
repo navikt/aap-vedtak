@@ -15,7 +15,9 @@ spec:
     application:
       enabled: true
   kafka:
-    pool: nav-dev
+    pool: {{kafka-pool}}
+  ingresses:
+    - {{ingress}}
   replicas:
     cpuThresholdPercentage: 50
     disableAutoScaling: true
@@ -32,6 +34,7 @@ spec:
     path: /healthy
   readiness:
     path: /healthy
+
   env:
     - name: LOG_APPENDER
       value: json
