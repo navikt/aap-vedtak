@@ -10,7 +10,6 @@ spec:
   accessPolicy:
     inbound:
       rules:
-        - application: aap-soknad-behandling
         - application: soknad-behandling
   azure:
     application:
