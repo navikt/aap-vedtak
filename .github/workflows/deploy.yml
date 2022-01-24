@@ -21,6 +21,13 @@ jobs:
         run: echo "IMAGE=$(echo $IMAGE_BASE):$(echo $TAG)" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
+      
+      - uses: actions/setup-java@v2
+          with:
+            java-version: 17
+            distribution: 'temurin'
+            check-latest: true
+            cache: 'gradle'
 
       - name: Bygg
         run: ./gradlew test app:shadowJar
