@@ -17,10 +17,8 @@ class Søker(
     fun håndterSøknad(søknad: Søknad) {
         val sak = Sak(this)
         saker.add(sak)
-        sak.håndterSøknad(søknad)
+        sak.håndterSøknad(søknad, fødselsdato)
     }
-
-    internal fun alder() = fødselsdato.alder()
 
     private fun toFrontendSaker() =
         saker.toFrontendSak(
@@ -40,7 +38,9 @@ class Personident(
 }
 
 class Fødselsdato(private val dato: LocalDate) {
-    internal fun alder() = dato.until(LocalDate.now(), ChronoUnit.YEARS)
+    private fun alder() = dato.until(LocalDate.now(), ChronoUnit.YEARS)
+
+    internal fun erMellom18Og67År() = alder() in 18..67
 
     internal fun toFrontendFødselsdato() = dato
 }
@@ -48,10 +48,10 @@ class Fødselsdato(private val dato: LocalDate) {
 internal class Sak(private val søker: Søker) {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
 
-    internal fun håndterSøknad(søknad: Søknad) {
-        val vilkår = `§11-4 første ledd`()
-        val vilkårsvurdering = vilkår.håndterAlder(søker.alder())
-        vilkårsvurderinger.add(vilkårsvurdering)
+    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
+        val vilkår = Paragraf_11_4FørsteLedd()
+        vilkårsvurderinger.add(vilkår)
+        vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato) }
         //opprett viklårsvurderinger
         //hent mer informasjon?
     }
@@ -77,46 +77,9 @@ class Søknad(
     fun opprettSøker() = Søker(personident, fødselsdato)
 }
 
-internal open class Vilkårsvurdering(
-    private val vilkår: Vilkår
-) {
-    private var tilstand: Tilstand = Tilstand.IkkeVurdert
-
-    private sealed class Tilstand(private val name: String) {
-        fun toFrontendTilstand(): String = name
-
-        object IkkeVurdert : Tilstand("IKKE_VURDERT")
-
-        object Oppfylt : Tilstand("OPPFYLT")
-
-        object IkkeOppfylt : Tilstand("IKKE_OPPFYLT")
-    }
-
-    internal fun erOppfylt() = tilstand == Tilstand.Oppfylt
-
-    internal fun vurdertOppfylt() {
-        tilstand = Tilstand.Oppfylt
-    }
-
-    fun vurdertIkkeOppfylt() {
-        tilstand = Tilstand.IkkeOppfylt
-    }
-
-    private fun toFrontendVilkårsvurdering() =
-        FrontendVilkårsvurdering(
-            vilkår = vilkår.toFrontendVilkår(),
-            tilstand = tilstand.toFrontendTilstand()
-        )
-
-    internal companion object {
-        internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
-            map(Vilkårsvurdering::toFrontendVilkårsvurdering)
-    }
-}
-
-internal abstract class Vilkår(
+internal abstract class Vilkårsvurdering(
     private val paragraf: Paragraf,
-    private val ledd: Ledd,
+    private val ledd: Ledd
 ) {
     internal enum class Paragraf {
         PARAGRAF_11_4
@@ -126,15 +89,99 @@ internal abstract class Vilkår(
         LEDD_1
     }
 
-    fun toFrontendVilkår() = FrontendVilkår(paragraf = paragraf.name, ledd = ledd.name)
+    internal abstract fun erOppfylt(): Boolean
+
+    internal abstract fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato)
+
+    private fun toFrontendVilkårsvurdering() =
+        FrontendVilkårsvurdering(
+            vilkår = FrontendVilkår(paragraf.name, ledd.name),
+            tilstand = toFrontendTilstand()
+        )
+
+    protected abstract fun toFrontendTilstand(): String
+
+    internal companion object {
+        internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
+            map(Vilkårsvurdering::toFrontendVilkårsvurdering)
+    }
 }
 
-internal class `§11-4 første ledd` : Vilkår(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
-    fun håndterAlder(alder: Long): Vilkårsvurdering {
-        val erMellom18Og67År = alder in 18..67
-        val vilkårsvurdering = Vilkårsvurdering(this)
-        if (erMellom18Og67År) vilkårsvurdering.vurdertOppfylt()
-        else vilkårsvurdering.vurdertIkkeOppfylt()
-        return vilkårsvurdering
+internal class Paragraf_11_4FørsteLedd :
+    Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
+    private lateinit var fødselsdato: Fødselsdato
+
+    private var tilstand: Tilstand = Tilstand.IkkeVurdert
+
+    private fun tilstand(nyTilstand: Tilstand) {
+        this.tilstand = nyTilstand
     }
+
+    private fun vurderAldersvilkår(fødselsdato: Fødselsdato) {
+        this.fødselsdato = fødselsdato
+        if (fødselsdato.erMellom18Og67År()) tilstand(Tilstand.Oppfylt)
+        else tilstand(Tilstand.IkkeOppfylt)
+    }
+
+    override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
+        tilstand.håndterSøknad(this, søknad, fødselsdato)
+    }
+
+    override fun erOppfylt() = tilstand.erOppfylt()
+
+    internal sealed class Tilstand(
+        private val name: String,
+        private val erOppfylt: Boolean
+    ) {
+        internal fun erOppfylt() = erOppfylt
+
+        internal abstract fun håndterSøknad(
+            vilkårsvurdering: Paragraf_11_4FørsteLedd,
+            søknad: Søknad,
+            fødselsdato: Fødselsdato
+        )
+
+        object IkkeVurdert : Tilstand(
+            name = "IKKE_VURDERT",
+            erOppfylt = false
+        ) {
+            override fun håndterSøknad(
+                vilkårsvurdering: Paragraf_11_4FørsteLedd,
+                søknad: Søknad,
+                fødselsdato: Fødselsdato
+            ) {
+                vilkårsvurdering.vurderAldersvilkår(fødselsdato)
+            }
+        }
+
+        object Oppfylt : Tilstand(
+            name = "OPPFYLT",
+            erOppfylt = true
+        ) {
+            override fun håndterSøknad(
+                vilkårsvurdering: Paragraf_11_4FørsteLedd,
+                søknad: Søknad,
+                fødselsdato: Fødselsdato
+            ) {
+                error("Vikkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
+            }
+        }
+
+        object IkkeOppfylt : Tilstand(
+            name = "IKKE_OPPFYLT",
+            erOppfylt = false
+        ) {
+            override fun håndterSøknad(
+                vilkårsvurdering: Paragraf_11_4FørsteLedd,
+                søknad: Søknad,
+                fødselsdato: Fødselsdato
+            ) {
+                error("Vikkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
+            }
+        }
+
+        internal fun toFrontendTilstand(): String = name
+    }
+
+    override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 }

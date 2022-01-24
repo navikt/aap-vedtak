@@ -37,45 +37,49 @@ internal class FrontendTest {
 internal class `§11-4 første ledd Test` {
     @Test
     fun `Hvis søkers alder er 67 år, er vilkår oppfylt`() {
+        val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = `§11-4 første ledd`()
+        val vilkår = Paragraf_11_4FørsteLedd()
 
-        val resultat = vilkår.håndterAlder(fødselsdato.alder())
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
 
-        assertTrue(resultat.erOppfylt())
+        assertTrue(vilkår.erOppfylt())
     }
 
     @Test
     fun `Hvis søkers alder er 68 år, er vilkår ikke oppfylt`() {
+        val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(68))
 
-        val vilkår = `§11-4 første ledd`()
+        val vilkår = Paragraf_11_4FørsteLedd()
 
-        val resultat = vilkår.håndterAlder(fødselsdato.alder())
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
 
-        assertFalse(resultat.erOppfylt())
+        assertFalse(vilkår.erOppfylt())
     }
 
     @Test
     fun `Hvis søkers alder er 18 år, er vilkår oppfylt`() {
+        val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
 
-        val vilkår = `§11-4 første ledd`()
+        val vilkår = Paragraf_11_4FørsteLedd()
 
-        val resultat = vilkår.håndterAlder(fødselsdato.alder())
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
 
-        assertTrue(resultat.erOppfylt())
+        assertTrue(vilkår.erOppfylt())
     }
 
     @Test
     fun `Hvis søkers alder er 17 år, er vilkår ikke oppfylt`() {
+        val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
 
-        val vilkår = `§11-4 første ledd`()
+        val vilkår = Paragraf_11_4FørsteLedd()
 
-        val resultat = vilkår.håndterAlder(fødselsdato.alder())
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
 
-        assertFalse(resultat.erOppfylt())
+        assertFalse(vilkår.erOppfylt())
     }
 }
