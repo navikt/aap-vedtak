@@ -12,6 +12,7 @@ import no.nav.aap.domene.frontendView.FrontendSak
 import no.nav.aap.domene.frontendView.FrontendVilkår
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
@@ -29,6 +30,7 @@ internal class ApiTest {
 
     @Test
     fun `GET oppgaver returns 200 OK`() {
+        assertFalse(true)
         withTestApp { mocks ->
             mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
                 KafkaSøknad(
