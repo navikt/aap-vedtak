@@ -26,18 +26,6 @@ jobs:
           check-latest: true
           cache: 'gradle'
 
-      - name: test
-        run: ./gradlew test --continue --no-daemon
-
-      - name: 📊 Publish results with dorny
-        if: success() || failure()
-        uses: dorny/test-reporter@v1.5.0
-        with:
-          name: 🧬 Test results
-          path: "**/build/test-results/test/TEST-*.xml"
-          reporter: java-junit
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: docker/login-action@v1
         with:
           registry: ghcr.io
@@ -49,6 +37,20 @@ jobs:
           build-args: project=${{ github.workflow }}
           push: true
           tags: ${IMAGE}:${TAG},${IMAGE}:latest
+
+        # POC - build docker before testing
+        # TODO: Use cache layers in test
+      - name: test
+        run: ./gradlew test --continue --no-daemon
+
+      - name: 📊 Publish results with dorny
+        if: success() || failure()
+        uses: dorny/test-reporter@v1.5.0
+        with:
+          name: 🧬 Test results
+          path: "**/build/test-results/test/TEST-*.xml"
+          reporter: java-junit
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Deploy to NAIS
         uses: nais/deploy/actions/deploy@v1
