@@ -1,37 +1,18 @@
 package no.nav.aap.domene
 
+import no.nav.aap.domene.Sak.Companion.toFrontendSak
+import no.nav.aap.domene.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
+import no.nav.aap.domene.frontendView.FrontendSak
+import no.nav.aap.domene.frontendView.FrontendVilkår
+import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-
-interface SøkerVisitor : VilkårsvurderingVisitor {
-    fun preVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
-    fun visitPersonident(ident: String) {}
-    fun visitFødselsdato(fødselsdato: LocalDate) {}
-    fun preVisitSak() {}
-    fun visitVilkår(paragraf: String, ledd: String) {}
-    fun postVisitSak() {}
-    fun postVisitSøker(personident: Personident, fødselsdato: Fødselsdato) {}
-}
-
-interface VilkårsvurderingVisitor {
-    fun visitVilkårsvurderingIkkeVurdert() {}
-    fun visitVilkårsvurderingOppfylt() {}
-    fun visitVilkårsvurderingIkkeOppfylt() {}
-}
 
 class Søker(
     private val personident: Personident,
     private val fødselsdato: Fødselsdato
 ) {
     private val saker: MutableList<Sak> = mutableListOf()
-
-    fun accept(visitor: SøkerVisitor) {
-        visitor.preVisitSøker(personident, fødselsdato)
-        personident.accept(visitor)
-        fødselsdato.accept(visitor)
-        saker.forEach { it.accept(visitor) }
-        visitor.postVisitSøker(personident, fødselsdato)
-    }
 
     fun håndterSøknad(søknad: Søknad) {
         val sak = Sak(this)
@@ -40,40 +21,52 @@ class Søker(
     }
 
     internal fun alder() = fødselsdato.alder()
+
+    private fun toFrontendSaker() =
+        saker.toFrontendSak(
+            personident = personident,
+            fødselsdato = fødselsdato
+        )
+
+    companion object {
+        fun Iterable<Søker>.toFrontendSaker() = flatMap(Søker::toFrontendSaker)
+    }
 }
 
 class Personident(
     private val ident: String
 ) {
-    internal fun accept(visitor: SøkerVisitor) {
-        visitor.visitPersonident(ident)
-    }
+    internal fun toFrontendPersonident() = ident
 }
 
-@JvmInline
-value class Fødselsdato(private val dato: LocalDate) {
+class Fødselsdato(private val dato: LocalDate) {
     internal fun alder() = dato.until(LocalDate.now(), ChronoUnit.YEARS)
 
-    internal fun accept(visitor: SøkerVisitor) {
-        visitor.visitFødselsdato(dato)
-    }
+    internal fun toFrontendFødselsdato() = dato
 }
 
 internal class Sak(private val søker: Søker) {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
 
-    fun accept(visitor: SøkerVisitor) {
-        visitor.preVisitSak()
-        vilkårsvurderinger.forEach { it.accept(visitor) }
-        visitor.postVisitSak()
-    }
-
-    fun håndterSøknad(søknad: Søknad) {
+    internal fun håndterSøknad(søknad: Søknad) {
         val vilkår = `§11-4 første ledd`()
         val vilkårsvurdering = vilkår.håndterAlder(søker.alder())
         vilkårsvurderinger.add(vilkårsvurdering)
         //opprett viklårsvurderinger
         //hent mer informasjon?
+    }
+
+    private fun toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) =
+        FrontendSak(
+            personident = personident.toFrontendPersonident(),
+            fødselsdato = fødselsdato.toFrontendFødselsdato(),
+            vilkårsvurderinger = vilkårsvurderinger.toFrontendVilkårsvurdering()
+        )
+
+    internal companion object {
+        internal fun Iterable<Sak>.toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) = map {
+            it.toFrontendSak(personident = personident, fødselsdato = fødselsdato)
+        }
     }
 }
 
@@ -89,25 +82,14 @@ internal open class Vilkårsvurdering(
 ) {
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
-    private sealed class Tilstand {
-        abstract fun accept(visitor: SøkerVisitor)
+    private sealed class Tilstand(private val name: String) {
+        fun toFrontendTilstand(): String = name
 
-        object IkkeVurdert : Tilstand() {
-            override fun accept(visitor: SøkerVisitor) = visitor.visitVilkårsvurderingIkkeVurdert()
-        }
+        object IkkeVurdert : Tilstand("IKKE_VURDERT")
 
-        object Oppfylt : Tilstand() {
-            override fun accept(visitor: SøkerVisitor) = visitor.visitVilkårsvurderingOppfylt()
-        }
+        object Oppfylt : Tilstand("OPPFYLT")
 
-        object IkkeOppfylt : Tilstand() {
-            override fun accept(visitor: SøkerVisitor) = visitor.visitVilkårsvurderingIkkeOppfylt()
-        }
-    }
-
-    fun accept(visitor: SøkerVisitor) {
-        vilkår.accept(visitor)
-        tilstand.accept(visitor)
+        object IkkeOppfylt : Tilstand("IKKE_OPPFYLT")
     }
 
     internal fun erOppfylt() = tilstand == Tilstand.Oppfylt
@@ -118,6 +100,17 @@ internal open class Vilkårsvurdering(
 
     fun vurdertIkkeOppfylt() {
         tilstand = Tilstand.IkkeOppfylt
+    }
+
+    private fun toFrontendVilkårsvurdering() =
+        FrontendVilkårsvurdering(
+            vilkår = vilkår.toFrontendVilkår(),
+            tilstand = tilstand.toFrontendTilstand()
+        )
+
+    internal companion object {
+        internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
+            map(Vilkårsvurdering::toFrontendVilkårsvurdering)
     }
 }
 
@@ -133,9 +126,7 @@ internal abstract class Vilkår(
         LEDD_1
     }
 
-    internal fun accept(visitor: SøkerVisitor) {
-        visitor.visitVilkår(paragraf.name, ledd.name)
-    }
+    fun toFrontendVilkår() = FrontendVilkår(paragraf = paragraf.name, ledd = ledd.name)
 }
 
 internal class `§11-4 første ledd` : Vilkår(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {

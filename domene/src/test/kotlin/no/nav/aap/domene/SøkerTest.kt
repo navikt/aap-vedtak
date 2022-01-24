@@ -1,6 +1,6 @@
 package no.nav.aap.domene
 
-import no.nav.aap.domene.frontendView.FrontendVisitor
+import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -15,17 +15,8 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val visitor = TestVisitor()
-        søker.accept(visitor)
-        assertTrue(visitor.oppfylt)
-    }
-}
-
-private class TestVisitor : SøkerVisitor {
-    var oppfylt = false
-
-    override fun visitVilkårsvurderingOppfylt() {
-        oppfylt = true
+        val saker = listOf(søker).toFrontendSaker()
+        assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
     }
 }
 
@@ -38,9 +29,7 @@ internal class FrontendTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val visitor = FrontendVisitor()
-        søker.accept(visitor)
-        val saker = visitor.saker()
+        val saker = listOf(søker).toFrontendSaker()
         assertEquals(1, saker.size)
     }
 }

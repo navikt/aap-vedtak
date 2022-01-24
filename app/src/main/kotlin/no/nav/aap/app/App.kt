@@ -23,8 +23,8 @@ import no.nav.aap.app.security.IssuerConfig
 import no.nav.aap.domene.Fødselsdato
 import no.nav.aap.domene.Personident
 import no.nav.aap.domene.Søker
+import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.Søknad
-import no.nav.aap.domene.frontendView.FrontendVisitor
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
@@ -91,9 +91,8 @@ fun Routing.api() {
     authenticate {
         route("/api") {
             get("/saker") {
-                val visitor = FrontendVisitor()
-                søkere.forEach { it.accept(visitor) }
-                call.respond(visitor.saker())
+                val frontendSaker = søkere.toFrontendSaker()
+                call.respond(frontendSaker)
             }
         }
     }
