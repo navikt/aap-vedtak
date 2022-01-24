@@ -30,7 +30,6 @@ internal class ApiTest {
 
     @Test
     fun `GET oppgaver returns 200 OK`() {
-        assertFalse(true)
         withTestApp { mocks ->
             mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
                 KafkaSøknad(
