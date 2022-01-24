@@ -21,7 +21,7 @@ dependencies {
 
     implementation("io.ktor:ktor-auth:1.6.7")
     implementation("io.ktor:ktor-client-auth:1.6.7")
-    implementation("no.nav.security:token-validation-ktor:1.3.9")
+    implementation("no.nav.security:token-validation-ktor:1.3.10")
     implementation("no.nav.security:token-client-core:1.3.10")
 
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
