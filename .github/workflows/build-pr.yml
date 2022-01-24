@@ -8,4 +8,13 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: test 
-        run: ./gradlew test 
+        run: ./gradlew test
+
+      - name: 📊 Publish results with dorny
+        if: success() || failure()
+        uses: dorny/test-reporter@v1.5.0
+        with:
+            name: 🧬 Test results
+            path: "**/build/test-results/test/TEST-*.xml"
+            reporter: java-junit
+            token: ${{ secrets.GITHUB_TOKEN }}
