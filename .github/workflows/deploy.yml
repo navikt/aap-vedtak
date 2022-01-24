@@ -25,9 +25,9 @@ jobs:
       - uses: actions/setup-java@v2
         with:
           java-version: 17
-           distribution: 'temurin'
-           check-latest: true
-           cache: 'gradle'
+          distribution: 'temurin'
+          check-latest: true
+          cache: 'gradle'
 
       - name: Bygg
         run: ./gradlew test app:shadowJar
