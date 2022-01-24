@@ -30,7 +30,7 @@ jobs:
           cache: 'gradle'
 
       - name: Bygg
-        run: ./gradlew test app:shadowJar
+        run: ./gradlew test app:shadowJar --continue
 
       - name: 📊 Publish results with dorny
         if: success() || failure()
