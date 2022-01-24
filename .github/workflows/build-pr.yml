@@ -14,8 +14,8 @@ jobs:
           check-latest: true  
           cache: 'gradle'
     
-      - name: test 
-        run: ./gradlew test --continue
+      - name: test
+        run: ./gradlew test --continue --no-daemon
     
       - name: 📊 Publish results with dorny
         if: success() || failure()
