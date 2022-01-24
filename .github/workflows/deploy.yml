@@ -36,7 +36,7 @@ jobs:
         with:
           build-args: project=${{ github.workflow }}
           push: true
-          tags: ${IMAGE}:${TAG},${IMAGE}:latest
+          tags: ${{ env.IMAGE }}:${TAG},${{ env.IMAGE }}:latest
 
         # POC - build docker before testing
         # TODO: Use cache layers in test
