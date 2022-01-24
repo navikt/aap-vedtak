@@ -36,7 +36,7 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-test-host:1.6.7")
-    testImplementation("no.nav.security:mock-oauth2-server:0.4.0")
+    testImplementation("no.nav.security:mock-oauth2-server:0.4.1")
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.0")
     testImplementation("no.nav:kafka-embedded-env:2.8.1") {
