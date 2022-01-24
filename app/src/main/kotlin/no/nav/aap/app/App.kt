@@ -5,11 +5,14 @@ import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
 import io.ktor.jackson.*
+import io.ktor.metrics.micrometer.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.pipeline.*
+import io.micrometer.prometheus.PrometheusConfig
+import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.KafkaConfig
 import no.nav.aap.app.kafka.KafkaFactory
@@ -42,7 +45,8 @@ fun Application.server(
     config: Config = loadConfig(),
     kafkaConsumer: Consumer<String, KafkaSøknad> = KafkaFactory.createConsumer(config.kafka),
 ) {
-
+    val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+    install(MicrometerMetrics) { registry = prometheus }
     install(ContentNegotiation) {
         jackson {
             registerModule(JavaTimeModule())
@@ -60,7 +64,7 @@ fun Application.server(
 
     routing {
         api()
-        actuator()
+        actuator(prometheus)
     }
 }
 
@@ -95,9 +99,14 @@ fun Routing.api() {
     }
 }
 
-private fun Routing.actuator() {
-    get("/healthy") {
-        call.respondText("Hello, world!")
+private fun Routing.actuator(prometheus: PrometheusMeterRegistry) {
+    route("/actuator") {
+        get("/healthy") {
+            call.respondText("Hello, world!")
+        }
+        get("/metrics") {
+            call.respond(prometheus.scrape())
+        }
     }
 }
 

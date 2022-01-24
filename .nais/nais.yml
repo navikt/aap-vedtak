@@ -31,9 +31,12 @@ spec:
       cpu: 200m
       memory: 256Mi
   liveness:
-    path: /healthy
+    path: /actuator/healthy
   readiness:
-    path: /healthy
+    path: /actuator/healthy
+  prometheus:
+    enabled: true
+    path: /actuator/metrics
 
   env:
     - name: LOG_APPENDER
