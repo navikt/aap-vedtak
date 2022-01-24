@@ -13,10 +13,15 @@ jobs:
           distribution: 'temurin'
           check-latest: true  
           cache: 'gradle'
-    
-      - name: test
-        run: ./gradlew test --continue --no-daemon
-    
+
+      - name: Validate Gradle wrapper
+        uses: gradle/wrapper-validation-action@e6e38bacfdf1a337459f332974bb2327a31aaf4b
+
+      - name: Build with Gradle
+        uses: gradle/gradle-build-action@4137be6a8bf7d7133955359dbd952c0ca73b1021
+        with:
+          arguments: test --continue --no-daemon
+ 
       - name: 📊 Publish results with dorny
         if: success() || failure()
         uses: dorny/test-reporter@v1.5.0
