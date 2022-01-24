@@ -6,7 +6,7 @@ on:
       - main
 
 env:
-  IMAGE_BASE: ghcr.io/${{ github.repository }}
+  IMAGE: ghcr.io/${{ github.repository }}
 
 jobs:
   build:
@@ -17,9 +17,6 @@ jobs:
       - name: Setter TAG
         run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
-      - name: Setter IMAGE
-        run: echo "IMAGE=$(echo $IMAGE_BASE):$(echo $TAG)" >> $GITHUB_ENV
-
       - uses: actions/checkout@v2
 
       - uses: actions/setup-java@v2
@@ -29,17 +26,17 @@ jobs:
           check-latest: true
           cache: 'gradle'
 
-      - name: Bygg
-        run: ./gradlew test app:shadowJar --continue
+      - name: test
+        run: ./gradlew test --continue --no-daemon
 
       - name: 📊 Publish results with dorny
         if: success() || failure()
         uses: dorny/test-reporter@v1.5.0
         with:
-            name: 🧬 Test results
-            path: "**/build/test-results/test/TEST-*.xml"
-            reporter: java-junit
-            token: ${{ secrets.GITHUB_TOKEN }}
+          name: 🧬 Test results
+          path: "**/build/test-results/test/TEST-*.xml"
+          reporter: java-junit
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: docker/login-action@v1
         with:
@@ -47,10 +44,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Bygg, tag og push Docker image
-        run: |
-          docker build --pull --tag ${IMAGE_BASE}:${TAG} --tag ${IMAGE_BASE}:latest .
-          docker push ${IMAGE_BASE} --all-tags
+      - uses: docker/build-push-action@v2.7.0
+        with:
+          build-args: project=${{ github.workflow }}
+          push: true
+          tags: ${IMAGE}:${TAG},${IMAGE}:latest
 
       - name: Deploy to NAIS
         uses: nais/deploy/actions/deploy@v1

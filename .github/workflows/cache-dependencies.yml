@@ -1,0 +1,23 @@
+name: Cache dependencies in docker image
+on:
+  schedule:
+    - cron: '0 */3 * * *'
+  workflow_dispatch:
+
+jobs:
+  build-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+
+      - uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: docker/build-push-action@v2.7.0
+        with:
+          file: Dockerfile.cache
+          push: true
+          tags: ghcr.io/navikt/aap-vedtak-cache:latest
