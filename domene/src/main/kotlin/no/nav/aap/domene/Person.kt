@@ -38,20 +38,23 @@ class Personident(
 }
 
 class Fødselsdato(private val dato: LocalDate) {
-    private fun alder() = dato.until(LocalDate.now(), ChronoUnit.YEARS)
+    private fun alderPåDato(vurderingsdato: LocalDate) = this.dato.until(vurderingsdato, ChronoUnit.YEARS)
 
-    internal fun erMellom18Og67År() = alder() in 18..67
+    internal fun erMellom18Og67År(vurderingsdato: LocalDate) =
+        alderPåDato(vurderingsdato) in 18..67
 
     internal fun toFrontendFødselsdato() = dato
 }
 
 internal class Sak(private val søker: Søker) {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
+    private lateinit var vurderingsdato:LocalDate
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
+        this.vurderingsdato = LocalDate.now()
         val vilkår = Paragraf_11_4FørsteLedd()
         vilkårsvurderinger.add(vilkår)
-        vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato) }
+        vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
         //opprett viklårsvurderinger
         //hent mer informasjon?
     }
@@ -91,7 +94,7 @@ internal abstract class Vilkårsvurdering(
 
     internal abstract fun erOppfylt(): Boolean
 
-    internal abstract fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato)
+    internal abstract fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate)
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(
@@ -110,6 +113,7 @@ internal abstract class Vilkårsvurdering(
 internal class Paragraf_11_4FørsteLedd :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
     private lateinit var fødselsdato: Fødselsdato
+    private lateinit var vurderingsdato: LocalDate
 
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
@@ -117,14 +121,15 @@ internal class Paragraf_11_4FørsteLedd :
         this.tilstand = nyTilstand
     }
 
-    private fun vurderAldersvilkår(fødselsdato: Fødselsdato) {
+    private fun vurderAldersvilkår(fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         this.fødselsdato = fødselsdato
-        if (fødselsdato.erMellom18Og67År()) tilstand(Tilstand.Oppfylt)
+        this.vurderingsdato = vurderingsdato
+        if (fødselsdato.erMellom18Og67År(vurderingsdato)) tilstand(Tilstand.Oppfylt)
         else tilstand(Tilstand.IkkeOppfylt)
     }
 
-    override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
-        tilstand.håndterSøknad(this, søknad, fødselsdato)
+    override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
     override fun erOppfylt() = tilstand.erOppfylt()
@@ -138,7 +143,8 @@ internal class Paragraf_11_4FørsteLedd :
         internal abstract fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
             søknad: Søknad,
-            fødselsdato: Fødselsdato
+            fødselsdato: Fødselsdato,
+            vurderingsdato: LocalDate
         )
 
         object IkkeVurdert : Tilstand(
@@ -148,9 +154,10 @@ internal class Paragraf_11_4FørsteLedd :
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4FørsteLedd,
                 søknad: Søknad,
-                fødselsdato: Fødselsdato
+                fødselsdato: Fødselsdato,
+                vurderingsdato: LocalDate
             ) {
-                vilkårsvurdering.vurderAldersvilkår(fødselsdato)
+                vilkårsvurdering.vurderAldersvilkår(fødselsdato, vurderingsdato)
             }
         }
 
@@ -161,9 +168,10 @@ internal class Paragraf_11_4FørsteLedd :
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4FørsteLedd,
                 søknad: Søknad,
-                fødselsdato: Fødselsdato
+                fødselsdato: Fødselsdato,
+                vurderingsdato: LocalDate
             ) {
-                error("Vikkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
+                error("Vilkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
             }
         }
 
@@ -174,9 +182,10 @@ internal class Paragraf_11_4FørsteLedd :
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4FørsteLedd,
                 søknad: Søknad,
-                fødselsdato: Fødselsdato
+                fødselsdato: Fødselsdato,
+                vurderingsdato: LocalDate
             ) {
-                error("Vikkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
+                error("Vilkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
             }
         }
 

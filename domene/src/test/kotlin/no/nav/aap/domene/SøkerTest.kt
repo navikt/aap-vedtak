@@ -42,7 +42,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertTrue(vilkår.erOppfylt())
     }
@@ -54,7 +54,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertFalse(vilkår.erOppfylt())
     }
@@ -66,7 +66,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertTrue(vilkår.erOppfylt())
     }
@@ -78,7 +78,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato)
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertFalse(vilkår.erOppfylt())
     }
