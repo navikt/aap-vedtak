@@ -44,7 +44,7 @@ jobs:
         run: ./gradlew test --continue --no-daemon
 
       - name: 📊 Publish results with dorny
-        if: success() || failure()
+        if: always()
         uses: dorny/test-reporter@v1.5.0
         with:
           name: 🧬 Test results

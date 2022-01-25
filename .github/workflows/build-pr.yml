@@ -11,7 +11,7 @@ jobs:
         with:
           java-version: 17
           distribution: 'temurin'
-          check-latest: true  
+          check-latest: true
       - name: Validate Gradle wrapper
         uses: gradle/wrapper-validation-action@v1
 
@@ -21,7 +21,7 @@ jobs:
           arguments: test --continue --no-daemon
  
       - name: 📊 Publish results with dorny
-        if: success() || failure()
+        if: always()
         uses: dorny/test-reporter@v1.5.0
         with:
             name: 🧬 Test results
