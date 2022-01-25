@@ -6,7 +6,6 @@ import no.nav.aap.domene.frontendView.FrontendSak
 import no.nav.aap.domene.frontendView.FrontendVilkår
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import java.time.LocalDate
-import java.time.temporal.ChronoUnit
 
 class Søker(
     private val personident: Personident,
@@ -38,17 +37,17 @@ class Personident(
 }
 
 class Fødselsdato(private val dato: LocalDate) {
-    private fun alderPåDato(vurderingsdato: LocalDate) = this.dato.until(vurderingsdato, ChronoUnit.YEARS)
+    private val `18ÅrsDagen`: LocalDate = this.dato.plusYears(18)
+    private val `67ÅrsDagen`: LocalDate = this.dato.plusYears(67)
 
-    internal fun erMellom18Og67År(vurderingsdato: LocalDate) =
-        alderPåDato(vurderingsdato) in 18..67
+    internal fun erMellom18Og67År(vurderingsdato: LocalDate) = vurderingsdato in `18ÅrsDagen`..`67ÅrsDagen`
 
     internal fun toFrontendFødselsdato() = dato
 }
 
 internal class Sak(private val søker: Søker) {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
-    private lateinit var vurderingsdato:LocalDate
+    private lateinit var vurderingsdato: LocalDate
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()

@@ -34,6 +34,45 @@ internal class FrontendTest {
     }
 }
 
+internal class FødselsdatoTest {
+    @Test
+    fun `Er mellom 18 og 67 år på 18-årsdagen`() {
+        val `18-årsdagen` = 1.januar(2022)
+        val fødselsdato = Fødselsdato(1.januar(2004))
+
+        assertTrue(fødselsdato.erMellom18Og67År(`18-årsdagen`))
+    }
+
+    @Test
+    fun `Er ikke mellom 18 og 67 år dagen før 18-årsdagen`() {
+        val `dagen før 18-årsdagen` = 31.desember(2021)
+        val fødselsdato = Fødselsdato(1.januar(2004))
+
+        assertFalse(fødselsdato.erMellom18Og67År(`dagen før 18-årsdagen`))
+    }
+
+    @Test
+    fun `Er mellom 18 og 67 år på 67-årsdagen`() {
+        val `67-årsdagen` = 1.januar(2071)
+        val fødselsdato = Fødselsdato(1.januar(2004))
+
+        assertTrue(fødselsdato.erMellom18Og67År(`67-årsdagen`))
+    }
+
+    @Test
+    fun `Er ikke mellom 18 og 67 år dagen etter 67-årsdagen`() {
+        val `dagen etter 67-årsdagen` = 2.januar(2071)
+        val fødselsdato = Fødselsdato(1.januar(2004))
+
+        assertFalse(fødselsdato.erMellom18Og67År(`dagen etter 67-årsdagen`))
+    }
+}
+
+internal fun Int.januar(år: Int) = LocalDate.of(år, 1, this)
+internal val Int.januar get() = this.januar(2022)
+internal fun Int.desember(år: Int) = LocalDate.of(år, 12, this)
+internal val Int.desember get() = this.desember(2022)
+
 internal class `§11-4 første ledd Test` {
     @Test
     fun `Hvis søkers alder er 67 år, er vilkår oppfylt`() {
