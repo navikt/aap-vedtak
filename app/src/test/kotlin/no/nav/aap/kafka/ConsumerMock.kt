@@ -25,9 +25,9 @@ internal class ConsumerMock<T>(
         return ConsumerRecords(mapOf(partition to records))
     }
 
+    override fun currentLag(p0: TopicPartition!) = TODO("dead end")
     override fun subscribe(topics: MutableCollection<String>) {}
     override fun unsubscribe() {}
-    override fun close() {}
     override fun close(timeout: Duration) {}
     override fun close(t: Long, u: TimeUnit) = TODO("dead end")
     override fun assignment() = TODO("dead end")
