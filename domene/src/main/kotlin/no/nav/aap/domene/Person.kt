@@ -14,7 +14,7 @@ class Søker(
     private val saker: MutableList<Sak> = mutableListOf()
 
     fun håndterSøknad(søknad: Søknad) {
-        val sak = Sak(this)
+        val sak = Sak()
         saker.add(sak)
         sak.håndterSøknad(søknad, fødselsdato)
     }
@@ -45,23 +45,57 @@ class Fødselsdato(private val dato: LocalDate) {
     internal fun toFrontendFødselsdato() = dato
 }
 
-internal class Sak(private val søker: Søker) {
+internal class Sak {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
     private lateinit var vurderingsdato: LocalDate
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()
-        val vilkår = Paragraf_11_4FørsteLedd()
-        vilkårsvurderinger.add(vilkår)
-        vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
-        //opprett viklårsvurderinger
-        //hent mer informasjon?
+        this.tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
+
+    private var tilstand: Tilstand = Start
+
+    private fun tilstand(nyTilstand: Tilstand) {
+        nyTilstand.onExit()
+        tilstand = nyTilstand
+        tilstand.onEntry()
+    }
+
+    private sealed interface Tilstand {
+        val name: String
+        fun onEntry() {}
+        fun onExit() {}
+        fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+
+        fun toFrontendTilstand() = name
+    }
+
+    private object Start : Tilstand {
+        override val name = "Start"
+        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            //opprett initielle vilkårsvurderinger
+            val vilkår = Paragraf_11_4FørsteLedd()
+            sak.vilkårsvurderinger.add(vilkår)
+            sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+            //bytt tilstand til SøknadMottatt
+            sak.tilstand(SøknadMottatt)
+        }
+    }
+
+    private object SøknadMottatt : Tilstand {
+        override val name = "SøknadMottatt"
+        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            error("Forventet ikke søknad i tilstand SøknadMottatt")
+        }
+    }
+
 
     private fun toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) =
         FrontendSak(
             personident = personident.toFrontendPersonident(),
             fødselsdato = fødselsdato.toFrontendFødselsdato(),
+            tilstand = tilstand.toFrontendTilstand(),
             vilkårsvurderinger = vilkårsvurderinger.toFrontendVilkårsvurdering()
         )
 

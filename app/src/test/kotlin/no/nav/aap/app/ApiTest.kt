@@ -45,6 +45,7 @@ internal class ApiTest {
                     FrontendSak(
                         personident = "11111111111",
                         fødselsdato = LocalDate.of(1990, 1, 1),
+                        tilstand = "SøknadMottatt",
                         vilkårsvurderinger = listOf(
                             FrontendVilkårsvurdering(
                                 vilkår = FrontendVilkår("PARAGRAF_11_4", "LEDD_1"),

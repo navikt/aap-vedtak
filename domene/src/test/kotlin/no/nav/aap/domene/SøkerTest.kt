@@ -1,8 +1,10 @@
 package no.nav.aap.domene
 
+import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 
@@ -17,6 +19,45 @@ internal class SøkerTest {
 
         val saker = listOf(søker).toFrontendSaker()
         assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+    }
+}
+
+internal class SakTest {
+    @Test
+    fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val sak = Sak()
+
+        assertTilstand("Start", sak, personident, fødselsdato)
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("SøknadMottatt", sak, personident, fødselsdato)
+
+        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
+        assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+    }
+
+    @Test
+    fun `Hvis vi mottar to søknader etterhverandre kastes en feil`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val sak = Sak()
+
+        assertTilstand("Start", sak, personident, fødselsdato)
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("SøknadMottatt", sak, personident, fødselsdato)
+        assertThrows<IllegalStateException> { sak.håndterSøknad(søknad, fødselsdato) }
+        assertTilstand("SøknadMottatt", sak, personident, fødselsdato)
+
+        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
+        assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+    }
+
+    private fun assertTilstand(actual: String, expected:Sak, personident: Personident, fødselsdato: Fødselsdato){
+        val frontendSak = listOf(expected).toFrontendSak(personident, fødselsdato).first()
+        assertEquals(actual, frontendSak.tilstand)
     }
 }
 
