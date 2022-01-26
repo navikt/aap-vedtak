@@ -16,5 +16,5 @@ data class FrontendVilkårsvurdering(
 
 data class FrontendVilkår(
     val paragraf: String,
-    val ledd: String
+    val ledd: List<String>
 )

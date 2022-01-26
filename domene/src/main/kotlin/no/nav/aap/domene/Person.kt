@@ -129,24 +129,32 @@ class Søknad(
 
 internal abstract class Vilkårsvurdering(
     private val paragraf: Paragraf,
-    private val ledd: Ledd
+    private val ledd: List<Ledd>
 ) {
+    internal constructor(
+        paragraf: Paragraf,
+        ledd: Ledd
+    ) : this(paragraf, listOf(ledd))
+
     internal enum class Paragraf {
-        PARAGRAF_11_4
+        PARAGRAF_11_4, PARAGRAF_11_5
     }
 
     internal enum class Ledd {
-        LEDD_1
+        LEDD_1, LEDD_2;
+
+        operator fun plus(other: Ledd) = listOf(this, other)
     }
 
     internal abstract fun erOppfylt(): Boolean
     internal abstract fun erIkkeOppfylt(): Boolean
 
-    internal abstract fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate)
+    internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+    internal open fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {}
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(
-            vilkår = FrontendVilkår(paragraf.name, ledd.name),
+            vilkår = FrontendVilkår(paragraf.name, ledd.map(Ledd::name)),
             tilstand = toFrontendTilstand()
         )
 
@@ -249,4 +257,129 @@ internal class Paragraf_11_4FørsteLedd :
     }
 
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
+}
+
+internal class Paragraf_11_5 :
+    Vilkårsvurdering(Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
+    private lateinit var oppgavesvar: OppgavesvarParagraf_11_5
+    private var gradNedsattArbeidsevne: Int = -1
+
+    private var tilstand: Tilstand = Tilstand.IkkeVurdert
+
+    private fun tilstand(nyTilstand: Tilstand) {
+        this.tilstand.onExit(this)
+        this.tilstand = nyTilstand
+        nyTilstand.onEntry(this)
+    }
+
+    override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+    }
+
+    override fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {
+        oppgavesvar.håndterOppgavesvar(this)
+    }
+
+    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5, gradNedsattArbeidsevne: Int) {
+        tilstand.håndterOppgavesvar(this, oppgavesvar, gradNedsattArbeidsevne)
+    }
+
+    override fun erOppfylt() = tilstand.erOppfylt()
+    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
+
+    internal sealed class Tilstand(
+        private val name: String,
+        private val erOppfylt: Boolean,
+        private val erIkkeOppfylt: Boolean
+    ) {
+        internal open fun onEntry(vilkårsvurdering: Paragraf_11_5) {}
+        internal open fun onExit(vilkårsvurdering: Paragraf_11_5) {}
+        internal fun erOppfylt() = erOppfylt
+        internal fun erIkkeOppfylt() = erIkkeOppfylt
+
+        internal open fun håndterSøknad(
+            vilkårsvurdering: Paragraf_11_5,
+            søknad: Søknad,
+            fødselsdato: Fødselsdato,
+            vurderingsdato: LocalDate
+        ) {
+            error("Søknad skal ikke håndteres i tilstand $name")
+        }
+
+        internal open fun håndterOppgavesvar(
+            vilkårsvurdering: Paragraf_11_5,
+            oppgavesvar: OppgavesvarParagraf_11_5,
+            gradNedsattArbeidsevne: Int
+        ) {
+            error("Oppgave skal ikke håndteres i tilstand $name")
+        }
+
+        object IkkeVurdert : Tilstand(
+            name = "IKKE_VURDERT",
+            erOppfylt = false,
+            erIkkeOppfylt = false
+        ) {
+            override fun håndterSøknad(
+                vilkårsvurdering: Paragraf_11_5,
+                søknad: Søknad,
+                fødselsdato: Fødselsdato,
+                vurderingsdato: LocalDate
+            ) {
+                vilkårsvurdering.tilstand(SøknadMottatt)
+            }
+        }
+
+        object SøknadMottatt : Tilstand(name = "SøknadMottatt", erOppfylt = false, erIkkeOppfylt = false) {
+            override fun onEntry(vilkårsvurdering: Paragraf_11_5) {
+                //send ut oppgaver for manuell vurdering av vilkår
+            }
+
+            override fun håndterOppgavesvar(
+                vilkårsvurdering: Paragraf_11_5,
+                oppgavesvar: OppgavesvarParagraf_11_5,
+                gradNedsattArbeidsevne: Int
+            ) {
+                vilkårsvurdering.vurderVilkår(oppgavesvar, gradNedsattArbeidsevne)
+            }
+        }
+
+        object Oppfylt : Tilstand(
+            name = "OPPFYLT",
+            erOppfylt = true,
+            erIkkeOppfylt = false
+        )
+
+        object IkkeOppfylt : Tilstand(
+            name = "IKKE_OPPFYLT",
+            erOppfylt = false,
+            erIkkeOppfylt = true
+        )
+
+        internal fun toFrontendTilstand(): String = name
+    }
+
+    override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
+
+    private fun vurderVilkår(oppgavesvar: OppgavesvarParagraf_11_5, gradNedsattArbeidsevne: Int) {
+        this.oppgavesvar = oppgavesvar
+        this.gradNedsattArbeidsevne = gradNedsattArbeidsevne
+
+        fun Int.erNedsattMedMinstHalvparten() = this >= 50
+
+        if (gradNedsattArbeidsevne.erNedsattMedMinstHalvparten()) {
+            tilstand(Tilstand.Oppfylt)
+        } else {
+            tilstand(Tilstand.IkkeOppfylt)
+        }
+    }
+}
+
+internal interface Oppgavesvar {
+    fun håndterOppgavesvar(vilkår: Paragraf_11_5) {}
+}
+
+internal class OppgavesvarParagraf_11_5(private val gradNedsattArbeidsevne: Int) : Oppgavesvar {
+    override fun håndterOppgavesvar(vilkår: Paragraf_11_5) {
+        vilkår.håndterOppgavesvar(this, gradNedsattArbeidsevne)
+    }
 }
