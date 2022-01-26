@@ -29,7 +29,7 @@ internal class ConsumerMock<T>(
     override fun subscribe(topics: MutableCollection<String>) {}
     override fun unsubscribe() {}
     override fun close(timeout: Duration) {}
-    override fun close(t: Long, u: TimeUnit) = TODO("dead end")
+    override fun close() = TODO("dead end")
     override fun assignment() = TODO("dead end")
     override fun subscription() = TODO("dead end")
     override fun subscribe(t: MutableCollection<String>, c: ConsumerRebalanceListener) = TODO("dead end")
