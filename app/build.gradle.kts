@@ -34,7 +34,7 @@ dependencies {
     implementation("io.ktor:ktor-jackson:1.6.7")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
-    implementation("org.apache.kafka:kafka-clients:2.8.1")
+    implementation("org.apache.kafka:kafka-clients:3.1.0")
     // JsonSerializer java 8 LocalDate
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
 
