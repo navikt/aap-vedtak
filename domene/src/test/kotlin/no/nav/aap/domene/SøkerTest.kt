@@ -20,6 +20,18 @@ internal class SøkerTest {
         val saker = listOf(søker).toFrontendSaker()
         assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
     }
+
+    @Test
+    fun `Hvis vi mottar en søknad der søker er under 18 år får vi et ikke-oppfylt aldersvilkår`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        val saker = listOf(søker).toFrontendSaker()
+        assertEquals("IKKE_OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+    }
 }
 
 internal class SakTest {
@@ -36,6 +48,21 @@ internal class SakTest {
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+    }
+
+    @Test
+    fun `Hvis vi mottar en søknad der søker er under 18 år får vi et ikke-oppfylt aldersvilkår`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val sak = Sak()
+
+        assertTilstand("Start", sak, personident, fødselsdato)
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("IkkeOppfylt", sak, personident, fødselsdato)
+
+        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
+        assertEquals("IKKE_OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
     }
 
     @Test
@@ -125,6 +152,7 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertTrue(vilkår.erOppfylt())
+        assertFalse(vilkår.erIkkeOppfylt())
     }
 
     @Test
@@ -137,6 +165,7 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertFalse(vilkår.erOppfylt())
+        assertTrue(vilkår.erIkkeOppfylt())
     }
 
     @Test
@@ -149,6 +178,7 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertTrue(vilkår.erOppfylt())
+        assertFalse(vilkår.erIkkeOppfylt())
     }
 
     @Test
@@ -161,5 +191,14 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertFalse(vilkår.erOppfylt())
+        assertTrue(vilkår.erIkkeOppfylt())
+    }
+
+    @Test
+    fun `Hvis søknad ikke er håndtert, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
+        val vilkår = Paragraf_11_4FørsteLedd()
+
+        assertFalse(vilkår.erOppfylt())
+        assertFalse(vilkår.erIkkeOppfylt())
     }
 }

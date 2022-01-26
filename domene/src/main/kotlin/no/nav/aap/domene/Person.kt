@@ -1,6 +1,7 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
+import no.nav.aap.domene.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
 import no.nav.aap.domene.frontendView.FrontendSak
 import no.nav.aap.domene.frontendView.FrontendVilkår
@@ -78,8 +79,14 @@ internal class Sak {
             val vilkår = Paragraf_11_4FørsteLedd()
             sak.vilkårsvurderinger.add(vilkår)
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
-            //bytt tilstand til SøknadMottatt
-            sak.tilstand(SøknadMottatt)
+
+            //Vurder om vilkår allerede er avslått
+            if (sak.vilkårsvurderinger.erNoenIkkeOppfylt()) {
+                sak.tilstand(IkkeOppfylt)
+            } else {
+                //bytt tilstand til SøknadMottatt
+                sak.tilstand(SøknadMottatt)
+            }
         }
     }
 
@@ -87,6 +94,13 @@ internal class Sak {
         override val name = "SøknadMottatt"
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             error("Forventet ikke søknad i tilstand SøknadMottatt")
+        }
+    }
+
+    private object IkkeOppfylt : Tilstand {
+        override val name = "IkkeOppfylt"
+        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            error("Forventet ikke søknad i tilstand IkkeOppfylt")
         }
     }
 
@@ -126,6 +140,7 @@ internal abstract class Vilkårsvurdering(
     }
 
     internal abstract fun erOppfylt(): Boolean
+    internal abstract fun erIkkeOppfylt(): Boolean
 
     internal abstract fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate)
 
@@ -138,6 +153,8 @@ internal abstract class Vilkårsvurdering(
     protected abstract fun toFrontendTilstand(): String
 
     internal companion object {
+        internal fun Iterable<Vilkårsvurdering>.erNoenIkkeOppfylt() = any(Vilkårsvurdering::erIkkeOppfylt)
+
         internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
             map(Vilkårsvurdering::toFrontendVilkårsvurdering)
     }
@@ -166,12 +183,15 @@ internal class Paragraf_11_4FørsteLedd :
     }
 
     override fun erOppfylt() = tilstand.erOppfylt()
+    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
     internal sealed class Tilstand(
         private val name: String,
-        private val erOppfylt: Boolean
+        private val erOppfylt: Boolean,
+        private val erIkkeOppfylt: Boolean
     ) {
         internal fun erOppfylt() = erOppfylt
+        internal fun erIkkeOppfylt() = erIkkeOppfylt
 
         internal abstract fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
@@ -182,7 +202,8 @@ internal class Paragraf_11_4FørsteLedd :
 
         object IkkeVurdert : Tilstand(
             name = "IKKE_VURDERT",
-            erOppfylt = false
+            erOppfylt = false,
+            erIkkeOppfylt = false
         ) {
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4FørsteLedd,
@@ -196,7 +217,8 @@ internal class Paragraf_11_4FørsteLedd :
 
         object Oppfylt : Tilstand(
             name = "OPPFYLT",
-            erOppfylt = true
+            erOppfylt = true,
+            erIkkeOppfylt = false
         ) {
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4FørsteLedd,
@@ -210,7 +232,8 @@ internal class Paragraf_11_4FørsteLedd :
 
         object IkkeOppfylt : Tilstand(
             name = "IKKE_OPPFYLT",
-            erOppfylt = false
+            erOppfylt = false,
+            erIkkeOppfylt = true
         ) {
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4FørsteLedd,
