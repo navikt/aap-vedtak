@@ -20,6 +20,10 @@ class Søker(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
+    internal fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {
+        saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
+    }
+
     private fun toFrontendSaker() =
         saker.toFrontendSak(
             personident = personident,
@@ -52,7 +56,11 @@ internal class Sak {
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()
-        this.tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+    }
+
+    internal fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {
+        tilstand.håndterOppgavesvar(this, oppgavesvar)
     }
 
     private var tilstand: Tilstand = Start
@@ -68,6 +76,9 @@ internal class Sak {
         fun onEntry() {}
         fun onExit() {}
         fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+        fun håndterOppgavesvar(sak: Sak, oppgavesvar: Oppgavesvar) {
+            error("Forventet ikke oppgavesvar i tilstand $name")
+        }
 
         fun toFrontendTilstand() = name
     }
@@ -76,8 +87,8 @@ internal class Sak {
         override val name = "Start"
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             //opprett initielle vilkårsvurderinger
-            val vilkår = Paragraf_11_4FørsteLedd()
-            sak.vilkårsvurderinger.add(vilkår)
+            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
+            sak.vilkårsvurderinger.add(Paragraf_11_5())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
             //Vurder om vilkår allerede er avslått
@@ -94,6 +105,10 @@ internal class Sak {
         override val name = "SøknadMottatt"
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             error("Forventet ikke søknad i tilstand SøknadMottatt")
+        }
+
+        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: Oppgavesvar) {
+            sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
         }
     }
 
@@ -329,7 +344,7 @@ internal class Paragraf_11_5 :
             }
         }
 
-        object SøknadMottatt : Tilstand(name = "SøknadMottatt", erOppfylt = false, erIkkeOppfylt = false) {
+        object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_5) {
                 //send ut oppgaver for manuell vurdering av vilkår
             }

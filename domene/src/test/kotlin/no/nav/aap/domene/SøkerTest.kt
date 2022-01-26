@@ -2,6 +2,7 @@ package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
+import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -18,7 +19,8 @@ internal class SøkerTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker()
-        assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
     }
 
     @Test
@@ -30,8 +32,44 @@ internal class SøkerTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker()
-        assertEquals("IKKE_OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
+        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        assertEquals("IKKE_OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
     }
+
+    @Test
+    fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på svar om nedsatt arbeidsevne`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        val saker = listOf(søker).toFrontendSaker()
+        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        assertEquals(2, vilkårsvurderinger.size) { "Har ${vilkårsvurderinger.size} vilkårsvurderinger, skulle vært 2" }
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
+    }
+
+    @Test
+    fun `Hvis vi mottar svar på oppgave om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(50))
+
+        val saker = listOf(søker).toFrontendSaker()
+        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        assertEquals(2, vilkårsvurderinger.size) { "Har ${vilkårsvurderinger.size} vilkårsvurderinger, skulle vært 2" }
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
+    }
+
+    private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
+        single { it.vilkår.paragraf == paragraf.name }
 }
 
 internal class SakTest {
@@ -66,7 +104,7 @@ internal class SakTest {
     }
 
     @Test
-    fun `Hvis vi mottar to søknader etterhverandre kastes en feil`() {
+    fun `Hvis vi mottar to søknader etter hverandre kastes en feil`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
@@ -82,7 +120,7 @@ internal class SakTest {
         assertEquals("OPPFYLT", saker.first().vilkårsvurderinger.first().tilstand)
     }
 
-    private fun assertTilstand(actual: String, expected:Sak, personident: Personident, fødselsdato: Fødselsdato){
+    private fun assertTilstand(actual: String, expected: Sak, personident: Personident, fødselsdato: Fødselsdato) {
         val frontendSak = listOf(expected).toFrontendSak(personident, fødselsdato).first()
         assertEquals(actual, frontendSak.tilstand)
     }
@@ -219,6 +257,7 @@ internal class `§11-5 Test` {
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
     }
+
     @Test
     fun `Hvis søkers arbeidsevne er nedsatt med 49 prosent, er vilkår ikke oppfylt`() {
         val personident = Personident("12345678910")
