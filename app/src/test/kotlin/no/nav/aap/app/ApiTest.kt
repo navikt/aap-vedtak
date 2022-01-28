@@ -48,6 +48,10 @@ internal class ApiTest {
                         tilstand = "SøknadMottatt",
                         vilkårsvurderinger = listOf(
                             FrontendVilkårsvurdering(
+                                vilkår = FrontendVilkår("PARAGRAF_11_2", listOf("LEDD_1", "LEDD_2")),
+                                tilstand = "SØKNAD_MOTTATT"
+                            ),
+                            FrontendVilkårsvurdering(
                                 vilkår = FrontendVilkår("PARAGRAF_11_4", listOf("LEDD_1")),
                                 tilstand = "OPPFYLT"
                             ),

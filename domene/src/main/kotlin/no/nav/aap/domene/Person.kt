@@ -20,6 +20,10 @@ class Søker(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
+    fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
+        saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
+    }
+
     fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
         saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
     }
@@ -59,6 +63,10 @@ internal class Sak {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
+    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
+        tilstand.håndterOppgavesvar(this, oppgavesvar)
+    }
+
     internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
         tilstand.håndterOppgavesvar(this, oppgavesvar)
     }
@@ -76,6 +84,10 @@ internal class Sak {
         fun onEntry() {}
         fun onExit() {}
         fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+        fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
+            error("Forventet ikke oppgavesvar i tilstand $name")
+        }
+
         fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
             error("Forventet ikke oppgavesvar i tilstand $name")
         }
@@ -87,6 +99,7 @@ internal class Sak {
         override val name = "Start"
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             //opprett initielle vilkårsvurderinger
+            sak.vilkårsvurderinger.add(Paragraf_11_2())
             sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
             sak.vilkårsvurderinger.add(Paragraf_11_5())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
@@ -105,6 +118,10 @@ internal class Sak {
         override val name = "SøknadMottatt"
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             error("Forventet ikke søknad i tilstand SøknadMottatt")
+        }
+
+        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
+            sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
         }
 
         override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
@@ -152,7 +169,7 @@ internal abstract class Vilkårsvurdering(
     ) : this(paragraf, listOf(ledd))
 
     internal enum class Paragraf {
-        PARAGRAF_11_4, PARAGRAF_11_5
+        PARAGRAF_11_2, PARAGRAF_11_4, PARAGRAF_11_5
     }
 
     internal enum class Ledd {
@@ -165,6 +182,7 @@ internal abstract class Vilkårsvurdering(
     internal abstract fun erIkkeOppfylt(): Boolean
 
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+    internal open fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {}
     internal open fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {}
 
     private fun toFrontendVilkårsvurdering() =
@@ -181,6 +199,124 @@ internal abstract class Vilkårsvurdering(
         internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
             map(Vilkårsvurdering::toFrontendVilkårsvurdering)
     }
+}
+
+internal class Paragraf_11_2 :
+    Vilkårsvurdering(Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
+    private lateinit var oppgavesvar: OppgavesvarParagraf_11_2
+
+    private var tilstand: Tilstand = Tilstand.IkkeVurdert
+
+    private fun tilstand(nyTilstand: Tilstand) {
+        this.tilstand.onExit(this)
+        this.tilstand = nyTilstand
+        nyTilstand.onEntry(this)
+    }
+
+    override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+    }
+
+    override fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
+        tilstand.vurderMedlemskap(this, oppgavesvar)
+    }
+
+    override fun erOppfylt() = tilstand.erOppfylt()
+    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
+
+    internal sealed class Tilstand(
+        private val name: String,
+        private val erOppfylt: Boolean,
+        private val erIkkeOppfylt: Boolean
+    ) {
+        internal open fun onEntry(vilkårsvurdering: Paragraf_11_2) {}
+        internal open fun onExit(vilkårsvurdering: Paragraf_11_2) {}
+        internal fun erOppfylt() = erOppfylt
+        internal fun erIkkeOppfylt() = erIkkeOppfylt
+
+        internal open fun håndterSøknad(
+            vilkårsvurdering: Paragraf_11_2,
+            søknad: Søknad,
+            fødselsdato: Fødselsdato,
+            vurderingsdato: LocalDate
+        ) {
+            error("Søknad skal ikke håndteres i tilstand $name")
+        }
+
+        internal open fun vurderMedlemskap(
+            vilkårsvurdering: Paragraf_11_2,
+            oppgavesvar: OppgavesvarParagraf_11_2
+        ) {
+            error("Oppgave skal ikke håndteres i tilstand $name")
+        }
+
+        object IkkeVurdert : Tilstand(
+            name = "IKKE_VURDERT",
+            erOppfylt = false,
+            erIkkeOppfylt = false
+        ) {
+            override fun håndterSøknad(
+                vilkårsvurdering: Paragraf_11_2,
+                søknad: Søknad,
+                fødselsdato: Fødselsdato,
+                vurderingsdato: LocalDate
+            ) {
+                vilkårsvurdering.tilstand(SøknadMottatt)
+            }
+        }
+
+        object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
+            override fun onEntry(vilkårsvurdering: Paragraf_11_2) {
+                //send ut oppgave for innhenting av maskinell medlemskapsvurdering
+            }
+
+            override fun vurderMedlemskap(
+                vilkårsvurdering: Paragraf_11_2,
+                oppgavesvar: OppgavesvarParagraf_11_2
+            ) {
+                vilkårsvurdering.oppgavesvar = oppgavesvar
+                when {
+                    oppgavesvar.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
+                    oppgavesvar.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
+                    else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs)
+                }
+            }
+        }
+
+        object ManuellVurderingTrengs : Tilstand(name = "MANUELL_VURDERING_TRENGS", erOppfylt = false, erIkkeOppfylt = false) {
+            override fun onEntry(vilkårsvurdering: Paragraf_11_2) {
+                //send ut oppgave for manuell vurdering av medlemskap
+            }
+
+            override fun vurderMedlemskap(
+                vilkårsvurdering: Paragraf_11_2,
+                oppgavesvar: OppgavesvarParagraf_11_2
+            ) {
+                vilkårsvurdering.oppgavesvar = oppgavesvar
+                when {
+                    oppgavesvar.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
+                    oppgavesvar.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
+                    else -> error("Veileder/saksbehandler må ta stilling til om bruker er medlem eller ikke")
+                }
+            }
+        }
+
+        object Oppfylt : Tilstand(
+            name = "OPPFYLT",
+            erOppfylt = true,
+            erIkkeOppfylt = false
+        )
+
+        object IkkeOppfylt : Tilstand(
+            name = "IKKE_OPPFYLT",
+            erOppfylt = false,
+            erIkkeOppfylt = true
+        )
+
+        internal fun toFrontendTilstand(): String = name
+    }
+
+    override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 }
 
 internal class Paragraf_11_4FørsteLedd :
@@ -383,6 +519,20 @@ internal class Paragraf_11_5 :
     }
 
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
+}
+
+class OppgavesvarParagraf_11_2(private val medlemskap: Medlemskap) {
+    class Medlemskap(private val svar: Svar) {
+        enum class Svar {
+            JA, VET_IKKE, NEI
+        }
+
+        internal fun erMedlem() = svar == Svar.JA
+        internal fun erIkkeMedlem() = svar == Svar.NEI
+    }
+
+    internal fun erMedlem() = medlemskap.erMedlem()
+    internal fun erIkkeMedlem() = medlemskap.erIkkeMedlem()
 }
 
 class OppgavesvarParagraf_11_5(private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad) {
