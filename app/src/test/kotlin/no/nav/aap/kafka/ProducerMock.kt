@@ -21,7 +21,7 @@ internal class ProducerMock<T>(
         kafka.produce(config.topic, record.key()) {
             record.value()
         }
-        return CompletableFuture.completedFuture(RecordMetadata(null, 0L, 0L, 0L, 0L, 0, 0))
+        return CompletableFuture.completedFuture(RecordMetadata(null, 0L, 0, 0L, 0, 0))
     }
 
     override fun close() {}
