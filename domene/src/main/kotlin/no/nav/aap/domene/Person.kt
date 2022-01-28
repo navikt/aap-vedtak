@@ -20,7 +20,7 @@ class Søker(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
-    internal fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {
+    fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
         saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
     }
 
@@ -59,7 +59,7 @@ internal class Sak {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
-    internal fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {
+    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
         tilstand.håndterOppgavesvar(this, oppgavesvar)
     }
 
@@ -76,7 +76,7 @@ internal class Sak {
         fun onEntry() {}
         fun onExit() {}
         fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
-        fun håndterOppgavesvar(sak: Sak, oppgavesvar: Oppgavesvar) {
+        fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
             error("Forventet ikke oppgavesvar i tilstand $name")
         }
 
@@ -107,7 +107,7 @@ internal class Sak {
             error("Forventet ikke søknad i tilstand SøknadMottatt")
         }
 
-        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: Oppgavesvar) {
+        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
             sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
         }
     }
@@ -165,7 +165,7 @@ internal abstract class Vilkårsvurdering(
     internal abstract fun erIkkeOppfylt(): Boolean
 
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
-    internal open fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {}
+    internal open fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {}
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(
@@ -291,12 +291,12 @@ internal class Paragraf_11_5 :
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
-    override fun håndterOppgavesvar(oppgavesvar: Oppgavesvar) {
-        oppgavesvar.håndterOppgavesvar(this)
+    override fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
+        oppgavesvar.vurderNedsattArbeidsevne(this)
     }
 
-    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5, gradNedsattArbeidsevne: Int) {
-        tilstand.håndterOppgavesvar(this, oppgavesvar, gradNedsattArbeidsevne)
+    internal fun vurderNedsattArbeidsevne(oppgavesvar: OppgavesvarParagraf_11_5, gradNedsattArbeidsevne: Int) {
+        tilstand.vurderNedsattArbeidsevne(this, oppgavesvar, gradNedsattArbeidsevne)
     }
 
     override fun erOppfylt() = tilstand.erOppfylt()
@@ -321,7 +321,7 @@ internal class Paragraf_11_5 :
             error("Søknad skal ikke håndteres i tilstand $name")
         }
 
-        internal open fun håndterOppgavesvar(
+        internal open fun vurderNedsattArbeidsevne(
             vilkårsvurdering: Paragraf_11_5,
             oppgavesvar: OppgavesvarParagraf_11_5,
             gradNedsattArbeidsevne: Int
@@ -349,12 +349,19 @@ internal class Paragraf_11_5 :
                 //send ut oppgaver for manuell vurdering av vilkår
             }
 
-            override fun håndterOppgavesvar(
+            override fun vurderNedsattArbeidsevne(
                 vilkårsvurdering: Paragraf_11_5,
                 oppgavesvar: OppgavesvarParagraf_11_5,
                 gradNedsattArbeidsevne: Int
             ) {
-                vilkårsvurdering.vurderVilkår(oppgavesvar, gradNedsattArbeidsevne)
+                vilkårsvurdering.oppgavesvar = oppgavesvar
+                vilkårsvurdering.gradNedsattArbeidsevne = gradNedsattArbeidsevne
+                fun Int.erNedsattMedMinstHalvparten() = this >= 50
+                if (gradNedsattArbeidsevne.erNedsattMedMinstHalvparten()) {
+                    vilkårsvurdering.tilstand(Oppfylt)
+                } else {
+                    vilkårsvurdering.tilstand(IkkeOppfylt)
+                }
             }
         }
 
@@ -374,27 +381,10 @@ internal class Paragraf_11_5 :
     }
 
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
-
-    private fun vurderVilkår(oppgavesvar: OppgavesvarParagraf_11_5, gradNedsattArbeidsevne: Int) {
-        this.oppgavesvar = oppgavesvar
-        this.gradNedsattArbeidsevne = gradNedsattArbeidsevne
-
-        fun Int.erNedsattMedMinstHalvparten() = this >= 50
-
-        if (gradNedsattArbeidsevne.erNedsattMedMinstHalvparten()) {
-            tilstand(Tilstand.Oppfylt)
-        } else {
-            tilstand(Tilstand.IkkeOppfylt)
-        }
-    }
 }
 
-internal interface Oppgavesvar {
-    fun håndterOppgavesvar(vilkår: Paragraf_11_5) {}
-}
-
-internal class OppgavesvarParagraf_11_5(private val gradNedsattArbeidsevne: Int) : Oppgavesvar {
-    override fun håndterOppgavesvar(vilkår: Paragraf_11_5) {
-        vilkår.håndterOppgavesvar(this, gradNedsattArbeidsevne)
+class OppgavesvarParagraf_11_5(private val gradNedsattArbeidsevne: Int) {
+    internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5) {
+        vilkår.vurderNedsattArbeidsevne(this, gradNedsattArbeidsevne)
     }
 }

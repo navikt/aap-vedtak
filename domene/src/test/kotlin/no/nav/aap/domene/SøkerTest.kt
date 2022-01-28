@@ -252,7 +252,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val oppgavesvar = OppgavesvarParagraf_11_5(50)
-        oppgavesvar.håndterOppgavesvar(vilkår)
+        oppgavesvar.vurderNedsattArbeidsevne(vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -268,7 +268,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val oppgavesvar = OppgavesvarParagraf_11_5(49)
-        oppgavesvar.håndterOppgavesvar(vilkår)
+        oppgavesvar.vurderNedsattArbeidsevne(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
