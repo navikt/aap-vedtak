@@ -277,7 +277,7 @@ internal class Paragraf_11_4FørsteLedd :
 internal class Paragraf_11_5 :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
     private lateinit var oppgavesvar: OppgavesvarParagraf_11_5
-    private var gradNedsattArbeidsevne: Int = -1
+    private lateinit var nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
 
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
@@ -295,8 +295,11 @@ internal class Paragraf_11_5 :
         oppgavesvar.vurderNedsattArbeidsevne(this)
     }
 
-    internal fun vurderNedsattArbeidsevne(oppgavesvar: OppgavesvarParagraf_11_5, gradNedsattArbeidsevne: Int) {
-        tilstand.vurderNedsattArbeidsevne(this, oppgavesvar, gradNedsattArbeidsevne)
+    internal fun vurderNedsattArbeidsevne(
+        oppgavesvar: OppgavesvarParagraf_11_5,
+        nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
+    ) {
+        tilstand.vurderNedsattArbeidsevne(this, oppgavesvar, nedsattArbeidsevnegrad)
     }
 
     override fun erOppfylt() = tilstand.erOppfylt()
@@ -324,7 +327,7 @@ internal class Paragraf_11_5 :
         internal open fun vurderNedsattArbeidsevne(
             vilkårsvurdering: Paragraf_11_5,
             oppgavesvar: OppgavesvarParagraf_11_5,
-            gradNedsattArbeidsevne: Int
+            nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
         ) {
             error("Oppgave skal ikke håndteres i tilstand $name")
         }
@@ -352,12 +355,11 @@ internal class Paragraf_11_5 :
             override fun vurderNedsattArbeidsevne(
                 vilkårsvurdering: Paragraf_11_5,
                 oppgavesvar: OppgavesvarParagraf_11_5,
-                gradNedsattArbeidsevne: Int
+                nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
             ) {
                 vilkårsvurdering.oppgavesvar = oppgavesvar
-                vilkårsvurdering.gradNedsattArbeidsevne = gradNedsattArbeidsevne
-                fun Int.erNedsattMedMinstHalvparten() = this >= 50
-                if (gradNedsattArbeidsevne.erNedsattMedMinstHalvparten()) {
+                vilkårsvurdering.nedsattArbeidsevnegrad = nedsattArbeidsevnegrad
+                if (nedsattArbeidsevnegrad.erNedsattMedMinstHalvparten()) {
                     vilkårsvurdering.tilstand(Oppfylt)
                 } else {
                     vilkårsvurdering.tilstand(IkkeOppfylt)
@@ -383,8 +385,12 @@ internal class Paragraf_11_5 :
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 }
 
-class OppgavesvarParagraf_11_5(private val gradNedsattArbeidsevne: Int) {
+class OppgavesvarParagraf_11_5(private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad) {
+    class NedsattArbeidsevnegrad(private val grad: Int) {
+        internal fun erNedsattMedMinstHalvparten() = grad >= 50
+    }
+
     internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5) {
-        vilkår.vurderNedsattArbeidsevne(this, gradNedsattArbeidsevne)
+        vilkår.vurderNedsattArbeidsevne(this, nedsattArbeidsevnegrad)
     }
 }

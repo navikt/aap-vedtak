@@ -59,7 +59,7 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(50))
+        søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
         val saker = listOf(søker).toFrontendSaker()
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -251,7 +251,7 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val oppgavesvar = OppgavesvarParagraf_11_5(50)
+        val oppgavesvar = OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50))
         oppgavesvar.vurderNedsattArbeidsevne(vilkår)
 
         assertTrue(vilkår.erOppfylt())
@@ -267,7 +267,7 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val oppgavesvar = OppgavesvarParagraf_11_5(49)
+        val oppgavesvar = OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(49))
         oppgavesvar.vurderNedsattArbeidsevne(vilkår)
 
         assertFalse(vilkår.erOppfylt())
