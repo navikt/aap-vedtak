@@ -1,6 +1,7 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
+import no.nav.aap.domene.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
 import no.nav.aap.domene.frontendView.FrontendSak
@@ -80,23 +81,31 @@ internal class Sak {
     }
 
     private sealed interface Tilstand {
-        val name: String
+        val tilstandsnavn: Tilstandsnavn
+
+        enum class Tilstandsnavn {
+            START, SØKNAD_MOTTATT, IKKE_OPPFYLT, BEREGN_INNTEKT
+        }
+
         fun onEntry() {}
         fun onExit() {}
-        fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+        fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            error("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
+        }
+
         fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
-            error("Forventet ikke oppgavesvar i tilstand $name")
+            error("Forventet ikke oppgavesvar i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
-            error("Forventet ikke oppgavesvar i tilstand $name")
+            error("Forventet ikke oppgavesvar i tilstand ${tilstandsnavn.name}")
         }
 
-        fun toFrontendTilstand() = name
+        fun toFrontendTilstand() = tilstandsnavn.name
     }
 
     private object Start : Tilstand {
-        override val name = "Start"
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.START
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             //opprett initielle vilkårsvurderinger
             sak.vilkårsvurderinger.add(Paragraf_11_2())
@@ -104,33 +113,43 @@ internal class Sak {
             sak.vilkårsvurderinger.add(Paragraf_11_5())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
-            //Vurder om vilkår allerede er avslått
-            if (sak.vilkårsvurderinger.erNoenIkkeOppfylt()) {
-                sak.tilstand(IkkeOppfylt)
-            } else {
-                //bytt tilstand til SøknadMottatt
-                sak.tilstand(SøknadMottatt)
+            vurderNestetilstand(sak)
+        }
+
+        private fun vurderNestetilstand(sak: Sak) {
+            when {
+                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt)
+                else -> sak.tilstand(SøknadMottatt)
             }
         }
     }
 
     private object SøknadMottatt : Tilstand {
-        override val name = "SøknadMottatt"
-        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-            error("Forventet ikke søknad i tilstand SøknadMottatt")
-        }
-
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.SØKNAD_MOTTATT
         override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
             sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
+            vurderNesteTilstand(sak)
         }
 
         override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
             sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
+            vurderNesteTilstand(sak)
+        }
+
+        private fun vurderNesteTilstand(sak: Sak) {
+            when {
+                sak.vilkårsvurderinger.erAlleOppfylt() -> sak.tilstand(BeregnInntekt)
+                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt)
+            }
         }
     }
 
+    private object BeregnInntekt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.BEREGN_INNTEKT
+    }
+
     private object IkkeOppfylt : Tilstand {
-        override val name = "IkkeOppfylt"
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.IKKE_OPPFYLT
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             error("Forventet ikke søknad i tilstand IkkeOppfylt")
         }
@@ -194,6 +213,7 @@ internal abstract class Vilkårsvurdering(
     protected abstract fun toFrontendTilstand(): String
 
     internal companion object {
+        internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)
         internal fun Iterable<Vilkårsvurdering>.erNoenIkkeOppfylt() = any(Vilkårsvurdering::erIkkeOppfylt)
 
         internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
@@ -203,7 +223,8 @@ internal abstract class Vilkårsvurdering(
 
 internal class Paragraf_11_2 :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
-    private lateinit var oppgavesvar: OppgavesvarParagraf_11_2
+    private lateinit var maskineltOppgavesvar: OppgavesvarParagraf_11_2
+    private lateinit var manueltOppgavesvar: OppgavesvarParagraf_11_2
 
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
@@ -274,7 +295,7 @@ internal class Paragraf_11_2 :
                 vilkårsvurdering: Paragraf_11_2,
                 oppgavesvar: OppgavesvarParagraf_11_2
             ) {
-                vilkårsvurdering.oppgavesvar = oppgavesvar
+                vilkårsvurdering.maskineltOppgavesvar = oppgavesvar
                 when {
                     oppgavesvar.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
                     oppgavesvar.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
@@ -283,7 +304,8 @@ internal class Paragraf_11_2 :
             }
         }
 
-        object ManuellVurderingTrengs : Tilstand(name = "MANUELL_VURDERING_TRENGS", erOppfylt = false, erIkkeOppfylt = false) {
+        object ManuellVurderingTrengs :
+            Tilstand(name = "MANUELL_VURDERING_TRENGS", erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_2) {
                 //send ut oppgave for manuell vurdering av medlemskap
             }
@@ -292,7 +314,7 @@ internal class Paragraf_11_2 :
                 vilkårsvurdering: Paragraf_11_2,
                 oppgavesvar: OppgavesvarParagraf_11_2
             ) {
-                vilkårsvurdering.oppgavesvar = oppgavesvar
+                vilkårsvurdering.manueltOppgavesvar = oppgavesvar
                 when {
                     oppgavesvar.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
                     oppgavesvar.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)

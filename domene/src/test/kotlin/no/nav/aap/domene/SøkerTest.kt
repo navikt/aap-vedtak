@@ -132,9 +132,9 @@ internal class SakTest {
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
 
-        assertTilstand("Start", sak, personident, fødselsdato)
+        assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SøknadMottatt", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -148,9 +148,9 @@ internal class SakTest {
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
 
-        assertTilstand("Start", sak, personident, fødselsdato)
+        assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("IkkeOppfylt", sak, personident, fødselsdato)
+        assertTilstand("IKKE_OPPFYLT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -164,15 +164,39 @@ internal class SakTest {
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
 
-        assertTilstand("Start", sak, personident, fødselsdato)
+        assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SøknadMottatt", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
         assertThrows<IllegalStateException> { sak.håndterSøknad(søknad, fødselsdato) }
-        assertTilstand("SøknadMottatt", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+    }
+
+    @Test
+    fun `Hvis vi mottar en søknad der søker er over 18 år, er medlem og har nedsatt arbeidsevne med 50 prosent vil saken gå videre i behandlingen`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val sak = Sak()
+        assertTilstand("START", sak, personident, fødselsdato)
+
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+
+        sak.håndterOppgavesvar(OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.JA)))
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+
+        sak.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
+
+        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
+        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
     }
 
     private fun assertTilstand(actual: String, expected: Sak, personident: Personident, fødselsdato: Fødselsdato) {
