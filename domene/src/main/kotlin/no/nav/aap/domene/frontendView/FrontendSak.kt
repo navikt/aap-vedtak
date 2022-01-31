@@ -10,17 +10,8 @@ data class FrontendSak(
 )
 
 data class FrontendVilkårsvurdering(
-    val vilkår: FrontendVilkår,
-    val tilstand: String
-)
-
-data class FrontendVilkår(
-    val paragraf: String,
-    val ledd: List<String>
-)
-
-data class FrontendOppgave(
     val paragraf: String,
     val ledd: List<String>,
-    val personident: String
+    val tilstand: String,
+    val harÅpenOppgave: Boolean
 )

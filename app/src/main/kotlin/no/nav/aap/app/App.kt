@@ -10,6 +10,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
+import io.ktor.util.*
 import io.ktor.util.pipeline.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
@@ -22,7 +23,7 @@ import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
 import no.nav.aap.domene.*
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
-import no.nav.aap.domene.frontendView.FrontendOppgave
+import no.nav.aap.domene.frontendView.FrontendSak
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
@@ -38,7 +39,8 @@ data class OAuthConfig(val azure: IssuerConfig)
 
 private val søknader = mutableListOf<KafkaSøknad>()
 private val søkere = mutableListOf<Søker>()
-private val oppgaver = mutableListOf<FrontendOppgave>()
+
+private val oppgaver = mutableListOf<FrontendSak>()
 
 fun Application.server(
     config: Config = loadConfig(),
@@ -67,14 +69,20 @@ fun Application.server(
     }
 }
 
+class SøkerLytter : Lytter {
+    private lateinit var søker: Søker
+
+    override fun oppdaterSøker(søker: Søker) {
+        this.søker = søker
+    }
+
+    override fun sendOppgave(oppgave: Oppgave) {
+        oppgaver.add(søker.toFrontendSaker().last())
+    }
+}
+
 fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøknad>) {
     val timeout = Duration.ofMillis(10L)
-
-    val lytter = object : Lytter{
-        override fun sendOppgave(oppgave: Oppgave) {
-            oppgaver.add(oppgave.tilFrontendOppgave())
-        }
-    }
 
     thread {
         while (true) {
@@ -85,7 +93,7 @@ fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøkna
                 .map { it.value() }
                 .onEach(søknader::add)
                 .map { søknad -> Søknad(Personident(søknad.ident.verdi), Fødselsdato(søknad.fødselsdato)) }
-                .map { søknad -> søknad.opprettSøker(lytter) to søknad }
+                .map { søknad -> søknad.opprettSøker(SøkerLytter()) to søknad }
                 .onEach { (søker, _) -> søkere.add(søker) }
                 .forEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
         }
@@ -95,12 +103,14 @@ fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøkna
 fun Routing.api() {
     authenticate {
         route("/api") {
-            get("/saker") {
-                val frontendSaker = søkere.toFrontendSaker()
-                call.respond(frontendSaker)
+            get("/sak/neste") {
+                call.respond(søkere.first().toFrontendSaker())
             }
-            get("/oppgaver") {
-                call.respond(oppgaver)
+
+            get("/sak/{personident}") {
+                val personident = Personident(call.parameters.getOrFail("personident"))
+                val frontendSaker = søkere.toFrontendSaker(personident)
+                call.respond(frontendSaker)
             }
         }
     }

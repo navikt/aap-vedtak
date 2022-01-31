@@ -17,6 +17,10 @@ class Søker(
 ) {
     private val saker: MutableList<Sak> = mutableListOf()
 
+    init {
+        lytter.oppdaterSøker(this)
+    }
+
     fun håndterSøknad(søknad: Søknad) {
         val sak = Sak(lytter)
         saker.add(sak)
@@ -31,22 +35,23 @@ class Søker(
         saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
     }
 
-    private fun toFrontendSaker() =
+    fun toFrontendSaker() =
         saker.toFrontendSak(
             personident = personident,
             fødselsdato = fødselsdato
         )
 
     companion object {
-        fun Iterable<Søker>.toFrontendSaker() = flatMap(Søker::toFrontendSaker)
+        fun Iterable<Søker>.toFrontendSaker(personident: Personident) =this
+            .filter { it.personident == personident }
+            .flatMap(Søker::toFrontendSaker)
     }
 }
 
-interface Oppgave {
-    fun tilFrontendOppgave(): FrontendOppgave
-}
+interface Oppgave
 
 interface Lytter {
+    fun oppdaterSøker(søker: Søker){}
     fun sendOppgave(oppgave: Oppgave) {}
 }
 
@@ -54,6 +59,21 @@ class Personident(
     private val ident: String
 ) {
     internal fun toFrontendPersonident() = ident
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Personident
+
+        if (ident != other.ident) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return ident.hashCode()
+    }
 }
 
 class Fødselsdato(private val dato: LocalDate) {
@@ -218,11 +238,14 @@ internal abstract class Vilkårsvurdering(
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(
-            vilkår = FrontendVilkår(paragraf.name, ledd.map(Ledd::name)),
-            tilstand = toFrontendTilstand()
+            paragraf = paragraf.name,
+            ledd = ledd.map(Ledd::name),
+            tilstand = toFrontendTilstand(),
+            harÅpenOppgave = toFrontendHarÅpenOppgave()
         )
 
     protected abstract fun toFrontendTilstand(): String
+    protected open fun toFrontendHarÅpenOppgave(): Boolean = false
 
     internal companion object {
         internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)
