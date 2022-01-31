@@ -4,6 +4,7 @@ import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
+import no.nav.aap.domene.frontendView.FrontendOppgave
 import no.nav.aap.domene.frontendView.FrontendSak
 import no.nav.aap.domene.frontendView.FrontendVilkår
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
@@ -11,12 +12,13 @@ import java.time.LocalDate
 
 class Søker(
     private val personident: Personident,
-    private val fødselsdato: Fødselsdato
+    private val fødselsdato: Fødselsdato,
+    private val lytter: Lytter
 ) {
     private val saker: MutableList<Sak> = mutableListOf()
 
     fun håndterSøknad(søknad: Søknad) {
-        val sak = Sak()
+        val sak = Sak(lytter)
         saker.add(sak)
         sak.håndterSøknad(søknad, fødselsdato)
     }
@@ -40,6 +42,14 @@ class Søker(
     }
 }
 
+interface Oppgave {
+    fun tilFrontendOppgave(): FrontendOppgave
+}
+
+interface Lytter {
+    fun sendOppgave(oppgave: Oppgave) {}
+}
+
 class Personident(
     private val ident: String
 ) {
@@ -55,7 +65,7 @@ class Fødselsdato(private val dato: LocalDate) {
     internal fun toFrontendFødselsdato() = dato
 }
 
-internal class Sak {
+internal class Sak(private val lytter: Lytter = object : Lytter {}) {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
     private lateinit var vurderingsdato: LocalDate
 
@@ -108,9 +118,9 @@ internal class Sak {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.START
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             //opprett initielle vilkårsvurderinger
-            sak.vilkårsvurderinger.add(Paragraf_11_2())
-            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
-            sak.vilkårsvurderinger.add(Paragraf_11_5())
+            sak.vilkårsvurderinger.add(Paragraf_11_2(sak.lytter))
+            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd(sak.lytter))
+            sak.vilkårsvurderinger.add(Paragraf_11_5(sak.lytter))
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
             vurderNestetilstand(sak)
@@ -175,17 +185,19 @@ class Søknad(
     private val personident: Personident,
     private val fødselsdato: Fødselsdato
 ) {
-    fun opprettSøker() = Søker(personident, fødselsdato)
+    fun opprettSøker(lytter: Lytter = object : Lytter {}) = Søker(personident, fødselsdato, lytter)
 }
 
 internal abstract class Vilkårsvurdering(
-    private val paragraf: Paragraf,
-    private val ledd: List<Ledd>
+    protected val lytter: Lytter,
+    protected val paragraf: Paragraf,
+    protected val ledd: List<Ledd>
 ) {
     internal constructor(
+        lytter: Lytter,
         paragraf: Paragraf,
         ledd: Ledd
-    ) : this(paragraf, listOf(ledd))
+    ) : this(lytter, paragraf, listOf(ledd))
 
     internal enum class Paragraf {
         PARAGRAF_11_2, PARAGRAF_11_4, PARAGRAF_11_5
@@ -221,8 +233,8 @@ internal abstract class Vilkårsvurdering(
     }
 }
 
-internal class Paragraf_11_2 :
-    Vilkårsvurdering(Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
+internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
+    Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
     private lateinit var maskineltOppgavesvar: OppgavesvarParagraf_11_2
     private lateinit var manueltOppgavesvar: OppgavesvarParagraf_11_2
 
@@ -341,8 +353,8 @@ internal class Paragraf_11_2 :
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 }
 
-internal class Paragraf_11_4FørsteLedd :
-    Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
+internal class Paragraf_11_4FørsteLedd(lytter: Lytter = object : Lytter {}) :
+    Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
     private lateinit var fødselsdato: Fødselsdato
     private lateinit var vurderingsdato: LocalDate
 
@@ -432,8 +444,8 @@ internal class Paragraf_11_4FørsteLedd :
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 }
 
-internal class Paragraf_11_5 :
-    Vilkårsvurdering(Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
+internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
+    Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
     private lateinit var oppgavesvar: OppgavesvarParagraf_11_5
     private lateinit var nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
 
@@ -507,7 +519,26 @@ internal class Paragraf_11_5 :
 
         object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_5) {
-                //send ut oppgaver for manuell vurdering av vilkår
+                vilkårsvurdering.lytter.sendOppgave(
+                    Oppgave_11_5(
+                        vilkårsvurdering.paragraf,
+                        vilkårsvurdering.ledd,
+                        Personident("") //FIXME!!
+                    )
+                )
+            }
+
+            class Oppgave_11_5(
+                private val paragraf: Paragraf,
+                private val ledd: List<Ledd>,
+                private val personident: Personident
+            ) : Oppgave {
+                override fun tilFrontendOppgave() =
+                    FrontendOppgave(
+                        paragraf = paragraf.name,
+                        ledd = ledd.map(Ledd::name),
+                        personident = personident.toFrontendPersonident()
+                    )
             }
 
             override fun vurderNedsattArbeidsevne(

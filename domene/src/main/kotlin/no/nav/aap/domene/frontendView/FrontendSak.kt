@@ -18,3 +18,9 @@ data class FrontendVilkår(
     val paragraf: String,
     val ledd: List<String>
 )
+
+data class FrontendOppgave(
+    val paragraf: String,
+    val ledd: List<String>,
+    val personident: String
+)

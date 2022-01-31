@@ -2,6 +2,7 @@ package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
+import no.nav.aap.domene.frontendView.FrontendOppgave
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -118,6 +119,24 @@ internal class SøkerTest {
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
         assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
+    }
+
+    @Test
+    fun `En oppgave opprettes etter håndtering av søknad`() {
+        val lytter = object : Lytter{
+            var oppgave: FrontendOppgave? = null
+            override fun sendOppgave(oppgave: Oppgave) {
+                this.oppgave = oppgave.tilFrontendOppgave()
+            }
+        }
+
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker(lytter)
+        søker.håndterSøknad(søknad)
+
+        assertNotNull(lytter.oppgave)
     }
 
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
