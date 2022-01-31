@@ -20,11 +20,9 @@ import no.nav.aap.app.modell.KafkaSøknad
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
-import no.nav.aap.domene.Fødselsdato
-import no.nav.aap.domene.Personident
-import no.nav.aap.domene.Søker
+import no.nav.aap.domene.*
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
-import no.nav.aap.domene.Søknad
+import no.nav.aap.domene.frontendView.FrontendOppgave
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
@@ -40,6 +38,7 @@ data class OAuthConfig(val azure: IssuerConfig)
 
 private val søknader = mutableListOf<KafkaSøknad>()
 private val søkere = mutableListOf<Søker>()
+private val oppgaver = mutableListOf<FrontendOppgave>()
 
 fun Application.server(
     config: Config = loadConfig(),
@@ -71,6 +70,12 @@ fun Application.server(
 fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøknad>) {
     val timeout = Duration.ofMillis(10L)
 
+    val lytter = object : Lytter{
+        override fun sendOppgave(oppgave: Oppgave) {
+            oppgaver.add(oppgave.tilFrontendOppgave())
+        }
+    }
+
     thread {
         while (true) {
             val records = kafkaConsumer.poll(timeout)
@@ -80,7 +85,7 @@ fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøkna
                 .map { it.value() }
                 .onEach(søknader::add)
                 .map { søknad -> Søknad(Personident(søknad.ident.verdi), Fødselsdato(søknad.fødselsdato)) }
-                .map { søknad -> søknad.opprettSøker() to søknad }
+                .map { søknad -> søknad.opprettSøker(lytter) to søknad }
                 .onEach { (søker, _) -> søkere.add(søker) }
                 .forEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
         }
@@ -93,6 +98,9 @@ fun Routing.api() {
             get("/saker") {
                 val frontendSaker = søkere.toFrontendSaker()
                 call.respond(frontendSaker)
+            }
+            get("/oppgaver") {
+                call.respond(oppgaver)
             }
         }
     }

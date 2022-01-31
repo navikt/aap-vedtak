@@ -8,6 +8,7 @@ import io.ktor.server.testing.*
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.modell.KafkaPersonident
 import no.nav.aap.app.modell.KafkaSøknad
+import no.nav.aap.domene.frontendView.FrontendOppgave
 import no.nav.aap.domene.frontendView.FrontendSak
 import no.nav.aap.domene.frontendView.FrontendVilkår
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
@@ -28,7 +29,7 @@ internal class ApiTest {
     }
 
     @Test
-    fun `GET oppgaver returns 200 OK`() {
+    fun `GET saker returns 200 OK`() {
         withTestApp { mocks ->
             mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
                 KafkaSøknad(
@@ -64,6 +65,33 @@ internal class ApiTest {
                 )
                 assertEquals(response.status(), HttpStatusCode.OK)
                 assertEquals(expected, response.parseBody<List<FrontendSak>>())
+            }
+        }
+    }
+
+    @Test
+    fun `GET oppgaver returns 200 OK`() {
+        withTestApp { mocks ->
+            mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
+                KafkaSøknad(
+                    ident = KafkaPersonident("FNR", "11111111111"),
+                    fødselsdato = LocalDate.of(1990, 1, 1)
+                )
+            }
+
+            with(handleRequest(HttpMethod.Get, "/api/oppgaver") {
+                val token = mocks.azureAdProvider.issueAzureToken()
+                addHeader("Authorization", "Bearer ${token.serialize()}")
+            }) {
+                val expected = listOf(
+                    FrontendOppgave(
+                        paragraf = "PARAGRAF_11_5",
+                        ledd = listOf("LEDD_1", "LEDD_2"),
+                        personident = ""
+                    )
+                )
+                assertEquals(response.status(), HttpStatusCode.OK)
+                assertEquals(expected, response.parseBody<List<FrontendOppgave>>())
             }
         }
     }
