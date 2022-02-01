@@ -33,6 +33,52 @@ internal class ApiTest {
     }
 
     @Test
+    fun `GET alle saker returns 200 OK`() {
+        withTestApp { mocks ->
+            mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
+                KafkaSøknad(
+                    ident = KafkaPersonident("FNR", "11111111111"),
+                    fødselsdato = LocalDate.of(1990, 1, 1)
+                )
+            }
+
+            with(handleRequest(HttpMethod.Get, "/api/sak") {
+                val token = mocks.azureAdProvider.issueAzureToken()
+                addHeader("Authorization", "Bearer ${token.serialize()}")
+            }) {
+                val expected = listOf( FrontendSak(
+                    personident = "11111111111",
+                    fødselsdato = LocalDate.of(1990, 1, 1),
+                    tilstand = "SØKNAD_MOTTATT",
+                    vilkårsvurderinger = listOf(
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_2",
+                            ledd = listOf("LEDD_1", "LEDD_2"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = false
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_4",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "OPPFYLT",
+                            harÅpenOppgave = false
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_5",
+                            ledd = listOf("LEDD_1", "LEDD_2"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = false
+                        )
+                    )
+                )
+                )
+                assertEquals(response.status(), HttpStatusCode.OK)
+                assertEquals(expected, response.parseBody<List<FrontendSak>>())
+            }
+        }
+    }
+
+    @Test
     fun `GET neste sak returns 200 OK`() {
         withTestApp { mocks ->
             mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {

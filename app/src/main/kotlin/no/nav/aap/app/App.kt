@@ -43,7 +43,7 @@ private val søkere = mutableListOf<Søker>()
 private val oppgaver = mutableListOf<FrontendSak>()
 
 //Test hack
-internal fun tømLister(){
+internal fun tømLister() {
     søknader.clear()
     søkere.clear()
     oppgaver.clear()
@@ -110,6 +110,10 @@ fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøkna
 fun Routing.api() {
     authenticate {
         route("/api") {
+            get("/sak") {
+                call.respond(søkere.toFrontendSaker())
+            }
+
             get("/sak/neste") {
                 call.respond(søkere.first().toFrontendSaker().last())
             }

@@ -40,6 +40,8 @@ class Søker(
         )
 
     companion object {
+        fun Iterable<Søker>.toFrontendSaker() = flatMap(Søker::toFrontendSaker)
+
         fun Iterable<Søker>.toFrontendSaker(personident: Personident) = this
             .filter { it.personident == personident }
             .flatMap(Søker::toFrontendSaker)
