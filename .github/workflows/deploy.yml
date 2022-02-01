@@ -17,6 +17,9 @@ jobs:
       - name: Setter TAG
         run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
+      - name: Setter nais docker image tag
+        run: echo "DOCKERIMAGETAG=$(echo $IMAGE):$(echo $TAG)" >> $GITHUB_ENV
+
       - uses: actions/checkout@v2
 
       - uses: actions/setup-java@v2
@@ -59,4 +62,5 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/nais.yml,.nais/alerts.yml
+          VAR: DOCKERIMAGETAG=${{ env.DOCKERIMAGETAG }}
           VARS: .nais/dev.json

@@ -6,7 +6,7 @@ metadata:
   labels:
     team: aap
 spec:
-  image: {{ image }}:{{ tag }}
+  image: {{ DOCKERIMAGETAG }}
   accessPolicy:
     inbound:
       rules:
