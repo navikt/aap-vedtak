@@ -42,6 +42,13 @@ private val søkere = mutableListOf<Søker>()
 
 private val oppgaver = mutableListOf<FrontendSak>()
 
+//Test hack
+internal fun tømLister(){
+    søknader.clear()
+    søkere.clear()
+    oppgaver.clear()
+}
+
 fun Application.server(
     config: Config = loadConfig(),
     kafkaConsumer: Consumer<String, KafkaSøknad> = KafkaFactory.createConsumer(config.kafka),
@@ -104,7 +111,7 @@ fun Routing.api() {
     authenticate {
         route("/api") {
             get("/sak/neste") {
-                call.respond(søkere.first().toFrontendSaker())
+                call.respond(søkere.first().toFrontendSaker().last())
             }
 
             get("/sak/{personident}") {

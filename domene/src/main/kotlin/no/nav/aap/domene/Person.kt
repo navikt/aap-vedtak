@@ -4,9 +4,7 @@ import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
-import no.nav.aap.domene.frontendView.FrontendOppgave
 import no.nav.aap.domene.frontendView.FrontendSak
-import no.nav.aap.domene.frontendView.FrontendVilkår
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import java.time.LocalDate
 
@@ -42,7 +40,7 @@ class Søker(
         )
 
     companion object {
-        fun Iterable<Søker>.toFrontendSaker(personident: Personident) =this
+        fun Iterable<Søker>.toFrontendSaker(personident: Personident) = this
             .filter { it.personident == personident }
             .flatMap(Søker::toFrontendSaker)
     }
@@ -51,7 +49,7 @@ class Søker(
 interface Oppgave
 
 interface Lytter {
-    fun oppdaterSøker(søker: Søker){}
+    fun oppdaterSøker(søker: Søker) {}
     fun sendOppgave(oppgave: Oppgave) {}
 }
 
@@ -210,8 +208,8 @@ class Søknad(
 
 internal abstract class Vilkårsvurdering(
     protected val lytter: Lytter,
-    protected val paragraf: Paragraf,
-    protected val ledd: List<Ledd>
+    private val paragraf: Paragraf,
+    private val ledd: List<Ledd>
 ) {
     internal constructor(
         lytter: Lytter,
@@ -542,27 +540,10 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
 
         object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_5) {
-                vilkårsvurdering.lytter.sendOppgave(
-                    Oppgave_11_5(
-                        vilkårsvurdering.paragraf,
-                        vilkårsvurdering.ledd,
-                        Personident("") //FIXME!!
-                    )
-                )
+                vilkårsvurdering.lytter.sendOppgave(Oppgave_11_5())
             }
 
-            class Oppgave_11_5(
-                private val paragraf: Paragraf,
-                private val ledd: List<Ledd>,
-                private val personident: Personident
-            ) : Oppgave {
-                override fun tilFrontendOppgave() =
-                    FrontendOppgave(
-                        paragraf = paragraf.name,
-                        ledd = ledd.map(Ledd::name),
-                        personident = personident.toFrontendPersonident()
-                    )
-            }
+            class Oppgave_11_5 : Oppgave
 
             override fun vurderNedsattArbeidsevne(
                 vilkårsvurdering: Paragraf_11_5,

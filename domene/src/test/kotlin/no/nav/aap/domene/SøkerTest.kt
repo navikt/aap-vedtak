@@ -2,13 +2,12 @@ package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
-import no.nav.aap.domene.frontendView.FrontendOppgave
+import no.nav.aap.domene.frontendView.FrontendSak
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
-
 
 internal class SøkerTest {
     @Test
@@ -19,7 +18,7 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
     }
@@ -32,7 +31,7 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals("IKKE_OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
     }
@@ -45,7 +44,7 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(3, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
@@ -62,7 +61,7 @@ internal class SøkerTest {
 
         søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(3, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
@@ -77,7 +76,7 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(3, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
@@ -95,7 +94,7 @@ internal class SøkerTest {
 
         søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(3, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
@@ -113,7 +112,7 @@ internal class SøkerTest {
 
         søker.håndterOppgavesvar(OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.JA)))
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(3, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
@@ -124,9 +123,15 @@ internal class SøkerTest {
     @Test
     fun `En oppgave opprettes etter håndtering av søknad`() {
         val lytter = object : Lytter{
-            var oppgave: FrontendOppgave? = null
+            lateinit var søker: Søker
+            var oppgave: FrontendSak? = null
+
+            override fun oppdaterSøker(søker: Søker) {
+                this.søker = søker
+            }
+
             override fun sendOppgave(oppgave: Oppgave) {
-                this.oppgave = oppgave.tilFrontendOppgave()
+                this.oppgave = søker.toFrontendSaker().last()
             }
         }
 
@@ -140,7 +145,7 @@ internal class SøkerTest {
     }
 
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
-        single { it.vilkår.paragraf == paragraf.name }
+        single { it.paragraf == paragraf.name }
 }
 
 internal class SakTest {
@@ -224,7 +229,7 @@ internal class SakTest {
     }
 
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
-        single { it.vilkår.paragraf == paragraf.name }
+        single { it.paragraf == paragraf.name }
 }
 
 internal class FrontendTest {
@@ -236,7 +241,7 @@ internal class FrontendTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        val saker = listOf(søker).toFrontendSaker()
+        val saker = listOf(søker).toFrontendSaker(personident)
         assertEquals(1, saker.size)
     }
 }

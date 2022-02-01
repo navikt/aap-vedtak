@@ -8,11 +8,10 @@ import io.ktor.server.testing.*
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.modell.KafkaPersonident
 import no.nav.aap.app.modell.KafkaSøknad
-import no.nav.aap.domene.frontendView.FrontendOppgave
 import no.nav.aap.domene.frontendView.FrontendSak
-import no.nav.aap.domene.frontendView.FrontendVilkår
 import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
@@ -28,8 +27,13 @@ internal class ApiTest {
         }
     }
 
+    @BeforeEach
+    fun setup(){
+        tømLister()
+    }
+
     @Test
-    fun `GET saker returns 200 OK`() {
+    fun `GET neste sak returns 200 OK`() {
         withTestApp { mocks ->
             mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
                 KafkaSøknad(
@@ -38,7 +42,52 @@ internal class ApiTest {
                 )
             }
 
-            with(handleRequest(HttpMethod.Get, "/api/saker") {
+            with(handleRequest(HttpMethod.Get, "/api/sak/neste") {
+                val token = mocks.azureAdProvider.issueAzureToken()
+                addHeader("Authorization", "Bearer ${token.serialize()}")
+            }) {
+                val expected = FrontendSak(
+                    personident = "11111111111",
+                    fødselsdato = LocalDate.of(1990, 1, 1),
+                    tilstand = "SØKNAD_MOTTATT",
+                    vilkårsvurderinger = listOf(
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_2",
+                            ledd = listOf("LEDD_1", "LEDD_2"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = false
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_4",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "OPPFYLT",
+                            harÅpenOppgave = false
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_5",
+                            ledd = listOf("LEDD_1", "LEDD_2"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = false
+                        )
+                    )
+                )
+                assertEquals(response.status(), HttpStatusCode.OK)
+                assertEquals(expected, response.parseBody<FrontendSak>())
+            }
+        }
+    }
+
+    @Test
+    fun `GET saker for person returns 200 OK`() {
+        withTestApp { mocks ->
+            mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
+                KafkaSøknad(
+                    ident = KafkaPersonident("FNR", "11111111111"),
+                    fødselsdato = LocalDate.of(1990, 1, 1)
+                )
+            }
+
+            with(handleRequest(HttpMethod.Get, "/api/sak/11111111111") {
                 val token = mocks.azureAdProvider.issueAzureToken()
                 addHeader("Authorization", "Bearer ${token.serialize()}")
             }) {
@@ -49,49 +98,28 @@ internal class ApiTest {
                         tilstand = "SØKNAD_MOTTATT",
                         vilkårsvurderinger = listOf(
                             FrontendVilkårsvurdering(
-                                vilkår = FrontendVilkår("PARAGRAF_11_2", listOf("LEDD_1", "LEDD_2")),
-                                tilstand = "SØKNAD_MOTTATT"
+                                paragraf = "PARAGRAF_11_2",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = false
                             ),
                             FrontendVilkårsvurdering(
-                                vilkår = FrontendVilkår("PARAGRAF_11_4", listOf("LEDD_1")),
-                                tilstand = "OPPFYLT"
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "OPPFYLT",
+                                harÅpenOppgave = false
                             ),
                             FrontendVilkårsvurdering(
-                                vilkår = FrontendVilkår("PARAGRAF_11_5", listOf("LEDD_1", "LEDD_2")),
-                                tilstand = "SØKNAD_MOTTATT"
+                                paragraf = "PARAGRAF_11_5",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = false
                             )
                         )
                     )
                 )
                 assertEquals(response.status(), HttpStatusCode.OK)
                 assertEquals(expected, response.parseBody<List<FrontendSak>>())
-            }
-        }
-    }
-
-    @Test
-    fun `GET oppgaver returns 200 OK`() {
-        withTestApp { mocks ->
-            mocks.kafka.produce("aap.aap-soknad-sendt.v1", "11111111111") {
-                KafkaSøknad(
-                    ident = KafkaPersonident("FNR", "11111111111"),
-                    fødselsdato = LocalDate.of(1990, 1, 1)
-                )
-            }
-
-            with(handleRequest(HttpMethod.Get, "/api/oppgaver") {
-                val token = mocks.azureAdProvider.issueAzureToken()
-                addHeader("Authorization", "Bearer ${token.serialize()}")
-            }) {
-                val expected = listOf(
-                    FrontendOppgave(
-                        paragraf = "PARAGRAF_11_5",
-                        ledd = listOf("LEDD_1", "LEDD_2"),
-                        personident = ""
-                    )
-                )
-                assertEquals(response.status(), HttpStatusCode.OK)
-                assertEquals(expected, response.parseBody<List<FrontendOppgave>>())
             }
         }
     }
