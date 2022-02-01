@@ -78,13 +78,18 @@ fun Application.server(
 
 class SøkerLytter : Lytter {
     private lateinit var søker: Søker
+    private var oppgaveOpprettet = false
 
     override fun oppdaterSøker(søker: Søker) {
         this.søker = søker
     }
 
     override fun sendOppgave(oppgave: Oppgave) {
-        oppgaver.add(søker.toFrontendSaker().last())
+        oppgaveOpprettet = true
+    }
+
+    override fun finalize() {
+        if (oppgaveOpprettet) oppgaver.add(søker.toFrontendSaker().last())
     }
 }
 
@@ -100,9 +105,11 @@ fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøkna
                 .map { it.value() }
                 .onEach(søknader::add)
                 .map { søknad -> Søknad(Personident(søknad.ident.verdi), Fødselsdato(søknad.fødselsdato)) }
-                .map { søknad -> søknad.opprettSøker(SøkerLytter()) to søknad }
-                .onEach { (søker, _) -> søkere.add(søker) }
-                .forEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
+                .map { søknad -> søknad to SøkerLytter() }
+                .map { (søknad, lytter) -> Triple(søknad.opprettSøker(lytter), søknad, lytter) }
+                .onEach { (søker) -> søkere.add(søker) }
+                .onEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
+                .forEach { (_, _, lytter) -> lytter.finalize() }
         }
     }
 }
@@ -115,7 +122,7 @@ fun Routing.api() {
             }
 
             get("/sak/neste") {
-                call.respond(søkere.first().toFrontendSaker().last())
+                call.respond(oppgaver.last())
             }
 
             get("/sak/{personident}") {

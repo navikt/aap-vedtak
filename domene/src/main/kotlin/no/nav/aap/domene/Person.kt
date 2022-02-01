@@ -53,6 +53,7 @@ interface Oppgave
 interface Lytter {
     fun oppdaterSøker(søker: Søker) {}
     fun sendOppgave(oppgave: Oppgave) {}
+    fun finalize() {}
 }
 
 class Personident(
@@ -356,6 +357,8 @@ internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
                     else -> error("Veileder/saksbehandler må ta stilling til om bruker er medlem eller ikke")
                 }
             }
+
+            override fun toFrontendHarÅpenOppgave() = true
         }
 
         object Oppfylt : Tilstand(
@@ -371,9 +374,11 @@ internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
         )
 
         internal fun toFrontendTilstand(): String = name
+        internal open fun toFrontendHarÅpenOppgave() = false
     }
 
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
+    override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
 }
 
 internal class Paragraf_11_4FørsteLedd(lytter: Lytter = object : Lytter {}) :
@@ -560,6 +565,8 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
                     vilkårsvurdering.tilstand(IkkeOppfylt)
                 }
             }
+
+            override fun toFrontendHarÅpenOppgave() = true
         }
 
         object Oppfylt : Tilstand(
@@ -575,9 +582,11 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
         )
 
         internal fun toFrontendTilstand(): String = name
+        internal open fun toFrontendHarÅpenOppgave() = false
     }
 
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
+    override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
 }
 
 class OppgavesvarParagraf_11_2(private val medlemskap: Medlemskap) {

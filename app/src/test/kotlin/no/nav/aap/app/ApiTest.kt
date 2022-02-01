@@ -67,7 +67,7 @@ internal class ApiTest {
                             paragraf = "PARAGRAF_11_5",
                             ledd = listOf("LEDD_1", "LEDD_2"),
                             tilstand = "SØKNAD_MOTTATT",
-                            harÅpenOppgave = false
+                            harÅpenOppgave = true
                         )
                     )
                 )
@@ -113,7 +113,7 @@ internal class ApiTest {
                             paragraf = "PARAGRAF_11_5",
                             ledd = listOf("LEDD_1", "LEDD_2"),
                             tilstand = "SØKNAD_MOTTATT",
-                            harÅpenOppgave = false
+                            harÅpenOppgave = true
                         )
                     )
                 )
@@ -159,7 +159,7 @@ internal class ApiTest {
                                 paragraf = "PARAGRAF_11_5",
                                 ledd = listOf("LEDD_1", "LEDD_2"),
                                 tilstand = "SØKNAD_MOTTATT",
-                                harÅpenOppgave = false
+                                harÅpenOppgave = true
                             )
                         )
                     )

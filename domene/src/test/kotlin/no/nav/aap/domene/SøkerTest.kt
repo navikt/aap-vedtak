@@ -122,8 +122,9 @@ internal class SøkerTest {
 
     @Test
     fun `En oppgave opprettes etter håndtering av søknad`() {
-        val lytter = object : Lytter{
+        val lytter = object : Lytter {
             lateinit var søker: Søker
+            private var oppgaveOpprettet = false
             var oppgave: FrontendSak? = null
 
             override fun oppdaterSøker(søker: Søker) {
@@ -131,7 +132,11 @@ internal class SøkerTest {
             }
 
             override fun sendOppgave(oppgave: Oppgave) {
-                this.oppgave = søker.toFrontendSaker().last()
+                this.oppgaveOpprettet = true
+            }
+
+            override fun finalize() {
+                if (this.oppgaveOpprettet) this.oppgave = søker.toFrontendSaker().last()
             }
         }
 
@@ -141,7 +146,35 @@ internal class SøkerTest {
         val søker = søknad.opprettSøker(lytter)
         søker.håndterSøknad(søknad)
 
+        lytter.finalize()
         assertNotNull(lytter.oppgave)
+
+        val expected = FrontendSak(
+            personident = "12345678910",
+            fødselsdato = LocalDate.now().minusYears(18),
+            tilstand = "SØKNAD_MOTTATT",
+            vilkårsvurderinger = listOf(
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_2",
+                    ledd = listOf("LEDD_1", "LEDD_2"),
+                    tilstand = "SØKNAD_MOTTATT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_4",
+                    ledd = listOf("LEDD_1"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_5",
+                    ledd = listOf("LEDD_1", "LEDD_2"),
+                    tilstand = "SØKNAD_MOTTATT",
+                    harÅpenOppgave = true
+                )
+            )
+        )
+        assertEquals(expected, lytter.oppgave)
     }
 
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
