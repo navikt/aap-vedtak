@@ -21,8 +21,8 @@ spec:
   replicas:
     cpuThresholdPercentage: 50
     disableAutoScaling: true
-    max: 2
-    min: 2
+    max: 1
+    min: 1
   resources:
     limits:
       cpu: 500m
