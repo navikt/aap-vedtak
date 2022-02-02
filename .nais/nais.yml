@@ -6,7 +6,7 @@ metadata:
   labels:
     team: aap
 spec:
-  image: {{ IMAGE_MED_TAG }}
+  image: {{ IMAGE }}
   accessPolicy:
     inbound:
       rules:
@@ -19,7 +19,7 @@ spec:
   ingresses:
     - {{ingress}}
   replicas:
-    cpuThresholdPercentage: 50
+    cpuThresholdPercentage: 90
     disableAutoScaling: true
     max: 1
     min: 1
@@ -28,12 +28,18 @@ spec:
       cpu: 500m
       memory: 512Mi
     requests:
-      cpu: 200m
-      memory: 256Mi
+      cpu: 500m
+      memory: 512Mi
   liveness:
     path: /actuator/healthy
+    initialDelay: 3
+    periodSeconds: 3
+    failureThreshold: 21
   readiness:
     path: /actuator/healthy
+    initialDelay: 3
+    periodSeconds: 3
+    failureThreshold: 21
   prometheus:
     enabled: true
     path: /actuator/metrics
