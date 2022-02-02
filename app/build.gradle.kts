@@ -43,9 +43,6 @@ dependencies {
     testImplementation("no.nav.security:mock-oauth2-server:0.4.2")
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.0")
-    testImplementation("no.nav:kafka-embedded-env:2.8.1") {
-        exclude("io.confluent", "kafka-schema-registry")
-    }
 }
 
 application {
