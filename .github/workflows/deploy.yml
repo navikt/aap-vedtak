@@ -22,8 +22,10 @@ jobs:
 
       - uses: gradle/wrapper-validation-action@v1
       - uses: gradle/gradle-build-action@v2
-        with:
-          arguments: test app:shadowJar --continue --no-daemon
+#        with:
+#          arguments: test app:shadowJar --continue --no-daemon
+
+      - run: ./gradlew test app:shadowJar --continue --no-daemon
 
       - uses: dorny/test-reporter@v1.5.0
         if: always()
