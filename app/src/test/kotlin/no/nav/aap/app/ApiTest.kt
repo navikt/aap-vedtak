@@ -8,8 +8,8 @@ import io.ktor.server.testing.*
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.modell.KafkaPersonident
 import no.nav.aap.app.modell.KafkaSøknad
-import no.nav.aap.domene.frontendView.FrontendSak
-import no.nav.aap.domene.frontendView.FrontendVilkårsvurdering
+import no.nav.aap.frontendView.FrontendSak
+import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
