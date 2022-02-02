@@ -19,9 +19,10 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           check-latest: true
+          cache: 'gradle'
 
-      - uses: gradle/wrapper-validation-action@v1
-      - uses: gradle/gradle-build-action@v2
+#      - uses: gradle/wrapper-validation-action@v1
+#      - uses: gradle/gradle-build-action@v2
 #        with:
 #          arguments: test app:shadowJar --continue --no-daemon
 
