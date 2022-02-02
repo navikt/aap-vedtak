@@ -17,8 +17,8 @@ jobs:
       - name: Setter TAG
         run: echo "TAG=$(date +%Y.%m.%d.%H%M%S)-$(echo $GITHUB_SHA | cut -c1-7)" >> $GITHUB_ENV
 
-      - name: Setter IMAGE_MED_TAG
-        run: echo "IMAGE_MED_TAG=$(echo $IMAGE):$(echo $TAG)" >> $GITHUB_ENV
+      - name: Setter IMAGEMEDTAG
+        run: echo "IMAGEMEDTAG=$(echo $IMAGE):$(echo $TAG)" >> $GITHUB_ENV
 
       - uses: actions/checkout@v2
 
@@ -39,7 +39,7 @@ jobs:
         with:
           build-args: project=${{ github.workflow }}
           push: true
-          tags: ${{ env.IMAGE_MED_TAG }},${{ env.IMAGE }}:latest
+          tags: ${{ env.IMAGEMEDTAG }},${{ env.IMAGE }}:latest
 
         # POC - build docker before testing
         # TODO: Use cache layers in test
