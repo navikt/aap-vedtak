@@ -1,4 +1,4 @@
-package no.nav.aap.domene.frontendView
+package no.nav.aap.frontendView
 
 import java.time.LocalDate
 

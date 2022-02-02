@@ -1,0 +1,132 @@
+package no.nav.aap.domene
+
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
+import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.Paragraf_11_2
+import no.nav.aap.domene.vilkår.Paragraf_11_4FørsteLedd
+import no.nav.aap.domene.vilkår.Paragraf_11_5
+import no.nav.aap.domene.vilkår.Vilkårsvurdering
+import no.nav.aap.frontendView.FrontendSak
+import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
+import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.Søknad
+import java.time.LocalDate
+
+internal class Sak(private val lytter: Lytter = object : Lytter {}) {
+    private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
+    private lateinit var vurderingsdato: LocalDate
+
+    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
+        this.vurderingsdato = LocalDate.now()
+        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+    }
+
+    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
+        tilstand.håndterOppgavesvar(this, oppgavesvar)
+    }
+
+    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
+        tilstand.håndterOppgavesvar(this, oppgavesvar)
+    }
+
+    private var tilstand: Tilstand = Start
+
+    private fun tilstand(nyTilstand: Tilstand) {
+        nyTilstand.onExit()
+        tilstand = nyTilstand
+        tilstand.onEntry()
+    }
+
+    private sealed interface Tilstand {
+        val tilstandsnavn: Tilstandsnavn
+
+        enum class Tilstandsnavn {
+            START, SØKNAD_MOTTATT, IKKE_OPPFYLT, BEREGN_INNTEKT
+        }
+
+        fun onEntry() {}
+        fun onExit() {}
+        fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            error("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
+        }
+
+        fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
+            error("Forventet ikke oppgavesvar i tilstand ${tilstandsnavn.name}")
+        }
+
+        fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
+            error("Forventet ikke oppgavesvar i tilstand ${tilstandsnavn.name}")
+        }
+
+        fun toFrontendTilstand() = tilstandsnavn.name
+    }
+
+    private object Start : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.START
+        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            //opprett initielle vilkårsvurderinger
+            sak.vilkårsvurderinger.add(Paragraf_11_2(sak.lytter))
+            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd(sak.lytter))
+            sak.vilkårsvurderinger.add(Paragraf_11_5(sak.lytter))
+            sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+
+            vurderNestetilstand(sak)
+        }
+
+        private fun vurderNestetilstand(sak: Sak) {
+            when {
+                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt)
+                else -> sak.tilstand(SøknadMottatt)
+            }
+        }
+    }
+
+    private object SøknadMottatt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.SØKNAD_MOTTATT
+        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
+            sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
+            vurderNesteTilstand(sak)
+        }
+
+        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
+            sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
+            vurderNesteTilstand(sak)
+        }
+
+        private fun vurderNesteTilstand(sak: Sak) {
+            when {
+                sak.vilkårsvurderinger.erAlleOppfylt() -> sak.tilstand(BeregnInntekt)
+                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt)
+            }
+        }
+    }
+
+    private object BeregnInntekt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.BEREGN_INNTEKT
+    }
+
+    private object IkkeOppfylt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.IKKE_OPPFYLT
+        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            error("Forventet ikke søknad i tilstand IkkeOppfylt")
+        }
+    }
+
+
+    private fun toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) =
+        FrontendSak(
+            personident = personident.toFrontendPersonident(),
+            fødselsdato = fødselsdato.toFrontendFødselsdato(),
+            tilstand = tilstand.toFrontendTilstand(),
+            vilkårsvurderinger = vilkårsvurderinger.toFrontendVilkårsvurdering()
+        )
+
+    internal companion object {
+        internal fun Iterable<Sak>.toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) = map {
+            it.toFrontendSak(personident = personident, fødselsdato = fødselsdato)
+        }
+    }
+}

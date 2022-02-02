@@ -23,7 +23,10 @@ import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.app.security.IssuerConfig
 import no.nav.aap.domene.*
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
-import no.nav.aap.domene.frontendView.FrontendSak
+import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.frontendView.FrontendSak
+import no.nav.aap.hendelse.Søknad
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.slf4j.Logger
