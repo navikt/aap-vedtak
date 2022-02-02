@@ -19,14 +19,13 @@ jobs:
           java-version: 17
           distribution: 'temurin'
           check-latest: true
-          cache: 'gradle'
 
-#      - uses: gradle/wrapper-validation-action@v1
-#      - uses: gradle/gradle-build-action@v2
-#        with:
-#          arguments: test app:shadowJar --continue --no-daemon
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: test app:shadowJar --continue --no-daemon
 
-      - run: ./gradlew test app:shadowJar --continue --no-daemon
+#      - run: ./gradlew test app:shadowJar --continue --no-daemon
 
       - uses: dorny/test-reporter@v1.5.0
         if: always()
@@ -41,10 +40,16 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: docker/build-push-action@v2.7.0
-        with:
-          push: true
-          tags: ${{ env.IMAGE }},ghcr.io/${{ github.repository }}:latest
+
+      - name: Bygg, tag og push Docker image
+        run: |
+          docker build --pull --tag ${{ env.IMAGE }} --tag ghcr.io/${{ github.repository }}:latest .
+          docker push ghcr.io/navikt/${{ github.repository }} --all-tags
+
+#      - uses: docker/build-push-action@v2.7.0
+#        with:
+#          push: true
+#          tags: ${{ env.IMAGE }},ghcr.io/${{ github.repository }}:latest
 
       - uses: nais/deploy/actions/deploy@v1
         env:
