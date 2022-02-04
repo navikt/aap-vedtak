@@ -1,12 +1,11 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.Lytter
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
-internal class Paragraf_11_4FørsteLedd(lytter: Lytter = object : Lytter {}) :
-    Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
+internal class Paragraf_11_4FørsteLedd :
+    Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
     private lateinit var fødselsdato: Fødselsdato
     private lateinit var vurderingsdato: LocalDate
 

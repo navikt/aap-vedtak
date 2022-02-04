@@ -1,8 +1,5 @@
 package no.nav.aap.component
 
-import no.nav.aap.domene.Lytter
-import no.nav.aap.domene.Behov
-import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
@@ -12,8 +9,9 @@ import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import no.nav.aap.hendelse.behov.Behov_11_2
+import no.nav.aap.hendelse.behov.Behov_11_5
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
@@ -129,33 +127,16 @@ internal class SøkerComponentTest {
     }
 
     @Test
-    fun `En oppgave opprettes etter håndtering av søknad`() {
-        val lytter = object : Lytter {
-            lateinit var søker: Søker
-            private var oppgaveOpprettet = false
-            var oppgave: FrontendSak? = null
-
-            override fun oppdaterSøker(søker: Søker) {
-                this.søker = søker
-            }
-
-            override fun sendOppgave(behov: Behov) {
-                this.oppgaveOpprettet = true
-            }
-
-            override fun finalize() {
-                if (this.oppgaveOpprettet) this.oppgave = søker.toFrontendSaker().last()
-            }
-        }
-
+    fun `En behov opprettes etter håndtering av søknad`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
-        val søker = søknad.opprettSøker(lytter)
+        val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        lytter.finalize()
-        assertNotNull(lytter.oppgave)
+        val behov = søknad.behov()
+        assertTrue(behov.filterIsInstance<Behov_11_2>().isNotEmpty())
+        assertTrue(behov.filterIsInstance<Behov_11_5>().isNotEmpty())
 
         val expected = FrontendSak(
             personident = "12345678910",
@@ -182,7 +163,7 @@ internal class SøkerComponentTest {
                 )
             )
         )
-        assertEquals(expected, lytter.oppgave)
+        assertEquals(expected, søker.toFrontendSaker().single())
     }
 
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =

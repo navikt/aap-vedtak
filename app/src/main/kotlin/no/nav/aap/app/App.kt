@@ -79,23 +79,6 @@ fun Application.server(
     }
 }
 
-class SøkerLytter : Lytter {
-    private lateinit var søker: Søker
-    private var oppgaveOpprettet = false
-
-    override fun oppdaterSøker(søker: Søker) {
-        this.søker = søker
-    }
-
-    override fun sendOppgave(behov: Behov) {
-        oppgaveOpprettet = true
-    }
-
-    override fun finalize() {
-        if (oppgaveOpprettet) oppgaver.add(søker.toFrontendSaker().last())
-    }
-}
-
 fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøknad>) {
     val timeout = Duration.ofMillis(10L)
 
@@ -108,11 +91,10 @@ fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøkna
                 .map { it.value() }
                 .onEach(søknader::add)
                 .map { søknad -> Søknad(Personident(søknad.ident.verdi), Fødselsdato(søknad.fødselsdato)) }
-                .map { søknad -> søknad to SøkerLytter() }
-                .map { (søknad, lytter) -> Triple(søknad.opprettSøker(lytter), søknad, lytter) }
+                .map { søknad -> søknad.opprettSøker() to søknad }
                 .onEach { (søker) -> søkere.add(søker) }
                 .onEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
-                .forEach { (_, _, lytter) -> lytter.finalize() }
+                .forEach { (søker: Søker, søknad) -> if(søknad.behov().isNotEmpty()) oppgaver.add(søker.toFrontendSaker().first()) }
         }
     }
 }

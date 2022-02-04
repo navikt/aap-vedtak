@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-class LøsningParagraf_11_2(private val medlemskap: Medlemskap) {
+class LøsningParagraf_11_2(private val medlemskap: Medlemskap) : Hendelse() {
     class Medlemskap(private val svar: Svar) {
         enum class Svar {
             JA, VET_IKKE, NEI

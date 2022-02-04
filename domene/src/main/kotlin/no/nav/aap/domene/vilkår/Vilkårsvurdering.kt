@@ -1,23 +1,20 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.Lytter
-import no.nav.aap.hendelse.LøsningParagraf_11_2
-import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
+import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
 internal abstract class Vilkårsvurdering(
-    protected val lytter: Lytter,
     private val paragraf: Paragraf,
     private val ledd: List<Ledd>
 ) {
     internal constructor(
-        lytter: Lytter,
         paragraf: Paragraf,
         ledd: Ledd
-    ) : this(lytter, paragraf, listOf(ledd))
+    ) : this(paragraf, listOf(ledd))
 
     internal enum class Paragraf {
         PARAGRAF_11_2, PARAGRAF_11_4, PARAGRAF_11_5

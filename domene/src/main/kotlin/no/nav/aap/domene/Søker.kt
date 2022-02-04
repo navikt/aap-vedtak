@@ -9,17 +9,12 @@ import no.nav.aap.hendelse.Søknad
 
 class Søker(
     private val personident: Personident,
-    private val fødselsdato: Fødselsdato,
-    private val lytter: Lytter
+    private val fødselsdato: Fødselsdato
 ) {
     private val saker: MutableList<Sak> = mutableListOf()
 
-    init {
-        lytter.oppdaterSøker(this)
-    }
-
     fun håndterSøknad(søknad: Søknad) {
-        val sak = Sak(lytter)
+        val sak = Sak()
         saker.add(sak)
         sak.håndterSøknad(søknad, fødselsdato)
     }

@@ -1,23 +1,24 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.Lytter
-import no.nav.aap.domene.Behov
-import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.hendelse.Behov
+import no.nav.aap.hendelse.Hendelse
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.behov.Behov_11_5
 import java.time.LocalDate
 
-internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
-    Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
+internal class Paragraf_11_5 :
+    Vilkårsvurdering(Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
     private lateinit var løsning: LøsningParagraf_11_5
     private lateinit var nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
 
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
-    private fun tilstand(nyTilstand: Tilstand) {
-        this.tilstand.onExit(this)
+    private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
+        this.tilstand.onExit(this, hendelse)
         this.tilstand = nyTilstand
-        nyTilstand.onEntry(this)
+        nyTilstand.onEntry(this, hendelse)
     }
 
     override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
@@ -43,8 +44,8 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
     ) {
-        internal open fun onEntry(vilkårsvurdering: Paragraf_11_5) {}
-        internal open fun onExit(vilkårsvurdering: Paragraf_11_5) {}
+        internal open fun onEntry(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {}
+        internal open fun onExit(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
         internal fun erIkkeOppfylt() = erIkkeOppfylt
 
@@ -76,16 +77,14 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
                 fødselsdato: Fødselsdato,
                 vurderingsdato: LocalDate
             ) {
-                vilkårsvurdering.tilstand(SøknadMottatt)
+                vilkårsvurdering.tilstand(SøknadMottatt, søknad)
             }
         }
 
         object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
-            override fun onEntry(vilkårsvurdering: Paragraf_11_5) {
-                vilkårsvurdering.lytter.sendOppgave(Behov_11_5())
+            override fun onEntry(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {
+                hendelse.opprettBehov(Behov_11_5())
             }
-
-            class Behov_11_5 : Behov
 
             override fun vurderNedsattArbeidsevne(
                 vilkårsvurdering: Paragraf_11_5,
@@ -95,9 +94,9 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
                 vilkårsvurdering.løsning = løsning
                 vilkårsvurdering.nedsattArbeidsevnegrad = nedsattArbeidsevnegrad
                 if (nedsattArbeidsevnegrad.erNedsattMedMinstHalvparten()) {
-                    vilkårsvurdering.tilstand(Oppfylt)
+                    vilkårsvurdering.tilstand(Oppfylt, løsning)
                 } else {
-                    vilkårsvurdering.tilstand(IkkeOppfylt)
+                    vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
                 }
             }
 

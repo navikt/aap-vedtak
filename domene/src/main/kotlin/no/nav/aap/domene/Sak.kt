@@ -15,7 +15,7 @@ import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
-internal class Sak(private val lytter: Lytter = object : Lytter {}) {
+internal class Sak {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
     private lateinit var vurderingsdato: LocalDate
 
@@ -68,9 +68,9 @@ internal class Sak(private val lytter: Lytter = object : Lytter {}) {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.START
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             //opprett initielle vilkårsvurderinger
-            sak.vilkårsvurderinger.add(Paragraf_11_2(sak.lytter))
-            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd(sak.lytter))
-            sak.vilkårsvurderinger.add(Paragraf_11_5(sak.lytter))
+            sak.vilkårsvurderinger.add(Paragraf_11_2())
+            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
+            sak.vilkårsvurderinger.add(Paragraf_11_5())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
             vurderNestetilstand(sak)
