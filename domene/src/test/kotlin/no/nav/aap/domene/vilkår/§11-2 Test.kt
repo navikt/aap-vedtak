@@ -2,6 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse
@@ -18,12 +19,13 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
-        val løsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
-
+        val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
         vilkår.håndterLøsning(løsning)
+        assertHarIkkeBehov(løsning)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -36,12 +38,13 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
-        val løsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
-
+        val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
         vilkår.håndterLøsning(løsning)
+        assertHarIkkeBehov(løsning)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -54,11 +57,14 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
-        val maskineltLøsning =
+        val maskinellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterLøsning(maskineltLøsning)
+        vilkår.håndterLøsning(maskinellLøsning)
+        assertHarBehov(maskinellLøsning)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -71,15 +77,19 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
-        val maskineltLøsning =
+        val maskinellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterLøsning(maskineltLøsning)
+        vilkår.håndterLøsning(maskinellLøsning)
+        assertHarBehov(maskinellLøsning)
 
-        val manueltLøsning =
+        val manuellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
-        vilkår.håndterLøsning(manueltLøsning)
+        vilkår.håndterLøsning(manuellLøsning)
+        assertHarIkkeBehov(manuellLøsning)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -92,15 +102,19 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
-        val maskineltLøsning =
+        val maskinellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterLøsning(maskineltLøsning)
+        vilkår.håndterLøsning(maskinellLøsning)
+        assertHarBehov(maskinellLøsning)
 
-        val manueltLøsning =
+        val manuellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
-        vilkår.håndterLøsning(manueltLøsning)
+        vilkår.håndterLøsning(manuellLøsning)
+        assertHarIkkeBehov(manuellLøsning)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -113,16 +127,19 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
-        val maskineltLøsning =
+        val maskinellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterLøsning(maskineltLøsning)
+        vilkår.håndterLøsning(maskinellLøsning)
+        assertHarBehov(maskinellLøsning)
 
-        val manueltLøsning =
+        val manuellLøsning =
             LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
 
-        assertThrows<IllegalStateException> { vilkår.håndterLøsning(manueltLøsning) }
+        assertThrows<IllegalStateException> { vilkår.håndterLøsning(manuellLøsning) }
     }
 
     @Test
@@ -140,9 +157,19 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+        assertHarBehov(søknad)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
+    }
+
+    private fun assertHarBehov(hendelse: Hendelse) {
+        assertTrue(hendelse.behov().isNotEmpty())
+    }
+
+    private fun assertHarIkkeBehov(hendelse: Hendelse) {
+        assertTrue(hendelse.behov().isEmpty())
     }
 }
