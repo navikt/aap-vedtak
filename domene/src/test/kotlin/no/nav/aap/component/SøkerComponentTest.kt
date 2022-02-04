@@ -1,7 +1,7 @@
-package no.nav.aap.e2e
+package no.nav.aap.component
 
 import no.nav.aap.domene.Lytter
-import no.nav.aap.domene.Oppgave
+import no.nav.aap.domene.Behov
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.entitet.Fødselsdato
@@ -9,15 +9,15 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-internal class SøkerTest {
+internal class SøkerComponentTest {
     @Test
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
@@ -45,7 +45,7 @@ internal class SøkerTest {
     }
 
     @Test
-    fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på svar om nedsatt arbeidsevne`() {
+    fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
@@ -60,14 +60,14 @@ internal class SøkerTest {
     }
 
     @Test
-    fun `Hvis vi mottar svar på oppgave om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt`() {
+    fun `Hvis vi mottar løsning på behov om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -77,7 +77,7 @@ internal class SøkerTest {
     }
 
     @Test
-    fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på svar om nedsatt arbeidsevne og medlemskap`() {
+    fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne og medlemskap`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
@@ -93,14 +93,14 @@ internal class SøkerTest {
     }
 
     @Test
-    fun `Hvis vi mottar svar på oppgave om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt, men ikke vilkår om medlemskap`() {
+    fun `Hvis vi mottar løsning på behov om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt, men ikke vilkår om medlemskap`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -111,14 +111,14 @@ internal class SøkerTest {
     }
 
     @Test
-    fun `Hvis vi mottar svar på oppgave om der bruker er medlem, blir vilkår om medlemskap oppfylt, men ikke vilkår om nedsatt arbeidsevne`() {
+    fun `Hvis vi mottar løsning på behov om der bruker er medlem, blir vilkår om medlemskap oppfylt, men ikke vilkår om nedsatt arbeidsevne`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterOppgavesvar(OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.JA)))
+        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA)))
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -139,7 +139,7 @@ internal class SøkerTest {
                 this.søker = søker
             }
 
-            override fun sendOppgave(oppgave: Oppgave) {
+            override fun sendOppgave(behov: Behov) {
                 this.oppgaveOpprettet = true
             }
 

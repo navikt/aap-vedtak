@@ -5,8 +5,8 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -78,10 +78,10 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
-        sak.håndterOppgavesvar(OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.JA)))
+        sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA)))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
-        sak.håndterOppgavesvar(OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
         assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)

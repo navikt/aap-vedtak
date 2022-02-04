@@ -1,15 +1,15 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.Lytter
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
 internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
     Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
-    private lateinit var maskineltOppgavesvar: OppgavesvarParagraf_11_2
-    private lateinit var manueltOppgavesvar: OppgavesvarParagraf_11_2
+    private lateinit var maskineltLøsning: LøsningParagraf_11_2
+    private lateinit var manueltLøsning: LøsningParagraf_11_2
 
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
@@ -23,8 +23,8 @@ internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
-    override fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
-        tilstand.vurderMedlemskap(this, oppgavesvar)
+    override fun håndterLøsning(løsning: LøsningParagraf_11_2) {
+        tilstand.vurderMedlemskap(this, løsning)
     }
 
     override fun erOppfylt() = tilstand.erOppfylt()
@@ -51,7 +51,7 @@ internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
 
         internal open fun vurderMedlemskap(
             vilkårsvurdering: Paragraf_11_2,
-            oppgavesvar: OppgavesvarParagraf_11_2
+            løsning: LøsningParagraf_11_2
         ) {
             error("Oppgave skal ikke håndteres i tilstand $name")
         }
@@ -78,12 +78,12 @@ internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
 
             override fun vurderMedlemskap(
                 vilkårsvurdering: Paragraf_11_2,
-                oppgavesvar: OppgavesvarParagraf_11_2
+                løsning: LøsningParagraf_11_2
             ) {
-                vilkårsvurdering.maskineltOppgavesvar = oppgavesvar
+                vilkårsvurdering.maskineltLøsning = løsning
                 when {
-                    oppgavesvar.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
-                    oppgavesvar.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
+                    løsning.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
+                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
                     else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs)
                 }
             }
@@ -97,12 +97,12 @@ internal class Paragraf_11_2(lytter: Lytter = object : Lytter {}) :
 
             override fun vurderMedlemskap(
                 vilkårsvurdering: Paragraf_11_2,
-                oppgavesvar: OppgavesvarParagraf_11_2
+                løsning: LøsningParagraf_11_2
             ) {
-                vilkårsvurdering.manueltOppgavesvar = oppgavesvar
+                vilkårsvurdering.manueltLøsning = løsning
                 when {
-                    oppgavesvar.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
-                    oppgavesvar.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
+                    løsning.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt)
+                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt)
                     else -> error("Veileder/saksbehandler må ta stilling til om bruker er medlem eller ikke")
                 }
             }

@@ -2,7 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -20,10 +20,10 @@ internal class `§11-2 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val oppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.JA))
+        val løsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
 
-        vilkår.håndterOppgavesvar(oppgavesvar)
+        vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -38,10 +38,10 @@ internal class `§11-2 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val oppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.NEI))
+        val løsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
 
-        vilkår.håndterOppgavesvar(oppgavesvar)
+        vilkår.håndterLøsning(løsning)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -56,9 +56,9 @@ internal class `§11-2 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val maskineltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterOppgavesvar(maskineltOppgavesvar)
+        val maskineltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        vilkår.håndterLøsning(maskineltLøsning)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -73,13 +73,13 @@ internal class `§11-2 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val maskineltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterOppgavesvar(maskineltOppgavesvar)
+        val maskineltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        vilkår.håndterLøsning(maskineltLøsning)
 
-        val manueltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.JA))
-        vilkår.håndterOppgavesvar(manueltOppgavesvar)
+        val manueltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
+        vilkår.håndterLøsning(manueltLøsning)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -94,13 +94,13 @@ internal class `§11-2 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val maskineltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterOppgavesvar(maskineltOppgavesvar)
+        val maskineltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        vilkår.håndterLøsning(maskineltLøsning)
 
-        val manueltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.NEI))
-        vilkår.håndterOppgavesvar(manueltOppgavesvar)
+        val manueltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
+        vilkår.håndterLøsning(manueltLøsning)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -115,14 +115,14 @@ internal class `§11-2 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val maskineltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.VET_IKKE))
-        vilkår.håndterOppgavesvar(maskineltOppgavesvar)
+        val maskineltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        vilkår.håndterLøsning(maskineltLøsning)
 
-        val manueltOppgavesvar =
-            OppgavesvarParagraf_11_2(OppgavesvarParagraf_11_2.Medlemskap(OppgavesvarParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        val manueltLøsning =
+            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
 
-        assertThrows<IllegalStateException> { vilkår.håndterOppgavesvar(manueltOppgavesvar) }
+        assertThrows<IllegalStateException> { vilkår.håndterLøsning(manueltLøsning) }
     }
 
     @Test
@@ -134,7 +134,7 @@ internal class `§11-2 Test` {
     }
 
     @Test
-    fun `Hvis søknad er håndtert, men ikke oppgavesvar, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
+    fun `Hvis søknad er håndtert, men ikke løsning, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 

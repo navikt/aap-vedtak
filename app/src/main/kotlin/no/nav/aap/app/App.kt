@@ -87,7 +87,7 @@ class SøkerLytter : Lytter {
         this.søker = søker
     }
 
-    override fun sendOppgave(oppgave: Oppgave) {
+    override fun sendOppgave(behov: Behov) {
         oppgaveOpprettet = true
     }
 

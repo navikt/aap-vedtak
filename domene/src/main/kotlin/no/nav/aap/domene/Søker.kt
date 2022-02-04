@@ -3,8 +3,8 @@ package no.nav.aap.domene
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 
 class Søker(
@@ -24,12 +24,12 @@ class Søker(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
-    fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
-        saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
+    fun håndterLøsning(løsning: LøsningParagraf_11_2) {
+        saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
-        saker.forEach { it.håndterOppgavesvar(oppgavesvar) }
+    fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+        saker.forEach { it.håndterLøsning(løsning) }
     }
 
     fun toFrontendSaker() =

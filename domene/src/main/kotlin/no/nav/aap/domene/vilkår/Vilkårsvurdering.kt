@@ -1,8 +1,8 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.Lytter
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.Søknad
@@ -33,8 +33,8 @@ internal abstract class Vilkårsvurdering(
     internal abstract fun erIkkeOppfylt(): Boolean
 
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
-    internal open fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {}
-    internal open fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {}
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_2) {}
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_5) {}
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(

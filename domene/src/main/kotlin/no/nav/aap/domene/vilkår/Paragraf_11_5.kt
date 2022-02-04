@@ -1,16 +1,16 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.Lytter
-import no.nav.aap.domene.Oppgave
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.domene.Behov
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
 internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
     Vilkårsvurdering(lytter, Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2) {
-    private lateinit var oppgavesvar: OppgavesvarParagraf_11_5
-    private lateinit var nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
+    private lateinit var løsning: LøsningParagraf_11_5
+    private lateinit var nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
 
     private var tilstand: Tilstand = Tilstand.IkkeVurdert
 
@@ -24,15 +24,15 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
-    override fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
-        oppgavesvar.vurderNedsattArbeidsevne(this)
+    override fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+        løsning.vurderNedsattArbeidsevne(this)
     }
 
     internal fun vurderNedsattArbeidsevne(
-        oppgavesvar: OppgavesvarParagraf_11_5,
-        nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
+        løsning: LøsningParagraf_11_5,
+        nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
     ) {
-        tilstand.vurderNedsattArbeidsevne(this, oppgavesvar, nedsattArbeidsevnegrad)
+        tilstand.vurderNedsattArbeidsevne(this, løsning, nedsattArbeidsevnegrad)
     }
 
     override fun erOppfylt() = tilstand.erOppfylt()
@@ -59,8 +59,8 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
 
         internal open fun vurderNedsattArbeidsevne(
             vilkårsvurdering: Paragraf_11_5,
-            oppgavesvar: OppgavesvarParagraf_11_5,
-            nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
+            løsning: LøsningParagraf_11_5,
+            nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
         ) {
             error("Oppgave skal ikke håndteres i tilstand $name")
         }
@@ -82,17 +82,17 @@ internal class Paragraf_11_5(lytter: Lytter = object : Lytter {}) :
 
         object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_5) {
-                vilkårsvurdering.lytter.sendOppgave(Oppgave_11_5())
+                vilkårsvurdering.lytter.sendOppgave(Behov_11_5())
             }
 
-            class Oppgave_11_5 : Oppgave
+            class Behov_11_5 : Behov
 
             override fun vurderNedsattArbeidsevne(
                 vilkårsvurdering: Paragraf_11_5,
-                oppgavesvar: OppgavesvarParagraf_11_5,
-                nedsattArbeidsevnegrad: OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad
+                løsning: LøsningParagraf_11_5,
+                nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
             ) {
-                vilkårsvurdering.oppgavesvar = oppgavesvar
+                vilkårsvurdering.løsning = løsning
                 vilkårsvurdering.nedsattArbeidsevnegrad = nedsattArbeidsevnegrad
                 if (nedsattArbeidsevnegrad.erNedsattMedMinstHalvparten()) {
                     vilkårsvurdering.tilstand(Oppfylt)

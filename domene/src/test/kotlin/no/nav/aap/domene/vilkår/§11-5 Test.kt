@@ -2,7 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
@@ -19,8 +19,8 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val oppgavesvar = OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(50))
-        oppgavesvar.vurderNedsattArbeidsevne(vilkår)
+        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50))
+        løsning.vurderNedsattArbeidsevne(vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -35,8 +35,8 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val oppgavesvar = OppgavesvarParagraf_11_5(OppgavesvarParagraf_11_5.NedsattArbeidsevnegrad(49))
-        oppgavesvar.vurderNedsattArbeidsevne(vilkår)
+        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(49))
+        løsning.vurderNedsattArbeidsevne(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -51,7 +51,7 @@ internal class `§11-5 Test` {
     }
 
     @Test
-    fun `Hvis søknad er håndtert, men ikke oppgavesvar, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
+    fun `Hvis søknad er håndtert, men ikke løsning, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 

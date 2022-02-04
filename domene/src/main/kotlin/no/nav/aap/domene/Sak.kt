@@ -10,8 +10,8 @@ import no.nav.aap.domene.vilkår.Paragraf_11_4FørsteLedd
 import no.nav.aap.domene.vilkår.Paragraf_11_5
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendSak
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_2
-import no.nav.aap.hendelse.OppgavesvarParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
@@ -24,12 +24,12 @@ internal class Sak(private val lytter: Lytter = object : Lytter {}) {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
     }
 
-    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_2) {
-        tilstand.håndterOppgavesvar(this, oppgavesvar)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
+        tilstand.håndterLøsning(this, løsning)
     }
 
-    internal fun håndterOppgavesvar(oppgavesvar: OppgavesvarParagraf_11_5) {
-        tilstand.håndterOppgavesvar(this, oppgavesvar)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+        tilstand.håndterLøsning(this, løsning)
     }
 
     private var tilstand: Tilstand = Start
@@ -53,12 +53,12 @@ internal class Sak(private val lytter: Lytter = object : Lytter {}) {
             error("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
-            error("Forventet ikke oppgavesvar i tilstand ${tilstandsnavn.name}")
+        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
+            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
-            error("Forventet ikke oppgavesvar i tilstand ${tilstandsnavn.name}")
+        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun toFrontendTilstand() = tilstandsnavn.name
@@ -86,13 +86,13 @@ internal class Sak(private val lytter: Lytter = object : Lytter {}) {
 
     private object SøknadMottatt : Tilstand {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.SØKNAD_MOTTATT
-        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_2) {
-            sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
+        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
+            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak)
         }
 
-        override fun håndterOppgavesvar(sak: Sak, oppgavesvar: OppgavesvarParagraf_11_5) {
-            sak.vilkårsvurderinger.forEach { it.håndterOppgavesvar(oppgavesvar) }
+        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak)
         }
 
