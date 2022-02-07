@@ -5,9 +5,11 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Paragraf_11_2
 import no.nav.aap.domene.vilkår.Paragraf_11_4FørsteLedd
 import no.nav.aap.domene.vilkår.Paragraf_11_5
+import no.nav.aap.domene.vilkår.Paragraf_11_6
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.LøsningParagraf_11_2
@@ -71,6 +73,7 @@ internal class Sak {
             sak.vilkårsvurderinger.add(Paragraf_11_2())
             sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
             sak.vilkårsvurderinger.add(Paragraf_11_5())
+            sak.vilkårsvurderinger.add(Paragraf_11_6())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
             vurderNestetilstand(sak)

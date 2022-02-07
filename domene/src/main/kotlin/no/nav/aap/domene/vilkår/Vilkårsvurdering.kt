@@ -2,9 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
-import no.nav.aap.hendelse.LøsningParagraf_11_2
-import no.nav.aap.hendelse.LøsningParagraf_11_5
-import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.*
 import java.time.LocalDate
 
 internal abstract class Vilkårsvurdering(
@@ -17,7 +15,7 @@ internal abstract class Vilkårsvurdering(
     ) : this(paragraf, listOf(ledd))
 
     internal enum class Paragraf {
-        PARAGRAF_11_2, PARAGRAF_11_4, PARAGRAF_11_5
+        PARAGRAF_11_2, PARAGRAF_11_4, PARAGRAF_11_5, PARAGRAF_11_6
     }
 
     internal enum class Ledd {
@@ -32,6 +30,9 @@ internal abstract class Vilkårsvurdering(
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_2) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_5) {}
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_6) {}
+
+    internal open fun håndterLøsningGenerisk(løsning: Hendelse) {}
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(
