@@ -68,6 +68,12 @@ internal class ApiTest {
                             ledd = listOf("LEDD_1", "LEDD_2"),
                             tilstand = "SØKNAD_MOTTATT",
                             harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_6",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
                         )
                     )
                 )
@@ -114,6 +120,12 @@ internal class ApiTest {
                             ledd = listOf("LEDD_1", "LEDD_2"),
                             tilstand = "SØKNAD_MOTTATT",
                             harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_6",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
                         )
                     )
                 )
@@ -158,6 +170,12 @@ internal class ApiTest {
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_5",
                                 ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_6",
+                                ledd = listOf("LEDD_1"),
                                 tilstand = "SØKNAD_MOTTATT",
                                 harÅpenOppgave = true
                             )

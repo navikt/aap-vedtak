@@ -5,13 +5,16 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Paragraf_11_2
 import no.nav.aap.domene.vilkår.Paragraf_11_4FørsteLedd
 import no.nav.aap.domene.vilkår.Paragraf_11_5
+import no.nav.aap.domene.vilkår.Paragraf_11_6
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.LøsningParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_6
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
@@ -29,6 +32,10 @@ internal class Sak {
     }
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -61,6 +68,10 @@ internal class Sak {
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
+        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
+            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
         fun toFrontendTilstand() = tilstandsnavn.name
     }
 
@@ -71,6 +82,7 @@ internal class Sak {
             sak.vilkårsvurderinger.add(Paragraf_11_2())
             sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
             sak.vilkårsvurderinger.add(Paragraf_11_5())
+            sak.vilkårsvurderinger.add(Paragraf_11_6())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
             vurderNestetilstand(sak)
@@ -92,6 +104,11 @@ internal class Sak {
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+            vurderNesteTilstand(sak)
+        }
+
+        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak)
         }
