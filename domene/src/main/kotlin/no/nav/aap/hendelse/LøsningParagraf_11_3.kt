@@ -1,5 +1,5 @@
 package no.nav.aap.hendelse
 
-class LøsningParagraf_11_6(private val erOppfylt: Boolean) : Hendelse() {
+class LøsningParagraf_11_3(private val erOppfylt: Boolean) : Hendelse() {
     internal fun erManueltOppfylt() = erOppfylt
 }

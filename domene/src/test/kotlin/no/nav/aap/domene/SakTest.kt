@@ -5,10 +5,7 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
-import no.nav.aap.hendelse.LøsningParagraf_11_2
-import no.nav.aap.hendelse.LøsningParagraf_11_5
-import no.nav.aap.hendelse.LøsningParagraf_11_6
-import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.*
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -82,6 +79,9 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA)))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
+        sak.håndterLøsning(LøsningParagraf_11_3(true))
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
@@ -93,6 +93,7 @@ internal class SakTest {
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
         assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
+        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_6).tilstand)
     }
 
     private fun assertTilstand(actual: String, expected: Sak, personident: Personident, fødselsdato: Fødselsdato) {
