@@ -25,7 +25,7 @@ internal class SakTest {
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
     }
 
     @Test
@@ -41,10 +41,7 @@ internal class SakTest {
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals(
-            "IKKE_OPPFYLT",
-            vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand
-        )
+        assertTilstand(vilkårsvurderinger, "IKKE_OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
     }
 
     @Test
@@ -62,7 +59,7 @@ internal class SakTest {
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
     }
 
     @Test
@@ -82,6 +79,9 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_3(true))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
+        sak.håndterLøsning(LøsningParagraf_11_4AndreOgTredjeLedd(true))
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
@@ -90,10 +90,11 @@ internal class SakTest {
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_6).tilstand)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
     }
 
     private fun assertTilstand(actual: String, expected: Sak, personident: Personident, fødselsdato: Fødselsdato) {
@@ -101,6 +102,37 @@ internal class SakTest {
         assertEquals(actual, frontendSak.tilstand)
     }
 
+    private fun assertTilstand(
+        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        tilstand: String,
+        paragraf: Vilkårsvurdering.Paragraf
+    ) {
+        assertEquals(tilstand, vilkårsvurderinger.single(paragraf).tilstand)
+    }
+
+    private fun assertTilstand(
+        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        tilstand: String,
+        paragraf: Vilkårsvurdering.Paragraf,
+        ledd: Vilkårsvurdering.Ledd
+    ) {
+        assertTilstand(vilkårsvurderinger, tilstand, paragraf, listOf(ledd))
+    }
+
+    private fun assertTilstand(
+        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        tilstand: String,
+        paragraf: Vilkårsvurdering.Paragraf,
+        ledd: List<Vilkårsvurdering.Ledd>
+    ) {
+        assertEquals(tilstand, vilkårsvurderinger.single(paragraf, ledd).tilstand)
+    }
+
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
         single { it.paragraf == paragraf.name }
+
+    private fun List<FrontendVilkårsvurdering>.single(
+        paragraf: Vilkårsvurdering.Paragraf,
+        ledd: List<Vilkårsvurdering.Ledd>
+    ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }
 }

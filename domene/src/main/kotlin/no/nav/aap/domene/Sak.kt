@@ -32,6 +32,10 @@ internal class Sak {
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
         tilstand.håndterLøsning(this, løsning)
     }
@@ -69,6 +73,10 @@ internal class Sak {
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
+        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
+            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
@@ -87,6 +95,7 @@ internal class Sak {
             sak.vilkårsvurderinger.add(Paragraf_11_2())
             sak.vilkårsvurderinger.add(Paragraf_11_3())
             sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
+            sak.vilkårsvurderinger.add(Paragraf_11_4AndreOgTredjeLedd())
             sak.vilkårsvurderinger.add(Paragraf_11_5())
             sak.vilkårsvurderinger.add(Paragraf_11_6())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
@@ -110,6 +119,11 @@ internal class Sak {
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
+            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+            vurderNesteTilstand(sak)
+        }
+
+        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak)
         }

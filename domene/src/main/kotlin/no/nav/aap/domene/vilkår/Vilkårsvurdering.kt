@@ -30,6 +30,7 @@ internal abstract class Vilkårsvurdering(
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_2) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_3) {}
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_5) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_6) {}
 

@@ -27,7 +27,12 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
     }
 
     @Test
@@ -40,7 +45,12 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals("IKKE_OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
     }
 
     @Test
@@ -53,9 +63,9 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals(5, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
+        assertEquals(6, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -70,9 +80,9 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals(5, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
+        assertEquals(6, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -85,12 +95,13 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals(5, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_3).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_6).tilstand)
+        assertEquals(6, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
     }
 
     @Test
@@ -105,12 +116,13 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals(5, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_3).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_6).tilstand)
+        assertEquals(6, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
     }
 
     @Test
@@ -125,12 +137,13 @@ internal class SøkerComponentTest {
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertEquals(5, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_2).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_3).tilstand)
-        assertEquals("OPPFYLT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_4).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_5).tilstand)
-        assertEquals("SØKNAD_MOTTATT", vilkårsvurderinger.single(Vilkårsvurdering.Paragraf.PARAGRAF_11_6).tilstand)
+        assertEquals(6, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
     }
 
     @Test
@@ -169,6 +182,12 @@ internal class SøkerComponentTest {
                     harÅpenOppgave = false
                 ),
                 FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_4",
+                    ledd = listOf("LEDD_2", "LEDD_3"),
+                    tilstand = "SØKNAD_MOTTATT",
+                    harÅpenOppgave = true
+                ),
+                FrontendVilkårsvurdering(
                     paragraf = "PARAGRAF_11_5",
                     ledd = listOf("LEDD_1", "LEDD_2"),
                     tilstand = "SØKNAD_MOTTATT",
@@ -185,6 +204,37 @@ internal class SøkerComponentTest {
         assertEquals(expected, søker.toFrontendSaker().single())
     }
 
+    private fun assertTilstand(
+        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        tilstand: String,
+        paragraf: Vilkårsvurdering.Paragraf
+    ) {
+        assertEquals(tilstand, vilkårsvurderinger.single(paragraf).tilstand)
+    }
+
+    private fun assertTilstand(
+        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        tilstand: String,
+        paragraf: Vilkårsvurdering.Paragraf,
+        ledd: Vilkårsvurdering.Ledd
+    ) {
+        assertTilstand(vilkårsvurderinger, tilstand, paragraf, listOf(ledd))
+    }
+
+    private fun assertTilstand(
+        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        tilstand: String,
+        paragraf: Vilkårsvurdering.Paragraf,
+        ledd: List<Vilkårsvurdering.Ledd>
+    ) {
+        assertEquals(tilstand, vilkårsvurderinger.single(paragraf, ledd).tilstand)
+    }
+
     private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
         single { it.paragraf == paragraf.name }
+
+    private fun List<FrontendVilkårsvurdering>.single(
+        paragraf: Vilkårsvurdering.Paragraf,
+        ledd: List<Vilkårsvurdering.Ledd>
+    ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }
 }

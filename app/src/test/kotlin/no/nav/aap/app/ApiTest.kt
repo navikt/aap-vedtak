@@ -70,6 +70,12 @@ internal class ApiTest {
                             harÅpenOppgave = false
                         ),
                         FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_4",
+                            ledd = listOf("LEDD_2","LEDD_3"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
                             paragraf = "PARAGRAF_11_5",
                             ledd = listOf("LEDD_1", "LEDD_2"),
                             tilstand = "SØKNAD_MOTTATT",
@@ -128,6 +134,12 @@ internal class ApiTest {
                             harÅpenOppgave = false
                         ),
                         FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_4",
+                            ledd = listOf("LEDD_2","LEDD_3"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
                             paragraf = "PARAGRAF_11_5",
                             ledd = listOf("LEDD_1", "LEDD_2"),
                             tilstand = "SØKNAD_MOTTATT",
@@ -184,6 +196,12 @@ internal class ApiTest {
                                 ledd = listOf("LEDD_1"),
                                 tilstand = "OPPFYLT",
                                 harÅpenOppgave = false
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_2","LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
                             ),
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_5",
