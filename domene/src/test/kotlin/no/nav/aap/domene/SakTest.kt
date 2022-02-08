@@ -7,6 +7,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.LøsningParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_6
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -82,6 +83,9 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+
+        sak.håndterLøsning(LøsningParagraf_11_6(true))
         assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)

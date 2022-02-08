@@ -14,6 +14,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.LøsningParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_6
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
@@ -31,6 +32,10 @@ internal class Sak {
     }
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -60,6 +65,10 @@ internal class Sak {
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
+        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
@@ -95,6 +104,11 @@ internal class Sak {
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+            vurderNesteTilstand(sak)
+        }
+
+        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak)
         }
