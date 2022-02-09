@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-class `§11-6 Test` {
+internal class `§11-6 Test` {
 
     @Test
     fun `Hvis saksbehandler manuelt har oppfylt 11-6, settes vilkår til oppfylt`() {
@@ -42,5 +42,4 @@ class `§11-6 Test` {
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
     }
-
 }

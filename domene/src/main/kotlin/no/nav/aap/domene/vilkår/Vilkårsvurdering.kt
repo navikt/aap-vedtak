@@ -15,7 +15,7 @@ internal abstract class Vilkårsvurdering(
     ) : this(paragraf, listOf(ledd))
 
     internal enum class Paragraf {
-        PARAGRAF_11_2, PARAGRAF_11_3, PARAGRAF_11_4, PARAGRAF_11_5, PARAGRAF_11_6
+        PARAGRAF_11_2, PARAGRAF_11_3, PARAGRAF_11_4, PARAGRAF_11_5, PARAGRAF_11_6, PARAGRAF_11_12
     }
 
     internal enum class Ledd {
@@ -33,6 +33,7 @@ internal abstract class Vilkårsvurdering(
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_5) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_6) {}
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
 
     private fun toFrontendVilkårsvurdering() =
         FrontendVilkårsvurdering(

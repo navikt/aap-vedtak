@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 
-class `§11-4 andre og tredje ledd Test` {
+internal class `§11-4 andre og tredje ledd Test` {
 
     @Test
     fun `Hvis saksbehandler manuelt har oppfylt 11-4 andre og tredje ledd, settes vilkår til oppfylt`() {
