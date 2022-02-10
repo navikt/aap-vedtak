@@ -1,10 +1,10 @@
 package no.nav.aap.domene.beregning
 
-internal class Beløp(
+class Beløp(
     private val beløp: Double
 ) : Comparable<Beløp> {
-    companion object {
-        fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.beløp })
+    internal companion object {
+        internal fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.beløp })
     }
 
     internal operator fun div(nevner: Int) = Beløp(beløp / nevner)

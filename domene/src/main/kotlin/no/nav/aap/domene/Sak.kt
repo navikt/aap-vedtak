@@ -1,5 +1,6 @@
 package no.nav.aap.domene
 
+import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
@@ -17,7 +18,9 @@ import java.time.LocalDate
 
 internal class Sak {
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
+    private val inntektshistorikk: Inntektshistorikk = Inntektshistorikk()
     private lateinit var vurderingsdato: LocalDate
+    private lateinit var vedtak: Vedtak
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()
@@ -49,6 +52,10 @@ internal class Sak {
     }
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningInntekter) {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -99,6 +106,10 @@ internal class Sak {
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
+        fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
+            error("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
         fun toFrontendTilstand() = tilstandsnavn.name
@@ -176,6 +187,17 @@ internal class Sak {
 
     private object BeregnInntekt : Tilstand {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.BEREGN_INNTEKT
+
+        override fun onEntry() {
+            // Be om inntekter
+        }
+
+        override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
+            løsning.lagreInntekter(sak.inntektshistorikk)
+            val grunnlagsberegning = sak.inntektshistorikk.beregnGrunnlag(sak.vurderingsdato)
+
+
+        }
     }
 
     private object IkkeOppfylt : Tilstand {

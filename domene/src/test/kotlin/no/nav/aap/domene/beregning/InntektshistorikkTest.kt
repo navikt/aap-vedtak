@@ -1,15 +1,15 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.januar
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class InntektshistorikkTest {
 
     @Test
     fun `Har ingen inntekt`() {
-        val inntektshistorikk = Inntektshistorikk(emptyList())
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(emptyList())
         val beregning = inntektshistorikk.beregnGrunnlag(1.januar)
 
         val expected = Grunnlagsberegning(
@@ -23,7 +23,8 @@ internal class InntektshistorikkTest {
 
     @Test
     fun `Har kun inntekt i år`() {
-        val inntektshistorikk = Inntektshistorikk(listOf(Inntekt(Arbeidsgiver(), januar(2022), Beløp(1000.0))))
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(listOf(Inntekt(Arbeidsgiver(), januar(2022), Beløp(1000.0))))
         val beregning = inntektshistorikk.beregnGrunnlag(1 januar 2022)
 
         val expected = Grunnlagsberegning(
@@ -38,7 +39,8 @@ internal class InntektshistorikkTest {
     @Test
     fun `Har kun inntekt forrige kalenderår`() {
         val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0)))
-        val inntektshistorikk = Inntektshistorikk(inntekter)
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.beregnGrunnlag(1 januar 2022)
 
         val expected = Grunnlagsberegning(
@@ -53,7 +55,8 @@ internal class InntektshistorikkTest {
     @Test
     fun `Har kun inntekt i 2020`() {
         val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)))
-        val inntektshistorikk = Inntektshistorikk(inntekter)
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.beregnGrunnlag(1 januar 2022)
 
         val expected = Grunnlagsberegning(
@@ -72,7 +75,8 @@ internal class InntektshistorikkTest {
             Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)),
             Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))
         )
-        val inntektshistorikk = Inntektshistorikk(inntekter)
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.beregnGrunnlag(1 januar 2022)
 
         val expected = Grunnlagsberegning(
@@ -91,7 +95,8 @@ internal class InntektshistorikkTest {
             Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)),
             Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))
         )
-        val inntektshistorikk = Inntektshistorikk(inntekter)
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.beregnGrunnlag(1 januar 2022)
 
         val expected = Grunnlagsberegning(

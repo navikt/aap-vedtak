@@ -6,11 +6,15 @@ import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
 import java.time.LocalDate
 import java.time.Year
 
-internal class Inntektshistorikk(
-    private val inntekter: List<Inntekt>
-) {
+internal class Inntektshistorikk {
+    private val inntekter = mutableListOf<Inntekt>()
+
     private companion object {
         private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3
+    }
+
+    internal fun leggTilInntekter(inntekter: List<Inntekt>) {
+        this.inntekter.addAll(inntekter)
     }
 
     internal fun beregnGrunnlag(beregningsdato: LocalDate): Grunnlagsberegning {
