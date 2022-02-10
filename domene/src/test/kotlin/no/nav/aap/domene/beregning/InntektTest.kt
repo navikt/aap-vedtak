@@ -7,6 +7,7 @@ import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
 import no.nav.aap.februar
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.Year
 import java.time.YearMonth
@@ -16,48 +17,48 @@ internal class InntektTest {
     @Test
     fun `summer tom liste`() {
         val sum = emptyList<Inntekt>().summerInntekt()
-        Assertions.assertEquals(Beløp(0.0), sum)
+        assertEquals(Beløp(0.0), sum)
     }
 
     @Test
     fun `summer liste med ett beløp på 0`() {
         val inntekter = inntekterFor(februar(2021) til januar(2021))
         val sum = inntekter.summerInntekt()
-        Assertions.assertEquals(Beløp(0.0), sum)
+        assertEquals(Beløp(0.0), sum)
     }
 
     @Test
     fun `summer liste med ett beløp på 1`() {
         val inntekter = inntekterFor(januar(2021) til januar(2021))
         val sum = inntekter.summerInntekt()
-        Assertions.assertEquals(Beløp(1.0), sum)
+        assertEquals(Beløp(1.0), sum)
     }
 
     @Test
     fun `summer liste med to beløp på 1`() {
         val inntekter = inntekterFor(januar(2021) til februar(2021))
         val sum = inntekter.summerInntekt()
-        Assertions.assertEquals(Beløp(2.0), sum)
+        assertEquals(Beløp(2.0), sum)
     }
 
     @Test
     fun `Finner ingen innteker for siste år når det ikke er noen inntekter`() {
         val inntekter = emptyList<Inntekt>().inntektSisteKalenderår(Year.of(2021))
-        Assertions.assertTrue(inntekter.isEmpty())
+        assertTrue(inntekter.isEmpty())
     }
 
     @Test
     fun `Finner ingen innteker for siste år når alle inntektene er fra et annet år`() {
         val inntekter = inntekterFor(januar(2020) til desember(2020))
         val inntekterSisteÅr = inntekter.inntektSisteKalenderår(Year.of(2021))
-        Assertions.assertTrue(inntekterSisteÅr.isEmpty())
+        assertTrue(inntekterSisteÅr.isEmpty())
     }
 
     @Test
     fun `Finner alle innteker for siste år når alle inntektene er fra samme år`() {
         val inntekter = inntekterFor(januar(2021) til desember(2021))
         val inntekterSisteÅr = inntekter.inntektSisteKalenderår(Year.of(2021))
-        Assertions.assertEquals(inntekter, inntekterSisteÅr)
+        assertEquals(inntekter, inntekterSisteÅr)
     }
 
     @Test
@@ -65,27 +66,27 @@ internal class InntektTest {
         val inntekter = inntekterFor(januar(2020) til desember(2022))
         val inntekterSisteÅr = inntekter.inntektSisteKalenderår(Year.of(2021))
         val expected = inntekter.subList(12, 24)
-        Assertions.assertEquals(expected, inntekterSisteÅr)
+        assertEquals(expected, inntekterSisteÅr)
     }
 
     @Test
     fun `Finner ingen innteker for siste tre år når det ikke er noen inntekter`() {
         val inntekter = emptyList<Inntekt>().inntektSiste3Kalenderår(Year.of(2021))
-        Assertions.assertTrue(inntekter.isEmpty())
+        assertTrue(inntekter.isEmpty())
     }
 
     @Test
     fun `Finner ingen innteker for siste tre år når alle inntektene er fra et annet år`() {
         val inntekter = inntekterFor(januar(2018) til desember(2018))
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
-        Assertions.assertTrue(inntekterSisteÅr.isEmpty())
+        assertTrue(inntekterSisteÅr.isEmpty())
     }
 
     @Test
     fun `Finner alle innteker for siste tre år når alle inntektene er fra samme år`() {
         val inntekter = inntekterFor(januar(2019) til desember(2021))
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
-        Assertions.assertEquals(inntekter, inntekterSisteÅr)
+        assertEquals(inntekter, inntekterSisteÅr)
     }
 
     @Test
@@ -93,7 +94,7 @@ internal class InntektTest {
         val inntekter = inntekterFor(januar(2018) til desember(2022))
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
         val expected = inntekter.subList(12, 48)
-        Assertions.assertEquals(expected, inntekterSisteÅr)
+        assertEquals(expected, inntekterSisteÅr)
     }
 
 
