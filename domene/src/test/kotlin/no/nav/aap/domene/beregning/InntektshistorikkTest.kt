@@ -1,7 +1,7 @@
-package no.nav.aap.domene
+package no.nav.aap.domene.beregning
 
 import no.nav.aap.januar
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 internal class InntektshistorikkTest {
@@ -17,7 +17,7 @@ internal class InntektshistorikkTest {
             emptyList()
         )
 
-        assertEquals(expected, beregning)
+        Assertions.assertEquals(expected, beregning)
     }
 
     @Test
@@ -31,7 +31,7 @@ internal class InntektshistorikkTest {
             emptyList()
         )
 
-        assertEquals(expected, beregning)
+        Assertions.assertEquals(expected, beregning)
     }
 
     @Test
@@ -46,7 +46,7 @@ internal class InntektshistorikkTest {
             inntekter
         )
 
-        assertEquals(expected, beregning)
+        Assertions.assertEquals(expected, beregning)
     }
 
     @Test
@@ -61,7 +61,7 @@ internal class InntektshistorikkTest {
             inntekter
         )
 
-        assertEquals(expected, beregning)
+        Assertions.assertEquals(expected, beregning)
     }
 
     @Test
@@ -80,7 +80,7 @@ internal class InntektshistorikkTest {
             inntekter
         )
 
-        assertEquals(expected, beregning)
+        Assertions.assertEquals(expected, beregning)
     }
 
     @Test
@@ -99,6 +99,6 @@ internal class InntektshistorikkTest {
             inntekter
         )
 
-        assertEquals(expected, beregning)
+        Assertions.assertEquals(expected, beregning)
     }
 }
