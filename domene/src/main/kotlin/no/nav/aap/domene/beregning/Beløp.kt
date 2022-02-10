@@ -7,7 +7,11 @@ class Beløp(
         internal fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.beløp })
     }
 
+    internal operator fun times(nevner: Int) = Beløp(beløp * nevner)
+    internal operator fun times(nevner: Beløp) = Beløp(beløp * nevner.beløp)
+
     internal operator fun div(nevner: Int) = Beløp(beløp / nevner)
+    internal operator fun div(nevner: Beløp) = Beløp(beløp / nevner.beløp)
 
     override fun compareTo(other: Beløp) = beløp.compareTo(other.beløp)
 
@@ -25,4 +29,6 @@ class Beløp(
     override fun hashCode(): Int {
         return beløp.hashCode()
     }
+
+    override fun toString() = "Beløp($beløp)"
 }

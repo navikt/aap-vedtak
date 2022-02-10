@@ -24,4 +24,9 @@ internal class Grunnlagsberegning(
         result = 31 * result + inntekterSiste3Kalenderår.hashCode()
         return result
     }
+
+    override fun toString() =
+        "Grunnlagsberegning(grunnlag=$grunnlag, inntekterSisteKalenderår=$inntekterSisteKalenderår, inntekterSiste3Kalenderår=$inntekterSiste3Kalenderår)"
+
+
 }

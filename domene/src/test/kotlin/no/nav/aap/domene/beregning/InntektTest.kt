@@ -86,7 +86,7 @@ internal class InntektTest {
     fun `Finner alle innteker for siste tre år når alle inntektene er fra samme år`() {
         val inntekter = inntekterFor(januar(2019) til desember(2021))
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
-        assertEquals(inntekter, inntekterSisteÅr)
+        assertEquals(inntekter, inntekterSisteÅr.values.flatten())
     }
 
     @Test
@@ -94,7 +94,7 @@ internal class InntektTest {
         val inntekter = inntekterFor(januar(2018) til desember(2022))
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
         val expected = inntekter.subList(12, 48)
-        assertEquals(expected, inntekterSisteÅr)
+        assertEquals(expected, inntekterSisteÅr.values.flatten())
     }
 
 
