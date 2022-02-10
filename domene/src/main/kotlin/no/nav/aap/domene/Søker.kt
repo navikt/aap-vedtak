@@ -1,8 +1,9 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.Beløp.Companion.summerBeløp
-import no.nav.aap.domene.Inntekt.Companion.inntektSiste3år
-import no.nav.aap.domene.Inntekt.Companion.inntektSisteÅr
+import no.nav.aap.domene.Inntekt.Companion.inntektSiste3Kalenderår
+import no.nav.aap.domene.Inntekt.Companion.inntektSisteKalenderår
+import no.nav.aap.domene.Inntekt.Companion.summerInntekt
 import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
@@ -12,7 +13,6 @@ import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
-import kotlin.math.max
 
 class Søker(
     private val personident: Personident,
@@ -52,20 +52,57 @@ class Søker(
 internal class Inntektshistorikk(
     private val inntekter: List<Inntekt>
 ) {
+    private companion object {
+        private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3
+    }
 
-    fun beregnGrunnlag(beregningsdato: LocalDate) {}
+    internal fun beregnGrunnlag(beregningsdato: LocalDate): Grunnlagsberegning {
+        val fjor = Year.from(beregningsdato).minusYears(1)
+        val inntekterSisteKalenderår = inntektSisteKalenderår(fjor)
+        val sumInntekterSisteKalenderår = inntekterSisteKalenderår.summerInntekt()
+        val inntekterSiste3Kalenderår = inntektSiste3Kalenderår(fjor)
+        val sumInntekterSiste3Kalenderår = inntekterSiste3Kalenderår.summerInntekt()
 
-    private fun inntektSisteÅr(år: Year): List<Inntekt> = inntekter.inntektSisteÅr(år)
+        val grunnlag = maxOf(sumInntekterSisteKalenderår, sumInntekterSiste3Kalenderår / ANTALL_ÅR_FOR_GJENNOMSNITT)
 
-    private fun inntektSiste3år(år: Year): List<Inntekt> = inntekter.inntektSiste3år(år)
+        return Grunnlagsberegning(
+            grunnlag = grunnlag,
+            inntekterSisteKalenderår = inntekterSisteKalenderår,
+            inntekterSiste3Kalenderår = inntekterSiste3Kalenderår
+        )
+    }
+
+    private fun inntektSisteKalenderår(år: Year): List<Inntekt> = inntekter.inntektSisteKalenderår(år)
+
+    private fun inntektSiste3Kalenderår(år: Year): List<Inntekt> = inntekter.inntektSiste3Kalenderår(år)
 
 }
 
 internal class Grunnlagsberegning(
     private val grunnlag: Beløp,
-    private val inntektSisteÅr: List<Inntekt>,
-    private val inntektSiste3år: List<Inntekt>
-)
+    private val inntekterSisteKalenderår: List<Inntekt>,
+    private val inntekterSiste3Kalenderår: List<Inntekt>
+) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Grunnlagsberegning
+
+        if (grunnlag != other.grunnlag) return false
+        if (inntekterSisteKalenderår != other.inntekterSisteKalenderår) return false
+        if (inntekterSiste3Kalenderår != other.inntekterSiste3Kalenderår) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = grunnlag.hashCode()
+        result = 31 * result + inntekterSisteKalenderår.hashCode()
+        result = 31 * result + inntekterSiste3Kalenderår.hashCode()
+        return result
+    }
+}
 
 internal class Inntekt(
     private val arbeidsgiver: Arbeidsgiver,
@@ -73,8 +110,11 @@ internal class Inntekt(
     private val beløp: Beløp
 ) {
     companion object {
-        internal fun Iterable<Inntekt>.inntektSisteÅr(år: Year) = filter { it.inntekstmåned.year == år.value }
-        internal fun Iterable<Inntekt>.inntektSiste3år(år: Year) = (0..2).map { år.minusYears(it.toLong()) }.flatMap { inntektSisteÅr(it) }
+        internal fun Iterable<Inntekt>.inntektSisteKalenderår(år: Year) = filter { Year.from(it.inntekstmåned) == år }
+
+        internal fun Iterable<Inntekt>.inntektSiste3Kalenderår(år: Year) =
+            filter { Year.from(it.inntekstmåned) in år.minusYears(2)..år }
+
         internal fun Iterable<Inntekt>.summerInntekt() = map { it.beløp }.summerBeløp()
     }
 
@@ -82,9 +122,28 @@ internal class Inntekt(
 
 internal class Beløp(
     private val beløp: Double
-) {
+) : Comparable<Beløp> {
     companion object {
-        fun Iterable<Beløp>.summerBeløp() = sumOf { it.beløp }
+        fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.beløp })
+    }
+
+    internal operator fun div(nevner: Int) = Beløp(beløp / nevner)
+
+    override fun compareTo(other: Beløp) = beløp.compareTo(other.beløp)
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Beløp
+
+        if (beløp != other.beløp) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return beløp.hashCode()
     }
 }
 
