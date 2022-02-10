@@ -15,27 +15,27 @@ import java.time.temporal.ChronoUnit
 
 internal class InntektTest {
     @Test
-    fun `summer tom liste`() {
+    fun `Hvis vi summerer en tom liste med inntekter, blir summen 0`() {
         val sum = emptyList<Inntekt>().summerInntekt()
         assertEquals(Beløp(0.0), sum)
     }
 
     @Test
-    fun `summer liste med ett beløp på 0`() {
+    fun `Hvis vi summerer en liste med ett beløp på 0, blir summen 0`() {
         val inntekter = inntekterFor(februar(2021) til januar(2021))
         val sum = inntekter.summerInntekt()
         assertEquals(Beløp(0.0), sum)
     }
 
     @Test
-    fun `summer liste med ett beløp på 1`() {
+    fun `Hvis vi summerer en liste med ett beløp på 1, blir summen 1`() {
         val inntekter = inntekterFor(januar(2021) til januar(2021))
         val sum = inntekter.summerInntekt()
         assertEquals(Beløp(1.0), sum)
     }
 
     @Test
-    fun `summer liste med to beløp på 1`() {
+    fun `Hvis vi summerer en liste med to beløp på 1, blir summen 2`() {
         val inntekter = inntekterFor(januar(2021) til februar(2021))
         val sum = inntekter.summerInntekt()
         assertEquals(Beløp(2.0), sum)

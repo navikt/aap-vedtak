@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class InntektshistorikkTest {
 
     @Test
-    fun `Har ingen inntekt`() {
+    fun `Hvis vi beregner grunnlag for en bruker uten inntekt, blir grunnlaget 0`() {
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(emptyList())
         val beregning = inntektshistorikk.beregnGrunnlag(1.januar)
@@ -23,7 +23,7 @@ internal class InntektshistorikkTest {
     }
 
     @Test
-    fun `Har kun inntekt i år`() {
+    fun `Hvis bruker kun har inntekt i år, blir grunnlaget 0`() {
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(listOf(Inntekt(Arbeidsgiver(), januar(2022), Beløp(1000.0))))
         val beregning = inntektshistorikk.beregnGrunnlag(1 januar 2022)
@@ -38,7 +38,7 @@ internal class InntektshistorikkTest {
     }
 
     @Test
-    fun `Har kun inntekt forrige kalenderår`() {
+    fun `Hvis bruker kun har inntekt i forrige kalenderår`() {
         val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
@@ -54,7 +54,7 @@ internal class InntektshistorikkTest {
     }
 
     @Test
-    fun `Har inntekt over 6G forrige kalenderår`() {
+    fun `Hvis bruker kun har inntekt over 6G forrige kalenderår, blir beløp G-regulert`() {
         val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
@@ -70,7 +70,7 @@ internal class InntektshistorikkTest {
     }
 
     @Test
-    fun `Har kun inntekt i 2020`() {
+    fun `Hvis bruker kun har inntekt i 2020`() {
         val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)

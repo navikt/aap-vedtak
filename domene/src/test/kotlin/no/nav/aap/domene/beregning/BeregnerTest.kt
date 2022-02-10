@@ -8,7 +8,7 @@ import java.time.Year
 internal class BeregnerTest{
 
     @Test
-    fun `ingen inntekt`(){
+    fun `Hvis vi beregner en liste med 0 inntekter, får vi 0 i justert beløp`(){
         val inntekter = listOf<Inntekt>()
         val beregner = Beregner(1.januar, Year.of(2020), Grunnbeløp())
         val justertInntekt = beregner.justertInntekt(inntekter)
