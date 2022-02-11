@@ -31,7 +31,7 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(1016.0720424767944.beløp, grunnlagForDag)
+        assertEquals(1016.0720424767943.beløp, grunnlagForDag)
     }
 
     @Test
@@ -49,20 +49,20 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(1054.9909273893686.beløp / 3, grunnlagForDag)
+        assertEquals(1054.9909273893618.beløp / 3, grunnlagForDag)
     }
 
     @Test
     fun `Har inntekt i 3 kalenderår`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), Beløp(1000.0)), //1076.1940404183
-            Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)), //1054.9909273894
-            Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))  //1016.0720424768
+            Inntekt(Arbeidsgiver(), januar(2019), Beløp(1000.0)), //1076.19
+            Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)), //1054.99
+            Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))  //1016.07
         )
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(3147.2570102845066.beløp / 3, grunnlagForDag)
+        assertEquals(3147.25.beløp / 3, grunnlagForDag)
     }
 
     @Test

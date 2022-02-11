@@ -1,8 +1,10 @@
 package no.nav.aap.domene.beregning
 
+import kotlin.math.round
+
 class Beløp(verdi: Number) : Comparable<Beløp> {
 
-    private val verdi: Double = verdi.toDouble()
+    private val verdi: Double = round(verdi.toDouble() * 100) / 100
 
     companion object {
         internal fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.verdi })
@@ -14,8 +16,8 @@ class Beløp(verdi: Number) : Comparable<Beløp> {
     internal operator fun times(nevner: Number) = Beløp(verdi * nevner.toDouble())
     internal operator fun times(nevner: Beløp) = this * nevner.verdi
 
-    internal operator fun div(nevner: Number) = Beløp(verdi / nevner.toDouble())
-    internal operator fun div(nevner: Beløp) = this / nevner.verdi
+    internal operator fun div(nevner: Number): Beløp = Beløp(verdi / nevner.toDouble())
+    internal operator fun div(nevner: Beløp): Double = this.verdi / nevner.verdi
 
     override fun compareTo(other: Beløp) = verdi.compareTo(other.verdi)
 

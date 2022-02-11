@@ -35,6 +35,11 @@ internal class InntektsgrunnlagForÅr(
     private val år: Year,
     private val inntekter: List<Inntekt>
 ) {
+    private val beløpFørJustering: Beløp = inntekter.summerInntekt()
+    private val beløpJustertFor6G: Beløp = Grunnbeløp.beløpJustertFor6G(år, beløpFørJustering)
+    private val erBeløpJustertFor6G: Boolean = beløpFørJustering != beløpJustertFor6G
+    private val beregningsfaktor: Double = Grunnbeløp.finnBeregningsfaktor(år, beløpJustertFor6G)
+
     internal companion object {
         private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3
 
@@ -51,12 +56,7 @@ internal class InntektsgrunnlagForÅr(
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
     }
 
-    internal fun grunnlagForDag(dato: LocalDate): Beløp {
-        val sumForÅr: Beløp = inntekter.summerInntekt()
-        val beløpJustertFor6G = Grunnbeløp.beløpJustertFor6G(år, sumForÅr)
-
-        return Grunnbeløp.justerInntekt(dato, år, beløpJustertFor6G)
-    }
+    private fun grunnlagForDag(dato: LocalDate) = Grunnbeløp.justerInntekt(dato, beregningsfaktor)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
