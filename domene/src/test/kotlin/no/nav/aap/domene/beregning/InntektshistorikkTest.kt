@@ -171,4 +171,24 @@ internal class InntektshistorikkTest {
 
         assertEquals(expected, beregning)
     }
+
+    @Test
+    fun `Hvis bruker har snittinntekt over 3 år som er høyere enn siste år`() {
+        val inntekter = listOf(
+            Inntekt(Arbeidsgiver(), januar(2014), Beløp(540527.0)),
+            Inntekt(Arbeidsgiver(), januar(2015), Beløp(459248.0)),
+            Inntekt(Arbeidsgiver(), januar(2016), Beløp(445700.0))
+        )
+        val inntektshistorikk = Inntektshistorikk()
+        inntektshistorikk.leggTilInntekter(inntekter)
+        val beregning = inntektshistorikk.beregnGrunnlag(1 juli 2017)
+
+        val expected = Grunnlagsberegning(
+            Beløp(499051.83807592624),
+            inntekter.takeLast(1),
+            inntekter
+        )
+
+        assertEquals(expected, beregning)
+    }
 }
