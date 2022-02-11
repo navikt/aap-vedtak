@@ -1,19 +1,23 @@
 package no.nav.aap.domene.beregning
 
-class Beløp(
-    private val beløp: Double
-) : Comparable<Beløp> {
-    internal companion object {
-        internal fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.beløp })
+class Beløp(verdi: Number) : Comparable<Beløp> {
+
+    private val verdi: Double = verdi.toDouble()
+
+    companion object {
+        internal fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.verdi })
+        val Number.beløp get() = Beløp(this)
     }
 
-    internal operator fun times(nevner: Int) = Beløp(beløp * nevner)
-    internal operator fun times(nevner: Beløp) = Beløp(beløp * nevner.beløp)
+    internal operator fun plus(nevner: Beløp) = Beløp(this.verdi + nevner.verdi)
 
-    internal operator fun div(nevner: Int) = Beløp(beløp / nevner)
-    internal operator fun div(nevner: Beløp) = Beløp(beløp / nevner.beløp)
+    internal operator fun times(nevner: Number) = Beløp(verdi * nevner.toDouble())
+    internal operator fun times(nevner: Beløp) = this * nevner.verdi
 
-    override fun compareTo(other: Beløp) = beløp.compareTo(other.beløp)
+    internal operator fun div(nevner: Number) = Beløp(verdi / nevner.toDouble())
+    internal operator fun div(nevner: Beløp) = this / nevner.verdi
+
+    override fun compareTo(other: Beløp) = verdi.compareTo(other.verdi)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -21,14 +25,12 @@ class Beløp(
 
         other as Beløp
 
-        if (beløp != other.beløp) return false
+        if (verdi != other.verdi) return false
 
         return true
     }
 
-    override fun hashCode(): Int {
-        return beløp.hashCode()
-    }
+    override fun hashCode() = verdi.hashCode()
 
-    override fun toString() = "Beløp($beløp)"
+    override fun toString() = "Beløp($verdi)"
 }

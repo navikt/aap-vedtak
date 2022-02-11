@@ -10,11 +10,10 @@ class Inntekt(
     private val beløp: Beløp
 ) {
     internal companion object {
-        internal fun Iterable<Inntekt>.inntektSisteKalenderår(år: Year) = filter { Year.from(it.inntekstmåned) == år }
-
         internal fun Iterable<Inntekt>.inntektSiste3Kalenderår(år: Year) = this
             .filter { Year.from(it.inntekstmåned) in år.minusYears(2)..år }
             .groupBy { Year.from(it.inntekstmåned) }
+            .map { (år, inntekter) -> InntektsgrunnlagForÅr(år, inntekter) }
 
         internal fun Iterable<Inntekt>.summerInntekt() = map { it.beløp }.summerBeløp()
     }

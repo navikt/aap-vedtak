@@ -194,7 +194,7 @@ internal class Sak {
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
             løsning.lagreInntekter(sak.inntektshistorikk)
-            val grunnlagsberegning = sak.inntektshistorikk.beregnGrunnlag(sak.vurderingsdato)
+            val grunnlagsberegning = sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingsdato)
 
 
         }
