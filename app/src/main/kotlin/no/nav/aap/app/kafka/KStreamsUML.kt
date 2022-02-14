@@ -1,4 +1,4 @@
-package no.nav.aap.kafka.streams
+package no.nav.aap.app.kafka
 
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.TopologyDescription
@@ -7,13 +7,18 @@ import java.io.File
 internal const val EOL = "\n"
 internal const val TAB = "\t"
 
-object KStreamsUML {
-    fun text(topology: Topology): String = plantUML(topology)
-
-    fun file(topology: Topology, destination: String = "build/topology.puml"): File =
-        File(destination).apply {
-            writeText(plantUML(topology))
+/**
+ * Uses topology description to create PlantUML
+ */
+class KStreamsUML {
+    companion object {
+        fun file(topology: Topology, path: String = "build/topology.puml"): File {
+            val umlGenerator = KStreamsUML()
+            return File(path).apply {
+                writeText(umlGenerator.plantUML(topology))
+            }
         }
+    }
 
     private fun plantUML(topology: Topology): String = topology.describe().let { description ->
         val stores = description.globalStores().map { processStore(it) }.toSet()
@@ -21,14 +26,6 @@ object KStreamsUML {
         val queues = description.getTopics().map { formatTopicToUmlQueue(it) }.toSet()
         val uml = PlantUML(stores + subtopologies, queues)
         uml.toString()
-    }
-
-    private fun markdown(topology: Topology): String = topology.describe().let { description ->
-        val stores = description.globalStores().map { processStore(it) }.toSet()
-        val subtopologies = description.subtopologies().map { processSubtopology(it) }
-        val queues = description.getTopics().map { formatTopicToUmlQueue(it) }.toSet()
-        val uml = PlantUML(stores + subtopologies, queues)
-        Markdown(uml).toString()
     }
 
     private fun TopologyDescription.getTopics(): Set<String> = this.let {

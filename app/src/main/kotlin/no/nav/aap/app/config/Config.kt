@@ -1,4 +1,15 @@
-package no.nav.aap.app.kafka
+package no.nav.aap.app.config
+
+import no.nav.aap.app.security.IssuerConfig
+
+data class Config(
+    val oauth: OAuthConfig,
+    val kafka: KafkaConfig,
+)
+
+data class OAuthConfig(
+    val azure: IssuerConfig,
+)
 
 data class KafkaConfig(
     val brokers: String,
@@ -11,6 +22,4 @@ data class KafkaConfig(
     val schemaRegistryUrl: String,
     val schemaRegistryUser: String,
     val schemaRegistryPwd: String,
-    @Deprecated("fjernes i kafka-streams implementasjonen")
-    val topic: String,
 )

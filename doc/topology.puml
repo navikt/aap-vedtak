@@ -5,7 +5,7 @@ queue "aap.sokere.v1" <<topic>> as aap_sokere_v1
 queue "aap.aap-soknad-sendt.v1" <<topic>> as aap_aap_soknad_sendt_v1
 queue "keyed_personident-repartition" <<topic>> as keyed_personident_repartition
 package "Sub-topology: 0" {
-	database "ktable-sokere" <<State Store>> as ktable_sokere
+	database "state-store-soker" <<State Store>> as state_store_soker
 	agent "soknad-mottatt" <<Source>> as soknad_mottatt
 	agent "KSTREAM-PEEK-0000000003" <<Processor>> as KSTREAM_PEEK_0000000003
 	agent "soknad-leftjoin-sokere" <<Processor>> as soknad_leftjoin_sokere
@@ -23,11 +23,11 @@ package "Sub-topology: 0" {
 	agent "produced-ny-soker" <<Sink>> as produced_ny_soker
 	agent "produced-soker-med-medlem" <<Sink>> as produced_soker_med_medlem
 	aap_aap_soknad_sendt_v1 --> soknad_mottatt
-	ktable_sokere -- soknad_leftjoin_sokere
+	state_store_soker -- soknad_leftjoin_sokere
 	keyed_personident_repartition --> keyed_personident_repartition_source
-	ktable_sokere -- KSTREAM_JOIN_0000000019
+	state_store_soker -- KSTREAM_JOIN_0000000019
 	aap_sokere_v1 --> KSTREAM_SOURCE_0000000000
-	ktable_sokere -- KTABLE_SOURCE_0000000001
+	state_store_soker -- KTABLE_SOURCE_0000000001
 	aap_medlem_v1 <-- produced_behov_medlem
 	aap_sokere_v1 <-- produced_ny_soker
 	aap_sokere_v1 <-- produced_soker_med_medlem

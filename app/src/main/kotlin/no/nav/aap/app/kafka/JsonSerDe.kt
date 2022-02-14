@@ -1,4 +1,4 @@
-package no.nav.aap.app.kafka.json
+package no.nav.aap.app.kafka
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -30,9 +30,7 @@ class JsonSerializer<T : Any> : Serializer<T> {
         }
     }
 
-    override fun serialize(topic: String?, data: T?): ByteArray? = data?.let {
-        objectMapper.writeValueAsBytes(it)
-    }
+    override fun serialize(topic: String?, data: T?): ByteArray? = data?.let { objectMapper.writeValueAsBytes(it) }
 }
 
 class JsonDeserializer<T : Any>(private val kclass: KClass<T>) : Deserializer<T> {

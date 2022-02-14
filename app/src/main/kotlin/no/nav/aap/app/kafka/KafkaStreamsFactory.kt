@@ -1,9 +1,8 @@
-package no.nav.aap.app.kafka.streams
+package no.nav.aap.app.kafka
 
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-import no.nav.aap.app.kafka.KafkaConfig
-import no.nav.aap.app.kafka.json.JsonSerde
+import no.nav.aap.app.config.KafkaConfig
 import org.apache.avro.specific.SpecificRecord
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.Consumer
@@ -15,15 +14,19 @@ import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.*
 import org.apache.kafka.streams.KafkaStreams
+import org.apache.kafka.streams.StoreQueryParameters
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.processor.LogAndSkipOnInvalidTimestamp
+import org.apache.kafka.streams.state.QueryableStoreTypes
+import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import java.util.*
 import kotlin.reflect.full.isSubclassOf
 
 interface Kafka : AutoCloseable {
     fun start()
     fun createKafkaStream(topology: Topology, config: KafkaConfig)
+    fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V>
 }
 
 class KafkaStreamsFactory : Kafka {
@@ -40,6 +43,14 @@ class KafkaStreamsFactory : Kafka {
 
         streams = KafkaStreams(topology, properties)
     }
+
+    override fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V> =
+        streams.store(
+            StoreQueryParameters.fromNameAndType(
+                name,
+                QueryableStoreTypes.keyValueStore()
+            )
+        )
 
     override fun start() = streams.start()
     override fun close() = streams.close()

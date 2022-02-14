@@ -11,107 +11,77 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
-import io.ktor.util.pipeline.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import no.nav.aap.app.config.Config
 import no.nav.aap.app.config.loadConfig
-import no.nav.aap.app.kafka.KafkaConfig
-import no.nav.aap.app.kafka.KafkaFactory
-import no.nav.aap.app.modell.KafkaSøknad
+import no.nav.aap.app.kafka.Kafka
+import no.nav.aap.app.kafka.KafkaStreamsFactory
+import no.nav.aap.app.kafka.getAllValues
+import no.nav.aap.app.modell.toDto
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
-import no.nav.aap.app.security.IssuerConfig
-import no.nav.aap.domene.*
+import no.nav.aap.app.streams.medlemStream
+import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
-import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.frontendView.FrontendSak
-import no.nav.aap.hendelse.Søknad
-import org.apache.kafka.clients.consumer.Consumer
-import org.apache.kafka.clients.consumer.ConsumerRecord
-import org.slf4j.Logger
-import java.time.Duration
-import kotlin.concurrent.thread
+import org.apache.kafka.streams.StreamsBuilder
+import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.kstream.Materialized
+import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
+import org.slf4j.LoggerFactory
+import no.nav.aap.avro.vedtak.v1.Søker as AvroSøker
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-data class Config(val oauth: OAuthConfig, val kafka: KafkaConfig)
-data class OAuthConfig(val azure: IssuerConfig)
+internal val log = LoggerFactory.getLogger("app")
 
-private val søknader = mutableListOf<KafkaSøknad>()
-private val søkere = mutableListOf<Søker>()
-
-private val oppgaver = mutableListOf<FrontendSak>()
-
-//Test hack
-internal fun tømLister() {
-    søknader.clear()
-    søkere.clear()
-    oppgaver.clear()
-}
-
-fun Application.server(
-    config: Config = loadConfig(),
-    kafkaConsumer: Consumer<String, KafkaSøknad> = KafkaFactory.createConsumer(config.kafka),
-) {
+fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
+    val config = loadConfig<Config>()
+    val topology = createTopology()
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+
     install(MicrometerMetrics) { registry = prometheus }
-    install(ContentNegotiation) {
-        jackson {
-            registerModule(JavaTimeModule())
-        }
-    }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
+    install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
 
-    kafkaConsumer.subscribe(listOf(config.kafka.topic)).also {
-        log.info("subscribed to topic ${config.kafka.topic}")
-        log.info("broker: ${config.kafka.brokers}")
-    }
+    kafka.createKafkaStream(topology, config.kafka)
 
-    søknadKafkaListener(kafkaConsumer)
-    environment.monitor.subscribe(ApplicationStopping) { kafkaConsumer.close() }
+    environment.monitor.subscribe(ApplicationStarted) { kafka.start() }
+    environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
     routing {
-        api()
+        api(kafka)
         actuator(prometheus)
     }
 }
 
-fun Application.søknadKafkaListener(kafkaConsumer: Consumer<String, KafkaSøknad>) {
-    val timeout = Duration.ofMillis(10L)
+fun createTopology(): Topology = StreamsBuilder().apply {
+    val søkere = table<String, AvroSøker>("aap.sokere.v1", Materialized.`as`("state-store-soker"))
+    søknadStream(søkere)
+    medlemStream(søkere)
+}.build()
 
-    thread {
-        while (true) {
-            val records = kafkaConsumer.poll(timeout)
-            records.asSequence()
-                .logConsumed(log)
-                .filterNotNull()
-                .map { it.value() }
-                .onEach(søknader::add)
-                .map { søknad -> Søknad(Personident(søknad.ident.verdi), Fødselsdato(søknad.fødselsdato)) }
-                .map { søknad -> søknad.opprettSøker() to søknad }
-                .onEach { (søker) -> søkere.add(søker) }
-                .onEach { (søker, søknad) -> søker.håndterSøknad(søknad) }
-                .forEach { (søker: Søker, søknad) -> if(søknad.behov().isNotEmpty()) oppgaver.add(søker.toFrontendSaker().first()) }
-        }
-    }
-}
+fun Routing.api(kafka: Kafka) {
+    val stateStore: ReadOnlyKeyValueStore<String, AvroSøker> = kafka.stateStore("state-store-soker")
 
-fun Routing.api() {
     authenticate {
         route("/api") {
             get("/sak") {
+                val søkere = stateStore.getAllValues().map(AvroSøker::toDto).map(Søker::create)
                 call.respond(søkere.toFrontendSaker())
             }
 
             get("/sak/neste") {
-                call.respond(oppgaver.last())
+                val søker = stateStore.getAllValues().map(AvroSøker::toDto).map(Søker::create)
+                call.respond(søker.toFrontendSaker().first())
             }
 
             get("/sak/{personident}") {
                 val personident = Personident(call.parameters.getOrFail("personident"))
+                val søkere = stateStore.getAllValues().map(AvroSøker::toDto).map(Søker::create)
                 val frontendSaker = søkere.toFrontendSaker(personident)
                 call.respond(frontendSaker)
             }
@@ -119,22 +89,9 @@ fun Routing.api() {
     }
 }
 
-private fun Routing.actuator(prometheus: PrometheusMeterRegistry) {
+fun Routing.actuator(prometheus: PrometheusMeterRegistry) {
     route("/actuator") {
-        get("/healthy") {
-            call.respondText("Hello, world!")
-        }
-        get("/metrics") {
-            call.respond(prometheus.scrape())
-        }
+        get("/healthy") { call.respondText("Hello, world!") }
+        get("/metrics") { call.respond(prometheus.scrape()) }
     }
 }
-
-private val PipelineContext<Unit, ApplicationCall>.log get() = application.log
-
-private fun <K, V> Sequence<ConsumerRecord<K, V>?>.logConsumed(log: Logger): Sequence<ConsumerRecord<K, V>?> =
-    onEach { record ->
-        record?.let {
-            log.info("Consumed=${it.topic()} key=${it.key()} offset=${it.offset()} partition=${it.partition()}")
-        }
-    }
