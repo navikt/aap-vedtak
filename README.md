@@ -2,4 +2,4 @@
 Vedtaksapplikasjon for AAP
 
 # Topology
-![img](doc/topology.svg)
+![img](doc/topology.png)

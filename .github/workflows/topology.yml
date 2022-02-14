@@ -1,0 +1,39 @@
+name: Generate UML for topology
+
+on:
+  push:
+    paths: [ doc/topology.puml ]
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+    name: Generate Topology
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 2
+
+      - uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: 'temurin'
+          check-latest: true
+
+      - uses: gradle/wrapper-validation-action@v1
+      - uses: gradle/gradle-build-action@v2
+        with:
+          arguments: app:test --tests no.nav.aap.app.GenerateUML --no-daemon
+
+      - uses: Timmy/plantuml-action@v1
+        with:
+          args: '-tpng doc/topology.puml'
+
+      - run: |
+          git config --local user.name  ${{ github.actor }}
+          git add doc/topology.png
+          git commit -m "Oppdaterer topology.png"
+
+      - uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          force: true
