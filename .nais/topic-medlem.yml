@@ -1,0 +1,16 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: medlem.v1
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  pool: {{kafka-pool}}
+  acl:
+    - team: medlemskap
+      application: medlemskap-aap-listener
+      access: readwrite
+    - team: aap
+      application: vedtak
+      access: readwrite

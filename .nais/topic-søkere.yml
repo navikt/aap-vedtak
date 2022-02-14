@@ -1,0 +1,13 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: sokere.v1
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  pool: {{kafka-pool}}
+  acl:
+    - team: aap
+      application: vedtak
+      access: readwrite
