@@ -1,13 +1,14 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
 
 internal abstract class Vilkårsvurdering(
-    private val paragraf: Paragraf,
-    private val ledd: List<Ledd>
+    protected val paragraf: Paragraf,
+    protected val ledd: List<Ledd>
 ) {
     internal constructor(
         paragraf: Paragraf,
@@ -54,12 +55,25 @@ internal abstract class Vilkårsvurdering(
 
     protected abstract fun toFrontendTilstand(): String
     protected open fun toFrontendHarÅpenOppgave(): Boolean = false
+    protected open fun toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        paragraf = paragraf.name,
+        ledd = ledd.map(Ledd::name),
+        tilstand = toFrontendTilstand(), // todo:
+        null,
+        null,
+    )
 
     internal companion object {
         internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)
         internal fun Iterable<Vilkårsvurdering>.erNoenIkkeOppfylt() = any(Vilkårsvurdering::erIkkeOppfylt)
-
+        internal fun Iterable<Vilkårsvurdering>.toDto() = map(Vilkårsvurdering::toDto)
         internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
             map(Vilkårsvurdering::toFrontendVilkårsvurdering)
+
+        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
+            when (Paragraf.valueOf(vilkårsvurdering.paragraf)) {
+                Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.create(vilkårsvurdering)
+                else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} not implemented") }
+            }
     }
 }

@@ -23,7 +23,7 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
+        val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
 
@@ -42,7 +42,7 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
+        val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
 
@@ -61,8 +61,7 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarBehov(maskinellLøsning)
 
@@ -81,13 +80,11 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarBehov(maskinellLøsning)
 
-        val manuellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA))
+        val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
 
@@ -106,13 +103,11 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarBehov(maskinellLøsning)
 
-        val manuellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.NEI))
+        val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
 
@@ -131,13 +126,11 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarBehov(maskinellLøsning)
 
-        val manuellLøsning =
-            LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.VET_IKKE))
+        val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
 
         assertThrows<IllegalStateException> { vilkår.håndterLøsning(manuellLøsning) }
     }

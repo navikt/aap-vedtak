@@ -73,7 +73,7 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
-        sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA)))
+        sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_3(true))

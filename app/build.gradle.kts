@@ -13,8 +13,6 @@ plugins {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("no.nav.aap:avroskjema:1.0.0")
-
     implementation("io.ktor:ktor-server-core:1.6.7")
     implementation("io.ktor:ktor-server-netty:1.6.7")
     implementation("io.ktor:ktor-client-jackson:1.6.7")
@@ -24,10 +22,12 @@ dependencies {
 
     implementation("io.ktor:ktor-auth:1.6.7")
     implementation("io.ktor:ktor-client-auth:1.6.7")
+    implementation("io.ktor:ktor-client-logging:1.6.7")
 
     implementation("io.ktor:ktor-metrics-micrometer:1.6.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.2")
 
+    implementation("no.nav.aap:avroskjema:1.0.25")
     implementation("no.nav.security:token-validation-ktor:1.3.10")
     implementation("no.nav.security:token-client-core:1.3.10")
 
@@ -38,6 +38,9 @@ dependencies {
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
     implementation("org.apache.kafka:kafka-clients:3.1.0")
+    implementation("org.apache.kafka:kafka-streams:3.0.0")
+    implementation("io.confluent:kafka-streams-avro-serde:7.0.1")
+
     // JsonSerializer java 8 LocalDate
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
 
@@ -46,6 +49,7 @@ dependencies {
     testImplementation("no.nav.security:mock-oauth2-server:0.4.2")
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.0")
+    testImplementation("org.apache.kafka:kafka-streams-test-utils:3.1.0")
 }
 
 application {

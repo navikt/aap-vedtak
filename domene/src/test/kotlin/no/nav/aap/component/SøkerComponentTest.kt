@@ -137,7 +137,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.Medlemskap(LøsningParagraf_11_2.Medlemskap.Svar.JA)))
+        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
 
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger

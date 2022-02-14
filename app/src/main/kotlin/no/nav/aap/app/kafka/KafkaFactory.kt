@@ -1,5 +1,7 @@
 package no.nav.aap.app.kafka
 
+import no.nav.aap.app.kafka.json.JsonDeserializer
+import no.nav.aap.app.kafka.json.JsonSerializer
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -17,7 +19,7 @@ object KafkaFactory {
             ConsumerConfig.GROUP_ID_CONFIG to config.groupId,
             ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
         )
-        return KafkaConsumer(props, StringDeserializer(), JsonDeserializer(V::class.java))
+        return KafkaConsumer(props, StringDeserializer(), JsonDeserializer(V::class))
     }
 
     fun <V : Any> createProducer(config: KafkaConfig): Producer<String, V> {
@@ -50,13 +52,3 @@ object KafkaFactory {
         }
 }
 
-data class KafkaConfig(
-    val brokers: String,
-    val groupId: String,
-    val clientId: String,
-    val security: Boolean,
-    val truststorePath: String,
-    val keystorePath: String,
-    val credstorePsw: String,
-    val topic: String,
-)

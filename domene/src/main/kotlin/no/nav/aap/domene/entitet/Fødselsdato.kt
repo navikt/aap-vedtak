@@ -9,4 +9,5 @@ class Fødselsdato(private val dato: LocalDate) {
     internal fun erMellom18Og67År(vurderingsdato: LocalDate) = vurderingsdato in `18ÅrsDagen`..`67ÅrsDagen`
 
     internal fun toFrontendFødselsdato() = dato
+    internal fun toDto() = dato
 }

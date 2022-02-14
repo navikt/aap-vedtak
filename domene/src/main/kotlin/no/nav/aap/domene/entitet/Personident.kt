@@ -4,6 +4,7 @@ class Personident(
     private val ident: String
 ) {
     internal fun toFrontendPersonident() = ident
+    internal fun toDto() = ident
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

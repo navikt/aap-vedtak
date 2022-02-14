@@ -1,7 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.hendelse.Behov
+import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.Søknad
@@ -33,33 +33,34 @@ internal class Paragraf_11_2 :
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
     internal sealed class Tilstand(
-        private val name: String,
+        protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
     ) {
+        enum class Tilstandsnavn { IKKE_VURDERT, SØKNAD_MOTTATT, MANUELL_VURDERING_TRENGS, IKKE_OPPFYLT, OPPFYLT, }
+
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
         internal fun erIkkeOppfylt() = erIkkeOppfylt
-
         internal open fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_2,
             søknad: Søknad,
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            error("Søknad skal ikke håndteres i tilstand $name")
+            error("Søknad skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun vurderMedlemskap(
             vilkårsvurdering: Paragraf_11_2,
             løsning: LøsningParagraf_11_2
         ) {
-            error("Oppgave skal ikke håndteres i tilstand $name")
+            error("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         object IkkeVurdert : Tilstand(
-            name = "IKKE_VURDERT",
+            tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
@@ -73,7 +74,8 @@ internal class Paragraf_11_2 :
             }
         }
 
-        object SøknadMottatt : Tilstand(name = "SØKNAD_MOTTATT", erOppfylt = false, erIkkeOppfylt = false) {
+        object SøknadMottatt :
+            Tilstand(tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT, erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {
                 //send ut behov for innhenting av maskinell medlemskapsvurdering
                 hendelse.opprettBehov(Behov_11_2())
@@ -93,7 +95,7 @@ internal class Paragraf_11_2 :
         }
 
         object ManuellVurderingTrengs :
-            Tilstand(name = "MANUELL_VURDERING_TRENGS", erOppfylt = false, erIkkeOppfylt = false) {
+            Tilstand(tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS, erOppfylt = false, erIkkeOppfylt = false) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {
                 //send ut behov for manuell vurdering av medlemskap
                 hendelse.opprettBehov(Behov_11_2()) //FIXME Eget behov for manuell????
@@ -112,24 +114,76 @@ internal class Paragraf_11_2 :
             }
 
             override fun toFrontendHarÅpenOppgave() = true
+
+            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf112.paragraf.name,
+                ledd = paragraf112.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = null,
+            )
         }
 
         object Oppfylt : Tilstand(
-            name = "OPPFYLT",
+            tilstandsnavn = Tilstandsnavn.OPPFYLT,
             erOppfylt = true,
             erIkkeOppfylt = false
-        )
+        ) {
+            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf112.paragraf.name,
+                ledd = paragraf112.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = null, // todo
+            )
+        }
 
         object IkkeOppfylt : Tilstand(
-            name = "IKKE_OPPFYLT",
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT,
             erOppfylt = false,
             erIkkeOppfylt = true
+        ) {
+            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf112.paragraf.name,
+                ledd = paragraf112.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = null, // todo
+            )
+        }
+
+        internal open fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            paragraf = paragraf112.paragraf.name,
+            ledd = paragraf112.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            null,
+            null
         )
 
-        internal fun toFrontendTilstand(): String = name
+        internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
     }
 
+    override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
     override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
+
+    internal companion object {
+        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 =
+            Paragraf_11_2().apply {
+                vilkårsvurdering.løsning_11_2_maskinell?.let {
+                    maskineltLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.valueOf(it.erMedlem))
+                }
+                vilkårsvurdering.løsning_11_2_manuell?.let {
+                    manueltLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.valueOf(it.erMedlem))
+                }
+                tilstand = when (Tilstand.Tilstandsnavn.valueOf(vilkårsvurdering.tilstand)) {
+                    Tilstand.Tilstandsnavn.IKKE_VURDERT -> Tilstand.IkkeVurdert
+                    Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
+                    Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> Tilstand.ManuellVurderingTrengs
+                    Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> Tilstand.IkkeOppfylt
+                    Tilstand.Tilstandsnavn.OPPFYLT -> Tilstand.Oppfylt
+                }
+            }
+    }
 }

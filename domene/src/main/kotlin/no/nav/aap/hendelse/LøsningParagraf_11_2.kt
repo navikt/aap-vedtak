@@ -1,15 +1,13 @@
 package no.nav.aap.hendelse
 
-class LøsningParagraf_11_2(private val medlemskap: Medlemskap) : Hendelse() {
-    class Medlemskap(private val svar: Svar) {
-        enum class Svar {
-            JA, VET_IKKE, NEI
-        }
+import no.nav.aap.dto.DtoLøsningParagraf_11_2
 
-        internal fun erMedlem() = svar == Svar.JA
-        internal fun erIkkeMedlem() = svar == Svar.NEI
+class LøsningParagraf_11_2(private val erMedlem: ErMedlem) : Hendelse() {
+    enum class ErMedlem {
+        JA, NEI, UAVKLART
     }
 
-    internal fun erMedlem() = medlemskap.erMedlem()
-    internal fun erIkkeMedlem() = medlemskap.erIkkeMedlem()
+    internal fun erMedlem() = erMedlem == ErMedlem.JA
+    internal fun erIkkeMedlem() = erMedlem == ErMedlem.NEI
+    internal fun toDto(): DtoLøsningParagraf_11_2 = DtoLøsningParagraf_11_2(erMedlem.name)
 }

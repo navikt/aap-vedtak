@@ -1,23 +1,24 @@
 package no.nav.aap.domene
 
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.*
-import no.nav.aap.domene.vilkår.Paragraf_11_2
-import no.nav.aap.domene.vilkår.Paragraf_11_4FørsteLedd
-import no.nav.aap.domene.vilkår.Paragraf_11_5
-import no.nav.aap.domene.vilkår.Paragraf_11_6
-import no.nav.aap.domene.vilkår.Vilkårsvurdering
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
+import no.nav.aap.dto.DtoSak
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
 
-internal class Sak {
-    private val vilkårsvurderinger: MutableList<Vilkårsvurdering> = mutableListOf()
+internal class Sak private constructor(
+    private var tilstand: Tilstand,
+    private val vilkårsvurderinger: MutableList<Vilkårsvurdering>
+) {
     private lateinit var vurderingsdato: LocalDate
+
+    constructor() : this(Start, mutableListOf())
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()
@@ -52,7 +53,6 @@ internal class Sak {
         tilstand.håndterLøsning(this, løsning)
     }
 
-    private var tilstand: Tilstand = Start
 
     private fun tilstand(nyTilstand: Tilstand) {
         nyTilstand.onExit()
@@ -102,6 +102,7 @@ internal class Sak {
         }
 
         fun toFrontendTilstand() = tilstandsnavn.name
+        fun toDto() = tilstandsnavn.name
     }
 
     private object Start : Tilstand {
@@ -197,6 +198,26 @@ internal class Sak {
     internal companion object {
         internal fun Iterable<Sak>.toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) = map {
             it.toFrontendSak(personident = personident, fødselsdato = fødselsdato)
+        }
+
+        internal fun Iterable<Sak>.toDto() = map { sak ->
+            DtoSak(
+                tilstand = sak.tilstand.toDto(),
+                vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
+                vurderingsdato = sak.vurderingsdato // ALLTID SATT
+            )
+        }
+
+        internal fun create(sak: DtoSak): Sak = Sak(
+            vilkårsvurderinger = sak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(), // todo: map
+            tilstand = when (Tilstand.Tilstandsnavn.valueOf(sak.tilstand)) {
+                Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> BeregnInntekt
+                Tilstand.Tilstandsnavn.START -> Start
+                Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
+                Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> IkkeOppfylt
+            },
+        ).apply {
+            vurderingsdato = sak.vurderingsdato
         }
     }
 }

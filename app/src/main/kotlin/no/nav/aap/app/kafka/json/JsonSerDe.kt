@@ -1,4 +1,4 @@
-package no.nav.aap.app.kafka
+package no.nav.aap.app.kafka.json
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect
 import com.fasterxml.jackson.annotation.JsonInclude
@@ -9,13 +9,20 @@ import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import org.apache.kafka.common.serialization.Deserializer
+import org.apache.kafka.common.serialization.Serde
 import org.apache.kafka.common.serialization.Serializer
+import kotlin.reflect.KClass
+
+class JsonSerde<V : Any>(private val kclass: KClass<V>) : Serde<V> {
+    override fun serializer(): Serializer<V> = JsonSerializer()
+    override fun deserializer(): Deserializer<V> = JsonDeserializer(kclass)
+}
 
 class JsonSerializer<T : Any> : Serializer<T> {
     private companion object {
         private val objectMapper: ObjectMapper = ObjectMapper().apply {
             registerKotlinModule()
-            registerModule(JavaTimeModule()) // LocalDate
+            registerModule(JavaTimeModule())
             disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
             setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE)
             setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY)
@@ -28,20 +35,15 @@ class JsonSerializer<T : Any> : Serializer<T> {
     }
 }
 
-class JsonDeserializer<T : Any>(private val clazz: Class<T>) : Deserializer<T> {
-    companion object {
+class JsonDeserializer<T : Any>(private val kclass: KClass<T>) : Deserializer<T> {
+    private companion object {
         private val objectMapper: ObjectMapper = ObjectMapper().apply {
             registerKotlinModule()
-            registerModule(JavaTimeModule()) // java LocalDate
+            registerModule(JavaTimeModule())
             configure(DeserializationFeature.USE_BIG_DECIMAL_FOR_FLOATS, true)
             configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false)
         }
     }
 
-    override fun deserialize(topic: String?, data: ByteArray?): T? = data?.let {
-        when {
-            topic != null -> objectMapper.readValue(it, clazz)
-            else -> throw IllegalStateException("Missing topic and class information to deserialize data")
-        }
-    }
+    override fun deserialize(topic: String?, data: ByteArray?): T? = objectMapper.readValue(data, kclass.java)
 }
