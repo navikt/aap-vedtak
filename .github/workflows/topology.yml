@@ -2,7 +2,9 @@ name: Generate UML for topology
 
 on:
   push:
-    paths: [ doc/topology.puml ]
+    branches: [ main ]
+    paths:
+      - 'doc/topology.puml'
 
 jobs:
   generate:
