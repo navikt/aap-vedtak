@@ -5,6 +5,7 @@ import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.dto.DtoSøker
+import no.nav.aap.hendelse.LøsningInntekter
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
@@ -27,6 +28,10 @@ class Søker private constructor(
     }
 
     fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+        saker.forEach { it.håndterLøsning(løsning) }
+    }
+
+    fun håndterLøsning(løsning: LøsningInntekter) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 

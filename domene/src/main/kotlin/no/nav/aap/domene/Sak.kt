@@ -1,5 +1,6 @@
 package no.nav.aap.domene
 
+import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.*
@@ -14,11 +15,13 @@ import java.time.LocalDate
 
 internal class Sak private constructor(
     private var tilstand: Tilstand,
-    private val vilkårsvurderinger: MutableList<Vilkårsvurdering>
+    private val vilkårsvurderinger: MutableList<Vilkårsvurdering>,
+    private val inntektshistorikk: Inntektshistorikk,
 ) {
     private lateinit var vurderingsdato: LocalDate
+    private lateinit var vedtak: Vedtak
 
-    constructor() : this(Start, mutableListOf())
+    constructor() : this(Start, mutableListOf(), Inntektshistorikk())
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()
@@ -53,6 +56,9 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterLøsning(løsning: LøsningInntekter) {
+        tilstand.håndterLøsning(this, løsning)
+    }
 
     private fun tilstand(nyTilstand: Tilstand) {
         nyTilstand.onExit()
@@ -99,6 +105,10 @@ internal class Sak private constructor(
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
+        fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
+            error("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
         fun toFrontendTilstand() = tilstandsnavn.name
@@ -177,6 +187,17 @@ internal class Sak private constructor(
 
     private object BeregnInntekt : Tilstand {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.BEREGN_INNTEKT
+
+        override fun onEntry() {
+            // Be om inntekter
+        }
+
+        override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
+            løsning.lagreInntekter(sak.inntektshistorikk)
+            val grunnlagsberegning = sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingsdato)
+
+
+        }
     }
 
     private object IkkeOppfylt : Tilstand {
@@ -216,6 +237,7 @@ internal class Sak private constructor(
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
                 Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> IkkeOppfylt
             },
+            inntektshistorikk = Inntektshistorikk()
         ).apply {
             vurderingsdato = sak.vurderingsdato
         }
