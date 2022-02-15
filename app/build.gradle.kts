@@ -37,7 +37,7 @@ dependencies {
     implementation("io.ktor:ktor-jackson:1.6.7")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
-    implementation("org.apache.kafka:kafka-clients:3.1.0")
+    implementation("org.apache.kafka:kafka-clients:7.0.1-ce")
     implementation("org.apache.kafka:kafka-streams:3.0.0")
     implementation("io.confluent:kafka-streams-avro-serde:7.0.1")
 
