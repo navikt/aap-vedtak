@@ -1,7 +1,7 @@
 oauth:
   azure:
     name: ${AZURE_OPENID_CONFIG_ISSUER:-azure}
-    discoveryUrl: ${AZURE_APP_WELL_KNOWN_URL:-http://localhost:8087/maskinporten/.well-known/openid-configuration}
+    discoveryUrl: ${AZURE_APP_WELL_KNOWN_URL:-http://localhost:8087/azure/.well-known/openid-configuration}
     audience: ${AZURE_APP_CLIENT_ID:-vedtak}
 
 kafka:
