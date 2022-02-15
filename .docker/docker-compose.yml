@@ -1,3 +1,9 @@
+# colima start
+# docker-compose -f .docker/docker-compose.yml up -d
+
+# LIST TOPICS
+# kcat -b localhost:9092 -L
+
 services:
   kafka:
     image: wurstmeister/kafka
@@ -13,10 +19,11 @@ services:
       KAFKA_DELETE_TOPIC_ENABLED: "true"
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_CREATE_TOPICS_SEPARATOR: "$$'\n'"
+      KAFKA_OFFSETS_TOPIC_NUM_PARTITIONS: 3
       KAFKA_CREATE_TOPICS: |
         aap.aap-soknad-sendt.v1:1:1
         aap.medlem.v1:1:1
-        aap.sokere.v1:1:1:compacted
+        aap.sokere.v1:1:1:compact
     volumes: [ /var/run/docker.sock:/var/run/docker.sock ]
 
   zookeeper:
@@ -29,17 +36,21 @@ services:
     container_name: schema-registry
     restart: always
     depends_on: [ kafka, zookeeper ]
-    ports: [ 8085:8085 ]
+    ports: [ 8085:8081 ]
     environment:
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9093
-      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8085
+      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081
+#      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka:9092
+#      SCHEMA_REGISTRY_KAFKASTORE_CONNECTION_URL: zookeeper:2181
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:9093
+
 
   mock-oauth2:
     image: ghcr.io/navikt/mock-oauth2-server:0.4.3
-    ports: [ 8087:8081 ]
+    ports: [ 8087:8080 ]
+    container_name: oauth2
     expose: [ 8087 ]
     environment:
-      SERVER_PORT: 8081
+      SERVER_PORT: 8080
       JSON_CONFIG_PATH: /etc/oauth-mock-config.json
     volumes: [ './oauth-mock.json:/etc/oauth-mock-config.json' ]

@@ -49,8 +49,8 @@ fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
     install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
 
     kafka.createKafkaStream(topology, config.kafka)
-
-    environment.monitor.subscribe(ApplicationStarted) { kafka.start() }
+    kafka.start()
+    kafka.waitForStore<String, AvroSøker>("state-store-soker")
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
     routing {

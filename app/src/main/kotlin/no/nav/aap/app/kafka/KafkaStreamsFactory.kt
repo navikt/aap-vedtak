@@ -3,6 +3,7 @@ package no.nav.aap.app.kafka
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 import no.nav.aap.app.config.KafkaConfig
+import no.nav.aap.app.log
 import org.apache.avro.specific.SpecificRecord
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.Consumer
@@ -14,10 +15,11 @@ import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.*
 import org.apache.kafka.streams.KafkaStreams
-import org.apache.kafka.streams.KafkaStreams.State.*
+import org.apache.kafka.streams.KafkaStreams.State.RUNNING
 import org.apache.kafka.streams.StoreQueryParameters
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.processor.LogAndSkipOnInvalidTimestamp
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
@@ -29,6 +31,7 @@ interface Kafka : AutoCloseable {
     fun createKafkaStream(topology: Topology, config: KafkaConfig)
     fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V>
     fun healthy(): Boolean
+    fun <K, V> waitForStore(name: String): ReadOnlyKeyValueStore<K, V>
 }
 
 class KafkaStreamsFactory : Kafka {
@@ -84,7 +87,6 @@ class KafkaStreamsFactory : Kafka {
         StreamsConfig.producerPrefix(ProducerConfig.ACKS_CONFIG) to "all",
         StreamsConfig.TOPOLOGY_OPTIMIZATION_CONFIG to StreamsConfig.OPTIMIZE,
         AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to config.schemaRegistryUrl,
-        AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG to "${config.schemaRegistryUser}:${config.schemaRegistryPwd}",
     )
 
     private fun aivenProperties(config: KafkaConfig): Map<String, String> =
@@ -99,16 +101,57 @@ class KafkaStreamsFactory : Kafka {
                 SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG to config.credstorePsw,
                 SslConfigs.SSL_KEY_PASSWORD_CONFIG to config.credstorePsw,
                 SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG to "",
+                AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG to "${config.schemaRegistryUser}:${config.schemaRegistryPwd}",
             )
             false -> mapOf()
         }
+
+    override fun <K, V> waitForStore(name: String): ReadOnlyKeyValueStore<K, V> {
+        var store: ReadOnlyKeyValueStore<Any, Any>? = null
+        val timestamp = System.currentTimeMillis()
+        val storeWaitTimeoutMillis = 10_000L
+
+        log.info("Waiting $storeWaitTimeoutMillis ms for store $name to become available")
+
+        while (store == null && System.currentTimeMillis() < timestamp + storeWaitTimeoutMillis) {
+            try {
+                store = streams.store(
+                    StoreQueryParameters.fromNameAndType(
+                        name,
+                        QueryableStoreTypes.keyValueStore()
+                    )
+                )
+            } catch (ignored: InvalidStateStoreException) {
+                Thread.sleep(500) // store not yet ready for querying
+            }
+        }
+        if (store != null) {
+            val duration = System.currentTimeMillis() - timestamp
+            log.info("Store $name became ready for querying in $duration ms")
+            @Suppress("UNCHECKED_CAST")
+            return store as ReadOnlyKeyValueStore<K, V>
+        } else {
+            error("Store $name did not become available for querying within $storeWaitTimeoutMillis ms")
+        }
+    }
 }
 
 inline fun <reified V : Any> KafkaStreamsFactory.createConsumer(config: KafkaConfig): Consumer<String, V> =
     KafkaConsumer(consumerProperties(config, serde<V>().deserializer()))
 
-inline fun <reified V : Any> KafkaStreamsFactory.createProducer(config: KafkaConfig): Producer<String, V> =
-    KafkaProducer(producerProperties(config, serde<V>().serializer()))
+inline fun <reified V : SpecificRecord> KafkaStreamsFactory.createProducer(config: KafkaConfig): Producer<String, V> {
+    println("${AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG} = ${config.schemaRegistryUrl}")
+    val schemaConfig = mapOf(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to config.schemaRegistryUrl)
+    val serde = SpecificAvroSerde<V>().apply {
+        configure(schemaConfig, false)
+    }
+    val producerProperties = producerProperties(config, serde.serializer())
+
+    return KafkaProducer(producerProperties.toMutableMap().apply { putAll(schemaConfig) }.toMap())
+}
+
+inline fun <reified V : Any> KafkaStreamsFactory.createJsonProducer(config: KafkaConfig): Producer<String, V> =
+    KafkaProducer(producerProperties(config, JsonSerde(V::class).serializer()))
 
 inline fun <reified V : Any> serde(): Serde<out Any> = when (V::class.isSubclassOf(SpecificRecord::class)) {
     true -> SpecificAvroSerde()

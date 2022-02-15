@@ -15,4 +15,3 @@ kafka:
   schema-registry-url: ${KAFKA_SCHEMA_REGISTRY:-http://localhost:8085}
   schema-registry-user: ${KAFKA_SCHEMA_REGISTRY_USER:-}
   schema-registry-pwd: ${KAFKA_SCHEMA_REGISTRY_PASSWORD:-}
-  topic: aap.aap-soknad-sendt.v1
