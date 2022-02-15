@@ -4,6 +4,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.application.*
 import io.ktor.auth.*
 import io.ktor.features.*
+import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.metrics.micrometer.*
 import io.ktor.response.*
@@ -54,7 +55,7 @@ fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
 
     routing {
         api(kafka)
-        actuator(prometheus)
+        actuator(prometheus, kafka)
     }
 }
 
@@ -89,9 +90,13 @@ fun Routing.api(kafka: Kafka) {
     }
 }
 
-fun Routing.actuator(prometheus: PrometheusMeterRegistry) {
+fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
     route("/actuator") {
-        get("/healthy") { call.respondText("Hello, world!") }
         get("/metrics") { call.respond(prometheus.scrape()) }
+        get("/live") { call.respond("vedtak") }
+        get("/ready") {
+            val status = if (kafka.healthy()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
+            call.respond(status, "vedtak")
+        }
     }
 }

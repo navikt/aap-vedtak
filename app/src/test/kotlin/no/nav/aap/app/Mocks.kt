@@ -61,6 +61,7 @@ class KStreamsMock : Kafka {
 
     override fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
 
+    override fun healthy(): Boolean = true
     override fun start() {}
     override fun close() {
         MockSchemaRegistry.dropScope(schemaRegistryUrl)

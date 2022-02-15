@@ -14,6 +14,7 @@ import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.common.serialization.*
 import org.apache.kafka.streams.KafkaStreams
+import org.apache.kafka.streams.KafkaStreams.State.*
 import org.apache.kafka.streams.StoreQueryParameters
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.Topology
@@ -27,6 +28,7 @@ interface Kafka : AutoCloseable {
     fun start()
     fun createKafkaStream(topology: Topology, config: KafkaConfig)
     fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V>
+    fun healthy(): Boolean
 }
 
 class KafkaStreamsFactory : Kafka {
@@ -52,6 +54,7 @@ class KafkaStreamsFactory : Kafka {
             )
         )
 
+    override fun healthy(): Boolean = streams.state() in listOf(RUNNING)
     override fun start() = streams.start()
     override fun close() = streams.close()
 

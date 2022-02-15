@@ -31,12 +31,12 @@ spec:
       cpu: 500m
       memory: 1024Mi
   liveness:
-    path: /actuator/healthy
+    path: /actuator/live
     initialDelay: 3
     periodSeconds: 3
     failureThreshold: 21
   readiness:
-    path: /actuator/healthy
+    path: /actuator/ready
     initialDelay: 3
     periodSeconds: 3
     failureThreshold: 21
