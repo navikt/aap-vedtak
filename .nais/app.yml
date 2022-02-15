@@ -26,10 +26,10 @@ spec:
   resources:
     limits:
       cpu: 1000m
-      memory: 2048Mi
+      memory: 3Gi
     requests:
       cpu: 500m
-      memory: 1024Mi
+      memory: 2048Mi
   liveness:
     path: /actuator/live
     initialDelay: 3
