@@ -1,9 +1,11 @@
 package no.nav.aap.domene.beregning
 
+import no.nav.aap.august
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.januar
 import no.nav.aap.juli
+import no.nav.aap.mars
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.Year
@@ -122,5 +124,31 @@ internal class InntektsgrunnlagTest {
         val grunnlagForDag = grunnlag.grunnlagForDag(1 juli 2017)
 
         assertEquals(499051.83807592624.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Eksempel 1`() {
+        val inntekter = listOf(
+            Inntekt(Arbeidsgiver(), januar(2018), 714273.beløp),
+            Inntekt(Arbeidsgiver(), januar(2019), 633576.beløp),
+            Inntekt(Arbeidsgiver(), januar(2020), 915454.beløp)
+        )
+        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2020))
+        val grunnlagForDag = grunnlag.grunnlagForDag(19 mars 2022)
+
+        assertEquals(638394.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Eksempel 2`() {
+        val inntekter = listOf(
+            Inntekt(Arbeidsgiver(), januar(2017), 190402.beløp),
+            Inntekt(Arbeidsgiver(), januar(2018), 268532.beløp),
+            Inntekt(Arbeidsgiver(), januar(2019), 350584.beløp)
+        )
+        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2019))
+        val grunnlagForDag = grunnlag.grunnlagForDag(31 august 2021)
+
+        assertEquals(377296.411466.beløp, grunnlagForDag)
     }
 }
