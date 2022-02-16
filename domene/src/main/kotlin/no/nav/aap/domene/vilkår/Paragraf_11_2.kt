@@ -8,12 +8,12 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_2
 import java.time.LocalDate
 
-internal class Paragraf_11_2 :
+internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand) :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
     private lateinit var maskineltLøsning: LøsningParagraf_11_2
     private lateinit var manueltLøsning: LøsningParagraf_11_2
 
-    private var tilstand: Tilstand = Tilstand.IkkeVurdert
+    internal constructor() : this(Tilstand.IkkeVurdert)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -32,12 +32,54 @@ internal class Paragraf_11_2 :
     override fun erOppfylt() = tilstand.erOppfylt()
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
+    private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_11_2_maskinell)
+        maskineltLøsning = LøsningParagraf_11_2(enumValueOf(dtoMaskinell.erMedlem))
+    }
+
+    private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoManuell = requireNotNull(vilkårsvurdering.løsning_11_2_manuell)
+        manueltLøsning = LøsningParagraf_11_2(enumValueOf(dtoManuell.erMedlem))
+    }
+
     internal sealed class Tilstand(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
     ) {
-        enum class Tilstandsnavn { IKKE_VURDERT, SØKNAD_MOTTATT, MANUELL_VURDERING_TRENGS, IKKE_OPPFYLT, OPPFYLT, }
+        enum class Tilstandsnavn(private val creator: (DtoVilkårsvurdering) -> Paragraf_11_2) {
+            IKKE_VURDERT({ Paragraf_11_2(IkkeVurdert) }),
+            SØKNAD_MOTTATT({ Paragraf_11_2(SøknadMottatt) }),
+            MANUELL_VURDERING_TRENGS({ vilkårsvurdering ->
+                Paragraf_11_2(ManuellVurderingTrengs).apply {
+                    settMaskinellLøsning(vilkårsvurdering)
+                }
+            }),
+            OPPFYLT_MASKINELT({ vilkårsvurdering ->
+                Paragraf_11_2(OppfyltMaskinelt).apply {
+                    settMaskinellLøsning(vilkårsvurdering)
+                }
+            }),
+            IKKE_OPPFYLT_MASKINELT({ vilkårsvurdering ->
+                Paragraf_11_2(IkkeOppfyltMaskinelt).apply {
+                    settMaskinellLøsning(vilkårsvurdering)
+                }
+            }),
+            OPPFYLT_MANUELT({ vilkårsvurdering ->
+                Paragraf_11_2(OppfyltManuelt).apply {
+                    settMaskinellLøsning(vilkårsvurdering)
+                    settManuellLøsning(vilkårsvurdering)
+                }
+            }),
+            IKKE_OPPFYLT_MANUELT({ vilkårsvurdering ->
+                Paragraf_11_2(IkkeOppfyltManuelt).apply {
+                    settMaskinellLøsning(vilkårsvurdering)
+                    settManuellLøsning(vilkårsvurdering)
+                }
+            });
+
+            internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 = creator(vilkårsvurdering)
+        }
 
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
@@ -87,8 +129,8 @@ internal class Paragraf_11_2 :
             ) {
                 vilkårsvurdering.maskineltLøsning = løsning
                 when {
-                    løsning.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt, løsning)
-                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
+                    løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskinelt, løsning)
+                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskinelt, løsning)
                     else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
                 }
             }
@@ -107,8 +149,8 @@ internal class Paragraf_11_2 :
             ) {
                 vilkårsvurdering.manueltLøsning = løsning
                 when {
-                    løsning.erMedlem() -> vilkårsvurdering.tilstand(Oppfylt, løsning)
-                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
+                    løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManuelt, løsning)
+                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltManuelt, løsning)
                     else -> error("Veileder/saksbehandler må ta stilling til om bruker er medlem eller ikke")
                 }
             }
@@ -124,8 +166,8 @@ internal class Paragraf_11_2 :
             )
         }
 
-        object Oppfylt : Tilstand(
-            tilstandsnavn = Tilstandsnavn.OPPFYLT,
+        object OppfyltMaskinelt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT,
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
@@ -134,12 +176,12 @@ internal class Paragraf_11_2 :
                 ledd = paragraf112.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = null, // todo
+                løsning_11_2_manuell = null
             )
         }
 
-        object IkkeOppfylt : Tilstand(
-            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT,
+        object IkkeOppfyltMaskinelt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
@@ -148,7 +190,35 @@ internal class Paragraf_11_2 :
                 ledd = paragraf112.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = null, // todo
+                løsning_11_2_manuell = null
+            )
+        }
+
+        object OppfyltManuelt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT,
+            erOppfylt = true,
+            erIkkeOppfylt = false
+        ) {
+            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf112.paragraf.name,
+                ledd = paragraf112.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = paragraf112.manueltLøsning.toDto()
+            )
+        }
+
+        object IkkeOppfyltManuelt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
+            erOppfylt = false,
+            erIkkeOppfylt = true
+        ) {
+            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf112.paragraf.name,
+                ledd = paragraf112.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = paragraf112.manueltLøsning.toDto()
             )
         }
 
@@ -156,8 +226,8 @@ internal class Paragraf_11_2 :
             paragraf = paragraf112.paragraf.name,
             ledd = paragraf112.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            null,
-            null
+            løsning_11_2_maskinell = null,
+            løsning_11_2_manuell = null
         )
 
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
@@ -170,20 +240,6 @@ internal class Paragraf_11_2 :
 
     internal companion object {
         internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 =
-            Paragraf_11_2().apply {
-                vilkårsvurdering.løsning_11_2_maskinell?.let {
-                    maskineltLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.valueOf(it.erMedlem))
-                }
-                vilkårsvurdering.løsning_11_2_manuell?.let {
-                    manueltLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.valueOf(it.erMedlem))
-                }
-                tilstand = when (Tilstand.Tilstandsnavn.valueOf(vilkårsvurdering.tilstand)) {
-                    Tilstand.Tilstandsnavn.IKKE_VURDERT -> Tilstand.IkkeVurdert
-                    Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
-                    Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> Tilstand.ManuellVurderingTrengs
-                    Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> Tilstand.IkkeOppfylt
-                    Tilstand.Tilstandsnavn.OPPFYLT -> Tilstand.Oppfylt
-                }
-            }
+            enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand).create(vilkårsvurdering)
     }
 }
