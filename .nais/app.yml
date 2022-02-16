@@ -16,6 +16,7 @@ spec:
       enabled: true
   kafka:
     pool: {{kafka-pool}}
+    streams: true
   ingresses:
     - {{ingress}}
   replicas:
