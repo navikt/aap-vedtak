@@ -14,7 +14,7 @@ import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.streams.*
-import org.apache.kafka.streams.KafkaStreams.State.RUNNING
+import org.apache.kafka.streams.KafkaStreams.*
 import org.apache.kafka.streams.errors.InvalidStateStoreException
 import org.apache.kafka.streams.kstream.Named
 import org.apache.kafka.streams.processor.LogAndSkipOnInvalidTimestamp
@@ -48,7 +48,7 @@ class KafkaStreamsFactory : Kafka {
     override fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V> =
         streams.store(StoreQueryParameters.fromNameAndType(name, QueryableStoreTypes.keyValueStore()))
 
-    override fun healthy(): Boolean = streams.state() in listOf(RUNNING)
+    override fun healthy(): Boolean = streams.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
     override fun start() = streams.start()
     override fun close() = streams.close()
 
@@ -56,24 +56,17 @@ class KafkaStreamsFactory : Kafka {
         ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG to config.brokers,
         ConsumerConfig.AUTO_OFFSET_RESET_CONFIG to "earliest",
         ConsumerConfig.GROUP_ID_CONFIG to "aap-vedtak",
-//        ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java.name,
-//        ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to deserializer::class.java.name,
         ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG to Duration.ofSeconds(124).toMillis().toInt(),
     )
 
     fun producerProperties(config: KafkaConfig, vararg additionalConfig: Pair<String, String>) = mapOf(
         CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG to config.brokers,
-//        ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to StringSerializer::class.java.name,
-//        ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to serializer::class.java.name,
-//        ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG to "true",
         ProducerConfig.ACKS_CONFIG to "all",
         ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION to "1",
         *additionalConfig
     )
 
     fun streamsProperties(config: KafkaConfig) = mapOf(
-//        StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG to Serdes.StringSerde::class.java,
-//        StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG to SpecificAvroSerde::class.java,
         StreamsConfig.APPLICATION_ID_CONFIG to "aap-vedtak",
         StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG to 0,
         StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG to LogAndSkipOnInvalidTimestamp::class.java,
