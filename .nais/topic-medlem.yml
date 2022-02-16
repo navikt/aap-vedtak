@@ -6,6 +6,7 @@ metadata:
   labels:
     team: aap
 spec:
+  kafka.streams: true
   pool: {{kafka-pool}}
   acl:
     - team: medlemskap
