@@ -49,9 +49,9 @@ fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
 
     kafka.createKafkaStream(topology, config.kafka)
 
-    runBlocking {
-        kafka.waitForStore<String, AvroSøker>("soker-store")
-    }
+//    runBlocking {
+//        kafka.waitForStore<String, AvroSøker>("soker-store")
+//    }
 
     kafka.start()
 
