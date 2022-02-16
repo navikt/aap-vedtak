@@ -58,7 +58,7 @@ class KafkaStreamsFactory : Kafka {
         ConsumerConfig.GROUP_ID_CONFIG to "aap-vedtak",
 //        ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG to StringDeserializer::class.java.name,
 //        ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG to deserializer::class.java.name,
-        ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG to Duration.ofSeconds(124).toMillis(),
+        ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG to Duration.ofSeconds(124).toMillis().toInt(),
     )
 
     fun producerProperties(config: KafkaConfig, vararg additionalConfig: Pair<String, String>) = mapOf(
