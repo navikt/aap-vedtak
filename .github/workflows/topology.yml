@@ -24,7 +24,7 @@ jobs:
       - uses: gradle/wrapper-validation-action@v1
       - uses: gradle/gradle-build-action@v2
         with:
-          arguments: app:test --tests no.nav.aap.app.GenerateUML --no-daemon
+          arguments: app:test --tests no.nav.aap.GenerateUML --no-daemon
 
       - uses: Timmy/plantuml-action@v1
         with:
