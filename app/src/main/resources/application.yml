@@ -11,7 +11,6 @@ kafka:
   keystorePath: ${KAFKA_KEYSTORE_PATH:-}
   credstorePsw: ${KAFKA_CREDSTORE_PASSWORD:-}
   clientId: ${KAFKA_CLIENT_ID:-vedtak}
-  groupId: ${KAFKA_GROUP_ID:-vedtak}
   schema-registry-url: ${KAFKA_SCHEMA_REGISTRY:-http://localhost:8085}
   schema-registry-user: ${KAFKA_SCHEMA_REGISTRY_USER:-}
   schema-registry-pwd: ${KAFKA_SCHEMA_REGISTRY_PASSWORD:-}

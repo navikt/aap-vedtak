@@ -6,7 +6,6 @@ import io.ktor.server.netty.*
 import no.nav.aap.app.config.Config
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.KafkaStreamsFactory
-import no.nav.aap.app.kafka.createJsonProducer
 import no.nav.aap.app.kafka.createProducer
 import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
@@ -25,7 +24,7 @@ fun main() {
     embeddedServer(Netty, port = 8081) {
         val config = loadConfig<Config>()
         val kafka = KafkaStreamsFactory()
-        val søknadProducer = kafka.createJsonProducer<JsonSøknad>(config.kafka)
+        val søknadProducer = kafka.createProducer<JsonSøknad>(config.kafka)
         val medlemProducer = kafka.createProducer<AvroMedlem>(config.kafka)
         thread {
             while (true) {

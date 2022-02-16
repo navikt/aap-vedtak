@@ -6,12 +6,18 @@ import com.sksamuel.hoplite.yaml.YamlParser
 import io.ktor.application.*
 import io.ktor.config.*
 
-inline fun <reified T : Any> Application.loadConfig(vararg resources: String = arrayOf("/application.yml")) =
+inline fun <reified T : Any> Application.loadConfig(vararg resources: String = arrayOf("/application.yml")): T =
     ConfigLoader.Builder()
         .addFileExtensionMapping("yml", YamlParser())
         .addKtorConfig(environment.config)
         .build()
-        .loadConfigOrThrow<T>(*resources)
+        .loadConfigOrThrow(*resources)
+
+inline fun <reified T : Any> loadConfig(resource: String = "/application.yml"): T =
+    ConfigLoader.Builder()
+        .addFileExtensionMapping("yml", YamlParser())
+        .build()
+        .loadConfigOrThrow(resource)
 
 /**
  * Add Ktors MapApplicationConfig as PropertySource,

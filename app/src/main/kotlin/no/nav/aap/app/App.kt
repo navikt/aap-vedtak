@@ -14,15 +14,14 @@ import io.ktor.server.netty.*
 import io.ktor.util.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.coroutines.runBlocking
 import no.nav.aap.app.config.Config
+import no.nav.aap.app.config.KafkaConfig
 import no.nav.aap.app.config.loadConfig
-import no.nav.aap.app.kafka.Kafka
-import no.nav.aap.app.kafka.KafkaStreamsFactory
-import no.nav.aap.app.kafka.getAllValues
+import no.nav.aap.app.kafka.*
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
-import no.nav.aap.app.streams.medlemStream
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.entitet.Personident
@@ -41,7 +40,7 @@ internal val log = LoggerFactory.getLogger("app")
 
 fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
     val config = loadConfig<Config>()
-    val topology = createTopology()
+    val topology = createTopology(config.kafka)
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
 
     install(MicrometerMetrics) { registry = prometheus }
@@ -49,8 +48,13 @@ fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
     install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
 
     kafka.createKafkaStream(topology, config.kafka)
+
+    runBlocking {
+        kafka.waitForStore<String, AvroSøker>("soker-store")
+    }
+
     kafka.start()
-    kafka.waitForStore<String, AvroSøker>("state-store-soker")
+
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
     routing {
@@ -59,14 +63,15 @@ fun Application.server(kafka: Kafka = KafkaStreamsFactory()) {
     }
 }
 
-fun createTopology(): Topology = StreamsBuilder().apply {
-    val søkere = table<String, AvroSøker>("aap.sokere.v1", Materialized.`as`("state-store-soker"))
-    søknadStream(søkere)
-    medlemStream(søkere)
+fun createTopology(config: KafkaConfig): Topology = StreamsBuilder().apply {
+    val topics = Topics(config)
+    val søkere = table(topics.søkere.name, topics.søkere.consumed("soker-consumed"), Materialized.`as`("soker-store"))
+    søknadStream(søkere, topics)
+    medlemStream(søkere, topics)
 }.build()
 
 fun Routing.api(kafka: Kafka) {
-    val stateStore: ReadOnlyKeyValueStore<String, AvroSøker> = kafka.stateStore("state-store-soker")
+    val stateStore: ReadOnlyKeyValueStore<String, AvroSøker> = kafka.stateStore("soker-store")
 
     authenticate {
         route("/api") {

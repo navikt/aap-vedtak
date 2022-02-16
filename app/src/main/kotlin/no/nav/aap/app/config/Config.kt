@@ -13,7 +13,6 @@ data class OAuthConfig(
 
 data class KafkaConfig(
     val brokers: String,
-    val groupId: String,
     val clientId: String,
     val security: Boolean,
     val truststorePath: String,

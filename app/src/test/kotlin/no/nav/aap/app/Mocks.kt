@@ -46,9 +46,7 @@ class KStreamsMock : Kafka {
     lateinit var driver: TopologyTestDriver
     lateinit var config: KafkaConfig
 
-    val schemaRegistryUrl: String by lazy {
-        "mock://schema-registry${UUID.randomUUID()}"
-    }
+    internal val schemaRegistryUrl: String by lazy { "mock://schema-registry/${UUID.randomUUID()}" }
 
     override fun createKafkaStream(topology: Topology, config: KafkaConfig) {
         this.config = config
@@ -59,15 +57,9 @@ class KStreamsMock : Kafka {
         })
     }
 
-    override fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
-
     override fun healthy(): Boolean = true
-
-    @Suppress("UNCHECKED_CAST")
-    override fun <K, V> waitForStore(name: String): ReadOnlyKeyValueStore<K, V> {
-        val keyValueStore = getKeyValueStore<Any, Any>(name)
-        return keyValueStore as ReadOnlyKeyValueStore<K, V>
-    }
+    override fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
+    override suspend fun <K, V> waitForStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
 
     override fun start() {}
     override fun close() {

@@ -3,61 +3,61 @@
 queue "aap.medlem.v1" <<topic>> as aap_medlem_v1
 queue "aap.sokere.v1" <<topic>> as aap_sokere_v1
 queue "aap.aap-soknad-sendt.v1" <<topic>> as aap_aap_soknad_sendt_v1
-queue "keyed_personident-repartition" <<topic>> as keyed_personident_repartition
+queue "aap.medlem.v1-joined-aap.sokere.v1-repartition" <<topic>> as aap_medlem_v1_joined_aap_sokere_v1_repartition
 package "Sub-topology: 0" {
-	database "state-store-soker" <<State Store>> as state_store_soker
+	database "soker-store" <<State Store>> as soker_store
 	agent "soknad-mottatt" <<Source>> as soknad_mottatt
 	agent "KSTREAM-PEEK-0000000003" <<Processor>> as KSTREAM_PEEK_0000000003
-	agent "soknad-leftjoin-sokere" <<Processor>> as soknad_leftjoin_sokere
+	agent "aap.aap-soknad-sendt.v1-joined-aap.sokere.v1" <<Processor>> as aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	agent "skip-eksisterende-soker" <<Processor>> as skip_eksisterende_soker
-	agent "keyed_personident-repartition-source" <<Source>> as keyed_personident_repartition_source
-	agent "KSTREAM-JOIN-0000000019" <<Processor>> as KSTREAM_JOIN_0000000019
+	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-source" <<Source>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_source
+	agent "aap.medlem.v1-joined-aap.sokere.v1" <<Processor>> as aap_medlem_v1_joined_aap_sokere_v1
 	agent "opprett-medlem-behov" <<Processor>> as opprett_medlem_behov
 	agent "opprett-soknad" <<Processor>> as opprett_soknad
 	agent "KSTREAM-PEEK-0000000007" <<Processor>> as KSTREAM_PEEK_0000000007
 	agent "KSTREAM-PEEK-0000000010" <<Processor>> as KSTREAM_PEEK_0000000010
 	agent "KSTREAM-PEEK-0000000020" <<Processor>> as KSTREAM_PEEK_0000000020
-	agent "KSTREAM-SOURCE-0000000000" <<Source>> as KSTREAM_SOURCE_0000000000
-	agent "KTABLE-SOURCE-0000000001" <<Processor>> as KTABLE_SOURCE_0000000001
+	agent "soker-consumed-source" <<Source>> as soker_consumed_source
 	agent "produced-behov-medlem" <<Sink>> as produced_behov_medlem
 	agent "produced-ny-soker" <<Sink>> as produced_ny_soker
 	agent "produced-soker-med-medlem" <<Sink>> as produced_soker_med_medlem
+	agent "soker-consumed" <<Processor>> as soker_consumed
 	aap_aap_soknad_sendt_v1 --> soknad_mottatt
-	state_store_soker -- soknad_leftjoin_sokere
-	keyed_personident_repartition --> keyed_personident_repartition_source
-	state_store_soker -- KSTREAM_JOIN_0000000019
-	aap_sokere_v1 --> KSTREAM_SOURCE_0000000000
-	state_store_soker -- KTABLE_SOURCE_0000000001
+	soker_store -- aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
+	aap_medlem_v1_joined_aap_sokere_v1_repartition --> aap_medlem_v1_joined_aap_sokere_v1_repartition_source
+	soker_store -- aap_medlem_v1_joined_aap_sokere_v1
+	aap_sokere_v1 --> soker_consumed_source
 	aap_medlem_v1 <-- produced_behov_medlem
 	aap_sokere_v1 <-- produced_ny_soker
 	aap_sokere_v1 <-- produced_soker_med_medlem
+	soker_store -- soker_consumed
 	soknad_mottatt --> KSTREAM_PEEK_0000000003
-	KSTREAM_PEEK_0000000003 --> soknad_leftjoin_sokere
-	soknad_leftjoin_sokere --> skip_eksisterende_soker
+	KSTREAM_PEEK_0000000003 --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
+	aap_aap_soknad_sendt_v1_joined_aap_sokere_v1 --> skip_eksisterende_soker
 	skip_eksisterende_soker --> opprett_medlem_behov
 	skip_eksisterende_soker --> opprett_soknad
-	keyed_personident_repartition_source --> KSTREAM_JOIN_0000000019
-	KSTREAM_JOIN_0000000019 --> KSTREAM_PEEK_0000000020
+	aap_medlem_v1_joined_aap_sokere_v1_repartition_source --> aap_medlem_v1_joined_aap_sokere_v1
+	aap_medlem_v1_joined_aap_sokere_v1 --> KSTREAM_PEEK_0000000020
 	opprett_medlem_behov --> KSTREAM_PEEK_0000000007
 	opprett_soknad --> KSTREAM_PEEK_0000000010
 	KSTREAM_PEEK_0000000007 --> produced_behov_medlem
 	KSTREAM_PEEK_0000000010 --> produced_ny_soker
 	KSTREAM_PEEK_0000000020 --> produced_soker_med_medlem
-	KSTREAM_SOURCE_0000000000 --> KTABLE_SOURCE_0000000001
+	soker_consumed_source --> soker_consumed
 }
 package "Sub-topology: 1" {
 	agent "medlem-mottatt" <<Source>> as medlem_mottatt
 	agent "KSTREAM-PEEK-0000000013" <<Processor>> as KSTREAM_PEEK_0000000013
-	agent "KSTREAM-FILTER-0000000014" <<Processor>> as KSTREAM_FILTER_0000000014
+	agent "filter-responses" <<Processor>> as filter_responses
 	agent "keyed_personident" <<Processor>> as keyed_personident
-	agent "keyed_personident-repartition-filter" <<Processor>> as keyed_personident_repartition_filter
-	agent "keyed_personident-repartition-sink" <<Sink>> as keyed_personident_repartition_sink
+	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-filter" <<Processor>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_filter
+	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-sink" <<Sink>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
 	aap_medlem_v1 --> medlem_mottatt
-	keyed_personident_repartition <-- keyed_personident_repartition_sink
+	aap_medlem_v1_joined_aap_sokere_v1_repartition <-- aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
 	medlem_mottatt --> KSTREAM_PEEK_0000000013
-	KSTREAM_PEEK_0000000013 --> KSTREAM_FILTER_0000000014
-	KSTREAM_FILTER_0000000014 --> keyed_personident
-	keyed_personident --> keyed_personident_repartition_filter
-	keyed_personident_repartition_filter --> keyed_personident_repartition_sink
+	KSTREAM_PEEK_0000000013 --> filter_responses
+	filter_responses --> keyed_personident
+	keyed_personident --> aap_medlem_v1_joined_aap_sokere_v1_repartition_filter
+	aap_medlem_v1_joined_aap_sokere_v1_repartition_filter --> aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
 }
 @enduml
