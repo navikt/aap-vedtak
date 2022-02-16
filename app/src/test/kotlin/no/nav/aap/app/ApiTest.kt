@@ -303,7 +303,7 @@ internal class ApiTest {
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_2",
                                 ledd = listOf("LEDD_1", "LEDD_2"),
-                                tilstand = "OPPFYLT",
+                                tilstand = "OPPFYLT_MASKINELT",
                                 løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
                                 løsning_11_2_manuell = null,
                             ),

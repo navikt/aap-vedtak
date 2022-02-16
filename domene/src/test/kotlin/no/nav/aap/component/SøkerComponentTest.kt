@@ -142,7 +142,7 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)

@@ -18,8 +18,8 @@ data class DtoVilkårsvurdering(
     val paragraf: String,
     val ledd: List<String>,
     val tilstand: String,
-    val løsning_11_2_manuell: DtoLøsningParagraf_11_2?,
     val løsning_11_2_maskinell: DtoLøsningParagraf_11_2?,
+    val løsning_11_2_manuell: DtoLøsningParagraf_11_2?,
 )
 
 data class DtoLøsningParagraf_11_2(val erMedlem: String)
