@@ -12,7 +12,7 @@ import java.time.LocalDate
 import java.util.*
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.medlem.v1.Request as AvroMedlemRequest
-import no.nav.aap.avro.vedtak.v1.Søker as AvroSøker
+import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
 
 fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søknadAndSøkerStream =

@@ -9,7 +9,7 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Joined
 import org.apache.kafka.streams.kstream.Produced
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.vedtak.v1.Søker as AvroSøker
+import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
 
 data class Topic<K, V>(
     val name: String,

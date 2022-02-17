@@ -1,10 +1,10 @@
 package no.nav.aap.app.modell
 
 import no.nav.aap.avro.medlem.v1.Medlem
-import no.nav.aap.avro.vedtak.v1.Løsning_11_2
+import no.nav.aap.avro.vedtak.v1.Losning_11_2
 import no.nav.aap.avro.vedtak.v1.Sak
-import no.nav.aap.avro.vedtak.v1.Søker
-import no.nav.aap.avro.vedtak.v1.Vilkårsvurdering
+import no.nav.aap.avro.vedtak.v1.Soker
+import no.nav.aap.avro.vedtak.v1.Vilkarsvurdering
 import no.nav.aap.dto.DtoLøsningParagraf_11_2
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.dto.DtoSøker
@@ -15,41 +15,41 @@ fun Medlem.toDto(): LøsningParagraf_11_2 = LøsningParagraf_11_2(
     erMedlem = LøsningParagraf_11_2.ErMedlem.valueOf(response.erMedlem.name)
 )
 
-fun Søker.toDto(): DtoSøker = DtoSøker(
+fun Soker.toDto(): DtoSøker = DtoSøker(
     personident = personident,
-    fødselsdato = fødselsdato,
+    fødselsdato = fodselsdato,
     saker = saker.map(Sak::toDto),
 )
 
 fun Sak.toDto(): DtoSak = DtoSak(
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto)
+    vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto)
 )
 
-fun Vilkårsvurdering.toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
+fun Vilkarsvurdering.toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
-    løsning_11_2_manuell = løsning112Manuell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
-    løsning_11_2_maskinell = løsning112Maskinell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
+    løsning_11_2_manuell = losning112Manuell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
+    løsning_11_2_maskinell = losning112Maskinell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
 )
 
-fun DtoSøker.toAvro(): Søker = Søker.newBuilder()
+fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
     .setPersonident(personident)
-    .setFødselsdato(fødselsdato)
+    .setFodselsdato(fødselsdato)
     .setSaker(
         saker.map { sak ->
             Sak.newBuilder()
                 .setTilstand(sak.tilstand)
-                .setVilkårsvurderinger(
+                .setVilkarsvurderinger(
                     sak.vilkårsvurderinger.map { vilkår ->
-                        Vilkårsvurdering.newBuilder()
+                        Vilkarsvurdering.newBuilder()
                             .setLedd(vilkår.ledd)
                             .setParagraf(vilkår.paragraf)
                             .setTilstand(vilkår.tilstand)
-                            .setLøsning112Manuell(vilkår.løsning_11_2_manuell?.let { Løsning_11_2(it.erMedlem) })
-                            .setLøsning112Maskinell(vilkår.løsning_11_2_maskinell?.let { Løsning_11_2(it.erMedlem) })
+                            .setLosning112Manuell(vilkår.løsning_11_2_manuell?.let { Losning_11_2(it.erMedlem) })
+                            .setLosning112Maskinell(vilkår.løsning_11_2_maskinell?.let { Losning_11_2(it.erMedlem) })
                             .build()
                     }
                 )

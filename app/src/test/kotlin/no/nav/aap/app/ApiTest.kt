@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.vedtak.v1.Søker as AvroSøker
+import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
 
 internal class ApiTest {
 

@@ -26,7 +26,7 @@ import no.nav.aap.domene.entitet.Personident
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
-import no.nav.aap.avro.vedtak.v1.Søker as AvroSøker
+import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
