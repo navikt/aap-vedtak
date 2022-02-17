@@ -5,7 +5,6 @@ import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.http.*
 import io.ktor.server.testing.*
-import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
@@ -404,12 +403,9 @@ fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks(
     )
 
     return EnvironmentVariables(externalConfig).execute<R> {
-        val config = loadConfig<Config>()
-        mocks.kafka.config = config.kafka
         withTestApplication(
-            { server(config, mocks.kafka) },
+            { server(mocks.kafka) },
             { test(mocks) }
         )
-
     }
 }

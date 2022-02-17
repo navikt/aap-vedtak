@@ -10,11 +10,11 @@ import no.nav.aap.avro.vedtak.v1.Søker as AvroSøker
 
 fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.medlem.name, topics.medlem.consumed("medlem-mottatt"))
-        .peek { _, _ -> log.info("consumed aap.medlem.v1") }
+        .peek { k, v -> log.info("consumed [aap.medlem.v1] [$k] [$v]") }
         .filter({ _, medlem -> medlem.response != null }, named("filter-responses"))
         .selectKey({ _, medlem -> medlem.personident }, named("keyed_personident"))
         .join(søkere, ::medlemLøsning, topics.medlem.joined(topics.søkere))
-        .peek { _, _ -> log.info("produced aap.sokere.v1") }
+        .peek { k, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
         .to(topics.søkere.name, topics.søkere.produced("produced-soker-med-medlem"))
 }
 

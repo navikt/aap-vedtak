@@ -36,19 +36,17 @@ data class Config(val oauth: OAuthConfig, val kafka: KafkaConfig)
 
 internal val log = LoggerFactory.getLogger("app")
 
-fun Application.server(
-    config: Config = loadConfig(),
-    kafka: Kafka = KStreams(config.kafka),
-) {
-    val topology = createTopology(config.kafka)
+fun Application.server(kafka: Kafka = KStreams()) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
+    val config = loadConfig<Config>()
 
     install(MicrometerMetrics) { registry = prometheus }
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
     install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
 
-    kafka.create(topology)
-    kafka.start()
+    val topics = Topics(config.kafka)
+    val topology = createTopology(topics)
+    kafka.init(topology, config.kafka)
 
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
@@ -58,8 +56,7 @@ fun Application.server(
     }
 }
 
-fun createTopology(config: KafkaConfig): Topology = StreamsBuilder().apply {
-    val topics = Topics(config)
+fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     val søkere = table(topics.søkere.name, topics.søkere.consumed("soker-consumed"), materialized("soker-store"))
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
@@ -67,7 +64,7 @@ fun createTopology(config: KafkaConfig): Topology = StreamsBuilder().apply {
 }.build()
 
 fun Routing.api(kafka: Kafka) {
-    val søkerStore = kafka.getStore<String, AvroSøker>("soker-store")
+    val søkerStore = kafka.getStore<AvroSøker>("soker-store")
 
     authenticate {
         route("/api") {
