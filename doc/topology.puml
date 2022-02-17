@@ -47,17 +47,30 @@ package "Sub-topology: 0" {
 }
 package "Sub-topology: 1" {
 	agent "medlem-mottatt" <<Source>> as medlem_mottatt
+	agent "KSTREAM-PEEK-0000000023" <<Processor>> as KSTREAM_PEEK_0000000023
+	agent "KSTREAM-FILTER-0000000024" <<Processor>> as KSTREAM_FILTER_0000000024
 	agent "KSTREAM-PEEK-0000000013" <<Processor>> as KSTREAM_PEEK_0000000013
+	agent "KSTREAM-MAPVALUES-0000000025" <<Processor>> as KSTREAM_MAPVALUES_0000000025
 	agent "filter-responses" <<Processor>> as filter_responses
+	agent "KSTREAM-FILTER-0000000026" <<Processor>> as KSTREAM_FILTER_0000000026
 	agent "keyed_personident" <<Processor>> as keyed_personident
+	agent "KSTREAM-PEEK-0000000027" <<Processor>> as KSTREAM_PEEK_0000000027
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-filter" <<Processor>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_filter
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-sink" <<Sink>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
+	agent "produced--medlem" <<Sink>> as produced__medlem
 	aap_medlem_v1 --> medlem_mottatt
 	aap_medlem_v1_joined_aap_sokere_v1_repartition <-- aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
+	aap_medlem_v1 <-- produced__medlem
 	medlem_mottatt --> KSTREAM_PEEK_0000000013
+	medlem_mottatt --> KSTREAM_PEEK_0000000023
+	KSTREAM_PEEK_0000000023 --> KSTREAM_FILTER_0000000024
+	KSTREAM_FILTER_0000000024 --> KSTREAM_MAPVALUES_0000000025
 	KSTREAM_PEEK_0000000013 --> filter_responses
+	KSTREAM_MAPVALUES_0000000025 --> KSTREAM_FILTER_0000000026
 	filter_responses --> keyed_personident
+	KSTREAM_FILTER_0000000026 --> KSTREAM_PEEK_0000000027
 	keyed_personident --> aap_medlem_v1_joined_aap_sokere_v1_repartition_filter
+	KSTREAM_PEEK_0000000027 --> produced__medlem
 	aap_medlem_v1_joined_aap_sokere_v1_repartition_filter --> aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
 }
 @enduml

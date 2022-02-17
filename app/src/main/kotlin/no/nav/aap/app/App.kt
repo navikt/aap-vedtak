@@ -14,7 +14,6 @@ import io.ktor.server.netty.*
 import io.ktor.util.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import kotlinx.coroutines.runBlocking
 import no.nav.aap.app.config.Config
 import no.nav.aap.app.config.KafkaConfig
 import no.nav.aap.app.config.loadConfig
@@ -68,6 +67,7 @@ fun createTopology(config: KafkaConfig): Topology = StreamsBuilder().apply {
     val søkere = table(topics.søkere.name, topics.søkere.consumed("soker-consumed"), Materialized.`as`("soker-store"))
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
+    medlemResponseStream(topics)
 }.build()
 
 fun Routing.api(kafka: Kafka) {

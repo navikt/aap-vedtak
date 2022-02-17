@@ -9,7 +9,6 @@ import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.avro.medlem.v1.ErMedlem
-import no.nav.aap.avro.medlem.v1.Response
 import no.nav.aap.dto.DtoLøsningParagraf_11_2
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.dto.DtoSøker
@@ -279,13 +278,19 @@ internal class ApiTest {
             assertEquals(false, medlemBehov.request.arbeidetUtenlands)
             assertEquals("AAP", medlemBehov.request.ytelse)
 
-            medlemTopic.produce(key = "NO THE ID WE WANT") {
-                medlemBehov.apply {
-                    response = Response.newBuilder()
-                        .setErMedlem(ErMedlem.JA)
-                        .build()
-                }
-            }
+            // midlertidig
+            val medlemLøsning = medlemOutputTopic.readValue()
+            assertNotNull(medlemLøsning.response)
+            assertEquals(ErMedlem.JA, medlemLøsning.response.erMedlem)
+            assertEquals("flotters", medlemLøsning.response.begrunnelse)
+
+//            medlemTopic.produce(key = "NO THE ID WE WANT") {
+//                medlemBehov.apply {
+//                    response = Response.newBuilder()
+//                        .setErMedlem(ErMedlem.JA)
+//                        .build()
+//                }
+//            }
 
             println(søkerOutputTopic.readValuesToList())
 
