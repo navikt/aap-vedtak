@@ -1,5 +1,6 @@
 package no.nav.aap.app.kafka
 
+import io.confluent.kafka.schemaregistry.client.SchemaRegistryClientConfig
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -49,7 +50,9 @@ data class KafkaConfig(
             this[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
-            this[AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG] = "${schemaRegistryUser}:${schemaRegistryPwd}"
+            this[SchemaRegistryClientConfig.BASIC_AUTH_CREDENTIALS_SOURCE] = "USER_INFO"
+            this[SchemaRegistryClientConfig.USER_INFO_CONFIG] = "${schemaRegistryUser}:${schemaRegistryPwd}"
+
         } else {
             this[SaslConfigs.SASL_MECHANISM] = "PLAIN"
             this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "PLAINTEXT"
