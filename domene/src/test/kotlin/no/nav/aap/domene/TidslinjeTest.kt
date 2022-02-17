@@ -27,7 +27,7 @@ class TidslinjeTest {
         )
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2016))
 
-        val tidsperiode = Tidsperiode.fyllPeriodeMedDager(1 januar 2017, grunnlag)
+        val tidsperiode = Tidsperiode.fyllPeriodeMedDager(1 januar 2017, grunnlag, Barnehage(emptyList()))
 
         assertEquals(0.beløp, tidsperiode.getDagsatsFor(1 januar 2017))
         assertEquals(1410.beløp, tidsperiode.getDagsatsFor(2 januar 2017))
@@ -46,7 +46,7 @@ class TidslinjeTest {
         )
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2016))
 
-        val tidslinje = Tidslinje.opprettTidslinje(1 januar 2017, grunnlag)
+        val tidslinje = Tidslinje.opprettTidslinje(1 januar 2017, grunnlag, Barnehage(emptyList()))
 
         assertEquals(14100.beløp, tidslinje.summerTidslinje())
     }

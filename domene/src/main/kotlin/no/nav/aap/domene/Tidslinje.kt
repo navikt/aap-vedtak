@@ -9,16 +9,16 @@ import no.nav.aap.domene.beregning.Inntektsgrunnlag
 import java.time.DayOfWeek
 import java.time.LocalDate
 
-internal class Tidslinje private constructor (
+internal class Tidslinje private constructor(
     private val grunnlag: Inntektsgrunnlag
 ) {
 
     private val tidsperioder: MutableList<Tidsperiode> = mutableListOf()
 
     companion object {
-        fun opprettTidslinje(virkningsdato: LocalDate, grunnlag: Inntektsgrunnlag): Tidslinje {
+        fun opprettTidslinje(virkningsdato: LocalDate, grunnlag: Inntektsgrunnlag, barnehage: Barnehage): Tidslinje {
             val tidslinje = Tidslinje(grunnlag)
-            tidslinje.tidsperioder.add(Tidsperiode.fyllPeriodeMedDager(virkningsdato, grunnlag))
+            tidslinje.tidsperioder.add(Tidsperiode.fyllPeriodeMedDager(virkningsdato, grunnlag, barnehage))
             return tidslinje
         }
     }
@@ -29,13 +29,15 @@ internal class Tidslinje private constructor (
 
 internal class Tidsperiode private constructor(
     private val dager: List<Dag>
-){
+) {
 
     companion object {
         private const val DAGER_I_EN_PERIODE = 14L
 
-        fun fyllPeriodeMedDager(fraDato: LocalDate, grunnlag: Inntektsgrunnlag) =
-            Tidsperiode((0 until DAGER_I_EN_PERIODE).map { fraDato.plusDays(it) }.map { Dag(it, grunnlag.grunnlagForDag(it)) })
+        fun fyllPeriodeMedDager(fraDato: LocalDate, grunnlag: Inntektsgrunnlag, barnehage: Barnehage) =
+            Tidsperiode((0 until DAGER_I_EN_PERIODE)
+                .map(fraDato::plusDays)
+                .map { dato -> Dag(dato, grunnlag.grunnlagForDag(dato), barnehage.barnetilleggForDag(dato)) })
 
         fun Iterable<Tidsperiode>.summerDagsatser() = this.map { it.summerDagsatserForPeriode() }.summerBeløp()
 
@@ -48,28 +50,19 @@ internal class Tidsperiode private constructor(
 }
 
 
-internal class Dag (
+internal class Dag(
     private val dato: LocalDate,
-    private val grunnlag: Beløp
+    grunnlag: Beløp,
+    private val barnetillegg: Beløp
 ) {
+    private val grunnlag: Beløp = if (dato.erHelg()) 0.beløp else grunnlag
 
-    private lateinit var dagsats: Beløp
+    private val minsteDagsats = this.grunnlag * 0.66 / 260
+    private val høyesteDagsats = this.grunnlag * 0.9 / 260
+    private val dagsats: Beløp = minOf(høyesteDagsats, minsteDagsats + barnetillegg)
 
     companion object {
         fun Iterable<Dag>.getDagsatsFor(date: LocalDate) = this.first { it.dato == date }.dagsats
-    }
-
-    init {
-        beregnDagsats()
-    }
-
-    fun beregnDagsats() {
-        dagsats = if(dato.erHelg()) {
-            0.beløp
-        } else {
-            (grunnlag * 0.66) / 260
-
-        }
     }
 
     fun getDagsats() = dagsats
