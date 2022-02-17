@@ -4,10 +4,10 @@ import com.nimbusds.jwt.SignedJWT
 import io.confluent.kafka.schemaregistry.testutil.MockSchemaRegistry
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-import no.nav.aap.app.config.KafkaConfig
+import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.JsonSerde
 import no.nav.aap.app.kafka.Kafka
-import no.nav.aap.app.kafka.KafkaStreamsFactory
+import no.nav.aap.app.kafka.KafkaConfig
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.apache.avro.specific.SpecificRecord
 import org.apache.kafka.common.serialization.Serdes
@@ -16,22 +16,15 @@ import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import java.util.*
 
-/**
- * Mocks Factory
- */
-class Mocks : AutoCloseable {
+class Mocks() : AutoCloseable {
     val azure = AzureMock().apply { start() }
     val kafka = KStreamsMock()
 
     override fun close() {
         azure.close()
-//        kafka.close()
     }
 }
 
-/**
- * Azure AD Mock
- */
 class AzureMock(private val server: MockOAuth2Server = MockOAuth2Server()) {
     fun wellKnownUrl(): String = server.wellKnownUrl("azure").toString()
     fun issueAzureToken(): SignedJWT = server.issueToken(issuerId = "azure", audience = "vedtak")
@@ -39,33 +32,27 @@ class AzureMock(private val server: MockOAuth2Server = MockOAuth2Server()) {
     fun close() = server.shutdown()
 }
 
-/**
- * Kafka Streams Mock
- */
-class KStreamsMock : Kafka {
+class KStreamsMock() : Kafka {
     lateinit var driver: TopologyTestDriver
     lateinit var config: KafkaConfig
 
     internal val schemaRegistryUrl: String by lazy { "mock://schema-registry/${UUID.randomUUID()}" }
 
-    override fun createKafkaStream(topology: Topology, config: KafkaConfig) {
-        this.config = config
-        this.driver = TopologyTestDriver(topology, Properties().apply {
-            putAll(KafkaStreamsFactory().streamsProperties(config))
-            put(StreamsConfig.STATE_DIR_CONFIG, "build/kafka-streams/state")
-            put(StreamsConfig.MAX_TASK_IDLE_MS_CONFIG, StreamsConfig.MAX_TASK_IDLE_MS_DISABLED)
-        })
-    }
+    override fun create(topology: Topology) {
+        val testConfig = Properties().apply {
+            putAll(config.consumer)
+            putAll(config.producer)
+            this[StreamsConfig.STATE_DIR_CONFIG] = "build/kafka-streams/state"
+            this[StreamsConfig.MAX_TASK_IDLE_MS_CONFIG] = StreamsConfig.MAX_TASK_IDLE_MS_DISABLED
+        }
 
-    override fun healthy(): Boolean = true
-    override fun <K, V> stateStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
-    override suspend fun <K, V> waitForStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
+        driver = TopologyTestDriver(topology, testConfig)
+    }
 
     override fun start() {}
-    override fun close() {
-        MockSchemaRegistry.dropScope(schemaRegistryUrl)
-        driver.close()
-    }
+    override fun healthy(): Boolean = true
+    override fun <K, V> getStore(name: String): ReadOnlyKeyValueStore<K, V> = driver.getKeyValueStore(name)
+    override fun close() = driver.close().also { MockSchemaRegistry.dropScope(schemaRegistryUrl) }
 
     inline fun <reified V : Any> inputJsonTopic(name: String): TestInputTopic<String, V> =
         driver.createInputTopic(name, Serdes.StringSerde().serializer(), JsonSerde(V::class).serializer())

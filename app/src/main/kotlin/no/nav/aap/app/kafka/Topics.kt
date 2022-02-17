@@ -2,7 +2,6 @@ package no.nav.aap.app.kafka
 
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
-import no.nav.aap.app.config.KafkaConfig
 import no.nav.aap.app.modell.JsonSøknad
 import org.apache.avro.specific.SpecificRecord
 import org.apache.kafka.common.serialization.Serde

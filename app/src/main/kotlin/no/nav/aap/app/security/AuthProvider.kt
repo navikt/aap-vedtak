@@ -21,3 +21,5 @@ interface AuthProvider {
         val additionalValidation: ((TokenValidationContext) -> Boolean)? = null
     )
 }
+
+data class OAuthConfig(val azure: IssuerConfig)

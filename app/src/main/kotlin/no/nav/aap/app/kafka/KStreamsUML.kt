@@ -10,15 +10,9 @@ internal const val TAB = "\t"
 /**
  * Uses topology description to create PlantUML
  */
-class KStreamsUML {
-    companion object {
-        fun file(topology: Topology, path: String = "build/topology.puml"): File {
-            val umlGenerator = KStreamsUML()
-            return File(path).apply {
-                writeText(umlGenerator.plantUML(topology))
-            }
-        }
-    }
+object KStreamsUML {
+    fun create(topology: Topology, filePath: String = "../doc/topology.puml"): File =
+        File(filePath).apply { writeText(plantUML(topology)) }
 
     private fun plantUML(topology: Topology): String = topology.describe().let { description ->
         val stores = description.globalStores().map { processStore(it) }.toSet()
@@ -48,18 +42,19 @@ class KStreamsUML {
     }
 
     private fun processSubtopology(subtopology: TopologyDescription.Subtopology): Package {
-        val agents =
-            subtopology.nodes().map { node -> formatNodeToUmlAgent(node.name(), node::class.simpleName!!) }.toSet()
-
-        val downstreamRelations =
-            subtopology.nodes().flatMap { node -> node.successors().map { node.name() to it.name() } }
-                .map { (node, downstreamNode) -> formatNodeToUmlRelation(node, downstreamNode) }.toSet()
-
-        val nodes = subtopology.nodes().map { processNode(it) }
+        val agents = subtopology.nodes()
+            .map { node -> formatNodeToUmlAgent(node.name(), node::class.simpleName!!) }
+            .toSet()
+        val downstreamRelations = subtopology.nodes()
+            .flatMap { node -> node.successors().map { node.name() to it.name() } }
+            .map { (node, downstreamNode) -> formatNodeToUmlRelation(node, downstreamNode) }
+            .toSet()
+        val nodes = subtopology.nodes()
+            .map { processNode(it) }
             .reduce { acc, pair -> Pair(acc.first.union(pair.first), acc.second.union(pair.second)) }
-
-        val (declarations, relations) = nodes.join(Pair(agents, emptySet())).join(Pair(emptySet(), downstreamRelations))
-
+        val (declarations, relations) = nodes
+            .join(Pair(agents, emptySet()))
+            .join(Pair(emptySet(), downstreamRelations))
         return Package(subtopology.id(), declarations, relations)
     }
 
@@ -129,35 +124,23 @@ class KStreamsUML {
     """.trimIndent()
 
     private data class Package(val id: Int, val declarations: Set<String>, val relations: Set<String>) {
-        override fun toString(): String {
-            return """
+        override fun toString(): String =
+            """
                 | package "Sub-topology: $id" {
                 | $TAB${declarations.joinToString(EOL + TAB)}
                 | $TAB${relations.joinToString(EOL + TAB)}
                 | }
             """.trimMargin("| ")
-        }
     }
 
     private data class PlantUML(val packages: Set<Package>, val queue: Set<String>) {
-        override fun toString(): String {
-            return """
+        override fun toString(): String =
+            """
                 | @startuml
                 | !theme lightgray
                 | ${queue.joinToString(EOL)}
                 | ${packages.joinToString(EOL) { it.toString() }}
                 | @enduml
             """.trimMargin("| ")
-        }
-    }
-
-    private data class Markdown(val diagram: PlantUML) {
-        override fun toString(): String {
-            return """
-                | ```plantuml
-                | $diagram
-                | ```
-            """.trimMargin("| ")
-        }
     }
 }
