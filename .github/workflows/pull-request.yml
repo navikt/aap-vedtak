@@ -1,5 +1,9 @@
-name: Build PR 
-on: [pull_request]
+name: Build PR
+on: [ pull_request ]
+
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   build:
@@ -16,15 +20,15 @@ jobs:
         uses: gradle/wrapper-validation-action@v1
 
       - name: Build with Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/gradle-build-action@v2.1.3
         with:
           arguments: test --continue --no-daemon
- 
+
       - name: 📊 Publish results with dorny
         if: always()
         uses: dorny/test-reporter@v1.5.0
         with:
-            name: 🧬 Test results
-            path: "**/build/test-results/test/TEST-*.xml"
-            reporter: java-junit
-            token: ${{ secrets.GITHUB_TOKEN }}
+          name: 🧬 Test results
+          path: "**/build/test-results/test/TEST-*.xml"
+          reporter: java-junit
+          token: ${{ secrets.GITHUB_TOKEN }}
