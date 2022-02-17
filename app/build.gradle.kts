@@ -25,11 +25,11 @@ dependencies {
     implementation("io.ktor:ktor-client-logging:1.6.7")
 
     implementation("io.ktor:ktor-metrics-micrometer:1.6.7")
-    implementation("io.micrometer:micrometer-registry-prometheus:1.8.2")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.8.3")
 
     implementation("no.nav.aap:avroskjema:1.0.26")
-    implementation("no.nav.security:token-validation-ktor:1.3.10")
-    implementation("no.nav.security:token-client-core:1.3.10")
+    implementation("no.nav.security:token-validation-ktor:1.3.16")
+    implementation("no.nav.security:token-client-core:1.3.16")
 
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
 
@@ -46,9 +46,9 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-test-host:1.6.7")
-    testImplementation("no.nav.security:mock-oauth2-server:0.4.2")
+    testImplementation("no.nav.security:mock-oauth2-server:0.4.3")
     // used to override env var runtime
-    testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.0")
+    testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:3.1.0")
 }
 
