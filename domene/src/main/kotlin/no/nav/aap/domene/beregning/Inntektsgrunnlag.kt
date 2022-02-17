@@ -1,19 +1,21 @@
 package no.nav.aap.domene.beregning
 
-import no.nav.aap.domene.beregning.Beløp.Companion.beløp
-import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
-import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.beregnGrunnlag
+import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregningsfaktor
+import no.nav.aap.domene.entitet.Fødselsdato
 import java.time.LocalDate
 import java.time.Year
 
 internal class Inntektsgrunnlag(
     private val sisteKalenderår: Year,
-    private val inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>
+    private val inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
+    private val fødselsdato: Fødselsdato
 ) {
-    internal fun grunnlagForDag(dato: LocalDate): Beløp {
-        return inntekterSiste3Kalenderår.beregnGrunnlag(sisteKalenderår, dato)
-    }
+    //Dette tallet representerer hele utregningen av 11-19
+    private val grunnlagsfaktor: Double = inntekterSiste3Kalenderår.totalBeregningsfaktor(sisteKalenderår)
+
+    internal fun grunnlagForDag(dato: LocalDate) =
+        Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, grunnlagsfaktor))
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -44,20 +46,20 @@ internal class InntektsgrunnlagForÅr(
     internal companion object {
         private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3
 
-        internal fun Iterable<InntektsgrunnlagForÅr>.beregnGrunnlag(sisteKalenderår: Year, dato: LocalDate): Beløp {
-            val sum1År = finnSisteKalenderår(sisteKalenderår).summerGrunnlagForDag(dato)
-            val gjennomsnitt3År = summerGrunnlagForDag(dato) / ANTALL_ÅR_FOR_GJENNOMSNITT
+        internal fun Iterable<InntektsgrunnlagForÅr>.totalBeregningsfaktor(sisteKalenderår: Year): Double {
+            val sum1År = finnSisteKalenderår(sisteKalenderår).summerBeregningsfaktor()
+            val gjennomsnitt3År = summerBeregningsfaktor() / ANTALL_ÅR_FOR_GJENNOMSNITT
             return maxOf(sum1År, gjennomsnitt3År)
         }
 
-        private fun Iterable<InntektsgrunnlagForÅr>.summerGrunnlagForDag(dato: LocalDate) =
-            map { it.grunnlagForDag(dato) }.summerBeløp()
+        private fun Iterable<InntektsgrunnlagForÅr>.summerBeregningsfaktor() = sumOf { it.beregningsfaktor }
 
         private fun Iterable<InntektsgrunnlagForÅr>.finnSisteKalenderår(sisteKalenderår: Year): List<InntektsgrunnlagForÅr> =
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
     }
 
-    private fun grunnlagForDag(dato: LocalDate) = Grunnbeløp.justerInntekt(dato, beregningsfaktor)
+    private fun grunnlagForDag(dato: LocalDate, fødselsdato: Fødselsdato) =
+        Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, beregningsfaktor))
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

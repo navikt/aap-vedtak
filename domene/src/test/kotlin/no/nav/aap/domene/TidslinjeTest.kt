@@ -5,6 +5,7 @@ import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
+import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -13,7 +14,8 @@ import java.time.Year
 
 class TidslinjeTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year) = Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år))
+    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
+        Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år), fødselsdato)
 
 
     @Test

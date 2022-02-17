@@ -56,8 +56,8 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
-    internal fun håndterLøsning(løsning: LøsningInntekter) {
-        tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
+        tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
 
     private fun tilstand(nyTilstand: Tilstand) {
@@ -107,7 +107,7 @@ internal class Sak private constructor(
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
+        fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             error("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
@@ -192,9 +192,9 @@ internal class Sak private constructor(
             // Be om inntekter
         }
 
-        override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter) {
+        override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             løsning.lagreInntekter(sak.inntektshistorikk)
-            val grunnlagsberegning = sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingsdato)
+            val grunnlagsberegning = sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingsdato, fødselsdato)
 
 
         }

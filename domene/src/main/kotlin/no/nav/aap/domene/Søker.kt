@@ -32,7 +32,7 @@ class Søker private constructor(
     }
 
     fun håndterLøsning(løsning: LøsningInntekter) {
-        saker.forEach { it.håndterLøsning(løsning) }
+        saker.forEach { it.håndterLøsning(løsning, fødselsdato) }
     }
 
     fun toFrontendSaker() =

@@ -40,38 +40,38 @@ internal class FødselsdatoTest {
     }
 
     @Test
-    fun `På 25-årsdagen er minimum grunnbeløp 2G`() {
+    fun `På 25-årsdagen er minimum grunnbeløp 2G - beregningsfaktor for minste årlige ytelse er 2G delt på 66 prosent`() {
         val `25-årsdagen` = 1.februar(2029)
         val fødselsdato = Fødselsdato(1.februar(2004))
         val beregningsfaktor = 1.0
 
-        assertEquals(2.0, fødselsdato.justerBeregningsfaktorForAlder(`25-årsdagen`, beregningsfaktor))
+        assertEquals(2.0 / .66, fødselsdato.justerGrunnlagsfaktorForAlder(`25-årsdagen`, beregningsfaktor))
     }
 
     @Test
-    fun `Dagen før 25-årsdagen er minimum grunnbeløp fire-tredjedels G`() {
+    fun `Dagen før 25-årsdagen er minimum grunnbeløp fire-tredjedels G - beregningsfaktor for minste årlige ytelse er fire-tredjedels G delt på 66 prosent`() {
         val `dagen før 25-årsdagen` = 31.januar(2029)
         val fødselsdato = Fødselsdato(1.februar(2004))
         val beregningsfaktor = 1.0
 
-        assertEquals(4.0 / 3, fødselsdato.justerBeregningsfaktorForAlder(`dagen før 25-årsdagen`, beregningsfaktor))
+        assertEquals(4.0 / 3 / .66, fødselsdato.justerGrunnlagsfaktorForAlder(`dagen før 25-årsdagen`, beregningsfaktor))
     }
 
     @Test
-    fun `På 25-årsdagen returneres beregningsfaktoren hvis den er over 2G`() {
+    fun `På 25-årsdagen returneres beregningsfaktoren hvis den er over 2G delt på 66 prosent`() {
         val `25-årsdagen` = 1 februar 2029
         val fødselsdato = Fødselsdato(1 februar 2004)
-        val beregningsfaktor = 2.1
+        val beregningsfaktor = 3.1
 
-        assertEquals(2.1, fødselsdato.justerBeregningsfaktorForAlder(`25-årsdagen`, beregningsfaktor))
+        assertEquals(3.1, fødselsdato.justerGrunnlagsfaktorForAlder(`25-årsdagen`, beregningsfaktor))
     }
 
     @Test
     fun `Dagen før 25-årsdagen returneres beregningsfaktoren hvis den er over fire-tredjedels G`() {
         val `dagen før 25-årsdagen` = 31.januar(2029)
         val fødselsdato = Fødselsdato(1.februar(2004))
-        val beregningsfaktor = 1.4
+        val beregningsfaktor = 2.1
 
-        assertEquals(1.4, fødselsdato.justerBeregningsfaktorForAlder(`dagen før 25-årsdagen`, beregningsfaktor))
+        assertEquals(2.1, fødselsdato.justerGrunnlagsfaktorForAlder(`dagen før 25-årsdagen`, beregningsfaktor))
     }
 }
