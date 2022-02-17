@@ -7,7 +7,7 @@ class Beløp(verdi: Number) : Comparable<Beløp> {
     private val verdi: Double = round(verdi.toDouble() * 100) / 100
 
     companion object {
-        internal fun Iterable<Beløp>.summerBeløp() = Beløp(sumOf { it.verdi })
+        internal fun Iterable<Beløp>.summerBeløp() = sumOf { it.verdi }.beløp
         val Number.beløp get() = Beløp(this)
     }
 
