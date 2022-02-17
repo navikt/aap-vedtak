@@ -19,11 +19,12 @@ data class Topic<K, V>(
 )
 
 class Topics(private val config: KafkaConfig) {
-    val søknad = Topic("aap.aap-soknad-sendt.v1", Serdes.String(), jsonSerde<JsonSøknad>())
-    val søkere = Topic("aap.sokere.v1", Serdes.String(), avroSerde<AvroSøker>())
-    val medlem = Topic("aap.medlem.v1", Serdes.String(), avroSerde<AvroMedlem>())
+    val søknad = Topic("aap.aap-soknad-sendt.v1", Serdes.StringSerde(), jsonSerde<JsonSøknad>())
+    val søkere = Topic("aap.sokere.v1", Serdes.StringSerde(), avroSerde<AvroSøker>())
+    val medlem = Topic("aap.medlem.v1", Serdes.StringSerde(), avroSerde<AvroMedlem>())
 
     private inline fun <reified V : Any> jsonSerde(): Serde<V> = JsonSerde(V::class)
+
     private fun <T : SpecificRecord> avroSerde(): SpecificAvroSerde<T> = SpecificAvroSerde<T>().apply {
         configure(mapOf(serdeConfig), false)
     }

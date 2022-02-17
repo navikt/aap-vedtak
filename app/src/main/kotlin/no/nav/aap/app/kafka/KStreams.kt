@@ -1,5 +1,3 @@
-@file:Suppress("UNCHECKED_CAST")
-
 package no.nav.aap.app.kafka
 
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
@@ -48,10 +46,18 @@ class KStreams(val config: KafkaConfig) : Kafka {
     override fun healthy(): Boolean = streams.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
     override fun start() = streams.start()
     override fun close() = streams.close()
-}
 
-inline fun <reified V : Any> KStreams.createConsumer(): Consumer<String, V> = KafkaConsumer(config.consumer)
-inline fun <reified V : Any> KStreams.createProducer(): Producer<String, V> = KafkaProducer(config.producer)
+    inline fun <reified V : Any> createConsumer(): Consumer<String, V> = KafkaConsumer(config.consumer)
+
+    inline fun <reified V : Any> createProducer(topic: Topic<String, V>): Producer<String, V> {
+        val extras = mapOf(
+            CommonClientConfigs.CLIENT_ID_CONFIG to "client-${topic.name}",
+//            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to topic.keySerde.serializer()::class.java,
+//            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to topic.valueSerde.serializer()::class.java,
+        )
+        return KafkaProducer(config.producer.apply { putAll(extras) }, topic.keySerde.serializer(), topic.valueSerde.serializer())
+    }
+}
 
 fun <K, V> KStreams.waitForStore(name: String): ReadOnlyKeyValueStore<K, V> = runBlocking {
     log.info("Waiting 10_000 ms for store $name to become available")
@@ -89,9 +95,10 @@ data class KafkaConfig(
 
     private val kStreams: Properties = Properties().apply {
         this[StreamsConfig.APPLICATION_ID_CONFIG] = "aap-vedtak"
+        this[CommonClientConfigs.CLIENT_ID_CONFIG] = clientId
         this[StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG] = "0"
         this[StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG] = LogAndSkipOnInvalidTimestamp::class.java
-        this[StreamsConfig.producerPrefix(ProducerConfig.ACKS_CONFIG)] = "all"
+//        this[StreamsConfig.producerPrefix(ProducerConfig.ACKS_CONFIG)] = "all"
         this[AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG] = schemaRegistryUrl
     }
 
