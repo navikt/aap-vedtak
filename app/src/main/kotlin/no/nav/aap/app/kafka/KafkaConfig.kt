@@ -29,7 +29,6 @@ data class KafkaConfig(
 ) {
 
     private val kStreams: Properties = Properties().apply {
-        this[AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG] = schemaRegistryUrl
         this[CommonClientConfigs.CLIENT_ID_CONFIG] = clientId
         this[StreamsConfig.APPLICATION_ID_CONFIG] = applicationId
         this[StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG] = "0"
@@ -39,7 +38,15 @@ data class KafkaConfig(
             LogAndContinueExceptionHandler::class.java
     }
 
-    private val ssl: Properties = Properties().apply {
+    val schemaRegistry: Properties = Properties().apply {
+        this[AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG] = schemaRegistryUrl
+        if (security) {
+            this[SchemaRegistryClientConfig.BASIC_AUTH_CREDENTIALS_SOURCE] = "USER_INFO"
+            this[SchemaRegistryClientConfig.USER_INFO_CONFIG] = "$schemaRegistryUser:$schemaRegistryPwd"
+        }
+    }
+
+    val ssl: Properties = Properties().apply {
         if (security) {
             this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "SSL"
             this[SslConfigs.SSL_TRUSTSTORE_TYPE_CONFIG] = "JKS"
@@ -50,23 +57,20 @@ data class KafkaConfig(
             this[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
-            this[SchemaRegistryClientConfig.BASIC_AUTH_CREDENTIALS_SOURCE] = "USER_INFO"
-            this[SchemaRegistryClientConfig.USER_INFO_CONFIG] = "$schemaRegistryUser:$schemaRegistryPwd"
-
         } else {
             this[SaslConfigs.SASL_MECHANISM] = "PLAIN"
             this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "PLAINTEXT"
         }
     }
 
-    val consumer: Properties = kStreams + ssl + Properties().apply {
+    val consumer: Properties = kStreams + ssl + schemaRegistry + Properties().apply {
         this[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = brokers
         this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
         this[ConsumerConfig.GROUP_ID_CONFIG] = "aap-vedtak"
         this[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] = 124_000
     }
 
-    val producer: Properties = kStreams + ssl + Properties().apply {
+    val producer: Properties = kStreams + ssl + schemaRegistry + Properties().apply {
         this[CommonClientConfigs.BOOTSTRAP_SERVERS_CONFIG] = brokers
         this[ProducerConfig.ACKS_CONFIG] = "all"
         this[ProducerConfig.MAX_IN_FLIGHT_REQUESTS_PER_CONNECTION] = "5"

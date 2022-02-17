@@ -1,7 +1,5 @@
 package no.nav.aap.app.kafka
 
-import io.confluent.kafka.schemaregistry.client.SchemaRegistryClientConfig
-import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 import no.nav.aap.app.modell.JsonSøknad
 import org.apache.avro.specific.SpecificRecord
@@ -27,15 +25,9 @@ class Topics(private val config: KafkaConfig) {
     private inline fun <reified V : Any> jsonSerde(): Serde<V> = JsonSerde(V::class)
 
     private fun <T : SpecificRecord> avroSerde(): SpecificAvroSerde<T> = SpecificAvroSerde<T>().apply {
-        configure(serdeConfig, false)
+        val conf = (config.ssl + config.schemaRegistry).map { it.key.toString() to it.value.toString() }
+        configure(conf.toMap(), false)
     }
-
-    private val serdeConfig: Map<String, String>
-        get() = mapOf(
-            AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG to config.schemaRegistryUrl,
-            SchemaRegistryClientConfig.BASIC_AUTH_CREDENTIALS_SOURCE to "USER_INFO",
-            SchemaRegistryClientConfig.USER_INFO_CONFIG to "${config.schemaRegistryUser}:${config.schemaRegistryPwd}",
-        )
 }
 
 fun <V : Any> Topic<String, V>.consumed(named: String): Consumed<String, V> =
