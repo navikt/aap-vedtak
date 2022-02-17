@@ -1,6 +1,7 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
+import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.beregnGrunnlag
 import java.time.LocalDate
@@ -50,7 +51,7 @@ internal class InntektsgrunnlagForÅr(
         }
 
         private fun Iterable<InntektsgrunnlagForÅr>.summerGrunnlagForDag(dato: LocalDate) =
-            map { it.grunnlagForDag(dato) }.fold(0.beløp, Beløp::plus)
+            map { it.grunnlagForDag(dato) }.summerBeløp()
 
         private fun Iterable<InntektsgrunnlagForÅr>.finnSisteKalenderår(sisteKalenderår: Year): List<InntektsgrunnlagForÅr> =
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
