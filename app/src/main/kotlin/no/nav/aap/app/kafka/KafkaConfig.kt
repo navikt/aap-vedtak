@@ -51,8 +51,7 @@ data class KafkaConfig(
             this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
             this[SchemaRegistryClientConfig.BASIC_AUTH_CREDENTIALS_SOURCE] = "USER_INFO"
-            this[SchemaRegistryClientConfig.SCHEMA_REGISTRY_USER_INFO_CONFIG] = "${schemaRegistryUser}:${schemaRegistryPwd}"
-            this[AbstractKafkaSchemaSerDeConfig.USER_INFO_CONFIG] = "${schemaRegistryUser}:${schemaRegistryPwd}"
+            this[SchemaRegistryClientConfig.USER_INFO_CONFIG] = "${schemaRegistryUser}:${schemaRegistryPwd}"
 
         } else {
             this[SaslConfigs.SASL_MECHANISM] = "PLAIN"
