@@ -7,6 +7,10 @@ metadata:
     team: aap
 spec:
   pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: compact,delete
+    partitions: 2
+    retentionHours: 120
   acl:
     - team: medlemskap
       application: medlemskap-aap-listener

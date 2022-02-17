@@ -7,6 +7,10 @@ metadata:
     team: aap
 spec:
   pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: compact
+    partitions: 2
+    retentionHours: -1
   acl:
     - team: aap
       application: vedtak
