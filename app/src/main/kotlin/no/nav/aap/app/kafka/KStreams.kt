@@ -82,6 +82,7 @@ fun <K, T> ReadOnlyKeyValueStore<K, T>.allValues(): List<T> =
 operator fun Properties.plus(properties: Properties): Properties = apply { putAll(properties) }
 
 data class KafkaConfig(
+    val applicationId: String,
     val brokers: String,
     val clientId: String,
     val security: Boolean,
@@ -94,7 +95,7 @@ data class KafkaConfig(
 ) {
 
     private val kStreams: Properties = Properties().apply {
-        this[StreamsConfig.APPLICATION_ID_CONFIG] = "aap-vedtak"
+        this[StreamsConfig.APPLICATION_ID_CONFIG] = applicationId
         this[CommonClientConfigs.CLIENT_ID_CONFIG] = clientId
         this[StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG] = "0"
         this[StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG] = LogAndSkipOnInvalidTimestamp::class.java

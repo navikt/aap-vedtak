@@ -387,6 +387,7 @@ internal class ApiTest {
 
 fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks().use { mocks ->
     val externalConfig = mapOf(
+        "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
         "AZURE_OPENID_CONFIG_ISSUER" to "azure",
         "AZURE_APP_WELL_KNOWN_URL" to mocks.azure.wellKnownUrl(),
         "AZURE_APP_CLIENT_ID" to "vedtak",

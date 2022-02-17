@@ -5,6 +5,7 @@ oauth:
     audience: ${AZURE_APP_CLIENT_ID:-vedtak}
 
 kafka:
+  application-id: ${KAFKA_STREAMS_APPLICATION_ID:-vedtak}
   brokers: ${KAFKA_BROKERS:-localhost:9092}
   security: ${KAFKA_SECURITY_ENABLED:-false}
   truststorePath: ${KAFKA_TRUSTSTORE_PATH:-}
