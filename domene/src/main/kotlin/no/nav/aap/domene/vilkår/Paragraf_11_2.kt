@@ -47,38 +47,16 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
     ) {
-        enum class Tilstandsnavn(private val creator: (DtoVilkårsvurdering) -> Paragraf_11_2) {
+        enum class Tilstandsnavn(private val creator: () -> Paragraf_11_2) {
             IKKE_VURDERT({ Paragraf_11_2(IkkeVurdert) }),
             SØKNAD_MOTTATT({ Paragraf_11_2(SøknadMottatt) }),
-            MANUELL_VURDERING_TRENGS({ vilkårsvurdering ->
-                Paragraf_11_2(ManuellVurderingTrengs).apply {
-                    settMaskinellLøsning(vilkårsvurdering)
-                }
-            }),
-            OPPFYLT_MASKINELT({ vilkårsvurdering ->
-                Paragraf_11_2(OppfyltMaskinelt).apply {
-                    settMaskinellLøsning(vilkårsvurdering)
-                }
-            }),
-            IKKE_OPPFYLT_MASKINELT({ vilkårsvurdering ->
-                Paragraf_11_2(IkkeOppfyltMaskinelt).apply {
-                    settMaskinellLøsning(vilkårsvurdering)
-                }
-            }),
-            OPPFYLT_MANUELT({ vilkårsvurdering ->
-                Paragraf_11_2(OppfyltManuelt).apply {
-                    settMaskinellLøsning(vilkårsvurdering)
-                    settManuellLøsning(vilkårsvurdering)
-                }
-            }),
-            IKKE_OPPFYLT_MANUELT({ vilkårsvurdering ->
-                Paragraf_11_2(IkkeOppfyltManuelt).apply {
-                    settMaskinellLøsning(vilkårsvurdering)
-                    settManuellLøsning(vilkårsvurdering)
-                }
-            });
+            MANUELL_VURDERING_TRENGS({ Paragraf_11_2(ManuellVurderingTrengs) }),
+            OPPFYLT_MASKINELT({ Paragraf_11_2(OppfyltMaskinelt) }),
+            IKKE_OPPFYLT_MASKINELT({ Paragraf_11_2(IkkeOppfyltMaskinelt) }),
+            OPPFYLT_MANUELT({ Paragraf_11_2(OppfyltManuelt) }),
+            IKKE_OPPFYLT_MANUELT({ Paragraf_11_2(IkkeOppfyltManuelt) });
 
-            internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 = creator(vilkårsvurdering)
+            internal fun create(): Paragraf_11_2 = creator()
         }
 
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
@@ -164,6 +142,10 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = null,
             )
+
+            override fun restore(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+            }
         }
 
         object OppfyltMaskinelt : Tilstand(
@@ -178,6 +160,10 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = null
             )
+
+            override fun restore(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+            }
         }
 
         object IkkeOppfyltMaskinelt : Tilstand(
@@ -192,6 +178,10 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = null
             )
+
+            override fun restore(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+            }
         }
 
         object OppfyltManuelt : Tilstand(
@@ -206,6 +196,11 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = paragraf112.manueltLøsning.toDto()
             )
+
+            override fun restore(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+                paragraf112.settManuellLøsning(vilkårsvurdering)
+            }
         }
 
         object IkkeOppfyltManuelt : Tilstand(
@@ -220,6 +215,11 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = paragraf112.manueltLøsning.toDto()
             )
+
+            override fun restore(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+                paragraf112.settManuellLøsning(vilkårsvurdering)
+            }
         }
 
         internal open fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -229,6 +229,8 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             løsning_11_2_maskinell = null,
             løsning_11_2_manuell = null
         )
+
+        internal open fun restore(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
 
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
@@ -240,6 +242,8 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
 
     internal companion object {
         internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 =
-            enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand).create(vilkårsvurdering)
+            enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand).create().apply {
+                this.tilstand.restore(this, vilkårsvurdering)
+            }
     }
 }
