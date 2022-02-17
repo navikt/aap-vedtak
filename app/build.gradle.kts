@@ -28,7 +28,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.3")
 
     implementation("no.nav.aap:avroskjema:1.0.26")
-    implementation("no.nav.security:token-validation-ktor:1.3.10")
+    implementation("no.nav.security:token-validation-ktor:1.3.16")
     implementation("no.nav.security:token-client-core:1.3.16")
 
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
