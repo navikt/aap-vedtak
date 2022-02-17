@@ -3,6 +3,7 @@ package no.nav.aap.domene.beregning
 import no.nav.aap.august
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
+import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.januar
 import no.nav.aap.juli
 import no.nav.aap.mars
@@ -12,28 +13,29 @@ import java.time.Year
 
 internal class InntektsgrunnlagTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year) = Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år))
+    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
+        Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år), fødselsdato)
 
     @Test
     fun `Hvis vi beregner grunnlag for en bruker uten inntekt, blir grunnlaget 0`() {
-        val grunnlag = Inntektsgrunnlag(Year.of(2021), emptyList())
-        assertEquals(0.beløp, grunnlag.grunnlagForDag(1.januar))
+        val grunnlag = Inntektsgrunnlag(Year.of(2021), emptyList(), Fødselsdato(1 januar 1970))
+        assertEquals(322421.21.beløp, grunnlag.grunnlagForDag(1.januar))
     }
 
     @Test
-    fun `Hvis bruker kun har inntekt i år, blir grunnlaget 0`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2022), Beløp(1000.0)))
+    fun `Hvis bruker kun har inntekt i år, blir grunnlaget satt til minstegrunnlag`() {
+        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2022), 1000.beløp))
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
-        assertEquals(0.beløp, grunnlag.grunnlagForDag(1 januar 2022))
+        assertEquals(322421.21.beløp, grunnlag.grunnlagForDag(1 januar 2022))
     }
 
     @Test
     fun `Hvis bruker kun har inntekt i forrige kalenderår`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0)))
+        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(400000.0)))
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(1016.0720424767943.beløp, grunnlagForDag)
+        assertEquals(406428.82.beløp, grunnlagForDag)
     }
 
     @Test
@@ -46,38 +48,56 @@ internal class InntektsgrunnlagTest {
     }
 
     @Test
-    fun `Hvis bruker kun har inntekt i 2020`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)))
+    fun `Hvis bruker kun har inntekt i 2020 blir snittet lavere enn minste årlige ytelse på 2G, og grunnlaget oppjusteres`() {
+        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2020), 400000.beløp))
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(1054.9909273893618.beløp / 3, grunnlagForDag)
+        assertEquals(322421.21.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Bruker har inntekt rett under grenseverdien på 2G delt på 66 prosent, så vil grunnlaget oppjusteres til minste årlige ytelse på 2G`() {
+        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), 314148.beløp))
+        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
+        val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
+
+        assertEquals(322421.21.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Bruker har inntekt rett over grenseverdien på 2G delt på 66 prosent, så grunnlaget vil ikke oppjusteres til minste årlige ytelse på 2G - Inntekten er allerede over`() {
+        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), 318336.64.beløp))
+        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
+        val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
+
+        assertEquals(323452.96.beløp, grunnlagForDag)
     }
 
     @Test
     fun `Har inntekt i 3 kalenderår`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), Beløp(1000.0)), //1076.19
-            Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)), //1054.99
-            Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))  //1016.07
+            Inntekt(Arbeidsgiver(), januar(2019), 400000.beløp), //4.0458802824
+            Inntekt(Arbeidsgiver(), januar(2020), 400000.beløp), //3.966168582
+            Inntekt(Arbeidsgiver(), januar(2021), 400000.beløp)  //3.8198556095
         )
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(3147.25.beløp / 3, grunnlagForDag)
+        assertEquals(((4.0458802824 + 3.966168582 + 3.8198556095) / 3 * 106399).beløp, grunnlagForDag)
     }
 
     @Test
     fun `Har inntekt i 3 kalenderår - høyere i 2019`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), Beløp(4000.0)),
-            Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)),
-            Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))
+            Inntekt(Arbeidsgiver(), januar(2019), 400000.beløp), //4.0458802824
+            Inntekt(Arbeidsgiver(), januar(2020), 400000.beløp), //3.966168582
+            Inntekt(Arbeidsgiver(), januar(2021), 200000.beløp)  //1.9099278047
         )
         val grunnlag = inntekter.inntektsgrunnlag(Year.of(2021))
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(6375.839131539539.beløp / 3, grunnlagForDag)
+        assertEquals(((4.0458802824 + 3.966168582 + 1.9099278047) / 3 * 106399).beløp, grunnlagForDag)
     }
 
     @Test
