@@ -5,6 +5,7 @@ import java.time.LocalDate
 class Fødselsdato(private val dato: LocalDate) {
     private val `18ÅrsDagen`: LocalDate = this.dato.plusYears(18)
     private val `25ÅrsDagen`: LocalDate = this.dato.plusYears(25)
+    private val `62ÅrsDagen`: LocalDate = this.dato.plusYears(62)
     private val `67ÅrsDagen`: LocalDate = this.dato.plusYears(67)
 
     private companion object {
@@ -14,6 +15,7 @@ class Fødselsdato(private val dato: LocalDate) {
 
     internal fun erMellom18Og67År(vurderingsdato: LocalDate) = vurderingsdato in `18ÅrsDagen`..`67ÅrsDagen`
     internal fun erUnder18År(dato: LocalDate) = dato < `18ÅrsDagen`
+    internal fun erUnder62(dato: LocalDate) = dato < `62ÅrsDagen`
 
     internal fun justerGrunnlagsfaktorForAlder(dato: LocalDate, beregningsfaktor: Double): Double {
         val minsteGrunnlagsfaktorForAlder =

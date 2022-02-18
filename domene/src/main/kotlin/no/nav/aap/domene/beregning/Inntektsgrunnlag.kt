@@ -7,10 +7,12 @@ import java.time.LocalDate
 import java.time.Year
 
 internal class Inntektsgrunnlag(
-    private val sisteKalenderår: Year,
+    private val beregningsdato: LocalDate,
     private val inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
     private val fødselsdato: Fødselsdato
 ) {
+    private val sisteKalenderår = Year.from(beregningsdato).minusYears(1)
+
     //Dette tallet representerer hele utregningen av 11-19
     private val grunnlagsfaktor: Double = inntekterSiste3Kalenderår.totalBeregningsfaktor(sisteKalenderår)
 

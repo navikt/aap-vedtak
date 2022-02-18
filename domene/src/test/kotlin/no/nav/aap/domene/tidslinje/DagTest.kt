@@ -8,12 +8,10 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.Year
 
 internal class DagTest {
-
-    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
-        Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år), fødselsdato)
 
     @Test
     fun `Omregner 66 prosent av grunnlaget til dagsats`() {

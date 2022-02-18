@@ -11,12 +11,13 @@ import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDate
 import java.time.Year
 
 internal class TidsperiodeTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
-        Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år), fødselsdato)
+    private fun Iterable<Inntekt>.inntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
+        Inntektsgrunnlag(beregningsdato, this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)), fødselsdato)
 
     @Test
     fun `Når man oppretter en ny tidsperiode med dato og grunnlag, får man en liste med dager med beløp`() {
@@ -25,7 +26,7 @@ internal class TidsperiodeTest {
             Inntekt(Arbeidsgiver(), januar(2015), 459248.beløp),
             Inntekt(Arbeidsgiver(), januar(2016), 645246.beløp)
         )
-        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2016))
+        val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
 
         val tidsperiode = Tidsperiode.fyllPeriodeMedDager(1 januar 2017, grunnlag, Barnehage(emptyList()))
 

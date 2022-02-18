@@ -1,17 +1,13 @@
 package no.nav.aap.domene
 
-import no.nav.aap.domene.beregning.Beløp
+import no.nav.aap.domene.beregning.Inntektsgrunnlag
+import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class Vedtak(
     private val innvilget: Boolean,
-    private val beregning: Beregning
-) {
-
-}
-
-internal class Beregning(
-    private val grunnlag: Beløp,
-
-){
-
-}
+    private val inntektsgrunnlag: Inntektsgrunnlag,
+    private val søknadstidspunkt: LocalDateTime,
+    private val vedtaksdato: LocalDate,
+    private val virkningsdato: LocalDate
+)

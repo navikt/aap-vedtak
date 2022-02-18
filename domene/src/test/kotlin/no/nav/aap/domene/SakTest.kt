@@ -79,9 +79,6 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_3(true))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
-        sak.håndterLøsning(LøsningParagraf_11_4AndreOgTredjeLedd(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
-
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
@@ -98,7 +95,7 @@ internal class SakTest {
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger, "IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)

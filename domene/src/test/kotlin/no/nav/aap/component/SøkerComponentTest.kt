@@ -99,6 +99,27 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        assertTilstand(vilkårsvurderinger,"IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+    }
+
+    @Test
+    fun `Hvis vi mottar en søknad med bruker over 62 får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne og medlemskap`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(65))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        val saker = listOf(søker).toFrontendSaker(personident)
+        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
@@ -122,7 +143,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger,"IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
         assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
@@ -145,7 +166,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger,"OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(vilkårsvurderinger,"IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
@@ -190,8 +211,8 @@ internal class SøkerComponentTest {
                 FrontendVilkårsvurdering(
                     paragraf = "PARAGRAF_11_4",
                     ledd = listOf("LEDD_2", "LEDD_3"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = true
+                    tilstand = "IKKE_RELEVANT",
+                    harÅpenOppgave = false
                 ),
                 FrontendVilkårsvurdering(
                     paragraf = "PARAGRAF_11_5",
