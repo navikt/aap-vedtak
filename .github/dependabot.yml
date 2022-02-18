@@ -1,15 +1,4 @@
 version: 2
-registries:
-  confluent:
-    type: maven-repository
-    url: https://packages.confluent.io/maven/
-    username: ""
-    password: ""
-  navikt:
-      type: maven-repository
-      url: https://github-package-registry-mirror.gc.nav.no/cached/maven-release
-      username: ""
-      password: ""
 updates:
 - package-ecosystem: github-actions
   directory: "/"
@@ -18,9 +7,6 @@ updates:
   open-pull-requests-limit: 10
 - package-ecosystem: gradle
   directory: "/"
-  registries:
-    - confluent
-    - navikt
   schedule:
     interval: daily
   open-pull-requests-limit: 10
