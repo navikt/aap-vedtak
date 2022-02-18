@@ -5,6 +5,8 @@ import no.nav.aap.domene.beregning.Inntekt.Companion.toDto
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.toDto
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregningsfaktor
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.entitet.Grunnlagsfaktor
+import no.nav.aap.domene.entitet.Grunnlagsfaktor.Companion.summer
 import no.nav.aap.dto.DtoInntektsgrunnlag
 import no.nav.aap.dto.DtoInntektsgrunnlagForÅr
 import java.time.LocalDate
@@ -18,7 +20,7 @@ internal class Inntektsgrunnlag(
     private val sisteKalenderår = Year.from(beregningsdato).minusYears(1)
 
     //Dette tallet representerer hele utregningen av 11-19
-    private val grunnlagsfaktor: Double = inntekterSiste3Kalenderår.totalBeregningsfaktor(sisteKalenderår)
+    private val grunnlagsfaktor: Grunnlagsfaktor = inntekterSiste3Kalenderår.totalBeregningsfaktor(sisteKalenderår)
 
     internal fun grunnlagForDag(dato: LocalDate) =
         Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, grunnlagsfaktor))
@@ -28,7 +30,7 @@ internal class Inntektsgrunnlag(
         inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.toDto(),
         fødselsdato = fødselsdato.toDto(),
         sisteKalenderår = sisteKalenderår,
-        grunnlagsfaktor = grunnlagsfaktor
+        grunnlagsfaktor = grunnlagsfaktor.toDto()
     )
 
     override fun equals(other: Any?): Boolean {
@@ -55,18 +57,18 @@ internal class InntektsgrunnlagForÅr(
     private val beløpFørJustering: Beløp = inntekter.summerInntekt()
     private val beløpJustertFor6G: Beløp = Grunnbeløp.beløpJustertFor6G(år, beløpFørJustering)
     private val erBeløpJustertFor6G: Boolean = beløpFørJustering != beløpJustertFor6G
-    private val beregningsfaktor: Double = Grunnbeløp.finnBeregningsfaktor(år, beløpJustertFor6G)
+    private val grunnlagsfaktor: Grunnlagsfaktor = Grunnbeløp.finnBeregningsfaktor(år, beløpJustertFor6G)
 
     internal companion object {
         private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3
 
-        internal fun Iterable<InntektsgrunnlagForÅr>.totalBeregningsfaktor(sisteKalenderår: Year): Double {
+        internal fun Iterable<InntektsgrunnlagForÅr>.totalBeregningsfaktor(sisteKalenderår: Year): Grunnlagsfaktor {
             val sum1År = finnSisteKalenderår(sisteKalenderår).summerBeregningsfaktor()
             val gjennomsnitt3År = summerBeregningsfaktor() / ANTALL_ÅR_FOR_GJENNOMSNITT
             return maxOf(sum1År, gjennomsnitt3År)
         }
 
-        private fun Iterable<InntektsgrunnlagForÅr>.summerBeregningsfaktor() = sumOf { it.beregningsfaktor }
+        private fun Iterable<InntektsgrunnlagForÅr>.summerBeregningsfaktor() = map { it.grunnlagsfaktor }.summer()
 
         private fun Iterable<InntektsgrunnlagForÅr>.finnSisteKalenderår(sisteKalenderår: Year): List<InntektsgrunnlagForÅr> =
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
@@ -75,7 +77,7 @@ internal class InntektsgrunnlagForÅr(
     }
 
     private fun grunnlagForDag(dato: LocalDate, fødselsdato: Fødselsdato) =
-        Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, beregningsfaktor))
+        Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, grunnlagsfaktor))
 
     private fun toDto() = DtoInntektsgrunnlagForÅr(
         år = år,
@@ -83,7 +85,7 @@ internal class InntektsgrunnlagForÅr(
         beløpFørJustering = beløpFørJustering.toDto(),
         beløpJustertFor6G = beløpJustertFor6G.toDto(),
         erBeløpJustertFor6G = erBeløpJustertFor6G,
-        beregningsfaktor = beregningsfaktor
+        beregningsfaktor = grunnlagsfaktor.toDto()
     )
 
     override fun equals(other: Any?): Boolean {
