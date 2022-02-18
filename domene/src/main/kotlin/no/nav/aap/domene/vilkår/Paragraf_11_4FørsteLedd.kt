@@ -1,15 +1,16 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 
-internal class Paragraf_11_4FørsteLedd :
+internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand: Tilstand) :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
     private lateinit var fødselsdato: Fødselsdato
     private lateinit var vurderingsdato: LocalDate
 
-    private var tilstand: Tilstand = Tilstand.IkkeVurdert
+    internal constructor() : this(Tilstand.IkkeVurdert)
 
     private fun tilstand(nyTilstand: Tilstand) {
         this.tilstand = nyTilstand
@@ -30,10 +31,16 @@ internal class Paragraf_11_4FørsteLedd :
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
     internal sealed class Tilstand(
-        private val name: String,
+        protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
     ) {
+        enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
+            IKKE_VURDERT({ IkkeVurdert }),
+            OPPFYLT({ Oppfylt }),
+            IKKE_OPPFYLT({ IkkeOppfylt }),
+        }
+
         internal fun erOppfylt() = erOppfylt
         internal fun erIkkeOppfylt() = erIkkeOppfylt
 
@@ -45,7 +52,7 @@ internal class Paragraf_11_4FørsteLedd :
         )
 
         object IkkeVurdert : Tilstand(
-            name = "IKKE_VURDERT",
+            tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
@@ -60,7 +67,7 @@ internal class Paragraf_11_4FørsteLedd :
         }
 
         object Oppfylt : Tilstand(
-            name = "OPPFYLT",
+            tilstandsnavn = Tilstandsnavn.OPPFYLT,
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
@@ -75,7 +82,7 @@ internal class Paragraf_11_4FørsteLedd :
         }
 
         object IkkeOppfylt : Tilstand(
-            name = "IKKE_OPPFYLT",
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT,
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
@@ -89,8 +96,23 @@ internal class Paragraf_11_4FørsteLedd :
             }
         }
 
-        internal fun toFrontendTilstand(): String = name
+        internal open fun restoreData(paragraf: Paragraf_11_4FørsteLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal fun toFrontendTilstand(): String = tilstandsnavn.name
+        internal open fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            paragraf = paragraf.paragraf.name,
+            ledd = paragraf.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+        )
     }
 
+    override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
+
+    internal companion object {
+        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4FørsteLedd =
+            enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
+                .tilknyttetTilstand()
+                .let(::Paragraf_11_4FørsteLedd)
+                .apply { this.tilstand.restoreData(this, vilkårsvurdering) }
+    }
 }

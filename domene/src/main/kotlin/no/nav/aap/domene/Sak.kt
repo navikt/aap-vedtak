@@ -230,7 +230,7 @@ internal class Sak private constructor(
         }
 
         internal fun create(sak: DtoSak): Sak = Sak(
-            vilkårsvurderinger = sak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(), // todo: map
+            vilkårsvurderinger = sak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(),
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(sak.tilstand)) {
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> BeregnInntekt
                 Tilstand.Tilstandsnavn.START -> Start

@@ -71,9 +71,29 @@ internal abstract class Vilkårsvurdering(
             map(Vilkårsvurdering::toFrontendVilkårsvurdering)
 
         internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
-            when (Paragraf.valueOf(vilkårsvurdering.paragraf)) {
+            when (enumValueOf<Paragraf>(vilkårsvurdering.paragraf)) {
                 Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.create(vilkårsvurdering)
-                else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} not implemented") }
+                Paragraf.PARAGRAF_11_3 -> Paragraf_11_3.create(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_4 -> {
+                    vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
+                        when (ledd) {
+                            listOf(Ledd.LEDD_1) -> Paragraf_11_4FørsteLedd.create(vilkårsvurdering)
+                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.create(vilkårsvurdering)
+                            else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                        }
+                    }
+                }
+                Paragraf.PARAGRAF_11_5 -> Paragraf_11_5.create(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_6 -> Paragraf_11_6.create(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_12 -> {
+                    vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
+                        when (ledd) {
+                            listOf(Ledd.LEDD_1) -> Paragraf_11_12FørsteLedd.create(vilkårsvurdering)
+                            else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                        }
+                    }
+                }
+                Paragraf.PARAGRAF_11_29 -> Paragraf_11_29.create(vilkårsvurdering)
             }
     }
 }

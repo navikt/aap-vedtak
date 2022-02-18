@@ -133,16 +133,15 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
 
             override fun toFrontendHarÅpenOppgave() = true
 
-            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                paragraf = paragraf112.paragraf.name,
-                ledd = paragraf112.ledd.map(Ledd::name),
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = null,
+                løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
-            override fun restoreData(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
-                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf.settMaskinellLøsning(vilkårsvurdering)
             }
         }
 
@@ -151,16 +150,15 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
-            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                paragraf = paragraf112.paragraf.name,
-                ledd = paragraf112.ledd.map(Ledd::name),
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = null
+                løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
-            override fun restoreData(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
-                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf.settMaskinellLøsning(vilkårsvurdering)
             }
         }
 
@@ -169,16 +167,15 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
-            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                paragraf = paragraf112.paragraf.name,
-                ledd = paragraf112.ledd.map(Ledd::name),
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = null
+                løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
-            override fun restoreData(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
-                paragraf112.settMaskinellLøsning(vilkårsvurdering)
+            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf.settMaskinellLøsning(vilkårsvurdering)
             }
         }
 
@@ -187,17 +184,17 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
-            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                paragraf = paragraf112.paragraf.name,
-                ledd = paragraf112.ledd.map(Ledd::name),
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = paragraf112.manueltLøsning.toDto()
+                løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
 
-            override fun restoreData(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
-                paragraf112.settMaskinellLøsning(vilkårsvurdering)
-                paragraf112.settManuellLøsning(vilkårsvurdering)
+            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf.settMaskinellLøsning(vilkårsvurdering)
+                paragraf.settManuellLøsning(vilkårsvurdering)
             }
         }
 
@@ -206,30 +203,27 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
-            override fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                paragraf = paragraf112.paragraf.name,
-                ledd = paragraf112.ledd.map(Ledd::name),
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                løsning_11_2_maskinell = paragraf112.maskineltLøsning.toDto(),
-                løsning_11_2_manuell = paragraf112.manueltLøsning.toDto()
+                løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
+                løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
 
-            override fun restoreData(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
-                paragraf112.settMaskinellLøsning(vilkårsvurdering)
-                paragraf112.settManuellLøsning(vilkårsvurdering)
+            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+                paragraf.settMaskinellLøsning(vilkårsvurdering)
+                paragraf.settManuellLøsning(vilkårsvurdering)
             }
         }
 
-        internal open fun toDto(paragraf112: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-            paragraf = paragraf112.paragraf.name,
-            ledd = paragraf112.ledd.map(Ledd::name),
+        internal open fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            paragraf = paragraf.paragraf.name,
+            ledd = paragraf.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            løsning_11_2_maskinell = null,
-            løsning_11_2_manuell = null
         )
 
-        internal open fun restoreData(paragraf112: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
-
+        internal open fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
     }

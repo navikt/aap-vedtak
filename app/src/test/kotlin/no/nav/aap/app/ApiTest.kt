@@ -55,48 +55,48 @@ internal class ApiTest {
                                 tilstand = "SØKNAD_MOTTATT",
                                 harÅpenOppgave = false
                             ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_3",
-//                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_4",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "OPPFYLT",
-//                                harÅpenOppgave = false
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_4",
-//                                ledd = listOf("LEDD_2", "LEDD_3"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_5",
-//                                ledd = listOf("LEDD_1", "LEDD_2"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_6",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_12",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_29",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            )
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_3",
+                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "OPPFYLT",
+                                harÅpenOppgave = false
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_5",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_6",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_12",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_29",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            )
                         )
                     )
                 )
@@ -133,48 +133,48 @@ internal class ApiTest {
                             tilstand = "SØKNAD_MOTTATT",
                             harÅpenOppgave = false
                         ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_3",
-//                            ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-//                            tilstand = "SØKNAD_MOTTATT",
-//                            harÅpenOppgave = true
-//                        ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_4",
-//                            ledd = listOf("LEDD_1"),
-//                            tilstand = "OPPFYLT",
-//                            harÅpenOppgave = false
-//                        ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_4",
-//                            ledd = listOf("LEDD_2", "LEDD_3"),
-//                            tilstand = "SØKNAD_MOTTATT",
-//                            harÅpenOppgave = true
-//                        ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_5",
-//                            ledd = listOf("LEDD_1", "LEDD_2"),
-//                            tilstand = "SØKNAD_MOTTATT",
-//                            harÅpenOppgave = true
-//                        ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_6",
-//                            ledd = listOf("LEDD_1"),
-//                            tilstand = "SØKNAD_MOTTATT",
-//                            harÅpenOppgave = true
-//                        ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_12",
-//                            ledd = listOf("LEDD_1"),
-//                            tilstand = "SØKNAD_MOTTATT",
-//                            harÅpenOppgave = true
-//                        ),
-//                        FrontendVilkårsvurdering(
-//                            paragraf = "PARAGRAF_11_29",
-//                            ledd = listOf("LEDD_1"),
-//                            tilstand = "SØKNAD_MOTTATT",
-//                            harÅpenOppgave = true
-//                        )
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_3",
+                            ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_4",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "OPPFYLT",
+                            harÅpenOppgave = false
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_4",
+                            ledd = listOf("LEDD_2", "LEDD_3"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_5",
+                            ledd = listOf("LEDD_1", "LEDD_2"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_6",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_12",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        ),
+                        FrontendVilkårsvurdering(
+                            paragraf = "PARAGRAF_11_29",
+                            ledd = listOf("LEDD_1"),
+                            tilstand = "SØKNAD_MOTTATT",
+                            harÅpenOppgave = true
+                        )
                     )
                 )
                 assertEquals(response.status(), HttpStatusCode.OK)
@@ -211,48 +211,48 @@ internal class ApiTest {
                                 tilstand = "SØKNAD_MOTTATT",
                                 harÅpenOppgave = false
                             ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_3",
-//                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_4",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "OPPFYLT",
-//                                harÅpenOppgave = false
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_4",
-//                                ledd = listOf("LEDD_2", "LEDD_3"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_5",
-//                                ledd = listOf("LEDD_1", "LEDD_2"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_6",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_12",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            ),
-//                            FrontendVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_29",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                harÅpenOppgave = true
-//                            )
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_3",
+                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "OPPFYLT",
+                                harÅpenOppgave = false
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_5",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_6",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_12",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            ),
+                            FrontendVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_29",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                                harÅpenOppgave = true
+                            )
                         )
                     )
                 )
@@ -302,7 +302,7 @@ internal class ApiTest {
                 fødselsdato = LocalDate.now().minusYears(40),
                 saker = listOf(
                     DtoSak(
-                        tilstand = "BEREGN_INNTEKT", // todo: SØKNAD_MOTTATT når fler vilkår er implementert
+                        tilstand = "SØKNAD_MOTTATT",
                         vurderingsdato = LocalDate.now(),
                         vilkårsvurderinger = listOf(
                             DtoVilkårsvurdering(
@@ -310,50 +310,42 @@ internal class ApiTest {
                                 ledd = listOf("LEDD_1", "LEDD_2"),
                                 tilstand = "OPPFYLT_MASKINELT",
                                 løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
-                                løsning_11_2_manuell = null,
                             ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_3",
-//                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                null, null
-//                            ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_4",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "OPPFYLT",
-//                                null, null
-//                            ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_4",
-//                                ledd = listOf("LEDD_2", "LEDD_3"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                null, null
-//                            ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_5",
-//                                ledd = listOf("LEDD_1", "LEDD_2"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                null, null
-//                            ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_6",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                null, null
-//                            ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_12",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                null, null
-//                            ),
-//                            DtoVilkårsvurdering(
-//                                paragraf = "PARAGRAF_11_29",
-//                                ledd = listOf("LEDD_1"),
-//                                tilstand = "SØKNAD_MOTTATT",
-//                                null, null
-//                            )
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_3",
+                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "OPPFYLT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_5",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_6",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_12",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_29",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            )
                         )
                     )
                 )
