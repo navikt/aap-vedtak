@@ -5,6 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'doc/topology.puml'
+      - '.github/workflows/topology.yml'
 
 jobs:
   generate:
@@ -25,6 +26,14 @@ jobs:
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: app:test --tests no.nav.aap.GenerateUML --no-daemon
+
+      - uses: dorny/test-reporter@v1.5.0
+        if: always()
+        with:
+          name: 🧬 Test results
+          path: "**/build/test-results/test/TEST-*.xml"
+          reporter: java-junit
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: Timmy/plantuml-action@v1
         with:
