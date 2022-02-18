@@ -6,6 +6,7 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.*
+import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -89,6 +90,9 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_29(true))
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+
+        sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)

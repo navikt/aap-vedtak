@@ -1,16 +1,20 @@
 package no.nav.aap.component
 
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
+import no.nav.aap.domene.beregning.Arbeidsgiver
+import no.nav.aap.domene.beregning.Beløp.Companion.beløp
+import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
-import no.nav.aap.hendelse.LøsningParagraf_11_2
-import no.nav.aap.hendelse.LøsningParagraf_11_5
-import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.Behov_11_2
 import no.nav.aap.hendelse.behov.Behov_11_5
+import no.nav.aap.januar
+import no.nav.aap.juli
+import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -64,8 +68,13 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -81,8 +90,13 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -96,14 +110,24 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_RELEVANT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -117,14 +141,24 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "SØKNAD_MOTTATT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -140,14 +174,24 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_RELEVANT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -163,14 +207,24 @@ internal class SøkerComponentTest {
         val saker = listOf(søker).toFrontendSaker(personident)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger,"OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
-        assertTilstand(vilkårsvurderinger,"OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger,"IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
-        assertTilstand(vilkårsvurderinger,"SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_RELEVANT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -241,6 +295,37 @@ internal class SøkerComponentTest {
             )
         )
         assertEquals(expected, søker.toFrontendSaker().single())
+    }
+
+    @Test
+    fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt`() {
+        val fødselsdato = Fødselsdato(17 juli 1995)
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningParagraf_11_3(true))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_6(true))
+        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
+        søker.håndterLøsning(LøsningParagraf_11_29(true))
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        søker.håndterLøsning(
+            LøsningInntekter(
+                listOf(
+                    Inntekt(Arbeidsgiver(), januar(2020), 500000.beløp),
+                    Inntekt(Arbeidsgiver(), januar(2019), 500000.beløp),
+                    Inntekt(Arbeidsgiver(), januar(2018), 500000.beløp)
+                )
+            )
+        )
+
+        val dtoSøker = søker.toDto()
+
+        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals(5.078089253694027, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
     private fun assertTilstand(

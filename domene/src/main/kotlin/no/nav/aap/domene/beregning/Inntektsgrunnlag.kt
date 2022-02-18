@@ -1,8 +1,12 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
+import no.nav.aap.domene.beregning.Inntekt.Companion.toDto
+import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.toDto
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregningsfaktor
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.dto.DtoInntektsgrunnlag
+import no.nav.aap.dto.DtoInntektsgrunnlagForÅr
 import java.time.LocalDate
 import java.time.Year
 
@@ -18,6 +22,14 @@ internal class Inntektsgrunnlag(
 
     internal fun grunnlagForDag(dato: LocalDate) =
         Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, grunnlagsfaktor))
+
+    internal fun toDto() = DtoInntektsgrunnlag(
+        beregningsdato = beregningsdato,
+        inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.toDto(),
+        fødselsdato = fødselsdato.toDto(),
+        sisteKalenderår = sisteKalenderår,
+        grunnlagsfaktor = grunnlagsfaktor
+    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
@@ -58,10 +70,21 @@ internal class InntektsgrunnlagForÅr(
 
         private fun Iterable<InntektsgrunnlagForÅr>.finnSisteKalenderår(sisteKalenderår: Year): List<InntektsgrunnlagForÅr> =
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
+
+        internal fun Iterable<InntektsgrunnlagForÅr>.toDto() = map(InntektsgrunnlagForÅr::toDto)
     }
 
     private fun grunnlagForDag(dato: LocalDate, fødselsdato: Fødselsdato) =
         Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, beregningsfaktor))
+
+    private fun toDto() = DtoInntektsgrunnlagForÅr(
+        år = år,
+        inntekter = inntekter.toDto(),
+        beløpFørJustering = beløpFørJustering.toDto(),
+        beløpJustertFor6G = beløpJustertFor6G.toDto(),
+        erBeløpJustertFor6G = erBeløpJustertFor6G,
+        beregningsfaktor = beregningsfaktor
+    )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

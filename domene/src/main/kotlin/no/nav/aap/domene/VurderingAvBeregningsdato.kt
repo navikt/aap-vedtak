@@ -18,6 +18,8 @@ internal class VurderingAvBeregningsdato {
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun erFerdig() = tilstand.erFerdig()
+
     internal fun beregningsdato() = tilstand.beregningsdato(this)
 
     internal sealed class Tilstand {
@@ -27,6 +29,8 @@ internal class VurderingAvBeregningsdato {
             løsning: LøsningVurderingAvBeregningsdato
         ) {
         }
+
+        internal open fun erFerdig() = false
 
         internal open fun beregningsdato(vurderingAvBeregningsdato: VurderingAvBeregningsdato): LocalDate =
             error("Kan ikke hente beregningsdato uten løsning")
@@ -51,6 +55,8 @@ internal class VurderingAvBeregningsdato {
         internal object Ferdig : Tilstand() {
             override fun beregningsdato(vurderingAvBeregningsdato: VurderingAvBeregningsdato): LocalDate =
                 vurderingAvBeregningsdato.løsning.beregningsdato
+
+            override fun erFerdig() = true
         }
     }
 }

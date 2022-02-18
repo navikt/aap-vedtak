@@ -18,7 +18,8 @@ fun Soker.toDto(): DtoSøker = DtoSøker(
 fun Sak.toDto(): DtoSak = DtoSak(
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto)
+    vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto),
+    vedtak = null //TODO
 )
 
 fun Vilkarsvurdering.toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(

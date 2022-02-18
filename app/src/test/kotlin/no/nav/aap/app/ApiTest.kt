@@ -346,7 +346,8 @@ internal class ApiTest {
                                 ledd = listOf("LEDD_1"),
                                 tilstand = "SØKNAD_MOTTATT",
                             )
-                        )
+                        ),
+                        vedtak = null //TODO
                     )
                 )
             )
