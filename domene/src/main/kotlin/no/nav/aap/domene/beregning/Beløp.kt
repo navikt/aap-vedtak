@@ -11,10 +11,10 @@ class Beløp(verdi: Number) : Comparable<Beløp> {
         val Number.beløp get() = Beløp(this)
     }
 
-    internal operator fun plus(nevner: Beløp) = Beløp(this.verdi + nevner.verdi)
+    internal operator fun plus(addend: Beløp) = Beløp(this.verdi + addend.verdi)
 
-    internal operator fun times(nevner: Number) = Beløp(verdi * nevner.toDouble())
-    internal operator fun times(nevner: Beløp) = this * nevner.verdi
+    internal operator fun times(faktor: Number) = Beløp(verdi * faktor.toDouble())
+    internal operator fun times(faktor: Beløp) = this * faktor.verdi
 
     internal operator fun div(nevner: Number): Beløp = Beløp(verdi / nevner.toDouble())
     internal operator fun div(nevner: Beløp): Double = this.verdi / nevner.verdi

@@ -4,6 +4,7 @@ import no.nav.aap.august
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import no.nav.aap.januar
 import no.nav.aap.juli
 import no.nav.aap.mars
@@ -36,7 +37,7 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(406428.82.beløp, grunnlagForDag)
+        assertEquals(406428.86.beløp, grunnlagForDag)
     }
 
     @Test
@@ -85,7 +86,7 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(((4.0458802824 + 3.966168582 + 3.8198556095) / 3 * 106399).beløp, grunnlagForDag)
+        assertEquals(Grunnlagsfaktor(4.045880 + 3.966168 + 3.819855) / 3 * 106399.beløp, grunnlagForDag)
     }
 
     @Test
@@ -98,7 +99,7 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(((4.0458802824 + 3.966168582 + 1.9099278047) / 3 * 106399).beløp, grunnlagForDag)
+        assertEquals(Grunnlagsfaktor(4.045880 + 3.966169 + 1.909928) / 3 * 106399.beløp, grunnlagForDag)
     }
 
     @Test
@@ -144,7 +145,7 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 juli 2017)
 
-        assertEquals(499051.83807592624.beløp, grunnlagForDag)
+        assertEquals(499051.8.beløp, grunnlagForDag)
     }
 
     @Test
@@ -170,6 +171,6 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2020)
         val grunnlagForDag = grunnlag.grunnlagForDag(31 august 2021)
 
-        assertEquals(377296.411466.beløp, grunnlagForDag)
+        assertEquals(377296.39.beløp, grunnlagForDag)
     }
 }

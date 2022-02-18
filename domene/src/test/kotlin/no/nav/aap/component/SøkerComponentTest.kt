@@ -325,7 +325,7 @@ internal class SøkerComponentTest {
         val dtoSøker = søker.toDto()
 
         assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
-        assertEquals(5.078089253694027, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
+        assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
     private fun assertTilstand(
