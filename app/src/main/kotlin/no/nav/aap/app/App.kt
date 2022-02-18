@@ -23,6 +23,8 @@ import no.nav.aap.app.security.OAuthConfig
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.entitet.Personident
+import org.apache.kafka.clients.producer.Producer
+import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
@@ -52,6 +54,7 @@ fun Application.server(kafka: Kafka = KStreams()) {
 
     routing {
         api(kafka)
+        devTools(kafka, topics)
         actuator(prometheus, kafka)
     }
 }
@@ -84,6 +87,23 @@ fun Routing.api(kafka: Kafka) {
                 val frontendSaker = søkere.toFrontendSaker(personident)
                 call.respond(frontendSaker)
             }
+        }
+    }
+}
+
+fun Routing.devTools(kafka: Kafka, topics: Topics) {
+    val søkerProducer = kafka.createProducer(topics.søkere)
+
+    fun <V> Producer<String, V>.tombstone(key: String) =
+        send(ProducerRecord(topics.søkere.name, key, null)).get()
+
+    route("/delete/{personident}") {
+        get {
+            val personident = call.parameters.getOrFail("personident")
+            søkerProducer.tombstone(personident).also {
+                log.info("produced tombstone [${topics.søkere.name}] [$personident] [null]")
+            }
+            call.respondText("Deleted $personident")
         }
     }
 }

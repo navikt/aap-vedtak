@@ -8,6 +8,9 @@ import no.nav.aap.app.kafka.*
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.apache.avro.specific.SpecificRecord
 import org.apache.kafka.clients.consumer.Consumer
+import org.apache.kafka.clients.consumer.MockConsumer
+import org.apache.kafka.clients.consumer.OffsetResetStrategy.EARLIEST
+import org.apache.kafka.clients.producer.MockProducer
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.*
@@ -42,8 +45,8 @@ class KStreamsMock : Kafka {
 
     internal val schemaRegistryUrl: String by lazy { "mock://schema-registry/${UUID.randomUUID()}" }
 
-    override fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V> = TODO("Not yet implemented")
-    override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> = TODO("Not yet implemented")
+    override fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V> = MockProducer()
+    override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> = MockConsumer(EARLIEST)
     override fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V> = driver.getKeyValueStore(name)
     override fun close() = driver.close().also { MockSchemaRegistry.dropScope(schemaRegistryUrl) }
     override fun healthy(): Boolean = true
