@@ -16,7 +16,7 @@ internal class Inntektshistorikk {
         val sisteKalenderår = Year.from(beregningsdato).minusYears(1)
         val inntekterSiste3Kalenderår = inntekter.inntektSiste3Kalenderår(sisteKalenderår)
         return Inntektsgrunnlag(
-            sisteKalenderår = sisteKalenderår,
+            beregningsdato = beregningsdato,
             inntekterSiste3Kalenderår = inntekterSiste3Kalenderår,
             fødselsdato = fødselsdato
         )

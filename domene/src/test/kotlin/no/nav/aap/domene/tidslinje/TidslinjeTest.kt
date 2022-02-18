@@ -10,12 +10,13 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
+import java.time.LocalDate
 import java.time.Year
 
 internal class TidslinjeTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(år: Year, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
-        Inntektsgrunnlag(år, this.inntektSiste3Kalenderår(år), fødselsdato)
+    private fun Iterable<Inntekt>.inntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
+        Inntektsgrunnlag(beregningsdato, this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)), fødselsdato)
 
     @Test
     fun `Når man oppretter en ny tidslinje med startdato og grunnlag, får man en periode med dager med beløp`() {
@@ -24,7 +25,7 @@ internal class TidslinjeTest {
             Inntekt(Arbeidsgiver(), januar(2015), 459248.beløp),
             Inntekt(Arbeidsgiver(), januar(2016), 645246.beløp)
         )
-        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2016))
+        val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
 
         val tidslinje = Tidslinje.opprettTidslinje(1 januar 2017, grunnlag, Barnehage(emptyList()))
 
@@ -38,7 +39,7 @@ internal class TidslinjeTest {
             Inntekt(Arbeidsgiver(), januar(2015), 459248.beløp),
             Inntekt(Arbeidsgiver(), januar(2016), 645246.beløp)
         )
-        val grunnlag = inntekter.inntektsgrunnlag(Year.of(2016))
+        val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
 
         val barnehage = Barnehage(
             listOf(

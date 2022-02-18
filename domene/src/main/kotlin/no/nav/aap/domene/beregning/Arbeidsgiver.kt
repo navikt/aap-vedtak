@@ -1,3 +1,5 @@
 package no.nav.aap.domene.beregning
 
-class Arbeidsgiver
+class Arbeidsgiver(private val ident: String = "HAHA"){
+    internal fun toDto() = ident
+}

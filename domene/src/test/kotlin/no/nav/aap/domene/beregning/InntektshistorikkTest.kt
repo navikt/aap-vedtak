@@ -19,7 +19,7 @@ internal class InntektshistorikkTest {
         val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
         val expected = Inntektsgrunnlag(
-            sisteKalenderår = Year.of(2021),
+            beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = emptyList(),
             fødselsdato = FØDSELSDATO
         )
@@ -34,7 +34,7 @@ internal class InntektshistorikkTest {
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
         val expected = Inntektsgrunnlag(
-            sisteKalenderår = Year.of(2021),
+            beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = emptyList(),
             fødselsdato = FØDSELSDATO
         )
@@ -50,7 +50,7 @@ internal class InntektshistorikkTest {
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
         val expected = Inntektsgrunnlag(
-            sisteKalenderår = Year.of(2021),
+            beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr(Year.of(2021), inntekter)),
             fødselsdato = FØDSELSDATO
         )
@@ -66,7 +66,7 @@ internal class InntektshistorikkTest {
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
         val expected = Inntektsgrunnlag(
-            sisteKalenderår = Year.of(2021),
+            beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr(Year.of(2020), inntekter)),
             fødselsdato = FØDSELSDATO
         )
@@ -86,7 +86,7 @@ internal class InntektshistorikkTest {
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
         val expected = Inntektsgrunnlag(
-            sisteKalenderår = Year.of(2021),
+            beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = listOf(
                 InntektsgrunnlagForÅr(Year.of(2019), listOf(inntekter[0])),
                 InntektsgrunnlagForÅr(Year.of(2020), listOf(inntekter[1])),

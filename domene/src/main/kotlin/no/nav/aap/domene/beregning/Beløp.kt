@@ -19,6 +19,8 @@ class Beløp(verdi: Number) : Comparable<Beløp> {
     internal operator fun div(nevner: Number): Beløp = Beløp(verdi / nevner.toDouble())
     internal operator fun div(nevner: Beløp): Double = this.verdi / nevner.verdi
 
+    internal fun toDto() = verdi
+
     override fun compareTo(other: Beløp) = verdi.compareTo(other.verdi)
 
     override fun equals(other: Any?): Boolean {

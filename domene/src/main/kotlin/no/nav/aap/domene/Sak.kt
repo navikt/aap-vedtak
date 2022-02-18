@@ -12,12 +12,14 @@ import no.nav.aap.dto.DtoSak
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class Sak private constructor(
     private var tilstand: Tilstand,
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering>,
     private val inntektshistorikk: Inntektshistorikk,
 ) {
+    private lateinit var vurderingAvBeregningsdato: VurderingAvBeregningsdato
     private lateinit var vurderingsdato: LocalDate
     private lateinit var vedtak: Vedtak
 
@@ -56,6 +58,10 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterLøsning(løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
         tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
@@ -70,7 +76,11 @@ internal class Sak private constructor(
         val tilstandsnavn: Tilstandsnavn
 
         enum class Tilstandsnavn {
-            START, SØKNAD_MOTTATT, IKKE_OPPFYLT, BEREGN_INNTEKT
+            START,
+            SØKNAD_MOTTATT,
+            BEREGN_INNTEKT,
+            VEDTAK_FATTET,
+            IKKE_OPPFYLT
         }
 
         fun onEntry() {}
@@ -107,12 +117,21 @@ internal class Sak private constructor(
             error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
+        fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
+            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
         fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             error("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
         fun toFrontendTilstand() = tilstandsnavn.name
-        fun toDto() = tilstandsnavn.name
+        fun toDto(sak: Sak) = DtoSak(
+            tilstand = tilstandsnavn.name,
+            vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
+            vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+            vedtak = null
+        )
     }
 
     private object Start : Tilstand {
@@ -128,6 +147,9 @@ internal class Sak private constructor(
             sak.vilkårsvurderinger.add(Paragraf_11_12FørsteLedd())
             sak.vilkårsvurderinger.add(Paragraf_11_29())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+
+            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
+            sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
 
             vurderNestetilstand(sak)
         }
@@ -177,10 +199,17 @@ internal class Sak private constructor(
             vurderNesteTilstand(sak)
         }
 
+        override fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
+            sak.vurderingAvBeregningsdato.håndterLøsning(løsning)
+            vurderNesteTilstand(sak)
+        }
+
         private fun vurderNesteTilstand(sak: Sak) {
             when {
-                sak.vilkårsvurderinger.erAlleOppfylt() -> sak.tilstand(BeregnInntekt)
-                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt)
+                sak.vilkårsvurderinger.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
+                    sak.tilstand(BeregnInntekt)
+                sak.vilkårsvurderinger.erNoenIkkeOppfylt() ->
+                    sak.tilstand(IkkeOppfylt)
             }
         }
     }
@@ -194,10 +223,30 @@ internal class Sak private constructor(
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             løsning.lagreInntekter(sak.inntektshistorikk)
-            val grunnlagsberegning = sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingsdato, fødselsdato)
+            val inntektsgrunnlag =
+                sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingAvBeregningsdato.beregningsdato(), fødselsdato)
+            sak.vedtak = Vedtak(
+                innvilget = true,
+                inntektsgrunnlag = inntektsgrunnlag,
+                søknadstidspunkt = LocalDateTime.now(),
+                vedtaksdato = LocalDate.now(),
+                virkningsdato = LocalDate.now()
+            )
 
-
+            sak.tilstand(VedtakFattet)
         }
+    }
+
+    private object VedtakFattet : Tilstand {
+        override val tilstandsnavn: Tilstand.Tilstandsnavn = Tilstand.Tilstandsnavn.VEDTAK_FATTET
+
+        override fun toDto(sak: Sak) = DtoSak(
+            tilstand = tilstandsnavn.name,
+            vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
+            vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+            vedtak = sak.vedtak.toDto()
+        )
+
     }
 
     private object IkkeOppfylt : Tilstand {
@@ -207,6 +256,7 @@ internal class Sak private constructor(
         }
     }
 
+    private fun toDto() = tilstand.toDto(this)
 
     private fun toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) =
         FrontendSak(
@@ -221,20 +271,15 @@ internal class Sak private constructor(
             it.toFrontendSak(personident = personident, fødselsdato = fødselsdato)
         }
 
-        internal fun Iterable<Sak>.toDto() = map { sak ->
-            DtoSak(
-                tilstand = sak.tilstand.toDto(),
-                vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
-                vurderingsdato = sak.vurderingsdato // ALLTID SATT
-            )
-        }
+        internal fun Iterable<Sak>.toDto() = map { sak -> sak.toDto() }
 
         internal fun create(sak: DtoSak): Sak = Sak(
             vilkårsvurderinger = sak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(),
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(sak.tilstand)) {
-                Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> BeregnInntekt
                 Tilstand.Tilstandsnavn.START -> Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
+                Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> BeregnInntekt
+                Tilstand.Tilstandsnavn.VEDTAK_FATTET -> VedtakFattet
                 Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> IkkeOppfylt
             },
             inntektshistorikk = Inntektshistorikk()

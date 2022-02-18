@@ -28,6 +28,14 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
         tilstand.håndterLøsning(this, løsning)
     }
 
+    private fun vurderAlder(hendelse: Hendelse, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+        if (fødselsdato.erUnder62(vurderingsdato)) {
+            tilstand(Tilstand.IkkeRelevant, hendelse)
+        } else {
+            tilstand(Tilstand.SøknadMottatt, hendelse)
+        }
+    }
+
     override fun erOppfylt() = tilstand.erOppfylt()
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
@@ -41,6 +49,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
             SØKNAD_MOTTATT({ SøknadMottatt }),
             OPPFYLT({ Oppfylt }),
             IKKE_OPPFYLT({ IkkeOppfylt }),
+            IKKE_RELEVANT({IkkeRelevant})
         }
 
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {}
@@ -75,7 +84,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
                 fødselsdato: Fødselsdato,
                 vurderingsdato: LocalDate
             ) {
-                vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+                vilkårsvurdering.vurderAlder(søknad, fødselsdato, vurderingsdato)
             }
         }
 
@@ -109,6 +118,12 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT,
             erOppfylt = false,
             erIkkeOppfylt = true
+        )
+
+        object IkkeRelevant : Tilstand(
+            tilstandsnavn = Tilstandsnavn.IKKE_RELEVANT,
+            erOppfylt = true,
+            erIkkeOppfylt = false
         )
 
         internal open fun restoreData(paragraf: Paragraf_11_4AndreOgTredjeLedd, vilkårsvurdering: DtoVilkårsvurdering) {}

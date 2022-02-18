@@ -1,6 +1,9 @@
 package no.nav.aap.dto
 
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.Year
+import java.time.YearMonth
 
 data class DtoSøker(
     val personident: String,
@@ -11,7 +14,8 @@ data class DtoSøker(
 data class DtoSak(
     val tilstand: String,
     val vilkårsvurderinger: List<DtoVilkårsvurdering>,
-    val vurderingsdato: LocalDate
+    val vurderingsdato: LocalDate,
+    val vedtak: DtoVedtak?
 )
 
 data class DtoVilkårsvurdering(
@@ -35,3 +39,34 @@ data class DtoLøsningParagraf_11_5(val grad: Int)
 data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean)
 data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean)
 data class DtoLøsningParagraf_11_29(val erOppfylt: Boolean)
+
+data class DtoVedtak(
+    val innvilget: Boolean,
+    val inntektsgrunnlag: DtoInntektsgrunnlag,
+    val søknadstidspunkt: LocalDateTime,
+    val vedtaksdato: LocalDate,
+    val virkningsdato: LocalDate
+)
+
+data class DtoInntektsgrunnlag(
+    val beregningsdato: LocalDate,
+    val inntekterSiste3Kalenderår: List<DtoInntektsgrunnlagForÅr>,
+    val fødselsdato: LocalDate,
+    val sisteKalenderår: Year,
+    val grunnlagsfaktor: Double
+)
+
+data class DtoInntektsgrunnlagForÅr(
+    val år: Year,
+    val inntekter: List<DtoInntekt>,
+    val beløpFørJustering: Double,
+    val beløpJustertFor6G: Double,
+    val erBeløpJustertFor6G: Boolean,
+    val beregningsfaktor: Double
+)
+
+data class DtoInntekt(
+    val arbeidsgiver: String,
+    val inntekstmåned: YearMonth,
+    val beløp: Double
+)

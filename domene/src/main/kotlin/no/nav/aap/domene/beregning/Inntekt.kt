@@ -1,6 +1,7 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
+import no.nav.aap.dto.DtoInntekt
 import java.time.Year
 import java.time.YearMonth
 
@@ -16,5 +17,13 @@ class Inntekt(
             .map { (år, inntekter) -> InntektsgrunnlagForÅr(år, inntekter) }
 
         internal fun Iterable<Inntekt>.summerInntekt() = map { it.beløp }.summerBeløp()
+
+        internal fun Iterable<Inntekt>.toDto() = map(Inntekt::toDto)
     }
+
+    private fun toDto() = DtoInntekt(
+        arbeidsgiver = arbeidsgiver.toDto(),
+        inntekstmåned = inntekstmåned,
+        beløp = beløp.toDto()
+    )
 }
