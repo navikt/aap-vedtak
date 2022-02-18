@@ -18,6 +18,7 @@ internal class Sak private constructor(
     private val vilkårsvurderinger: MutableList<Vilkårsvurdering>,
     private val inntektshistorikk: Inntektshistorikk,
 ) {
+    private lateinit var vurderingAvBeregningsdato: VurderingAvBeregningsdato
     private lateinit var vurderingsdato: LocalDate
     private lateinit var vedtak: Vedtak
 
@@ -128,6 +129,9 @@ internal class Sak private constructor(
             sak.vilkårsvurderinger.add(Paragraf_11_12FørsteLedd())
             sak.vilkårsvurderinger.add(Paragraf_11_29())
             sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+
+            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
+            sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
 
             vurderNestetilstand(sak)
         }
