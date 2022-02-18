@@ -70,8 +70,8 @@ internal class ApiTest {
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_4",
                                 ledd = listOf("LEDD_2", "LEDD_3"),
-                                tilstand = "SØKNAD_MOTTATT",
-                                harÅpenOppgave = true
+                                tilstand = "IKKE_RELEVANT",
+                                harÅpenOppgave = false
                             ),
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_5",
@@ -148,8 +148,8 @@ internal class ApiTest {
                         FrontendVilkårsvurdering(
                             paragraf = "PARAGRAF_11_4",
                             ledd = listOf("LEDD_2", "LEDD_3"),
-                            tilstand = "SØKNAD_MOTTATT",
-                            harÅpenOppgave = true
+                            tilstand = "IKKE_RELEVANT",
+                            harÅpenOppgave = false
                         ),
                         FrontendVilkårsvurdering(
                             paragraf = "PARAGRAF_11_5",
@@ -226,8 +226,8 @@ internal class ApiTest {
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_4",
                                 ledd = listOf("LEDD_2", "LEDD_3"),
-                                tilstand = "SØKNAD_MOTTATT",
-                                harÅpenOppgave = true
+                                tilstand = "IKKE_RELEVANT",
+                                harÅpenOppgave = false
                             ),
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_5",
@@ -324,7 +324,7 @@ internal class ApiTest {
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_4",
                                 ledd = listOf("LEDD_2", "LEDD_3"),
-                                tilstand = "SØKNAD_MOTTATT",
+                                tilstand = "IKKE_RELEVANT",
                             ),
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_5",
