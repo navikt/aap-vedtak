@@ -16,8 +16,10 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.*
 import org.apache.kafka.streams.KafkaStreams.State
-import org.apache.kafka.streams.errors.DefaultProductionExceptionHandler
 import org.apache.kafka.streams.errors.ProductionExceptionHandler
+import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse
+import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse.CONTINUE
+import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
 import org.apache.kafka.streams.kstream.Materialized
 import org.apache.kafka.streams.kstream.Named
 import org.apache.kafka.streams.state.KeyValueStore
@@ -33,12 +35,21 @@ interface Kafka : AutoCloseable {
     fun healthy(): Boolean
 }
 
-class KStreams : Kafka {
+class KStreams constructor() : Kafka {
     private lateinit var config: KafkaConfig
     private lateinit var streams: KafkaStreams
 
+    constructor(kafkaConfig: KafkaConfig) : this() {
+        config = kafkaConfig
+    }
+
     override fun init(topology: Topology, config: KafkaConfig) {
-        this.streams = KafkaStreams(topology, config.consumer + config.producer).apply { start() }
+        this.streams = KafkaStreams(topology, config.consumer + config.producer)
+        this.streams.setUncaughtExceptionHandler { err: Throwable ->
+            log.error("Uventet feil, logger og leser neste record, ${err.message}")
+            StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
+        }
+        this.streams.start()
         this.config = config
     }
 
@@ -83,10 +94,13 @@ fun <V> materialized(name: String): Materialized<String, V, KeyValueStore<Bytes,
 fun <V> ReadOnlyKeyValueStore<String, V>.allValues(): List<V> =
     all().use { it.asSequence().map(KeyValue<String, V>::value).toList() }
 
-class LogContinueErrorHandler : DefaultProductionExceptionHandler() {
-    override fun handle(record: ProducerRecord<ByteArray, ByteArray>?, exception: Exception?)
-            : ProductionExceptionHandler.ProductionExceptionHandlerResponse {
+class LogContinueErrorHandler : ProductionExceptionHandler {
+    override fun configure(configs: MutableMap<String, *>?) {}
+    override fun handle(
+        record: ProducerRecord<ByteArray, ByteArray>?,
+        exception: Exception?
+    ): ProductionExceptionHandlerResponse {
         log.error("Feil i streams, logger og leser neste record", exception)
-        return ProductionExceptionHandler.ProductionExceptionHandlerResponse.CONTINUE
+        return CONTINUE
     }
 }

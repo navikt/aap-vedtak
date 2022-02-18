@@ -61,6 +61,9 @@ fun Application.server(kafka: Kafka = KStreams()) {
 
 fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     val søkere = table(topics.søkere.name, topics.søkere.consumed("soker-consumed"), materialized("soker-store"))
+    søkere.stateStoreCleaner("soker-store") { record, _ ->
+        record.value().personident in søkereMarkedForDeletion
+    }
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
     medlemResponseStream(topics)
@@ -91,6 +94,7 @@ fun Routing.api(kafka: Kafka) {
     }
 }
 
+private val søkereMarkedForDeletion: MutableList<String> = mutableListOf()
 fun Routing.devTools(kafka: Kafka, topics: Topics) {
     val søkerProducer = kafka.createProducer(topics.søkere)
 
@@ -101,6 +105,7 @@ fun Routing.devTools(kafka: Kafka, topics: Topics) {
         get {
             val personident = call.parameters.getOrFail("personident")
             søkerProducer.tombstone(personident).also {
+                søkereMarkedForDeletion.add(personident)
                 log.info("produced tombstone [${topics.søkere.name}] [$personident] [null]")
             }
             call.respondText("Deleted $personident")

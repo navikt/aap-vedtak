@@ -24,7 +24,7 @@ import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 fun main() {
     embeddedServer(Netty, port = 8081) {
         val config = loadConfig<Config>()
-        val kafka = KStreams()
+        val kafka = KStreams(config.kafka)
         val topics = Topics(config.kafka)
         val søknadProducer = kafka.createProducer(topics.søknad)
         val medlemProducer = kafka.createProducer(topics.medlem)
