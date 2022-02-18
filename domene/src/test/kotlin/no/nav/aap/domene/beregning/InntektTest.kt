@@ -1,10 +1,14 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.desember
+import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
 import no.nav.aap.februar
 import no.nav.aap.januar
+import no.nav.aap.mars
+import no.nav.aap.april
+import no.nav.aap.mai
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.Year
@@ -37,6 +41,19 @@ internal class InntektTest {
         val inntekter = inntekterFor(januar(2021) til februar(2021))
         val sum = inntekter.summerInntekt()
         assertEquals(Beløp(2.0), sum)
+    }
+
+    @Test
+    fun `Summerer en liste med inntekter`() {
+        val inntekter = listOf(
+            Inntekt(Arbeidsgiver(), januar(2020), 12000.beløp),
+            Inntekt(Arbeidsgiver(), februar(2020), 13000.beløp),
+            Inntekt(Arbeidsgiver(), mars(2020), 14000.beløp),
+            Inntekt(Arbeidsgiver(), april(2020), 12000.beløp),
+            Inntekt(Arbeidsgiver(), mai(2020), 12000.beløp)
+        )
+        val sum = inntekter.summerInntekt()
+        assertEquals(Beløp(63000.0), sum)
     }
 
     @Test
