@@ -130,6 +130,7 @@ internal class Sak private constructor(
             tilstand = tilstandsnavn.name,
             vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
             vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+            vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
             vedtak = null
         )
     }
@@ -244,9 +245,9 @@ internal class Sak private constructor(
             tilstand = tilstandsnavn.name,
             vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
             vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+            vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
             vedtak = sak.vedtak.toDto()
         )
-
     }
 
     private object IkkeOppfylt : Tilstand {
@@ -285,6 +286,7 @@ internal class Sak private constructor(
             inntektshistorikk = Inntektshistorikk()
         ).apply {
             vurderingsdato = sak.vurderingsdato
+            vurderingAvBeregningsdato = VurderingAvBeregningsdato.create(sak.vurderingAvBeregningsdato)
         }
     }
 }

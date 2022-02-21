@@ -9,10 +9,7 @@ import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.avro.medlem.v1.ErMedlem
-import no.nav.aap.dto.DtoLøsningParagraf_11_2
-import no.nav.aap.dto.DtoSak
-import no.nav.aap.dto.DtoSøker
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.*
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import org.apache.kafka.streams.TestInputTopic
@@ -346,6 +343,10 @@ internal class ApiTest {
                                 ledd = listOf("LEDD_1"),
                                 tilstand = "SØKNAD_MOTTATT",
                             )
+                        ),
+                        vurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
+                            tilstand = "SØKNAD_MOTTATT",
+                            løsningVurderingAvBeregningsdato = null
                         ),
                         vedtak = null //TODO
                     )

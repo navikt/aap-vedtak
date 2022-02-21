@@ -27,7 +27,7 @@ dependencies {
     implementation("io.ktor:ktor-metrics-micrometer:1.6.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.3")
 
-    implementation("no.nav.aap.avro:vedtak:1.1.5")
+    implementation("no.nav.aap.avro:vedtak:1.1.10")
     implementation("no.nav.aap.avro:medlem:1.1.3")
 
     implementation("no.nav.security:token-validation-ktor:1.3.16")

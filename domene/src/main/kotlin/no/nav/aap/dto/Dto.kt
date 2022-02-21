@@ -15,6 +15,7 @@ data class DtoSak(
     val tilstand: String,
     val vilkårsvurderinger: List<DtoVilkårsvurdering>,
     val vurderingsdato: LocalDate,
+    val vurderingAvBeregningsdato: DtoVurderingAvBeregningsdato,
     val vedtak: DtoVedtak?
 )
 
@@ -39,6 +40,15 @@ data class DtoLøsningParagraf_11_5(val grad: Int)
 data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean)
 data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean)
 data class DtoLøsningParagraf_11_29(val erOppfylt: Boolean)
+
+data class DtoVurderingAvBeregningsdato(
+    val tilstand: String,
+    val løsningVurderingAvBeregningsdato: DtoLøsningVurderingAvBeregningsdato?
+)
+
+data class DtoLøsningVurderingAvBeregningsdato(
+    val beregningsdato: LocalDate
+)
 
 data class DtoVedtak(
     val innvilget: Boolean,

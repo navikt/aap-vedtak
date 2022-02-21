@@ -19,6 +19,7 @@ fun Sak.toDto(): DtoSak = DtoSak(
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
     vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto),
+    vurderingAvBeregningsdato = vurderingAvBeregningsdato.toDto(),
     vedtak = null //TODO
 )
 
@@ -34,6 +35,15 @@ fun Vilkarsvurdering.toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
     løsning_11_6_manuell = losning116Manuell?.let { DtoLøsningParagraf_11_6(it.erOppfylt) },
     løsning_11_12_ledd1_manuell = losning1112L1Manuell?.let { DtoLøsningParagraf_11_12_ledd1(it.erOppfylt) },
     løsning_11_29_manuell = losning1129Manuell?.let { DtoLøsningParagraf_11_29(it.erOppfylt) },
+)
+
+fun VurderingAvBeregningsdato.toDto(): DtoVurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
+    tilstand = tilstand,
+    løsningVurderingAvBeregningsdato = losningVurderingAvBeregningsdato?.toDto()
+)
+
+fun LosningVurderingAvBeregningsdato.toDto(): DtoLøsningVurderingAvBeregningsdato = DtoLøsningVurderingAvBeregningsdato(
+    beregningsdato = beregningsdato
 )
 
 fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
@@ -81,6 +91,14 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
                     }
                 )
                 .setVurderingsdato(sak.vurderingsdato)
+                .setVurderingAvBeregningsdato(
+                    VurderingAvBeregningsdato.newBuilder()
+                        .setTilstand(sak.vurderingAvBeregningsdato.tilstand)
+                        .setLosningVurderingAvBeregningsdato(sak.vurderingAvBeregningsdato.løsningVurderingAvBeregningsdato?.let {
+                            LosningVurderingAvBeregningsdato(it.beregningsdato)
+                        })
+                        .build()
+                )
                 .build()
         }
     ).build()

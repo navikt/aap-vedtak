@@ -85,10 +85,7 @@ internal class InntektsgrunnlagTest {
 
         val totalGrunnlagsfaktor =
             Grunnlagsfaktor(4.0458802824) + Grunnlagsfaktor(3.966168582) + Grunnlagsfaktor(3.8198556095)
-        assertEquals(
-            totalGrunnlagsfaktor / 3 * 106399.beløp,
-            grunnlagForDag
-        )
+        assertEquals(totalGrunnlagsfaktor / 3 * 106399.beløp, grunnlagForDag)
     }
 
     @Test

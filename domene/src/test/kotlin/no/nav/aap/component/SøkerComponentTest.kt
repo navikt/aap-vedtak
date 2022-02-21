@@ -1,5 +1,6 @@
 package no.nav.aap.component
 
+import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.beregning.Arbeidsgiver
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
@@ -7,6 +8,7 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
+import no.nav.aap.dto.DtoSøker
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.*
@@ -323,6 +325,43 @@ internal class SøkerComponentTest {
         )
 
         val dtoSøker = søker.toDto()
+
+        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
+    }
+
+    @Test
+    fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt - med serialisering og deserialisering`() {
+        val fødselsdato = Fødselsdato(17 juli 1995)
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        var dtoSøker: DtoSøker = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
+
+        fun medSøker(block: Søker.() -> Unit) {
+            val create = Søker.create(dtoSøker)
+            block(create)
+            dtoSøker = create.toDto()
+        }
+
+        medSøker { håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_3(true)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50))) }
+        medSøker { håndterLøsning(LøsningParagraf_11_6(true)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_12FørsteLedd(true)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_29(true)) }
+        medSøker { håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021)) }
+        medSøker {
+            håndterLøsning(
+                LøsningInntekter(
+                    listOf(
+                        Inntekt(Arbeidsgiver(), januar(2020), 500000.beløp),
+                        Inntekt(Arbeidsgiver(), januar(2019), 500000.beløp),
+                        Inntekt(Arbeidsgiver(), januar(2018), 500000.beløp)
+                    )
+                )
+            )
+        }
+
 
         assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
