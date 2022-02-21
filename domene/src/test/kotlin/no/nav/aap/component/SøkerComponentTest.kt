@@ -338,9 +338,9 @@ internal class SøkerComponentTest {
         var dtoSøker: DtoSøker = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
 
         fun medSøker(block: Søker.() -> Unit) {
-            val create = Søker.create(dtoSøker)
-            block(create)
-            dtoSøker = create.toDto()
+            val søker = Søker.create(dtoSøker)
+            block(søker)
+            dtoSøker = søker.toDto()
         }
 
         medSøker { håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)) }
@@ -361,7 +361,7 @@ internal class SøkerComponentTest {
                 )
             )
         }
-
+        medSøker {  }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
 
         assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)

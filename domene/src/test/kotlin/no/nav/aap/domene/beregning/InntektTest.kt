@@ -75,9 +75,9 @@ internal class InntektTest {
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
         assertEquals(
             listOf(
-                InntektsgrunnlagForÅr(Year.of(2019), inntekter.subList(0, 12)),
-                InntektsgrunnlagForÅr(Year.of(2020), inntekter.subList(12, 24)),
-                InntektsgrunnlagForÅr(Year.of(2021), inntekter.subList(24, 36))
+                InntektsgrunnlagForÅr.create(Year.of(2019), inntekter.subList(0, 12)),
+                InntektsgrunnlagForÅr.create(Year.of(2020), inntekter.subList(12, 24)),
+                InntektsgrunnlagForÅr.create(Year.of(2021), inntekter.subList(24, 36))
             ),
             inntekterSisteÅr
         )
@@ -89,9 +89,9 @@ internal class InntektTest {
         val inntekterSisteÅr = inntekter.inntektSiste3Kalenderår(Year.of(2021))
         assertEquals(
             listOf(
-                InntektsgrunnlagForÅr(Year.of(2019), inntekter.subList(12, 24)),
-                InntektsgrunnlagForÅr(Year.of(2020), inntekter.subList(24, 36)),
-                InntektsgrunnlagForÅr(Year.of(2021), inntekter.subList(36, 48))
+                InntektsgrunnlagForÅr.create(Year.of(2019), inntekter.subList(12, 24)),
+                InntektsgrunnlagForÅr.create(Year.of(2020), inntekter.subList(24, 36)),
+                InntektsgrunnlagForÅr.create(Year.of(2021), inntekter.subList(36, 48))
             ),
             inntekterSisteÅr
         )

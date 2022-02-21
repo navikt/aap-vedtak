@@ -16,8 +16,15 @@ import java.time.Year
 
 internal class TidsperiodeTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
-        Inntektsgrunnlag(beregningsdato, this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)), fødselsdato)
+    private fun Iterable<Inntekt>.inntektsgrunnlag(
+        beregningsdato: LocalDate,
+        fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)
+    ) =
+        Inntektsgrunnlag.create(
+            beregningsdato,
+            this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)),
+            fødselsdato
+        )
 
     @Test
     fun `Når man oppretter en ny tidsperiode med dato og grunnlag, får man en liste med dager med beløp`() {

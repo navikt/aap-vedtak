@@ -15,8 +15,15 @@ import java.time.Year
 
 internal class TidslinjeTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
-        Inntektsgrunnlag(beregningsdato, this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)), fødselsdato)
+    private fun Iterable<Inntekt>.inntektsgrunnlag(
+        beregningsdato: LocalDate,
+        fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)
+    ) =
+        Inntektsgrunnlag.create(
+            beregningsdato,
+            this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)),
+            fødselsdato
+        )
 
     @Test
     fun `Når man oppretter en ny tidslinje med startdato og grunnlag, får man en periode med dager med beløp`() {

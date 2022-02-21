@@ -72,7 +72,7 @@ data class DtoInntektsgrunnlagForÅr(
     val beløpFørJustering: Double,
     val beløpJustertFor6G: Double,
     val erBeløpJustertFor6G: Boolean,
-    val beregningsfaktor: Double
+    val grunnlagsfaktor: Double
 )
 
 data class DtoInntekt(

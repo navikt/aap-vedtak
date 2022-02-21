@@ -19,4 +19,14 @@ internal class Vedtak(
         vedtaksdato = vedtaksdato,
         virkningsdato = virkningsdato
     )
+
+    internal companion object {
+        internal fun create(dtoVedtak: DtoVedtak) = Vedtak(
+            innvilget = dtoVedtak.innvilget,
+            inntektsgrunnlag = Inntektsgrunnlag.create(dtoVedtak.inntektsgrunnlag),
+            søknadstidspunkt = dtoVedtak.søknadstidspunkt,
+            vedtaksdato = dtoVedtak.vedtaksdato,
+            virkningsdato = dtoVedtak.virkningsdato
+        )
+    }
 }

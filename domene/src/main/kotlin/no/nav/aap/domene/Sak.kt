@@ -133,6 +133,11 @@ internal class Sak private constructor(
             vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
             vedtak = null
         )
+
+        fun restoreData(sak: Sak, dtoSak: DtoSak) {
+            sak.vurderingsdato = dtoSak.vurderingsdato
+            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.create(dtoSak.vurderingAvBeregningsdato)
+        }
     }
 
     private object Start : Tilstand {
@@ -248,6 +253,13 @@ internal class Sak private constructor(
             vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
             vedtak = sak.vedtak.toDto()
         )
+
+        override fun restoreData(sak: Sak, dtoSak: DtoSak) {
+            sak.vurderingsdato = dtoSak.vurderingsdato
+            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.create(dtoSak.vurderingAvBeregningsdato)
+            val dtoVedtak = requireNotNull(dtoSak.vedtak)
+            sak.vedtak = Vedtak.create(dtoVedtak)
+        }
     }
 
     private object IkkeOppfylt : Tilstand {
@@ -274,9 +286,9 @@ internal class Sak private constructor(
 
         internal fun Iterable<Sak>.toDto() = map { sak -> sak.toDto() }
 
-        internal fun create(sak: DtoSak): Sak = Sak(
-            vilkårsvurderinger = sak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(),
-            tilstand = when (Tilstand.Tilstandsnavn.valueOf(sak.tilstand)) {
+        internal fun create(dtoSak: DtoSak): Sak = Sak(
+            vilkårsvurderinger = dtoSak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(),
+            tilstand = when (Tilstand.Tilstandsnavn.valueOf(dtoSak.tilstand)) {
                 Tilstand.Tilstandsnavn.START -> Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> BeregnInntekt
@@ -285,8 +297,7 @@ internal class Sak private constructor(
             },
             inntektshistorikk = Inntektshistorikk()
         ).apply {
-            vurderingsdato = sak.vurderingsdato
-            vurderingAvBeregningsdato = VurderingAvBeregningsdato.create(sak.vurderingAvBeregningsdato)
+            this.tilstand.restoreData(this, dtoSak)
         }
     }
 }
