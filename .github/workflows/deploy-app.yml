@@ -27,13 +27,14 @@ jobs:
 
 #      - uses: gradle/wrapper-validation-action@v1
       - run: export JAVA_HOME=$JAVA_HOME_17_X64
+      - run: chmod +x gradlew
       - uses: gradle/gradle-build-action@v2.1.3
         with:
           arguments: test app:shadowJar --continue --no-daemon
           gradle-home-cache-excludes: |
             caches/build-cache-1
             wrapper
-          gradle-executable: /usr/share/gradle
+          gradle-executable: ./
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 
