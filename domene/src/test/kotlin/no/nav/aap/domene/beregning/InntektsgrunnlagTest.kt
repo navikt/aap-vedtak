@@ -15,9 +15,6 @@ import java.time.Year
 
 internal class InntektsgrunnlagTest {
 
-    private fun Iterable<Inntekt>.inntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)) =
-        Inntektsgrunnlag(beregningsdato, this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)), fødselsdato)
-
     @Test
     fun `Hvis vi beregner grunnlag for en bruker uten inntekt, blir grunnlaget 0`() {
         val grunnlag = Inntektsgrunnlag(1 januar 2022, emptyList(), Fødselsdato(1 januar 1970))
@@ -86,7 +83,12 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(Grunnlagsfaktor(4.045880 + 3.966168 + 3.819855) / 3 * 106399.beløp, grunnlagForDag)
+        val totalGrunnlagsfaktor =
+            Grunnlagsfaktor(4.0458802824) + Grunnlagsfaktor(3.966168582) + Grunnlagsfaktor(3.8198556095)
+        assertEquals(
+            totalGrunnlagsfaktor / 3 * 106399.beløp,
+            grunnlagForDag
+        )
     }
 
     @Test
@@ -99,7 +101,9 @@ internal class InntektsgrunnlagTest {
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
-        assertEquals(Grunnlagsfaktor(4.045880 + 3.966169 + 1.909928) / 3 * 106399.beløp, grunnlagForDag)
+        val totalGrunnlagsfaktor =
+            Grunnlagsfaktor(4.0458802824) + Grunnlagsfaktor(3.966168582) + Grunnlagsfaktor(1.9099278047)
+        assertEquals(totalGrunnlagsfaktor / 3 * 106399.beløp, grunnlagForDag)
     }
 
     @Test
@@ -173,4 +177,14 @@ internal class InntektsgrunnlagTest {
 
         assertEquals(377296.39.beløp, grunnlagForDag)
     }
+
+    private fun Iterable<Inntekt>.inntektsgrunnlag(
+        beregningsdato: LocalDate,
+        fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)
+    ) =
+        Inntektsgrunnlag(
+            beregningsdato,
+            this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)),
+            fødselsdato
+        )
 }

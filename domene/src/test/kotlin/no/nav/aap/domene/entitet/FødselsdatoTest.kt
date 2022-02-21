@@ -1,7 +1,6 @@
 package no.nav.aap.domene.entitet
 
 import no.nav.aap.desember
-import no.nav.aap.domene.beregning.Grunnbeløp
 import no.nav.aap.februar
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions.*

@@ -7,6 +7,8 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
 
     private val verdi: Double = round(verdi.toDouble() * 1_000_000) / 1_000_000
 
+    internal operator fun plus(addend: Grunnlagsfaktor) = Grunnlagsfaktor(this.verdi + addend.verdi)
+
     internal operator fun times(faktor: Beløp): Beløp = faktor * verdi
 
     internal operator fun div(nevner: Int) = Grunnlagsfaktor(verdi / nevner)
@@ -30,7 +32,5 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
         return true
     }
 
-    override fun hashCode(): Int {
-        return verdi.hashCode()
-    }
+    override fun hashCode() = verdi.hashCode()
 }
