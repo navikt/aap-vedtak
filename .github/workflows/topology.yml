@@ -13,9 +13,6 @@ jobs:
     name: Generate Topology
     steps:
       - uses: actions/checkout@v2
-        with:
-          token: ${{ secrets.PAT }}
-
       - uses: actions/setup-java@v2
         with:
           java-version: 17
@@ -23,6 +20,7 @@ jobs:
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: app:test --tests no.nav.aap.GenerateUML --no-daemon
+
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-tsvg doc/topology.puml'
@@ -36,4 +34,5 @@ jobs:
         run: |
           git add doc/topology.svg
           git commit -m "Oppdaterer topology.svg"
+          git pull --rebase
           git push --force-with-lease
