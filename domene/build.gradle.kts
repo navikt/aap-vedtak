@@ -17,9 +17,15 @@ dependencies {
 tasks {
     withType<KotlinCompile> {
         kotlinOptions.jvmTarget = "17"
+        dependsOn("installGitHooks")
     }
 
     withType<Test> {
         useJUnitPlatform()
+    }
+
+    register("installGitHooks", Copy::class) {
+        from(File(rootProject.rootDir, ".githooks"))
+        into(File(rootProject.rootDir, ".git/hooks"))
     }
 }
