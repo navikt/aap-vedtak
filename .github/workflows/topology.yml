@@ -13,6 +13,9 @@ jobs:
     name: Generate Topology
     steps:
       - uses: actions/checkout@v2
+        with:
+          token: ${{ secrets.PAT }}
+
       - uses: actions/setup-java@v2
         with:
           java-version: 17
@@ -23,15 +26,14 @@ jobs:
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-tsvg doc/topology.puml'
+
+      - name: Configure Git User
+        run: |
+          git config --global user.name topology
+          git config --global user.email topology@users.noreply.github.com
+
       - name: Update doc/topology.svg
         run: |
-          git config --local user.name topology
-          git config --local user.email topology@users.noreply.github.com
           git add doc/topology.svg
-          git remote add topology "https://${{ github.actor }}${{ secrets.PAT }}@github.com/${{ github.repository }}.git"
-          git show-ref
-          git branch --verbose
           git commit -m "Oppdaterer topology.svg"
-          git checkout main
-          git pull --rebase topology main
           git push topology main --force-with-lease
