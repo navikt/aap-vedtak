@@ -9,9 +9,7 @@ echo " ***** Domain tests running *****"
 # Stash any unstaged changes (pre-push is already committed)
 git stash -q --keep-index
 
-# For a snappy experience we only test the domain.
-# The application tests is not frequently changed and we tolerate the pipeline to fail on these situations.
-./gradlew domene:test
+./gradlew test
 
 result=$?
 
