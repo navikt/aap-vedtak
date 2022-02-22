@@ -13,37 +13,25 @@ jobs:
     name: Generate Topology
     steps:
       - uses: actions/checkout@v2
-        with:
-          fetch-depth: 2
-
       - uses: actions/setup-java@v2
         with:
           java-version: 17
           distribution: 'temurin'
-          check-latest: true
-
-      - uses: gradle/wrapper-validation-action@v1
       - uses: gradle/gradle-build-action@v2
         with:
           arguments: app:test --tests no.nav.aap.GenerateUML --no-daemon
-
-      - uses: dorny/test-reporter@v1.5.0
-        if: always()
-        with:
-          name: 🧬 Test results
-          path: "**/build/test-results/test/TEST-*.xml"
-          reporter: java-junit
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-tsvg doc/topology.puml'
-
       - name: Update doc/topology.svg
         run: |
-          git config --local user.name github-actions[bot]
-          git config --local user.email github-actions[bot]@users.noreply.github.com
+          git config --local user.name topology
+          git config --local user.email topology@users.noreply.github.com
           git add doc/topology.svg
-          url="https://${{ secrets.PAT }}@github.com/${{ github.repository }}.git"
+          git remote add topology "https://${{ github.actor }}${{ secrets.PAT }}@github.com/${{ github.repository }}.git"
+          git show-ref
+          git branch --verbose
           git commit -m "Oppdaterer topology.svg"
-          git push "$url" --force-with-lease
+          git checkout main
+          git pull --rebase topology main
+          git push topology main --force-with-lease
