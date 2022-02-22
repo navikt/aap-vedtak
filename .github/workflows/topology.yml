@@ -43,8 +43,5 @@ jobs:
           git config --local user.name  ${{ github.actor }}
           git add doc/topology.png
           git commit -m "Oppdaterer topology.png"
-
-      - uses: ad-m/github-push-action@master
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          force: true
+          url="https://${{ github.actor }}:${{ github.token }}@github.com/${{ github.repository }}.git"
+          git push "$url" --force-with-lease
