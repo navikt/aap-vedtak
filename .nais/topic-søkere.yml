@@ -15,3 +15,6 @@ spec:
     - team: aap
       application: vedtak
       access: readwrite
+    - team: aap
+      application: sink
+      access: read
