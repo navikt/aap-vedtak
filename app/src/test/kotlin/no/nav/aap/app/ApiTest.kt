@@ -357,6 +357,104 @@ internal class ApiTest {
         }
     }
 
+    @Test
+    fun `søker får innvilget vedtak`() {
+        withTestApp { mocks ->
+            initializeTopics(mocks.kafka)
+
+            søknadTopic.produce("123") {
+                JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
+            }
+
+            val medlemBehov = medlemOutputTopic.readValue()
+            assertNull(medlemBehov.response)
+            assertNotNull(medlemBehov.request)
+            assertNotNull(medlemBehov.request.mottattDato)
+            assertEquals(false, medlemBehov.request.arbeidetUtenlands)
+            assertEquals("AAP", medlemBehov.request.ytelse)
+
+            // midlertidig
+            val medlemLøsning = medlemOutputTopic.readValue()
+            assertNotNull(medlemLøsning.response)
+            assertEquals(ErMedlem.JA, medlemLøsning.response.erMedlem)
+            assertEquals("flotters", medlemLøsning.response.begrunnelse)
+
+//            medlemTopic.produce(key = "NO THE ID WE WANT") {
+//                medlemBehov.apply {
+//                    response = Response.newBuilder()
+//                        .setErMedlem(ErMedlem.JA)
+//                        .build()
+//                }
+//            }
+
+            println(søkerOutputTopic.readValuesToList())
+
+            val søker = stateStore["123"]
+            assertNotNull(søker)
+            val actual = søker.toDto()
+            val expected = DtoSøker(
+                personident = "123",
+                fødselsdato = LocalDate.now().minusYears(40),
+                saker = listOf(
+                    DtoSak(
+                        tilstand = "SØKNAD_MOTTATT",
+                        vurderingsdato = LocalDate.now(),
+                        vilkårsvurderinger = listOf(
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_2",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "OPPFYLT_MASKINELT",
+                                løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_3",
+                                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "OPPFYLT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_4",
+                                ledd = listOf("LEDD_2", "LEDD_3"),
+                                tilstand = "IKKE_RELEVANT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_5",
+                                ledd = listOf("LEDD_1", "LEDD_2"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_6",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_12",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            ),
+                            DtoVilkårsvurdering(
+                                paragraf = "PARAGRAF_11_29",
+                                ledd = listOf("LEDD_1"),
+                                tilstand = "SØKNAD_MOTTATT",
+                            )
+                        ),
+                        vurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
+                            tilstand = "SØKNAD_MOTTATT",
+                            løsningVurderingAvBeregningsdato = null
+                        ),
+                        vedtak = null //TODO
+                    )
+                )
+            )
+
+            assertEquals(expected, actual)
+        }
+    }
+
     companion object {
         internal fun initializeTopics(kafka: KStreamsMock) {
             søknadTopic = kafka.inputJsonTopic("aap.aap-soknad-sendt.v1")
