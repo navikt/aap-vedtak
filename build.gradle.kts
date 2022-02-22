@@ -10,3 +10,10 @@ subprojects {
         mavenCentral()
     }
 }
+
+tasks {
+    register<Copy>("installGitHooks") {
+        from(File(rootProject.rootDir, ".githooks"))
+        into(File(rootProject.rootDir, ".git/hooks"))
+    }
+}
