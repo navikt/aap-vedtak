@@ -1,5 +1,5 @@
 @startuml
-!theme lightgray
+!theme black-knight
 queue "aap.medlem.v1" <<topic>> as aap_medlem_v1
 queue "aap.sokere.v1" <<topic>> as aap_sokere_v1
 queue "aap.aap-soknad-sendt.v1" <<topic>> as aap_aap_soknad_sendt_v1

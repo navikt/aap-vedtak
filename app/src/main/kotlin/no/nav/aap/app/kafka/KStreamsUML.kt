@@ -137,7 +137,7 @@ object KStreamsUML {
         override fun toString(): String =
             """
                 | @startuml
-                | !theme lightgray
+                | !theme black-knight
                 | ${queue.joinToString(EOL)}
                 | ${packages.joinToString(EOL) { it.toString() }}
                 | @enduml
