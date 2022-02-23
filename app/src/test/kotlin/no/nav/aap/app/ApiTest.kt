@@ -9,6 +9,7 @@ import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.avro.medlem.v1.ErMedlem
+import no.nav.aap.avro.vedtak.v1.LosningVurderingAvBeregningsdato
 import no.nav.aap.dto.*
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
@@ -16,11 +17,25 @@ import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
 import org.apache.kafka.streams.state.KeyValueStore
 import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
+import java.time.Year
+import java.time.YearMonth
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
+import no.nav.aap.avro.vedtak.v1.Inntekt as AvroInntekt
+import no.nav.aap.avro.vedtak.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.vedtak.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
+import no.nav.aap.avro.vedtak.v1.Losning_11_2 as AvroLøsning_11_2
+import no.nav.aap.avro.vedtak.v1.Losning_11_29 as AvroLøsning_11_29
+import no.nav.aap.avro.vedtak.v1.Losning_11_3 as AvroLøsning_11_3
+import no.nav.aap.avro.vedtak.v1.Losning_11_4_l2_l3 as AvroLøsning_11_4_l2_l3
+import no.nav.aap.avro.vedtak.v1.Losning_11_5 as AvroLøsning_11_5
+import no.nav.aap.avro.vedtak.v1.Losning_11_6 as AvroLøsning_11_6
 import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.vedtak.v1.Vilkarsvurdering as AvroVilkårsvurdering
+import no.nav.aap.avro.vedtak.v1.VurderingAvBeregningsdato as AvroVurderingAvBeregningsdato
 
 internal class ApiTest {
 
@@ -357,6 +372,7 @@ internal class ApiTest {
         }
     }
 
+    @Disabled("Deaktiverer denne testen til vi lander hvordan vi skal løse behov og løsninger")
     @Test
     fun `søker får innvilget vedtak`() {
         withTestApp { mocks ->
@@ -366,38 +382,103 @@ internal class ApiTest {
                 JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
             }
 
-            val medlemBehov = medlemOutputTopic.readValue()
-            assertNull(medlemBehov.response)
-            assertNotNull(medlemBehov.request)
-            assertNotNull(medlemBehov.request.mottattDato)
-            assertEquals(false, medlemBehov.request.arbeidetUtenlands)
-            assertEquals("AAP", medlemBehov.request.ytelse)
+            fun svar(
+                key: String,
+                paragraf: String,
+                ledd: List<String>,
+                tilstand: String,
+                losning_11_2_manuell: AvroLøsning_11_2? = null,
+                losning_11_2_maskinell: AvroLøsning_11_2? = null,
+                losning_11_3_manuell: AvroLøsning_11_3? = null,
+                losning_11_4_l2_l3_manuell: AvroLøsning_11_4_l2_l3? = null,
+                losning_11_5_manuell: AvroLøsning_11_5? = null,
+                losning_11_6_manuell: AvroLøsning_11_6? = null,
+                losning_11_12_l1_manuell: AvroLøsning_11_12_l1? = null,
+                losning_11_29_manuell: AvroLøsning_11_29? = null
+            ) {
+                løsningTopic.produce(key) {
+                    AvroVilkårsvurdering(
+                        paragraf,
+                        ledd,
+                        tilstand,
+                        losning_11_2_manuell,
+                        losning_11_2_maskinell,
+                        losning_11_3_manuell,
+                        losning_11_4_l2_l3_manuell,
+                        losning_11_5_manuell,
+                        losning_11_6_manuell,
+                        losning_11_12_l1_manuell,
+                        losning_11_29_manuell
+                    )
+                }
+            }
 
-            // midlertidig
-            val medlemLøsning = medlemOutputTopic.readValue()
-            assertNotNull(medlemLøsning.response)
-            assertEquals(ErMedlem.JA, medlemLøsning.response.erMedlem)
-            assertEquals("flotters", medlemLøsning.response.begrunnelse)
+            svar(
+                key = "123",
+                paragraf = "PARAGRAF_11_3",
+                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                tilstand = "SØKNAD_MOTTATT",
+                losning_11_3_manuell = AvroLøsning_11_3(true)
+            )
+            svar(
+                key = "123",
+                paragraf = "PARAGRAF_11_5",
+                ledd = listOf("LEDD_1", "LEDD_2"),
+                tilstand = "SØKNAD_MOTTATT",
+                losning_11_5_manuell = AvroLøsning_11_5(60)
+            )
+            svar(
+                key = "123",
+                paragraf = "PARAGRAF_11_6",
+                ledd = listOf("LEDD_1"),
+                tilstand = "SØKNAD_MOTTATT",
+                losning_11_6_manuell = AvroLøsning_11_6(true)
+            )
+            svar(
+                key = "123",
+                paragraf = "PARAGRAF_11_12",
+                ledd = listOf("LEDD_1"),
+                tilstand = "SØKNAD_MOTTATT",
+                losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true)
+            )
+            svar(
+                key = "123",
+                paragraf = "PARAGRAF_11_29",
+                ledd = listOf("LEDD_1"),
+                tilstand = "SØKNAD_MOTTATT",
+                losning_11_29_manuell = AvroLøsning_11_29(true)
+            )
 
-//            medlemTopic.produce(key = "NO THE ID WE WANT") {
-//                medlemBehov.apply {
-//                    response = Response.newBuilder()
-//                        .setErMedlem(ErMedlem.JA)
-//                        .build()
-//                }
-//            }
+            vurderingAvBeregningsdatoTopic.produce("123") {
+                AvroVurderingAvBeregningsdato(
+                    "SØKNAD_MOTTATT",
+                    LosningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
+                )
+            }
+
+            inntekterTopic.produce("123") {
+                AvroInntekter(
+                    listOf(
+                        AvroInntekt("321", LocalDate.of(2021, 1, 1), 400000.0),
+                        AvroInntekt("321", LocalDate.of(2020, 1, 1), 400000.0),
+                        AvroInntekt("321", LocalDate.of(2019, 1, 1), 400000.0)
+                    )
+                )
+            }
 
             println(søkerOutputTopic.readValuesToList())
 
             val søker = stateStore["123"]
             assertNotNull(søker)
             val actual = søker.toDto()
+            assertNotNull(actual.saker.firstOrNull()?.vedtak) { "Saken mangler vedtak - $actual" }
+            val søknadstidspunkt = actual.saker.first().vedtak!!.søknadstidspunkt
             val expected = DtoSøker(
                 personident = "123",
                 fødselsdato = LocalDate.now().minusYears(40),
                 saker = listOf(
                     DtoSak(
-                        tilstand = "SØKNAD_MOTTATT",
+                        tilstand = "VEDTAK_FATTET",
                         vurderingsdato = LocalDate.now(),
                         vilkårsvurderinger = listOf(
                             DtoVilkårsvurdering(
@@ -409,7 +490,8 @@ internal class ApiTest {
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_3",
                                 ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-                                tilstand = "SØKNAD_MOTTATT",
+                                tilstand = "OPPFYLT",
+                                løsning_11_3_manuell = DtoLøsningParagraf_11_3(true)
                             ),
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_4",
@@ -424,29 +506,90 @@ internal class ApiTest {
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_5",
                                 ledd = listOf("LEDD_1", "LEDD_2"),
-                                tilstand = "SØKNAD_MOTTATT",
+                                tilstand = "OPPFYLT",
+                                løsning_11_5_manuell = DtoLøsningParagraf_11_5(60)
                             ),
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_6",
                                 ledd = listOf("LEDD_1"),
-                                tilstand = "SØKNAD_MOTTATT",
+                                tilstand = "OPPFYLT",
+                                løsning_11_6_manuell = DtoLøsningParagraf_11_6(true)
                             ),
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_12",
                                 ledd = listOf("LEDD_1"),
-                                tilstand = "SØKNAD_MOTTATT",
+                                tilstand = "OPPFYLT",
+                                løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(true)
                             ),
                             DtoVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_29",
                                 ledd = listOf("LEDD_1"),
-                                tilstand = "SØKNAD_MOTTATT",
+                                tilstand = "OPPFYLT",
+                                løsning_11_29_manuell = DtoLøsningParagraf_11_29(true)
                             )
                         ),
                         vurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
-                            tilstand = "SØKNAD_MOTTATT",
-                            løsningVurderingAvBeregningsdato = null
+                            tilstand = "FERDIG",
+                            løsningVurderingAvBeregningsdato = DtoLøsningVurderingAvBeregningsdato(
+                                LocalDate.of(2022, 1, 1)
+                            )
                         ),
-                        vedtak = null //TODO
+                        vedtak = DtoVedtak(
+                            innvilget = true,
+                            inntektsgrunnlag = DtoInntektsgrunnlag(
+                                beregningsdato = LocalDate.of(2022, 1, 1),
+                                inntekterSiste3Kalenderår = listOf(
+                                    DtoInntektsgrunnlagForÅr(
+                                        år = Year.of(2021),
+                                        inntekter = listOf(
+                                            DtoInntekt(
+                                                arbeidsgiver = "321",
+                                                inntekstmåned = YearMonth.of(2021, 1),
+                                                beløp = 400000.0
+                                            )
+                                        ),
+                                        beløpFørJustering = 400000.0,
+                                        beløpJustertFor6G = 400000.0,
+                                        erBeløpJustertFor6G = false,
+                                        grunnlagsfaktor = 3.819856
+                                    ),
+                                    DtoInntektsgrunnlagForÅr(
+                                        år = Year.of(2020),
+                                        inntekter = listOf(
+                                            DtoInntekt(
+                                                arbeidsgiver = "321",
+                                                inntekstmåned = YearMonth.of(2020, 1),
+                                                beløp = 400000.0
+                                            )
+                                        ),
+                                        beløpFørJustering = 400000.0,
+                                        beløpJustertFor6G = 400000.0,
+                                        erBeløpJustertFor6G = false,
+                                        grunnlagsfaktor = 3.966169
+                                    ),
+                                    DtoInntektsgrunnlagForÅr(
+                                        år = Year.of(2019),
+                                        inntekter = listOf(
+                                            DtoInntekt(
+                                                arbeidsgiver = "321",
+                                                inntekstmåned = YearMonth.of(2019, 1),
+                                                beløp = 400000.0
+                                            )
+                                        ),
+                                        beløpFørJustering = 400000.0,
+                                        beløpJustertFor6G = 400000.0,
+                                        erBeløpJustertFor6G = false,
+                                        grunnlagsfaktor = 4.04588
+                                    )
+                                ),
+                                fødselsdato = LocalDate.of(1982, 2, 23),
+                                sisteKalenderår = Year.of(2021),
+                                grunnlagsfaktor = 3.943968
+                            ),
+                            søknadstidspunkt = søknadstidspunkt,
+                            vedtaksdato = LocalDate.now(),
+                            virkningsdato = LocalDate.now()
+                        )
                     )
                 )
             )
@@ -459,6 +602,9 @@ internal class ApiTest {
         internal fun initializeTopics(kafka: KStreamsMock) {
             søknadTopic = kafka.inputJsonTopic("aap.aap-soknad-sendt.v1")
             medlemTopic = kafka.inputAvroTopic("aap.medlem.v1")
+            løsningTopic = kafka.inputAvroTopic("aap.losning.v1")
+            vurderingAvBeregningsdatoTopic = kafka.inputAvroTopic("aap.vurdering-av-beregningsdato.v1")
+            inntekterTopic = kafka.inputAvroTopic("aap.inntekter.v1")
             medlemOutputTopic = kafka.outputAvroTopic("aap.medlem.v1")
             søkerOutputTopic = kafka.outputAvroTopic("aap.sokere.v1")
             stateStore = kafka.getKeyValueStore("soker-store")
@@ -470,6 +616,9 @@ internal class ApiTest {
 
         private lateinit var søknadTopic: TestInputTopic<String, JsonSøknad>
         private lateinit var medlemTopic: TestInputTopic<String, AvroMedlem>
+        private lateinit var løsningTopic: TestInputTopic<String, AvroVilkårsvurdering>
+        private lateinit var vurderingAvBeregningsdatoTopic: TestInputTopic<String, AvroVurderingAvBeregningsdato>
+        private lateinit var inntekterTopic: TestInputTopic<String, AvroInntekter>
         private lateinit var medlemOutputTopic: TestOutputTopic<String, AvroMedlem>
         private lateinit var søkerOutputTopic: TestOutputTopic<String, AvroSøker>
         private lateinit var stateStore: KeyValueStore<String, AvroSøker>

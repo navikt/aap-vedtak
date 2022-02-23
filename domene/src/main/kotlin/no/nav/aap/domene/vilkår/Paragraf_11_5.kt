@@ -88,7 +88,11 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
             }
         }
 
-        object SøknadMottatt : Tilstand(tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT, erOppfylt = false, erIkkeOppfylt = false) {
+        object SøknadMottatt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
+            erOppfylt = false,
+            erIkkeOppfylt = false
+        ) {
             override fun onEntry(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {
                 hendelse.opprettBehov(Behov_11_5())
             }
@@ -114,13 +118,37 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
             tilstandsnavn = Tilstandsnavn.OPPFYLT,
             erOppfylt = true,
             erIkkeOppfylt = false
-        )
+        ) {
+            override fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_5_manuell = paragraf.løsning.toDto()
+            )
+
+            override fun restoreData(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
+                val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_manuell)
+                paragraf.løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(løsning.grad))
+            }
+        }
 
         object IkkeOppfylt : Tilstand(
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT,
             erOppfylt = false,
             erIkkeOppfylt = true
-        )
+        ) {
+            override fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                løsning_11_5_manuell = paragraf.løsning.toDto()
+            )
+
+            override fun restoreData(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
+                val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_manuell)
+                paragraf.løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(løsning.grad))
+            }
+        }
 
         internal open fun restoreData(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
@@ -128,13 +156,14 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
         internal open fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
             paragraf = paragraf.paragraf.name,
             ledd = paragraf.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
+            tilstand = tilstandsnavn.name
         )
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
     override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
+
     internal companion object {
         internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_5 =
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)

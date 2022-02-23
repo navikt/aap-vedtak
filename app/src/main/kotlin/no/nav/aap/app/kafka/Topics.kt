@@ -10,6 +10,9 @@ import org.apache.kafka.streams.kstream.Joined
 import org.apache.kafka.streams.kstream.Produced
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.vedtak.v1.Vilkarsvurdering as AvroVilkårsvurdering
+import no.nav.aap.avro.vedtak.v1.VurderingAvBeregningsdato as AvroVurderingAvBeregningsdato
+import no.nav.aap.avro.vedtak.v1.Inntekter as AvroInntekter
 
 data class Topic<K, V>(
     val name: String,
@@ -21,6 +24,9 @@ class Topics(private val config: KafkaConfig) {
     val søknad = Topic("aap.aap-soknad-sendt.v1", Serdes.StringSerde(), jsonSerde<JsonSøknad>())
     val søkere = Topic("aap.sokere.v1", Serdes.StringSerde(), avroSerde<AvroSøker>())
     val medlem = Topic("aap.medlem.v1", Serdes.StringSerde(), avroSerde<AvroMedlem>())
+    val løsning = Topic("aap.losning.v1", Serdes.StringSerde(), avroSerde<AvroVilkårsvurdering>())
+    val vurderingAvBeregningsdato = Topic("aap.vurdering-av-beregningsdato.v1", Serdes.StringSerde(), avroSerde<AvroVurderingAvBeregningsdato>())
+    val inntekter = Topic("aap.inntekter.v1", Serdes.StringSerde(), avroSerde<AvroInntekter>())
 
     private inline fun <reified V : Any> jsonSerde(): Serde<V> = JsonSerde(V::class)
 

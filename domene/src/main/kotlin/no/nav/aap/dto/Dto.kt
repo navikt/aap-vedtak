@@ -1,5 +1,10 @@
 package no.nav.aap.dto
 
+import no.nav.aap.domene.Søker
+import no.nav.aap.domene.beregning.Arbeidsgiver
+import no.nav.aap.domene.beregning.Beløp.Companion.beløp
+import no.nav.aap.domene.beregning.Inntekt
+import no.nav.aap.hendelse.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
@@ -33,13 +38,47 @@ data class DtoVilkårsvurdering(
     val løsning_11_29_manuell: DtoLøsningParagraf_11_29? = null,
 )
 
-data class DtoLøsningParagraf_11_2(val erMedlem: String)
-data class DtoLøsningParagraf_11_3(val erOppfylt: Boolean)
-data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean)
-data class DtoLøsningParagraf_11_5(val grad: Int)
-data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean)
-data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean)
-data class DtoLøsningParagraf_11_29(val erOppfylt: Boolean)
+data class DtoLøsningParagraf_11_2(val erMedlem: String) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_2(enumValueOf(erMedlem)))
+    }
+}
+
+data class DtoLøsningParagraf_11_3(val erOppfylt: Boolean) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_3(erOppfylt))
+    }
+}
+
+data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_4AndreOgTredjeLedd(erOppfylt))
+    }
+}
+
+data class DtoLøsningParagraf_11_5(val grad: Int) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(grad)))
+    }
+}
+
+data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_6(erOppfylt))
+    }
+}
+
+data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd(erOppfylt))
+    }
+}
+
+data class DtoLøsningParagraf_11_29(val erOppfylt: Boolean) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningParagraf_11_29(erOppfylt))
+    }
+}
 
 data class DtoVurderingAvBeregningsdato(
     val tilstand: String,
@@ -48,7 +87,12 @@ data class DtoVurderingAvBeregningsdato(
 
 data class DtoLøsningVurderingAvBeregningsdato(
     val beregningsdato: LocalDate
-)
+) {
+    fun håndter(søker: Søker) {
+        val løsning = LøsningVurderingAvBeregningsdato(beregningsdato)
+        søker.håndterLøsning(løsning)
+    }
+}
 
 data class DtoVedtak(
     val innvilget: Boolean,
@@ -80,3 +124,17 @@ data class DtoInntekt(
     val inntekstmåned: YearMonth,
     val beløp: Double
 )
+
+data class DtoInntekter(
+    val inntekter: List<DtoInntekt>
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterLøsning(LøsningInntekter(inntekter.map {
+            Inntekt(
+                arbeidsgiver = Arbeidsgiver(it.arbeidsgiver),
+                inntekstmåned = it.inntekstmåned,
+                beløp = it.beløp.beløp
+            )
+        }))
+    }
+}

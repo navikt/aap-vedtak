@@ -66,6 +66,10 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     }
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
+    //TODO: Må finne ut om dette er måten å løse det på
+//    løsningStream(søkere, topics)
+//    vurderingAvBeregningsdatoStream(søkere, topics)
+//    inntekterStream(søkere, topics)
     medlemResponseStream(topics)
 }.build()
 
