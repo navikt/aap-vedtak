@@ -7,12 +7,12 @@ import no.nav.aap.app.kafka.produced
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker
+import no.nav.aap.dto.DtoLøsning
 import no.nav.aap.dto.DtoSøker
-import no.nav.aap.dto.DtoVilkårsvurdering
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
+import no.nav.aap.avro.vedtak.v1.Losning as AvroLøsning
 import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
-import no.nav.aap.avro.vedtak.v1.Vilkarsvurdering as AvroVilkårsvurdering
 
 fun StreamsBuilder.løsningStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.løsning.name, topics.løsning.consumed("losning-mottatt"))
@@ -49,9 +49,9 @@ private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): AvroS
     return søker.toDto().toAvro()
 }
 
-private data class LøsningAndSøker(val løsning: DtoVilkårsvurdering, val dtoSøker: DtoSøker) {
+private data class LøsningAndSøker(val løsning: DtoLøsning, val dtoSøker: DtoSøker) {
     companion object {
-        fun create(løsning: AvroVilkårsvurdering, søker: AvroSøker): LøsningAndSøker =
+        fun create(løsning: AvroLøsning, søker: AvroSøker): LøsningAndSøker =
             LøsningAndSøker(løsning.toDto(), søker.toDto())
     }
 }

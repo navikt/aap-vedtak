@@ -10,6 +10,8 @@ import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.avro.medlem.v1.ErMedlem
 import no.nav.aap.avro.vedtak.v1.LosningVurderingAvBeregningsdato
+import no.nav.aap.avro.vedtak.v1.Losning_11_2
+import no.nav.aap.avro.vedtak.v1.Losning_11_4_l2_l3
 import no.nav.aap.dto.*
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
@@ -27,14 +29,12 @@ import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.vedtak.v1.Inntekt as AvroInntekt
 import no.nav.aap.avro.vedtak.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.vedtak.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
-import no.nav.aap.avro.vedtak.v1.Losning_11_2 as AvroLøsning_11_2
 import no.nav.aap.avro.vedtak.v1.Losning_11_29 as AvroLøsning_11_29
 import no.nav.aap.avro.vedtak.v1.Losning_11_3 as AvroLøsning_11_3
-import no.nav.aap.avro.vedtak.v1.Losning_11_4_l2_l3 as AvroLøsning_11_4_l2_l3
 import no.nav.aap.avro.vedtak.v1.Losning_11_5 as AvroLøsning_11_5
 import no.nav.aap.avro.vedtak.v1.Losning_11_6 as AvroLøsning_11_6
 import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
-import no.nav.aap.avro.vedtak.v1.Vilkarsvurdering as AvroVilkårsvurdering
+import no.nav.aap.avro.vedtak.v1.Losning as AvroLøsning
 import no.nav.aap.avro.vedtak.v1.VurderingAvBeregningsdato as AvroVurderingAvBeregningsdato
 
 internal class ApiTest {
@@ -384,23 +384,17 @@ internal class ApiTest {
 
             fun svar(
                 key: String,
-                paragraf: String,
-                ledd: List<String>,
-                tilstand: String,
-                losning_11_2_manuell: AvroLøsning_11_2? = null,
-                losning_11_2_maskinell: AvroLøsning_11_2? = null,
-                losning_11_3_manuell: AvroLøsning_11_3? = null,
-                losning_11_4_l2_l3_manuell: AvroLøsning_11_4_l2_l3? = null,
-                losning_11_5_manuell: AvroLøsning_11_5? = null,
-                losning_11_6_manuell: AvroLøsning_11_6? = null,
-                losning_11_12_l1_manuell: AvroLøsning_11_12_l1? = null,
-                losning_11_29_manuell: AvroLøsning_11_29? = null
+                losning_11_2_manuell: Losning_11_2? = null,
+                losning_11_2_maskinell: Losning_11_2? = null,
+                losning_11_3_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_3? = null,
+                losning_11_4_l2_l3_manuell: Losning_11_4_l2_l3? = null,
+                losning_11_5_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_5? = null,
+                losning_11_6_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_6? = null,
+                losning_11_12_l1_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_12_l1? = null,
+                losning_11_29_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_29? = null
             ) {
                 løsningTopic.produce(key) {
-                    AvroVilkårsvurdering(
-                        paragraf,
-                        ledd,
-                        tilstand,
+                    AvroLøsning(
                         losning_11_2_manuell,
                         losning_11_2_maskinell,
                         losning_11_3_manuell,
@@ -415,37 +409,22 @@ internal class ApiTest {
 
             svar(
                 key = "123",
-                paragraf = "PARAGRAF_11_3",
-                ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-                tilstand = "SØKNAD_MOTTATT",
                 losning_11_3_manuell = AvroLøsning_11_3(true)
             )
             svar(
                 key = "123",
-                paragraf = "PARAGRAF_11_5",
-                ledd = listOf("LEDD_1", "LEDD_2"),
-                tilstand = "SØKNAD_MOTTATT",
                 losning_11_5_manuell = AvroLøsning_11_5(60)
             )
             svar(
                 key = "123",
-                paragraf = "PARAGRAF_11_6",
-                ledd = listOf("LEDD_1"),
-                tilstand = "SØKNAD_MOTTATT",
                 losning_11_6_manuell = AvroLøsning_11_6(true)
             )
             svar(
                 key = "123",
-                paragraf = "PARAGRAF_11_12",
-                ledd = listOf("LEDD_1"),
-                tilstand = "SØKNAD_MOTTATT",
                 losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true)
             )
             svar(
                 key = "123",
-                paragraf = "PARAGRAF_11_29",
-                ledd = listOf("LEDD_1"),
-                tilstand = "SØKNAD_MOTTATT",
                 losning_11_29_manuell = AvroLøsning_11_29(true)
             )
 
@@ -616,7 +595,7 @@ internal class ApiTest {
 
         private lateinit var søknadTopic: TestInputTopic<String, JsonSøknad>
         private lateinit var medlemTopic: TestInputTopic<String, AvroMedlem>
-        private lateinit var løsningTopic: TestInputTopic<String, AvroVilkårsvurdering>
+        private lateinit var løsningTopic: TestInputTopic<String, AvroLøsning>
         private lateinit var vurderingAvBeregningsdatoTopic: TestInputTopic<String, AvroVurderingAvBeregningsdato>
         private lateinit var inntekterTopic: TestInputTopic<String, AvroInntekter>
         private lateinit var medlemOutputTopic: TestOutputTopic<String, AvroMedlem>
