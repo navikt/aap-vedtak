@@ -21,11 +21,13 @@ tasks {
 
     withType<Test> {
         useJUnitPlatform()
-        dependsOn("installGitHooks")
+        //FIXME: Hvis det ikke finnes ucommitede endringer, men har andre endringer i stash, så vil denne poppe forrige endring som ligger i stash
+        //dependsOn("installGitHooks")
     }
 
-    register<Copy>("installGitHooks") {
-        from(File(rootProject.rootDir, ".githooks"))
-        into(File(rootProject.rootDir, ".git/hooks"))
-    }
+    //FIXME: Hvis det ikke finnes ucommitede endringer, men har andre endringer i stash, så vil denne poppe forrige endring som ligger i stash
+//    register<Copy>("installGitHooks") {
+//        from(File(rootProject.rootDir, ".githooks"))
+//        into(File(rootProject.rootDir, ".git/hooks"))
+//    }
 }
