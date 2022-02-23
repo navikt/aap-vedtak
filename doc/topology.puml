@@ -11,16 +11,16 @@ package "Sub-topology: 0" {
 	agent "aap.aap-soknad-sendt.v1-joined-aap.sokere.v1" <<Processor>> as aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	agent "skip-eksisterende-soker" <<Processor>> as skip_eksisterende_soker
 	agent "opprett-soknad" <<Processor>> as opprett_soknad
-	agent "KSTREAM-FLATMAPVALUES-0000000012" <<Processor>> as KSTREAM_FLATMAPVALUES_0000000012
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-source" <<Source>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_source
+	agent "hent-ut-behov" <<Processor>> as hent_ut_behov
 	agent "aap.medlem.v1-joined-aap.sokere.v1" <<Processor>> as aap_medlem_v1_joined_aap_sokere_v1
 	agent "behov-" <<Processor>> as behov_
-	agent "behov-1" <<Processor>> as behov_1
+	agent "behov-medlem" <<Processor>> as behov_medlem
 	agent "filter-idempotent-medlem-losning" <<Processor>> as filter_idempotent_medlem_losning
 	agent "soker-consumed-source" <<Source>> as soker_consumed_source
-	agent "KSTREAM-MAPVALUES-0000000009" <<Processor>> as KSTREAM_MAPVALUES_0000000009
-	agent "KSTREAM-MAPVALUES-0000000015" <<Processor>> as KSTREAM_MAPVALUES_0000000015
 	agent "KSTREAM-MAPVALUES-0000000027" <<Processor>> as KSTREAM_MAPVALUES_0000000027
+	agent "branch-mapper-behov-medlem" <<Processor>> as branch_mapper_behov_medlem
+	agent "hent-ut-soker" <<Processor>> as hent_ut_soker
 	agent "soker-consumed" <<Processor>> as soker_consumed
 	agent "KSTREAM-PEEK-0000000010" <<Processor>> as KSTREAM_PEEK_0000000010
 	agent "KSTREAM-PEEK-0000000016" <<Processor>> as KSTREAM_PEEK_0000000016
@@ -44,18 +44,18 @@ package "Sub-topology: 0" {
 	KSTREAM_PEEK_0000000005 --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	aap_aap_soknad_sendt_v1_joined_aap_sokere_v1 --> skip_eksisterende_soker
 	skip_eksisterende_soker --> opprett_soknad
-	opprett_soknad --> KSTREAM_FLATMAPVALUES_0000000012
-	opprett_soknad --> KSTREAM_MAPVALUES_0000000009
-	KSTREAM_FLATMAPVALUES_0000000012 --> behov_
+	opprett_soknad --> hent_ut_soker
+	opprett_soknad --> hent_ut_behov
 	aap_medlem_v1_joined_aap_sokere_v1_repartition_source --> aap_medlem_v1_joined_aap_sokere_v1
+	hent_ut_behov --> behov_
 	aap_medlem_v1_joined_aap_sokere_v1 --> filter_idempotent_medlem_losning
-	behov_ --> behov_1
-	behov_1 --> KSTREAM_MAPVALUES_0000000015
+	behov_ --> behov_medlem
+	behov_medlem --> branch_mapper_behov_medlem
 	filter_idempotent_medlem_losning --> KSTREAM_MAPVALUES_0000000027
 	soker_consumed_source --> soker_consumed
-	KSTREAM_MAPVALUES_0000000009 --> KSTREAM_PEEK_0000000010
-	KSTREAM_MAPVALUES_0000000015 --> KSTREAM_PEEK_0000000016
 	KSTREAM_MAPVALUES_0000000027 --> KSTREAM_PEEK_0000000028
+	branch_mapper_behov_medlem --> KSTREAM_PEEK_0000000016
+	hent_ut_soker --> KSTREAM_PEEK_0000000010
 	soker_consumed --> KTABLE_TOSTREAM_0000000002
 	KSTREAM_PEEK_0000000010 --> produced_ny_soker
 	KSTREAM_PEEK_0000000016 --> produced_behov_medlem

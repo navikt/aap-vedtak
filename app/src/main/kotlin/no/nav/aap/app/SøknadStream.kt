@@ -9,9 +9,7 @@ import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.hendelse.Søknad
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.Branched
-import org.apache.kafka.streams.kstream.BranchedKStream
-import org.apache.kafka.streams.kstream.KTable
+import org.apache.kafka.streams.kstream.*
 import java.time.LocalDate
 import java.util.*
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
@@ -23,44 +21,49 @@ fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: To
         stream(topics.søknad.name, topics.søknad.consumed("soknad-mottatt"))
             .peek { k: String, v -> log.info("consumed [aap.aap-soknad-sendt.v1] [$k] [$v]") }
             .leftJoin(søkere, SøknadAndSøker::join, topics.søknad.joined(topics.søkere))
-            .filter({ _, (_, søker) -> søker == null }, named("skip-eksisterende-soker"))
+            .filter(named("skip-eksisterende-soker")) { _, (_, søker) -> søker == null }
 
     val søkerOgBehov = søknadAndSøkerStream
         .mapValues(::opprettSøker, named("opprett-soknad"))
 
     søkerOgBehov
-        .mapValues { _, (søker) -> søker }
+        .mapValues(named("hent-ut-soker")) { (søker) -> søker }
         .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
         .to("aap.sokere.v1", topics.søkere.produced("produced-ny-soker"))
 
 
-    val branched = søkerOgBehov
-        .flatMapValues { _, (_, dtoBehov) -> dtoBehov }
+    søkerOgBehov
+        .flatMapValues(named("hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
         .split(named("behov-"))
-
-    branch(branched, topics.medlem, "produced-behov-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
+        .branch(topics.medlem, "medlem", "produced-behov-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
 }
 
-private fun <T : Any> branch(
-    branchedKStream: BranchedKStream<String, DtoBehov>,
-    topic: Topic<String, T>,
+private fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
+    topic: Topic<String, AVROVALUE>,
+    branchName: String,
     producedName: String,
     predicate: (DtoBehov) -> Boolean,
-    getMapper: () -> ToAvro<T>
-) {
-    branchedKStream.branch({ _, value -> predicate(value) }, Branched.withConsumer { chain ->
+    getMapper: () -> MAPPER
+) where MAPPER : ToAvro<AVROVALUE>, MAPPER : Lytter =
+    branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
         chain
-            .mapValues { _, value -> getMapper().also(value::accept).toAvro() }
+            .mapValues(named("branch-mapper-behov-$branchName")) { value -> getMapper().also(value::accept).toAvro() }
             .peek { k: String, v -> log.info("produced [${topic.name}] [$k] [$v]") }
             .to(topic.name, topic.produced(producedName))
-    })
+    }.withName(branchName))
+
+private fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
+private fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (V) -> VR) = mapValues(mapper, named)
+private fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (K, V) -> VR) = mapValues(mapper, named)
+private fun <K, V, VR> KStream<K, V>.flatMapValues(named: Named, mapper: (V) -> Iterable<VR>) =
+    flatMapValues(mapper, named)
+
+
+private interface ToAvro<out AVROVALUE> {
+    fun toAvro(): AVROVALUE
 }
 
-private interface ToAvro<out T> : Lytter {
-    fun toAvro(): T
-}
-
-private class ToAvroMedlem : ToAvro<AvroMedlem> {
+private class ToAvroMedlem : Lytter, ToAvro<AvroMedlem> {
     private lateinit var ident: String
 
     override fun medlem(ident: String) {
@@ -81,9 +84,8 @@ private class ToAvroMedlem : ToAvro<AvroMedlem> {
 private fun opprettSøker(wrapper: SøknadAndSøker): Pair<AvroSøker, List<DtoBehov>> {
     val ident = wrapper.søknad.ident.verdi
     val søknad = Søknad(Personident(ident), Fødselsdato(wrapper.søknad.fødselsdato))
-    val søker = søknad.opprettSøker().apply {
-        håndterSøknad(søknad)
-    }
+    val søker = søknad.opprettSøker()
+    søker.håndterSøknad(søknad)
 
     return søker.toDto().toAvro() to søknad.behov().map { it.toDto(ident) }
 }
