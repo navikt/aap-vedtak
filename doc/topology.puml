@@ -27,7 +27,7 @@ package "Sub-topology: 0" {
 	agent "KSTREAM-PEEK-0000000028" <<Processor>> as KSTREAM_PEEK_0000000028
 	agent "KTABLE-TOSTREAM-0000000002" <<Processor>> as KTABLE_TOSTREAM_0000000002
 	agent "KSTREAM-PROCESSOR-0000000003" <<Processor>> as KSTREAM_PROCESSOR_0000000003
-	agent "produced-behov-medlem" <<Sink>> as produced_behov_medlem
+	agent "branch-medlem-produced-behov" <<Sink>> as branch_medlem_produced_behov
 	agent "produced-ny-soker" <<Sink>> as produced_ny_soker
 	agent "produced-soker-med-medlem" <<Sink>> as produced_soker_med_medlem
 	aap_aap_soknad_sendt_v1 --> soknad_mottatt
@@ -37,7 +37,7 @@ package "Sub-topology: 0" {
 	aap_sokere_v1 --> soker_consumed_source
 	soker_store -- soker_consumed
 	soker_store -- KSTREAM_PROCESSOR_0000000003
-	aap_medlem_v1 <-- produced_behov_medlem
+	aap_medlem_v1 <-- branch_medlem_produced_behov
 	aap_sokere_v1 <-- produced_ny_soker
 	aap_sokere_v1 <-- produced_soker_med_medlem
 	soknad_mottatt --> KSTREAM_PEEK_0000000005
@@ -58,7 +58,7 @@ package "Sub-topology: 0" {
 	hent_ut_soker --> KSTREAM_PEEK_0000000010
 	soker_consumed --> KTABLE_TOSTREAM_0000000002
 	KSTREAM_PEEK_0000000010 --> produced_ny_soker
-	KSTREAM_PEEK_0000000016 --> produced_behov_medlem
+	KSTREAM_PEEK_0000000016 --> branch_medlem_produced_behov
 	KSTREAM_PEEK_0000000028 --> produced_soker_med_medlem
 	KTABLE_TOSTREAM_0000000002 --> KSTREAM_PROCESSOR_0000000003
 }

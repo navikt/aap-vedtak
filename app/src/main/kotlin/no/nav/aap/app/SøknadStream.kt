@@ -48,7 +48,7 @@ private fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
         chain
             .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
             .peek { k: String, v -> log.info("produced [${topic.name}] [$k] [$v]") }
-            .to(topic.name, topic.produced("produced-behov-$branchName"))
+            .to(topic.name, topic.produced("branch-$branchName-produced-behov"))
     }.withName("-branch-$branchName"))
 
 private fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
