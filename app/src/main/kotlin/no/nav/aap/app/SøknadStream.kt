@@ -34,23 +34,22 @@ fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: To
 
     søkerOgBehov
         .flatMapValues(named("hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
-        .split(named("behov-"))
-        .branch(topics.medlem, "medlem", "produced-behov-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
+        .split(named("split-behov"))
+        .branch(topics.medlem, "medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
 }
 
 private fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
     topic: Topic<String, AVROVALUE>,
     branchName: String,
-    producedName: String,
     predicate: (DtoBehov) -> Boolean,
     getMapper: () -> MAPPER
 ) where MAPPER : ToAvro<AVROVALUE>, MAPPER : Lytter =
     branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
         chain
-            .mapValues(named("branch-mapper-behov-$branchName")) { value -> getMapper().also(value::accept).toAvro() }
+            .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
             .peek { k: String, v -> log.info("produced [${topic.name}] [$k] [$v]") }
-            .to(topic.name, topic.produced(producedName))
-    }.withName(branchName))
+            .to(topic.name, topic.produced("produced-behov-$branchName"))
+    }.withName("-branch-$branchName"))
 
 private fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
 private fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (V) -> VR) = mapValues(mapper, named)

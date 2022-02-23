@@ -14,12 +14,12 @@ package "Sub-topology: 0" {
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-source" <<Source>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_source
 	agent "hent-ut-behov" <<Processor>> as hent_ut_behov
 	agent "aap.medlem.v1-joined-aap.sokere.v1" <<Processor>> as aap_medlem_v1_joined_aap_sokere_v1
-	agent "behov-" <<Processor>> as behov_
-	agent "behov-medlem" <<Processor>> as behov_medlem
+	agent "split-behov" <<Processor>> as split_behov
 	agent "filter-idempotent-medlem-losning" <<Processor>> as filter_idempotent_medlem_losning
 	agent "soker-consumed-source" <<Source>> as soker_consumed_source
+	agent "split-behov-branch-medlem" <<Processor>> as split_behov_branch_medlem
 	agent "KSTREAM-MAPVALUES-0000000027" <<Processor>> as KSTREAM_MAPVALUES_0000000027
-	agent "branch-mapper-behov-medlem" <<Processor>> as branch_mapper_behov_medlem
+	agent "branch-medlem-map-behov" <<Processor>> as branch_medlem_map_behov
 	agent "hent-ut-soker" <<Processor>> as hent_ut_soker
 	agent "soker-consumed" <<Processor>> as soker_consumed
 	agent "KSTREAM-PEEK-0000000010" <<Processor>> as KSTREAM_PEEK_0000000010
@@ -44,17 +44,17 @@ package "Sub-topology: 0" {
 	KSTREAM_PEEK_0000000005 --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	aap_aap_soknad_sendt_v1_joined_aap_sokere_v1 --> skip_eksisterende_soker
 	skip_eksisterende_soker --> opprett_soknad
-	opprett_soknad --> hent_ut_soker
 	opprett_soknad --> hent_ut_behov
+	opprett_soknad --> hent_ut_soker
 	aap_medlem_v1_joined_aap_sokere_v1_repartition_source --> aap_medlem_v1_joined_aap_sokere_v1
-	hent_ut_behov --> behov_
+	hent_ut_behov --> split_behov
 	aap_medlem_v1_joined_aap_sokere_v1 --> filter_idempotent_medlem_losning
-	behov_ --> behov_medlem
-	behov_medlem --> branch_mapper_behov_medlem
+	split_behov --> split_behov_branch_medlem
 	filter_idempotent_medlem_losning --> KSTREAM_MAPVALUES_0000000027
 	soker_consumed_source --> soker_consumed
+	split_behov_branch_medlem --> branch_medlem_map_behov
 	KSTREAM_MAPVALUES_0000000027 --> KSTREAM_PEEK_0000000028
-	branch_mapper_behov_medlem --> KSTREAM_PEEK_0000000016
+	branch_medlem_map_behov --> KSTREAM_PEEK_0000000016
 	hent_ut_soker --> KSTREAM_PEEK_0000000010
 	soker_consumed --> KTABLE_TOSTREAM_0000000002
 	KSTREAM_PEEK_0000000010 --> produced_ny_soker
