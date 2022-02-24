@@ -1,7 +1,7 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: sokere.v1
+  name: manuell.v1
   namespace: aap
   labels:
     team: aap
@@ -12,13 +12,13 @@ metadata:
 spec:
   pool: {{kafka-pool}}
   config:
-    cleanupPolicy: compact
+    cleanupPolicy: compact,delete
     partitions: 2
-    retentionHours: -1
+    retentionHours: 120
   acl:
     - team: aap
       application: vedtak
       access: readwrite
     - team: aap
-      application: sink
-      access: read
+      application: soknad-behandling
+      access: readwrite
