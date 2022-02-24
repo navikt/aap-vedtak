@@ -38,8 +38,7 @@ data class DtoVilkårsvurdering(
     val løsning_11_29_manuell: DtoLøsningParagraf_11_29? = null,
 )
 
-data class DtoLøsning(
-    val løsning_11_2_maskinell: DtoLøsningParagraf_11_2? = null,
+data class DtoManuell(
     val løsning_11_2_manuell: DtoLøsningParagraf_11_2? = null,
     val løsning_11_3_manuell: DtoLøsningParagraf_11_3? = null,
     val løsning_11_4_ledd2_ledd3_manuell: DtoLøsningParagraf_11_4_ledd2_ledd3? = null,
@@ -47,6 +46,7 @@ data class DtoLøsning(
     val løsning_11_6_manuell: DtoLøsningParagraf_11_6? = null,
     val løsning_11_12_ledd1_manuell: DtoLøsningParagraf_11_12_ledd1? = null,
     val løsning_11_29_manuell: DtoLøsningParagraf_11_29? = null,
+    val løsningVurderingAvBeregningsdato: DtoLøsningVurderingAvBeregningsdato? = null,
 )
 
 data class DtoLøsningParagraf_11_2(val erMedlem: String) {

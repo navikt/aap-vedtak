@@ -1,25 +1,22 @@
 package no.nav.aap.app
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.consumed
-import no.nav.aap.app.kafka.joined
-import no.nav.aap.app.kafka.produced
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker
-import no.nav.aap.dto.DtoLøsning
+import no.nav.aap.dto.DtoManuell
 import no.nav.aap.dto.DtoSøker
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import no.nav.aap.avro.vedtak.v1.Losning as AvroLøsning
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-fun StreamsBuilder.løsningStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
-    stream(topics.løsning.name, topics.løsning.consumed("losning-mottatt"))
+fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+    stream(topics.manuell.name, topics.manuell.consumed("losning-mottatt"))
         .peek { k: String, v -> log.info("consumed [aap.losning.v1] [$k] [$v]") }
 //        .filter({ _, medlem -> medlem.response != null }, named("filter-responses"))
 //        .selectKey({ _, medlem -> medlem.personident }, named("keyed_personident"))
-        .join(søkere, LøsningAndSøker::create, topics.løsning.joined(topics.søkere))
+        .join(søkere, LøsningAndSøker::create, topics.manuell.joined(topics.søkere))
 //        .filter(::idempotentMedlemLøsning, named("filter-idempotent-medlem-losning"))
         .mapValues(::håndterManuellLøsning)
         .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
@@ -45,13 +42,14 @@ private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): AvroS
     løsningAndSøker.løsning.løsning_11_6_manuell?.håndter(søker)
     løsningAndSøker.løsning.løsning_11_12_ledd1_manuell?.håndter(søker)
     løsningAndSøker.løsning.løsning_11_29_manuell?.håndter(søker)
+    løsningAndSøker.løsning.løsningVurderingAvBeregningsdato?.håndter(søker)
 
     return søker.toDto().toAvro()
 }
 
-private data class LøsningAndSøker(val løsning: DtoLøsning, val dtoSøker: DtoSøker) {
+private data class LøsningAndSøker(val løsning: DtoManuell, val dtoSøker: DtoSøker) {
     companion object {
-        fun create(løsning: AvroLøsning, søker: AvroSøker): LøsningAndSøker =
+        fun create(løsning: AvroManuell, søker: AvroSøker): LøsningAndSøker =
             LøsningAndSøker(løsning.toDto(), søker.toDto())
     }
 }

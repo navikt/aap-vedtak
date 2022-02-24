@@ -1,9 +1,6 @@
 package no.nav.aap.app
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.consumed
-import no.nav.aap.app.kafka.joined
-import no.nav.aap.app.kafka.produced
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker
@@ -11,8 +8,8 @@ import no.nav.aap.dto.DtoInntekter
 import no.nav.aap.dto.DtoSøker
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import no.nav.aap.avro.vedtak.v1.Inntekter as AvroInntekter
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.sokere.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.inntekter.name, topics.inntekter.consumed("inntekter-mottatt"))
@@ -35,10 +32,10 @@ private fun idempotentMedlemLøsning(key: String, løsningAndSøker: InntekterAn
         .singleOrNull() == null
 }
 
-private fun håndterManuellLøsning(vurderingAvBeregningsdatoAndSøker: InntekterAndSøker): AvroSøker {
-    val søker = Søker.create(vurderingAvBeregningsdatoAndSøker.dtoSøker)
+private fun håndterManuellLøsning(inntekterAndSøker: InntekterAndSøker): AvroSøker {
+    val søker = Søker.create(inntekterAndSøker.dtoSøker)
 
-    vurderingAvBeregningsdatoAndSøker.inntekter.håndter(søker)
+    inntekterAndSøker.inntekter.håndter(søker)
 
     return søker.toDto().toAvro()
 }

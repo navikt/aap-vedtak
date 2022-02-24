@@ -14,7 +14,7 @@ import java.time.LocalDate
 import java.util.*
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.medlem.v1.Request as AvroMedlemRequest
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søknadAndSøkerStream =
@@ -29,7 +29,7 @@ fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: To
     søkerOgBehov
         .mapValues(named("hent-ut-soker")) { (søker) -> søker }
         .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
-        .to("aap.sokere.v1", topics.søkere.produced("produced-ny-soker"))
+        .to(topics.søkere.name, topics.søkere.produced("produced-ny-soker"))
 
 
     søkerOgBehov

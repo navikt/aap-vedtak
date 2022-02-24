@@ -8,7 +8,7 @@ import no.nav.aap.dto.DtoSøker
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.medlem.name, topics.medlem.consumed("medlem-mottatt"))

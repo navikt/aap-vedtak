@@ -1,8 +1,6 @@
 package no.nav.aap.app
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.consumed
-import no.nav.aap.app.kafka.produced
 import no.nav.aap.avro.medlem.v1.ErMedlem
 import no.nav.aap.avro.medlem.v1.Response
 import org.apache.kafka.streams.StreamsBuilder

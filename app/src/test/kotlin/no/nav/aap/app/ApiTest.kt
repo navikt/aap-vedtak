@@ -9,9 +9,6 @@ import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.avro.medlem.v1.ErMedlem
-import no.nav.aap.avro.vedtak.v1.LosningVurderingAvBeregningsdato
-import no.nav.aap.avro.vedtak.v1.Losning_11_2
-import no.nav.aap.avro.vedtak.v1.Losning_11_4_l2_l3
 import no.nav.aap.dto.*
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
@@ -25,17 +22,19 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
+import no.nav.aap.avro.manuell.v1.LosningVurderingAvBeregningsdato as AvroLøsningVurderingAvBeregningsdato
+import no.nav.aap.avro.manuell.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
+import no.nav.aap.avro.manuell.v1.Losning_11_2 as AvroLøsning_11_2
+import no.nav.aap.avro.manuell.v1.Losning_11_29 as AvroLøsning_11_29
+import no.nav.aap.avro.manuell.v1.Losning_11_3 as AvroLøsning_11_3
+import no.nav.aap.avro.manuell.v1.Losning_11_4_l2_l3 as AvroLøsning_11_4_l2_l3
+import no.nav.aap.avro.manuell.v1.Losning_11_5 as AvroLøsning_11_5
+import no.nav.aap.avro.manuell.v1.Losning_11_6 as AvroLøsning_11_6
+import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.vedtak.v1.Inntekt as AvroInntekt
-import no.nav.aap.avro.vedtak.v1.Inntekter as AvroInntekter
-import no.nav.aap.avro.vedtak.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
-import no.nav.aap.avro.vedtak.v1.Losning_11_29 as AvroLøsning_11_29
-import no.nav.aap.avro.vedtak.v1.Losning_11_3 as AvroLøsning_11_3
-import no.nav.aap.avro.vedtak.v1.Losning_11_5 as AvroLøsning_11_5
-import no.nav.aap.avro.vedtak.v1.Losning_11_6 as AvroLøsning_11_6
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
-import no.nav.aap.avro.vedtak.v1.Losning as AvroLøsning
-import no.nav.aap.avro.vedtak.v1.VurderingAvBeregningsdato as AvroVurderingAvBeregningsdato
+import no.nav.aap.avro.sokere.v1.Inntekt as AvroInntekt
+import no.nav.aap.avro.sokere.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal class ApiTest {
 
@@ -384,25 +383,25 @@ internal class ApiTest {
 
             fun svar(
                 key: String,
-                losning_11_2_manuell: Losning_11_2? = null,
-                losning_11_2_maskinell: Losning_11_2? = null,
-                losning_11_3_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_3? = null,
-                losning_11_4_l2_l3_manuell: Losning_11_4_l2_l3? = null,
-                losning_11_5_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_5? = null,
-                losning_11_6_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_6? = null,
-                losning_11_12_l1_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_12_l1? = null,
-                losning_11_29_manuell: no.nav.aap.avro.vedtak.v1.Losning_11_29? = null
+                losning_11_2_manuell: AvroLøsning_11_2? = null,
+                losning_11_3_manuell: AvroLøsning_11_3? = null,
+                losning_11_4_l2_l3_manuell: AvroLøsning_11_4_l2_l3? = null,
+                losning_11_5_manuell: AvroLøsning_11_5? = null,
+                losning_11_6_manuell: AvroLøsning_11_6? = null,
+                losning_11_12_l1_manuell: AvroLøsning_11_12_l1? = null,
+                losning_11_29_manuell: AvroLøsning_11_29? = null,
+                losningVurderingAvBeregningsdato: AvroLøsningVurderingAvBeregningsdato? = null
             ) {
-                løsningTopic.produce(key) {
-                    AvroLøsning(
+                manuellTopic.produce(key) {
+                    AvroManuell(
                         losning_11_2_manuell,
-                        losning_11_2_maskinell,
                         losning_11_3_manuell,
                         losning_11_4_l2_l3_manuell,
                         losning_11_5_manuell,
                         losning_11_6_manuell,
                         losning_11_12_l1_manuell,
-                        losning_11_29_manuell
+                        losning_11_29_manuell,
+                        losningVurderingAvBeregningsdato
                     )
                 }
             }
@@ -427,13 +426,11 @@ internal class ApiTest {
                 key = "123",
                 losning_11_29_manuell = AvroLøsning_11_29(true)
             )
-
-            vurderingAvBeregningsdatoTopic.produce("123") {
-                AvroVurderingAvBeregningsdato(
-                    "SØKNAD_MOTTATT",
-                    LosningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
-                )
-            }
+            svar(
+                key = "123",
+                losningVurderingAvBeregningsdato =
+                AvroLøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
+            )
 
             inntekterTopic.produce("123") {
                 AvroInntekter(
@@ -561,7 +558,7 @@ internal class ApiTest {
                                         grunnlagsfaktor = 4.04588
                                     )
                                 ),
-                                fødselsdato = LocalDate.of(1982, 2, 23),
+                                fødselsdato = LocalDate.now().minusYears(40),
                                 sisteKalenderår = Year.of(2021),
                                 grunnlagsfaktor = 3.943968
                             ),
@@ -581,8 +578,7 @@ internal class ApiTest {
         internal fun initializeTopics(kafka: KStreamsMock) {
             søknadTopic = kafka.inputJsonTopic("aap.aap-soknad-sendt.v1")
             medlemTopic = kafka.inputAvroTopic("aap.medlem.v1")
-            løsningTopic = kafka.inputAvroTopic("aap.losning.v1")
-            vurderingAvBeregningsdatoTopic = kafka.inputAvroTopic("aap.vurdering-av-beregningsdato.v1")
+            manuellTopic = kafka.inputAvroTopic("aap.manuell.v1")
             inntekterTopic = kafka.inputAvroTopic("aap.inntekter.v1")
             medlemOutputTopic = kafka.outputAvroTopic("aap.medlem.v1")
             søkerOutputTopic = kafka.outputAvroTopic("aap.sokere.v1")
@@ -595,8 +591,7 @@ internal class ApiTest {
 
         private lateinit var søknadTopic: TestInputTopic<String, JsonSøknad>
         private lateinit var medlemTopic: TestInputTopic<String, AvroMedlem>
-        private lateinit var løsningTopic: TestInputTopic<String, AvroLøsning>
-        private lateinit var vurderingAvBeregningsdatoTopic: TestInputTopic<String, AvroVurderingAvBeregningsdato>
+        private lateinit var manuellTopic: TestInputTopic<String, AvroManuell>
         private lateinit var inntekterTopic: TestInputTopic<String, AvroInntekter>
         private lateinit var medlemOutputTopic: TestOutputTopic<String, AvroMedlem>
         private lateinit var søkerOutputTopic: TestOutputTopic<String, AvroSøker>

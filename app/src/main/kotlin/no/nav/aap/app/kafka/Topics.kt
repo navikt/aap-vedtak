@@ -9,23 +9,30 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Joined
 import org.apache.kafka.streams.kstream.Produced
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
-import no.nav.aap.avro.vedtak.v1.Losning as AvroLøsning
-import no.nav.aap.avro.vedtak.v1.VurderingAvBeregningsdato as AvroVurderingAvBeregningsdato
-import no.nav.aap.avro.vedtak.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.sokere.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
+import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 
 data class Topic<K, V>(
     val name: String,
     val keySerde: Serde<K>,
     val valueSerde: Serde<V>,
-)
+) {
+    fun consumed(named: String): Consumed<K, V> =
+        Consumed.with(keySerde, valueSerde).withName(named)
+
+    fun produced(named: String): Produced<K, V> =
+        Produced.with(keySerde, valueSerde).withName(named)
+
+    fun <R : Any> joined(right: Topic<K, R>): Joined<K, V, R> =
+        Joined.with(keySerde, valueSerde, right.valueSerde, "$name-joined-${right.name}")
+}
 
 class Topics(private val config: KafkaConfig) {
     val søknad = Topic("aap.aap-soknad-sendt.v1", Serdes.StringSerde(), jsonSerde<JsonSøknad>())
     val søkere = Topic("aap.sokere.v1", Serdes.StringSerde(), avroSerde<AvroSøker>())
     val medlem = Topic("aap.medlem.v1", Serdes.StringSerde(), avroSerde<AvroMedlem>())
-    val løsning = Topic("aap.losning.v1", Serdes.StringSerde(), avroSerde<AvroLøsning>())
-    val vurderingAvBeregningsdato = Topic("aap.vurdering-av-beregningsdato.v1", Serdes.StringSerde(), avroSerde<AvroVurderingAvBeregningsdato>())
+    val manuell = Topic("aap.manuell.v1", Serdes.StringSerde(), avroSerde<AvroManuell>())
     val inntekter = Topic("aap.inntekter.v1", Serdes.StringSerde(), avroSerde<AvroInntekter>())
 
     private inline fun <reified V : Any> jsonSerde(): Serde<V> = JsonSerde(V::class)
@@ -35,12 +42,3 @@ class Topics(private val config: KafkaConfig) {
         configure(conf.toMap(), false)
     }
 }
-
-fun <V : Any> Topic<String, V>.consumed(named: String): Consumed<String, V> =
-    Consumed.with(keySerde, valueSerde).withName(named)
-
-fun <V : Any> Topic<String, V>.produced(named: String): Produced<String, V> =
-    Produced.with(keySerde, valueSerde).withName(named)
-
-fun <L : Any, R : Any> Topic<String, L>.joined(right: Topic<String, R>): Joined<String, L, R> =
-    Joined.with(keySerde, valueSerde, right.valueSerde, "$name-joined-${right.name}")

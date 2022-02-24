@@ -28,7 +28,7 @@ import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
-import no.nav.aap.avro.vedtak.v1.Soker as AvroSøker
+import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
@@ -66,9 +66,8 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     }
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
+    manuellStream(søkere, topics)
     //TODO: Må finne ut om dette er måten å løse det på
-//    løsningStream(søkere, topics)
-//    vurderingAvBeregningsdatoStream(søkere, topics)
 //    inntekterStream(søkere, topics)
     medlemResponseStream(topics)
 }.build()
