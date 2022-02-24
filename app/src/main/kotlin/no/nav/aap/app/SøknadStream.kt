@@ -17,49 +17,21 @@ import no.nav.aap.avro.medlem.v1.Request as AvroMedlemRequest
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
-    val søknadAndSøkerStream =
-        stream(topics.søknad.name, topics.søknad.consumed("soknad-mottatt"))
-            .peek { k: String, v -> log.info("consumed [aap.aap-soknad-sendt.v1] [$k] [$v]") }
-            .leftJoin(søkere, SøknadAndSøker::join, topics.søknad.joined(topics.søkere))
-            .filter(named("skip-eksisterende-soker")) { _, (_, søker) -> søker == null }
-
-    val søkerOgBehov = søknadAndSøkerStream
+    val søkerOgBehov = stream(topics.søknad.name, topics.søknad.consumed("soknad-mottatt"))
+        .peek { k: String, v -> log.info("consumed [aap.aap-soknad-sendt.v1] [$k] [$v]") }
+        .leftJoin(søkere, SøknadAndSøker::join, topics.søknad.joined(topics.søkere))
+        .filter(named("skip-eksisterende-soker")) { _, (_, søker) -> søker == null }
         .mapValues(::opprettSøker, named("opprett-soknad"))
 
     søkerOgBehov
-        .mapValues(named("hent-ut-soker")) { (søker) -> søker }
+        .mapValues(named("soknad-hent-ut-soker")) { (søker) -> søker }
         .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
         .to(topics.søkere.name, topics.søkere.produced("produced-ny-soker"))
 
-
     søkerOgBehov
-        .flatMapValues(named("hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
-        .split(named("split-behov"))
-        .branch(topics.medlem, "medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
-}
-
-private fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
-    topic: Topic<String, AVROVALUE>,
-    branchName: String,
-    predicate: (DtoBehov) -> Boolean,
-    getMapper: () -> MAPPER
-) where MAPPER : ToAvro<AVROVALUE>, MAPPER : Lytter =
-    branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
-        chain
-            .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
-            .peek { k: String, v -> log.info("produced [${topic.name}] [$k] [$v]") }
-            .to(topic.name, topic.produced("branch-$branchName-produced-behov"))
-    }.withName("-branch-$branchName"))
-
-private fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
-private fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (V) -> VR) = mapValues(mapper, named)
-private fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (K, V) -> VR) = mapValues(mapper, named)
-private fun <K, V, VR> KStream<K, V>.flatMapValues(named: Named, mapper: (V) -> Iterable<VR>) =
-    flatMapValues(mapper, named)
-
-
-private interface ToAvro<out AVROVALUE> {
-    fun toAvro(): AVROVALUE
+        .flatMapValues(named("soknad-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
+        .split(named("soknad-split-behov"))
+        .branch(topics.medlem, "soknad-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
 }
 
 private class ToAvroMedlem : Lytter, ToAvro<AvroMedlem> {

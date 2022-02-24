@@ -9,7 +9,7 @@ import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.Joined
 import org.apache.kafka.streams.kstream.Produced
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.sokere.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 

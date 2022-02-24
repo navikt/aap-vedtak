@@ -11,8 +11,10 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsv
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.behov.BehovInntekter
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.time.Year
 
 internal class Sak private constructor(
     private var tilstand: Tilstand,
@@ -66,10 +68,10 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
 
-    private fun tilstand(nyTilstand: Tilstand) {
-        nyTilstand.onExit()
+    private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
+        nyTilstand.onExit(this, hendelse)
         tilstand = nyTilstand
-        tilstand.onEntry()
+        tilstand.onEntry(this, hendelse)
     }
 
     private sealed interface Tilstand {
@@ -83,8 +85,8 @@ internal class Sak private constructor(
             IKKE_OPPFYLT
         }
 
-        fun onEntry() {}
-        fun onExit() {}
+        fun onEntry(sak: Sak, hendelse: Hendelse) {}
+        fun onExit(sak: Sak, hendelse: Hendelse) {}
         fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             error("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
         }
@@ -157,13 +159,13 @@ internal class Sak private constructor(
             sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
             sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
 
-            vurderNestetilstand(sak)
+            vurderNestetilstand(sak, søknad)
         }
 
-        private fun vurderNestetilstand(sak: Sak) {
+        private fun vurderNestetilstand(sak: Sak, søknad: Søknad) {
             when {
-                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt)
-                else -> sak.tilstand(SøknadMottatt)
+                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt, søknad)
+                else -> sak.tilstand(SøknadMottatt, søknad)
             }
         }
     }
@@ -172,50 +174,50 @@ internal class Sak private constructor(
         override val tilstandsnavn = Tilstand.Tilstandsnavn.SØKNAD_MOTTATT
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
             sak.vurderingAvBeregningsdato.håndterLøsning(løsning)
-            vurderNesteTilstand(sak)
+            vurderNesteTilstand(sak, løsning)
         }
 
-        private fun vurderNesteTilstand(sak: Sak) {
+        private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
             when {
                 sak.vilkårsvurderinger.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
-                    sak.tilstand(BeregnInntekt)
+                    sak.tilstand(BeregnInntekt, hendelse)
                 sak.vilkårsvurderinger.erNoenIkkeOppfylt() ->
-                    sak.tilstand(IkkeOppfylt)
+                    sak.tilstand(IkkeOppfylt, hendelse)
             }
         }
     }
@@ -223,8 +225,13 @@ internal class Sak private constructor(
     private object BeregnInntekt : Tilstand {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.BEREGN_INNTEKT
 
-        override fun onEntry() {
-            // Be om inntekter
+        override fun onEntry(sak: Sak, hendelse: Hendelse) {
+            hendelse.opprettBehov(
+                BehovInntekter(
+                    fom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(3),
+                    tom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(1)
+                )
+            )
         }
 
         override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
@@ -239,7 +246,7 @@ internal class Sak private constructor(
                 virkningsdato = LocalDate.now()
             )
 
-            sak.tilstand(VedtakFattet)
+            sak.tilstand(VedtakFattet, løsning)
         }
     }
 

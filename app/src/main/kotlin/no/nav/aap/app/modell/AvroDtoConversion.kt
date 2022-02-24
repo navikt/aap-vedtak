@@ -1,5 +1,6 @@
 package no.nav.aap.app.modell
 
+import no.nav.aap.avro.inntekter.v1.Inntekter
 import no.nav.aap.avro.manuell.v1.Manuell
 import no.nav.aap.avro.medlem.v1.Medlem
 import no.nav.aap.avro.sokere.v1.*
@@ -7,6 +8,7 @@ import no.nav.aap.dto.*
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import java.time.Year
 import java.time.YearMonth
+import no.nav.aap.avro.inntekter.v1.Inntekt as InntekterInntekt
 
 fun Medlem.toDto(): LøsningParagraf_11_2 = LøsningParagraf_11_2(
     erMedlem = LøsningParagraf_11_2.ErMedlem.valueOf(response.erMedlem.name)
@@ -61,7 +63,13 @@ fun LosningVurderingAvBeregningsdato.toDto(): DtoLøsningVurderingAvBeregningsda
 )
 
 fun Inntekter.toDto(): DtoInntekter = DtoInntekter(
-    inntekter = inntekter.map { it.toDto() }
+    inntekter = response.inntekter.map { it.toDto() }
+)
+
+fun InntekterInntekt.toDto(): DtoInntekt = DtoInntekt(
+    arbeidsgiver = arbeidsgiver,
+    inntekstmåned = YearMonth.from(inntektsmaned),
+    beløp = belop
 )
 
 fun Inntekt.toDto(): DtoInntekt = DtoInntekt(

@@ -50,44 +50,58 @@ data class DtoManuell(
 )
 
 data class DtoLøsningParagraf_11_2(val erMedlem: String) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_2(enumValueOf(erMedlem)))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_2(enumValueOf(erMedlem))
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_3(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_3(erOppfylt))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_3(erOppfylt)
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_4AndreOgTredjeLedd(erOppfylt))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd(erOppfylt)
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_5(val grad: Int) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(grad)))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(grad))
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_6(erOppfylt))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_6(erOppfylt)
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd(erOppfylt))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_12FørsteLedd(erOppfylt)
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_29(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker) {
-        søker.håndterLøsning(LøsningParagraf_11_29(erOppfylt))
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_29(erOppfylt)
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 
@@ -99,9 +113,10 @@ data class DtoVurderingAvBeregningsdato(
 data class DtoLøsningVurderingAvBeregningsdato(
     val beregningsdato: LocalDate
 ) {
-    fun håndter(søker: Søker) {
+    fun håndter(søker: Søker): List<Behov> {
         val løsning = LøsningVurderingAvBeregningsdato(beregningsdato)
         søker.håndterLøsning(løsning)
+        return løsning.behov()
     }
 }
 

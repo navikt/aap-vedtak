@@ -1,5 +1,7 @@
 package no.nav.aap.hendelse
 
+import java.time.Year
+
 open class Hendelse {
     private val behov = mutableListOf<Behov>()
 
@@ -24,6 +26,7 @@ sealed class DtoBehov {
     open fun erDtoBehov_11_12FørsteLedd() = false
     open fun erDtoBehov_11_29() = false
     open fun erDtoBehovVurderingAvBeregningsdato() = false
+    open fun erInntekter() = false
 
     open fun accept(lytter: Lytter) {}
 
@@ -82,6 +85,17 @@ sealed class DtoBehov {
             lytter.behovVurderingAvBeregningsdato(ident)
         }
     }
+
+    class DtoInntekter(
+        private val ident: String,
+        private val fom: Year,
+        private val tom: Year
+        ) : DtoBehov() {
+        override fun erInntekter() = true
+        override fun accept(lytter: Lytter) {
+            lytter.behovInntekter(ident, fom, tom)
+        }
+    }
 }
 
 interface Lytter {
@@ -94,4 +108,5 @@ interface Lytter {
     fun behov_11_6(ident: String) {}
     fun behov_11_12FørsteLedd(ident: String) {}
     fun behov_11_29(ident: String) {}
+    fun behovInntekter(ident: String, fom: Year, tom: Year) {}
 }

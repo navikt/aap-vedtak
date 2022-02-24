@@ -7,6 +7,8 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
 import no.nav.aap.app.log
+import no.nav.aap.hendelse.DtoBehov
+import no.nav.aap.hendelse.Lytter
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -20,8 +22,7 @@ import org.apache.kafka.streams.errors.ProductionExceptionHandler
 import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse
 import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse.CONTINUE
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
-import org.apache.kafka.streams.kstream.Materialized
-import org.apache.kafka.streams.kstream.Named
+import org.apache.kafka.streams.kstream.*
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
@@ -103,4 +104,28 @@ class LogContinueErrorHandler : ProductionExceptionHandler {
         log.error("Feil i streams, logger og leser neste record", exception)
         return CONTINUE
     }
+}
+
+internal fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
+    topic: Topic<String, AVROVALUE>,
+    branchName: String,
+    predicate: (DtoBehov) -> Boolean,
+    getMapper: () -> MAPPER
+) where MAPPER : ToAvro<AVROVALUE>, MAPPER : Lytter =
+    branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
+        chain
+            .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
+            .peek { k: String, v -> log.info("produced [${topic.name}] [$k] [$v]") }
+            .to(topic.name, topic.produced("branch-$branchName-produced-behov"))
+    }.withName("-branch-$branchName"))
+
+internal fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
+internal fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (V) -> VR) = mapValues(mapper, named)
+internal fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (K, V) -> VR) = mapValues(mapper, named)
+internal fun <K, V, VR> KStream<K, V>.flatMapValues(named: Named, mapper: (V) -> Iterable<VR>) =
+    flatMapValues(mapper, named)
+
+
+internal interface ToAvro<out AVROVALUE> {
+    fun toAvro(): AVROVALUE
 }

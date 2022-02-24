@@ -67,9 +67,9 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
     manuellStream(søkere, topics)
-    //TODO: Må finne ut om dette er måten å løse det på
-//    inntekterStream(søkere, topics)
+    inntekterStream(søkere, topics)
     medlemResponseStream(topics)
+    inntekterResponseStream(topics)
 }.build()
 
 fun Routing.api(kafka: Kafka) {

@@ -8,6 +8,7 @@ on:
       - '.nais/topic-medlem.yml'
       - '.nais/topic-søkere.yml'
       - '.nais/topic-manuell.yml'
+      - '.nais/topic-inntekter.yml'
       - '.github/workflows/deploy-topics.yml'
 
 jobs:
@@ -41,5 +42,14 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/topic-manuell.yml
+          VARS: .nais/dev.yml
+          PRINT_PAYLOAD: true
+
+      - name: Deploy aap.inntekter.v1 to dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/topic-inntekter.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true

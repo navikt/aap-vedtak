@@ -1,0 +1,21 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: inntekter.v1
+  namespace: aap
+  labels:
+    team: aap
+  annotations:
+    # Revurder om topic skal slettes sammen med kubernetesressursen når topic opprettes i prod
+    removeDataWhenResourceIsDeleted: "true"
+    githubUrl: "https://github.com/navikt/aap-vedtak"
+spec:
+  pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: compact,delete
+    partitions: 2
+    retentionHours: 120
+  acl:
+    - team: aap
+      application: vedtak
+      access: readwrite

@@ -32,8 +32,6 @@ import no.nav.aap.avro.manuell.v1.Losning_11_5 as AvroLøsning_11_5
 import no.nav.aap.avro.manuell.v1.Losning_11_6 as AvroLøsning_11_6
 import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.sokere.v1.Inntekt as AvroInntekt
-import no.nav.aap.avro.sokere.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal class ApiTest {
@@ -371,7 +369,6 @@ internal class ApiTest {
         }
     }
 
-    @Disabled("Deaktiverer denne testen til vi lander hvordan vi skal løse behov og løsninger")
     @Test
     fun `søker får innvilget vedtak`() {
         withTestApp { mocks ->
@@ -431,16 +428,6 @@ internal class ApiTest {
                 losningVurderingAvBeregningsdato =
                 AvroLøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
-
-            inntekterTopic.produce("123") {
-                AvroInntekter(
-                    listOf(
-                        AvroInntekt("321", LocalDate.of(2021, 1, 1), 400000.0),
-                        AvroInntekt("321", LocalDate.of(2020, 1, 1), 400000.0),
-                        AvroInntekt("321", LocalDate.of(2019, 1, 1), 400000.0)
-                    )
-                )
-            }
 
             println(søkerOutputTopic.readValuesToList())
 
@@ -579,7 +566,6 @@ internal class ApiTest {
             søknadTopic = kafka.inputJsonTopic("aap.aap-soknad-sendt.v1")
             medlemTopic = kafka.inputAvroTopic("aap.medlem.v1")
             manuellTopic = kafka.inputAvroTopic("aap.manuell.v1")
-            inntekterTopic = kafka.inputAvroTopic("aap.inntekter.v1")
             medlemOutputTopic = kafka.outputAvroTopic("aap.medlem.v1")
             søkerOutputTopic = kafka.outputAvroTopic("aap.sokere.v1")
             stateStore = kafka.getKeyValueStore("soker-store")
@@ -592,7 +578,6 @@ internal class ApiTest {
         private lateinit var søknadTopic: TestInputTopic<String, JsonSøknad>
         private lateinit var medlemTopic: TestInputTopic<String, AvroMedlem>
         private lateinit var manuellTopic: TestInputTopic<String, AvroManuell>
-        private lateinit var inntekterTopic: TestInputTopic<String, AvroInntekter>
         private lateinit var medlemOutputTopic: TestOutputTopic<String, AvroMedlem>
         private lateinit var søkerOutputTopic: TestOutputTopic<String, AvroSøker>
         private lateinit var stateStore: KeyValueStore<String, AvroSøker>
