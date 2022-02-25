@@ -35,6 +35,8 @@ class Topics(private val config: KafkaConfig) {
     val manuell = Topic("aap.manuell.v1", Serdes.StringSerde(), avroSerde<AvroManuell>())
     val inntekter = Topic("aap.inntekter.v1", Serdes.StringSerde(), avroSerde<AvroInntekter>())
 
+    val tempSøkere = Topic(søkere.name, Serdes.StringSerde(), Serdes.ByteArray())
+
     private inline fun <reified V : Any> jsonSerde(): Serde<V> = JsonSerde(V::class)
 
     private fun <T : SpecificRecord> avroSerde(): SpecificAvroSerde<T> = SpecificAvroSerde<T>().apply {

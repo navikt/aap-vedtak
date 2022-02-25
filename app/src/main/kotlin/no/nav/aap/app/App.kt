@@ -60,10 +60,20 @@ fun Application.server(kafka: Kafka = KStreams()) {
 }
 
 fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
-    val søkere = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
+    val søkere = stream(topics.søkere.name, topics.tempSøkere.consumed("soker-consumed"))
         .peek(log::info)
         .filter { key, value -> value != null }
         .peek(log::info)
+        .filter { key, value ->
+            try {
+                topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value)
+                true
+            } catch (e: Throwable) {
+                log.warn("klarte ikke deserializere $key $value", e)
+                false
+            }
+        }
+        .mapValues { value -> topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value) }
         .toTable(
             named("Hello"),
             materialized<AvroSøker>("soker-store")
