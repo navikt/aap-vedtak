@@ -115,7 +115,7 @@ internal class Paragraf_11_3 private constructor(private var tilstand: Tilstand)
                 løsning_11_3_manuell = paragraf.løsning.toDto()
             )
 
-            override fun restoreData(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning113Manuell = requireNotNull(vilkårsvurdering.løsning_11_3_manuell)
                 paragraf.løsning = LøsningParagraf_11_3(løsning113Manuell.erOppfylt)
             }
@@ -133,13 +133,13 @@ internal class Paragraf_11_3 private constructor(private var tilstand: Tilstand)
                 løsning_11_3_manuell = paragraf.løsning.toDto()
             )
 
-            override fun restoreData(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning113Manuell = requireNotNull(vilkårsvurdering.løsning_11_3_manuell)
                 paragraf.løsning = LøsningParagraf_11_3(løsning113Manuell.erOppfylt)
             }
         }
 
-        internal open fun restoreData(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
 
@@ -159,6 +159,6 @@ internal class Paragraf_11_3 private constructor(private var tilstand: Tilstand)
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_3)
-                .apply { this.tilstand.restoreData(this, vilkårsvurdering) }
+                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

@@ -72,7 +72,7 @@ internal class VurderingAvBeregningsdato private constructor(
                 løsningVurderingAvBeregningsdato = vurderingAvBeregningsdato.løsning.toDto()
             )
 
-            override fun restoreData(
+            override fun gjenopprettTilstand(
                 vurderingAvBeregningsdato: VurderingAvBeregningsdato,
                 dtoVurderingAvBeregningsdato: DtoVurderingAvBeregningsdato
             ) {
@@ -88,7 +88,7 @@ internal class VurderingAvBeregningsdato private constructor(
             løsningVurderingAvBeregningsdato = null
         )
 
-        internal open fun restoreData(
+        internal open fun gjenopprettTilstand(
             vurderingAvBeregningsdato: VurderingAvBeregningsdato,
             dtoVurderingAvBeregningsdato: DtoVurderingAvBeregningsdato
         ) {
@@ -102,6 +102,6 @@ internal class VurderingAvBeregningsdato private constructor(
             enumValueOf<Tilstand.Tilstandsnavn>(dtoVurderingAvBeregningsdato.tilstand)
                 .tilknyttetTilstand()
                 .let(::VurderingAvBeregningsdato)
-                .apply { this.tilstand.restoreData(this, dtoVurderingAvBeregningsdato) }
+                .apply { this.tilstand.gjenopprettTilstand(this, dtoVurderingAvBeregningsdato) }
     }
 }

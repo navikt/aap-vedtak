@@ -96,7 +96,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
             }
         }
 
-        internal open fun restoreData(paragraf: Paragraf_11_4FørsteLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_4FørsteLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             paragraf = paragraf.paragraf.name,
@@ -113,6 +113,6 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_4FørsteLedd)
-                .apply { this.tilstand.restoreData(this, vilkårsvurdering) }
+                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

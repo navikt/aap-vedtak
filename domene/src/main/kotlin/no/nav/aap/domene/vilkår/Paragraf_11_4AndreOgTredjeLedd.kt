@@ -126,7 +126,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
             erIkkeOppfylt = false
         )
 
-        internal open fun restoreData(paragraf: Paragraf_11_4AndreOgTredjeLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_4AndreOgTredjeLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
         internal open fun toDto(paragraf: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -145,6 +145,6 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_4AndreOgTredjeLedd)
-                .apply { this.tilstand.restoreData(this, vilkårsvurdering) }
+                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

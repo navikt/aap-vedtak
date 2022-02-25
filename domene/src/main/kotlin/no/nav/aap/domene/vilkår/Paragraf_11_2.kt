@@ -140,7 +140,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
-            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
                 paragraf.settMaskinellLøsning(vilkårsvurdering)
             }
         }
@@ -157,7 +157,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
-            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
                 paragraf.settMaskinellLøsning(vilkårsvurdering)
             }
         }
@@ -174,7 +174,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
-            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
                 paragraf.settMaskinellLøsning(vilkårsvurdering)
             }
         }
@@ -192,7 +192,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
 
-            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
                 paragraf.settMaskinellLøsning(vilkårsvurdering)
                 paragraf.settManuellLøsning(vilkårsvurdering)
             }
@@ -211,7 +211,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
 
-            override fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {
                 paragraf.settMaskinellLøsning(vilkårsvurdering)
                 paragraf.settManuellLøsning(vilkårsvurdering)
             }
@@ -223,7 +223,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             tilstand = tilstandsnavn.name,
         )
 
-        internal open fun restoreData(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
     }
@@ -237,6 +237,6 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_2)
-                .apply { this.tilstand.restoreData(this, vilkårsvurdering) }
+                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

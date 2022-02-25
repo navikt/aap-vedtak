@@ -144,7 +144,7 @@ internal class Sak private constructor(
             vedtak = null
         )
 
-        fun restoreData(sak: Sak, dtoSak: DtoSak) {
+        fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
             sak.vurderingsdato = dtoSak.vurderingsdato
             sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
         }
@@ -269,7 +269,7 @@ internal class Sak private constructor(
             vedtak = sak.vedtak.toDto()
         )
 
-        override fun restoreData(sak: Sak, dtoSak: DtoSak) {
+        override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
             sak.vurderingsdato = dtoSak.vurderingsdato
             sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
             val dtoVedtak = requireNotNull(dtoSak.vedtak)
@@ -316,7 +316,7 @@ internal class Sak private constructor(
             },
             inntektshistorikk = Inntektshistorikk()
         ).apply {
-            this.tilstand.restoreData(this, dtoSak)
+            this.tilstand.gjenopprettTilstand(this, dtoSak)
         }
     }
 }

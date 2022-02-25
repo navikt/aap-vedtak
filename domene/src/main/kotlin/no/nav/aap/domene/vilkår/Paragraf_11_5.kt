@@ -126,7 +126,7 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
                 løsning_11_5_manuell = paragraf.løsning.toDto()
             )
 
-            override fun restoreData(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_manuell)
                 paragraf.løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(løsning.grad))
             }
@@ -144,13 +144,13 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
                 løsning_11_5_manuell = paragraf.løsning.toDto()
             )
 
-            override fun restoreData(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
+            override fun gjenopprettTilstand(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_manuell)
                 paragraf.løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(løsning.grad))
             }
         }
 
-        internal open fun restoreData(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {}
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toFrontendHarÅpenOppgave() = false
         internal open fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -169,6 +169,6 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_5)
-                .apply { this.tilstand.restoreData(this, vilkårsvurdering) }
+                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }
