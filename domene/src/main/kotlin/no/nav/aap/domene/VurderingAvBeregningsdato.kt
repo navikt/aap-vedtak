@@ -79,7 +79,7 @@ internal class VurderingAvBeregningsdato private constructor(
                 val dtoLøsningVurderingAvBeregningsdato =
                     requireNotNull(dtoVurderingAvBeregningsdato.løsningVurderingAvBeregningsdato)
                 vurderingAvBeregningsdato.løsning =
-                    LøsningVurderingAvBeregningsdato.create(dtoLøsningVurderingAvBeregningsdato)
+                    LøsningVurderingAvBeregningsdato.gjenopprett(dtoLøsningVurderingAvBeregningsdato)
             }
         }
 
@@ -98,7 +98,7 @@ internal class VurderingAvBeregningsdato private constructor(
     internal fun toDto() = tilstand.toDto(this)
 
     internal companion object {
-        internal fun create(dtoVurderingAvBeregningsdato: DtoVurderingAvBeregningsdato): VurderingAvBeregningsdato =
+        internal fun gjenopprett(dtoVurderingAvBeregningsdato: DtoVurderingAvBeregningsdato): VurderingAvBeregningsdato =
             enumValueOf<Tilstand.Tilstandsnavn>(dtoVurderingAvBeregningsdato.tilstand)
                 .tilknyttetTilstand()
                 .let(::VurderingAvBeregningsdato)

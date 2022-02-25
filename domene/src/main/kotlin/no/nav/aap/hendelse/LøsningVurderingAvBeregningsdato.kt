@@ -10,7 +10,7 @@ class LøsningVurderingAvBeregningsdato(
     internal fun toDto() = DtoLøsningVurderingAvBeregningsdato(beregningsdato)
 
     internal companion object {
-        internal fun create(dtoLøsningVurderingAvBeregningsdato: DtoLøsningVurderingAvBeregningsdato) =
+        internal fun gjenopprett(dtoLøsningVurderingAvBeregningsdato: DtoLøsningVurderingAvBeregningsdato) =
             LøsningVurderingAvBeregningsdato(dtoLøsningVurderingAvBeregningsdato.beregningsdato)
     }
 }

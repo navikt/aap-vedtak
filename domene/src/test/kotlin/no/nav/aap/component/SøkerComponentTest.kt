@@ -492,7 +492,7 @@ internal class SøkerComponentTest {
         var dtoSøker: DtoSøker = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
 
         fun medSøker(block: Søker.() -> Unit) {
-            val søker = Søker.create(dtoSøker)
+            val søker = Søker.gjenopprett(dtoSøker)
             block(søker)
             dtoSøker = søker.toDto()
         }

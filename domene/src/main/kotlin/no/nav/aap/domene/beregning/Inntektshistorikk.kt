@@ -15,7 +15,7 @@ internal class Inntektshistorikk {
     internal fun finnInntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato): Inntektsgrunnlag {
         val sisteKalenderår = Year.from(beregningsdato).minusYears(1)
         val inntekterSiste3Kalenderår = inntekter.inntektSiste3Kalenderår(sisteKalenderår)
-        return Inntektsgrunnlag.create(
+        return Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = beregningsdato,
             inntekterSiste3Kalenderår = inntekterSiste3Kalenderår,
             fødselsdato = fødselsdato

@@ -30,9 +30,9 @@ internal class Vedtak(
     )
 
     internal companion object {
-        internal fun create(dtoVedtak: DtoVedtak) = Vedtak(
+        internal fun gjenopprett(dtoVedtak: DtoVedtak) = Vedtak(
             innvilget = dtoVedtak.innvilget,
-            inntektsgrunnlag = Inntektsgrunnlag.create(dtoVedtak.inntektsgrunnlag),
+            inntektsgrunnlag = Inntektsgrunnlag.gjenopprett(dtoVedtak.inntektsgrunnlag),
             søknadstidspunkt = dtoVedtak.søknadstidspunkt,
             vedtaksdato = dtoVedtak.vedtaksdato,
             virkningsdato = dtoVedtak.virkningsdato

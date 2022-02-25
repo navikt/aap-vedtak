@@ -21,7 +21,7 @@ internal class InntektsgrunnlagTest {
 
     @Test
     fun `Hvis vi beregner grunnlag for en bruker uten inntekt, blir grunnlaget 0`() {
-        val grunnlag = Inntektsgrunnlag.create(1 januar 2022, emptyList(), Fødselsdato(1 januar 1970))
+        val grunnlag = Inntektsgrunnlag.inntektsgrunnlag(1 januar 2022, emptyList(), Fødselsdato(1 januar 1970))
         assertEquals(322421.21.beløp, grunnlag.grunnlagForDag(1.januar))
     }
 
@@ -183,7 +183,7 @@ internal class InntektsgrunnlagTest {
         beregningsdato: LocalDate,
         fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)
     ) =
-        Inntektsgrunnlag.create(
+        Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato,
             this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)),
             fødselsdato

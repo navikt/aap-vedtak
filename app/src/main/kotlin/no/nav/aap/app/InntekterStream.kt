@@ -23,7 +23,7 @@ fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: 
 }
 
 private fun håndterInntekter(inntekterAndSøker: InntekterAndSøker): AvroSøker {
-    val søker = Søker.create(inntekterAndSøker.dtoSøker)
+    val søker = Søker.gjenopprett(inntekterAndSøker.dtoSøker)
 
     inntekterAndSøker.inntekter.håndter(søker)
 

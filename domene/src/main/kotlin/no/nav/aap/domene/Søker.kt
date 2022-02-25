@@ -75,10 +75,10 @@ class Søker private constructor(
             .filter { it.personident == personident }
             .flatMap(Søker::toFrontendSaker)
 
-        fun create(søker: DtoSøker): Søker = Søker(
+        fun gjenopprett(søker: DtoSøker): Søker = Søker(
             personident = Personident(søker.personident),
             fødselsdato = Fødselsdato(søker.fødselsdato),
-            saker = søker.saker.map(Sak::create).toMutableList(),
+            saker = søker.saker.map(Sak::gjenopprett).toMutableList(),
         )
     }
 }

@@ -155,7 +155,7 @@ internal class Paragraf_11_6 private constructor(private var tilstand: Tilstand)
     override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
 
     internal companion object {
-        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_6 =
+        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_6 =
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_6)

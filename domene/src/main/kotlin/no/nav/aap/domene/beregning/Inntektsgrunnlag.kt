@@ -46,7 +46,7 @@ internal class Inntektsgrunnlag private constructor(
     )
 
     internal companion object {
-        internal fun create(
+        internal fun inntektsgrunnlag(
             beregningsdato: LocalDate,
             inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
             fødselsdato: Fødselsdato,
@@ -61,9 +61,9 @@ internal class Inntektsgrunnlag private constructor(
             )
         }
 
-        internal fun create(dtoInntektsgrunnlag: DtoInntektsgrunnlag) = Inntektsgrunnlag(
+        internal fun gjenopprett(dtoInntektsgrunnlag: DtoInntektsgrunnlag) = Inntektsgrunnlag(
             beregningsdato = dtoInntektsgrunnlag.beregningsdato,
-            inntekterSiste3Kalenderår = InntektsgrunnlagForÅr.create(dtoInntektsgrunnlag.inntekterSiste3Kalenderår),
+            inntekterSiste3Kalenderår = InntektsgrunnlagForÅr.gjenopprett(dtoInntektsgrunnlag.inntekterSiste3Kalenderår),
             fødselsdato = Fødselsdato(dtoInntektsgrunnlag.fødselsdato),
             sisteKalenderår = dtoInntektsgrunnlag.sisteKalenderår,
             grunnlagsfaktor = Grunnlagsfaktor(dtoInntektsgrunnlag.grunnlagsfaktor)
@@ -112,11 +112,11 @@ internal class InntektsgrunnlagForÅr private constructor(
 
         internal fun Iterable<InntektsgrunnlagForÅr>.toDto() = map(InntektsgrunnlagForÅr::toDto)
 
-        internal fun create(inntekterSiste3Kalenderår: Iterable<DtoInntektsgrunnlagForÅr>) =
+        internal fun gjenopprett(inntekterSiste3Kalenderår: Iterable<DtoInntektsgrunnlagForÅr>) =
             inntekterSiste3Kalenderår.map {
                 InntektsgrunnlagForÅr(
                     år = it.år,
-                    inntekter = Inntekt.create(it.inntekter),
+                    inntekter = Inntekt.gjenopprett(it.inntekter),
                     beløpFørJustering = it.beløpFørJustering.beløp,
                     beløpJustertFor6G = it.beløpJustertFor6G.beløp,
                     erBeløpJustertFor6G = it.erBeløpJustertFor6G,
@@ -124,7 +124,7 @@ internal class InntektsgrunnlagForÅr private constructor(
                 )
             }
 
-        internal fun create(
+        internal fun inntektsgrunnlagForÅr(
             år: Year,
             inntekter: List<Inntekt>
         ): InntektsgrunnlagForÅr {

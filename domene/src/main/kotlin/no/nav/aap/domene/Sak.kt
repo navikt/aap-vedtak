@@ -146,7 +146,7 @@ internal class Sak private constructor(
 
         fun restoreData(sak: Sak, dtoSak: DtoSak) {
             sak.vurderingsdato = dtoSak.vurderingsdato
-            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.create(dtoSak.vurderingAvBeregningsdato)
+            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
         }
     }
 
@@ -271,9 +271,9 @@ internal class Sak private constructor(
 
         override fun restoreData(sak: Sak, dtoSak: DtoSak) {
             sak.vurderingsdato = dtoSak.vurderingsdato
-            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.create(dtoSak.vurderingAvBeregningsdato)
+            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
             val dtoVedtak = requireNotNull(dtoSak.vedtak)
-            sak.vedtak = Vedtak.create(dtoVedtak)
+            sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
         }
 
         override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
@@ -305,8 +305,8 @@ internal class Sak private constructor(
 
         internal fun Iterable<Sak>.toDto() = map { sak -> sak.toDto() }
 
-        internal fun create(dtoSak: DtoSak): Sak = Sak(
-            vilkårsvurderinger = dtoSak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::create).toMutableList(),
+        internal fun gjenopprett(dtoSak: DtoSak): Sak = Sak(
+            vilkårsvurderinger = dtoSak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::gjenopprett).toMutableList(),
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(dtoSak.tilstand)) {
                 Tilstand.Tilstandsnavn.START -> Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt

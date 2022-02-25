@@ -16,14 +16,14 @@ class Inntekt(
         internal fun Iterable<Inntekt>.inntektSiste3Kalenderår(år: Year) = this
             .filter { Year.from(it.inntekstmåned) in år.minusYears(2)..år }
             .groupBy { Year.from(it.inntekstmåned) }
-            .map { (år, inntekter) -> InntektsgrunnlagForÅr.create(år, inntekter) }
+            .map { (år, inntekter) -> InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(år, inntekter) }
 
         internal fun Iterable<Inntekt>.summerInntekt() = map { it.beløp }.summerBeløp()
 
         internal fun Iterable<Inntekt>.toDto() = map(Inntekt::toDto)
         internal fun Iterable<Inntekt>.toFrontendInntekt() = map(Inntekt::toFrontendInntekt)
 
-        internal fun create(inntekter: Iterable<DtoInntekt>) = inntekter.map {
+        internal fun gjenopprett(inntekter: Iterable<DtoInntekt>) = inntekter.map {
             Inntekt(
                 arbeidsgiver = Arbeidsgiver(it.arbeidsgiver),
                 inntekstmåned = it.inntekstmåned,

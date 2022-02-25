@@ -109,7 +109,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
     override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 
     internal companion object {
-        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4FørsteLedd =
+        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4FørsteLedd =
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_4FørsteLedd)

@@ -32,7 +32,7 @@ private fun idempotentMedlemLøsning(key: String, medlemAndSøker: MedlemAndSøk
 }
 
 private fun medlemLøsning(medlemAndSøker: MedlemAndSøker): AvroSøker {
-    val søker = Søker.create(medlemAndSøker.dtoSøker).apply {
+    val søker = Søker.gjenopprett(medlemAndSøker.dtoSøker).apply {
         val medlem = medlemAndSøker.avroMedlem.toDto()
         håndterLøsning(medlem)
     }

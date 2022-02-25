@@ -38,7 +38,7 @@ fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: To
 }
 
 private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<AvroSøker, List<DtoBehov>> {
-    val søker = Søker.create(løsningAndSøker.dtoSøker)
+    val søker = Søker.gjenopprett(løsningAndSøker.dtoSøker)
 
     val dtoBehov = mutableListOf<DtoBehov>()
 

@@ -78,18 +78,18 @@ fun Routing.api(kafka: Kafka) {
     authenticate {
         route("/api") {
             get("/sak") {
-                val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::create)
+                val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 call.respond(søkere.toFrontendSaker())
             }
 
             get("/sak/neste") {
-                val søker = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::create)
+                val søker = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 call.respond(søker.toFrontendSaker().first())
             }
 
             get("/sak/{personident}") {
                 val personident = Personident(call.parameters.getOrFail("personident"))
-                val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::create)
+                val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 val frontendSaker = søkere.toFrontendSaker(personident)
                 call.respond(frontendSaker)
             }

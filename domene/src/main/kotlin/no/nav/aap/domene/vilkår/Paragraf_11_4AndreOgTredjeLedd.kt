@@ -141,7 +141,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
     override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
 
     internal companion object {
-        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4AndreOgTredjeLedd =
+        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4AndreOgTredjeLedd =
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let(::Paragraf_11_4AndreOgTredjeLedd)

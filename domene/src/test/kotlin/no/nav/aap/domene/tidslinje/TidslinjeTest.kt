@@ -57,7 +57,7 @@ internal class TidslinjeTest {
         beregningsdato: LocalDate,
         fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)
     ) =
-        Inntektsgrunnlag.create(
+        Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato,
             this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)),
             fødselsdato

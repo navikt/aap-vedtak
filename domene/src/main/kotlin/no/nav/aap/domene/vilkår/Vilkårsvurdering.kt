@@ -64,30 +64,30 @@ internal abstract class Vilkårsvurdering(
         internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
             map(Vilkårsvurdering::toFrontendVilkårsvurdering)
 
-        internal fun create(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
+        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
             when (enumValueOf<Paragraf>(vilkårsvurdering.paragraf)) {
-                Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.create(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_3 -> Paragraf_11_3.create(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.gjenopprett(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_3 -> Paragraf_11_3.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_4 -> {
                     vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
                         when (ledd) {
-                            listOf(Ledd.LEDD_1) -> Paragraf_11_4FørsteLedd.create(vilkårsvurdering)
-                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.create(vilkårsvurdering)
+                            listOf(Ledd.LEDD_1) -> Paragraf_11_4FørsteLedd.gjenopprett(vilkårsvurdering)
+                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.gjenopprett(vilkårsvurdering)
                             else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
-                Paragraf.PARAGRAF_11_5 -> Paragraf_11_5.create(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_6 -> Paragraf_11_6.create(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_5 -> Paragraf_11_5.gjenopprett(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_6 -> Paragraf_11_6.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_12 -> {
                     vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
                         when (ledd) {
-                            listOf(Ledd.LEDD_1) -> Paragraf_11_12FørsteLedd.create(vilkårsvurdering)
+                            listOf(Ledd.LEDD_1) -> Paragraf_11_12FørsteLedd.gjenopprett(vilkårsvurdering)
                             else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
-                Paragraf.PARAGRAF_11_29 -> Paragraf_11_29.create(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_29 -> Paragraf_11_29.gjenopprett(vilkårsvurdering)
             }
     }
 }

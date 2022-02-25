@@ -19,7 +19,7 @@ internal class InntektshistorikkTest {
         inntektshistorikk.leggTilInntekter(emptyList())
         val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
-        val expected = Inntektsgrunnlag.create(
+        val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = emptyList(),
             fødselsdato = FØDSELSDATO
@@ -34,7 +34,7 @@ internal class InntektshistorikkTest {
         inntektshistorikk.leggTilInntekter(listOf(Inntekt(ARBEIDSGIVER, januar(2022), Beløp(1000.0))))
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
-        val expected = Inntektsgrunnlag.create(
+        val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = emptyList(),
             fødselsdato = FØDSELSDATO
@@ -50,9 +50,9 @@ internal class InntektshistorikkTest {
         inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
-        val expected = Inntektsgrunnlag.create(
+        val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
-            inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr.create(Year.of(2021), inntekter)),
+            inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), inntekter)),
             fødselsdato = FØDSELSDATO
         )
 
@@ -66,9 +66,9 @@ internal class InntektshistorikkTest {
         inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
-        val expected = Inntektsgrunnlag.create(
+        val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
-            inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr.create(Year.of(2020), inntekter)),
+            inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2020), inntekter)),
             fødselsdato = FØDSELSDATO
         )
 
@@ -86,12 +86,12 @@ internal class InntektshistorikkTest {
         inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
-        val expected = Inntektsgrunnlag.create(
+        val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = listOf(
-                InntektsgrunnlagForÅr.create(Year.of(2019), listOf(inntekter[0])),
-                InntektsgrunnlagForÅr.create(Year.of(2020), listOf(inntekter[1])),
-                InntektsgrunnlagForÅr.create(Year.of(2021), listOf(inntekter[2]))
+                InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2019), listOf(inntekter[0])),
+                InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2020), listOf(inntekter[1])),
+                InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), listOf(inntekter[2]))
             ),
             fødselsdato = FØDSELSDATO
         )
