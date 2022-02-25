@@ -97,7 +97,7 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
 fun Routing.api(kafka: Kafka) {
     val søkerStore = kafka.getStore<AvroSøker>("soker-state-store")
 
-    log.info("ca records on state store: ${søkerStore.approximateNumEntries()}")
+//    log.info("ca records on state store: ${søkerStore.approximateNumEntries()}")
 
     authenticate {
         route("/api") {
