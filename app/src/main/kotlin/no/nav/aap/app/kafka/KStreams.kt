@@ -26,7 +26,6 @@ import org.apache.kafka.streams.kstream.*
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
-import org.checkerframework.checker.units.qual.K
 import java.util.*
 
 interface Kafka : AutoCloseable {

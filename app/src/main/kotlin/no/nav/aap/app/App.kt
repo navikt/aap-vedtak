@@ -77,12 +77,12 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
         .mapValues { value -> topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value) }
         .toTable(
             named("Hello"),
-            materialized<AvroSøker>("soker-store")
+            materialized<AvroSøker>("soker-state-store")
                 .withKeySerde(topics.søkere.keySerde)
                 .withValueSerde(topics.søkere.valueSerde)
         )
 //
-//    søkere.stateStoreCleaner("soker-store") { record, _ ->
+//    søkere.stateStoreCleaner("soker-state-store") { record, _ ->
 //        record.value().personident in søkereMarkedForDeletion
 //    }
 
@@ -95,7 +95,10 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
 }.build()
 
 fun Routing.api(kafka: Kafka) {
-    val søkerStore = kafka.getStore<AvroSøker>("soker-store")
+    val søkerStore = kafka.getStore<AvroSøker>("soker-state-store")
+
+    log.info("ca records on state store: ${søkerStore.approximateNumEntries()}")
+
     authenticate {
         route("/api") {
             get("/sak") {
