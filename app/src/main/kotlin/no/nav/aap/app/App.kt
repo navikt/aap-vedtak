@@ -78,6 +78,9 @@ fun Routing.api(kafka: Kafka) {
     authenticate {
         route("/api") {
             get("/sak") {
+                søkerStore.all().iterator().forEachRemaining {
+                    log.info("state store: ${it.key}:${it.value}")
+                }
                 val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 call.respond(søkere.toFrontendSaker())
             }
