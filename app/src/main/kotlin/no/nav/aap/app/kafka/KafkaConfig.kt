@@ -2,6 +2,7 @@ package no.nav.aap.app.kafka
 
 import io.confluent.kafka.schemaregistry.client.SchemaRegistryClientConfig
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
+import io.confluent.kafka.serializers.KafkaAvroDeserializerConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -39,6 +40,7 @@ data class KafkaConfig(
             LogAndSkipOnInvalidTimestamp::class.java.name
         this[StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG] =
             LogAndContinueExceptionHandler::class.java.name
+        this[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = false
     }
 
     val schemaRegistry: Properties = Properties().apply {
