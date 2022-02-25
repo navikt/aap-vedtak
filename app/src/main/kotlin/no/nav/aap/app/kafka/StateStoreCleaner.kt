@@ -30,11 +30,11 @@ internal class StateStoreCleaner<K, V>(
             store.all().use { iterator ->
                 runCatching {
                     iterator.forEach { record: KeyValue<K, ValueAndTimestamp<V>> ->
-                        if (predicate(record.value, wallClockTime)) {
+//                        if (predicate(record.value, wallClockTime)) {
                             recordCleanedCallback(context, record)
                             log.info("Removed ${record.key}] [${record.value.value()}]")
                             store.delete(record.key)
-                        }
+//                        }
                     }
                 }.onFailure {
                     if (it is SerializationException && it.cause is RestClientException)
