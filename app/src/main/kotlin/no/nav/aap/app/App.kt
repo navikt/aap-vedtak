@@ -80,10 +80,10 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
                 .withKeySerde(topics.søkere.keySerde)
                 .withValueSerde(topics.søkere.valueSerde)
         )
-
-    søkere.stateStoreCleaner("soker-store") { record, _ ->
-        record.value().personident in søkereMarkedForDeletion
-    }
+//
+//    søkere.stateStoreCleaner("soker-store") { record, _ ->
+//        record.value().personident in søkereMarkedForDeletion
+//    }
 
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
