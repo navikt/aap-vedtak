@@ -74,14 +74,10 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
 
 fun Routing.api(kafka: Kafka) {
     val søkerStore = kafka.getStore<AvroSøker>("soker-store")
-    val stringStore = kafka.getStore<String>("soker-store")
 
     authenticate {
         route("/api") {
             get("/sak") {
-                stringStore.all().iterator().forEachRemaining {
-                    log.info("state store: ${it.key}:${it.value}")
-                }
                 val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 call.respond(søkere.toFrontendSaker())
             }
