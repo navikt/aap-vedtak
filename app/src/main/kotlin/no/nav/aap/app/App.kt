@@ -66,8 +66,9 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
         .peek(log::info)
         .filter { key, value ->
             try {
-                topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value)
-                true
+                val deserialize = topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value)
+                log.info("klarte å deserializere $key $value")
+                deserialize != null
             } catch (e: Throwable) {
                 log.warn("klarte ikke deserializere $key $value", e)
                 false
