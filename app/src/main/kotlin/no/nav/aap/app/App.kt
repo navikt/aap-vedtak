@@ -60,10 +60,21 @@ fun Application.server(kafka: Kafka = KStreams()) {
 }
 
 fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
-    val søkere = table(topics.søkere.name, topics.søkere.consumed("soker-consumed"), materialized("soker-store"))
+    val søkere = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
+        .peek(log::info)
+        .filter { key, value -> value != null }
+        .peek(log::info)
+        .toTable(
+            named("Hello"),
+            materialized<AvroSøker>("soker-store")
+                .withKeySerde(topics.søkere.keySerde)
+                .withValueSerde(topics.søkere.valueSerde)
+        )
+
     søkere.stateStoreCleaner("soker-store") { record, _ ->
         record.value().personident in søkereMarkedForDeletion
     }
+
     søknadStream(søkere, topics)
     medlemStream(søkere, topics)
     manuellStream(søkere, topics)
@@ -74,7 +85,6 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
 
 fun Routing.api(kafka: Kafka) {
     val søkerStore = kafka.getStore<AvroSøker>("soker-store")
-
     authenticate {
         route("/api") {
             get("/sak") {

@@ -26,6 +26,7 @@ import org.apache.kafka.streams.kstream.*
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
+import org.checkerframework.checker.units.qual.K
 import java.util.*
 
 interface Kafka : AutoCloseable {
@@ -90,7 +91,10 @@ fun <V> Kafka.waitForStore(name: String): ReadOnlyKeyValueStore<String, V> = run
 }
 
 fun named(named: String): Named = Named.`as`(named)
+
 fun <V> materialized(name: String): Materialized<String, V, KeyValueStore<Bytes, ByteArray>> = Materialized.`as`(name)
+fun <V> materialized(topic: Topic<String, V>): Materialized<String, V, KeyValueStore<Bytes, ByteArray>> =
+    Materialized.with(topic.keySerde, topic.valueSerde)
 
 fun <V> ReadOnlyKeyValueStore<String, V>.allValues(): List<V> =
     all().use { it.asSequence().map(KeyValue<String, V>::value).toList() }
