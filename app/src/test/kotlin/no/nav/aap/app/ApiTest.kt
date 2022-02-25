@@ -16,7 +16,6 @@ import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
 import org.apache.kafka.streams.state.KeyValueStore
 import org.junit.jupiter.api.Assertions.*
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
@@ -106,7 +105,8 @@ internal class ApiTest {
                                 tilstand = "SØKNAD_MOTTATT",
                                 harÅpenOppgave = true
                             )
-                        )
+                        ),
+                        vedtak = null
                     )
                 )
                 assertEquals(response.status(), HttpStatusCode.OK)
@@ -184,7 +184,8 @@ internal class ApiTest {
                             tilstand = "SØKNAD_MOTTATT",
                             harÅpenOppgave = true
                         )
-                    )
+                    ),
+                    vedtak = null
                 )
                 assertEquals(response.status(), HttpStatusCode.OK)
                 assertEquals(expected, response.parseBody<FrontendSak>())
@@ -262,7 +263,8 @@ internal class ApiTest {
                                 tilstand = "SØKNAD_MOTTATT",
                                 harÅpenOppgave = true
                             )
-                        )
+                        ),
+                        vedtak = null
                     )
                 )
                 assertEquals(response.status(), HttpStatusCode.OK)
@@ -292,16 +294,6 @@ internal class ApiTest {
             assertNotNull(medlemLøsning.response)
             assertEquals(ErMedlem.JA, medlemLøsning.response.erMedlem)
             assertEquals("flotters", medlemLøsning.response.begrunnelse)
-
-//            medlemTopic.produce(key = "NO THE ID WE WANT") {
-//                medlemBehov.apply {
-//                    response = Response.newBuilder()
-//                        .setErMedlem(ErMedlem.JA)
-//                        .build()
-//                }
-//            }
-
-            println(søkerOutputTopic.readValuesToList())
 
             val søker = stateStore["123"]
             assertNotNull(søker)
@@ -360,7 +352,7 @@ internal class ApiTest {
                             tilstand = "SØKNAD_MOTTATT",
                             løsningVurderingAvBeregningsdato = null
                         ),
-                        vedtak = null //TODO
+                        vedtak = null
                     )
                 )
             )

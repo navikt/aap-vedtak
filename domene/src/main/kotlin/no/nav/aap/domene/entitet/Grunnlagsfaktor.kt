@@ -20,6 +20,7 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
     }
 
     internal fun toDto() = verdi
+    internal fun toFrontendGrunnlagsfaktor() = verdi
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

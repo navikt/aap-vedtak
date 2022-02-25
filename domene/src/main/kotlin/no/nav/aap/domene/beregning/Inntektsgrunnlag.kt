@@ -3,13 +3,17 @@ package no.nav.aap.domene.beregning
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
 import no.nav.aap.domene.beregning.Inntekt.Companion.toDto
+import no.nav.aap.domene.beregning.Inntekt.Companion.toFrontendInntekt
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.toDto
+import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.toFrontendInntekterSiste3Kalenderår
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregningsfaktor
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import no.nav.aap.domene.entitet.Grunnlagsfaktor.Companion.summer
 import no.nav.aap.dto.DtoInntektsgrunnlag
 import no.nav.aap.dto.DtoInntektsgrunnlagForÅr
+import no.nav.aap.frontendView.FrontendInntektsgrunnlag
+import no.nav.aap.frontendView.FrontendInntektsgrunnlagForÅr
 import java.time.LocalDate
 import java.time.Year
 
@@ -31,6 +35,14 @@ internal class Inntektsgrunnlag private constructor(
         fødselsdato = fødselsdato.toDto(),
         sisteKalenderår = sisteKalenderår,
         grunnlagsfaktor = grunnlagsfaktor.toDto()
+    )
+
+    internal fun toFrontendInntektsgrunnlag() = FrontendInntektsgrunnlag(
+        beregningsdato = beregningsdato,
+        inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.toFrontendInntekterSiste3Kalenderår(),
+        fødselsdato = fødselsdato.toFrontendFødselsdato(),
+        sisteKalenderår = sisteKalenderår,
+        grunnlagsfaktor = grunnlagsfaktor.toFrontendGrunnlagsfaktor()
     )
 
     internal companion object {
@@ -127,6 +139,9 @@ internal class InntektsgrunnlagForÅr private constructor(
                 grunnlagsfaktor = Grunnbeløp.finnBeregningsfaktor(år, beløpJustertFor6G)
             )
         }
+
+        internal fun Iterable<InntektsgrunnlagForÅr>.toFrontendInntekterSiste3Kalenderår() =
+            map(InntektsgrunnlagForÅr::toFrontendInntekterSiste3Kalenderår)
     }
 
     private fun grunnlagForDag(dato: LocalDate, fødselsdato: Fødselsdato) =
@@ -139,6 +154,15 @@ internal class InntektsgrunnlagForÅr private constructor(
         beløpJustertFor6G = beløpJustertFor6G.toDto(),
         erBeløpJustertFor6G = erBeløpJustertFor6G,
         grunnlagsfaktor = grunnlagsfaktor.toDto()
+    )
+
+    private fun toFrontendInntekterSiste3Kalenderår() = FrontendInntektsgrunnlagForÅr(
+        år = år,
+        inntekter = inntekter.toFrontendInntekt(),
+        beløpFørJustering = beløpFørJustering.toFrontendBeløp(),
+        beløpJustertFor6G = beløpJustertFor6G.toFrontendBeløp(),
+        erBeløpJustertFor6G = erBeløpJustertFor6G,
+        grunnlagsfaktor = grunnlagsfaktor.toFrontendGrunnlagsfaktor()
     )
 
     override fun equals(other: Any?): Boolean {

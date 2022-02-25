@@ -127,7 +127,15 @@ internal class Sak private constructor(
             error("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
-        fun toFrontendTilstand() = tilstandsnavn.name
+        fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
+            FrontendSak(
+                personident = personident.toFrontendPersonident(),
+                fødselsdato = fødselsdato.toFrontendFødselsdato(),
+                tilstand = tilstandsnavn.name,
+                vilkårsvurderinger = sak.vilkårsvurderinger.toFrontendVilkårsvurdering(),
+                vedtak = null
+            )
+
         fun toDto(sak: Sak) = DtoSak(
             tilstand = tilstandsnavn.name,
             vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
@@ -267,6 +275,15 @@ internal class Sak private constructor(
             val dtoVedtak = requireNotNull(dtoSak.vedtak)
             sak.vedtak = Vedtak.create(dtoVedtak)
         }
+
+        override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
+            FrontendSak(
+                personident = personident.toFrontendPersonident(),
+                fødselsdato = fødselsdato.toFrontendFødselsdato(),
+                tilstand = tilstandsnavn.name,
+                vilkårsvurderinger = sak.vilkårsvurderinger.toFrontendVilkårsvurdering(),
+                vedtak = sak.vedtak.toFrontendVedtak()
+            )
     }
 
     private object IkkeOppfylt : Tilstand {
@@ -279,12 +296,7 @@ internal class Sak private constructor(
     private fun toDto() = tilstand.toDto(this)
 
     private fun toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) =
-        FrontendSak(
-            personident = personident.toFrontendPersonident(),
-            fødselsdato = fødselsdato.toFrontendFødselsdato(),
-            tilstand = tilstand.toFrontendTilstand(),
-            vilkårsvurderinger = vilkårsvurderinger.toFrontendVilkårsvurdering()
-        )
+        tilstand.toFrontendSak(this, personident, fødselsdato)
 
     internal companion object {
         internal fun Iterable<Sak>.toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) = map {

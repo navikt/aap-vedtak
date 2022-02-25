@@ -55,13 +55,7 @@ internal abstract class Vilkårsvurdering(
 
     protected abstract fun toFrontendTilstand(): String
     protected open fun toFrontendHarÅpenOppgave(): Boolean = false
-    protected open fun toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
-        paragraf = paragraf.name,
-        ledd = ledd.map(Ledd::name),
-        tilstand = toFrontendTilstand(), // todo:
-        null,
-        null,
-    )
+    protected abstract fun toDto(): DtoVilkårsvurdering
 
     internal companion object {
         internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)

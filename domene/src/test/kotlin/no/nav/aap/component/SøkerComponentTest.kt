@@ -9,18 +9,19 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoSøker
-import no.nav.aap.frontendView.FrontendSak
-import no.nav.aap.frontendView.FrontendVilkårsvurdering
+import no.nav.aap.frontendView.*
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.Behov_11_2
 import no.nav.aap.hendelse.behov.Behov_11_5
 import no.nav.aap.januar
 import no.nav.aap.juli
 import no.nav.aap.september
+import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.Year
 
 internal class SøkerComponentTest {
     @Test
@@ -294,9 +295,157 @@ internal class SøkerComponentTest {
                     tilstand = "SØKNAD_MOTTATT",
                     harÅpenOppgave = true
                 )
-            )
+            ),
+            vedtak = null
         )
         assertEquals(expected, søker.toFrontendSaker().single())
+    }
+
+    @Test
+    fun `Beregner vedtak og mapper sak til frontend`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(40))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningParagraf_11_3(true))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_6(true))
+        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
+        søker.håndterLøsning(LøsningParagraf_11_29(true))
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato(13 januar 2022))
+        søker.håndterLøsning(
+            LøsningInntekter(
+                listOf(
+                    Inntekt(Arbeidsgiver("321"), januar(2021), 400000.beløp),
+                    Inntekt(Arbeidsgiver("321"), januar(2020), 400000.beløp),
+                    Inntekt(Arbeidsgiver("321"), januar(2019), 400000.beløp)
+                )
+            )
+        )
+
+        val behov = søknad.behov()
+        assertTrue(behov.filterIsInstance<Behov_11_2>().isNotEmpty())
+        assertTrue(behov.filterIsInstance<Behov_11_5>().isNotEmpty())
+
+        val actual = søker.toFrontendSaker().single()
+        Assertions.assertNotNull(actual.vedtak) { "Saken mangler vedtak - $actual" }
+        val søknadstidspunkt = actual.vedtak!!.søknadstidspunkt
+
+        val expected = FrontendSak(
+            personident = "12345678910",
+            fødselsdato = LocalDate.now().minusYears(40),
+            tilstand = "VEDTAK_FATTET",
+            vilkårsvurderinger = listOf(
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_2",
+                    ledd = listOf("LEDD_1", "LEDD_2"),
+                    tilstand = "OPPFYLT_MASKINELT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_3",
+                    ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_4",
+                    ledd = listOf("LEDD_1"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_4",
+                    ledd = listOf("LEDD_2", "LEDD_3"),
+                    tilstand = "IKKE_RELEVANT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_5",
+                    ledd = listOf("LEDD_1", "LEDD_2"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_6",
+                    ledd = listOf("LEDD_1"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_12",
+                    ledd = listOf("LEDD_1"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                ),
+                FrontendVilkårsvurdering(
+                    paragraf = "PARAGRAF_11_29",
+                    ledd = listOf("LEDD_1"),
+                    tilstand = "OPPFYLT",
+                    harÅpenOppgave = false
+                )
+            ),
+            vedtak = FrontendVedtak(
+                innvilget = true,
+                inntektsgrunnlag = FrontendInntektsgrunnlag(
+                    beregningsdato = 13 januar 2022,
+                    inntekterSiste3Kalenderår = listOf(
+                        FrontendInntektsgrunnlagForÅr(
+                            år = Year.of(2021),
+                            inntekter = listOf(
+                                FrontendInntekt(
+                                    arbeidsgiver = "321",
+                                    inntekstmåned = januar(2021),
+                                    beløp = 400000.0
+                                )
+                            ),
+                            beløpFørJustering = 400000.0,
+                            beløpJustertFor6G = 400000.0,
+                            erBeløpJustertFor6G = false,
+                            grunnlagsfaktor = 3.819856
+                        ),
+                        FrontendInntektsgrunnlagForÅr(
+                            år = Year.of(2020),
+                            inntekter = listOf(
+                                FrontendInntekt(
+                                    arbeidsgiver = "321",
+                                    inntekstmåned = januar(2020),
+                                    beløp = 400000.0
+                                )
+                            ),
+                            beløpFørJustering = 400000.0,
+                            beløpJustertFor6G = 400000.0,
+                            erBeløpJustertFor6G = false,
+                            grunnlagsfaktor = 3.966169
+                        ),
+                        FrontendInntektsgrunnlagForÅr(
+                            år = Year.of(2019),
+                            inntekter = listOf(
+                                FrontendInntekt(
+                                    arbeidsgiver = "321",
+                                    inntekstmåned = januar(2019),
+                                    beløp = 400000.0
+                                )
+                            ),
+                            beløpFørJustering = 400000.0,
+                            beløpJustertFor6G = 400000.0,
+                            erBeløpJustertFor6G = false,
+                            grunnlagsfaktor = 4.04588
+                        )
+                    ),
+                    fødselsdato = LocalDate.now().minusYears(40),
+                    sisteKalenderår = Year.of(2021),
+                    grunnlagsfaktor = 3.943968
+                ),
+                søknadstidspunkt = søknadstidspunkt,
+                vedtaksdato = LocalDate.now(),
+                virkningsdato = LocalDate.now()
+            )
+        )
+        assertEquals(expected, actual)
     }
 
     @Test
@@ -361,7 +510,7 @@ internal class SøkerComponentTest {
                 )
             )
         }
-        medSøker {  }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
+        medSøker { }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
 
         assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
