@@ -70,8 +70,8 @@ data class KafkaConfig(
 
     val consumer: Properties = kStreams + ssl + schemaRegistry + Properties().apply {
         this[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = brokers
-        this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
-        this[ConsumerConfig.GROUP_ID_CONFIG] = "aap-vedtak"
+        this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
+        this[ConsumerConfig.GROUP_ID_CONFIG] = "aap-vedtak-1"
         this[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] = 124_000
     }
 
