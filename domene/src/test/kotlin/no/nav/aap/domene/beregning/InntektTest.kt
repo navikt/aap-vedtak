@@ -16,6 +16,11 @@ import java.time.YearMonth
 import java.time.temporal.ChronoUnit
 
 internal class InntektTest {
+
+    private companion object {
+        private val ARBEIDSGIVER = Arbeidsgiver("987654321")
+    }
+
     @Test
     fun `Hvis vi summerer en tom liste med inntekter, blir summen 0`() {
         val sum = emptyList<Inntekt>().summerInntekt()
@@ -46,11 +51,11 @@ internal class InntektTest {
     @Test
     fun `Summerer en liste med inntekter`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2020), 12000.beløp),
-            Inntekt(Arbeidsgiver(), februar(2020), 13000.beløp),
-            Inntekt(Arbeidsgiver(), mars(2020), 14000.beløp),
-            Inntekt(Arbeidsgiver(), april(2020), 12000.beløp),
-            Inntekt(Arbeidsgiver(), mai(2020), 12000.beløp)
+            Inntekt(ARBEIDSGIVER, januar(2020), 12000.beløp),
+            Inntekt(ARBEIDSGIVER, februar(2020), 13000.beløp),
+            Inntekt(ARBEIDSGIVER, mars(2020), 14000.beløp),
+            Inntekt(ARBEIDSGIVER, april(2020), 12000.beløp),
+            Inntekt(ARBEIDSGIVER, mai(2020), 12000.beløp)
         )
         val sum = inntekter.summerInntekt()
         assertEquals(Beløp(63000.0), sum)
@@ -104,5 +109,5 @@ internal class InntektTest {
     private fun ClosedRange<YearMonth>.inntekter() =
         (0..this.start.until(this.endInclusive, ChronoUnit.MONTHS))
             .map { this.start.plusMonths(it) }
-            .map { Inntekt(Arbeidsgiver(), it, Beløp(1.0)) }
+            .map { Inntekt(ARBEIDSGIVER, it, Beløp(1.0)) }
 }

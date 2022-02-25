@@ -24,6 +24,11 @@ import java.time.LocalDate
 import java.time.Year
 
 internal class SøkerComponentTest {
+
+    private companion object {
+        private val ARBEIDSGIVER = Arbeidsgiver("987654321")
+    }
+
     @Test
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
@@ -319,9 +324,9 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
-                    Inntekt(Arbeidsgiver("321"), januar(2021), 400000.beløp),
-                    Inntekt(Arbeidsgiver("321"), januar(2020), 400000.beløp),
-                    Inntekt(Arbeidsgiver("321"), januar(2019), 400000.beløp)
+                    Inntekt(ARBEIDSGIVER, januar(2021), 400000.beløp),
+                    Inntekt(ARBEIDSGIVER, januar(2020), 400000.beløp),
+                    Inntekt(ARBEIDSGIVER, januar(2019), 400000.beløp)
                 )
             )
         )
@@ -397,7 +402,7 @@ internal class SøkerComponentTest {
                             år = Year.of(2021),
                             inntekter = listOf(
                                 FrontendInntekt(
-                                    arbeidsgiver = "321",
+                                    arbeidsgiver = ARBEIDSGIVER.toFrontendArbeidsgiver(),
                                     inntekstmåned = januar(2021),
                                     beløp = 400000.0
                                 )
@@ -411,7 +416,7 @@ internal class SøkerComponentTest {
                             år = Year.of(2020),
                             inntekter = listOf(
                                 FrontendInntekt(
-                                    arbeidsgiver = "321",
+                                    arbeidsgiver = ARBEIDSGIVER.toFrontendArbeidsgiver(),
                                     inntekstmåned = januar(2020),
                                     beløp = 400000.0
                                 )
@@ -425,7 +430,7 @@ internal class SøkerComponentTest {
                             år = Year.of(2019),
                             inntekter = listOf(
                                 FrontendInntekt(
-                                    arbeidsgiver = "321",
+                                    arbeidsgiver = ARBEIDSGIVER.toFrontendArbeidsgiver(),
                                     inntekstmåned = januar(2019),
                                     beløp = 400000.0
                                 )
@@ -466,9 +471,9 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
-                    Inntekt(Arbeidsgiver(), januar(2020), 500000.beløp),
-                    Inntekt(Arbeidsgiver(), januar(2019), 500000.beløp),
-                    Inntekt(Arbeidsgiver(), januar(2018), 500000.beløp)
+                    Inntekt(ARBEIDSGIVER, januar(2020), 500000.beløp),
+                    Inntekt(ARBEIDSGIVER, januar(2019), 500000.beløp),
+                    Inntekt(ARBEIDSGIVER, januar(2018), 500000.beløp)
                 )
             )
         )
@@ -503,9 +508,9 @@ internal class SøkerComponentTest {
             håndterLøsning(
                 LøsningInntekter(
                     listOf(
-                        Inntekt(Arbeidsgiver(), januar(2020), 500000.beløp),
-                        Inntekt(Arbeidsgiver(), januar(2019), 500000.beløp),
-                        Inntekt(Arbeidsgiver(), januar(2018), 500000.beløp)
+                        Inntekt(ARBEIDSGIVER, januar(2020), 500000.beløp),
+                        Inntekt(ARBEIDSGIVER, januar(2019), 500000.beløp),
+                        Inntekt(ARBEIDSGIVER, januar(2018), 500000.beløp)
                     )
                 )
             )

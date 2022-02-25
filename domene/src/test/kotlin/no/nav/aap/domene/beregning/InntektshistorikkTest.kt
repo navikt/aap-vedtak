@@ -10,6 +10,7 @@ internal class InntektshistorikkTest {
 
     private companion object {
         private val FØDSELSDATO = Fødselsdato(1 januar 1970)
+        private val ARBEIDSGIVER = Arbeidsgiver("987654321")
     }
 
     @Test
@@ -30,7 +31,7 @@ internal class InntektshistorikkTest {
     @Test
     fun `Hvis bruker kun har inntekt i år, blir inntektsgrunnlaget tomt`() {
         val inntektshistorikk = Inntektshistorikk()
-        inntektshistorikk.leggTilInntekter(listOf(Inntekt(Arbeidsgiver(), januar(2022), Beløp(1000.0))))
+        inntektshistorikk.leggTilInntekter(listOf(Inntekt(ARBEIDSGIVER, januar(2022), Beløp(1000.0))))
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
 
         val expected = Inntektsgrunnlag.create(
@@ -44,7 +45,7 @@ internal class InntektshistorikkTest {
 
     @Test
     fun `Hvis bruker kun har inntekt i forrige kalenderår`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0)))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2021), Beløp(1000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
@@ -60,7 +61,7 @@ internal class InntektshistorikkTest {
 
     @Test
     fun `Hvis bruker kun har inntekt i 2020`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2020), Beløp(1000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
         val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
@@ -77,9 +78,9 @@ internal class InntektshistorikkTest {
     @Test
     fun `Har inntekt i 3 kalenderår`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), Beløp(1000.0)), //1076.1940404183
-            Inntekt(Arbeidsgiver(), januar(2020), Beløp(1000.0)), //1054.9909273894
-            Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000.0))  //1016.0720424768
+            Inntekt(ARBEIDSGIVER, januar(2019), Beløp(1000.0)), //1076.1940404183
+            Inntekt(ARBEIDSGIVER, januar(2020), Beløp(1000.0)), //1054.9909273894
+            Inntekt(ARBEIDSGIVER, januar(2021), Beløp(1000.0))  //1016.0720424768
         )
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)

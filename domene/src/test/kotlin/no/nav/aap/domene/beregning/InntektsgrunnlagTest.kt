@@ -15,6 +15,10 @@ import java.time.Year
 
 internal class InntektsgrunnlagTest {
 
+    private companion object {
+        private val ARBEIDSGIVER = Arbeidsgiver("987654321")
+    }
+
     @Test
     fun `Hvis vi beregner grunnlag for en bruker uten inntekt, blir grunnlaget 0`() {
         val grunnlag = Inntektsgrunnlag.create(1 januar 2022, emptyList(), Fødselsdato(1 januar 1970))
@@ -23,14 +27,14 @@ internal class InntektsgrunnlagTest {
 
     @Test
     fun `Hvis bruker kun har inntekt i år, blir grunnlaget satt til minstegrunnlag`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2022), 1000.beløp))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2022), 1000.beløp))
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         assertEquals(322421.21.beløp, grunnlag.grunnlagForDag(1 januar 2022))
     }
 
     @Test
     fun `Hvis bruker kun har inntekt i forrige kalenderår`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(400000.0)))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2021), Beløp(400000.0)))
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
@@ -39,7 +43,7 @@ internal class InntektsgrunnlagTest {
 
     @Test
     fun `Hvis bruker kun har inntekt over 6G forrige kalenderår, blir beløp G-regulert`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), Beløp(1000000.0)))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2021), Beløp(1000000.0)))
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
@@ -48,7 +52,7 @@ internal class InntektsgrunnlagTest {
 
     @Test
     fun `Hvis bruker kun har inntekt i 2020 blir snittet lavere enn minste årlige ytelse på 2G, og grunnlaget oppjusteres`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2020), 400000.beløp))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2020), 400000.beløp))
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
@@ -57,7 +61,7 @@ internal class InntektsgrunnlagTest {
 
     @Test
     fun `Bruker har inntekt rett under grenseverdien på 2G delt på 66 prosent, så vil grunnlaget oppjusteres til minste årlige ytelse på 2G`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), 314148.beløp))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2021), 314148.beløp))
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
@@ -66,7 +70,7 @@ internal class InntektsgrunnlagTest {
 
     @Test
     fun `Bruker har inntekt rett over grenseverdien på 2G delt på 66 prosent, så grunnlaget vil ikke oppjusteres til minste årlige ytelse på 2G - Inntekten er allerede over`() {
-        val inntekter = listOf(Inntekt(Arbeidsgiver(), januar(2021), 318336.64.beløp))
+        val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2021), 318336.64.beløp))
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
 
@@ -76,9 +80,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Har inntekt i 3 kalenderår`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), 400000.beløp), //4.0458802824
-            Inntekt(Arbeidsgiver(), januar(2020), 400000.beløp), //3.966168582
-            Inntekt(Arbeidsgiver(), januar(2021), 400000.beløp)  //3.8198556095
+            Inntekt(ARBEIDSGIVER, januar(2019), 400000.beløp), //4.0458802824
+            Inntekt(ARBEIDSGIVER, januar(2020), 400000.beløp), //3.966168582
+            Inntekt(ARBEIDSGIVER, januar(2021), 400000.beløp)  //3.8198556095
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
@@ -91,9 +95,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Har inntekt i 3 kalenderår - høyere i 2019`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), 400000.beløp), //4.0458802824
-            Inntekt(Arbeidsgiver(), januar(2020), 400000.beløp), //3.966168582
-            Inntekt(Arbeidsgiver(), januar(2021), 200000.beløp)  //1.9099278047
+            Inntekt(ARBEIDSGIVER, januar(2019), 400000.beløp), //4.0458802824
+            Inntekt(ARBEIDSGIVER, januar(2020), 400000.beløp), //3.966168582
+            Inntekt(ARBEIDSGIVER, januar(2021), 200000.beløp)  //1.9099278047
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
@@ -106,9 +110,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Har inntekt i 3 kalenderår - alle over 6G`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2019), Beløp(700000.0)),
-            Inntekt(Arbeidsgiver(), januar(2020), Beløp(800000.0)),
-            Inntekt(Arbeidsgiver(), januar(2021), Beløp(900000.0))
+            Inntekt(ARBEIDSGIVER, januar(2019), Beløp(700000.0)),
+            Inntekt(ARBEIDSGIVER, januar(2020), Beløp(800000.0)),
+            Inntekt(ARBEIDSGIVER, januar(2021), Beløp(900000.0))
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2022)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 januar 2022)
@@ -123,9 +127,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Har inntekt i 3 kalenderår - fra rundskriv`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2014), 540527.beløp),
-            Inntekt(Arbeidsgiver(), januar(2015), 459248.beløp),
-            Inntekt(Arbeidsgiver(), januar(2016), 645246.beløp)
+            Inntekt(ARBEIDSGIVER, januar(2014), 540527.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2015), 459248.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2016), 645246.beløp)
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 juli 2017)
@@ -139,9 +143,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Hvis bruker har snittinntekt over 3 år som er høyere enn siste år`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2014), Beløp(540527.0)),
-            Inntekt(Arbeidsgiver(), januar(2015), Beløp(459248.0)),
-            Inntekt(Arbeidsgiver(), januar(2016), Beløp(445700.0))
+            Inntekt(ARBEIDSGIVER, januar(2014), Beløp(540527.0)),
+            Inntekt(ARBEIDSGIVER, januar(2015), Beløp(459248.0)),
+            Inntekt(ARBEIDSGIVER, januar(2016), Beløp(445700.0))
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
         val grunnlagForDag = grunnlag.grunnlagForDag(1 juli 2017)
@@ -152,9 +156,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Eksempel 1`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2018), 714273.beløp),
-            Inntekt(Arbeidsgiver(), januar(2019), 633576.beløp),
-            Inntekt(Arbeidsgiver(), januar(2020), 915454.beløp)
+            Inntekt(ARBEIDSGIVER, januar(2018), 714273.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2019), 633576.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2020), 915454.beløp)
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2021)
         val grunnlagForDag = grunnlag.grunnlagForDag(19 mars 2022)
@@ -165,9 +169,9 @@ internal class InntektsgrunnlagTest {
     @Test
     fun `Eksempel 2`() {
         val inntekter = listOf(
-            Inntekt(Arbeidsgiver(), januar(2017), 190402.beløp),
-            Inntekt(Arbeidsgiver(), januar(2018), 268532.beløp),
-            Inntekt(Arbeidsgiver(), januar(2019), 350584.beløp)
+            Inntekt(ARBEIDSGIVER, januar(2017), 190402.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 268532.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2019), 350584.beløp)
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2020)
         val grunnlagForDag = grunnlag.grunnlagForDag(31 august 2021)
