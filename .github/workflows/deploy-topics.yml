@@ -12,12 +12,11 @@ on:
       - '.github/workflows/deploy-topics.yml'
 
 jobs:
-  deploy-topic:
-    name: Deploy topic
+  deploy-medlem:
+    name: Deploy medlem
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2.4.0
-
       - name: Deploy aap.medlem.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -27,6 +26,11 @@ jobs:
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
+  deploy-sokere:
+    name: Deploy sokere
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
       - name: Deploy aap.sokere.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -36,6 +40,11 @@ jobs:
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
+  deploy-manuell:
+    name: Deploy manuell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
       - name: Deploy aap.manuell.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -45,6 +54,11 @@ jobs:
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
+  deploy-inntekter:
+    name: Deploy inntekter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
       - name: Deploy aap.inntekter.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
