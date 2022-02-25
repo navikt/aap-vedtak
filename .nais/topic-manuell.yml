@@ -14,7 +14,7 @@ spec:
   config:
     cleanupPolicy: compact,delete
     partitions: 2
-    retentionHours: 120
+    retentionHours: 1
   acl:
     - team: aap
       application: vedtak
