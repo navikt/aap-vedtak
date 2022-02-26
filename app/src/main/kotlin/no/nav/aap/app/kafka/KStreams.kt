@@ -50,7 +50,7 @@ class KStreams : Kafka {
         }
         streams.setStateListener { newState, oldState ->
             log.info("Kafka streams state changed: $oldState -> $newState")
-            if (oldState == State.CREATED && newState == State.RUNNING) started = true
+            if (newState == State.RUNNING) started = true
         }
         config = kafkaConfig
         streams.start()
