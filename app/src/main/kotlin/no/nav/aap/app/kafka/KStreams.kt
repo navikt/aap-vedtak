@@ -29,36 +29,39 @@ import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import java.util.*
 
 interface Kafka : AutoCloseable {
-    fun init(topology: Topology, config: KafkaConfig)
+    fun start(topology: Topology, kafkaConfig: KafkaConfig)
     fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V>
     fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V>
     fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V>
     fun healthy(): Boolean
+    fun started(): Boolean
 }
 
-class KStreams constructor() : Kafka {
+class KStreams : Kafka {
     private lateinit var config: KafkaConfig
     private lateinit var streams: KafkaStreams
+    private var started: Boolean = false
 
-    constructor(kafkaConfig: KafkaConfig) : this() {
-        config = kafkaConfig
-    }
-
-    override fun init(topology: Topology, config: KafkaConfig) {
-        this.streams = KafkaStreams(topology, config.consumer + config.producer)
-        this.streams.setUncaughtExceptionHandler { err: Throwable ->
+    override fun start(topology: Topology, kafkaConfig: KafkaConfig) {
+        streams = KafkaStreams(topology, kafkaConfig.consumer + kafkaConfig.producer)
+        streams.setUncaughtExceptionHandler { err: Throwable ->
             log.error("Uventet feil, logger og leser neste record, ${err.message}")
             StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
         }
-        this.streams.start()
-        this.config = config
+        streams.setStateListener { newState, oldState ->
+            log.info("Kafka streams state changed: $oldState -> $newState")
+            if (oldState == State.CREATED && newState == State.RUNNING) started = true
+        }
+        config = kafkaConfig
+        streams.start()
     }
 
     override fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V> =
         streams.store(StoreQueryParameters.fromNameAndType(name, QueryableStoreTypes.keyValueStore()))
 
-    override fun healthy(): Boolean = streams.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
+    override fun started() = started
     override fun close() = streams.close()
+    override fun healthy(): Boolean = streams.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
 
     override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> =
         KafkaConsumer(
@@ -90,10 +93,14 @@ fun <V> Kafka.waitForStore(name: String): ReadOnlyKeyValueStore<String, V> = run
 }
 
 fun named(named: String): Named = Named.`as`(named)
+fun <V> materialized(
+    storeName: String,
+    topic: Topic<String, V>,
+): Materialized<String, V, KeyValueStore<Bytes, ByteArray>> =
+    Materialized.`as`<String?, V, KeyValueStore<Bytes, ByteArray>?>(storeName)
+        .withKeySerde(topic.keySerde)
+        .withValueSerde(topic.valueSerde)
 
-fun <V> materialized(name: String): Materialized<String, V, KeyValueStore<Bytes, ByteArray>> = Materialized.`as`(name)
-fun <V> materialized(topic: Topic<String, V>): Materialized<String, V, KeyValueStore<Bytes, ByteArray>> =
-    Materialized.with(topic.keySerde, topic.valueSerde)
 
 fun <V> ReadOnlyKeyValueStore<String, V>.allValues(): List<V> =
     all().use { it.asSequence().map(KeyValue<String, V>::value).toList() }

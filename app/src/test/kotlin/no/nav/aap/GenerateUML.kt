@@ -1,6 +1,6 @@
 package no.nav.aap
 
-import no.nav.aap.app.Config
+import no.nav.aap.app.config.Config
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.createTopology
 import no.nav.aap.app.kafka.KStreamsUML

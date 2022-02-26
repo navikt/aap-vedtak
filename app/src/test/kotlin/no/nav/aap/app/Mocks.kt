@@ -38,9 +38,9 @@ class KStreamsMock : Kafka {
     lateinit var driver: TopologyTestDriver
     lateinit var config: KafkaConfig
 
-    override fun init(topology: Topology, config: KafkaConfig) {
-        this.driver = TopologyTestDriver(topology, config.consumer + config.producer + testConfig)
-        this.config = config
+    override fun start(topology: Topology, kafkaConfig: KafkaConfig) {
+        driver = TopologyTestDriver(topology, kafkaConfig.consumer + kafkaConfig.producer + testConfig)
+        config = kafkaConfig
     }
 
     internal val schemaRegistryUrl: String by lazy { "mock://schema-registry/${UUID.randomUUID()}" }
@@ -50,6 +50,7 @@ class KStreamsMock : Kafka {
     override fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V> = driver.getKeyValueStore(name)
     override fun close() = driver.close().also { MockSchemaRegistry.dropScope(schemaRegistryUrl) }
     override fun healthy(): Boolean = true
+    override fun started(): Boolean = true
 
     inline fun <reified V : Any> inputJsonTopic(name: String): TestInputTopic<String, V> =
         driver.createInputTopic(name, Serdes.StringSerde().serializer(), JsonSerde(V::class).serializer())

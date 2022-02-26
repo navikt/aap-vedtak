@@ -12,14 +12,15 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
+import io.ktor.util.collections.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import no.nav.aap.app.config.Config
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.*
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
-import no.nav.aap.app.security.OAuthConfig
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.entitet.Personident
@@ -27,16 +28,16 @@ import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import org.slf4j.LoggerFactory
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
+
+const val SØKERE_STORE_NAME = "soker-state-store"
+internal val log = LoggerFactory.getLogger("app")
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
-
-data class Config(val oauth: OAuthConfig, val kafka: KafkaConfig)
-
-internal val log = LoggerFactory.getLogger("app")
 
 fun Application.server(kafka: Kafka = KStreams()) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
@@ -46,59 +47,39 @@ fun Application.server(kafka: Kafka = KStreams()) {
     install(AapAuth) { providers += AzureADProvider(config.oauth.azure) }
     install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
 
-    val topics = Topics(config.kafka)
-    val topology = createTopology(topics)
-    kafka.init(topology, config.kafka)
-
+    Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
+    val topics = Topics(config.kafka)
+    val topology = createTopology(topics)
+    kafka.start(topology, config.kafka)
+    val søkerStore = kafka.getStore<AvroSøker>(SØKERE_STORE_NAME)
+
     routing {
-        api(kafka)
+        api(søkerStore)
         devTools(kafka, topics)
         actuator(prometheus, kafka)
     }
 }
 
 fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
-    val søkere = stream(topics.søkere.name, topics.tempSøkere.consumed("soker-consumed"))
-        .peek(log::info)
-        .filter { key, value -> value != null }
-        .peek(log::info)
-        .filter { key, value ->
-            try {
-                val deserialize = topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value)
-                log.info("klarte å deserializere $key $value")
-                deserialize != null
-            } catch (e: Throwable) {
-                log.warn("klarte ikke deserializere $key $value", e)
-                false
-            }
-        }
-        .mapValues { value -> topics.søkere.valueSerde.deserializer().deserialize(topics.søkere.name, value) }
-        .toTable(
-            named("Hello"),
-            materialized<AvroSøker>("soker-state-store")
-                .withKeySerde(topics.søkere.keySerde)
-                .withValueSerde(topics.søkere.valueSerde)
-        )
-//
-//    søkere.stateStoreCleaner("soker-state-store") { record, _ ->
-//        record.value().personident in søkereMarkedForDeletion
-//    }
+    val søkerKTable = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
+        .filter { _, value -> value != null }
+        .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
 
-    søknadStream(søkere, topics)
-    medlemStream(søkere, topics)
-    manuellStream(søkere, topics)
-    inntekterStream(søkere, topics)
+    søkerKTable.stateStoreCleaner(SØKERE_STORE_NAME) { record, _ ->
+        DevTool.søkereMarkedForDeletion.removeIf { it == record.value().personident }
+    }
+
+    søknadStream(søkerKTable, topics)
+    medlemStream(søkerKTable, topics)
+    manuellStream(søkerKTable, topics)
+    inntekterStream(søkerKTable, topics)
     medlemResponseStream(topics)
     inntekterResponseStream(topics)
 }.build()
 
-fun Routing.api(kafka: Kafka) {
-    val søkerStore = kafka.getStore<AvroSøker>("soker-state-store")
-
-//    log.info("ca records on state store: ${søkerStore.approximateNumEntries()}")
-
+fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) {
     authenticate {
         route("/api") {
             get("/sak") {
@@ -121,32 +102,38 @@ fun Routing.api(kafka: Kafka) {
     }
 }
 
-private val søkereMarkedForDeletion: MutableList<String> = mutableListOf()
-fun Routing.devTools(kafka: Kafka, topics: Topics) {
-    val søkerProducer = kafka.createProducer(topics.søkere)
-
-    fun <V> Producer<String, V>.tombstone(key: String) =
-        send(ProducerRecord(topics.søkere.name, key, null)).get()
-
-    route("/delete/{personident}") {
-        get {
-            val personident = call.parameters.getOrFail("personident")
-            søkerProducer.tombstone(personident).also {
-                søkereMarkedForDeletion.add(personident)
-                log.info("produced tombstone [${topics.søkere.name}] [$personident] [null]")
-            }
-            call.respondText("Deleted $personident")
-        }
-    }
-}
-
 fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
     route("/actuator") {
         get("/metrics") { call.respond(prometheus.scrape()) }
         get("/live") { call.respond("vedtak") }
         get("/ready") {
-            val status = if (kafka.healthy()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respond(status, "vedtak")
+            when (kafka.healthy() && kafka.started()) {
+                true -> call.respond(HttpStatusCode.OK, "vedtak")
+                false -> call.respond(HttpStatusCode.InternalServerError, "vedtak")
+            }
+        }
+    }
+}
+
+object DevTool {
+    val søkereMarkedForDeletion: ConcurrentList<String> = ConcurrentList()
+}
+
+fun Routing.devTools(kafka: Kafka, topics: Topics) {
+    val søkerProducer = kafka.createProducer(topics.søkere)
+
+    fun <V> Producer<String, V>.tombstone(key: String) {
+        send(ProducerRecord(topics.søkere.name, key, null)).get()
+    }
+
+    route("/delete/{personident}") {
+        get {
+            val personident = call.parameters.getOrFail("personident")
+            søkerProducer.tombstone(personident).also {
+                DevTool.søkereMarkedForDeletion.add(personident)
+                log.info("produced tombstone [${topics.søkere.name}] [$personident] [null]")
+            }
+            call.respondText("Deleted $personident")
         }
     }
 }
