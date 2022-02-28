@@ -16,7 +16,7 @@ import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.medlem.v1.Request as AvroMedlemRequest
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+internal fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søkerOgBehov = stream(topics.søknad.name, topics.søknad.consumed("soknad-mottatt"))
         .peek { k: String, v -> log.info("consumed [aap.aap-soknad-sendt.v1] [$k] [$v]") }
         .leftJoin(søkere, SøknadAndSøker::join, topics.søknad.joined(topics.søkere))

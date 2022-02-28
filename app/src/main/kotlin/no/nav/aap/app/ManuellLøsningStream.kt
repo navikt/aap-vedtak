@@ -20,7 +20,7 @@ import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+internal fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søkerOgBehov = stream(topics.manuell.name, topics.manuell.consumed("losning-mottatt"))
         .peek { k: String, v -> log.info("consumed [aap.losning.v1] [$k] [$v]") }
         .join(søkere, LøsningAndSøker::create, topics.manuell.joined(topics.søkere))

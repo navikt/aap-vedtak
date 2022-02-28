@@ -39,7 +39,7 @@ fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-fun Application.server(kafka: Kafka = KStreams()) {
+internal fun Application.server(kafka: Kafka = KStreams()) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val config = loadConfig<Config>()
 
@@ -62,7 +62,7 @@ fun Application.server(kafka: Kafka = KStreams()) {
     }
 }
 
-fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
+internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     val søkerKTable = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
         .filter { _, value -> value != null }
         .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
@@ -79,7 +79,7 @@ fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     inntekterResponseStream(topics)
 }.build()
 
-fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) {
+private fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) {
     authenticate {
         route("/api") {
             get("/sak") {
@@ -102,7 +102,7 @@ fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) {
     }
 }
 
-fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
+private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
     route("/actuator") {
         get("/metrics") { call.respond(prometheus.scrape()) }
         get("/live") { call.respond("vedtak") }
@@ -115,11 +115,11 @@ fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
     }
 }
 
-object DevTool {
+private object DevTool {
     val søkereMarkedForDeletion: ConcurrentList<String> = ConcurrentList()
 }
 
-fun Routing.devTools(kafka: Kafka, topics: Topics) {
+private fun Routing.devTools(kafka: Kafka, topics: Topics) {
     val søkerProducer = kafka.createProducer(topics.søkere)
 
     fun <V> Producer<String, V>.tombstone(key: String) {

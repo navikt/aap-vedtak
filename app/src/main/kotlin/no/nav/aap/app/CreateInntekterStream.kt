@@ -6,13 +6,13 @@ import org.apache.kafka.streams.StreamsBuilder
 import no.nav.aap.avro.inntekter.v1.Inntekt as AvroInntekt
 import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 
-fun StreamsBuilder.inntekterResponseStream(topics: Topics) {
+internal fun StreamsBuilder.inntekterResponseStream(topics: Topics) {
     stream(topics.inntekter.name, topics.inntekter.consumed("inntekter-behov-mottatt"))
         .peek { k, v -> log.info("consumed [aap.inntekter.v1] [$k] [$v]") }
         .filter { _, inntekter -> inntekter.response == null }
         .mapValues(::addInntekterResponse)
         .filter { _, inntekter -> inntekter.personident != "11111111111" } // test person
-        .peek { k, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
+        .peek { k, v -> log.info("produced [aap.inntekter.v1] [$k] [$v]") }
         .to(topics.inntekter.name, topics.inntekter.produced("produced--inntekter"))
 }
 

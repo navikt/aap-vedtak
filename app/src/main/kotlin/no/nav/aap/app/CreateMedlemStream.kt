@@ -6,13 +6,13 @@ import no.nav.aap.avro.medlem.v1.Response
 import org.apache.kafka.streams.StreamsBuilder
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 
-fun StreamsBuilder.medlemResponseStream(topics: Topics) {
+internal fun StreamsBuilder.medlemResponseStream(topics: Topics) {
     stream(topics.medlem.name, topics.medlem.consumed("medlem-behov-mottatt"))
         .peek { k, v -> log.info("consumed [aap.medlem.v1] [$k] [$v]") }
         .filter { _, medlem -> medlem.response == null }
         .mapValues(::addMedlemResponse)
         .filter { _, medlem -> medlem.personident != "11111111111" } // test person
-        .peek { k, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
+        .peek { k, v -> log.info("produced [aap.medlem.v1] [$k] [$v]") }
         .to(topics.medlem.name, topics.medlem.produced("produced--medlem"))
 }
 

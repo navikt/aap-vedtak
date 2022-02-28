@@ -12,7 +12,7 @@ import org.apache.kafka.streams.kstream.KTable
 import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.inntekter.name, topics.inntekter.consumed("inntekter-mottatt"))
         .peek { k: String, v -> log.info("consumed [${topics.inntekter.name}] [$k] [$v]") }
         .filter({ _, inntekter -> inntekter.response != null }, named("inntekter-filter-responses"))

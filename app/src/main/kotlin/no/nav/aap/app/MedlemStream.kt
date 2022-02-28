@@ -10,7 +10,7 @@ import org.apache.kafka.streams.kstream.KTable
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+internal fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.medlem.name, topics.medlem.consumed("medlem-mottatt"))
         .peek { k: String, v -> log.info("consumed [aap.medlem.v1] [$k] [$v]") }
         .filter({ _, medlem -> medlem.response != null }, named("filter-responses"))
