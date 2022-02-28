@@ -75,7 +75,7 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     medlemStream(søkerKTable, topics)
     manuellStream(søkerKTable, topics)
     inntekterStream(søkerKTable, topics)
-    medlemResponseStream(topics)
+//    medlemResponseStream(topics)
     inntekterResponseStream(topics)
 }.build()
 

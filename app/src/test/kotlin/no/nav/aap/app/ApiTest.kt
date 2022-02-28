@@ -9,13 +9,15 @@ import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.avro.medlem.v1.ErMedlem
+import no.nav.aap.avro.medlem.v1.Response
 import no.nav.aap.dto.*
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
 import org.apache.kafka.streams.state.KeyValueStore
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
@@ -282,18 +284,12 @@ internal class ApiTest {
                 JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
             }
 
-            val medlemBehov = medlemOutputTopic.readValue()
-            assertNull(medlemBehov.response)
-            assertNotNull(medlemBehov.request)
-            assertNotNull(medlemBehov.request.mottattDato)
-            assertEquals(false, medlemBehov.request.arbeidetUtenlands)
-            assertEquals("AAP", medlemBehov.request.ytelse)
-
-            // midlertidig
-            val medlemLøsning = medlemOutputTopic.readValue()
-            assertNotNull(medlemLøsning.response)
-            assertEquals(ErMedlem.JA, medlemLøsning.response.erMedlem)
-            assertEquals("flotters", medlemLøsning.response.begrunnelse)
+            val medlemRequest = medlemOutputTopic.readValue()
+            medlemTopic.produce("123") {
+                medlemRequest.apply {
+                    response = Response.newBuilder().setErMedlem(ErMedlem.JA).build()
+                }
+            }
 
             val søker = stateStore["123"]
             assertNotNull(søker)
@@ -368,6 +364,13 @@ internal class ApiTest {
 
             søknadTopic.produce("123") {
                 JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
+            }
+
+            val medlemRequest = medlemOutputTopic.readValue()
+            medlemTopic.produce("123") {
+                medlemRequest.apply {
+                    response = Response.newBuilder().setErMedlem(ErMedlem.JA).build()
+                }
             }
 
             produserLøsning(key = "123", losning_11_3_manuell = AvroLøsning_11_3(true))
