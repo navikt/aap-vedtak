@@ -14,8 +14,11 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, to
     stream(topics.medlem.name, topics.medlem.consumed("medlem-mottatt"))
         .peek { k: String, v -> log.info("consumed [aap.medlem.v1] [$k] [$v]") }
         .filter({ _, medlem -> medlem.response != null }, named("filter-responses"))
+        .peek { k: String, v -> log.info("select key [aap.medlem.v1] [from $k] [to ${v.personident}]") }
         .selectKey({ _, medlem -> medlem.personident }, named("keyed_personident"))
+        .peek { k: String, v -> log.info("try to join [aap.medlem.v1] [$k] [$v]") }
         .join(søkere, MedlemAndSøker::create, topics.medlem.joined(topics.søkere))
+        .peek { k: String, v -> log.info("joined [aap.medlem.v1] [$k] [$v]") }
         .mapValues(::medlemLøsning)
         .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
         .to(topics.søkere.name, topics.søkere.produced("produced-soker-med-medlem"))

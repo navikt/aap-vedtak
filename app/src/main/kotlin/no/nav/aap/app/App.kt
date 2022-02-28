@@ -65,6 +65,7 @@ internal fun Application.server(kafka: Kafka = KStreams()) {
 internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     val søkerKTable = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
         .filter { _, value -> value != null }
+        .peek { key, value -> log.info("populated state store with [$key] [$value]") }
         .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
 
     søkerKTable.stateStoreCleaner(SØKERE_STORE_NAME) { record, _ ->
