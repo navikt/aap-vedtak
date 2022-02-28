@@ -18,6 +18,7 @@ import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søkerOgBehov = stream(topics.søknad.name, topics.søknad.consumed("soknad-mottatt"))
+        .selectKey ({ _, value -> value.ident.verdi }, named("soknad_keyed_personident"))
         .peek { k: String, v -> log.info("consumed [aap.aap-soknad-sendt.v1] [$k] [$v]") }
         .leftJoin(søkere, SøknadAndSøker::join, topics.søknad.joined(topics.søkere))
         .filter(named("skip-eksisterende-soker")) { _, (_, søker) -> søker == null }
