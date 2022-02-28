@@ -9,4 +9,7 @@ class Søknad(
     private val fødselsdato: Fødselsdato
 ) : Hendelse() {
     fun opprettSøker() = Søker(personident, fødselsdato)
+    internal fun erStudent() = false
+    internal fun harSøktUføretrygd() = false
+    internal fun erArbeidssøker() = false
 }

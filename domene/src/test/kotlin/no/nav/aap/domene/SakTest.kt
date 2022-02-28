@@ -22,7 +22,7 @@ internal class SakTest {
 
         assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -38,7 +38,7 @@ internal class SakTest {
 
         assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("IKKE_OPPFYLT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_IKKE_OPPFYLT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -54,9 +54,9 @@ internal class SakTest {
 
         assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
         assertThrows<IllegalStateException> { sak.håndterSøknad(søknad, fødselsdato) }
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger
@@ -72,28 +72,28 @@ internal class SakTest {
         assertTilstand("START", sak, personident, fødselsdato)
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_3(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_6(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_29(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
-        assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
+        assertTilstand("STANDARD_BEREGN_INNTEKT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
         val vilkårsvurderinger = saker.first().vilkårsvurderinger

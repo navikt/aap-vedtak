@@ -79,10 +79,13 @@ internal class Sak private constructor(
 
         enum class Tilstandsnavn {
             START,
-            SØKNAD_MOTTATT,
-            BEREGN_INNTEKT,
-            VEDTAK_FATTET,
-            IKKE_OPPFYLT
+            STANDARD_SØKNAD_MOTTATT,
+            STANDARD_BEREGN_INNTEKT,
+            STANDARD_VEDTAK_FATTET,
+            STANDARD_IKKE_OPPFYLT,
+            STUDENT_SØKNAD_MOTTATT,
+            UFØRETRYGD_SØKNAD_MOTTATT,
+            ARBEIDSSØKER_SØKNAD_MOTTATT
         }
 
         fun onEntry(sak: Sak, hendelse: Hendelse) {}
@@ -150,36 +153,66 @@ internal class Sak private constructor(
         }
     }
 
+    private object StudentSøknadMottatt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.STUDENT_SØKNAD_MOTTATT
+    }
+
+    private object UføretrygdSøknadMottatt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT
+    }
+
+    private object ArbeidssøkerSøknadMottatt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT
+    }
+
     private object Start : Tilstand {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.START
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-            //opprett initielle vilkårsvurderinger
-            sak.vilkårsvurderinger.add(Paragraf_11_2())
-            sak.vilkårsvurderinger.add(Paragraf_11_3())
-            sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
-            sak.vilkårsvurderinger.add(Paragraf_11_4AndreOgTredjeLedd())
-            sak.vilkårsvurderinger.add(Paragraf_11_5())
-            sak.vilkårsvurderinger.add(Paragraf_11_6())
-            sak.vilkårsvurderinger.add(Paragraf_11_12FørsteLedd())
-            sak.vilkårsvurderinger.add(Paragraf_11_29())
-            sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+            val nestePositiveTilstand = vurderLøype(sak, søknad, fødselsdato, vurderingsdato)
 
-            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
-            sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
-
-            vurderNestetilstand(sak, søknad)
+            vurderNestetilstand(sak, søknad, nestePositiveTilstand)
         }
 
-        private fun vurderNestetilstand(sak: Sak, søknad: Søknad) {
+        private fun vurderLøype(
+            sak: Sak,
+            søknad: Søknad,
+            fødselsdato: Fødselsdato,
+            vurderingsdato: LocalDate
+        ): Tilstand {
+            return if (søknad.erStudent()) {
+                StudentSøknadMottatt
+            } else if (søknad.harSøktUføretrygd()) {
+                UføretrygdSøknadMottatt
+            } else if (søknad.erArbeidssøker()) {
+                ArbeidssøkerSøknadMottatt
+            } else {
+                //opprett initielle vilkårsvurderinger
+                sak.vilkårsvurderinger.add(Paragraf_11_2())
+                sak.vilkårsvurderinger.add(Paragraf_11_3())
+                sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
+                sak.vilkårsvurderinger.add(Paragraf_11_4AndreOgTredjeLedd())
+                sak.vilkårsvurderinger.add(Paragraf_11_5())
+                sak.vilkårsvurderinger.add(Paragraf_11_6())
+                sak.vilkårsvurderinger.add(Paragraf_11_12FørsteLedd())
+                sak.vilkårsvurderinger.add(Paragraf_11_29())
+                sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+
+                sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
+                sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
+                StandardSøknadMottatt
+            }
+        }
+
+        private fun vurderNestetilstand(sak: Sak, søknad: Søknad, nestePositiveTilstand: Tilstand) {
             when {
                 sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt, søknad)
-                else -> sak.tilstand(SøknadMottatt, søknad)
+                else -> sak.tilstand(nestePositiveTilstand, søknad)
             }
         }
     }
 
-    private object SøknadMottatt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.SØKNAD_MOTTATT
+    private object StandardSøknadMottatt : Tilstand {
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_SØKNAD_MOTTATT
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak, løsning)
@@ -231,7 +264,7 @@ internal class Sak private constructor(
     }
 
     private object BeregnInntekt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.BEREGN_INNTEKT
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_BEREGN_INNTEKT
 
         override fun onEntry(sak: Sak, hendelse: Hendelse) {
             hendelse.opprettBehov(
@@ -259,7 +292,7 @@ internal class Sak private constructor(
     }
 
     private object VedtakFattet : Tilstand {
-        override val tilstandsnavn: Tilstand.Tilstandsnavn = Tilstand.Tilstandsnavn.VEDTAK_FATTET
+        override val tilstandsnavn: Tilstand.Tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_VEDTAK_FATTET
 
         override fun toDto(sak: Sak) = DtoSak(
             tilstand = tilstandsnavn.name,
@@ -287,7 +320,7 @@ internal class Sak private constructor(
     }
 
     private object IkkeOppfylt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.IKKE_OPPFYLT
+        override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_IKKE_OPPFYLT
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             error("Forventet ikke søknad i tilstand IkkeOppfylt")
         }
@@ -309,10 +342,13 @@ internal class Sak private constructor(
             vilkårsvurderinger = dtoSak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::gjenopprett).toMutableList(),
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(dtoSak.tilstand)) {
                 Tilstand.Tilstandsnavn.START -> Start
-                Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-                Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> BeregnInntekt
-                Tilstand.Tilstandsnavn.VEDTAK_FATTET -> VedtakFattet
-                Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> IkkeOppfylt
+                Tilstand.Tilstandsnavn.STANDARD_SØKNAD_MOTTATT -> StandardSøknadMottatt
+                Tilstand.Tilstandsnavn.STANDARD_BEREGN_INNTEKT -> BeregnInntekt
+                Tilstand.Tilstandsnavn.STANDARD_VEDTAK_FATTET -> VedtakFattet
+                Tilstand.Tilstandsnavn.STANDARD_IKKE_OPPFYLT -> IkkeOppfylt
+                Tilstand.Tilstandsnavn.STUDENT_SØKNAD_MOTTATT -> StudentSøknadMottatt
+                Tilstand.Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT -> UføretrygdSøknadMottatt
+                Tilstand.Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT -> ArbeidssøkerSøknadMottatt
             },
             inntektshistorikk = Inntektshistorikk()
         ).apply {

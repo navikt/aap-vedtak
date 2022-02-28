@@ -250,7 +250,7 @@ internal class SøkerComponentTest {
         val expected = FrontendSak(
             personident = "12345678910",
             fødselsdato = LocalDate.now().minusYears(18),
-            tilstand = "SØKNAD_MOTTATT",
+            tilstand = "STANDARD_SØKNAD_MOTTATT",
             vilkårsvurderinger = listOf(
                 FrontendVilkårsvurdering(
                     paragraf = "PARAGRAF_11_2",
@@ -342,7 +342,7 @@ internal class SøkerComponentTest {
         val expected = FrontendSak(
             personident = "12345678910",
             fødselsdato = LocalDate.now().minusYears(40),
-            tilstand = "VEDTAK_FATTET",
+            tilstand = "STANDARD_VEDTAK_FATTET",
             vilkårsvurderinger = listOf(
                 FrontendVilkårsvurdering(
                     paragraf = "PARAGRAF_11_2",
@@ -480,7 +480,7 @@ internal class SøkerComponentTest {
 
         val dtoSøker = søker.toDto()
 
-        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("STANDARD_VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
@@ -517,7 +517,7 @@ internal class SøkerComponentTest {
         }
         medSøker { }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
 
-        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("STANDARD_VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 

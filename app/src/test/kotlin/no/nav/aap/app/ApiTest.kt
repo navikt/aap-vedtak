@@ -55,7 +55,7 @@ internal class ApiTest {
                     FrontendSak(
                         personident = "11111111111",
                         fødselsdato = LocalDate.of(1990, 1, 1),
-                        tilstand = "SØKNAD_MOTTATT",
+                        tilstand = "STANDARD_SØKNAD_MOTTATT",
                         vilkårsvurderinger = listOf(
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_2",
@@ -134,7 +134,7 @@ internal class ApiTest {
                 val expected = FrontendSak(
                     personident = "11111111111",
                     fødselsdato = LocalDate.of(1990, 1, 1),
-                    tilstand = "SØKNAD_MOTTATT",
+                    tilstand = "STANDARD_SØKNAD_MOTTATT",
                     vilkårsvurderinger = listOf(
                         FrontendVilkårsvurdering(
                             paragraf = "PARAGRAF_11_2",
@@ -213,7 +213,7 @@ internal class ApiTest {
                     FrontendSak(
                         personident = "11111111111",
                         fødselsdato = LocalDate.of(1990, 1, 1),
-                        tilstand = "SØKNAD_MOTTATT",
+                        tilstand = "STANDARD_SØKNAD_MOTTATT",
                         vilkårsvurderinger = listOf(
                             FrontendVilkårsvurdering(
                                 paragraf = "PARAGRAF_11_2",
@@ -303,7 +303,7 @@ internal class ApiTest {
                 fødselsdato = LocalDate.now().minusYears(40),
                 saker = listOf(
                     DtoSak(
-                        tilstand = "SØKNAD_MOTTATT",
+                        tilstand = "STANDARD_SØKNAD_MOTTATT",
                         vurderingsdato = LocalDate.now(),
                         vilkårsvurderinger = listOf(
                             DtoVilkårsvurdering(
@@ -370,55 +370,16 @@ internal class ApiTest {
                 JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
             }
 
-            fun svar(
-                key: String,
-                losning_11_2_manuell: AvroLøsning_11_2? = null,
-                losning_11_3_manuell: AvroLøsning_11_3? = null,
-                losning_11_4_l2_l3_manuell: AvroLøsning_11_4_l2_l3? = null,
-                losning_11_5_manuell: AvroLøsning_11_5? = null,
-                losning_11_6_manuell: AvroLøsning_11_6? = null,
-                losning_11_12_l1_manuell: AvroLøsning_11_12_l1? = null,
-                losning_11_29_manuell: AvroLøsning_11_29? = null,
-                losningVurderingAvBeregningsdato: AvroLøsningVurderingAvBeregningsdato? = null
-            ) {
-                manuellTopic.produce(key) {
-                    AvroManuell(
-                        losning_11_2_manuell,
-                        losning_11_3_manuell,
-                        losning_11_4_l2_l3_manuell,
-                        losning_11_5_manuell,
-                        losning_11_6_manuell,
-                        losning_11_12_l1_manuell,
-                        losning_11_29_manuell,
-                        losningVurderingAvBeregningsdato
-                    )
-                }
-            }
-
-            svar(
+            produserLøsning(key = "123", losning_11_3_manuell = AvroLøsning_11_3(true))
+            produserLøsning(key = "123", losning_11_5_manuell = AvroLøsning_11_5(60))
+            produserLøsning(key = "123", losning_11_6_manuell = AvroLøsning_11_6(true))
+            produserLøsning(key = "123", losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true))
+            produserLøsning(key = "123", losning_11_29_manuell = AvroLøsning_11_29(true))
+            produserLøsning(
                 key = "123",
-                losning_11_3_manuell = AvroLøsning_11_3(true)
-            )
-            svar(
-                key = "123",
-                losning_11_5_manuell = AvroLøsning_11_5(60)
-            )
-            svar(
-                key = "123",
-                losning_11_6_manuell = AvroLøsning_11_6(true)
-            )
-            svar(
-                key = "123",
-                losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true)
-            )
-            svar(
-                key = "123",
-                losning_11_29_manuell = AvroLøsning_11_29(true)
-            )
-            svar(
-                key = "123",
-                losningVurderingAvBeregningsdato =
-                AvroLøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
+                losningVurderingAvBeregningsdato = AvroLøsningVurderingAvBeregningsdato(
+                    LocalDate.of(2022, 1, 1)
+                )
             )
 
             println(søkerOutputTopic.readValuesToList())
@@ -433,7 +394,7 @@ internal class ApiTest {
                 fødselsdato = LocalDate.now().minusYears(40),
                 saker = listOf(
                     DtoSak(
-                        tilstand = "VEDTAK_FATTET",
+                        tilstand = "STANDARD_VEDTAK_FATTET",
                         vurderingsdato = LocalDate.now(),
                         vilkårsvurderinger = listOf(
                             DtoVilkårsvurdering(
@@ -574,9 +535,34 @@ internal class ApiTest {
         private lateinit var søkerOutputTopic: TestOutputTopic<String, AvroSøker>
         private lateinit var stateStore: KeyValueStore<String, AvroSøker>
     }
+
+    private fun produserLøsning(
+        key: String,
+        losning_11_2_manuell: AvroLøsning_11_2? = null,
+        losning_11_3_manuell: AvroLøsning_11_3? = null,
+        losning_11_4_l2_l3_manuell: AvroLøsning_11_4_l2_l3? = null,
+        losning_11_5_manuell: AvroLøsning_11_5? = null,
+        losning_11_6_manuell: AvroLøsning_11_6? = null,
+        losning_11_12_l1_manuell: AvroLøsning_11_12_l1? = null,
+        losning_11_29_manuell: AvroLøsning_11_29? = null,
+        losningVurderingAvBeregningsdato: AvroLøsningVurderingAvBeregningsdato? = null
+    ) {
+        manuellTopic.produce(key) {
+            AvroManuell(
+                losning_11_2_manuell,
+                losning_11_3_manuell,
+                losning_11_4_l2_l3_manuell,
+                losning_11_5_manuell,
+                losning_11_6_manuell,
+                losning_11_12_l1_manuell,
+                losning_11_29_manuell,
+                losningVurderingAvBeregningsdato
+            )
+        }
+    }
 }
 
-fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks().use { mocks ->
+private fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks().use { mocks ->
     val externalConfig = mapOf(
         "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
         "AZURE_OPENID_CONFIG_ISSUER" to "azure",
