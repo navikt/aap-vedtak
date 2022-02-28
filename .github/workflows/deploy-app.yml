@@ -28,8 +28,8 @@ jobs:
         with:
           arguments: test app:shadowJar --continue --no-daemon --no-build-cache
 #           Gradle build cache increases over time. Exclude if cache is too large
-          gradle-home-cache-excludes: |
-            caches/build-cache-1
+#          gradle-home-cache-excludes: |
+#            caches/build-cache-1
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
 

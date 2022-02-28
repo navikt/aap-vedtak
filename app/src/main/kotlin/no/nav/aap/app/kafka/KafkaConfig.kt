@@ -63,14 +63,14 @@ data class KafkaConfig(
             this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
         } else {
-            this[SaslConfigs.SASL_MECHANISM] = "PLAIN"
-            this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "PLAINTEXT"
+//            this[SaslConfigs.SASL_MECHANISM] = "PLAIN"
+//            this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "PLAINTEXT"
         }
     }
 
     val consumer: Properties = kStreams + ssl + schemaRegistry + Properties().apply {
         this[ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG] = brokers
-        this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "latest"
+        this[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
         this[ConsumerConfig.GROUP_ID_CONFIG] = "aap-vedtak-1"
         this[ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG] = 124_000
     }
