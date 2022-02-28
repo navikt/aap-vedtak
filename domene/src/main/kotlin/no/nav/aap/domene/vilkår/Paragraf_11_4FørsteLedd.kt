@@ -3,7 +3,10 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Søknad
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
+
+private val log = LoggerFactory.getLogger("Paragraf_11_4FørsteLedd")
 
 internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand: Tilstand) :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
@@ -77,7 +80,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
                 fødselsdato: Fødselsdato,
                 vurderingsdato: LocalDate
             ) {
-                error("Vilkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
+                log.info("Vilkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
             }
         }
 
@@ -92,11 +95,16 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
                 fødselsdato: Fødselsdato,
                 vurderingsdato: LocalDate
             ) {
-                error("Vilkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
+                log.info("Vilkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
             }
         }
 
-        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_4FørsteLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal open fun gjenopprettTilstand(
+            paragraf: Paragraf_11_4FørsteLedd,
+            vilkårsvurdering: DtoVilkårsvurdering
+        ) {
+        }
+
         internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             paragraf = paragraf.paragraf.name,

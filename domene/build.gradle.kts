@@ -11,6 +11,7 @@ plugins {
 }
 
 dependencies {
+    api("ch.qos.logback:logback-classic:1.2.10")
     testImplementation("org.junit.jupiter:junit-jupiter:5.8.2")
 }
 

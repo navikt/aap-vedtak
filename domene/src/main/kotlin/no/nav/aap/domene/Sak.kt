@@ -12,9 +12,12 @@ import no.nav.aap.dto.DtoSak
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
+
+private val log = LoggerFactory.getLogger("sak")
 
 internal class Sak private constructor(
     private var tilstand: Tilstand,
@@ -91,43 +94,43 @@ internal class Sak private constructor(
         fun onEntry(sak: Sak, hendelse: Hendelse) {}
         fun onExit(sak: Sak, hendelse: Hendelse) {}
         fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-            error("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
-            error("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
-            error("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
         fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
@@ -322,7 +325,7 @@ internal class Sak private constructor(
     private object IkkeOppfylt : Tilstand {
         override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_IKKE_OPPFYLT
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-            error("Forventet ikke søknad i tilstand IkkeOppfylt")
+            log.info("Forventet ikke søknad i tilstand IkkeOppfylt")
         }
     }
 

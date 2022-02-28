@@ -46,24 +46,6 @@ internal class SakTest {
     }
 
     @Test
-    fun `Hvis vi mottar to søknader etter hverandre kastes en feil`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
-        val sak = Sak()
-
-        assertTilstand("START", sak, personident, fødselsdato)
-        sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
-        assertThrows<IllegalStateException> { sak.håndterSøknad(søknad, fødselsdato) }
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
-
-        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-    }
-
-    @Test
     fun `Hvis vi mottar en søknad der søker er over 18 år, er medlem og har nedsatt arbeidsevne med 50 prosent vil saken gå videre i behandlingen`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")

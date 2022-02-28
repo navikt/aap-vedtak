@@ -6,7 +6,10 @@ import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_29
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_29
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
+
+private val log = LoggerFactory.getLogger("Paragraf_11_29")
 
 internal class Paragraf_11_29 private constructor(private var tilstand: Tilstand) :
     Vilkårsvurdering(Paragraf.PARAGRAF_11_29, Ledd.LEDD_1) {
@@ -54,14 +57,14 @@ internal class Paragraf_11_29 private constructor(private var tilstand: Tilstand
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            error("Søknad skal ikke håndteres i tilstand $tilstandsnavn")
+            log.info("Søknad skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun vurderManueltOppfyltLøsning(
             vilkårsvurdering: Paragraf_11_29,
             løsning: LøsningParagraf_11_29
         ) {
-            error("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+            log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         object IkkeVurdert : Tilstand(

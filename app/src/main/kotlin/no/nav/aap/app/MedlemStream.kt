@@ -16,19 +16,9 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, to
         .filter({ _, medlem -> medlem.response != null }, named("filter-responses"))
         .selectKey({ _, medlem -> medlem.personident }, named("keyed_personident"))
         .join(søkere, MedlemAndSøker::create, topics.medlem.joined(topics.søkere))
-        .filter(::idempotentMedlemLøsning, named("filter-idempotent-medlem-losning"))
         .mapValues(::medlemLøsning)
         .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
         .to(topics.søkere.name, topics.søkere.produced("produced-soker-med-medlem"))
-}
-
-/**
- * Returnerer true dersom medlem ikke er idempotent
- */
-private fun idempotentMedlemLøsning(key: String, medlemAndSøker: MedlemAndSøker): Boolean {
-    return medlemAndSøker.dtoSøker.saker
-        .mapNotNull { sak -> sak.vilkårsvurderinger.firstOrNull { it.løsning_11_2_maskinell != null } }
-        .singleOrNull() == null
 }
 
 private fun medlemLøsning(medlemAndSøker: MedlemAndSøker): AvroSøker {
