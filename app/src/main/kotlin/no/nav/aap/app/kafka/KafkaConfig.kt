@@ -7,7 +7,6 @@ import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.producer.ProducerConfig
-import org.apache.kafka.common.config.SaslConfigs
 import org.apache.kafka.common.config.SslConfigs
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.errors.LogAndContinueExceptionHandler
@@ -36,10 +35,8 @@ data class KafkaConfig(
         this[StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG] = "0"
         this[StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG] = SpecificAvroSerde::class.java.name
         this[StreamsConfig.DEFAULT_PRODUCTION_EXCEPTION_HANDLER_CLASS_CONFIG] = LogContinueErrorHandler::class.java.name
-        this[StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG] =
-            LogAndSkipOnInvalidTimestamp::class.java.name
-        this[StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG] =
-            LogAndContinueExceptionHandler::class.java.name
+        this[StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG] = LogAndSkipOnInvalidTimestamp::class.java.name
+        this[StreamsConfig.DEFAULT_DESERIALIZATION_EXCEPTION_HANDLER_CLASS_CONFIG] = LogAndContinueExceptionHandler::class.java.name
         this[KafkaAvroDeserializerConfig.SPECIFIC_AVRO_READER_CONFIG] = false
     }
 
@@ -62,9 +59,6 @@ data class KafkaConfig(
             this[SslConfigs.SSL_KEYSTORE_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_KEY_PASSWORD_CONFIG] = credstorePsw
             this[SslConfigs.SSL_ENDPOINT_IDENTIFICATION_ALGORITHM_CONFIG] = ""
-        } else {
-//            this[SaslConfigs.SASL_MECHANISM] = "PLAIN"
-//            this[CommonClientConfigs.SECURITY_PROTOCOL_CONFIG] = "PLAINTEXT"
         }
     }
 

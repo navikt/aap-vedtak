@@ -45,11 +45,9 @@ services:
   oauth2:
     image: ghcr.io/navikt/mock-oauth2-server:0.4.3
     container_name: oauth2
-    ports: [ 8087:8087 ]
-    expose: [ 8087 ]
+    ports: [ 8087:8080 ]
     volumes: [ './oauth2.json:/etc/oauth2.json' ]
     environment:
-      SERVER_PORT: 8087
       JSON_CONFIG_PATH: /etc/oauth2.json
 
 #  ksqldb:

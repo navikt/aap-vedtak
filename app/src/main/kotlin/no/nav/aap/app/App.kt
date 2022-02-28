@@ -12,7 +12,6 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
-import io.ktor.util.collections.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.config.Config
@@ -30,6 +29,7 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import org.slf4j.LoggerFactory
+import java.util.concurrent.ConcurrentLinkedQueue
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 const val SØKERE_STORE_NAME = "soker-state-store"
@@ -68,15 +68,14 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
         .peek { key, value -> log.info("populated state store with [$key] [$value]") }
         .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
 
-    søkerKTable.stateStoreCleaner(SØKERE_STORE_NAME) { record, _ ->
-        DevTool.søkereMarkedForDeletion.removeIf { it == record.value().personident }
+    søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) {
+        søkereToDelete.poll()
     }
 
     søknadStream(søkerKTable, topics)
     medlemStream(søkerKTable, topics)
     manuellStream(søkerKTable, topics)
     inntekterStream(søkerKTable, topics)
-//    medlemResponseStream(topics)
     inntekterResponseStream(topics)
 }.build()
 
@@ -116,9 +115,7 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) 
     }
 }
 
-private object DevTool {
-    val søkereMarkedForDeletion: ConcurrentList<String> = ConcurrentList()
-}
+private val søkereToDelete: ConcurrentLinkedQueue<String> = ConcurrentLinkedQueue<String>()
 
 private fun Routing.devTools(kafka: Kafka, topics: Topics) {
     val søkerProducer = kafka.createProducer(topics.søkere)
@@ -131,8 +128,8 @@ private fun Routing.devTools(kafka: Kafka, topics: Topics) {
         get {
             val personident = call.parameters.getOrFail("personident")
             søkerProducer.tombstone(personident).also {
-                DevTool.søkereMarkedForDeletion.add(personident)
-                log.info("produced tombstone [${topics.søkere.name}] [$personident] [null]")
+                søkereToDelete.add(personident)
+                log.info("produced [${topics.søkere.name}] [$personident] [tombstone]")
             }
             call.respondText("Deleted $personident")
         }
