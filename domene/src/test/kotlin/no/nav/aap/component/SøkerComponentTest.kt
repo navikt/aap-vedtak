@@ -521,6 +521,31 @@ internal class SøkerComponentTest {
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
+    @Test
+    fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt for student`() {
+        val fødselsdato = Fødselsdato(17 juli 1995)
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato, erStudent = true)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        søker.håndterLøsning(
+            LøsningInntekter(
+                listOf(
+                    Inntekt(ARBEIDSGIVER, januar(2020), 500000.beløp),
+                    Inntekt(ARBEIDSGIVER, januar(2019), 500000.beløp),
+                    Inntekt(ARBEIDSGIVER, januar(2018), 500000.beløp)
+                )
+            )
+        )
+
+        val dtoSøker = søker.toDto()
+
+        assertEquals("STUDENT_VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
+    }
+
     private fun assertTilstand(
         vilkårsvurderinger: List<FrontendVilkårsvurdering>,
         tilstand: String,

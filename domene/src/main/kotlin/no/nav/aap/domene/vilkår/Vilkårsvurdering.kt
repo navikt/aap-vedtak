@@ -22,6 +22,7 @@ internal abstract class Vilkårsvurdering(
         PARAGRAF_11_5,
         PARAGRAF_11_6,
         PARAGRAF_11_12,
+        PARAGRAF_11_14,
         PARAGRAF_11_29
     }
 
@@ -87,6 +88,7 @@ internal abstract class Vilkårsvurdering(
                         }
                     }
                 }
+                Paragraf.PARAGRAF_11_14 -> Paragraf_11_14.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_29 -> Paragraf_11_29.gjenopprett(vilkårsvurdering)
             }
     }

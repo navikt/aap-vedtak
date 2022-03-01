@@ -28,7 +28,7 @@ internal class Sak private constructor(
     private lateinit var vurderingsdato: LocalDate
     private lateinit var vedtak: Vedtak
 
-    constructor() : this(Start, mutableListOf(), Inntektshistorikk())
+    constructor() : this(Tilstand.Start, mutableListOf(), Inntektshistorikk())
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
         this.vurderingsdato = LocalDate.now()
@@ -87,6 +87,9 @@ internal class Sak private constructor(
             STANDARD_VEDTAK_FATTET,
             STANDARD_IKKE_OPPFYLT,
             STUDENT_SØKNAD_MOTTATT,
+            STUDENT_BEREGN_INNTEKT,
+            STUDENT_VEDTAK_FATTET,
+            STUDENT_IKKE_OPPFYLT,
             UFØRETRYGD_SØKNAD_MOTTATT,
             ARBEIDSSØKER_SØKNAD_MOTTATT
         }
@@ -154,163 +157,246 @@ internal class Sak private constructor(
             sak.vurderingsdato = dtoSak.vurderingsdato
             sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
         }
-    }
 
-    private object StudentSøknadMottatt : Tilstand(Tilstandsnavn.STUDENT_SØKNAD_MOTTATT)
-    private object UføretrygdSøknadMottatt : Tilstand(Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT)
-    private object ArbeidssøkerSøknadMottatt : Tilstand(Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT)
+        object Start : Tilstand(Tilstandsnavn.START) {
+            override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+                val nestePositiveTilstand = vurderLøype(sak, søknad, fødselsdato, vurderingsdato)
 
-    private object Start : Tilstand(Tilstandsnavn.START) {
-        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-            val nestePositiveTilstand = vurderLøype(sak, søknad, fødselsdato, vurderingsdato)
+                vurderNestetilstand(sak, søknad, nestePositiveTilstand)
+            }
 
-            vurderNestetilstand(sak, søknad, nestePositiveTilstand)
-        }
+            private fun vurderLøype(
+                sak: Sak,
+                søknad: Søknad,
+                fødselsdato: Fødselsdato,
+                vurderingsdato: LocalDate
+            ): Tilstand {
+                return if (søknad.erStudent()) {
+                    sak.vilkårsvurderinger.add(Paragraf_11_14())
+                    sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
-        private fun vurderLøype(
-            sak: Sak,
-            søknad: Søknad,
-            fødselsdato: Fødselsdato,
-            vurderingsdato: LocalDate
-        ): Tilstand {
-            return if (søknad.erStudent()) {
-                StudentSøknadMottatt
-            } else if (søknad.harSøktUføretrygd()) {
-                UføretrygdSøknadMottatt
-            } else if (søknad.erArbeidssøker()) {
-                ArbeidssøkerSøknadMottatt
-            } else {
-                //opprett initielle vilkårsvurderinger
-                sak.vilkårsvurderinger.add(Paragraf_11_2())
-                sak.vilkårsvurderinger.add(Paragraf_11_3())
-                sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
-                sak.vilkårsvurderinger.add(Paragraf_11_4AndreOgTredjeLedd())
-                sak.vilkårsvurderinger.add(Paragraf_11_5())
-                sak.vilkårsvurderinger.add(Paragraf_11_6())
-                sak.vilkårsvurderinger.add(Paragraf_11_12FørsteLedd())
-                sak.vilkårsvurderinger.add(Paragraf_11_29())
-                sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+                    sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
+                    sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
+                    StudentSøknadMottatt
+                } else if (søknad.harSøktUføretrygd()) {
+                    UføretrygdSøknadMottatt
+                } else if (søknad.erArbeidssøker()) {
+                    ArbeidssøkerSøknadMottatt
+                } else {
+                    //opprett initielle vilkårsvurderinger
+                    sak.vilkårsvurderinger.add(Paragraf_11_2())
+                    sak.vilkårsvurderinger.add(Paragraf_11_3())
+                    sak.vilkårsvurderinger.add(Paragraf_11_4FørsteLedd())
+                    sak.vilkårsvurderinger.add(Paragraf_11_4AndreOgTredjeLedd())
+                    sak.vilkårsvurderinger.add(Paragraf_11_5())
+                    sak.vilkårsvurderinger.add(Paragraf_11_6())
+                    sak.vilkårsvurderinger.add(Paragraf_11_12FørsteLedd())
+                    sak.vilkårsvurderinger.add(Paragraf_11_29())
+                    sak.vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
-                sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
-                sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
-                StandardSøknadMottatt
+                    sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
+                    sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
+                    StandardSøknadMottatt
+                }
+            }
+
+            private fun vurderNestetilstand(sak: Sak, søknad: Søknad, nestePositiveTilstand: Tilstand) {
+                when {
+                    sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt, søknad)
+                    else -> sak.tilstand(nestePositiveTilstand, søknad)
+                }
             }
         }
 
-        private fun vurderNestetilstand(sak: Sak, søknad: Søknad, nestePositiveTilstand: Tilstand) {
-            when {
-                sak.vilkårsvurderinger.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt, søknad)
-                else -> sak.tilstand(nestePositiveTilstand, søknad)
+        object StudentSøknadMottatt : Tilstand(Tilstandsnavn.STUDENT_SØKNAD_MOTTATT) {
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
+                sak.vurderingAvBeregningsdato.håndterLøsning(løsning)
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
+                when {
+                    sak.vilkårsvurderinger.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
+                        sak.tilstand(StudentBeregnInntekt, hendelse)
+                    sak.vilkårsvurderinger.erNoenIkkeOppfylt() ->
+                        sak.tilstand(IkkeOppfylt, hendelse)
+                }
             }
         }
-    }
 
-    private object StandardSøknadMottatt : Tilstand(Tilstandsnavn.STANDARD_SØKNAD_MOTTATT) {
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
+        object StudentBeregnInntekt : Tilstand(Tilstandsnavn.STUDENT_BEREGN_INNTEKT) {
 
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
-            sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        override fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
-            sak.vurderingAvBeregningsdato.håndterLøsning(løsning)
-            vurderNesteTilstand(sak, løsning)
-        }
-
-        private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
-            when {
-                sak.vilkårsvurderinger.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
-                    sak.tilstand(BeregnInntekt, hendelse)
-                sak.vilkårsvurderinger.erNoenIkkeOppfylt() ->
-                    sak.tilstand(IkkeOppfylt, hendelse)
-            }
-        }
-    }
-
-    private object BeregnInntekt : Tilstand(Tilstandsnavn.STANDARD_BEREGN_INNTEKT) {
-
-        override fun onEntry(sak: Sak, hendelse: Hendelse) {
-            hendelse.opprettBehov(
-                BehovInntekter(
-                    fom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(3),
-                    tom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(1)
+            override fun onEntry(sak: Sak, hendelse: Hendelse) {
+                hendelse.opprettBehov(
+                    BehovInntekter(
+                        fom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(3),
+                        tom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(1)
+                    )
                 )
-            )
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
+                løsning.lagreInntekter(sak.inntektshistorikk)
+                val inntektsgrunnlag =
+                    sak.inntektshistorikk.finnInntektsgrunnlag(
+                        sak.vurderingAvBeregningsdato.beregningsdato(),
+                        fødselsdato
+                    )
+                sak.vedtak = Vedtak(
+                    innvilget = true,
+                    inntektsgrunnlag = inntektsgrunnlag,
+                    søknadstidspunkt = LocalDateTime.now(),
+                    vedtaksdato = LocalDate.now(),
+                    virkningsdato = LocalDate.now()
+                )
+
+                sak.tilstand(StudentVedtakFattet, løsning)
+            }
         }
 
-        override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
-            løsning.lagreInntekter(sak.inntektshistorikk)
-            val inntektsgrunnlag =
-                sak.inntektshistorikk.finnInntektsgrunnlag(sak.vurderingAvBeregningsdato.beregningsdato(), fødselsdato)
-            sak.vedtak = Vedtak(
-                innvilget = true,
-                inntektsgrunnlag = inntektsgrunnlag,
-                søknadstidspunkt = LocalDateTime.now(),
-                vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now()
-            )
+        object StudentVedtakFattet : Tilstand(Tilstandsnavn.STUDENT_VEDTAK_FATTET) {
 
-            sak.tilstand(VedtakFattet, løsning)
-        }
-    }
-
-    private object VedtakFattet : Tilstand(Tilstandsnavn.STANDARD_VEDTAK_FATTET) {
-
-        override fun toDto(sak: Sak) = DtoSak(
-            tilstand = tilstandsnavn.name,
-            vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
-            vurderingsdato = sak.vurderingsdato, // ALLTID SATT
-            vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
-            vedtak = sak.vedtak.toDto()
-        )
-
-        override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
-            sak.vurderingsdato = dtoSak.vurderingsdato
-            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
-            val dtoVedtak = requireNotNull(dtoSak.vedtak)
-            sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
-        }
-
-        override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
-            FrontendSak(
-                personident = personident.toFrontendPersonident(),
-                fødselsdato = fødselsdato.toFrontendFødselsdato(),
+            override fun toDto(sak: Sak) = DtoSak(
                 tilstand = tilstandsnavn.name,
-                vilkårsvurderinger = sak.vilkårsvurderinger.toFrontendVilkårsvurdering(),
-                vedtak = sak.vedtak.toFrontendVedtak()
+                vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
+                vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+                vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
+                vedtak = sak.vedtak.toDto()
             )
-    }
 
-    private object IkkeOppfylt : Tilstand(Tilstandsnavn.STANDARD_IKKE_OPPFYLT)
+            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+                sak.vurderingsdato = dtoSak.vurderingsdato
+                sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
+                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+                sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
+            }
+
+            override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
+                FrontendSak(
+                    personident = personident.toFrontendPersonident(),
+                    fødselsdato = fødselsdato.toFrontendFødselsdato(),
+                    tilstand = tilstandsnavn.name,
+                    vilkårsvurderinger = sak.vilkårsvurderinger.toFrontendVilkårsvurdering(),
+                    vedtak = sak.vedtak.toFrontendVedtak()
+                )
+        }
+
+        object StudentIkkeOppfylt : Tilstand(Tilstandsnavn.STUDENT_IKKE_OPPFYLT)
+
+        object UføretrygdSøknadMottatt : Tilstand(Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT)
+        object ArbeidssøkerSøknadMottatt : Tilstand(Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT)
+
+        object StandardSøknadMottatt : Tilstand(Tilstandsnavn.STANDARD_SØKNAD_MOTTATT) {
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
+                sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
+                sak.vurderingAvBeregningsdato.håndterLøsning(løsning)
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
+                when {
+                    sak.vilkårsvurderinger.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
+                        sak.tilstand(BeregnInntekt, hendelse)
+                    sak.vilkårsvurderinger.erNoenIkkeOppfylt() ->
+                        sak.tilstand(IkkeOppfylt, hendelse)
+                }
+            }
+        }
+
+        object BeregnInntekt : Tilstand(Tilstandsnavn.STANDARD_BEREGN_INNTEKT) {
+
+            override fun onEntry(sak: Sak, hendelse: Hendelse) {
+                hendelse.opprettBehov(
+                    BehovInntekter(
+                        fom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(3),
+                        tom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(1)
+                    )
+                )
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
+                løsning.lagreInntekter(sak.inntektshistorikk)
+                val inntektsgrunnlag =
+                    sak.inntektshistorikk.finnInntektsgrunnlag(
+                        sak.vurderingAvBeregningsdato.beregningsdato(),
+                        fødselsdato
+                    )
+                sak.vedtak = Vedtak(
+                    innvilget = true,
+                    inntektsgrunnlag = inntektsgrunnlag,
+                    søknadstidspunkt = LocalDateTime.now(),
+                    vedtaksdato = LocalDate.now(),
+                    virkningsdato = LocalDate.now()
+                )
+
+                sak.tilstand(VedtakFattet, løsning)
+            }
+        }
+
+        object VedtakFattet : Tilstand(Tilstandsnavn.STANDARD_VEDTAK_FATTET) {
+
+            override fun toDto(sak: Sak) = DtoSak(
+                tilstand = tilstandsnavn.name,
+                vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
+                vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+                vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
+                vedtak = sak.vedtak.toDto()
+            )
+
+            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+                sak.vurderingsdato = dtoSak.vurderingsdato
+                sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
+                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+                sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
+            }
+
+            override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
+                FrontendSak(
+                    personident = personident.toFrontendPersonident(),
+                    fødselsdato = fødselsdato.toFrontendFødselsdato(),
+                    tilstand = tilstandsnavn.name,
+                    vilkårsvurderinger = sak.vilkårsvurderinger.toFrontendVilkårsvurdering(),
+                    vedtak = sak.vedtak.toFrontendVedtak()
+                )
+        }
+
+        object IkkeOppfylt : Tilstand(Tilstandsnavn.STANDARD_IKKE_OPPFYLT)
+    }
 
     private fun toDto() = tilstand.toDto(this)
 
@@ -327,14 +413,17 @@ internal class Sak private constructor(
         internal fun gjenopprett(dtoSak: DtoSak): Sak = Sak(
             vilkårsvurderinger = dtoSak.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::gjenopprett).toMutableList(),
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(dtoSak.tilstand)) {
-                Tilstand.Tilstandsnavn.START -> Start
-                Tilstand.Tilstandsnavn.STANDARD_SØKNAD_MOTTATT -> StandardSøknadMottatt
-                Tilstand.Tilstandsnavn.STANDARD_BEREGN_INNTEKT -> BeregnInntekt
-                Tilstand.Tilstandsnavn.STANDARD_VEDTAK_FATTET -> VedtakFattet
-                Tilstand.Tilstandsnavn.STANDARD_IKKE_OPPFYLT -> IkkeOppfylt
-                Tilstand.Tilstandsnavn.STUDENT_SØKNAD_MOTTATT -> StudentSøknadMottatt
-                Tilstand.Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT -> UføretrygdSøknadMottatt
-                Tilstand.Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT -> ArbeidssøkerSøknadMottatt
+                Tilstand.Tilstandsnavn.START -> Tilstand.Start
+                Tilstand.Tilstandsnavn.STANDARD_SØKNAD_MOTTATT -> Tilstand.StandardSøknadMottatt
+                Tilstand.Tilstandsnavn.STANDARD_BEREGN_INNTEKT -> Tilstand.BeregnInntekt
+                Tilstand.Tilstandsnavn.STANDARD_VEDTAK_FATTET -> Tilstand.VedtakFattet
+                Tilstand.Tilstandsnavn.STANDARD_IKKE_OPPFYLT -> Tilstand.IkkeOppfylt
+                Tilstand.Tilstandsnavn.STUDENT_SØKNAD_MOTTATT -> Tilstand.StudentSøknadMottatt
+                Tilstand.Tilstandsnavn.STUDENT_BEREGN_INNTEKT -> Tilstand.StudentBeregnInntekt
+                Tilstand.Tilstandsnavn.STUDENT_VEDTAK_FATTET -> Tilstand.StudentVedtakFattet
+                Tilstand.Tilstandsnavn.STUDENT_IKKE_OPPFYLT -> Tilstand.StudentIkkeOppfylt
+                Tilstand.Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT -> Tilstand.UføretrygdSøknadMottatt
+                Tilstand.Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT -> Tilstand.ArbeidssøkerSøknadMottatt
             },
             inntektshistorikk = Inntektshistorikk()
         ).apply {
