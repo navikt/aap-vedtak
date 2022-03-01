@@ -85,8 +85,6 @@ private fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) 
     authenticate {
         route("/api") {
             get("/sak") {
-                log.info("key: ${søkerStore.all().peekNextKey()}")
-
                 val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 call.respond(søkere.toFrontendSaker())
             }
