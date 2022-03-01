@@ -12,6 +12,7 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
 import io.ktor.util.*
+import io.ktor.util.collections.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.config.Config
@@ -82,6 +83,8 @@ private fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) 
     authenticate {
         route("/api") {
             get("/sak") {
+                log.info("key: ${søkerStore.all().peekNextKey()}")
+
                 val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 call.respond(søkere.toFrontendSaker())
             }
@@ -114,7 +117,7 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) 
     }
 }
 
-val søkereToDelete: ConcurrentLinkedQueue<String> = ConcurrentLinkedQueue<String>()
+val søkereToDelete: ConcurrentList<String> = ConcurrentList()
 
 private fun Routing.devTools(kafka: Kafka, topics: Topics) {
     val søkerProducer = kafka.createProducer(topics.søkere)

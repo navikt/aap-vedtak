@@ -19,7 +19,7 @@ internal class StateStoreDeleter<V>(
     override fun init(context: ProcessorContext<Void, Void>) {
         val store = context.getStateStore<KeyValueStore<String, ValueAndTimestamp<V>>>(storeName)
         context.schedule(Duration.ofSeconds(1), PunctuationType.WALL_CLOCK_TIME) {
-            søkereToDelete.poll()?.let { key ->
+            søkereToDelete.removeFirstOrNull()?.let { key ->
                 log.info("Trying to deleted [$storeName] [$key] [???]")
                 store.delete(key)?.let {
                     log.info("Deleted [$storeName] [$key] [${it.value()}]")
