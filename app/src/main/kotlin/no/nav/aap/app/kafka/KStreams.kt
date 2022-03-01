@@ -23,9 +23,11 @@ import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExce
 import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse.CONTINUE
 import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
 import org.apache.kafka.streams.kstream.*
+import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
+import org.checkerframework.checker.units.qual.K
 import java.util.*
 
 interface Kafka : AutoCloseable {
@@ -125,8 +127,7 @@ internal fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
     branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
         chain
             .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
-            .peek { k: String, v -> log.info("produced [${topic.name}] [$k] [$v]") }
-            .to(topic.name, topic.produced("branch-$branchName-produced-behov"))
+            .to(topic, topic.produced("branch-$branchName-produced-behov"))
     }.withName("-branch-$branchName"))
 
 internal fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
@@ -139,3 +140,26 @@ internal fun <K, V, VR> KStream<K, V>.flatMapValues(named: Named, mapper: (V) ->
 internal interface ToAvro<out AVROVALUE> {
     fun toAvro(): AVROVALUE
 }
+
+fun <V : Any> KStream<String, V>.logConsumed(): KStream<String, V> = transformValues(
+    ValueTransformerWithKeySupplier {
+        object : ValueTransformerWithKey<String, V, V> {
+            private lateinit var context: ProcessorContext
+
+            override fun init(context: ProcessorContext) {
+                this.context = context
+            }
+
+            override fun transform(readOnlyKey: String, value: V): V {
+                log.info("consumed [${context.topic()}] K:$readOnlyKey V:$value")
+                return value
+            }
+
+            override fun close() {}
+        }
+    }
+)
+
+fun <K, V> KStream<K, V>.to(topic: Topic<K, V>, producedWith: Produced<K, V>) = this
+    .peek { key, value -> log.info("produced [${topic.name}] K:$key V:$value") }
+    .to(topic.name, producedWith)

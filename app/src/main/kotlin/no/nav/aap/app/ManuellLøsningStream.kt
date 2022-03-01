@@ -22,14 +22,13 @@ import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søkerOgBehov = stream(topics.manuell.name, topics.manuell.consumed("losning-mottatt"))
-        .peek { k: String, v -> log.info("consumed [aap.losning.v1] [$k] [$v]") }
+        .logConsumed()
         .join(søkere, LøsningAndSøker::create, topics.manuell.joined(topics.søkere))
         .mapValues(::håndterManuellLøsning)
 
     søkerOgBehov
         .mapValues(named("manuell-hent-ut-soker")) { (søker) -> søker }
-        .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
-        .to(topics.søkere.name, topics.søkere.produced("produced-soker-med-handtert-losning"))
+        .to(topics.søkere, topics.søkere.produced("produced-soker-med-handtert-losning"))
 
     søkerOgBehov
         .flatMapValues(named("manuell-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }

@@ -1,6 +1,7 @@
 package no.nav.aap.app
 
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.kafka.logConsumed
 import no.nav.aap.avro.inntekter.v1.Response
 import org.apache.kafka.streams.StreamsBuilder
 import no.nav.aap.avro.inntekter.v1.Inntekt as AvroInntekt
@@ -8,7 +9,7 @@ import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 
 internal fun StreamsBuilder.inntekterResponseStream(topics: Topics) {
     stream(topics.inntekter.name, topics.inntekter.consumed("inntekter-behov-mottatt"))
-        .peek { k, v -> log.info("consumed [aap.inntekter.v1] [$k] [$v]") }
+        .logConsumed()
         .filter { _, inntekter -> inntekter.response == null }
         .mapValues(::addInntekterResponse)
         .filter { _, inntekter -> inntekter.personident != "11111111111" } // test person

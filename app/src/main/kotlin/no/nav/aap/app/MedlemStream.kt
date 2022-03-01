@@ -12,13 +12,12 @@ import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.medlemStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.medlem.name, topics.medlem.consumed("medlem-mottatt"))
-        .peek { k: String, v -> log.info("consumed [aap.medlem.v1] [$k] [$v]") }
+        .logConsumed()
         .filter({ _, medlem -> medlem.response != null }, named("filter-responses"))
         .selectKey({ _, medlem -> medlem.personident }, named("keyed_personident"))
         .join(søkere, MedlemAndSøker::create, topics.medlem.joined(topics.søkere))
         .mapValues(::medlemLøsning)
-        .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
-        .to(topics.søkere.name, topics.søkere.produced("produced-soker-med-medlem"))
+        .to(topics.søkere, topics.søkere.produced("produced-soker-med-medlem"))
 }
 
 private fun medlemLøsning(medlemAndSøker: MedlemAndSøker): AvroSøker {

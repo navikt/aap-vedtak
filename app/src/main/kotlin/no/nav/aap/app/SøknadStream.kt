@@ -9,7 +9,7 @@ import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.hendelse.Søknad
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.*
+import org.apache.kafka.streams.kstream.KTable
 import java.time.LocalDate
 import java.util.*
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
@@ -18,15 +18,14 @@ import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     val søkerOgBehov = stream(topics.søknad.name, topics.søknad.consumed("soknad-mottatt"))
-        .peek { k: String, v -> log.info("consumed [aap.aap-soknad-sendt.v1] [$k] [$v]") }
+        .logConsumed()
         .leftJoin(søkere, SøknadAndSøker::join, topics.søknad.joined(topics.søkere))
         .filter(named("skip-eksisterende-soker")) { _, (_, søker) -> søker == null }
         .mapValues(::opprettSøker, named("opprett-soknad"))
 
     søkerOgBehov
         .mapValues(named("soknad-hent-ut-soker")) { (søker) -> søker }
-        .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
-        .to(topics.søkere.name, topics.søkere.produced("produced-ny-soker"))
+        .to(topics.søkere, topics.søkere.produced("produced-ny-soker"))
 
     søkerOgBehov
         .flatMapValues(named("soknad-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }

@@ -1,7 +1,9 @@
 package no.nav.aap.app
 
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.kafka.logConsumed
 import no.nav.aap.app.kafka.named
+import no.nav.aap.app.kafka.to
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker
@@ -14,12 +16,11 @@ import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
     stream(topics.inntekter.name, topics.inntekter.consumed("inntekter-mottatt"))
-        .peek { k: String, v -> log.info("consumed [${topics.inntekter.name}] [$k] [$v]") }
+        .logConsumed()
         .filter({ _, inntekter -> inntekter.response != null }, named("inntekter-filter-responses"))
         .join(søkere, InntekterAndSøker::create, topics.inntekter.joined(topics.søkere))
         .mapValues(::håndterInntekter)
-        .peek { k: String, v -> log.info("produced [aap.sokere.v1] [$k] [$v]") }
-        .to(topics.søkere.name, topics.søkere.produced("produced-soker-med-handtert-inntekter"))
+        .to(topics.søkere, topics.søkere.produced("produced-soker-med-handtert-inntekter"))
 }
 
 private fun håndterInntekter(inntekterAndSøker: InntekterAndSøker): AvroSøker {
