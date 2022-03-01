@@ -77,9 +77,9 @@ internal class Sak private constructor(
         tilstand.onEntry(this, hendelse)
     }
 
-    private sealed interface Tilstand {
-        val tilstandsnavn: Tilstandsnavn
-
+    private sealed class Tilstand(
+        protected val tilstandsnavn: Tilstandsnavn
+    ) {
         enum class Tilstandsnavn {
             START,
             STANDARD_SØKNAD_MOTTATT,
@@ -91,49 +91,49 @@ internal class Sak private constructor(
             ARBEIDSSØKER_SØKNAD_MOTTATT
         }
 
-        fun onEntry(sak: Sak, hendelse: Hendelse) {}
-        fun onExit(sak: Sak, hendelse: Hendelse) {}
-        fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+        open fun onEntry(sak: Sak, hendelse: Hendelse) {}
+        open fun onExit(sak: Sak, hendelse: Hendelse) {}
+        open fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
-        fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
+        open fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
             FrontendSak(
                 personident = personident.toFrontendPersonident(),
                 fødselsdato = fødselsdato.toFrontendFødselsdato(),
@@ -142,7 +142,7 @@ internal class Sak private constructor(
                 vedtak = null
             )
 
-        fun toDto(sak: Sak) = DtoSak(
+        open fun toDto(sak: Sak) = DtoSak(
             tilstand = tilstandsnavn.name,
             vilkårsvurderinger = sak.vilkårsvurderinger.toDto(),
             vurderingsdato = sak.vurderingsdato, // ALLTID SATT
@@ -150,26 +150,17 @@ internal class Sak private constructor(
             vedtak = null
         )
 
-        fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+        open fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
             sak.vurderingsdato = dtoSak.vurderingsdato
             sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
         }
     }
 
-    private object StudentSøknadMottatt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.STUDENT_SØKNAD_MOTTATT
-    }
+    private object StudentSøknadMottatt : Tilstand(Tilstandsnavn.STUDENT_SØKNAD_MOTTATT)
+    private object UføretrygdSøknadMottatt : Tilstand(Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT)
+    private object ArbeidssøkerSøknadMottatt : Tilstand(Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT)
 
-    private object UføretrygdSøknadMottatt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.UFØRETRYGD_SØKNAD_MOTTATT
-    }
-
-    private object ArbeidssøkerSøknadMottatt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.ARBEIDSSØKER_SØKNAD_MOTTATT
-    }
-
-    private object Start : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.START
+    private object Start : Tilstand(Tilstandsnavn.START) {
         override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
             val nestePositiveTilstand = vurderLøype(sak, søknad, fødselsdato, vurderingsdato)
 
@@ -214,8 +205,7 @@ internal class Sak private constructor(
         }
     }
 
-    private object StandardSøknadMottatt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_SØKNAD_MOTTATT
+    private object StandardSøknadMottatt : Tilstand(Tilstandsnavn.STANDARD_SØKNAD_MOTTATT) {
         override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
             sak.vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
             vurderNesteTilstand(sak, løsning)
@@ -266,8 +256,7 @@ internal class Sak private constructor(
         }
     }
 
-    private object BeregnInntekt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_BEREGN_INNTEKT
+    private object BeregnInntekt : Tilstand(Tilstandsnavn.STANDARD_BEREGN_INNTEKT) {
 
         override fun onEntry(sak: Sak, hendelse: Hendelse) {
             hendelse.opprettBehov(
@@ -294,8 +283,7 @@ internal class Sak private constructor(
         }
     }
 
-    private object VedtakFattet : Tilstand {
-        override val tilstandsnavn: Tilstand.Tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_VEDTAK_FATTET
+    private object VedtakFattet : Tilstand(Tilstandsnavn.STANDARD_VEDTAK_FATTET) {
 
         override fun toDto(sak: Sak) = DtoSak(
             tilstand = tilstandsnavn.name,
@@ -322,12 +310,7 @@ internal class Sak private constructor(
             )
     }
 
-    private object IkkeOppfylt : Tilstand {
-        override val tilstandsnavn = Tilstand.Tilstandsnavn.STANDARD_IKKE_OPPFYLT
-        override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-            log.info("Forventet ikke søknad i tilstand IkkeOppfylt")
-        }
-    }
+    private object IkkeOppfylt : Tilstand(Tilstandsnavn.STANDARD_IKKE_OPPFYLT)
 
     private fun toDto() = tilstand.toDto(this)
 
