@@ -143,14 +143,14 @@ internal interface ToAvro<out AVROVALUE> {
 
 fun <V : Any> KStream<String, V>.logConsumed(): KStream<String, V> = transformValues(
     ValueTransformerWithKeySupplier {
-        object : ValueTransformerWithKey<String, V, V> {
+        object : ValueTransformerWithKey<String, V?, V?> {
             private lateinit var context: ProcessorContext
 
             override fun init(context: ProcessorContext) {
                 this.context = context
             }
 
-            override fun transform(readOnlyKey: String, value: V): V {
+            override fun transform(readOnlyKey: String, value: V?): V? {
                 log.info("consumed [${context.topic()}] K:$readOnlyKey V:$value")
                 return value
             }
