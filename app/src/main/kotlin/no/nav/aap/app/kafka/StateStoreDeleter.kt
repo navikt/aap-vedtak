@@ -13,15 +13,16 @@ import java.time.Duration
 
 internal class StateStoreDeleter<V>(
     private val storeName: String,
-    private val deleteKey: () -> String,
+    private val deleteKey: () -> String?,
 ) : Processor<String, V, Void, Void> {
 
     override fun init(context: ProcessorContext<Void, Void>) {
         val store = context.getStateStore<KeyValueStore<String, ValueAndTimestamp<V>>>(storeName)
         context.schedule(Duration.ofSeconds(1), PunctuationType.WALL_CLOCK_TIME) {
-            val key = deleteKey.invoke()
-            store.delete(key)?.let {
-                log.info("Deleted [$storeName] [$key] [${it.value()}]")
+            deleteKey.invoke()?.let { key ->
+                store.delete(key)?.let {
+                    log.info("Deleted [$storeName] [$key] [${it.value()}]")
+                }
             }
         }
     }
@@ -29,7 +30,7 @@ internal class StateStoreDeleter<V>(
     override fun process(record: Record<String, V>?) {}
 }
 
-fun <V> KTable<String, V>.scheduleCleanup(store: String, deleteKey: () -> String) =
+fun <V> KTable<String, V>.scheduleCleanup(store: String, deleteKey: () -> String?) =
     toStream().process(
         ProcessorSupplier { StateStoreDeleter(store, deleteKey) },
         store
