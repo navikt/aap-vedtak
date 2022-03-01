@@ -69,9 +69,7 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
         .peek { key, value -> log.info("produced [$SØKERE_STORE_NAME] K:$key V:$value") }
         .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
 
-    søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) {
-        søkereToDelete.poll()
-    }
+    søkerKTable.scheduleCleanup(SØKERE_STORE_NAME)
 
     søknadStream(søkerKTable, topics)
     medlemStream(søkerKTable, topics)
@@ -116,7 +114,7 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) 
     }
 }
 
-private val søkereToDelete: ConcurrentLinkedQueue<String> = ConcurrentLinkedQueue<String>()
+val søkereToDelete: ConcurrentLinkedQueue<String> = ConcurrentLinkedQueue<String>()
 
 private fun Routing.devTools(kafka: Kafka, topics: Topics) {
     val søkerProducer = kafka.createProducer(topics.søkere)

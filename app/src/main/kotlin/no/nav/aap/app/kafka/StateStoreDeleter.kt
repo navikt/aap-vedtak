@@ -1,6 +1,7 @@
 package no.nav.aap.app.kafka
 
 import no.nav.aap.app.log
+import no.nav.aap.app.søkereToDelete
 import org.apache.kafka.streams.kstream.KTable
 import org.apache.kafka.streams.processor.PunctuationType
 import org.apache.kafka.streams.processor.api.Processor
@@ -13,13 +14,13 @@ import java.time.Duration
 
 internal class StateStoreDeleter<V>(
     private val storeName: String,
-    private val deleteKey: () -> String?,
 ) : Processor<String, V, Void, Void> {
 
     override fun init(context: ProcessorContext<Void, Void>) {
         val store = context.getStateStore<KeyValueStore<String, ValueAndTimestamp<V>>>(storeName)
         context.schedule(Duration.ofSeconds(1), PunctuationType.WALL_CLOCK_TIME) {
-            deleteKey.invoke()?.let { key ->
+            søkereToDelete.poll()?.let { key ->
+                log.info("Trying to deleted [$storeName] [$key] [???]")
                 store.delete(key)?.let {
                     log.info("Deleted [$storeName] [$key] [${it.value()}]")
                 }
@@ -30,8 +31,8 @@ internal class StateStoreDeleter<V>(
     override fun process(record: Record<String, V>?) {}
 }
 
-fun <V> KTable<String, V>.scheduleCleanup(store: String, deleteKey: () -> String?) =
+fun <V> KTable<String, V>.scheduleCleanup(store: String) =
     toStream().process(
-        ProcessorSupplier { StateStoreDeleter(store, deleteKey) },
+        ProcessorSupplier { StateStoreDeleter(store) },
         store
     )
