@@ -30,7 +30,6 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentLinkedQueue
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 const val SØKERE_STORE_NAME = "soker-state-store"
