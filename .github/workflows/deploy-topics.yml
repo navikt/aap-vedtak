@@ -16,7 +16,7 @@ jobs:
     name: Deploy medlem
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Deploy aap.medlem.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -30,7 +30,7 @@ jobs:
     name: Deploy sokere
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Deploy aap.sokere.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -44,7 +44,7 @@ jobs:
     name: Deploy manuell
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Deploy aap.manuell.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
@@ -58,7 +58,7 @@ jobs:
     name: Deploy inntekter
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2.4.0
+      - uses: actions/checkout@v3
       - name: Deploy aap.inntekter.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
