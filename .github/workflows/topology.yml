@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          token: ${{ secrets.PAT }}
-          persist-credentials: true
+#          token: ${{ secrets.PAT }}
+#          persist-credentials: true
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-svg doc/topology.puml'
@@ -25,3 +25,4 @@ jobs:
         with:
           commit_message: Auto Update Topology.svg
           file_pattern: doc/topology.svg
+          push_options: '--force'
