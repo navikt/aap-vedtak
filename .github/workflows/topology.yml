@@ -18,6 +18,7 @@ jobs:
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-svg doc/topology.puml'
+
       - uses: actions/upload-artifact@v2
         with:
           path: doc/topology.svg
@@ -26,4 +27,3 @@ jobs:
         with:
           commit_message: Auto Update Topology.svg
           file_pattern: doc/topology.svg
-#          push_options: '--force'
