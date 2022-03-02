@@ -3,30 +3,17 @@ name: Topology UML
 on:
   push:
     paths:
-      - doc/topology.puml
-      - .github/workflows/topology.yml
+      - 'doc/topology.puml'
+      - ''.github/workflows/topology.yml'
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - id: latest
-        run: |
-          url=https://sourceforge.net/projects/plantuml/best_release.json
-          echo "::set-output name=PLANTUML_VERSION::$(curl $url | jq .release.date -r)"
-
-      - uses: actions/cache@v2
-        id: cached
+      - uses: Timmy/plantuml-action@v1
         with:
-          path: plantuml.jar
-          key: ${{ steps.latest.outputs.PLANTUML_VERSION }}
-
-      - if: steps.cached.outputs.cache-hit != 'true'
-        run: wget -O plantuml.jar "http://sourceforge.net/projects/plantuml/files/plantuml.jar/download"
-
-      - run: cat doc/topology.puml | java -jar plantuml.jar -svg -pipe > topology.svg
-
+          args: '-svg doc/topology.puml'
       - uses: actions/upload-artifact@v2
         with:
-          path: topology.svg
+          path: doc/topology.svg
