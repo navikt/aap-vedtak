@@ -13,7 +13,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           token: ${{ secrets.PAT }}
-          persist-credentials: false
+          persist-credentials: true
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-svg doc/topology.puml'
