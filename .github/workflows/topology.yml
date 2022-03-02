@@ -14,6 +14,7 @@ jobs:
         with:
           token: ${{ secrets.PAT }}
           persist-credentials: true
+
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-svg doc/topology.puml'
