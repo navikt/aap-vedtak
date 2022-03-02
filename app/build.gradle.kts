@@ -1,9 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
-/*
- * This project uses @Incubating APIs which are subject to change.
- */
-
 plugins {
     kotlin("jvm")
     id("com.github.johnrengelman.shadow")
@@ -59,7 +55,6 @@ dependencies {
 }
 
 application {
-//     Define the main class for the application.
     mainClass.set("no.nav.aap.app.AppKt")
 }
 
