@@ -26,12 +26,11 @@ jobs:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
           arguments: test app:shadowJar --continue --no-daemon --no-build-cache
-#           Gradle build cache increases over time. Exclude if cache is too large
-#          gradle-home-cache-excludes: |
-#            caches/build-cache-1
 
-      - id: topology
-        run: echo "::set-output name=puml::$(cat app/build/topology.puml)"
+      - uses: actions/upload-artifact@v2
+        with:
+          name: topology.puml
+          path: app/build/topology.puml
 
       - uses: dorny/test-reporter@v1.5.0
         if: success() || failure()
@@ -65,9 +64,3 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/app.yml,.nais/alert.yml
           VARS: .nais/dev.yml
-
-  topology:
-    needs: build
-    uses: navikt/aap-vedtak/.github/workflows/topology.yml@main
-    with:
-      topology: ${{ needs.build.outputs.topology }}
