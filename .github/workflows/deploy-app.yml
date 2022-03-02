@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - main
+    paths-ignore:
+      - 'doc/topology.puml'
+      - '.github/workflows/topology.yml'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}
