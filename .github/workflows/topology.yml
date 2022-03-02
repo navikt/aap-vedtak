@@ -26,4 +26,4 @@ jobs:
           args: '-tutxt app/build/topology.puml'
 
       - name: Display diagrams
-        run: cat diagrams/*.utxt
+        run: cat app/build/topology.utxt
