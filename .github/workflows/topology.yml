@@ -23,16 +23,7 @@ jobs:
 
       - uses: Timmy/plantuml-action@v1
         with:
-          args: '-tsvg doc/topology.puml'
+          args: '-tutxt app/build/topology.puml'
 
-      - name: Configure Git User
-        run: |
-          git config --global user.name topology
-          git config --global user.email topology@users.noreply.github.com
-
-      - name: Update doc/topology.svg
-        run: |
-          git add doc/topology.svg
-          git commit -m "Oppdaterer topology.svg"
-          git pull --rebase
-          git push --force-with-lease
+      - name: Display diagrams
+        run: cat diagrams/*.utxt

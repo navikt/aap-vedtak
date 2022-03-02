@@ -3,5 +3,4 @@
 Vedtaksapplikasjon for AAP
 
 # Topology
-
-![img](doc/topology.svg)
+Se i `app/build/topology.puml` og lim inn resultatet i [plantuml-editor](https://plantuml-editor.kkeisuke.dev)
