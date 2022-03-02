@@ -1,19 +1,16 @@
 name: Topology UML
 
 on:
-  workflow_run:
-    workflows : [ 'Build and Deploy' ]
-    types: [ completed ]
+  push:
+    paths:
+      - doc/topology.puml
+      - .github/workflows/topology.yml
+
 jobs:
   generate:
     runs-on: ubuntu-latest
     steps:
-      - uses: dawidd6/action-download-artifact@v2
-        with:
-          workflow: 'Build and Deploy'
-          run_id: ${{ github.event.workflow_run.id }}
-          name: diagram
-
+      - uses: actions/checkout@v3
       - id: latest
         run: |
           url=https://sourceforge.net/projects/plantuml/best_release.json
@@ -28,7 +25,7 @@ jobs:
       - if: steps.cached.outputs.cache-hit != 'true'
         run: wget -O plantuml.jar "http://sourceforge.net/projects/plantuml/files/plantuml.jar/download"
 
-      - run: cat diagram/topology.puml | java -jar plantuml.jar -svg -pipe > topology.svg
+      - run: cat doc/topology.puml | java -jar plantuml.jar -svg -pipe > topology.svg
 
       - uses: actions/upload-artifact@v2
         with:

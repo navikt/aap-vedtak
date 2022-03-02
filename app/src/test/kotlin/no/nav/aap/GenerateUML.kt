@@ -14,9 +14,8 @@ internal class GenerateUML {
         val config = loadConfig<Config>()
         val topics = Topics(config.kafka)
         val topology = createTopology(topics)
-        val filePath = "build/topology.puml"
 
-        KStreamsUML.create(topology, filePath).also {
+        KStreamsUML.create(topology).also {
             println("Generated topology UML ${it.absoluteFile}. Online editor: https://plantuml-editor.kkeisuke.dev")
         }
     }
