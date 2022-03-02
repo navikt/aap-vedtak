@@ -18,10 +18,15 @@ data class DtoSøker(
 
 data class DtoSak(
     val tilstand: String,
-    val vilkårsvurderinger: List<DtoVilkårsvurdering>,
+    val sakstyper: List<DtoSakstype>,
     val vurderingsdato: LocalDate,
     val vurderingAvBeregningsdato: DtoVurderingAvBeregningsdato,
     val vedtak: DtoVedtak?
+)
+
+data class DtoSakstype(
+    val type: String,
+    val vilkårsvurderinger: List<DtoVilkårsvurdering>
 )
 
 data class DtoVilkårsvurdering(

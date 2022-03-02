@@ -38,7 +38,8 @@ internal class SøkerComponentTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT",
@@ -56,7 +57,8 @@ internal class SøkerComponentTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertTilstand(
             vilkårsvurderinger,
             "IKKE_OPPFYLT",
@@ -74,7 +76,8 @@ internal class SøkerComponentTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
@@ -96,7 +99,8 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
@@ -116,7 +120,8 @@ internal class SøkerComponentTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
@@ -147,7 +152,8 @@ internal class SøkerComponentTest {
         søker.håndterSøknad(søknad)
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
@@ -180,7 +186,8 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
@@ -213,7 +220,8 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
 
         val saker = listOf(søker).toFrontendSaker(personident)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
@@ -250,55 +258,58 @@ internal class SøkerComponentTest {
         val expected = FrontendSak(
             personident = "12345678910",
             fødselsdato = LocalDate.now().minusYears(18),
-            tilstand = "STANDARD_SØKNAD_MOTTATT",
-            vilkårsvurderinger = listOf(
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_2",
-                    ledd = listOf("LEDD_1", "LEDD_2"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_3",
-                    ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = true
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_4",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_4",
-                    ledd = listOf("LEDD_2", "LEDD_3"),
-                    tilstand = "IKKE_RELEVANT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_5",
-                    ledd = listOf("LEDD_1", "LEDD_2"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = true
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_6",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = true
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_12",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = true
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_29",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "SØKNAD_MOTTATT",
-                    harÅpenOppgave = true
+            tilstand = "SØKNAD_MOTTATT",
+            sakstype = FrontendSakstype(
+                type = "STANDARD",
+                vilkårsvurderinger = listOf(
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_2",
+                        ledd = listOf("LEDD_1", "LEDD_2"),
+                        tilstand = "SØKNAD_MOTTATT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_3",
+                        ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                        tilstand = "SØKNAD_MOTTATT",
+                        harÅpenOppgave = true
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_4",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_4",
+                        ledd = listOf("LEDD_2", "LEDD_3"),
+                        tilstand = "IKKE_RELEVANT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_5",
+                        ledd = listOf("LEDD_1", "LEDD_2"),
+                        tilstand = "SØKNAD_MOTTATT",
+                        harÅpenOppgave = true
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_6",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "SØKNAD_MOTTATT",
+                        harÅpenOppgave = true
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_12",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "SØKNAD_MOTTATT",
+                        harÅpenOppgave = true
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_29",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "SØKNAD_MOTTATT",
+                        harÅpenOppgave = true
+                    )
                 )
             ),
             vedtak = null
@@ -342,55 +353,58 @@ internal class SøkerComponentTest {
         val expected = FrontendSak(
             personident = "12345678910",
             fødselsdato = LocalDate.now().minusYears(40),
-            tilstand = "STANDARD_VEDTAK_FATTET",
-            vilkårsvurderinger = listOf(
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_2",
-                    ledd = listOf("LEDD_1", "LEDD_2"),
-                    tilstand = "OPPFYLT_MASKINELT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_3",
-                    ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_4",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_4",
-                    ledd = listOf("LEDD_2", "LEDD_3"),
-                    tilstand = "IKKE_RELEVANT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_5",
-                    ledd = listOf("LEDD_1", "LEDD_2"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_6",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_12",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
-                ),
-                FrontendVilkårsvurdering(
-                    paragraf = "PARAGRAF_11_29",
-                    ledd = listOf("LEDD_1"),
-                    tilstand = "OPPFYLT",
-                    harÅpenOppgave = false
+            tilstand = "VEDTAK_FATTET",
+            sakstype = FrontendSakstype(
+                type = "STANDARD",
+                vilkårsvurderinger = listOf(
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_2",
+                        ledd = listOf("LEDD_1", "LEDD_2"),
+                        tilstand = "OPPFYLT_MASKINELT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_3",
+                        ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_4",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_4",
+                        ledd = listOf("LEDD_2", "LEDD_3"),
+                        tilstand = "IKKE_RELEVANT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_5",
+                        ledd = listOf("LEDD_1", "LEDD_2"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_6",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_12",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    ),
+                    FrontendVilkårsvurdering(
+                        paragraf = "PARAGRAF_11_29",
+                        ledd = listOf("LEDD_1"),
+                        tilstand = "OPPFYLT",
+                        harÅpenOppgave = false
+                    )
                 )
             ),
             vedtak = FrontendVedtak(
@@ -480,7 +494,7 @@ internal class SøkerComponentTest {
 
         val dtoSøker = søker.toDto()
 
-        assertEquals("STANDARD_VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
@@ -517,7 +531,7 @@ internal class SøkerComponentTest {
         }
         medSøker { }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
 
-        assertEquals("STANDARD_VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
@@ -542,7 +556,8 @@ internal class SøkerComponentTest {
 
         val dtoSøker = søker.toDto()
 
-        assertEquals("STUDENT_VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("STUDENT", dtoSøker.saker.single().sakstyper.last().type)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 

@@ -22,11 +22,17 @@ internal class SakTest {
 
         assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
     }
 
     @Test
@@ -38,11 +44,17 @@ internal class SakTest {
 
         assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("STANDARD_IKKE_OPPFYLT", sak, personident, fødselsdato)
+        assertTilstand("IKKE_OPPFYLT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
-        assertTilstand(vilkårsvurderinger, "IKKE_OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
     }
 
     @Test
@@ -54,34 +66,45 @@ internal class SakTest {
         assertTilstand("START", sak, personident, fødselsdato)
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_3(true))
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_6(true))
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningParagraf_11_29(true))
-        assertTilstand("STANDARD_SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
 
         sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
-        assertTilstand("STANDARD_BEREGN_INNTEKT", sak, personident, fødselsdato)
+        assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
 
         val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val vilkårsvurderinger = saker.first().vilkårsvurderinger
+        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.vilkårsvurderinger
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_1)
-        assertTilstand(vilkårsvurderinger, "IKKE_RELEVANT", Vilkårsvurdering.Paragraf.PARAGRAF_11_4, Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_RELEVANT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)

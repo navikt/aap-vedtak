@@ -23,7 +23,7 @@ fun Soker.toDto(): DtoSøker = DtoSøker(
 fun Sak.toDto(): DtoSak = DtoSak(
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto),
+    sakstyper = listOf(DtoSakstype("STANDARD", vilkarsvurderinger.map(Vilkarsvurdering::toDto))), //FIXME
     vurderingAvBeregningsdato = vurderingAvBeregningsdato.toDto(),
     vedtak = vedtak?.toDto()
 )
@@ -111,7 +111,7 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
             Sak.newBuilder()
                 .setTilstand(sak.tilstand)
                 .setVilkarsvurderinger(
-                    sak.vilkårsvurderinger.map { vilkår ->
+                    sak.sakstyper.last().vilkårsvurderinger.map { vilkår ->
                         Vilkarsvurdering.newBuilder()
                             .setLedd(vilkår.ledd)
                             .setParagraf(vilkår.paragraf)

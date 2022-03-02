@@ -9,8 +9,13 @@ data class FrontendSak(
     val personident: String,
     val fødselsdato: LocalDate,
     val tilstand: String,
-    val vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+    val sakstype: FrontendSakstype?,
     val vedtak: FrontendVedtak?
+)
+
+data class FrontendSakstype(
+    val type: String,
+    val vilkårsvurderinger: List<FrontendVilkårsvurdering>
 )
 
 data class FrontendVilkårsvurdering(
