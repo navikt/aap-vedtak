@@ -10,8 +10,9 @@ env:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
+    outputs:
+      topology: ${{ steps.topology.outputs.puml }}
     steps:
       - uses: styfle/cancel-workflow-action@0.9.1
       - uses: actions/checkout@v2
@@ -28,6 +29,9 @@ jobs:
 #           Gradle build cache increases over time. Exclude if cache is too large
 #          gradle-home-cache-excludes: |
 #            caches/build-cache-1
+
+      - id: topology
+        run: echo "::set-output name=puml::$(cat app/build/topology.puml)"
 
       - uses: dorny/test-reporter@v1.5.0
         if: success() || failure()
@@ -61,3 +65,9 @@ jobs:
           CLUSTER: dev-gcp
           RESOURCE: .nais/app.yml,.nais/alert.yml
           VARS: .nais/dev.yml
+
+  topology:
+    needs: build
+    uses: navikt/aap-vedtak/.github/workflows/topology.yml@main
+    with:
+      topology: ${{ needs.build.outputs.topology }}
