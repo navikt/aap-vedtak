@@ -22,3 +22,4 @@ jobs:
         with:
           commit_message: Auto Update Topology.svg
           file_pattern: doc/topology.svg
+          token: ${{ secrets.PAT }}
