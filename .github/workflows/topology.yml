@@ -11,6 +11,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          token: ${{ secrets.PAT }}
       - uses: Timmy/plantuml-action@v1
         with:
           args: '-svg doc/topology.puml'
@@ -22,4 +24,3 @@ jobs:
         with:
           commit_message: Auto Update Topology.svg
           file_pattern: doc/topology.svg
-          token: ${{ secrets.PAT }}
