@@ -7,6 +7,7 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.tidslinje.Tidsperiode.Companion.DAGER_I_EN_PERIODE
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -20,37 +21,73 @@ internal class TidslinjeTest {
     }
 
     @Test
-    fun `Når man oppretter en ny tidslinje med startdato og grunnlag, får man en periode med dager med beløp`() {
+    fun `Når det mottas et meldekort legges dagene til i tidslinjen og utbetaling beregnes`() {
         val inntekter = listOf(
             Inntekt(ARBEIDSGIVER, januar(2014), 540527.beløp),
             Inntekt(ARBEIDSGIVER, januar(2015), 459248.beløp),
             Inntekt(ARBEIDSGIVER, januar(2016), 645246.beløp)
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
+        val tidslinje = Tidslinje()
 
-        val tidslinje = Tidslinje.opprettTidslinje(1 januar 2017, grunnlag, Barnehage(emptyList()))
+        val meldekort = Meldekort(
+            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            Barnehage(emptyList()),
+            emptyList()
+        )
+
+        tidslinje.håndterMeldekort(meldekort, grunnlag)
 
         assertEquals(14100.beløp, tidslinje.summerTidslinje())
     }
 
     @Test
-    fun `Når det legges til barn i tidslinja, blir barnetillegget lagt til dagsatsen`() {
+    fun `Når det mottas et meldekort med barn legges barnetillegg til på dagene`() {
         val inntekter = listOf(
             Inntekt(ARBEIDSGIVER, januar(2014), 540527.beløp),
             Inntekt(ARBEIDSGIVER, januar(2015), 459248.beløp),
             Inntekt(ARBEIDSGIVER, januar(2016), 645246.beløp)
         )
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
+        val tidslinje = Tidslinje()
 
-        val barnehage = Barnehage(
-            listOf(
-                Barnehage.Barn(Fødselsdato(1 januar 2012))
-            )
+        val meldekort = Meldekort(
+            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            Barnehage(listOf(Barnehage.Barn(Fødselsdato(1 januar 2012)))),
+            emptyList()
         )
 
-        val tidslinje = Tidslinje.opprettTidslinje(1 januar 2017, grunnlag, barnehage)
+        tidslinje.håndterMeldekort(meldekort, grunnlag)
 
         assertEquals((14100 + 270).beløp, tidslinje.summerTidslinje())
+    }
+
+    @Test
+    fun `Når det mottas to påfølgende meldekort opprettes to tidsperioder`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2014), 540527.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2015), 459248.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2016), 645246.beløp)
+        )
+        val grunnlag = inntekter.inntektsgrunnlag(1 januar 2017)
+        val tidslinje = Tidslinje()
+
+        val meldekort = Meldekort(
+            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            Barnehage(emptyList()),
+            emptyList()
+        )
+
+        val meldekort2 = Meldekort(
+            (1..DAGER_I_EN_PERIODE).map { (15 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            Barnehage(emptyList()),
+            emptyList()
+        )
+
+        tidslinje.håndterMeldekort(meldekort, grunnlag)
+        tidslinje.håndterMeldekort(meldekort2, grunnlag)
+
+        assertEquals(14100.beløp * 2, tidslinje.summerTidslinje())
     }
 
     private fun Iterable<Inntekt>.inntektsgrunnlag(

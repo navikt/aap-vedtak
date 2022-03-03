@@ -4,6 +4,7 @@ import no.nav.aap.domene.Sakstype.Companion.toDto
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.tidslinje.Tidslinje
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.*
@@ -262,7 +263,8 @@ internal class Sak private constructor(
                     inntektsgrunnlag = inntektsgrunnlag,
                     søknadstidspunkt = LocalDateTime.now(),
                     vedtaksdato = LocalDate.now(),
-                    virkningsdato = LocalDate.now()
+                    virkningsdato = LocalDate.now(),
+                    tidslinje = Tidslinje()
                 )
 
                 sak.tilstand(VedtakFattet, løsning)

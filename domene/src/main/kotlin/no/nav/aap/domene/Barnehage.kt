@@ -5,7 +5,7 @@ import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.entitet.Fødselsdato
 import java.time.LocalDate
 
-internal class Barnehage(
+class Barnehage(
     private val barn: List<Barn>
 ) {
 
@@ -15,7 +15,7 @@ internal class Barnehage(
 
     internal fun barnetilleggForDag(dato: LocalDate) = BARNETILLEGG * barn.antallBarnUnder18År(dato)
 
-    internal class Barn(
+    class Barn(
         private val fødselsdato: Fødselsdato
     ) {
         internal companion object {

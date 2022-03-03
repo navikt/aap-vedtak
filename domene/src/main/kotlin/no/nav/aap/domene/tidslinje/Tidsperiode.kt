@@ -6,12 +6,12 @@ import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
 import java.time.LocalDate
 
-internal class Tidsperiode private constructor(
+internal class Tidsperiode(
     private val dager: List<Dag>
 ) {
 
-    companion object {
-        private const val DAGER_I_EN_PERIODE = 14L
+    internal companion object {
+        internal const val DAGER_I_EN_PERIODE = 14L
 
         fun fyllPeriodeMedDager(fraDato: LocalDate, grunnlag: Inntektsgrunnlag, barnehage: Barnehage) =
             Tidsperiode((0 until DAGER_I_EN_PERIODE)

@@ -1,6 +1,7 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
+import no.nav.aap.domene.tidslinje.Tidslinje
 import no.nav.aap.dto.DtoVedtak
 import no.nav.aap.frontendView.FrontendVedtak
 import java.time.LocalDate
@@ -11,7 +12,8 @@ internal class Vedtak(
     private val inntektsgrunnlag: Inntektsgrunnlag,
     private val søknadstidspunkt: LocalDateTime,
     private val vedtaksdato: LocalDate,
-    private val virkningsdato: LocalDate
+    private val virkningsdato: LocalDate,
+    private val tidslinje: Tidslinje
 ) {
     internal fun toDto() = DtoVedtak(
         innvilget = innvilget,
@@ -35,7 +37,8 @@ internal class Vedtak(
             inntektsgrunnlag = Inntektsgrunnlag.gjenopprett(dtoVedtak.inntektsgrunnlag),
             søknadstidspunkt = dtoVedtak.søknadstidspunkt,
             vedtaksdato = dtoVedtak.vedtaksdato,
-            virkningsdato = dtoVedtak.virkningsdato
+            virkningsdato = dtoVedtak.virkningsdato,
+            tidslinje = Tidslinje() //FIXME
         )
     }
 }
