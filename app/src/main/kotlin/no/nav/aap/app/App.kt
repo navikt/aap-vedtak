@@ -7,6 +7,7 @@ import io.ktor.features.*
 import io.ktor.http.*
 import io.ktor.jackson.*
 import io.ktor.metrics.micrometer.*
+import io.ktor.request.*
 import io.ktor.response.*
 import io.ktor.routing.*
 import io.ktor.server.engine.*
@@ -15,15 +16,19 @@ import io.ktor.util.*
 import io.ktor.util.collections.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import no.nav.aap.app.config.Config
 import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.*
 import no.nav.aap.app.modell.toDto
+import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.security.AapAuth
 import no.nav.aap.app.security.AzureADProvider
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.Søker.Companion.toFrontendSaker
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.dto.DtoManuell
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
@@ -56,7 +61,7 @@ internal fun Application.server(kafka: Kafka = KStreams()) {
     val søkerStore = kafka.getStore<AvroSøker>(SØKERE_STORE_NAME)
 
     routing {
-        api(søkerStore)
+        api(søkerStore, kafka, topics)
         devTools(kafka, topics)
         actuator(prometheus, kafka)
     }
@@ -80,7 +85,9 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     inntekterResponseStream(topics)
 }.build()
 
-private fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) {
+private fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>, kafka: Kafka, topics: Topics) {
+    val manuellProducer = kafka.createProducer(topics.manuell)
+
     authenticate {
         route("/api") {
             get("/sak") {
@@ -98,6 +105,15 @@ private fun Routing.api(søkerStore: ReadOnlyKeyValueStore<String, AvroSøker>) 
                 val søkere = søkerStore.allValues().map(AvroSøker::toDto).map(Søker::gjenopprett)
                 val frontendSaker = søkere.toFrontendSaker(personident)
                 call.respond(frontendSaker)
+            }
+
+            post("/sak/{personident}/losning") {
+                val personident = call.parameters.getOrFail("personident")
+                val løsning = call.receive<DtoManuell>()
+                withContext(Dispatchers.IO) {
+                    manuellProducer.send(ProducerRecord(topics.manuell.name, personident, løsning.toAvro())).get()
+                }
+                call.respond(HttpStatusCode.OK, "OK")
             }
         }
     }

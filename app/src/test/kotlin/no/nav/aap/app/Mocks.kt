@@ -12,11 +12,16 @@ import org.apache.kafka.clients.consumer.MockConsumer
 import org.apache.kafka.clients.consumer.OffsetResetStrategy.EARLIEST
 import org.apache.kafka.clients.producer.MockProducer
 import org.apache.kafka.clients.producer.Producer
+import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.clients.producer.RecordMetadata
+import org.apache.kafka.common.TopicPartition
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.streams.*
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
 import java.util.*
+import java.util.concurrent.Future
+import java.util.concurrent.TimeUnit
 
 class Mocks : AutoCloseable {
     val azure = AzureMock().apply { start() }
@@ -45,7 +50,33 @@ class KStreamsMock : Kafka {
 
     internal val schemaRegistryUrl: String by lazy { "mock://schema-registry/${UUID.randomUUID()}" }
 
-    override fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V> = MockProducer()
+    override fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V> =
+        object : MockProducer<String, V>(true, topic.keySerde.serializer(), topic.valueSerde.serializer()) {
+            override fun send(record: ProducerRecord<String, V>): Future<RecordMetadata> {
+                inputAvroTopic<SpecificRecord>(topic.name).pipeInput(record.key(), record.value() as SpecificRecord)
+                return object : Future<RecordMetadata> {
+                    override fun cancel(mayInterruptIfRunning: Boolean): Boolean {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun isCancelled(): Boolean {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun isDone(): Boolean {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun get() =
+                        RecordMetadata(TopicPartition(topic.name, 0), 0, 0, 0, 0, 0)
+
+                    override fun get(timeout: Long, unit: TimeUnit): RecordMetadata {
+                        TODO("Not yet implemented")
+                    }
+                }
+            }
+        }
+
     override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> = MockConsumer(EARLIEST)
     override fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V> = driver.getKeyValueStore(name)
     override fun close() = driver.close().also { MockSchemaRegistry.dropScope(schemaRegistryUrl) }
