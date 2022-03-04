@@ -10,7 +10,7 @@ import no.nav.aap.app.security.OAuthConfig
 
 data class Config(
     val oauth: OAuthConfig,
-    val kafka: KafkaConfig,
+    val kafka: KafkaConfig
 )
 
 inline fun <reified T : Any> Application.loadConfig(vararg resources: String = arrayOf("/application.yml")): T =
