@@ -31,7 +31,7 @@ internal class TidslinjeTest {
         val tidslinje = Tidslinje()
 
         val meldekort = Meldekort(
-            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Meldekortdag(it) },
             Barnehage(emptyList()),
             emptyList()
         )
@@ -52,7 +52,7 @@ internal class TidslinjeTest {
         val tidslinje = Tidslinje()
 
         val meldekort = Meldekort(
-            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Meldekortdag(it) },
             Barnehage(listOf(Barnehage.Barn(Fødselsdato(1 januar 2012)))),
             emptyList()
         )
@@ -73,13 +73,13 @@ internal class TidslinjeTest {
         val tidslinje = Tidslinje()
 
         val meldekort = Meldekort(
-            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            (1..DAGER_I_EN_PERIODE).map { (1 januar 2017).plusDays(it) }.map { Meldekort.Meldekortdag(it) },
             Barnehage(emptyList()),
             emptyList()
         )
 
         val meldekort2 = Meldekort(
-            (1..DAGER_I_EN_PERIODE).map { (15 januar 2017).plusDays(it) }.map { Meldekort.Dag(it) },
+            (1..DAGER_I_EN_PERIODE).map { (15 januar 2017).plusDays(it) }.map { Meldekort.Meldekortdag(it) },
             Barnehage(emptyList()),
             emptyList()
         )

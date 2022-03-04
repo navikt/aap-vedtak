@@ -3,7 +3,7 @@ package no.nav.aap.domene.tidslinje
 import no.nav.aap.domene.Barnehage
 import no.nav.aap.domene.tidslinje.Tidsperiode.Companion.summerDagsatser
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
-import no.nav.aap.domene.tidslinje.Meldekort.Dag.Companion.tilTidsperiodedager
+import no.nav.aap.domene.tidslinje.Meldekort.Meldekortdag.Companion.tilTidsperiodedager
 import no.nav.aap.hendelse.Hendelse
 import java.time.LocalDate
 
@@ -24,20 +24,16 @@ internal class Tidslinje {
 }
 
 class Meldekort(
-    private val dager: List<Dag>,
+    private val dager: List<Meldekortdag>,
     private val barnehage: Barnehage,
     private val institusjonsopphold: List<Institusjonsopphold>
 ) : Hendelse() {
-    class Dag(
+    class Meldekortdag(
         private val dato: LocalDate
     ) {
         internal companion object {
-            internal fun Iterable<Dag>.tilTidsperiodedager(
-                grunnlag: Inntektsgrunnlag,
-                barnehage: Barnehage
-            ): List<no.nav.aap.domene.tidslinje.Dag> {
-                return map { Dag(it.dato, grunnlag.grunnlagForDag(it.dato), barnehage.barnetilleggForDag(it.dato)) }
-            }
+            internal fun Iterable<Meldekortdag>.tilTidsperiodedager(grunnlag: Inntektsgrunnlag, barnehage: Barnehage) =
+                map { Dag(it.dato, grunnlag.grunnlagForDag(it.dato), barnehage.barnetilleggForDag(it.dato)) }
         }
     }
 
@@ -51,11 +47,8 @@ class Meldekort(
             OPPHOLD_I_INSTITUSJON,
             STRAFFEGJENNOMFØRING
         }
-
     }
 
-    internal fun opprettTidsperiode(grunnlag: Inntektsgrunnlag): Tidsperiode {
-        val tidsperiodedager = dager.tilTidsperiodedager(grunnlag, barnehage)
-        return Tidsperiode(tidsperiodedager)
-    }
+    internal fun opprettTidsperiode(grunnlag: Inntektsgrunnlag) =
+        Tidsperiode(dager.tilTidsperiodedager(grunnlag, barnehage))
 }
