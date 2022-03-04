@@ -4,6 +4,7 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.*
+import org.slf4j.LoggerFactory
 import java.time.LocalDate
 
 internal abstract class Vilkårsvurdering(
@@ -59,6 +60,8 @@ internal abstract class Vilkårsvurdering(
     protected abstract fun toDto(): DtoVilkårsvurdering
 
     internal companion object {
+        private val log = LoggerFactory.getLogger("Vilkårsvurdering")
+
         internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)
         internal fun Iterable<Vilkårsvurdering>.erNoenIkkeOppfylt() = any(Vilkårsvurdering::erIkkeOppfylt)
         internal fun Iterable<Vilkårsvurdering>.toDto() = map(Vilkårsvurdering::toDto)
@@ -74,7 +77,7 @@ internal abstract class Vilkårsvurdering(
                         when (ledd) {
                             listOf(Ledd.LEDD_1) -> Paragraf_11_4FørsteLedd.gjenopprett(vilkårsvurdering)
                             listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.gjenopprett(vilkårsvurdering)
-                            else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                            else -> null.also { log.warn("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
@@ -84,7 +87,7 @@ internal abstract class Vilkårsvurdering(
                     vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) -> Paragraf_11_12FørsteLedd.gjenopprett(vilkårsvurdering)
-                            else -> null.also { println("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                            else -> null.also { log.warn("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }

@@ -395,8 +395,6 @@ internal class ApiTest {
             postLøsning(mocks, """{"løsning_11_29_manuell":{"erOppfylt":true}}""")
             postLøsning(mocks, """{"løsningVurderingAvBeregningsdato":{"beregningsdato":"2022-01-01"}}""")
 
-            println(søkerOutputTopic.readValuesToList())
-
             val søker = stateStore["123"]
             assertNotNull(søker)
             val actual = søker.toDto()
@@ -569,8 +567,6 @@ internal class ApiTest {
                     LocalDate.of(2022, 1, 1)
                 )
             )
-
-            println(søkerOutputTopic.readValuesToList())
 
             val søker = stateStore["123"]
             assertNotNull(søker)

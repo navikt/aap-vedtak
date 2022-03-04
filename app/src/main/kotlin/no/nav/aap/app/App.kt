@@ -38,7 +38,7 @@ import org.slf4j.LoggerFactory
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 const val SØKERE_STORE_NAME = "soker-state-store"
-internal val log = LoggerFactory.getLogger("app")
+private val secureLog = LoggerFactory.getLogger("secureLog")
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
@@ -71,7 +71,7 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     val søkerKTable = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
         .logConsumed()
         .filter { _, value -> value != null }
-        .peek { key, value -> log.info("produced [$SØKERE_STORE_NAME] K:$key V:$value") }
+        .peek { key, value -> secureLog.info("produced [$SØKERE_STORE_NAME] K:$key V:$value") }
         .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
 
     søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) { record ->
@@ -146,7 +146,7 @@ private fun Routing.devTools(kafka: Kafka, topics: Topics) {
             val personident = call.parameters.getOrFail("personident")
             søkerProducer.tombstone(personident).also {
                 søkereToDelete.add(personident)
-                log.info("produced [${topics.søkere.name}] [$personident] [tombstone]")
+                secureLog.info("produced [${topics.søkere.name}] [$personident] [tombstone]")
             }
             call.respondText("Deleted $personident")
         }

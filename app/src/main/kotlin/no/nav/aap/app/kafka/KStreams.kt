@@ -6,7 +6,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
-import no.nav.aap.app.log
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import org.apache.kafka.clients.CommonClientConfigs
@@ -27,8 +26,11 @@ import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.QueryableStoreTypes
 import org.apache.kafka.streams.state.ReadOnlyKeyValueStore
-import org.checkerframework.checker.units.qual.K
+import org.slf4j.LoggerFactory
 import java.util.*
+
+private val log = LoggerFactory.getLogger("app")
+private val secureLog = LoggerFactory.getLogger("secureLog")
 
 interface Kafka : AutoCloseable {
     fun start(topology: Topology, kafkaConfig: KafkaConfig)
@@ -47,7 +49,7 @@ class KStreams : Kafka {
     override fun start(topology: Topology, kafkaConfig: KafkaConfig) {
         streams = KafkaStreams(topology, kafkaConfig.consumer + kafkaConfig.producer)
         streams.setUncaughtExceptionHandler { err: Throwable ->
-            log.error("Uventet feil, logger og leser neste record, ${err.message}")
+            secureLog.error("Uventet feil, logger og leser neste record, ${err.message}")
             StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
         }
         streams.setStateListener { newState, oldState ->
@@ -113,7 +115,7 @@ class LogContinueErrorHandler : ProductionExceptionHandler {
         record: ProducerRecord<ByteArray, ByteArray>?,
         exception: Exception?
     ): ProductionExceptionHandlerResponse {
-        log.error("Feil i streams, logger og leser neste record", exception)
+        secureLog.error("Feil i streams, logger og leser neste record", exception)
         return CONTINUE
     }
 }
@@ -151,7 +153,7 @@ fun <V : Any> KStream<String, V>.logConsumed(): KStream<String, V> = transformVa
             }
 
             override fun transform(readOnlyKey: String, value: V?): V? {
-                log.info("consumed [${context.topic()}] K:$readOnlyKey V:$value")
+                secureLog.info("consumed [${context.topic()}] K:$readOnlyKey V:$value")
                 return value
             }
 
@@ -161,5 +163,5 @@ fun <V : Any> KStream<String, V>.logConsumed(): KStream<String, V> = transformVa
 )
 
 fun <K, V> KStream<K, V>.to(topic: Topic<K, V>, producedWith: Produced<K, V>) = this
-    .peek { key, value -> log.info("produced [${topic.name}] K:$key V:$value") }
+    .peek { key, value -> secureLog.info("produced [${topic.name}] K:$key V:$value") }
     .to(topic.name, producedWith)
