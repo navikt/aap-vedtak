@@ -33,7 +33,7 @@ dependencies {
 
     implementation("com.sksamuel.hoplite:hoplite-yaml:1.4.16")
 
-    implementation("ch.qos.logback:logback-classic:1.2.10")
+    implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.ktor:ktor-jackson:1.6.7")
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
 
