@@ -9,13 +9,6 @@ spec:
   image: {{image}}
   secureLogs:
     enabled: true
-  accessPolicy:
-    inbound:
-      rules:
-        - application: soknad-behandling
-  azure:
-    application:
-      enabled: true
   kafka:
     pool: {{kafka-pool}}
     streams: true

@@ -6,10 +6,8 @@ import com.sksamuel.hoplite.yaml.YamlParser
 import io.ktor.application.*
 import io.ktor.config.*
 import no.nav.aap.app.kafka.KafkaConfig
-import no.nav.aap.app.security.OAuthConfig
 
 data class Config(
-    val oauth: OAuthConfig,
     val kafka: KafkaConfig
 )
 

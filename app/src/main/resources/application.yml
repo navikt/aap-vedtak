@@ -1,9 +1,3 @@
-oauth:
-  azure:
-    name: ${AZURE_OPENID_CONFIG_ISSUER:-azure}
-    discoveryUrl: ${AZURE_APP_WELL_KNOWN_URL:-http://localhost:8087/azure/.well-known/openid-configuration}
-    audience: ${AZURE_APP_CLIENT_ID:-vedtak}
-
 kafka:
   application-id: ${KAFKA_STREAMS_APPLICATION_ID:-vedtak}
   brokers: ${KAFKA_BROKERS:-localhost:9092}
