@@ -22,3 +22,6 @@ spec:
     - team: aap
       application: sink
       access: read
+    - team: aap
+      application: oppgavestyring
+      access: read
