@@ -8,7 +8,7 @@ import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.januar
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate

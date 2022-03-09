@@ -9,7 +9,6 @@ import no.nav.aap.hendelse.*
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 internal class SakTest {

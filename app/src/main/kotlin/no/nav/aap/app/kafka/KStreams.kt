@@ -6,8 +6,6 @@ import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withTimeout
-import no.nav.aap.hendelse.DtoBehov
-import no.nav.aap.hendelse.Lytter
 import org.apache.kafka.clients.CommonClientConfigs
 import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.KafkaConsumer
@@ -120,28 +118,11 @@ class LogContinueErrorHandler : ProductionExceptionHandler {
     }
 }
 
-internal fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
-    topic: Topic<String, AVROVALUE>,
-    branchName: String,
-    predicate: (DtoBehov) -> Boolean,
-    getMapper: () -> MAPPER
-) where MAPPER : ToAvro<AVROVALUE>, MAPPER : Lytter =
-    branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
-        chain
-            .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
-            .to(topic, topic.produced("branch-$branchName-produced-behov"))
-    }.withName("-branch-$branchName"))
-
 internal fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
 internal fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (V) -> VR) = mapValues(mapper, named)
 internal fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (K, V) -> VR) = mapValues(mapper, named)
 internal fun <K, V, VR> KStream<K, V>.flatMapValues(named: Named, mapper: (V) -> Iterable<VR>) =
     flatMapValues(mapper, named)
-
-
-internal interface ToAvro<out AVROVALUE> {
-    fun toAvro(): AVROVALUE
-}
 
 fun <V : Any> KStream<String, V>.logConsumed(): KStream<String, V> = transformValues(
     ValueTransformerWithKeySupplier {

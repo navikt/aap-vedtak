@@ -1,8 +1,8 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.beløpJustertFor6G
-import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.justerInntekt
 import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.finnBeregningsfaktor
+import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.justerInntekt
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import java.time.LocalDate
 import java.time.Year

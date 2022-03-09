@@ -1,4 +1,4 @@
-package no.nav.aap.app
+package no.nav.aap.app.stream.mock
 
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.logConsumed

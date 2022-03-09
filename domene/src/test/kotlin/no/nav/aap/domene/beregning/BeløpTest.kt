@@ -1,8 +1,7 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class BeløpTest {

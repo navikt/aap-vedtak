@@ -1,15 +1,9 @@
 package no.nav.aap.domene.tidslinje
 
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
-import no.nav.aap.domene.beregning.Inntekt
-import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
-import no.nav.aap.domene.beregning.Inntektsgrunnlag
-import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.januar
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import java.time.LocalDate
-import java.time.Year
 
 internal class DagTest {
 

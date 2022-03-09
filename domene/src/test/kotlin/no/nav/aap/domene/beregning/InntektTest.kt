@@ -1,15 +1,11 @@
 package no.nav.aap.domene.beregning
 
-import no.nav.aap.desember
+import no.nav.aap.*
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.inntektSiste3Kalenderår
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
-import no.nav.aap.februar
-import no.nav.aap.januar
-import no.nav.aap.mars
-import no.nav.aap.april
-import no.nav.aap.mai
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.Year
 import java.time.YearMonth

@@ -1,4 +1,4 @@
-package no.nav.aap.app
+package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.*
 import no.nav.aap.app.modell.JsonSøknad
@@ -6,14 +6,9 @@ import no.nav.aap.app.modell.toAvro
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.hendelse.DtoBehov
-import no.nav.aap.hendelse.Lytter
 import no.nav.aap.hendelse.Søknad
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import java.time.LocalDate
-import java.util.*
-import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
-import no.nav.aap.avro.medlem.v1.Request as AvroMedlemRequest
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
@@ -29,26 +24,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, AvroSøker>, t
 
     søkerOgBehov
         .flatMapValues(named("soknad-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
-        .split(named("soknad-split-behov"))
-        .branch(topics.medlem, "soknad-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
-}
-
-private class ToAvroMedlem : Lytter, ToAvro<AvroMedlem> {
-    private lateinit var ident: String
-
-    override fun medlem(ident: String) {
-        this.ident = ident
-    }
-
-    override fun toAvro(): AvroMedlem = AvroMedlem.newBuilder()
-        .setId(UUID.randomUUID().toString()) // TraceId
-        .setPersonident(ident)
-        .setRequestBuilder(
-            AvroMedlemRequest.newBuilder()
-                .setArbeidetUtenlands(false)
-                .setMottattDato(LocalDate.now())
-                .setYtelse("AAP")
-        ).build()
+        .sendBehov("soknad", topics)
 }
 
 private fun opprettSøker(wrapper: SøknadAndSøker): Pair<AvroSøker, List<DtoBehov>> {

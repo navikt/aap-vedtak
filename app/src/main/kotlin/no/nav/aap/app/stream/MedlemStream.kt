@@ -1,6 +1,9 @@
-package no.nav.aap.app
+package no.nav.aap.app.stream
 
-import no.nav.aap.app.kafka.*
+import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.kafka.logConsumed
+import no.nav.aap.app.kafka.named
+import no.nav.aap.app.kafka.to
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker

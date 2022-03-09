@@ -2,7 +2,6 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.hendelse.LøsningParagraf_11_3
 import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse

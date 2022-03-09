@@ -1,9 +1,9 @@
 package no.nav.aap.domene.tidslinje
 
 import no.nav.aap.domene.Barnehage
-import no.nav.aap.domene.tidslinje.Tidsperiode.Companion.summerDagsatser
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
 import no.nav.aap.domene.tidslinje.Meldekort.Meldekortdag.Companion.tilTidsperiodedager
+import no.nav.aap.domene.tidslinje.Tidsperiode.Companion.summerDagsatser
 import no.nav.aap.hendelse.Hendelse
 import java.time.LocalDate
 

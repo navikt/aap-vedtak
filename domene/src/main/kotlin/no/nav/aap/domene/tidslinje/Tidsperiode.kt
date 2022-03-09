@@ -1,9 +1,9 @@
 package no.nav.aap.domene.tidslinje
 
 import no.nav.aap.domene.Barnehage
-import no.nav.aap.domene.tidslinje.Dag.Companion.getDagsatsFor
 import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
+import no.nav.aap.domene.tidslinje.Dag.Companion.getDagsatsFor
 import java.time.LocalDate
 
 internal class Tidsperiode(
