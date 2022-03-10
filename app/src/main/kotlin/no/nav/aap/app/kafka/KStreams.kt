@@ -3,7 +3,6 @@ package no.nav.aap.app.kafka
 import io.ktor.http.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.core.instrument.binder.kafka.KafkaStreamsMetrics
-import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
@@ -57,8 +56,8 @@ class KStreams : Kafka {
             log.info("Kafka streams state changed: $oldState -> $newState")
             if (newState == State.RUNNING) started = true
         }
-        config = kafkaConfig
         KafkaStreamsMetrics(streams).bindTo(registry)
+        config = kafkaConfig
         streams.start()
     }
 

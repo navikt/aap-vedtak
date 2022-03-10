@@ -5,8 +5,7 @@ import io.confluent.kafka.schemaregistry.testutil.MockSchemaRegistry
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
 import io.confluent.kafka.streams.serdes.avro.SpecificAvroSerde
 import io.micrometer.core.instrument.MeterRegistry
-import io.micrometer.core.instrument.binder.kafka.KafkaStreamsMetrics
-import io.micrometer.prometheus.PrometheusMeterRegistry
+import io.micrometer.core.instrument.binder.kafka.KtorKafkaMetrics
 import no.nav.aap.app.kafka.*
 import no.nav.security.mock.oauth2.MockOAuth2Server
 import org.apache.avro.specific.SpecificRecord
@@ -48,6 +47,7 @@ class KStreamsMock : Kafka {
 
     override fun start(topology: Topology, kafkaConfig: KafkaConfig, registry: MeterRegistry) {
         driver = TopologyTestDriver(topology, kafkaConfig.consumer + kafkaConfig.producer + testConfig)
+        KtorKafkaMetrics(registry, driver::metrics)
         config = kafkaConfig
     }
 
