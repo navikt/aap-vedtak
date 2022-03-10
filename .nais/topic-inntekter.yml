@@ -19,3 +19,6 @@ spec:
     - team: aap
       application: vedtak
       access: readwrite
+    - team: aap
+      application: inntekt
+      access: readwrite

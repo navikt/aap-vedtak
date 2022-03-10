@@ -8,8 +8,6 @@ import io.ktor.server.testing.*
 import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
-import no.nav.aap.avro.medlem.v1.ErMedlem
-import no.nav.aap.avro.medlem.v1.Response
 import no.nav.aap.dto.*
 import org.apache.kafka.streams.TestInputTopic
 import org.apache.kafka.streams.TestOutputTopic
@@ -21,6 +19,9 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
+import no.nav.aap.avro.inntekter.v1.Inntekt as AvroInntekt
+import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
+import no.nav.aap.avro.inntekter.v1.Response as AvroInntekterResponse
 import no.nav.aap.avro.manuell.v1.LosningVurderingAvBeregningsdato as AvroLøsningVurderingAvBeregningsdato
 import no.nav.aap.avro.manuell.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
 import no.nav.aap.avro.manuell.v1.Losning_11_2 as AvroLøsning_11_2
@@ -30,7 +31,9 @@ import no.nav.aap.avro.manuell.v1.Losning_11_4_l2_l3 as AvroLøsning_11_4_l2_l3
 import no.nav.aap.avro.manuell.v1.Losning_11_5 as AvroLøsning_11_5
 import no.nav.aap.avro.manuell.v1.Losning_11_6 as AvroLøsning_11_6
 import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
+import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
+import no.nav.aap.avro.medlem.v1.Response as AvroMedlemResponse
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal class ApiTest {
@@ -56,7 +59,7 @@ internal class ApiTest {
             val medlemRequest = medlemOutputTopic.readValue()
             medlemTopic.produce("123") {
                 medlemRequest.apply {
-                    response = Response.newBuilder().setErMedlem(ErMedlem.JA).build()
+                    response = AvroMedlemResponse.newBuilder().setErMedlem(AvroErMedlem.JA).build()
                 }
             }
 
@@ -71,6 +74,21 @@ internal class ApiTest {
                     LocalDate.of(2022, 1, 1)
                 )
             )
+
+            val inntektRequest = inntektOutputTopic.readValue()
+            inntektTopic.produce("123") {
+                inntektRequest.apply {
+                    response = AvroInntekterResponse.newBuilder()
+                        .setInntekter(
+                            listOf(
+                                AvroInntekt("321", request.fom.plusYears(2), 400000.0),
+                                AvroInntekt("321", request.fom.plusYears(1), 400000.0),
+                                AvroInntekt("321", request.fom, 400000.0)
+                            )
+                        )
+                        .build()
+                }
+            }
 
             val søker = stateStore["123"]
             assertNotNull(søker)
@@ -211,8 +229,10 @@ internal class ApiTest {
         internal fun initializeTopics(kafka: KStreamsMock) {
             søknadTopic = kafka.inputJsonTopic("aap.aap-soknad-sendt.v1")
             medlemTopic = kafka.inputAvroTopic("aap.medlem.v1")
-            manuellTopic = kafka.inputAvroTopic("aap.manuell.v1")
             medlemOutputTopic = kafka.outputAvroTopic("aap.medlem.v1")
+            manuellTopic = kafka.inputAvroTopic("aap.manuell.v1")
+            inntektTopic = kafka.inputAvroTopic("aap.inntekter.v1")
+            inntektOutputTopic = kafka.outputAvroTopic("aap.inntekter.v1")
             søkerOutputTopic = kafka.outputAvroTopic("aap.sokere.v1")
             stateStore = kafka.getKeyValueStore("soker-state-store")
         }
@@ -223,8 +243,10 @@ internal class ApiTest {
 
         private lateinit var søknadTopic: TestInputTopic<String, JsonSøknad>
         private lateinit var medlemTopic: TestInputTopic<String, AvroMedlem>
-        private lateinit var manuellTopic: TestInputTopic<String, AvroManuell>
         private lateinit var medlemOutputTopic: TestOutputTopic<String, AvroMedlem>
+        private lateinit var manuellTopic: TestInputTopic<String, AvroManuell>
+        private lateinit var inntektTopic: TestInputTopic<String, AvroInntekter>
+        private lateinit var inntektOutputTopic: TestOutputTopic<String, AvroInntekter>
         private lateinit var søkerOutputTopic: TestOutputTopic<String, AvroSøker>
         private lateinit var stateStore: KeyValueStore<String, AvroSøker>
     }

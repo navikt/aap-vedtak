@@ -20,7 +20,6 @@ import no.nav.aap.app.kafka.*
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
-import no.nav.aap.app.stream.mock.inntekterResponseStream
 import no.nav.aap.app.stream.søknadStream
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -71,7 +70,6 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     medlemStream(søkerKTable, topics)
     manuellStream(søkerKTable, topics)
     inntekterStream(søkerKTable, topics)
-    inntekterResponseStream(topics)
 }.build()
 
 private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
