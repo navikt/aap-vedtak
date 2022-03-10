@@ -1,6 +1,9 @@
 package no.nav.aap.app.kafka
 
 import io.ktor.http.*
+import io.micrometer.core.instrument.MeterRegistry
+import io.micrometer.core.instrument.binder.kafka.KafkaStreamsMetrics
+import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.flow
@@ -31,7 +34,7 @@ private val log = LoggerFactory.getLogger("app")
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
 interface Kafka : AutoCloseable {
-    fun start(topology: Topology, kafkaConfig: KafkaConfig)
+    fun start(topology: Topology, kafkaConfig: KafkaConfig, registry: MeterRegistry)
     fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V>
     fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V>
     fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V>
@@ -44,7 +47,7 @@ class KStreams : Kafka {
     private lateinit var streams: KafkaStreams
     private var started: Boolean = false
 
-    override fun start(topology: Topology, kafkaConfig: KafkaConfig) {
+    override fun start(topology: Topology, kafkaConfig: KafkaConfig, registry: MeterRegistry) {
         streams = KafkaStreams(topology, kafkaConfig.consumer + kafkaConfig.producer)
         streams.setUncaughtExceptionHandler { err: Throwable ->
             secureLog.error("Uventet feil, logger og leser neste record, ${err.message}")
@@ -55,6 +58,7 @@ class KStreams : Kafka {
             if (newState == State.RUNNING) started = true
         }
         config = kafkaConfig
+        KafkaStreamsMetrics(streams).bindTo(registry)
         streams.start()
     }
 
@@ -64,7 +68,6 @@ class KStreams : Kafka {
     override fun started() = started
     override fun close() = streams.close()
     override fun healthy(): Boolean = streams.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
-
     override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> =
         KafkaConsumer(
             config.consumer + mapOf(CommonClientConfigs.CLIENT_ID_CONFIG to "client-${topic.name}"),

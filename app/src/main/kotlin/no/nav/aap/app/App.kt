@@ -48,7 +48,7 @@ internal fun Application.server(kafka: Kafka = KStreams()) {
 
     val topics = Topics(config.kafka)
     val topology = createTopology(topics)
-    kafka.start(topology, config.kafka)
+    kafka.start(topology, config.kafka, prometheus)
 
     routing {
         devTools(kafka, topics)
