@@ -20,6 +20,7 @@ import no.nav.aap.app.kafka.*
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
+import no.nav.aap.app.stream.mock.soknadProducer
 import no.nav.aap.app.stream.søknadStream
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
@@ -48,6 +49,8 @@ internal fun Application.server(kafka: Kafka = KStreams()) {
     val topics = Topics(config.kafka)
     val topology = createTopology(topics)
     kafka.start(topology, config.kafka, prometheus)
+
+    soknadProducer(kafka, topics)
 
     routing {
         devTools(kafka, topics)
