@@ -116,7 +116,7 @@ internal class `§11-2 Test` {
     }
 
     @Test
-    fun `Hvis vi ikke vet om søker er medlem etter manuell vurdering, kastes en feil`() {
+    fun `Hvis søker er uavklart etter manuell vurdering, er vilkår for medlemsskap ikke oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -131,8 +131,11 @@ internal class `§11-2 Test` {
         assertHarBehov(maskinellLøsning)
 
         val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(manuellLøsning)
+        assertHarIkkeBehov(manuellLøsning)
 
-        assertThrows<IllegalStateException> { vilkår.håndterLøsning(manuellLøsning) }
+        assertFalse(vilkår.erOppfylt())
+        assertTrue(vilkår.erIkkeOppfylt())
     }
 
     @Test

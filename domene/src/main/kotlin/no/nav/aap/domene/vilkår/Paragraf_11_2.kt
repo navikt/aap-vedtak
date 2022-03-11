@@ -1,6 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.vedtakException
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
@@ -129,8 +130,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 vilkårsvurdering.manueltLøsning = løsning
                 when {
                     løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManuelt, løsning)
-                    løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltManuelt, løsning)
-                    else -> error("Veileder/saksbehandler må ta stilling til om bruker er medlem eller ikke")
+                    else -> vilkårsvurdering.tilstand(IkkeOppfyltManuelt, løsning) // todo: se på alternativ løsning?
                 }
             }
 
