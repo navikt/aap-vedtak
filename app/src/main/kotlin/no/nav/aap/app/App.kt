@@ -24,6 +24,7 @@ import no.nav.aap.app.stream.mock.soknadProducer
 import no.nav.aap.app.stream.søknadStream
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.streams.KafkaStreams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
@@ -78,9 +79,13 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
 private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
     route("/actuator") {
         get("/metrics") { call.respond(prometheus.scrape()) }
-        get("/live") { call.respond("vedtak") }
+        get("/live") {
+            val status = if (kafka.state() == State.ERROR) HttpStatusCode.InternalServerError else HttpStatusCode.OK
+            call.respond(status, "vedtak")
+        }
         get("/ready") {
-            when (kafka.healthy() && kafka.started()) {
+            val healthy = kafka.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
+            when (healthy && kafka.started()) {
                 true -> call.respond(HttpStatusCode.OK, "vedtak")
                 false -> call.respond(HttpStatusCode.InternalServerError, "vedtak")
             }

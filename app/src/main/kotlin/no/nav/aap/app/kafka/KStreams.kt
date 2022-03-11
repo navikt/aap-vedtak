@@ -32,7 +32,7 @@ interface Kafka : AutoCloseable {
     fun <V : Any> createProducer(topic: Topic<String, V>): Producer<String, V>
     fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V>
     fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V>
-    fun healthy(): Boolean
+    fun state(): State
     fun started(): Boolean
 }
 
@@ -58,7 +58,7 @@ class KStreams : Kafka {
 
     override fun started() = started
     override fun close() = streams.close()
-    override fun healthy(): Boolean = streams.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
+    override fun state(): State = streams.state()
     override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> =
         KafkaConsumer(
             config.consumer + mapOf(CommonClientConfigs.CLIENT_ID_CONFIG to "client-${topic.name}"),

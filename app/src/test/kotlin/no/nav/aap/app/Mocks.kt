@@ -83,7 +83,7 @@ class KStreamsMock : Kafka {
     override fun <V : Any> createConsumer(topic: Topic<String, V>): Consumer<String, V> = MockConsumer(EARLIEST)
     override fun <V> getStore(name: String): ReadOnlyKeyValueStore<String, V> = driver.getKeyValueStore(name)
     override fun close() = driver.close().also { MockSchemaRegistry.dropScope(schemaRegistryUrl) }
-    override fun healthy(): Boolean = true
+    override fun state(): KafkaStreams.State = KafkaStreams.State.RUNNING
     override fun started(): Boolean = true
 
     inline fun <reified V : Any> inputJsonTopic(name: String): TestInputTopic<String, V> =
