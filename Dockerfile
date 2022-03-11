@@ -7,4 +7,5 @@ COPY . .
 FROM eclipse-temurin:17-jdk-focal
 
 COPY --from=buildToJar /home/gradle/app/build/libs/*.jar app.jar
-CMD ["java", "-jar", "app.jar"]
+CMD ["java", "-Xmx4G", "-Xms2G", "-XX:+UseParallelGC", "-jar", "app.jar"]
+para
