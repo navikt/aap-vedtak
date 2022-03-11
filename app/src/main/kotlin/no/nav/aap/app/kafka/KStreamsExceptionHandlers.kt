@@ -40,7 +40,7 @@ class EntryPointExceptionHandler : DeserializationExceptionHandler {
  */
 class ProcessingExceptionHandler : StreamsUncaughtExceptionHandler {
     override fun handle(exception: Throwable) = when (exception) {
-        is RuntimeException -> logAndReplaceThread(exception)
+        is IllegalStateException -> logAndReplaceThread(exception)
         else -> logAndShutdownClient(exception)
     }
 
