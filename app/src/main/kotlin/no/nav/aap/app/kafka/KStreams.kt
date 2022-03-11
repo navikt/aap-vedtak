@@ -13,14 +13,9 @@ import org.apache.kafka.clients.consumer.Consumer
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.Producer
-import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.*
 import org.apache.kafka.streams.KafkaStreams.State
-import org.apache.kafka.streams.errors.ProductionExceptionHandler
-import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse
-import org.apache.kafka.streams.errors.ProductionExceptionHandler.ProductionExceptionHandlerResponse.CONTINUE
-import org.apache.kafka.streams.errors.StreamsUncaughtExceptionHandler
 import org.apache.kafka.streams.kstream.*
 import org.apache.kafka.streams.processor.ProcessorContext
 import org.apache.kafka.streams.state.KeyValueStore
@@ -48,10 +43,7 @@ class KStreams : Kafka {
 
     override fun start(topology: Topology, kafkaConfig: KafkaConfig, registry: MeterRegistry) {
         streams = KafkaStreams(topology, kafkaConfig.consumer + kafkaConfig.producer)
-        streams.setUncaughtExceptionHandler { err: Throwable ->
-            secureLog.error("Uventet feil, logger og leser neste record, ${err.message}")
-            StreamsUncaughtExceptionHandler.StreamThreadExceptionResponse.REPLACE_THREAD
-        }
+        streams.setUncaughtExceptionHandler(ProcessingExceptionHandler())
         streams.setStateListener { newState, oldState ->
             log.info("Kafka streams state changed: $oldState -> $newState")
             if (newState == State.RUNNING) started = true
@@ -108,17 +100,6 @@ fun <V> materialized(
 
 fun <V> ReadOnlyKeyValueStore<String, V>.allValues(): List<V> =
     all().use { it.asSequence().map(KeyValue<String, V>::value).toList() }
-
-class LogContinueErrorHandler : ProductionExceptionHandler {
-    override fun configure(configs: MutableMap<String, *>?) {}
-    override fun handle(
-        record: ProducerRecord<ByteArray, ByteArray>?,
-        exception: Exception?
-    ): ProductionExceptionHandlerResponse {
-        secureLog.error("Feil i streams, logger og leser neste record", exception)
-        return CONTINUE
-    }
-}
 
 internal fun <K, V> KStream<K, V>.filter(named: Named, predicate: (K, V) -> Boolean) = filter(predicate, named)
 internal fun <K, V, VR> KStream<K, V>.mapValues(named: Named, mapper: (V) -> VR) = mapValues(mapper, named)
