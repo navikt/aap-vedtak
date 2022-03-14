@@ -2,7 +2,6 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
-import no.nav.aap.frontendView.FrontendVilkårsvurdering
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -46,17 +45,6 @@ internal abstract class Vilkårsvurdering(
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_6) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_29) {}
-
-    private fun toFrontendVilkårsvurdering() =
-        FrontendVilkårsvurdering(
-            paragraf = paragraf.name,
-            ledd = ledd.map(Ledd::name),
-            tilstand = toFrontendTilstand(),
-            harÅpenOppgave = toFrontendHarÅpenOppgave()
-        )
-
-    protected abstract fun toFrontendTilstand(): String
-    protected open fun toFrontendHarÅpenOppgave(): Boolean = false
     protected abstract fun toDto(): DtoVilkårsvurdering
 
     internal companion object {
@@ -65,8 +53,6 @@ internal abstract class Vilkårsvurdering(
         internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)
         internal fun Iterable<Vilkårsvurdering>.erNoenIkkeOppfylt() = any(Vilkårsvurdering::erIkkeOppfylt)
         internal fun Iterable<Vilkårsvurdering>.toDto() = map(Vilkårsvurdering::toDto)
-        internal fun Iterable<Vilkårsvurdering>.toFrontendVilkårsvurdering() =
-            map(Vilkårsvurdering::toFrontendVilkårsvurdering)
 
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
             when (enumValueOf<Paragraf>(vilkårsvurdering.paragraf)) {
@@ -76,7 +62,9 @@ internal abstract class Vilkårsvurdering(
                     vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) -> Paragraf_11_4FørsteLedd.gjenopprett(vilkårsvurdering)
-                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.gjenopprett(vilkårsvurdering)
+                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.gjenopprett(
+                                vilkårsvurdering
+                            )
                             else -> null.also { log.warn("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }

@@ -84,7 +84,6 @@ internal class Paragraf_11_14 private constructor(private var tilstand: Tilstand
         ) {
         }
 
-        internal fun toFrontendTilstand(): String = tilstandsnavn.name
         internal open fun toDto(paragraf: Paragraf_11_14): DtoVilkårsvurdering = DtoVilkårsvurdering(
             paragraf = paragraf.paragraf.name,
             ledd = paragraf.ledd.map(Ledd::name),
@@ -93,7 +92,6 @@ internal class Paragraf_11_14 private constructor(private var tilstand: Tilstand
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
-    override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
 
     internal companion object {
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_14 =

@@ -23,6 +23,5 @@ class Fødselsdato(private val dato: LocalDate) {
         return maxOf(grunnlagsfaktor, minsteGrunnlagsfaktorForAlder)
     }
 
-    internal fun toFrontendFødselsdato() = dato
     internal fun toDto() = dato
 }

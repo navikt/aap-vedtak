@@ -1,7 +1,6 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.vedtakException
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
@@ -134,8 +133,6 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 }
             }
 
-            override fun toFrontendHarÅpenOppgave() = true
-
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
@@ -227,13 +224,9 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
         )
 
         internal open fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
-        internal fun toFrontendTilstand(): String = tilstandsnavn.name
-        internal open fun toFrontendHarÅpenOppgave() = false
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
-    override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
-    override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
 
     internal companion object {
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 =

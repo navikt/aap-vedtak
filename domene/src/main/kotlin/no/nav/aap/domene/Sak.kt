@@ -3,10 +3,8 @@ package no.nav.aap.domene
 import no.nav.aap.domene.Sakstype.Companion.toDto
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.tidslinje.Tidslinje
 import no.nav.aap.dto.DtoSak
-import no.nav.aap.frontendView.FrontendSak
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
 import org.slf4j.LoggerFactory
@@ -126,15 +124,6 @@ internal class Sak private constructor(
             log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
-            FrontendSak(
-                personident = personident.toFrontendPersonident(),
-                fødselsdato = fødselsdato.toFrontendFødselsdato(),
-                tilstand = tilstandsnavn.name,
-                sakstype = sak.sakstype.toFrontendSakstype(),
-                vedtak = null
-            )
-
         open fun toDto(sak: Sak) = DtoSak(
             tilstand = tilstandsnavn.name,
             sakstyper = sak.sakstyper.toDto(),
@@ -178,15 +167,6 @@ internal class Sak private constructor(
                     else -> sak.tilstand(SøknadMottatt, søknad)
                 }
             }
-
-            override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
-                FrontendSak(
-                    personident = personident.toFrontendPersonident(),
-                    fødselsdato = fødselsdato.toFrontendFødselsdato(),
-                    tilstand = tilstandsnavn.name,
-                    sakstype = null,
-                    vedtak = null
-                )
         }
 
         object SøknadMottatt : Tilstand(Tilstandsnavn.SØKNAD_MOTTATT) {
@@ -287,15 +267,6 @@ internal class Sak private constructor(
                 val dtoVedtak = requireNotNull(dtoSak.vedtak)
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
-
-            override fun toFrontendSak(sak: Sak, personident: Personident, fødselsdato: Fødselsdato) =
-                FrontendSak(
-                    personident = personident.toFrontendPersonident(),
-                    fødselsdato = fødselsdato.toFrontendFødselsdato(),
-                    tilstand = tilstandsnavn.name,
-                    sakstype = sak.sakstype.toFrontendSakstype(),
-                    vedtak = sak.vedtak.toFrontendVedtak()
-                )
         }
 
         object IkkeOppfylt : Tilstand(Tilstandsnavn.IKKE_OPPFYLT)
@@ -303,15 +274,8 @@ internal class Sak private constructor(
 
     private fun toDto() = tilstand.toDto(this)
 
-    private fun toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) =
-        tilstand.toFrontendSak(this, personident, fødselsdato)
-
     internal companion object {
         private val log = LoggerFactory.getLogger("sak")
-
-        internal fun Iterable<Sak>.toFrontendSak(personident: Personident, fødselsdato: Fødselsdato) = map {
-            it.toFrontendSak(personident = personident, fødselsdato = fødselsdato)
-        }
 
         internal fun Iterable<Sak>.toDto() = map { sak -> sak.toDto() }
 

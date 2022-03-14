@@ -5,9 +5,7 @@ import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toFrontendVilkårsvurdering
 import no.nav.aap.dto.DtoSakstype
-import no.nav.aap.frontendView.FrontendSakstype
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -100,8 +98,6 @@ internal abstract class Sakstype private constructor(
     }
 
     private fun toDto() = DtoSakstype(type.name, vilkårsvurderinger.toDto())
-    internal fun toFrontendSakstype() =
-        FrontendSakstype(type.name, vilkårsvurderinger.toFrontendVilkårsvurdering())
 
     internal companion object {
         private val log = LoggerFactory.getLogger("sakstype")

@@ -106,8 +106,6 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
                     vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
                 }
             }
-
-            override fun toFrontendHarÅpenOppgave() = true
         }
 
         object Oppfylt : Tilstand(
@@ -129,8 +127,6 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
         )
 
         internal open fun gjenopprettTilstand(paragraf: Paragraf_11_4AndreOgTredjeLedd, vilkårsvurdering: DtoVilkårsvurdering) {}
-        internal fun toFrontendTilstand(): String = tilstandsnavn.name
-        internal open fun toFrontendHarÅpenOppgave() = false
         internal open fun toDto(paragraf: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             paragraf = paragraf.paragraf.name,
             ledd = paragraf.ledd.map(Ledd::name),
@@ -139,8 +135,6 @@ internal class Paragraf_11_4AndreOgTredjeLedd  private constructor(private var t
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
-    override fun toFrontendTilstand(): String = tilstand.toFrontendTilstand()
-    override fun toFrontendHarÅpenOppgave() = tilstand.toFrontendHarÅpenOppgave()
 
     internal companion object {
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4AndreOgTredjeLedd =

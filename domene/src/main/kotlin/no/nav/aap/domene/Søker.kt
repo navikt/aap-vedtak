@@ -1,7 +1,6 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toDto
-import no.nav.aap.domene.Sak.Companion.toFrontendSak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.dto.DtoSøker
@@ -56,12 +55,6 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning, fødselsdato) }
     }
 
-    fun toFrontendSaker() =
-        saker.toFrontendSak(
-            personident = personident,
-            fødselsdato = fødselsdato
-        )
-
     fun toDto() = DtoSøker(
         personident = personident.toDto(),
         fødselsdato = fødselsdato.toDto(),
@@ -69,12 +62,6 @@ class Søker private constructor(
     )
 
     companion object {
-        fun Iterable<Søker>.toFrontendSaker() = flatMap(Søker::toFrontendSaker)
-
-        fun Iterable<Søker>.toFrontendSaker(personident: Personident) = this
-            .filter { it.personident == personident }
-            .flatMap(Søker::toFrontendSaker)
-
         fun gjenopprett(søker: DtoSøker): Søker = Søker(
             personident = Personident(søker.personident),
             fødselsdato = Fødselsdato(søker.fødselsdato),

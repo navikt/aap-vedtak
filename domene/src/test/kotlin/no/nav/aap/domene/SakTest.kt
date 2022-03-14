@@ -1,10 +1,10 @@
 package no.nav.aap.domene
 
-import no.nav.aap.domene.Sak.Companion.toFrontendSak
+import no.nav.aap.domene.Sak.Companion.toDto
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.frontendView.FrontendVilkårsvurdering
+import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -19,13 +19,12 @@ internal class SakTest {
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
 
-        assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
-        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
-        val vilkårsvurderinger = sakstype.vilkårsvurderinger
+        val saker = listOf(sak).toDto()
+        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT",
@@ -41,13 +40,12 @@ internal class SakTest {
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
 
-        assertTilstand("START", sak, personident, fødselsdato)
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("IKKE_OPPFYLT", sak, personident, fødselsdato)
+        assertTilstand("IKKE_OPPFYLT", sak)
 
-        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
-        val vilkårsvurderinger = sakstype.vilkårsvurderinger
+        val saker = listOf(sak).toDto()
+        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
             "IKKE_OPPFYLT",
@@ -62,35 +60,34 @@ internal class SakTest {
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
-        assertTilstand("START", sak, personident, fødselsdato)
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_3(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_6(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_29(true))
-        assertTilstand("SØKNAD_MOTTATT", sak, personident, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
-        assertTilstand("BEREGN_INNTEKT", sak, personident, fødselsdato)
+        assertTilstand("BEREGN_INNTEKT", sak)
 
-        val saker = listOf(sak).toFrontendSak(personident, fødselsdato)
-        val sakstype = requireNotNull(saker.first().sakstype) { "Mangler sakstype" }
-        val vilkårsvurderinger = sakstype.vilkårsvurderinger
+        val saker = listOf(sak).toDto()
+        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(
             vilkårsvurderinger,
@@ -110,13 +107,13 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
-    private fun assertTilstand(actual: String, expected: Sak, personident: Personident, fødselsdato: Fødselsdato) {
-        val frontendSak = listOf(expected).toFrontendSak(personident, fødselsdato).first()
-        assertEquals(actual, frontendSak.tilstand)
+    private fun assertTilstand(actual: String, expected: Sak) {
+        val dtoSak = listOf(expected).toDto().first()
+        assertEquals(actual, dtoSak.tilstand)
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        vilkårsvurderinger: List<DtoVilkårsvurdering>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf
     ) {
@@ -124,7 +121,7 @@ internal class SakTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        vilkårsvurderinger: List<DtoVilkårsvurdering>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: Vilkårsvurdering.Ledd
@@ -133,7 +130,7 @@ internal class SakTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<FrontendVilkårsvurdering>,
+        vilkårsvurderinger: List<DtoVilkårsvurdering>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
@@ -141,10 +138,10 @@ internal class SakTest {
         assertEquals(tilstand, vilkårsvurderinger.single(paragraf, ledd).tilstand)
     }
 
-    private fun List<FrontendVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
+    private fun List<DtoVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
         single { it.paragraf == paragraf.name }
 
-    private fun List<FrontendVilkårsvurdering>.single(
+    private fun List<DtoVilkårsvurdering>.single(
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
     ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }
