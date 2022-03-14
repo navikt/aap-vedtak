@@ -23,7 +23,7 @@ dependencies {
     implementation("io.ktor:ktor-metrics-micrometer:1.6.7")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.3")
 
-    implementation("no.nav.aap.avro:sokere:1.1.18")
+    implementation("no.nav.aap.avro:sokere:3.0.0")
     implementation("no.nav.aap.avro:manuell:0.0.3")
     implementation("no.nav.aap.avro:inntekter:0.0.2")
     implementation("no.nav.aap.avro:medlem:1.1.6")

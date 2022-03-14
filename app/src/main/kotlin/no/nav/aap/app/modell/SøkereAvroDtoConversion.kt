@@ -14,16 +14,21 @@ fun Soker.toDto(): DtoSøker = DtoSøker(
 fun Sak.toDto(): DtoSak = DtoSak(
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    sakstyper = listOf(DtoSakstype("STANDARD", vilkarsvurderinger.map(Vilkarsvurdering::toDto))), //FIXME
+    sakstyper = sakstyper.map(Sakstype::toDto),
     vurderingAvBeregningsdato = vurderingAvBeregningsdato.toDto(),
     vedtak = vedtak?.toDto()
+)
+
+fun Sakstype.toDto(): DtoSakstype = DtoSakstype(
+    type = type,
+    vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto)
 )
 
 fun Vilkarsvurdering.toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
-    måVurderesManuelt = false, //FIXME
+    måVurderesManuelt = maVurderesManuelt,
     løsning_11_2_manuell = losning112Manuell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
     løsning_11_2_maskinell = losning112Maskinell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
     løsning_11_3_manuell = losning113Manuell?.let { DtoLøsningParagraf_11_3(it.erOppfylt) },
@@ -81,29 +86,37 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
         saker.map { sak ->
             Sak.newBuilder()
                 .setTilstand(sak.tilstand)
-                .setVilkarsvurderinger(
-                    sak.sakstyper.last().vilkårsvurderinger.map { vilkår ->
-                        Vilkarsvurdering.newBuilder()
-                            .setLedd(vilkår.ledd)
-                            .setParagraf(vilkår.paragraf)
-                            .setTilstand(vilkår.tilstand)
-                            .setLosning112Manuell(vilkår.løsning_11_2_manuell?.let {
-                                Losning_11_2(it.erMedlem)
-                            }).setLosning112Maskinell(vilkår.løsning_11_2_maskinell?.let {
-                                Losning_11_2(it.erMedlem)
-                            }).setLosning113Manuell(vilkår.løsning_11_3_manuell?.let {
-                                Losning_11_3(it.erOppfylt)
-                            }).setLosning114L2L3Manuell(vilkår.løsning_11_4_ledd2_ledd3_manuell?.let {
-                                Losning_11_4_l2_l3(it.erOppfylt)
-                            }).setLosning115Manuell(vilkår.løsning_11_5_manuell?.let {
-                                Losning_11_5(it.grad)
-                            }).setLosning116Manuell(vilkår.løsning_11_6_manuell?.let {
-                                Losning_11_6(it.erOppfylt)
-                            }).setLosning1112L1Manuell(vilkår.løsning_11_12_ledd1_manuell?.let {
-                                Losning_11_12_l1(it.erOppfylt)
-                            }).setLosning1129Manuell(vilkår.løsning_11_29_manuell?.let {
-                                Losning_11_29(it.erOppfylt)
-                            }).build()
+                .setSakstyper(
+                    sak.sakstyper.map { sakstype ->
+                        Sakstype.newBuilder()
+                            .setType(sakstype.type)
+                            .setVilkarsvurderinger(
+                                sakstype.vilkårsvurderinger.map { vilkår ->
+                                    Vilkarsvurdering.newBuilder()
+                                        .setLedd(vilkår.ledd)
+                                        .setParagraf(vilkår.paragraf)
+                                        .setTilstand(vilkår.tilstand)
+                                        .setMaVurderesManuelt(vilkår.måVurderesManuelt)
+                                        .setLosning112Manuell(vilkår.løsning_11_2_manuell?.let {
+                                            Losning_11_2(it.erMedlem)
+                                        }).setLosning112Maskinell(vilkår.løsning_11_2_maskinell?.let {
+                                            Losning_11_2(it.erMedlem)
+                                        }).setLosning113Manuell(vilkår.løsning_11_3_manuell?.let {
+                                            Losning_11_3(it.erOppfylt)
+                                        }).setLosning114L2L3Manuell(vilkår.løsning_11_4_ledd2_ledd3_manuell?.let {
+                                            Losning_11_4_l2_l3(it.erOppfylt)
+                                        }).setLosning115Manuell(vilkår.løsning_11_5_manuell?.let {
+                                            Losning_11_5(it.grad)
+                                        }).setLosning116Manuell(vilkår.løsning_11_6_manuell?.let {
+                                            Losning_11_6(it.erOppfylt)
+                                        }).setLosning1112L1Manuell(vilkår.løsning_11_12_ledd1_manuell?.let {
+                                            Losning_11_12_l1(it.erOppfylt)
+                                        }).setLosning1129Manuell(vilkår.løsning_11_29_manuell?.let {
+                                            Losning_11_29(it.erOppfylt)
+                                        }).build()
+                                }
+                            )
+                            .build()
                     }
                 )
                 .setVurderingsdato(sak.vurderingsdato)
