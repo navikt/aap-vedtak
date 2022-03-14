@@ -33,6 +33,7 @@ data class DtoVilkårsvurdering(
     val paragraf: String,
     val ledd: List<String>,
     val tilstand: String,
+    val måVurderesManuelt: Boolean,
     val løsning_11_2_maskinell: DtoLøsningParagraf_11_2? = null,
     val løsning_11_2_manuell: DtoLøsningParagraf_11_2? = null,
     val løsning_11_3_manuell: DtoLøsningParagraf_11_3? = null,

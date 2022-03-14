@@ -1,5 +1,6 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
@@ -8,6 +9,7 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+
 private val log = LoggerFactory.getLogger("Paragraf_11_5")
 
 internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand) :
@@ -88,6 +90,9 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
             ) {
                 vilkårsvurdering.tilstand(SøknadMottatt, søknad)
             }
+
+            override fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
         }
 
         object SøknadMottatt : Tilstand(
@@ -112,6 +117,13 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
                     vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
                 }
             }
+
+            override fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                måVurderesManuelt = true
+            )
         }
 
         object Oppfylt : Tilstand(
@@ -123,6 +135,7 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false,
                 løsning_11_5_manuell = paragraf.løsning.toDto()
             )
 
@@ -141,6 +154,7 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false,
                 løsning_11_5_manuell = paragraf.løsning.toDto()
             )
 
@@ -151,11 +165,7 @@ internal class Paragraf_11_5 private constructor(private var tilstand: Tilstand)
         }
 
         internal open fun gjenopprettTilstand(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {}
-        internal open fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
-            paragraf = paragraf.paragraf.name,
-            ledd = paragraf.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name
-        )
+        internal abstract fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

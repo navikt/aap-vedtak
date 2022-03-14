@@ -1,5 +1,6 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
@@ -93,6 +94,9 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             ) {
                 vilkårsvurdering.tilstand(SøknadMottatt, søknad)
             }
+
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
         }
 
         object SøknadMottatt :
@@ -113,14 +117,17 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                     else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
                 }
             }
+
+            override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false
+            )
         }
 
         object ManuellVurderingTrengs :
             Tilstand(tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS, erOppfylt = false, erIkkeOppfylt = false) {
-            override fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {
-                //send ut behov for manuell vurdering av medlemskap
-                hendelse.opprettBehov(Behov_11_2()) //FIXME Eget behov for manuell????
-            }
 
             override fun vurderMedlemskap(
                 vilkårsvurdering: Paragraf_11_2,
@@ -137,6 +144,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = true,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
@@ -154,6 +162,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
@@ -171,6 +180,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
@@ -188,6 +198,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
@@ -207,6 +218,7 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
+                måVurderesManuelt = false,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
@@ -217,13 +229,8 @@ internal class Paragraf_11_2 private constructor(private var tilstand: Tilstand)
             }
         }
 
-        internal open fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
-            paragraf = paragraf.paragraf.name,
-            ledd = paragraf.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-        )
-
         internal open fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
+        internal abstract fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

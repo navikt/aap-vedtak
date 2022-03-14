@@ -100,46 +100,54 @@ internal class ApiTest {
                                         paragraf = "PARAGRAF_11_2",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
+                                        måVurderesManuelt = false,
                                         løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_3",
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT",
+                                        måVurderesManuelt = false,
                                         løsning_11_3_manuell = DtoLøsningParagraf_11_3(true)
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
+                                        måVurderesManuelt = false
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_2", "LEDD_3"),
                                         tilstand = "IKKE_RELEVANT",
+                                        måVurderesManuelt = false
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_5",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT",
+                                        måVurderesManuelt = false,
                                         løsning_11_5_manuell = DtoLøsningParagraf_11_5(60)
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_6",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
+                                        måVurderesManuelt = false,
                                         løsning_11_6_manuell = DtoLøsningParagraf_11_6(true)
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_12",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
+                                        måVurderesManuelt = false,
                                         løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(true)
                                     ),
                                     DtoVilkårsvurdering(
                                         paragraf = "PARAGRAF_11_29",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
+                                        måVurderesManuelt = false,
                                         løsning_11_29_manuell = DtoLøsningParagraf_11_29(true)
                                     )
                                 )

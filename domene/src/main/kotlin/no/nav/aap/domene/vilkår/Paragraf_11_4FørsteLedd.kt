@@ -105,10 +105,11 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
         ) {
         }
 
-        internal open fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        internal fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             paragraf = paragraf.paragraf.name,
             ledd = paragraf.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
+            måVurderesManuelt = false
         )
     }
 

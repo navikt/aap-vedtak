@@ -2,13 +2,13 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 internal class `§11-2 Test` {
@@ -22,10 +22,12 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -41,10 +43,12 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         val løsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -60,10 +64,12 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
-        assertHarBehov(maskinellLøsning)
+        assertHarIkkeBehov(maskinellLøsning)
+        assertMåVurderesManuelt(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -82,11 +88,13 @@ internal class `§11-2 Test` {
 
         val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
-        assertHarBehov(maskinellLøsning)
+        assertHarIkkeBehov(maskinellLøsning)
+        assertMåVurderesManuelt(vilkår)
 
         val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -105,11 +113,13 @@ internal class `§11-2 Test` {
 
         val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
-        assertHarBehov(maskinellLøsning)
+        assertHarIkkeBehov(maskinellLøsning)
+        assertMåVurderesManuelt(vilkår)
 
         val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -128,11 +138,13 @@ internal class `§11-2 Test` {
 
         val maskinellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
-        assertHarBehov(maskinellLøsning)
+        assertHarIkkeBehov(maskinellLøsning)
+        assertMåVurderesManuelt(vilkår)
 
         val manuellLøsning = LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -156,6 +168,7 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
+        assertSkalIkkeVurdersManuelt(vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -167,5 +180,13 @@ internal class `§11-2 Test` {
 
     private fun assertHarIkkeBehov(hendelse: Hendelse) {
         assertTrue(hendelse.behov().isEmpty())
+    }
+
+    private fun assertMåVurderesManuelt(vilkårsvurdering: Vilkårsvurdering) {
+        assertTrue(listOf(vilkårsvurdering).toDto().first().måVurderesManuelt)
+    }
+
+    private fun assertSkalIkkeVurdersManuelt(vilkårsvurdering: Vilkårsvurdering) {
+        assertFalse(listOf(vilkårsvurdering).toDto().first().måVurderesManuelt)
     }
 }
