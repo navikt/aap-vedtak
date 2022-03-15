@@ -11,7 +11,7 @@ dependencies {
 
     implementation("io.ktor:ktor-server-core:1.6.7")
     implementation("io.ktor:ktor-server-netty:1.6.7")
-    implementation("io.ktor:ktor-client-jackson:1.6.7")
+    implementation("io.ktor:ktor-client-jackson:1.6.8")
 
     implementation("io.ktor:ktor-client-core:1.6.7")
     implementation("io.ktor:ktor-client-cio:1.6.7")
