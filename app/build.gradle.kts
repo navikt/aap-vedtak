@@ -47,7 +47,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.1")
 
     testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-server-test-host:1.6.7")
+    testImplementation("io.ktor:ktor-server-test-host:1.6.8")
     testImplementation("no.nav.security:mock-oauth2-server:0.4.3")
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
