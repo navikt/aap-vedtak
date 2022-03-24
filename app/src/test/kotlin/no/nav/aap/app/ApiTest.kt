@@ -232,7 +232,7 @@ internal class ApiTest {
             inntektTopic = kafka.inputAvroTopic("aap.inntekter.v1")
             inntektOutputTopic = kafka.outputAvroTopic("aap.inntekter.v1")
             søkerOutputTopic = kafka.outputAvroTopic("aap.sokere.v1")
-            stateStore = kafka.getKeyValueStore("soker-state-store")
+            stateStore = kafka.getKeyValueStore(SØKERE_STORE_NAME)
         }
 
         inline fun <reified T> TestApplicationResponse.parseBody(): T = objectMapper.readValue(content!!)

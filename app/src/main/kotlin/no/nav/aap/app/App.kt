@@ -30,7 +30,7 @@ import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-private const val SØKERE_STORE_NAME = "soker-state-store-v1"
+internal const val SØKERE_STORE_NAME = "soker-state-store-v1"
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
 fun main() {
