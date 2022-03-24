@@ -7,7 +7,7 @@ queue "aap.aap-soknad-sendt.v1" <<topic>> as aap_aap_soknad_sendt_v1
 queue "aap.manuell.v1" <<topic>> as aap_manuell_v1
 queue "aap.medlem.v1-joined-aap.sokere.v1-repartition" <<topic>> as aap_medlem_v1_joined_aap_sokere_v1_repartition
 package "Sub-topology: 0" {
-	database "soker-state-store" <<State Store>> as soker_state_store
+	database "soker-state-store-v1" <<State Store>> as soker_state_store_v1
 	agent "soknad-mottatt" <<Source>> as soknad_mottatt
 	agent "KSTREAM-TRANSFORMVALUES-0000000006" <<Processor>> as KSTREAM_TRANSFORMVALUES_0000000006
 	agent "losning-mottatt" <<Source>> as losning_mottatt
@@ -62,13 +62,13 @@ package "Sub-topology: 0" {
 	agent "sokere-as-ktable" <<Processor>> as sokere_as_ktable
 	aap_aap_soknad_sendt_v1 --> soknad_mottatt
 	aap_manuell_v1 --> losning_mottatt
-	soker_state_store -- aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
-	soker_state_store -- aap_manuell_v1_joined_aap_sokere_v1
+	soker_state_store_v1 -- aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
+	soker_state_store_v1 -- aap_manuell_v1_joined_aap_sokere_v1
 	aap_inntekter_v1 --> inntekter_mottatt
 	aap_medlem_v1_joined_aap_sokere_v1_repartition --> aap_medlem_v1_joined_aap_sokere_v1_repartition_source
 	aap_sokere_v1 --> soker_consumed
-	soker_state_store -- aap_inntekter_v1_joined_aap_sokere_v1
-	soker_state_store -- aap_medlem_v1_joined_aap_sokere_v1
+	soker_state_store_v1 -- aap_inntekter_v1_joined_aap_sokere_v1
+	soker_state_store_v1 -- aap_medlem_v1_joined_aap_sokere_v1
 	aap_inntekter_v1 <-- branch_manuell_inntekter_produced_behov
 	aap_medlem_v1 <-- branch_manuell_medlem_produced_behov
 	aap_inntekter_v1 <-- branch_soknad_inntekter_produced_behov
@@ -77,7 +77,7 @@ package "Sub-topology: 0" {
 	aap_sokere_v1 <-- produced_soker_med_handtert_inntekter
 	aap_sokere_v1 <-- produced_soker_med_handtert_losning
 	aap_sokere_v1 <-- produced_soker_med_medlem
-	soker_state_store -- sokere_as_ktable
+	soker_state_store_v1 -- sokere_as_ktable
 	soknad_mottatt --> KSTREAM_TRANSFORMVALUES_0000000006
 	KSTREAM_TRANSFORMVALUES_0000000006 --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	losning_mottatt --> KSTREAM_TRANSFORMVALUES_0000000035

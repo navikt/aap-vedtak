@@ -22,3 +22,6 @@ spec:
     - team: aap
       application: inntekt
       access: readwrite
+    - team: aap
+      application: aap-kafka-manager
+      access: read
