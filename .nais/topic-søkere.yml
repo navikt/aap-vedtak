@@ -25,3 +25,6 @@ spec:
     - team: aap
       application: oppgavestyring
       access: read
+    - team: aap
+      application: aap-kafka-manager
+      access: read
