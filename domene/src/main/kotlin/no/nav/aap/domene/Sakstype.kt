@@ -12,6 +12,7 @@ import java.time.LocalDate
 
 internal abstract class Sakstype private constructor(
     protected val type: Type,
+    private var aktiv: Boolean,
     private val vilkårsvurderinger: List<Vilkårsvurdering>
 ) {
 
@@ -58,8 +59,9 @@ internal abstract class Sakstype private constructor(
     internal class Standard private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering>
     ) : Sakstype(
-        Type.STANDARD,
-        vilkårsvurderinger
+        type = Type.STANDARD,
+        aktiv = true,
+        vilkårsvurderinger = vilkårsvurderinger
     ) {
         internal companion object {
             internal fun opprettStandard(): Standard {
@@ -84,8 +86,9 @@ internal abstract class Sakstype private constructor(
     internal class Student private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering>
     ) : Sakstype(
-        Type.STUDENT,
-        vilkårsvurderinger
+        type = Type.STUDENT,
+        aktiv = true,
+        vilkårsvurderinger = vilkårsvurderinger
     ) {
         internal companion object {
             internal fun opprettStudent(): Student {
@@ -97,7 +100,11 @@ internal abstract class Sakstype private constructor(
         }
     }
 
-    private fun toDto() = DtoSakstype(type.name, vilkårsvurderinger.toDto())
+    private fun toDto() = DtoSakstype(
+        type = type.name,
+        aktiv = aktiv,
+        vilkårsvurderinger = vilkårsvurderinger.toDto()
+    )
 
     internal companion object {
         private val log = LoggerFactory.getLogger("sakstype")

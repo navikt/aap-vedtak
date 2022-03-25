@@ -9,14 +9,18 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_12FørsteLedd
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.util.*
 
 private val log = LoggerFactory.getLogger("Paragraf_11_12FørsteLedd")
 
-internal class Paragraf_11_12FørsteLedd private constructor(private var tilstand: Tilstand) :
-    Vilkårsvurdering(Paragraf.PARAGRAF_11_12, Ledd.LEDD_1) {
+internal class Paragraf_11_12FørsteLedd private constructor(
+    vilkårsvurderingsid: UUID,
+    private var tilstand: Tilstand
+) :
+    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_12, Ledd.LEDD_1) {
     private lateinit var løsning: LøsningParagraf_11_12FørsteLedd
 
-    internal constructor() : this(Tilstand.IkkeVurdert)
+    internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -108,6 +112,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(private var tilstan
             }
 
             override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 måVurderesManuelt = true,
@@ -121,6 +126,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(private var tilstan
             erIkkeOppfylt = false
         ) {
             override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
@@ -143,6 +149,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(private var tilstan
             erIkkeOppfylt = true
         ) {
             override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
@@ -174,7 +181,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(private var tilstan
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_12FørsteLedd =
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
-                .let(::Paragraf_11_12FørsteLedd)
+                .let { tilstand -> Paragraf_11_12FørsteLedd(vilkårsvurdering.vilkårsvurderingsid, tilstand) }
                 .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

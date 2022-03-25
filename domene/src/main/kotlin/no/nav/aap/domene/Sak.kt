@@ -11,8 +11,10 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
+import java.util.*
 
 internal class Sak private constructor(
+    private val saksid: UUID,
     private var tilstand: Tilstand,
     private val sakstyper: MutableList<Sakstype>,
     private val inntektshistorikk: Inntektshistorikk
@@ -20,13 +22,13 @@ internal class Sak private constructor(
     private val sakstype: Sakstype get() = sakstyper.last()
     private lateinit var vurderingAvBeregningsdato: VurderingAvBeregningsdato
     private lateinit var vurderingsdato: LocalDate
+    private lateinit var søknadstidspunkt: LocalDateTime
     private lateinit var vedtak: Vedtak
 
-    constructor() : this(Tilstand.Start, mutableListOf(), Inntektshistorikk())
+    constructor() : this(UUID.randomUUID(), Tilstand.Start, mutableListOf(), Inntektshistorikk())
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
-        this.vurderingsdato = LocalDate.now()
-        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+        tilstand.håndterSøknad(this, søknad, fødselsdato)
     }
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
@@ -84,7 +86,7 @@ internal class Sak private constructor(
 
         open fun onEntry(sak: Sak, hendelse: Hendelse) {}
         open fun onExit(sak: Sak, hendelse: Hendelse) {}
-        open fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+        open fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato) {
             log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
         }
 
@@ -125,22 +127,28 @@ internal class Sak private constructor(
         }
 
         open fun toDto(sak: Sak) = DtoSak(
+            saksid = sak.saksid,
             tilstand = tilstandsnavn.name,
             sakstyper = sak.sakstyper.toDto(),
             vurderingsdato = sak.vurderingsdato, // ALLTID SATT
             vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
+            søknadstidspunkt = sak.søknadstidspunkt,
             vedtak = null
         )
 
         open fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+            sak.søknadstidspunkt = dtoSak.søknadstidspunkt
             sak.vurderingsdato = dtoSak.vurderingsdato
             sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
         }
 
         object Start : Tilstand(Tilstandsnavn.START) {
-            override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
+            override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato) {
+                sak.søknadstidspunkt = LocalDateTime.now()
+                sak.vurderingsdato = LocalDate.now()
+
                 opprettLøype(sak, søknad)
-                sak.sakstype.håndterSøknad(søknad, fødselsdato, vurderingsdato)
+                sak.sakstype.håndterSøknad(søknad, fødselsdato, sak.vurderingsdato)
 
                 sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
                 sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
@@ -239,9 +247,9 @@ internal class Sak private constructor(
                         fødselsdato
                     )
                 sak.vedtak = Vedtak(
+                    vedtaksid = UUID.randomUUID(),
                     innvilget = true,
                     inntektsgrunnlag = inntektsgrunnlag,
-                    søknadstidspunkt = LocalDateTime.now(),
                     vedtaksdato = LocalDate.now(),
                     virkningsdato = LocalDate.now(),
                     tidslinje = Tidslinje()
@@ -254,14 +262,17 @@ internal class Sak private constructor(
         object VedtakFattet : Tilstand(Tilstandsnavn.VEDTAK_FATTET) {
 
             override fun toDto(sak: Sak) = DtoSak(
+                saksid = sak.saksid,
                 tilstand = tilstandsnavn.name,
                 sakstyper = sak.sakstyper.toDto(),
                 vurderingsdato = sak.vurderingsdato, // ALLTID SATT
                 vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
+                søknadstidspunkt = sak.søknadstidspunkt,
                 vedtak = sak.vedtak.toDto()
             )
 
             override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
                 sak.vurderingsdato = dtoSak.vurderingsdato
                 sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
                 val dtoVedtak = requireNotNull(dtoSak.vedtak)
@@ -280,6 +291,7 @@ internal class Sak private constructor(
         internal fun Iterable<Sak>.toDto() = map { sak -> sak.toDto() }
 
         internal fun gjenopprett(dtoSak: DtoSak): Sak = Sak(
+            saksid = dtoSak.saksid,
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(dtoSak.tilstand)) {
                 Tilstand.Tilstandsnavn.START -> Tilstand.Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt

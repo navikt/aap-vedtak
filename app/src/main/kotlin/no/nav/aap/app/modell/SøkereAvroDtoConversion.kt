@@ -4,6 +4,7 @@ import no.nav.aap.avro.sokere.v1.*
 import no.nav.aap.dto.*
 import java.time.Year
 import java.time.YearMonth
+import java.util.*
 
 fun Soker.toDto(): DtoSøker = DtoSøker(
     personident = personident,
@@ -12,19 +13,23 @@ fun Soker.toDto(): DtoSøker = DtoSøker(
 )
 
 fun Sak.toDto(): DtoSak = DtoSak(
+    saksid = saksid?.let(UUID::fromString) ?: UUID.randomUUID(),
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
     sakstyper = sakstyper.map(Sakstype::toDto),
     vurderingAvBeregningsdato = vurderingAvBeregningsdato.toDto(),
+    søknadstidspunkt = soknadstidspunkt,
     vedtak = vedtak?.toDto()
 )
 
 fun Sakstype.toDto(): DtoSakstype = DtoSakstype(
     type = type,
+    aktiv = aktiv,
     vilkårsvurderinger = vilkarsvurderinger.map(Vilkarsvurdering::toDto)
 )
 
 fun Vilkarsvurdering.toDto(): DtoVilkårsvurdering = DtoVilkårsvurdering(
+    vilkårsvurderingsid = vilkarsvurderingsid?.let(UUID::fromString) ?: UUID.randomUUID(),
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -55,9 +60,9 @@ fun Inntekt.toDto(): DtoInntekt = DtoInntekt(
 )
 
 fun Vedtak.toDto(): DtoVedtak = DtoVedtak(
+    vedtaksid = vedtaksid?.let(UUID::fromString) ?: UUID.randomUUID(),
     innvilget = innvilget,
     inntektsgrunnlag = inntektsgrunnlag.toDto(),
-    søknadstidspunkt = soknadstidspunkt,
     vedtaksdato = vedtaksdato,
     virkningsdato = virkningsdato
 )
@@ -85,14 +90,17 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
     .setSaker(
         saker.map { sak ->
             Sak.newBuilder()
+                .setSaksid(sak.saksid.toString())
                 .setTilstand(sak.tilstand)
                 .setSakstyper(
                     sak.sakstyper.map { sakstype ->
                         Sakstype.newBuilder()
                             .setType(sakstype.type)
+                            .setAktiv(sakstype.aktiv)
                             .setVilkarsvurderinger(
                                 sakstype.vilkårsvurderinger.map { vilkår ->
                                     Vilkarsvurdering.newBuilder()
+                                        .setVilkarsvurderingsid(vilkår.vilkårsvurderingsid.toString())
                                         .setLedd(vilkår.ledd)
                                         .setParagraf(vilkår.paragraf)
                                         .setTilstand(vilkår.tilstand)
@@ -120,18 +128,19 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
                     }
                 )
                 .setVurderingsdato(sak.vurderingsdato)
-                .setVurderingAvBeregningsdato(
+                .setVurderingAvBeregningsdatoBuilder(
                     VurderingAvBeregningsdato.newBuilder()
                         .setTilstand(sak.vurderingAvBeregningsdato.tilstand)
                         .setLosningVurderingAvBeregningsdato(sak.vurderingAvBeregningsdato.løsningVurderingAvBeregningsdato?.let {
                             LosningVurderingAvBeregningsdato(it.beregningsdato)
                         })
-                        .build()
                 )
-                .setVedtak(sak.vedtak?.let { vedtak ->
-                    Vedtak(
-                        vedtak.innvilget,
-                        vedtak.inntektsgrunnlag.let { inntektsgrunnlag ->
+                .setSoknadstidspunkt(sak.søknadstidspunkt)
+                .setVedtakBuilder(sak.vedtak?.let { vedtak ->
+                    Vedtak.newBuilder().apply {
+                        vedtaksid = vedtak.vedtaksid.toString()
+                        innvilget = vedtak.innvilget
+                        inntektsgrunnlag = vedtak.inntektsgrunnlag.let { inntektsgrunnlag ->
                             Inntektsgrunnlag(
                                 inntektsgrunnlag.beregningsdato,
                                 inntektsgrunnlag.inntekterSiste3Kalenderår.map { inntektsgrunnlagForÅr ->
@@ -154,11 +163,10 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
                                 inntektsgrunnlag.sisteKalenderår.atDay(1),
                                 inntektsgrunnlag.grunnlagsfaktor
                             )
-                        },
-                        vedtak.søknadstidspunkt,
-                        vedtak.vedtaksdato,
-                        vedtak.virkningsdato
-                    )
+                        }
+                        vedtaksdato = vedtak.vedtaksdato
+                        virkningsdato = vedtak.virkningsdato
+                    }
                 })
                 .build()
         }

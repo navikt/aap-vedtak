@@ -84,19 +84,26 @@ internal class ApiTest {
             assertNotNull(søker)
             val actual = søker.toDto()
             assertNotNull(actual.saker.firstOrNull()?.vedtak) { "Saken mangler vedtak - $actual" }
-            val søknadstidspunkt = actual.saker.first().vedtak!!.søknadstidspunkt
+            val søknadstidspunkt = actual.saker.first().søknadstidspunkt
+
+            fun vilkårsvurderingsid(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].vilkårsvurderingsid
+
             val expected = DtoSøker(
                 personident = "123",
                 fødselsdato = LocalDate.now().minusYears(40),
                 saker = listOf(
                     DtoSak(
+                        saksid = actual.saker.first().saksid,
                         tilstand = "VEDTAK_FATTET",
                         vurderingsdato = LocalDate.now(),
                         sakstyper = listOf(
                             DtoSakstype(
                                 type = "STANDARD",
+                                aktiv = true,
                                 vilkårsvurderinger = listOf(
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(0),
                                         paragraf = "PARAGRAF_11_2",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
@@ -104,6 +111,7 @@ internal class ApiTest {
                                         løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(1),
                                         paragraf = "PARAGRAF_11_3",
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT",
@@ -111,18 +119,21 @@ internal class ApiTest {
                                         løsning_11_3_manuell = DtoLøsningParagraf_11_3(true)
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(2),
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
                                         måVurderesManuelt = false
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(3),
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_2", "LEDD_3"),
                                         tilstand = "IKKE_RELEVANT",
                                         måVurderesManuelt = false
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(4),
                                         paragraf = "PARAGRAF_11_5",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT",
@@ -130,6 +141,7 @@ internal class ApiTest {
                                         løsning_11_5_manuell = DtoLøsningParagraf_11_5(60)
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(5),
                                         paragraf = "PARAGRAF_11_6",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
@@ -137,6 +149,7 @@ internal class ApiTest {
                                         løsning_11_6_manuell = DtoLøsningParagraf_11_6(true)
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(6),
                                         paragraf = "PARAGRAF_11_12",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
@@ -144,6 +157,7 @@ internal class ApiTest {
                                         løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(true)
                                     ),
                                     DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(7),
                                         paragraf = "PARAGRAF_11_29",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
@@ -159,7 +173,9 @@ internal class ApiTest {
                                 LocalDate.of(2022, 1, 1)
                             )
                         ),
+                        søknadstidspunkt = søknadstidspunkt,
                         vedtak = DtoVedtak(
+                            vedtaksid = actual.saker.first().vedtak!!.vedtaksid,
                             innvilget = true,
                             inntektsgrunnlag = DtoInntektsgrunnlag(
                                 beregningsdato = LocalDate.of(2022, 1, 1),
@@ -211,7 +227,6 @@ internal class ApiTest {
                                 sisteKalenderår = Year.of(2021),
                                 grunnlagsfaktor = 3.943968
                             ),
-                            søknadstidspunkt = søknadstidspunkt,
                             vedtaksdato = LocalDate.now(),
                             virkningsdato = LocalDate.now()
                         )

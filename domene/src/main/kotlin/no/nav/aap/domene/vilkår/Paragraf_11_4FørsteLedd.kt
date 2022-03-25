@@ -5,15 +5,19 @@ import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Søknad
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.util.*
 
 private val log = LoggerFactory.getLogger("Paragraf_11_4FørsteLedd")
 
-internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand: Tilstand) :
-    Vilkårsvurdering(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
+internal class Paragraf_11_4FørsteLedd private constructor(
+    vilkårsvurderingsid: UUID,
+    private var tilstand: Tilstand
+) :
+    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_4, Ledd.LEDD_1) {
     private lateinit var fødselsdato: Fødselsdato
     private lateinit var vurderingsdato: LocalDate
 
-    internal constructor() : this(Tilstand.IkkeVurdert)
+    internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
 
     private fun tilstand(nyTilstand: Tilstand) {
         this.tilstand = nyTilstand
@@ -106,6 +110,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
         }
 
         internal fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
             paragraf = paragraf.paragraf.name,
             ledd = paragraf.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -119,7 +124,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(private var tilstand
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4FørsteLedd =
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
-                .let(::Paragraf_11_4FørsteLedd)
+                .let { tilstand -> Paragraf_11_4FørsteLedd(vilkårsvurdering.vilkårsvurderingsid, tilstand) }
                 .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

@@ -5,15 +5,18 @@ import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.util.*
 
 internal abstract class Vilkårsvurdering(
+    protected val vilkårsvurderingsid: UUID,
     protected val paragraf: Paragraf,
     protected val ledd: List<Ledd>
 ) {
     internal constructor(
+        vilkårsvurderingsid: UUID,
         paragraf: Paragraf,
         ledd: Ledd
-    ) : this(paragraf, listOf(ledd))
+    ) : this(vilkårsvurderingsid, paragraf, listOf(ledd))
 
     internal enum class Paragraf {
         PARAGRAF_11_2,

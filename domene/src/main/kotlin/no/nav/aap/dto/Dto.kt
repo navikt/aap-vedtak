@@ -9,6 +9,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
 import java.time.YearMonth
+import java.util.UUID
 
 data class DtoSøker(
     val personident: String,
@@ -17,19 +18,23 @@ data class DtoSøker(
 )
 
 data class DtoSak(
+    val saksid: UUID,
     val tilstand: String,
     val sakstyper: List<DtoSakstype>,
     val vurderingsdato: LocalDate,
     val vurderingAvBeregningsdato: DtoVurderingAvBeregningsdato,
+    val søknadstidspunkt: LocalDateTime,
     val vedtak: DtoVedtak?
 )
 
 data class DtoSakstype(
     val type: String,
+    val aktiv: Boolean,
     val vilkårsvurderinger: List<DtoVilkårsvurdering>
 )
 
 data class DtoVilkårsvurdering(
+    val vilkårsvurderingsid: UUID,
     val paragraf: String,
     val ledd: List<String>,
     val tilstand: String,
@@ -127,9 +132,9 @@ data class DtoLøsningVurderingAvBeregningsdato(
 }
 
 data class DtoVedtak(
+    val vedtaksid: UUID,
     val innvilget: Boolean,
     val inntektsgrunnlag: DtoInntektsgrunnlag,
-    val søknadstidspunkt: LocalDateTime,
     val vedtaksdato: LocalDate,
     val virkningsdato: LocalDate
 )
