@@ -66,9 +66,9 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
         .peek { key, value -> secureLog.info("produced [$SØKERE_STORE_NAME] K:$key V:$value") }
         .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
 
-//    søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) { record ->
-//        søkereToDelete.removeIf { it == record.value().personident }
-//    }
+    søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) { record ->
+        søkereToDelete.removeIf { it == record.value().personident }
+    }
 
     søknadStream(søkerKTable, topics)
     medlemStream(søkerKTable, topics)
