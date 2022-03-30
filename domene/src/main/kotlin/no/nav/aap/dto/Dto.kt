@@ -62,7 +62,7 @@ data class DtoManuell(
 
 data class DtoLøsningParagraf_11_2(val erMedlem: String) {
     fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_2(enumValueOf(erMedlem))
+        val løsning = LøsningParagraf_11_2(enumValueOf(erMedlem.uppercase()))
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
