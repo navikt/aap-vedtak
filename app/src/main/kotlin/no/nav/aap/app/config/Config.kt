@@ -1,6 +1,7 @@
 package no.nav.aap.app.config
 
 import com.sksamuel.hoplite.ConfigLoader
+import com.sksamuel.hoplite.ConfigLoaderBuilder
 import com.sksamuel.hoplite.MapPropertySource
 import com.sksamuel.hoplite.yaml.YamlParser
 import io.ktor.application.*
@@ -12,14 +13,14 @@ data class Config(
 )
 
 inline fun <reified T : Any> Application.loadConfig(vararg resources: String = arrayOf("/application.yml")): T =
-    ConfigLoader.Builder()
+    ConfigLoader.builder()
         .addFileExtensionMapping("yml", YamlParser())
         .addKtorConfig(environment.config)
         .build()
         .loadConfigOrThrow(*resources)
 
 inline fun <reified T : Any> loadConfig(resource: String = "/application.yml"): T =
-    ConfigLoader.Builder()
+    ConfigLoader.builder()
         .addFileExtensionMapping("yml", YamlParser())
         .build()
         .loadConfigOrThrow(resource)
@@ -28,7 +29,7 @@ inline fun <reified T : Any> loadConfig(resource: String = "/application.yml"): 
  * Add Ktors MapApplicationConfig as PropertySource,
  * this allows the MapApplicationConfig to override config values in tests
  */
-fun ConfigLoader.Builder.addKtorConfig(config: ApplicationConfig) = apply {
+fun ConfigLoaderBuilder.addKtorConfig(config: ApplicationConfig) = apply {
     if (config is MapApplicationConfig) {
         // get access to the protected property 'map'
         @Suppress("UNCHECKED_CAST")
