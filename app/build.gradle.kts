@@ -29,7 +29,7 @@ dependencies {
     implementation("no.nav.aap.avro:medlem:1.1.6")
 
     implementation("no.nav.security:token-validation-ktor:2.0.13")
-    implementation("no.nav.security:token-client-core:2.0.13")
+    implementation("no.nav.security:token-client-core:2.0.14")
 
     implementation("com.sksamuel.hoplite:hoplite-yaml:2.0.3")
 
