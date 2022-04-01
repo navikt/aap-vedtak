@@ -11,6 +11,8 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
 
     internal operator fun times(faktor: Beløp): Beløp = faktor * verdi
 
+    internal operator fun times(faktor: Double): Grunnlagsfaktor = Grunnlagsfaktor(faktor * verdi)
+
     internal operator fun div(nevner: Int) = Grunnlagsfaktor(verdi / nevner)
 
     override fun compareTo(other: Grunnlagsfaktor) = this.verdi.compareTo(other.verdi)
@@ -33,4 +35,8 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
     }
 
     override fun hashCode() = verdi.hashCode()
+
+    override fun toString(): String {
+        return verdi.toString()
+    }
 }

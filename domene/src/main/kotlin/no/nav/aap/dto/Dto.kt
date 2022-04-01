@@ -4,6 +4,7 @@ import no.nav.aap.domene.Søker
 import no.nav.aap.domene.beregning.Arbeidsgiver
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt
+import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -142,9 +143,11 @@ data class DtoVedtak(
 data class DtoInntektsgrunnlag(
     val beregningsdato: LocalDate,
     val inntekterSiste3Kalenderår: List<DtoInntektsgrunnlagForÅr>,
+    val årligArbeidsinntektVedYrkesskade: DtoInntektsgrunnlagForÅr?,
     val fødselsdato: LocalDate,
     val sisteKalenderår: Year,
-    val grunnlagsfaktor: Double
+    val grunnlagsfaktor: Double,
+    val grunnlagsfaktorForYrkesskade: Double?
 )
 
 data class DtoInntektsgrunnlagForÅr(

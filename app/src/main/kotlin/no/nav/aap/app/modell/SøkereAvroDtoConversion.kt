@@ -70,9 +70,11 @@ fun Vedtak.toDto(): DtoVedtak = DtoVedtak(
 fun Inntektsgrunnlag.toDto(): DtoInntektsgrunnlag = DtoInntektsgrunnlag(
     beregningsdato = beregningsdato,
     inntekterSiste3Kalenderår = inntekterSiste3Kalenderar.map { it.toDto() },
+    årligArbeidsinntektVedYrkesskade = null,
     fødselsdato = fodselsdato,
     sisteKalenderår = Year.from(sisteKalenderar),
-    grunnlagsfaktor = grunnlagsfaktor
+    grunnlagsfaktor = grunnlagsfaktor,
+    grunnlagsfaktorForYrkesskade = null
 )
 
 fun InntektsgrunnlagForAr.toDto(): DtoInntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
