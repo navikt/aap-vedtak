@@ -73,8 +73,7 @@ fun Inntektsgrunnlag.toDto(): DtoInntektsgrunnlag = DtoInntektsgrunnlag(
     årligArbeidsinntektVedYrkesskade = null,
     fødselsdato = fodselsdato,
     sisteKalenderår = Year.from(sisteKalenderar),
-    grunnlagsfaktor = grunnlagsfaktor,
-    grunnlagsfaktorForYrkesskade = null
+    grunnlagsfaktor = grunnlagsfaktor
 )
 
 fun InntektsgrunnlagForAr.toDto(): DtoInntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
