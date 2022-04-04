@@ -42,6 +42,10 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
+        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
@@ -101,7 +105,7 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_3(),
                     Paragraf_11_4FørsteLedd(),
                     Paragraf_11_4AndreOgTredjeLedd(),
-                    Paragraf_11_5(),
+                    Paragraf_11_5_yrkesskade(),
                     Paragraf_11_6(),
                     Paragraf_11_12FørsteLedd(),
                     Paragraf_11_22(),

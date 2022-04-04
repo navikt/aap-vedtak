@@ -22,6 +22,7 @@ sealed class DtoBehov {
     open fun erDtoBehov_11_4FørsteLedd() = false
     open fun erDtoBehov_11_4AndreOgTredjeLedd() = false
     open fun erDtoBehov_11_5() = false
+    open fun erDtoBehov_11_5_yrkesskade() = false
     open fun erDtoBehov_11_6() = false
     open fun erDtoBehov_11_12FørsteLedd() = false
     open fun erDtoBehov_11_22() = false
@@ -54,6 +55,13 @@ sealed class DtoBehov {
 
     class DtoBehov_11_5(private val ident: String) : DtoBehov() {
         override fun erDtoBehov_11_5() = true
+        override fun accept(lytter: Lytter) {
+            lytter.behov_11_5(ident)
+        }
+    }
+
+    class DtoBehov_11_5_yrkesskade(private val ident: String) : DtoBehov() {
+        override fun erDtoBehov_11_5_yrkesskade() = true
         override fun accept(lytter: Lytter) {
             lytter.behov_11_5(ident)
         }

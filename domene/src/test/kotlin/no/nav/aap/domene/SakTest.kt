@@ -122,7 +122,10 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_3(true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        sak.håndterLøsning(LøsningParagraf_11_5_yrkesskade(
+            arbeidsevneErNedsattMedMinst50Prosent = true,
+            arbeidsevneErNedsattMedMinst30Prosent = true
+        ))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_6(true))
@@ -160,7 +163,7 @@ internal class SakTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5_YRKESSKADE)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_22)

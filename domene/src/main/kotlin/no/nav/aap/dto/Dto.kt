@@ -44,6 +44,7 @@ data class DtoVilkårsvurdering(
     val løsning_11_3_manuell: DtoLøsningParagraf_11_3? = null,
     val løsning_11_4_ledd2_ledd3_manuell: DtoLøsningParagraf_11_4_ledd2_ledd3? = null,
     val løsning_11_5_manuell: DtoLøsningParagraf_11_5? = null,
+    val løsning_11_5_yrkesskade_manuell: DtoLøsningParagraf_11_5_yrkesskade? = null,
     val løsning_11_6_manuell: DtoLøsningParagraf_11_6? = null,
     val løsning_11_12_ledd1_manuell: DtoLøsningParagraf_11_12_ledd1? = null,
     val løsning_11_22_manuell: DtoLøsningParagraf_11_22? = null,
@@ -88,6 +89,20 @@ data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
 data class DtoLøsningParagraf_11_5(val grad: Int) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(grad))
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
+    }
+}
+
+data class DtoLøsningParagraf_11_5_yrkesskade(
+    val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
+    val arbeidsevneErNedsattMedMinst30Prosent: Boolean
+) {
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_5_yrkesskade(
+            arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
+            arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent
+        )
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }

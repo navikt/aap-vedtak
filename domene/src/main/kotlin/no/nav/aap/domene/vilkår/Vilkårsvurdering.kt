@@ -23,6 +23,7 @@ internal abstract class Vilkårsvurdering(
         PARAGRAF_11_3,
         PARAGRAF_11_4,
         PARAGRAF_11_5,
+        PARAGRAF_11_5_YRKESSKADE,
         PARAGRAF_11_6,
         PARAGRAF_11_12,
         PARAGRAF_11_14,
@@ -46,6 +47,7 @@ internal abstract class Vilkårsvurdering(
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_3) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_5) {}
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_6) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_22) {}
@@ -75,6 +77,7 @@ internal abstract class Vilkårsvurdering(
                     }
                 }
                 Paragraf.PARAGRAF_11_5 -> Paragraf_11_5.gjenopprett(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_5_YRKESSKADE -> Paragraf_11_5_yrkesskade.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_6 -> Paragraf_11_6.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_12 -> {
                     vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->

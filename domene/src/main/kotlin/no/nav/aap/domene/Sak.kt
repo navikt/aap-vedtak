@@ -47,6 +47,10 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
         tilstand.håndterLøsning(this, løsning)
     }
@@ -107,6 +111,10 @@ internal class Sak private constructor(
         }
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5_yrkesskade) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
@@ -203,6 +211,11 @@ internal class Sak private constructor(
             }
 
             override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
+                sak.sakstype.håndterLøsning(løsning)
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5_yrkesskade) {
                 sak.sakstype.håndterLøsning(løsning)
                 vurderNesteTilstand(sak, løsning)
             }
