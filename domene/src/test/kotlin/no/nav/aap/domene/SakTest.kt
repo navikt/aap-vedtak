@@ -1,6 +1,7 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toDto
+import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
@@ -10,6 +11,7 @@ import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.Year
 
 internal class SakTest {
     @Test
@@ -104,6 +106,64 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+    }
+
+    @Test
+    fun `Hvis vi mottar en søknad der søker har oppgitt yrkesskade`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato, harTidligereYrkesskade = Søknad.HarYrkesskade.JA)
+        val sak = Sak()
+
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_3(true))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_6(true))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_22(
+            erOppfylt = true,
+            andelNedsattArbeidsevne = 50,
+            år = Year.of(2018),
+            antattÅrligArbeidsinntekt = 400000.beløp
+        ))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_29(true))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        assertTilstand("BEREGN_INNTEKT", sak)
+
+        val saker = listOf(sak).toDto()
+        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_RELEVANT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_22)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 

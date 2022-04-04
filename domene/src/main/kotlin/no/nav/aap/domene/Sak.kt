@@ -170,6 +170,7 @@ internal class Sak private constructor(
             ) {
                 val sakstype: Sakstype = when {
                     søknad.erStudent() -> Sakstype.Student.opprettStudent()
+                    søknad.harTidligereYrkesskade() -> Sakstype.Yrkesskade.opprettYrkesskade()
                     søknad.harSøktUføretrygd() -> TODO("Opprett uføretrygd")
                     søknad.erArbeidssøker() -> TODO("Opprett arbeidssøker")
                     else -> Sakstype.Standard.opprettStandard()

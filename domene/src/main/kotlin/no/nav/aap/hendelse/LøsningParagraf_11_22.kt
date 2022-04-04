@@ -5,12 +5,16 @@ import no.nav.aap.dto.DtoLøsningParagraf_11_22
 import java.time.Year
 
 class LøsningParagraf_11_22(
+    private val erOppfylt: Boolean,
     private val andelNedsattArbeidsevne: Int,
     private val år: Year,
     private val antattÅrligArbeidsinntekt: Beløp
 ) : Hendelse() {
 
+    internal fun erOppfylt() = erOppfylt
+
     internal fun toDto() = DtoLøsningParagraf_11_22(
+        erOppfylt = erOppfylt,
         andelNedsattArbeidsevne = andelNedsattArbeidsevne,
         år = år,
         antattÅrligArbeidsinntekt = antattÅrligArbeidsinntekt.toDto()

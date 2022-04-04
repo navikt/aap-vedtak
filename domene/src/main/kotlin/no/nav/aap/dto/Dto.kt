@@ -110,12 +110,14 @@ data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean) {
 }
 
 data class DtoLøsningParagraf_11_22(
+    val erOppfylt: Boolean,
     val andelNedsattArbeidsevne: Int,
     val år: Year,
     val antattÅrligArbeidsinntekt: Double
 ) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = LøsningParagraf_11_22(
+            erOppfylt = erOppfylt,
             andelNedsattArbeidsevne = andelNedsattArbeidsevne,
             år = år,
             antattÅrligArbeidsinntekt = antattÅrligArbeidsinntekt.beløp

@@ -18,6 +18,7 @@ internal abstract class Sakstype private constructor(
 
     internal enum class Type {
         STANDARD,
+        YRKESSKADE,
         STUDENT
     }
 
@@ -87,6 +88,34 @@ internal abstract class Sakstype private constructor(
         }
     }
 
+    internal class Yrkesskade private constructor(
+        vilkårsvurderinger: List<Vilkårsvurdering>
+    ) : Sakstype(
+        type = Type.YRKESSKADE,
+        aktiv = true,
+        vilkårsvurderinger = vilkårsvurderinger
+    ) {
+        internal companion object {
+            internal fun opprettYrkesskade(): Yrkesskade {
+                val vilkårsvurderinger = listOf(
+                    Paragraf_11_3(),
+                    Paragraf_11_4FørsteLedd(),
+                    Paragraf_11_4AndreOgTredjeLedd(),
+                    Paragraf_11_5(),
+                    Paragraf_11_6(),
+                    Paragraf_11_12FørsteLedd(),
+                    Paragraf_11_22(),
+                    Paragraf_11_29()
+                )
+
+                return Yrkesskade(vilkårsvurderinger)
+            }
+
+            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering>) =
+                Yrkesskade(vilkårsvurderinger)
+        }
+    }
+
     internal class Student private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering>
     ) : Sakstype(
@@ -120,6 +149,7 @@ internal abstract class Sakstype private constructor(
                 dtoSakstype.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::gjenopprett).toMutableList()
             return when (enumValueOf<Type>(dtoSakstype.type)) {
                 Type.STANDARD -> Standard.gjenopprettStandard(vilkårsvurderinger)
+                Type.YRKESSKADE -> Yrkesskade.gjenopprettStandard(vilkårsvurderinger)
                 Type.STUDENT -> Student.gjenopprettStudent(vilkårsvurderinger)
             }
         }

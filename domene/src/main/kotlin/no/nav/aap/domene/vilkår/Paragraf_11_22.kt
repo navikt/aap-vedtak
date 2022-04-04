@@ -106,7 +106,11 @@ internal class Paragraf_11_22 private constructor(
             ) {
                 vilkårsvurdering.løsning = løsning
 
-                //TODO
+                if (løsning.erOppfylt()) {
+                    vilkårsvurdering.tilstand(Oppfylt, løsning)
+                } else {
+                    vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
+                }
             }
 
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -135,6 +139,7 @@ internal class Paragraf_11_22 private constructor(
             override fun gjenopprettTilstand(paragraf: Paragraf_11_22, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_22_manuell)
                 paragraf.løsning = LøsningParagraf_11_22(
+                    erOppfylt = løsning.erOppfylt,
                     andelNedsattArbeidsevne = løsning.andelNedsattArbeidsevne,
                     år = løsning.år,
                     antattÅrligArbeidsinntekt = løsning.antattÅrligArbeidsinntekt.beløp
@@ -159,6 +164,7 @@ internal class Paragraf_11_22 private constructor(
             override fun gjenopprettTilstand(paragraf: Paragraf_11_22, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_22_manuell)
                 paragraf.løsning = LøsningParagraf_11_22(
+                    erOppfylt = løsning.erOppfylt,
                     andelNedsattArbeidsevne = løsning.andelNedsattArbeidsevne,
                     år = løsning.år,
                     antattÅrligArbeidsinntekt = løsning.antattÅrligArbeidsinntekt.beløp
