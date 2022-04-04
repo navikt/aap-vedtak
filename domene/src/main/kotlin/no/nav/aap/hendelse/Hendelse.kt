@@ -24,6 +24,7 @@ sealed class DtoBehov {
     open fun erDtoBehov_11_5() = false
     open fun erDtoBehov_11_6() = false
     open fun erDtoBehov_11_12FørsteLedd() = false
+    open fun erDtoBehov_11_22() = false
     open fun erDtoBehov_11_29() = false
     open fun erDtoBehovVurderingAvBeregningsdato() = false
     open fun erInntekter() = false
@@ -72,6 +73,13 @@ sealed class DtoBehov {
         }
     }
 
+    class DtoBehov_11_22(private val ident: String) : DtoBehov() {
+        override fun erDtoBehov_11_22() = true
+        override fun accept(lytter: Lytter) {
+            lytter.behov_11_22(ident)
+        }
+    }
+
     class DtoBehov_11_29(private val ident: String) : DtoBehov() {
         override fun erDtoBehov_11_29() = true
         override fun accept(lytter: Lytter) {
@@ -107,6 +115,7 @@ interface Lytter {
     fun behov_11_5(ident: String) {}
     fun behov_11_6(ident: String) {}
     fun behov_11_12FørsteLedd(ident: String) {}
+    fun behov_11_22(ident: String) {}
     fun behov_11_29(ident: String) {}
     fun behovInntekter(ident: String, fom: Year, tom: Year) {}
 }

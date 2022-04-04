@@ -49,6 +49,10 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
+        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }

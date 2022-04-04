@@ -9,7 +9,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
 import java.time.YearMonth
-import java.util.UUID
+import java.util.*
 
 data class DtoSøker(
     val personident: String,
@@ -46,6 +46,7 @@ data class DtoVilkårsvurdering(
     val løsning_11_5_manuell: DtoLøsningParagraf_11_5? = null,
     val løsning_11_6_manuell: DtoLøsningParagraf_11_6? = null,
     val løsning_11_12_ledd1_manuell: DtoLøsningParagraf_11_12_ledd1? = null,
+    val løsning_11_22_manuell: DtoLøsningParagraf_11_22? = null,
     val løsning_11_29_manuell: DtoLøsningParagraf_11_29? = null,
 )
 
@@ -103,6 +104,22 @@ data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean) {
 data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = LøsningParagraf_11_12FørsteLedd(erOppfylt)
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
+    }
+}
+
+data class DtoLøsningParagraf_11_22(
+    val andelNedsattArbeidsevne: Int,
+    val år: Year,
+    val antattÅrligArbeidsinntekt: Double
+) {
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningParagraf_11_22(
+            andelNedsattArbeidsevne = andelNedsattArbeidsevne,
+            år = år,
+            antattÅrligArbeidsinntekt = antattÅrligArbeidsinntekt.beløp
+        )
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }

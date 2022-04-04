@@ -4,31 +4,31 @@ import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import no.nav.aap.dto.DtoYrkesskade
 
 internal class Yrkesskade(
-    private val gradAvNedsattArbeidsevneKnyttetTilYrkesskade: Double,
+    private val andelNedsattArbeidsevne: Double,
     private val inntektsgrunnlag: InntektsgrunnlagForÅr
 ) {
 
         internal fun beregnEndeligGrunnlagsfaktor(
             grunnlagsfaktorForNedsattArbeidsevne: Grunnlagsfaktor
         ): Grunnlagsfaktor {
-            return if (gradAvNedsattArbeidsevneKnyttetTilYrkesskade > 70) {
+            return if (andelNedsattArbeidsevne > 70) {
                 maxOf(grunnlagsfaktorForNedsattArbeidsevne, inntektsgrunnlag.grunnlagsfaktor())
             } else {
-                val gradAvNedsattArbeidsevneKnyttetTilNedsattArbeidsevne = 100 - gradAvNedsattArbeidsevneKnyttetTilYrkesskade
+                val gradAvNedsattArbeidsevneKnyttetTilNedsattArbeidsevne = 100 - andelNedsattArbeidsevne
                 val andelAvEndeligGrunnlagsfaktorSomIkkeSkalJusteres = grunnlagsfaktorForNedsattArbeidsevne * gradAvNedsattArbeidsevneKnyttetTilNedsattArbeidsevne / 100
-                val andelAvEndeligGrunnlagsfaktorSomErJustert = maxOf(grunnlagsfaktorForNedsattArbeidsevne, inntektsgrunnlag.grunnlagsfaktor()) * gradAvNedsattArbeidsevneKnyttetTilYrkesskade / 100
+                val andelAvEndeligGrunnlagsfaktorSomErJustert = maxOf(grunnlagsfaktorForNedsattArbeidsevne, inntektsgrunnlag.grunnlagsfaktor()) * andelNedsattArbeidsevne / 100
                 andelAvEndeligGrunnlagsfaktorSomIkkeSkalJusteres + andelAvEndeligGrunnlagsfaktorSomErJustert
             }
         }
 
     internal fun toDto() = DtoYrkesskade(
-        gradAvNedsattArbeidsevneKnyttetTilYrkesskade = gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
+        gradAvNedsattArbeidsevneKnyttetTilYrkesskade = andelNedsattArbeidsevne,
         inntektsgrunnlag = inntektsgrunnlag.toDto()
     )
 
     internal companion object{
         internal fun gjenopprett(dtoYrkesskade: DtoYrkesskade) = Yrkesskade(
-            gradAvNedsattArbeidsevneKnyttetTilYrkesskade = dtoYrkesskade.gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
+            andelNedsattArbeidsevne = dtoYrkesskade.gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
             inntektsgrunnlag = InntektsgrunnlagForÅr.gjenopprett(dtoYrkesskade.inntektsgrunnlag)
         )
     }
