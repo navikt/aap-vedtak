@@ -18,7 +18,7 @@ internal class Inntektshistorikk {
         return Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = beregningsdato,
             inntekterSiste3Kalenderår = inntekterSiste3Kalenderår,
-            årligArbeidsinntektVedYrkesskade = null,
+            yrkesskade = null,
             fødselsdato = fødselsdato
         )
     }

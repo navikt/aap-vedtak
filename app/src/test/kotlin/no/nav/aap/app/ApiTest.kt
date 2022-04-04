@@ -224,7 +224,7 @@ internal class ApiTest {
                                     )
                                 ),
                                 fødselsdato = LocalDate.now().minusYears(40),
-                                årligArbeidsinntektVedYrkesskade = null,
+                                yrkesskade = null,
                                 sisteKalenderår = Year.of(2021),
                                 grunnlagsfaktor = 3.943968
                             ),

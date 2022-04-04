@@ -179,13 +179,134 @@ internal class InntektsgrunnlagTest {
         assertEquals(377296.39.beløp, grunnlagForDag)
     }
 
+    @Test
+    fun `Inntektsgrunnlaget økes ved yrkesskade`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2017), 93281.beløp * 3),
+            Inntekt(ARBEIDSGIVER, januar(2018), 95800.beløp * 3),
+            Inntekt(ARBEIDSGIVER, januar(2019), 98866.beløp * 3)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, januar(2015), 89502.beløp * 4))
+            .inntektSiste3Kalenderår(Year.of(2015)).first()
+        val yrkesskade = Yrkesskade(100.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 januar 2020, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(31 august 2021)
+
+        assertEquals(106399.beløp * 4, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 30 prosent yrkesskade`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2016), 430661.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 397000.beløp))
+            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val yrkesskade = Yrkesskade(30.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(30 juli 2020)
+
+        assertEquals(459978.68.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 70 prosent yrkesskade`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2016), 430661.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 397000.beløp))
+            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val yrkesskade = Yrkesskade(70.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(30 juli 2020)
+
+        assertEquals(460419.25.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 80 prosent yrkesskade`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2016), 430661.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 397000.beløp))
+            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val yrkesskade = Yrkesskade(80.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(30 juli 2020)
+
+        assertEquals(460749.65.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 30 prosent yrkesskade med høy inntekt på skadetidspunkt`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2016), 430661.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 425000.beløp))
+            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val yrkesskade = Yrkesskade(30.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(30 juli 2020)
+
+        assertEquals(469727.53.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 70 prosent yrkesskade med høy inntekt på skadetidspunkt`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2016), 430661.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 425000.beløp))
+            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val yrkesskade = Yrkesskade(70.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(30 juli 2020)
+
+        assertEquals(483166.57.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 80 prosent yrkesskade med høy inntekt på skadetidspunkt`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2016), 430661.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
+            Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 425000.beløp))
+            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val yrkesskade = Yrkesskade(80.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(30 juli 2020)
+
+        assertEquals(493245.82.beløp, grunnlagForDag)
+    }
+
     private fun Iterable<Inntekt>.inntektsgrunnlag(
         beregningsdato: LocalDate,
-        fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970)
+        fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970),
+        yrkesskade: Yrkesskade? = null
     ) =
         Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato,
             this.inntektSiste3Kalenderår(Year.from(beregningsdato).minusYears(1)),
-            fødselsdato
+            fødselsdato,
+            yrkesskade
         )
 }

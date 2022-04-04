@@ -16,7 +16,7 @@ import java.time.Year
 internal class Inntektsgrunnlag private constructor(
     private val beregningsdato: LocalDate,
     private val inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
-    private val årligArbeidsinntektVedYrkesskade: Yrkesskade? = null,
+    private val yrkesskade: Yrkesskade? = null,
     private val fødselsdato: Fødselsdato,
     private val sisteKalenderår: Year,
     //Dette tallet representerer hele utregningen av 11-19
@@ -29,7 +29,7 @@ internal class Inntektsgrunnlag private constructor(
     internal fun toDto() = DtoInntektsgrunnlag(
         beregningsdato = beregningsdato,
         inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.toDto(),
-        årligArbeidsinntektVedYrkesskade = årligArbeidsinntektVedYrkesskade?.toDto(),
+        yrkesskade = yrkesskade?.toDto(),
         fødselsdato = fødselsdato.toDto(),
         sisteKalenderår = sisteKalenderår,
         grunnlagsfaktor = grunnlagsfaktor.toDto()
@@ -40,24 +40,25 @@ internal class Inntektsgrunnlag private constructor(
             beregningsdato: LocalDate,
             inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
             fødselsdato: Fødselsdato,
-            årligArbeidsinntektVedYrkesskade: Yrkesskade? = null,
+            yrkesskade: Yrkesskade? = null,
         ): Inntektsgrunnlag {
             val sisteKalenderår = Year.from(beregningsdato).minusYears(1)
             return Inntektsgrunnlag(
                 beregningsdato = beregningsdato,
                 inntekterSiste3Kalenderår = inntekterSiste3Kalenderår,
-                årligArbeidsinntektVedYrkesskade = årligArbeidsinntektVedYrkesskade,
+                yrkesskade = yrkesskade,
                 fødselsdato = fødselsdato,
                 sisteKalenderår = sisteKalenderår,
-                grunnlagsfaktor = inntekterSiste3Kalenderår.totalBeregningsfaktor(sisteKalenderår)
+                grunnlagsfaktor = inntekterSiste3Kalenderår.totalBeregningsfaktor(sisteKalenderår, yrkesskade)
             )
         }
 
         internal fun gjenopprett(dtoInntektsgrunnlag: DtoInntektsgrunnlag) = Inntektsgrunnlag(
             beregningsdato = dtoInntektsgrunnlag.beregningsdato,
             inntekterSiste3Kalenderår = InntektsgrunnlagForÅr.gjenopprett(dtoInntektsgrunnlag.inntekterSiste3Kalenderår),
-            årligArbeidsinntektVedYrkesskade = dtoInntektsgrunnlag.årligArbeidsinntektVedYrkesskade?.let(
-                Yrkesskade.Companion::gjenopprett),
+            yrkesskade = dtoInntektsgrunnlag.yrkesskade?.let(
+                Yrkesskade.Companion::gjenopprett
+            ),
             fødselsdato = Fødselsdato(dtoInntektsgrunnlag.fødselsdato),
             sisteKalenderår = dtoInntektsgrunnlag.sisteKalenderår,
             grunnlagsfaktor = Grunnlagsfaktor(dtoInntektsgrunnlag.grunnlagsfaktor)
@@ -93,10 +94,17 @@ internal class InntektsgrunnlagForÅr private constructor(
     internal companion object {
         private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3
 
-        internal fun Iterable<InntektsgrunnlagForÅr>.totalBeregningsfaktor(sisteKalenderår: Year): Grunnlagsfaktor {
+        internal fun Iterable<InntektsgrunnlagForÅr>.totalBeregningsfaktor(
+            sisteKalenderår: Year,
+            yrkesskade: Yrkesskade?
+        ): Grunnlagsfaktor {
             val sum1År = finnSisteKalenderår(sisteKalenderår).summerBeregningsfaktor()
             val gjennomsnitt3År = summerBeregningsfaktor() / ANTALL_ÅR_FOR_GJENNOMSNITT
-            return maxOf(sum1År, gjennomsnitt3År)
+            val grunnlagsfaktor = maxOf(sum1År, gjennomsnitt3År)
+            if (yrkesskade != null) {
+                return yrkesskade.beregnEndeligGrunnlagsfaktor(grunnlagsfaktor)
+            }
+            return grunnlagsfaktor
         }
 
         private fun Iterable<InntektsgrunnlagForÅr>.summerBeregningsfaktor() = map { it.grunnlagsfaktor }.summer()
@@ -119,14 +127,14 @@ internal class InntektsgrunnlagForÅr private constructor(
             }
 
         internal fun gjenopprett(inntektsgrunnlagForYrkesskade: DtoInntektsgrunnlagForÅr) =
-                InntektsgrunnlagForÅr(
-                    år = inntektsgrunnlagForYrkesskade.år,
-                    inntekter = Inntekt.gjenopprett(inntektsgrunnlagForYrkesskade.inntekter),
-                    beløpFørJustering = inntektsgrunnlagForYrkesskade.beløpFørJustering.beløp,
-                    beløpJustertFor6G = inntektsgrunnlagForYrkesskade.beløpJustertFor6G.beløp,
-                    erBeløpJustertFor6G = inntektsgrunnlagForYrkesskade.erBeløpJustertFor6G,
-                    grunnlagsfaktor = Grunnlagsfaktor(inntektsgrunnlagForYrkesskade.grunnlagsfaktor)
-                )
+            InntektsgrunnlagForÅr(
+                år = inntektsgrunnlagForYrkesskade.år,
+                inntekter = Inntekt.gjenopprett(inntektsgrunnlagForYrkesskade.inntekter),
+                beløpFørJustering = inntektsgrunnlagForYrkesskade.beløpFørJustering.beløp,
+                beløpJustertFor6G = inntektsgrunnlagForYrkesskade.beløpJustertFor6G.beløp,
+                erBeløpJustertFor6G = inntektsgrunnlagForYrkesskade.erBeløpJustertFor6G,
+                grunnlagsfaktor = Grunnlagsfaktor(inntektsgrunnlagForYrkesskade.grunnlagsfaktor)
+            )
 
 
         internal fun inntektsgrunnlagForÅr(

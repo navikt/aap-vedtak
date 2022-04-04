@@ -142,7 +142,7 @@ data class DtoVedtak(
 data class DtoInntektsgrunnlag(
     val beregningsdato: LocalDate,
     val inntekterSiste3Kalenderår: List<DtoInntektsgrunnlagForÅr>,
-    val årligArbeidsinntektVedYrkesskade: DtoYrkesskade?,
+    val yrkesskade: DtoYrkesskade?,
     val fødselsdato: LocalDate,
     val sisteKalenderår: Year,
     val grunnlagsfaktor: Double
