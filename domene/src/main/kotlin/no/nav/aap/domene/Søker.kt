@@ -19,6 +19,14 @@ class Søker private constructor(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
+    fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
+        saker.forEach { it.håndterLøsning(løsning) }
+    }
+
+    fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
+        saker.forEach { it.håndterLøsning(løsning) }
+    }
+
     fun håndterLøsning(løsning: LøsningParagraf_11_2) {
         saker.forEach { it.håndterLøsning(løsning) }
     }

@@ -19,6 +19,7 @@ internal abstract class Vilkårsvurdering(
     ) : this(vilkårsvurderingsid, paragraf, listOf(ledd))
 
     internal enum class Paragraf {
+        MEDLEMSKAP_YRKESSKADE,
         PARAGRAF_11_2,
         PARAGRAF_11_3,
         PARAGRAF_11_4,
@@ -43,6 +44,8 @@ internal abstract class Vilkårsvurdering(
     internal abstract fun erIkkeOppfylt(): Boolean
 
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
+    internal open fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {}
+    internal open fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_2) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_3) {}
     internal open fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {}
@@ -63,6 +66,7 @@ internal abstract class Vilkårsvurdering(
 
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
             when (enumValueOf<Paragraf>(vilkårsvurdering.paragraf)) {
+                Paragraf.MEDLEMSKAP_YRKESSKADE -> MedlemskapYrkesskade.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_3 -> Paragraf_11_3.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_4 -> {

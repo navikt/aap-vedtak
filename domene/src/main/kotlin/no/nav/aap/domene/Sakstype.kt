@@ -26,6 +26,14 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
     }
 
+    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
+        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    }
+
+    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
+        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
@@ -102,6 +110,7 @@ internal abstract class Sakstype private constructor(
         internal companion object {
             internal fun opprettYrkesskade(): Yrkesskade {
                 val vilkårsvurderinger = listOf(
+                    MedlemskapYrkesskade(),
                     Paragraf_11_3(),
                     Paragraf_11_4FørsteLedd(),
                     Paragraf_11_4AndreOgTredjeLedd(),

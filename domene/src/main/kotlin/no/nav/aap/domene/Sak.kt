@@ -31,6 +31,14 @@ internal class Sak private constructor(
         tilstand.håndterSøknad(this, søknad, fødselsdato)
     }
 
+    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
         tilstand.håndterLøsning(this, løsning)
     }
@@ -96,6 +104,14 @@ internal class Sak private constructor(
         open fun onExit(sak: Sak, hendelse: Hendelse) {}
         open fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato) {
             log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellMedlemskapYrkesskade) {
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterLøsning(sak: Sak, løsning: LøsningManuellMedlemskapYrkesskade) {
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
@@ -195,6 +211,16 @@ internal class Sak private constructor(
         }
 
         object SøknadMottatt : Tilstand(Tilstandsnavn.SØKNAD_MOTTATT) {
+            override fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellMedlemskapYrkesskade) {
+                sak.sakstype.håndterLøsning(løsning)
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningManuellMedlemskapYrkesskade) {
+                sak.sakstype.håndterLøsning(løsning)
+                vurderNesteTilstand(sak, løsning)
+            }
+
             override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
                 sak.sakstype.håndterLøsning(løsning)
                 vurderNesteTilstand(sak, løsning)

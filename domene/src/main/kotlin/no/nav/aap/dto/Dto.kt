@@ -39,6 +39,8 @@ data class DtoVilkårsvurdering(
     val ledd: List<String>,
     val tilstand: String,
     val måVurderesManuelt: Boolean,
+    val løsning_medlemskap_yrkesskade_maskinell: DtoLøsningMaskinellMedlemskapYrkesskade? = null,
+    val løsning_medlemskap_yrkesskade_manuell: DtoLøsningManuellMedlemskapYrkesskade? = null,
     val løsning_11_2_maskinell: DtoLøsningParagraf_11_2? = null,
     val løsning_11_2_manuell: DtoLøsningParagraf_11_2? = null,
     val løsning_11_3_manuell: DtoLøsningParagraf_11_3? = null,
@@ -61,6 +63,22 @@ data class DtoManuell(
     val løsning_11_29_manuell: DtoLøsningParagraf_11_29? = null,
     val løsningVurderingAvBeregningsdato: DtoLøsningVurderingAvBeregningsdato? = null,
 )
+
+data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(erMedlem.uppercase()))
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
+    }
+}
+
+data class DtoLøsningManuellMedlemskapYrkesskade(val erMedlem: String) {
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = LøsningManuellMedlemskapYrkesskade(enumValueOf(erMedlem.uppercase()))
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
+    }
+}
 
 data class DtoLøsningParagraf_11_2(val erMedlem: String) {
     fun håndter(søker: Søker): List<Behov> {

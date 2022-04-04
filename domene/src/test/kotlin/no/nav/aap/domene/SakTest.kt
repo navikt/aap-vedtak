@@ -119,6 +119,9 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterLøsning(LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
         sak.håndterLøsning(LøsningParagraf_11_3(true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
