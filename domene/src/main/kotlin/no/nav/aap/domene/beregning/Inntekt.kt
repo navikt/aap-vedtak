@@ -15,7 +15,7 @@ class Inntekt(
         internal fun Iterable<Inntekt>.inntektSiste3Kalenderår(år: Year) = this
             .filter { Year.from(it.inntekstmåned) in år.minusYears(2)..år }
             .groupBy { Year.from(it.inntekstmåned) }
-            .map { (år, inntekter) -> InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(år, inntekter) }
+            .map { (år, inntekter) -> InntekterForBeregning.inntekterForBeregning(år, inntekter) }
 
         internal fun Iterable<Inntekt>.summerInntekt() = map { it.beløp }.summerBeløp()
 

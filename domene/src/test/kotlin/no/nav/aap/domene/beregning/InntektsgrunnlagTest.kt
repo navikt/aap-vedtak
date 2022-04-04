@@ -186,8 +186,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2018), 95800.beløp * 3),
             Inntekt(ARBEIDSGIVER, januar(2019), 98866.beløp * 3)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, januar(2015), 89502.beløp * 4))
-            .inntektSiste3Kalenderår(Year.of(2015)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2015), 89502.beløp * 4)
         val yrkesskade = Yrkesskade(100.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 januar 2020, yrkesskade = yrkesskade)
@@ -203,8 +202,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
             Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 397000.beløp))
-            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2014), 397000.beløp)
         val yrkesskade = Yrkesskade(30.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
@@ -220,8 +218,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
             Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 397000.beløp))
-            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2014), 397000.beløp)
         val yrkesskade = Yrkesskade(70.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
@@ -237,8 +234,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
             Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 397000.beløp))
-            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2014), 397000.beløp)
         val yrkesskade = Yrkesskade(80.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
@@ -254,8 +250,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
             Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 425000.beløp))
-            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2014), 425000.beløp)
         val yrkesskade = Yrkesskade(30.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
@@ -271,8 +266,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
             Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 425000.beløp))
-            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2014), 425000.beløp)
         val yrkesskade = Yrkesskade(70.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)
@@ -288,8 +282,7 @@ internal class InntektsgrunnlagTest {
             Inntekt(ARBEIDSGIVER, januar(2017), 418734.beløp),
             Inntekt(ARBEIDSGIVER, januar(2018), 423658.beløp)
         )
-        val grunnlagsfaktorForYrkesskade = listOf(Inntekt(ARBEIDSGIVER, august(2014), 425000.beløp))
-            .inntektSiste3Kalenderår(Year.of(2014)).first()
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2014), 425000.beløp)
         val yrkesskade = Yrkesskade(80.0, grunnlagsfaktorForYrkesskade)
 
         val grunnlag = inntekter.inntektsgrunnlag(1 august 2019, yrkesskade = yrkesskade)

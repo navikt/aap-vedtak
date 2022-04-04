@@ -12,13 +12,13 @@ internal class Inntektshistorikk {
         this.inntekter.addAll(inntekter)
     }
 
-    internal fun finnInntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato): Inntektsgrunnlag {
+    internal fun finnInntektsgrunnlag(beregningsdato: LocalDate, fødselsdato: Fødselsdato, yrkesskade: Yrkesskade?): Inntektsgrunnlag {
         val sisteKalenderår = Year.from(beregningsdato).minusYears(1)
         val inntekterSiste3Kalenderår = inntekter.inntektSiste3Kalenderår(sisteKalenderår)
         return Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = beregningsdato,
             inntekterSiste3Kalenderår = inntekterSiste3Kalenderår,
-            yrkesskade = null,
+            yrkesskade = yrkesskade,
             fødselsdato = fødselsdato
         )
     }

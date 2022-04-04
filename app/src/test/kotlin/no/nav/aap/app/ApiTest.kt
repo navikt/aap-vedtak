@@ -180,8 +180,7 @@ internal class ApiTest {
                             inntektsgrunnlag = DtoInntektsgrunnlag(
                                 beregningsdato = LocalDate.of(2022, 1, 1),
                                 inntekterSiste3Kalenderår = listOf(
-                                    DtoInntektsgrunnlagForÅr(
-                                        år = Year.of(2021),
+                                    DtoInntekterForBeregning(
                                         inntekter = listOf(
                                             DtoInntekt(
                                                 arbeidsgiver = "321",
@@ -189,13 +188,15 @@ internal class ApiTest {
                                                 beløp = 400000.0
                                             )
                                         ),
-                                        beløpFørJustering = 400000.0,
-                                        beløpJustertFor6G = 400000.0,
-                                        erBeløpJustertFor6G = false,
-                                        grunnlagsfaktor = 3.819856
+                                        inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
+                                            år = Year.of(2021),
+                                            beløpFørJustering = 400000.0,
+                                            beløpJustertFor6G = 400000.0,
+                                            erBeløpJustertFor6G = false,
+                                            grunnlagsfaktor = 3.819856
+                                        )
                                     ),
-                                    DtoInntektsgrunnlagForÅr(
-                                        år = Year.of(2020),
+                                    DtoInntekterForBeregning(
                                         inntekter = listOf(
                                             DtoInntekt(
                                                 arbeidsgiver = "321",
@@ -203,13 +204,15 @@ internal class ApiTest {
                                                 beløp = 400000.0
                                             )
                                         ),
-                                        beløpFørJustering = 400000.0,
-                                        beløpJustertFor6G = 400000.0,
-                                        erBeløpJustertFor6G = false,
-                                        grunnlagsfaktor = 3.966169
+                                        inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
+                                            år = Year.of(2020),
+                                            beløpFørJustering = 400000.0,
+                                            beløpJustertFor6G = 400000.0,
+                                            erBeløpJustertFor6G = false,
+                                            grunnlagsfaktor = 3.966169
+                                        )
                                     ),
-                                    DtoInntektsgrunnlagForÅr(
-                                        år = Year.of(2019),
+                                    DtoInntekterForBeregning(
                                         inntekter = listOf(
                                             DtoInntekt(
                                                 arbeidsgiver = "321",
@@ -217,10 +220,13 @@ internal class ApiTest {
                                                 beløp = 400000.0
                                             )
                                         ),
-                                        beløpFørJustering = 400000.0,
-                                        beløpJustertFor6G = 400000.0,
-                                        erBeløpJustertFor6G = false,
-                                        grunnlagsfaktor = 4.04588
+                                        inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
+                                            år = Year.of(2019),
+                                            beløpFørJustering = 400000.0,
+                                            beløpJustertFor6G = 400000.0,
+                                            erBeløpJustertFor6G = false,
+                                            grunnlagsfaktor = 4.04588
+                                        )
                                     )
                                 ),
                                 fødselsdato = LocalDate.now().minusYears(40),

@@ -193,16 +193,20 @@ data class DtoVedtak(
 
 data class DtoInntektsgrunnlag(
     val beregningsdato: LocalDate,
-    val inntekterSiste3Kalenderår: List<DtoInntektsgrunnlagForÅr>,
+    val inntekterSiste3Kalenderår: List<DtoInntekterForBeregning>,
     val yrkesskade: DtoYrkesskade?,
     val fødselsdato: LocalDate,
     val sisteKalenderår: Year,
     val grunnlagsfaktor: Double
 )
 
+data class DtoInntekterForBeregning(
+    val inntekter: List<DtoInntekt>,
+    val inntektsgrunnlagForÅr: DtoInntektsgrunnlagForÅr
+)
+
 data class DtoInntektsgrunnlagForÅr(
     val år: Year,
-    val inntekter: List<DtoInntekt>,
     val beløpFørJustering: Double,
     val beløpJustertFor6G: Double,
     val erBeløpJustertFor6G: Boolean,

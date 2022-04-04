@@ -76,13 +76,15 @@ fun Inntektsgrunnlag.toDto(): DtoInntektsgrunnlag = DtoInntektsgrunnlag(
     grunnlagsfaktor = grunnlagsfaktor
 )
 
-fun InntektsgrunnlagForAr.toDto(): DtoInntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
-    år = Year.from(ar),
+fun InntektsgrunnlagForAr.toDto(): DtoInntekterForBeregning = DtoInntekterForBeregning(
     inntekter = inntekter.map { it.toDto() },
-    beløpFørJustering = belopForJustering,
-    beløpJustertFor6G = belopJustertFor6G,
-    erBeløpJustertFor6G = erBelopJustertFor6G,
-    grunnlagsfaktor = grunnlagsfaktor
+    inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
+        år = Year.from(ar),
+        beløpFørJustering = belopForJustering,
+        beløpJustertFor6G = belopJustertFor6G,
+        erBeløpJustertFor6G = erBelopJustertFor6G,
+        grunnlagsfaktor = grunnlagsfaktor
+    )
 )
 
 fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
@@ -144,20 +146,20 @@ fun DtoSøker.toAvro(): Soker = Soker.newBuilder()
                         inntektsgrunnlag = vedtak.inntektsgrunnlag.let { inntektsgrunnlag ->
                             Inntektsgrunnlag(
                                 inntektsgrunnlag.beregningsdato,
-                                inntektsgrunnlag.inntekterSiste3Kalenderår.map { inntektsgrunnlagForÅr ->
+                                inntektsgrunnlag.inntekterSiste3Kalenderår.map { inntekterForBeregning ->
                                     InntektsgrunnlagForAr(
-                                        inntektsgrunnlagForÅr.år.atDay(1),
-                                        inntektsgrunnlagForÅr.inntekter.map { inntekt ->
+                                        inntekterForBeregning.inntektsgrunnlagForÅr.år.atDay(1),
+                                        inntekterForBeregning.inntekter.map { inntekt ->
                                             Inntekt(
                                                 inntekt.arbeidsgiver,
                                                 inntekt.inntekstmåned.atDay(1),
                                                 inntekt.beløp
                                             )
                                         },
-                                        inntektsgrunnlagForÅr.beløpFørJustering,
-                                        inntektsgrunnlagForÅr.beløpJustertFor6G,
-                                        inntektsgrunnlagForÅr.erBeløpJustertFor6G,
-                                        inntektsgrunnlagForÅr.grunnlagsfaktor
+                                        inntekterForBeregning.inntektsgrunnlagForÅr.beløpFørJustering,
+                                        inntekterForBeregning.inntektsgrunnlagForÅr.beløpJustertFor6G,
+                                        inntekterForBeregning.inntektsgrunnlagForÅr.erBeløpJustertFor6G,
+                                        inntekterForBeregning.inntektsgrunnlagForÅr.grunnlagsfaktor
                                     )
                                 },
                                 inntektsgrunnlag.fødselsdato,

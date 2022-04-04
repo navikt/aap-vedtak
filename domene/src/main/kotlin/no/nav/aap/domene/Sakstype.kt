@@ -1,6 +1,9 @@
 package no.nav.aap.domene
 
+import no.nav.aap.domene.beregning.Inntektshistorikk
+import no.nav.aap.domene.beregning.Yrkesskade as YrkesskadeBeregning
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.tidslinje.Tidslinje
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
@@ -9,11 +12,12 @@ import no.nav.aap.dto.DtoSakstype
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.util.*
 
 internal abstract class Sakstype private constructor(
     protected val type: Type,
     private var aktiv: Boolean,
-    private val vilkårsvurderinger: List<Vilkårsvurdering>
+    protected val vilkårsvurderinger: List<Vilkårsvurdering>
 ) {
 
     internal enum class Type {
@@ -62,13 +66,15 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_22) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
+
+    abstract fun opprettVedtak(inntektshistorikk: Inntektshistorikk, beregningsdato: LocalDate, fødselsdato: Fødselsdato): Vedtak
 
     internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
     internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
@@ -80,6 +86,23 @@ internal abstract class Sakstype private constructor(
         aktiv = true,
         vilkårsvurderinger = vilkårsvurderinger
     ) {
+
+        override fun opprettVedtak(
+            inntektshistorikk: Inntektshistorikk,
+            beregningsdato: LocalDate,
+            fødselsdato: Fødselsdato
+        ): Vedtak {
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, null)
+            return Vedtak(
+                vedtaksid = UUID.randomUUID(),
+                innvilget = true,
+                inntektsgrunnlag = inntektsgrunnlag,
+                vedtaksdato = LocalDate.now(),
+                virkningsdato = LocalDate.now(),
+                tidslinje = Tidslinje()
+            )
+        }
+
         internal companion object {
             internal fun opprettStandard(): Standard {
                 val vilkårsvurderinger = listOf(
@@ -101,14 +124,33 @@ internal abstract class Sakstype private constructor(
     }
 
     internal class Yrkesskade private constructor(
+        private val paragraf1122: Paragraf_11_22,
         vilkårsvurderinger: List<Vilkårsvurdering>
     ) : Sakstype(
         type = Type.YRKESSKADE,
         aktiv = true,
         vilkårsvurderinger = vilkårsvurderinger
     ) {
+
+        override fun opprettVedtak(
+            inntektshistorikk: Inntektshistorikk,
+            beregningsdato: LocalDate,
+            fødselsdato: Fødselsdato
+        ): Vedtak {
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, paragraf1122.yrkesskade())
+            return Vedtak(
+                vedtaksid = UUID.randomUUID(),
+                innvilget = true,
+                inntektsgrunnlag = inntektsgrunnlag,
+                vedtaksdato = LocalDate.now(),
+                virkningsdato = LocalDate.now(),
+                tidslinje = Tidslinje()
+            )
+        }
+
         internal companion object {
             internal fun opprettYrkesskade(): Yrkesskade {
+                val paragraf1122 = Paragraf_11_22()
                 val vilkårsvurderinger = listOf(
                     MedlemskapYrkesskade(),
                     Paragraf_11_3(),
@@ -117,15 +159,15 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_5_yrkesskade(),
                     Paragraf_11_6(),
                     Paragraf_11_12FørsteLedd(),
-                    Paragraf_11_22(),
+                    paragraf1122,
                     Paragraf_11_29()
                 )
 
-                return Yrkesskade(vilkårsvurderinger)
+                return Yrkesskade(paragraf1122, vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering>) =
-                Yrkesskade(vilkårsvurderinger)
+            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering>) =
+                Yrkesskade(vilkårsvurderinger.filterIsInstance<Paragraf_11_22>().first(), vilkårsvurderinger)
         }
     }
 
@@ -136,6 +178,23 @@ internal abstract class Sakstype private constructor(
         aktiv = true,
         vilkårsvurderinger = vilkårsvurderinger
     ) {
+
+        override fun opprettVedtak(
+            inntektshistorikk: Inntektshistorikk,
+            beregningsdato: LocalDate,
+            fødselsdato: Fødselsdato
+        ): Vedtak {
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, null)
+            return Vedtak(
+                vedtaksid = UUID.randomUUID(),
+                innvilget = true,
+                inntektsgrunnlag = inntektsgrunnlag,
+                vedtaksdato = LocalDate.now(),
+                virkningsdato = LocalDate.now(),
+                tidslinje = Tidslinje()
+            )
+        }
+
         internal companion object {
             internal fun opprettStudent(): Student {
                 val vilkårsvurderinger = listOf(Paragraf_11_14())
@@ -162,7 +221,7 @@ internal abstract class Sakstype private constructor(
                 dtoSakstype.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::gjenopprett).toMutableList()
             return when (enumValueOf<Type>(dtoSakstype.type)) {
                 Type.STANDARD -> Standard.gjenopprettStandard(vilkårsvurderinger)
-                Type.YRKESSKADE -> Yrkesskade.gjenopprettStandard(vilkårsvurderinger)
+                Type.YRKESSKADE -> Yrkesskade.gjenopprettYrkesskade(vilkårsvurderinger)
                 Type.STUDENT -> Student.gjenopprettStudent(vilkårsvurderinger)
             }
         }

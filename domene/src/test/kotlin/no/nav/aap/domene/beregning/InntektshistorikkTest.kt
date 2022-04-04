@@ -17,7 +17,7 @@ internal class InntektshistorikkTest {
     fun `Hvis vi henter grunnlag for en bruker uten inntekt, blir inntektsgrunnlaget tomt`() {
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(emptyList())
-        val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
+        val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO, null)
 
         val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
@@ -32,7 +32,7 @@ internal class InntektshistorikkTest {
     fun `Hvis bruker kun har inntekt i år, blir inntektsgrunnlaget tomt`() {
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(listOf(Inntekt(ARBEIDSGIVER, januar(2022), Beløp(1000.0))))
-        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
+        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO, null)
 
         val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
@@ -48,11 +48,11 @@ internal class InntektshistorikkTest {
         val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2021), Beløp(1000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
-        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
+        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO, null)
 
         val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
-            inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), inntekter)),
+            inntekterSiste3Kalenderår = listOf(InntekterForBeregning.inntekterForBeregning(Year.of(2021), inntekter)),
             fødselsdato = FØDSELSDATO
         )
 
@@ -64,11 +64,11 @@ internal class InntektshistorikkTest {
         val inntekter = listOf(Inntekt(ARBEIDSGIVER, januar(2020), Beløp(1000.0)))
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
-        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
+        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO, null)
 
         val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
-            inntekterSiste3Kalenderår = listOf(InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2020), inntekter)),
+            inntekterSiste3Kalenderår = listOf(InntekterForBeregning.inntekterForBeregning(Year.of(2020), inntekter)),
             fødselsdato = FØDSELSDATO
         )
 
@@ -84,14 +84,14 @@ internal class InntektshistorikkTest {
         )
         val inntektshistorikk = Inntektshistorikk()
         inntektshistorikk.leggTilInntekter(inntekter)
-        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO)
+        val beregning = inntektshistorikk.finnInntektsgrunnlag(1 januar 2022, FØDSELSDATO, null)
 
         val expected = Inntektsgrunnlag.inntektsgrunnlag(
             beregningsdato = 1 januar 2022,
             inntekterSiste3Kalenderår = listOf(
-                InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2019), listOf(inntekter[0])),
-                InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2020), listOf(inntekter[1])),
-                InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), listOf(inntekter[2]))
+                InntekterForBeregning.inntekterForBeregning(Year.of(2019), listOf(inntekter[0])),
+                InntekterForBeregning.inntekterForBeregning(Year.of(2020), listOf(inntekter[1])),
+                InntekterForBeregning.inntekterForBeregning(Year.of(2021), listOf(inntekter[2]))
             ),
             fødselsdato = FØDSELSDATO
         )

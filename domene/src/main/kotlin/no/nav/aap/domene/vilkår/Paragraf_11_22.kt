@@ -2,6 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
+import no.nav.aap.domene.beregning.Yrkesskade
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
@@ -40,6 +41,8 @@ internal class Paragraf_11_22 private constructor(
     override fun erOppfylt() = tilstand.erOppfylt()
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
+    internal fun yrkesskade() = tilstand.yrkesskade(this)
+
     internal sealed class Tilstand(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
@@ -71,6 +74,10 @@ internal class Paragraf_11_22 private constructor(
             løsning: LøsningParagraf_11_22
         ) {
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
+        internal open fun yrkesskade(paragraf1122: Paragraf_11_22): Yrkesskade {
+            error("") //FIXME
         }
 
         object IkkeVurdert : Tilstand(
@@ -127,6 +134,8 @@ internal class Paragraf_11_22 private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun yrkesskade(paragraf1122: Paragraf_11_22) = paragraf1122.løsning.yrkesskade()
+
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,

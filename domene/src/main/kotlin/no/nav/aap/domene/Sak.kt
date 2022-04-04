@@ -3,7 +3,6 @@ package no.nav.aap.domene
 import no.nav.aap.domene.Sakstype.Companion.toDto
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.tidslinje.Tidslinje
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
@@ -294,18 +293,11 @@ internal class Sak private constructor(
 
             override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
                 løsning.lagreInntekter(sak.inntektshistorikk)
-                val inntektsgrunnlag =
-                    sak.inntektshistorikk.finnInntektsgrunnlag(
-                        sak.vurderingAvBeregningsdato.beregningsdato(),
-                        fødselsdato
-                    )
-                sak.vedtak = Vedtak(
-                    vedtaksid = UUID.randomUUID(),
-                    innvilget = true,
-                    inntektsgrunnlag = inntektsgrunnlag,
-                    vedtaksdato = LocalDate.now(),
-                    virkningsdato = LocalDate.now(),
-                    tidslinje = Tidslinje()
+
+                sak.vedtak = sak.sakstype.opprettVedtak(
+                    sak.inntektshistorikk,
+                    sak.vurderingAvBeregningsdato.beregningsdato(),
+                    fødselsdato
                 )
 
                 sak.tilstand(VedtakFattet, løsning)

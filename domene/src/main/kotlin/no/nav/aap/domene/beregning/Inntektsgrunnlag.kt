@@ -3,11 +3,14 @@ package no.nav.aap.domene.beregning
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt.Companion.summerInntekt
 import no.nav.aap.domene.beregning.Inntekt.Companion.toDto
-import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.toDto
+import no.nav.aap.domene.beregning.InntekterForBeregning.Companion.toDto
+import no.nav.aap.domene.beregning.InntekterForBeregning.Companion.totalBeregningsfaktor
+import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.inntektsgrunnlagForÅr
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregningsfaktor
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import no.nav.aap.domene.entitet.Grunnlagsfaktor.Companion.summer
+import no.nav.aap.dto.DtoInntekterForBeregning
 import no.nav.aap.dto.DtoInntektsgrunnlag
 import no.nav.aap.dto.DtoInntektsgrunnlagForÅr
 import java.time.LocalDate
@@ -15,7 +18,7 @@ import java.time.Year
 
 internal class Inntektsgrunnlag private constructor(
     private val beregningsdato: LocalDate,
-    private val inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
+    private val inntekterSiste3Kalenderår: List<InntekterForBeregning>,
     private val yrkesskade: Yrkesskade? = null,
     private val fødselsdato: Fødselsdato,
     private val sisteKalenderår: Year,
@@ -38,7 +41,7 @@ internal class Inntektsgrunnlag private constructor(
     internal companion object {
         internal fun inntektsgrunnlag(
             beregningsdato: LocalDate,
-            inntekterSiste3Kalenderår: List<InntektsgrunnlagForÅr>,
+            inntekterSiste3Kalenderår: List<InntekterForBeregning>,
             fødselsdato: Fødselsdato,
             yrkesskade: Yrkesskade? = null,
         ): Inntektsgrunnlag {
@@ -55,7 +58,7 @@ internal class Inntektsgrunnlag private constructor(
 
         internal fun gjenopprett(dtoInntektsgrunnlag: DtoInntektsgrunnlag) = Inntektsgrunnlag(
             beregningsdato = dtoInntektsgrunnlag.beregningsdato,
-            inntekterSiste3Kalenderår = InntektsgrunnlagForÅr.gjenopprett(dtoInntektsgrunnlag.inntekterSiste3Kalenderår),
+            inntekterSiste3Kalenderår = InntekterForBeregning.gjenopprett(dtoInntektsgrunnlag.inntekterSiste3Kalenderår),
             yrkesskade = dtoInntektsgrunnlag.yrkesskade?.let(
                 Yrkesskade.Companion::gjenopprett
             ),
@@ -82,13 +85,74 @@ internal class Inntektsgrunnlag private constructor(
         "Inntektsgrunnlag(inntekterSiste3Kalenderår=$inntekterSiste3Kalenderår)"
 }
 
+internal class InntekterForBeregning private constructor(
+    private val inntekter: List<Inntekt>,
+    private val inntektsgrunnlagForÅr: InntektsgrunnlagForÅr
+) {
+
+    internal companion object {
+
+        internal fun Iterable<InntekterForBeregning>.totalBeregningsfaktor(
+            sisteKalenderår: Year,
+            yrkesskade: Yrkesskade?
+        ) = map { it.inntektsgrunnlagForÅr }.totalBeregningsfaktor(sisteKalenderår, yrkesskade)
+
+        internal fun inntekterForBeregning(
+            år: Year,
+            inntekter: List<Inntekt>
+        ): InntekterForBeregning {
+            val beløpFørJustering = inntekter.summerInntekt()
+            val inntektsgrunnlagForÅr = inntektsgrunnlagForÅr(
+                år = år,
+                beløpFørJustering = beløpFørJustering
+            )
+            return InntekterForBeregning(
+                inntekter = inntekter,
+                inntektsgrunnlagForÅr = inntektsgrunnlagForÅr
+            )
+        }
+
+        internal fun Iterable<InntekterForBeregning>.toDto() = map(InntekterForBeregning::toDto)
+
+        internal fun gjenopprett(dtoInntekterForBeregning: Iterable<DtoInntekterForBeregning>) =
+            dtoInntekterForBeregning.map {
+                InntekterForBeregning(
+                    inntekter = Inntekt.gjenopprett(it.inntekter),
+                    inntektsgrunnlagForÅr = InntektsgrunnlagForÅr.gjenopprett(it.inntektsgrunnlagForÅr)
+                )
+            }
+    }
+
+    internal fun toDto() = DtoInntekterForBeregning(
+        inntekter = inntekter.toDto(),
+        inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toDto()
+    )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as InntekterForBeregning
+
+        if (inntekter != other.inntekter) return false
+        if (inntektsgrunnlagForÅr != other.inntektsgrunnlagForÅr) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = inntekter.hashCode()
+        result = 31 * result + inntektsgrunnlagForÅr.hashCode()
+        return result
+    }
+}
+
 internal class InntektsgrunnlagForÅr private constructor(
     private val år: Year,
-    private val inntekter: List<Inntekt>,
-    private val beløpFørJustering: Beløp = inntekter.summerInntekt(),
-    private val beløpJustertFor6G: Beløp = Grunnbeløp.beløpJustertFor6G(år, beløpFørJustering),
-    private val erBeløpJustertFor6G: Boolean = beløpFørJustering != beløpJustertFor6G,
-    private val grunnlagsfaktor: Grunnlagsfaktor = Grunnbeløp.finnBeregningsfaktor(år, beløpJustertFor6G)
+    private val beløpFørJustering: Beløp,
+    private val beløpJustertFor6G: Beløp,
+    private val erBeløpJustertFor6G: Boolean,
+    private val grunnlagsfaktor: Grunnlagsfaktor
 ) {
 
     internal companion object {
@@ -112,13 +176,10 @@ internal class InntektsgrunnlagForÅr private constructor(
         private fun Iterable<InntektsgrunnlagForÅr>.finnSisteKalenderår(sisteKalenderår: Year): List<InntektsgrunnlagForÅr> =
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
 
-        internal fun Iterable<InntektsgrunnlagForÅr>.toDto() = map(InntektsgrunnlagForÅr::toDto)
-
         internal fun gjenopprett(inntekterSiste3Kalenderår: Iterable<DtoInntektsgrunnlagForÅr>) =
             inntekterSiste3Kalenderår.map {
                 InntektsgrunnlagForÅr(
                     år = it.år,
-                    inntekter = Inntekt.gjenopprett(it.inntekter),
                     beløpFørJustering = it.beløpFørJustering.beløp,
                     beløpJustertFor6G = it.beløpJustertFor6G.beløp,
                     erBeløpJustertFor6G = it.erBeløpJustertFor6G,
@@ -129,23 +190,19 @@ internal class InntektsgrunnlagForÅr private constructor(
         internal fun gjenopprett(inntektsgrunnlagForYrkesskade: DtoInntektsgrunnlagForÅr) =
             InntektsgrunnlagForÅr(
                 år = inntektsgrunnlagForYrkesskade.år,
-                inntekter = Inntekt.gjenopprett(inntektsgrunnlagForYrkesskade.inntekter),
                 beløpFørJustering = inntektsgrunnlagForYrkesskade.beløpFørJustering.beløp,
                 beløpJustertFor6G = inntektsgrunnlagForYrkesskade.beløpJustertFor6G.beløp,
                 erBeløpJustertFor6G = inntektsgrunnlagForYrkesskade.erBeløpJustertFor6G,
                 grunnlagsfaktor = Grunnlagsfaktor(inntektsgrunnlagForYrkesskade.grunnlagsfaktor)
             )
 
-
         internal fun inntektsgrunnlagForÅr(
             år: Year,
-            inntekter: List<Inntekt>
+            beløpFørJustering: Beløp
         ): InntektsgrunnlagForÅr {
-            val beløpFørJustering = inntekter.summerInntekt()
             val beløpJustertFor6G = Grunnbeløp.beløpJustertFor6G(år, beløpFørJustering)
             return InntektsgrunnlagForÅr(
                 år = år,
-                inntekter = inntekter,
                 beløpFørJustering = beløpFørJustering,
                 beløpJustertFor6G = beløpJustertFor6G,
                 erBeløpJustertFor6G = beløpFørJustering != beløpJustertFor6G,
@@ -158,7 +215,6 @@ internal class InntektsgrunnlagForÅr private constructor(
 
     internal fun toDto() = DtoInntektsgrunnlagForÅr(
         år = år,
-        inntekter = inntekter.toDto(),
         beløpFørJustering = beløpFørJustering.toDto(),
         beløpJustertFor6G = beløpJustertFor6G.toDto(),
         erBeløpJustertFor6G = erBeløpJustertFor6G,
@@ -172,14 +228,20 @@ internal class InntektsgrunnlagForÅr private constructor(
         other as InntektsgrunnlagForÅr
 
         if (år != other.år) return false
-        if (inntekter != other.inntekter) return false
+        if (beløpFørJustering != other.beløpFørJustering) return false
+        if (beløpJustertFor6G != other.beløpJustertFor6G) return false
+        if (erBeløpJustertFor6G != other.erBeløpJustertFor6G) return false
+        if (grunnlagsfaktor != other.grunnlagsfaktor) return false
 
         return true
     }
 
     override fun hashCode(): Int {
         var result = år.hashCode()
-        result = 31 * result + inntekter.hashCode()
+        result = 31 * result + beløpFørJustering.hashCode()
+        result = 31 * result + beløpJustertFor6G.hashCode()
+        result = 31 * result + erBeløpJustertFor6G.hashCode()
+        result = 31 * result + grunnlagsfaktor.hashCode()
         return result
     }
 }
