@@ -291,6 +291,48 @@ internal class InntektsgrunnlagTest {
         assertEquals(493245.82.beløp, grunnlagForDag)
     }
 
+    @Test
+    fun `Yrkessakde - fra eksempel med 80 prosent yrkesskade med lavere inntekt på skadetidspunkt`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2020), 579957.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), 552000.beløp)
+        val yrkesskade = Yrkesskade(80.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2021, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(1 august 2021)
+
+        assertEquals(611849.36.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 70 prosent yrkesskade med lavere inntekt på skadetidspunkt`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2020), 579957.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), 552000.beløp)
+        val yrkesskade = Yrkesskade(70.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2021, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(1 august 2021)
+
+        assertEquals(611849.36.beløp, grunnlagForDag)
+    }
+
+    @Test
+    fun `Yrkessakde - fra eksempel med 30 prosent yrkesskade med lavere inntekt på skadetidspunkt`() {
+        val inntekter = listOf(
+            Inntekt(ARBEIDSGIVER, januar(2020), 579957.beløp)
+        )
+        val grunnlagsfaktorForYrkesskade = InntektsgrunnlagForÅr.inntektsgrunnlagForÅr(Year.of(2021), 552000.beløp)
+        val yrkesskade = Yrkesskade(30.0, grunnlagsfaktorForYrkesskade)
+
+        val grunnlag = inntekter.inntektsgrunnlag(1 august 2021, yrkesskade = yrkesskade)
+        val grunnlagForDag = grunnlag.grunnlagForDag(1 august 2021)
+
+        assertEquals(611849.36.beløp, grunnlagForDag)
+    }
+
     private fun Iterable<Inntekt>.inntektsgrunnlag(
         beregningsdato: LocalDate,
         fødselsdato: Fødselsdato = Fødselsdato(1 januar 1970),
