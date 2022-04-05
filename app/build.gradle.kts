@@ -44,7 +44,7 @@ dependencies {
             because("Mac M1")
         }
     }
-    implementation("io.confluent:kafka-streams-avro-serde:7.0.1") {
+    implementation("io.confluent:kafka-streams-avro-serde:7.1.0") {
         exclude("org.apache.kafka", "kafka-clients")
     }
 
