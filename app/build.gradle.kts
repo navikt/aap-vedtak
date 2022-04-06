@@ -31,7 +31,7 @@ dependencies {
     implementation("no.nav.security:token-validation-ktor:2.0.14")
     implementation("no.nav.security:token-client-core:2.0.14")
 
-    implementation("com.sksamuel.hoplite:hoplite-yaml:2.0.4")
+    implementation("com.sksamuel.hoplite:hoplite-yaml:2.1.0")
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.ktor:ktor-jackson:1.6.8")
