@@ -17,7 +17,7 @@ dependencies {
     implementation("io.ktor:ktor-client-cio:1.6.8")
 
     implementation("io.ktor:ktor-auth:1.6.8")
-    implementation("io.ktor:ktor-client-auth:1.6.8")
+    implementation("io.ktor:ktor-client-auth:2.0.0")
     implementation("io.ktor:ktor-client-logging:1.6.8")
 
     implementation("io.ktor:ktor-metrics-micrometer:1.6.8")
