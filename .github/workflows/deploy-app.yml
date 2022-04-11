@@ -31,7 +31,7 @@ jobs:
         with:
           arguments: test app:shadowJar --continue --no-daemon --no-build-cache
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: topology.puml
           path: app/build/topology.puml
