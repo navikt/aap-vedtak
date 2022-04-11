@@ -35,7 +35,7 @@ dependencies {
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.ktor:ktor-jackson:1.6.8")
-    runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.0.1")
+    runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.1")
 
     implementation("org.apache.kafka:kafka-clients:3.1.0")
     implementation("org.apache.kafka:kafka-streams:3.1.0")
