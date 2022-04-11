@@ -3,7 +3,6 @@ package no.nav.aap.domene
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.beregning.Yrkesskade as YrkesskadeBeregning
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.tidslinje.Tidslinje
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
@@ -98,8 +97,7 @@ internal abstract class Sakstype private constructor(
                 innvilget = true,
                 inntektsgrunnlag = inntektsgrunnlag,
                 vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now(),
-                tidslinje = Tidslinje()
+                virkningsdato = LocalDate.now()
             )
         }
 
@@ -143,8 +141,7 @@ internal abstract class Sakstype private constructor(
                 innvilget = true,
                 inntektsgrunnlag = inntektsgrunnlag,
                 vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now(),
-                tidslinje = Tidslinje()
+                virkningsdato = LocalDate.now()
             )
         }
 
@@ -190,8 +187,7 @@ internal abstract class Sakstype private constructor(
                 innvilget = true,
                 inntektsgrunnlag = inntektsgrunnlag,
                 vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now(),
-                tidslinje = Tidslinje()
+                virkningsdato = LocalDate.now()
             )
         }
 
