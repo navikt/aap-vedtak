@@ -28,4 +28,30 @@ internal class BeløpTest {
         val sum = listOf(Beløp(1.0), Beløp(1.0)).summerBeløp()
         assertEquals(Beløp(2.0), sum)
     }
+
+    @Test
+    fun `Pluss beløp funker`() {
+        assertEquals(Beløp(10.0), Beløp(4.0) + Beløp(6.0))
+    }
+
+    @Test
+    fun `Ganger beløp funker`() {
+        assertEquals(Beløp(30.0), Beløp(5.0) * Beløp(6.0))
+    }
+
+    @Test
+    fun `Ganger beløp med nummer funker`() {
+        assertEquals(Beløp(30.0), Beløp(5.0) * 6)
+    }
+
+    @Test
+    fun `Divisjon beløp funker`() {
+        assertEquals(5.0, Beløp(10.0) / Beløp(2.0))
+    }
+
+    @Test
+    fun `Divisjon beløp med nummer funker`() {
+        assertEquals(Beløp(5.0), Beløp(10.0) / 2)
+    }
+
 }
