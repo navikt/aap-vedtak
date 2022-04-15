@@ -40,7 +40,7 @@ dependencies {
     implementation("org.apache.kafka:kafka-clients:3.1.0")
     implementation("org.apache.kafka:kafka-streams:3.1.0")
     constraints {
-        implementation("org.rocksdb:rocksdbjni:6.29.4.1") {
+        implementation("org.rocksdb:rocksdbjni:7.1.1") {
             because("Mac M1")
         }
     }
