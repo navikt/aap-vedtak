@@ -11,7 +11,7 @@ dependencies {
 
     implementation("io.ktor:ktor-server-core:1.6.8")
     implementation("io.ktor:ktor-server-netty:1.6.8")
-    implementation("io.ktor:ktor-client-jackson:1.6.8")
+    implementation("io.ktor:ktor-client-jackson:2.0.0")
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2.2") {
             because("2.13.2 vulnerability")
