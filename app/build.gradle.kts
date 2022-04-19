@@ -9,7 +9,7 @@ plugins {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("io.ktor:ktor-server-core:1.6.8")
+    implementation("io.ktor:ktor-server-core:2.0.0")
     implementation("io.ktor:ktor-server-netty:1.6.8")
     implementation("io.ktor:ktor-client-jackson:1.6.8")
     constraints {
