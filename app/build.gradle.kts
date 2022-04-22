@@ -9,23 +9,25 @@ plugins {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("io.ktor:ktor-server-core:1.6.8")
-    implementation("io.ktor:ktor-server-netty:1.6.8")
-    implementation("io.ktor:ktor-client-jackson:1.6.8")
+    implementation("io.ktor:ktor-server-core:2.0.0")
+    implementation("io.ktor:ktor-server-netty:2.0.0")
+    implementation("io.ktor:ktor-client-jackson:2.0.0")
     constraints {
         implementation("com.fasterxml.jackson.core:jackson-databind:2.13.2.2") {
             because("2.13.2 vulnerability")
         }
     }
 
-    implementation("io.ktor:ktor-client-core:1.6.8")
-    implementation("io.ktor:ktor-client-cio:1.6.8")
+    implementation("io.ktor:ktor-client-core:2.0.0")
+    implementation("io.ktor:ktor-client-cio:2.0.0")
+    implementation("io.ktor:ktor-server-content-negotiation:2.0.0")
+    implementation("io.ktor:ktor-serialization-jackson:2.0.0")
 
     implementation("io.ktor:ktor-auth:1.6.8")
-    implementation("io.ktor:ktor-client-auth:1.6.8")
-    implementation("io.ktor:ktor-client-logging:1.6.8")
+    implementation("io.ktor:ktor-client-auth:2.0.0")
+    implementation("io.ktor:ktor-client-logging:2.0.0")
 
-    implementation("io.ktor:ktor-metrics-micrometer:1.6.8")
+    implementation("io.ktor:ktor-server-metrics-micrometer:2.0.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
 
     implementation("no.nav.aap.avro:sokere:3.0.2")
@@ -57,7 +59,7 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2")
 
     testImplementation(kotlin("test"))
-    testImplementation("io.ktor:ktor-server-test-host:1.6.8")
+    testImplementation("io.ktor:ktor-server-test-host:2.0.0")
     testImplementation("no.nav.security:mock-oauth2-server:0.4.4")
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
@@ -70,7 +72,7 @@ application {
 
 tasks {
     withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.jvmTarget = "18"
     }
 
     withType<Test> {

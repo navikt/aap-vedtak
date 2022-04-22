@@ -1,8 +1,8 @@
 package no.nav.aap.app.stream.mock
 
-import io.ktor.application.*
-import io.ktor.response.*
-import io.ktor.routing.*
+import io.ktor.server.application.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import no.nav.aap.app.kafka.Kafka
@@ -25,7 +25,7 @@ internal fun Application.soknadProducer(kafka: Kafka, topics: Topics) {
         get("/load/stop") {
             load = false
 
-            log.info("stopped producing.")
+            this@soknadProducer.log.info("stopped producing.")
             call.respondText("stopped producing.")
         }
 
@@ -36,7 +36,7 @@ internal fun Application.soknadProducer(kafka: Kafka, topics: Topics) {
                 produceLoad(topics, producer, logger)
             }
 
-            log.info("started producing.")
+            this@soknadProducer.log.info("started producing.")
             call.respondText("started producing.")
         }
     }
