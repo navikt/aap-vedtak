@@ -10,7 +10,7 @@ application {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("com.github.navikt.aap-libs:ktor-utils:0.0.18")
+    implementation("com.github.navikt.aap-libs:ktor-utils:0.0.20")
 
     implementation("io.ktor:ktor-server-core:2.0.0")
     implementation("io.ktor:ktor-server-netty:2.0.0")
