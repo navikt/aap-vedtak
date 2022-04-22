@@ -1,10 +1,10 @@
 package no.nav.aap
 
 import no.nav.aap.app.config.Config
-import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.createTopology
 import no.nav.aap.app.kafka.KStreamsUML
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.ktor.config.loadConfig
 import org.junit.jupiter.api.Test
 import org.slf4j.LoggerFactory
 

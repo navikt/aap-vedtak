@@ -297,28 +297,30 @@ internal class ApiTest {
     }
 }
 
-private fun <R> withTestApp(test: TestApplicationEngine.(mocks: Mocks) -> R): R = Mocks().use { mocks ->
-    val externalConfig = mapOf(
-        "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
-        "AZURE_OPENID_CONFIG_ISSUER" to "azure",
-        "AZURE_APP_WELL_KNOWN_URL" to mocks.azure.wellKnownUrl(),
-        "AZURE_APP_CLIENT_ID" to "vedtak",
-        "KAFKA_BROKERS" to "mock://kafka",
-        "KAFKA_TRUSTSTORE_PATH" to "",
-        "KAFKA_SECURITY_ENABLED" to "false",
-        "KAFKA_KEYSTORE_PATH" to "",
-        "KAFKA_CREDSTORE_PASSWORD" to "",
-        "KAFKA_CLIENT_ID" to "vedtak",
-        "KAFKA_GROUP_ID" to "vedtak-1",
-        "KAFKA_SCHEMA_REGISTRY" to mocks.kafka.schemaRegistryUrl,
-        "KAFKA_SCHEMA_REGISTRY_USER" to "",
-        "KAFKA_SCHEMA_REGISTRY_PASSWORD" to "",
-    )
-
-    return EnvironmentVariables(externalConfig).execute<R> {
-        withTestApplication(
-            { server(mocks.kafka) },
-            { test(mocks) }
-        )
+private fun withTestApp(test: ApplicationTestBuilder.(mocks: Mocks) -> Unit) = Mocks().use { mocks ->
+    EnvironmentVariables(containerProperties(mocks)).execute {
+        testApplication {
+            application {
+                server(mocks.kafka)
+                this@testApplication.test(mocks)
+            }
+        }
     }
 }
+
+private fun containerProperties(mocks: Mocks): Map<String, String> = mapOf(
+    "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
+    "AZURE_OPENID_CONFIG_ISSUER" to "azure",
+    "AZURE_APP_WELL_KNOWN_URL" to mocks.azure.wellKnownUrl(),
+    "AZURE_APP_CLIENT_ID" to "vedtak",
+    "KAFKA_BROKERS" to "mock://kafka",
+    "KAFKA_TRUSTSTORE_PATH" to "",
+    "KAFKA_SECURITY_ENABLED" to "false",
+    "KAFKA_KEYSTORE_PATH" to "",
+    "KAFKA_CREDSTORE_PASSWORD" to "",
+    "KAFKA_CLIENT_ID" to "vedtak",
+    "KAFKA_GROUP_ID" to "vedtak-1",
+    "KAFKA_SCHEMA_REGISTRY" to mocks.kafka.schemaRegistryUrl,
+    "KAFKA_SCHEMA_REGISTRY_USER" to "",
+    "KAFKA_SCHEMA_REGISTRY_PASSWORD" to "",
+)

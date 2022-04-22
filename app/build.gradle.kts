@@ -1,13 +1,16 @@
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
 plugins {
-    kotlin("jvm")
     id("com.github.johnrengelman.shadow")
     application
 }
 
+application {
+    mainClass.set("no.nav.aap.app.AppKt")
+}
+
 dependencies {
     implementation(project(":domene"))
+
+    implementation("com.github.navikt.aap-libs:ktor-utils:0.0.18")
 
     implementation("io.ktor:ktor-server-core:2.0.0")
     implementation("io.ktor:ktor-server-netty:2.0.0")
@@ -30,15 +33,14 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:2.0.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
 
-    implementation("no.nav.aap.avro:sokere:3.0.2")
-    implementation("no.nav.aap.avro:manuell:0.0.3")
-    implementation("no.nav.aap.avro:inntekter:0.0.2")
-    implementation("no.nav.aap.avro:medlem:1.1.6")
+    implementation("com.github.navikt:aap-avro:3.0.2-sokere")
+    implementation("com.github.navikt:aap-avro:0.0.3-manuell")
+    implementation("com.github.navikt:aap-avro:0.0.2-inntekter")
+    implementation("com.github.navikt:aap-avro:1.1.6-medlem")
 
     implementation("no.nav.security:token-validation-ktor:2.0.14")
     implementation("no.nav.security:token-client-core:2.0.14")
 
-    implementation("com.sksamuel.hoplite:hoplite-yaml:2.1.1")
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("io.ktor:ktor-jackson:1.6.8")
@@ -64,21 +66,4 @@ dependencies {
     // used to override env var runtime
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
     testImplementation("org.apache.kafka:kafka-streams-test-utils:3.1.0")
-}
-
-application {
-    mainClass.set("no.nav.aap.app.AppKt")
-}
-
-tasks {
-    withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "18"
-    }
-
-    withType<Test> {
-        useJUnitPlatform()
-        testLogging {
-            events("PASSED", "SKIPPED", "FAILED")
-        }
-    }
 }

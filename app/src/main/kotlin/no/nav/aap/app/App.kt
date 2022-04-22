@@ -14,13 +14,13 @@ import io.ktor.server.util.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.config.Config
-import no.nav.aap.app.config.loadConfig
 import no.nav.aap.app.kafka.*
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.mock.soknadProducer
 import no.nav.aap.app.stream.søknadStream
+import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.KafkaStreams.State
