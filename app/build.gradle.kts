@@ -37,7 +37,7 @@ dependencies {
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
 
     implementation("no.nav.security:token-validation-ktor:2.0.14")
-    implementation("no.nav.security:token-client-core:2.0.14")
+    implementation("no.nav.security:token-client-core:2.0.15")
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.2")
