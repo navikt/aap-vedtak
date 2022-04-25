@@ -8,7 +8,7 @@ application {
 }
 
 dependencies {
-    val aapLibVersion = "0.0.31"
+    val aapLibVersion = "0.0.32"
     implementation(project(":domene"))
 
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
