@@ -36,7 +36,7 @@ dependencies {
     implementation("io.ktor:ktor-server-metrics-micrometer:2.0.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
 
-    implementation("no.nav.security:token-validation-ktor:2.0.14")
+    implementation("no.nav.security:token-validation-ktor:2.0.15")
     implementation("no.nav.security:token-client-core:2.0.14")
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
