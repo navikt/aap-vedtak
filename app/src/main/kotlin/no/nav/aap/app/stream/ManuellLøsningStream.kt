@@ -1,8 +1,6 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.flatMapValues
-import no.nav.aap.app.kafka.mapValues
 import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto

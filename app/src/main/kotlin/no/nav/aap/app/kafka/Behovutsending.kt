@@ -6,6 +6,7 @@ import no.nav.aap.avro.medlem.v1.Medlem
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Topic
+import no.nav.aap.kafka.streams.mapValues
 import no.nav.aap.kafka.streams.named
 import no.nav.aap.kafka.streams.produce
 import org.apache.kafka.streams.kstream.Branched
