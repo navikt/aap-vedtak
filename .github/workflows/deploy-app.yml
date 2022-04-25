@@ -20,7 +20,7 @@ jobs:
     steps:
       - uses: styfle/cancel-workflow-action@0.9.1
       - uses: actions/checkout@v3
-      - uses: actions/setup-java@v2
+      - uses: actions/setup-java@v3
         with:
           java-version: 18
           distribution: 'temurin'
@@ -31,7 +31,7 @@ jobs:
         with:
           arguments: test app:shadowJar --continue --no-daemon --no-build-cache
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: topology.puml
           path: app/build/topology.puml
