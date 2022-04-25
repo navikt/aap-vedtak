@@ -1,26 +1,31 @@
 package no.nav.aap.app.stream
 
-import no.nav.aap.app.kafka.*
+import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.kafka.flatMapValues
+import no.nav.aap.app.kafka.mapValues
+import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.DtoManuell
 import no.nav.aap.dto.DtoSøker
 import no.nav.aap.hendelse.DtoBehov
+import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
-    val søkerOgBehov = stream(topics.manuell.name, topics.manuell.consumed("losning-mottatt"))
-        .logConsumed()
-        .join(søkere, LøsningAndSøker::create, topics.manuell.joined(topics.søkere))
-        .mapValues(::håndterManuellLøsning)
+    val søkerOgBehov =
+        consume(topics.manuell)
+            .filterNotNull { "filter-manuell-tombstones" }
+            .join(topics.manuell with topics.søkere, søkere, LøsningAndSøker::create)
+            .mapValues(::håndterManuellLøsning)
 
     søkerOgBehov
         .mapValues(named("manuell-hent-ut-soker")) { (søker) -> søker }
-        .to(topics.søkere, topics.søkere.produced("produced-soker-med-handtert-losning"))
+        .produce(topics.søkere) { "produced-soker-med-handtert-losning" }
 
     søkerOgBehov
         .flatMapValues(named("manuell-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }

@@ -1,16 +1,14 @@
 package no.nav.aap.app
 
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
-import com.fasterxml.jackson.module.kotlin.readValue
 import io.ktor.server.testing.*
+import no.nav.aap.app.kafka.SØKERE_STORE_NAME
+import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.dto.*
+import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.streams.TestInputTopic
-import org.apache.kafka.streams.TestOutputTopic
-import org.apache.kafka.streams.state.KeyValueStore
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -19,7 +17,6 @@ import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 import no.nav.aap.avro.inntekter.v1.Inntekt as AvroInntekt
-import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.inntekter.v1.Response as AvroInntekterResponse
 import no.nav.aap.avro.manuell.v1.LosningVurderingAvBeregningsdato as AvroLøsningVurderingAvBeregningsdato
 import no.nav.aap.avro.manuell.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
@@ -31,7 +28,6 @@ import no.nav.aap.avro.manuell.v1.Losning_11_5 as AvroLøsning_11_5
 import no.nav.aap.avro.manuell.v1.Losning_11_6 as AvroLøsning_11_6
 import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
-import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 import no.nav.aap.avro.medlem.v1.Response as AvroMedlemResponse
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
@@ -40,7 +36,16 @@ internal class ApiTest {
     @Test
     fun `søker får innvilget vedtak`() {
         withTestApp { mocks ->
-            initializeTopics(mocks.kafka)
+            val config = loadConfig<Config>()
+            val topics = Topics(config.kafka)
+
+            val søknadTopic = mocks.kafka.inputTopic(topics.søknad)
+            val medlemTopic = mocks.kafka.inputTopic(topics.medlem)
+            val medlemOutputTopic = mocks.kafka.outputTopic(topics.medlem)
+            val manuellTopic = mocks.kafka.inputTopic(topics.manuell)
+            val inntektTopic = mocks.kafka.inputTopic(topics.inntekter)
+            val inntektOutputTopic = mocks.kafka.outputTopic(topics.inntekter)
+            val stateStore = mocks.kafka.getStore<AvroSøker>(SØKERE_STORE_NAME)
 
             søknadTopic.produce("123") {
                 JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
@@ -53,16 +58,14 @@ internal class ApiTest {
                 }
             }
 
-            produserLøsning(key = "123", losning_11_3_manuell = AvroLøsning_11_3(true))
-            produserLøsning(key = "123", losning_11_5_manuell = AvroLøsning_11_5(60))
-            produserLøsning(key = "123", losning_11_6_manuell = AvroLøsning_11_6(true))
-            produserLøsning(key = "123", losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true))
-            produserLøsning(key = "123", losning_11_29_manuell = AvroLøsning_11_29(true))
-            produserLøsning(
+            manuellTopic.produserLøsning(key = "123", losning_11_3_manuell = AvroLøsning_11_3(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_5_manuell = AvroLøsning_11_5(60))
+            manuellTopic.produserLøsning(key = "123", losning_11_6_manuell = AvroLøsning_11_6(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_29_manuell = AvroLøsning_11_29(true))
+            manuellTopic.produserLøsning(
                 key = "123",
-                losningVurderingAvBeregningsdato = AvroLøsningVurderingAvBeregningsdato(
-                    LocalDate.of(2022, 1, 1)
-                )
+                losningVurderingAvBeregningsdato = AvroLøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
 
             val inntektRequest = inntektOutputTopic.readValue()
@@ -245,33 +248,7 @@ internal class ApiTest {
         }
     }
 
-    companion object {
-        internal fun initializeTopics(kafka: KStreamsMock) {
-            søknadTopic = kafka.inputJsonTopic("aap.aap-soknad-sendt.v1")
-            medlemTopic = kafka.inputAvroTopic("aap.medlem.v1")
-            medlemOutputTopic = kafka.outputAvroTopic("aap.medlem.v1")
-            manuellTopic = kafka.inputAvroTopic("aap.manuell.v1")
-            inntektTopic = kafka.inputAvroTopic("aap.inntekter.v1")
-            inntektOutputTopic = kafka.outputAvroTopic("aap.inntekter.v1")
-            søkerOutputTopic = kafka.outputAvroTopic("aap.sokere.v1")
-            stateStore = kafka.getKeyValueStore(SØKERE_STORE_NAME)
-        }
-
-        inline fun <reified T> TestApplicationResponse.parseBody(): T = objectMapper.readValue(content!!)
-
-        private val objectMapper = jacksonObjectMapper().apply { registerModule(JavaTimeModule()) }
-
-        private lateinit var søknadTopic: TestInputTopic<String, JsonSøknad>
-        private lateinit var medlemTopic: TestInputTopic<String, AvroMedlem>
-        private lateinit var medlemOutputTopic: TestOutputTopic<String, AvroMedlem>
-        private lateinit var manuellTopic: TestInputTopic<String, AvroManuell>
-        private lateinit var inntektTopic: TestInputTopic<String, AvroInntekter>
-        private lateinit var inntektOutputTopic: TestOutputTopic<String, AvroInntekter>
-        private lateinit var søkerOutputTopic: TestOutputTopic<String, AvroSøker>
-        private lateinit var stateStore: KeyValueStore<String, AvroSøker>
-    }
-
-    private fun produserLøsning(
+    private fun TestInputTopic<String, AvroManuell>.produserLøsning(
         key: String,
         losning_11_2_manuell: AvroLøsning_11_2? = null,
         losning_11_3_manuell: AvroLøsning_11_3? = null,
@@ -282,7 +259,7 @@ internal class ApiTest {
         losning_11_29_manuell: AvroLøsning_11_29? = null,
         losningVurderingAvBeregningsdato: AvroLøsningVurderingAvBeregningsdato? = null
     ) {
-        manuellTopic.produce(key) {
+        produce(key) {
             AvroManuell(
                 losning_11_2_manuell,
                 losning_11_3_manuell,
@@ -298,7 +275,7 @@ internal class ApiTest {
 }
 
 private fun withTestApp(test: ApplicationTestBuilder.(mocks: Mocks) -> Unit) = Mocks().use { mocks ->
-    EnvironmentVariables(containerProperties(mocks)).execute {
+    EnvironmentVariables(containerProperties()).execute {
         testApplication {
             application {
                 server(mocks.kafka)
@@ -308,11 +285,8 @@ private fun withTestApp(test: ApplicationTestBuilder.(mocks: Mocks) -> Unit) = M
     }
 }
 
-private fun containerProperties(mocks: Mocks): Map<String, String> = mapOf(
+private fun containerProperties(): Map<String, String> = mapOf(
     "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
-    "AZURE_OPENID_CONFIG_ISSUER" to "azure",
-    "AZURE_APP_WELL_KNOWN_URL" to mocks.azure.wellKnownUrl(),
-    "AZURE_APP_CLIENT_ID" to "vedtak",
     "KAFKA_BROKERS" to "mock://kafka",
     "KAFKA_TRUSTSTORE_PATH" to "",
     "KAFKA_SECURITY_ENABLED" to "false",
@@ -320,7 +294,7 @@ private fun containerProperties(mocks: Mocks): Map<String, String> = mapOf(
     "KAFKA_CREDSTORE_PASSWORD" to "",
     "KAFKA_CLIENT_ID" to "vedtak",
     "KAFKA_GROUP_ID" to "vedtak-1",
-    "KAFKA_SCHEMA_REGISTRY" to mocks.kafka.schemaRegistryUrl,
+    "KAFKA_SCHEMA_REGISTRY" to "mock://schema-registry",
     "KAFKA_SCHEMA_REGISTRY_USER" to "",
     "KAFKA_SCHEMA_REGISTRY_PASSWORD" to "",
 )

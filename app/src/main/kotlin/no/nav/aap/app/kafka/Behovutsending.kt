@@ -5,6 +5,9 @@ import no.nav.aap.avro.inntekter.v1.Request
 import no.nav.aap.avro.medlem.v1.Medlem
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
+import no.nav.aap.kafka.streams.Topic
+import no.nav.aap.kafka.streams.named
+import no.nav.aap.kafka.streams.produce
 import org.apache.kafka.streams.kstream.Branched
 import org.apache.kafka.streams.kstream.BranchedKStream
 import org.apache.kafka.streams.kstream.KStream
@@ -19,7 +22,7 @@ internal fun KStream<String, DtoBehov>.sendBehov(name: String, topics: Topics) {
 }
 
 private fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
-    topic: Topic<String, AVROVALUE>,
+    topic: Topic<AVROVALUE>,
     branchName: String,
     predicate: (DtoBehov) -> Boolean,
     getMapper: () -> MAPPER
@@ -27,7 +30,7 @@ private fun <AVROVALUE : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
     branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
         chain
             .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toAvro() }
-            .to(topic, topic.produced("branch-$branchName-produced-behov"))
+            .produce(topic) { "branch-$branchName-produced-behov" }
     }.withName("-branch-$branchName"))
 
 private interface ToAvro<out AVROVALUE> {

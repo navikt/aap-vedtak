@@ -13,30 +13,32 @@ import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.aap.app.config.Config
-import no.nav.aap.app.kafka.*
+import no.nav.aap.app.kafka.SØKERE_STORE_NAME
+import no.nav.aap.app.kafka.Tables
+import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.mock.soknadProducer
 import no.nav.aap.app.stream.søknadStream
+import no.nav.aap.kafka.KafkaConfig
+import no.nav.aap.kafka.streams.*
+import no.nav.aap.kafka.streams.store.scheduleCleanup
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.streams.KafkaStreams.State
 import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
-import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-internal const val SØKERE_STORE_NAME = "soker-state-store-v1"
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-internal fun Application.server(kafka: Kafka = KStreams()) {
+data class Config(val kafka: KafkaConfig)
+
+internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val config = loadConfig<Config>()
 
@@ -47,23 +49,24 @@ internal fun Application.server(kafka: Kafka = KStreams()) {
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
     val topics = Topics(config.kafka)
-    val topology = createTopology(topics)
-    kafka.start(topology, config.kafka, prometheus)
+    val tables = Tables(topics)
 
-    soknadProducer(kafka, topics)
+    kafka.start(config.kafka, prometheus) {
+        streamsBuilder(topics, tables)
+    }
+
+    soknadProducer(kafka, config.kafka, topics)
 
     routing {
-        devTools(kafka, topics)
+        devTools(kafka, config.kafka, topics)
         actuator(prometheus, kafka)
     }
 }
 
-internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
-    val søkerKTable = stream(topics.søkere.name, topics.søkere.consumed("soker-consumed"))
-        .logConsumed()
-        .filter { _, value -> value != null }
-        .peek { key, value -> secureLog.info("produced [$SØKERE_STORE_NAME] K:$key V:$value") }
-        .toTable(named("sokere-as-ktable"), materialized<AvroSøker>(SØKERE_STORE_NAME, topics.søkere))
+internal fun StreamsBuilder.streamsBuilder(topics: Topics, tables: Tables) {
+    val søkerKTable = consume(topics.søkere)
+        .filterNotNull { "filter-soker-tombstones" }
+        .produce(tables.søkere)
 
     søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) { record ->
         søkereToDelete.removeIf { it == record.value().personident }
@@ -73,29 +76,28 @@ internal fun createTopology(topics: Topics): Topology = StreamsBuilder().apply {
     medlemStream(søkerKTable, topics)
     manuellStream(søkerKTable, topics)
     inntekterStream(søkerKTable, topics)
-}.build()
+}
 
-private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: Kafka) {
+private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStreams) {
     route("/actuator") {
-        get("/metrics") { call.respond(prometheus.scrape()) }
+        get("/metrics") {
+            call.respond(prometheus.scrape())
+        }
         get("/live") {
-            val status = if (kafka.state() == State.ERROR) HttpStatusCode.InternalServerError else HttpStatusCode.OK
+            val status = if (kafka.isLive()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
             call.respond(status, "vedtak")
         }
         get("/ready") {
-            val healthy = kafka.state() in listOf(State.CREATED, State.RUNNING, State.REBALANCING)
-            when (healthy && kafka.started()) {
-                true -> call.respond(HttpStatusCode.OK, "vedtak")
-                false -> call.respond(HttpStatusCode.InternalServerError, "vedtak")
-            }
+            val status = if (kafka.isReady()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
+            call.respond(status, "vedtak")
         }
     }
 }
 
 val søkereToDelete: MutableList<String> = mutableListOf()
 
-private fun Routing.devTools(kafka: Kafka, topics: Topics) {
-    val søkerProducer = kafka.createProducer(topics.søkere)
+private fun Routing.devTools(kafka: KStreams, config: KafkaConfig, topics: Topics) {
+    val søkerProducer = kafka.createProducer(config, topics.søkere)
 
     fun <V> Producer<String, V>.tombstone(key: String) {
         send(ProducerRecord(topics.søkere.name, key, null)).get()

@@ -5,10 +5,11 @@ import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import no.nav.aap.app.kafka.Kafka
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
+import no.nav.aap.kafka.KafkaConfig
+import no.nav.aap.kafka.streams.KStreams
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.slf4j.Logger
@@ -17,8 +18,8 @@ import java.time.LocalDate
 import java.util.concurrent.atomic.AtomicInteger
 import kotlin.random.Random
 
-internal fun Application.soknadProducer(kafka: Kafka, topics: Topics) {
-    val producer = kafka.createProducer(topics.søknad)
+internal fun Application.soknadProducer(kafka: KStreams, config: KafkaConfig, topics: Topics) {
+    val producer = kafka.createProducer(config, topics.søknad)
     val logger = LoggerFactory.getLogger("soknadProducer")
 
     routing {

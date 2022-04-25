@@ -8,25 +8,27 @@ queue "aap.manuell.v1" <<topic>> as aap_manuell_v1
 queue "aap.medlem.v1-joined-aap.sokere.v1-repartition" <<topic>> as aap_medlem_v1_joined_aap_sokere_v1_repartition
 package "Sub-topology: 0" {
 	database "soker-state-store-v1" <<State Store>> as soker_state_store_v1
-	agent "soknad-mottatt" <<Source>> as soknad_mottatt
-	agent "KSTREAM-TRANSFORMVALUES-0000000008" <<Processor>> as KSTREAM_TRANSFORMVALUES_0000000008
-	agent "losning-mottatt" <<Source>> as losning_mottatt
-	agent "KSTREAM-TRANSFORMVALUES-0000000037" <<Processor>> as KSTREAM_TRANSFORMVALUES_0000000037
+	agent "consume-aap.aap-soknad-sendt.v1" <<Source>> as consume_aap_aap_soknad_sendt_v1
+	agent "consume-aap.manuell.v1" <<Source>> as consume_aap_manuell_v1
+	agent "KSTREAM-PEEK-0000000008" <<Processor>> as KSTREAM_PEEK_0000000008
+	agent "KSTREAM-PEEK-0000000038" <<Processor>> as KSTREAM_PEEK_0000000038
+	agent "filter-manuell-tombstones" <<Processor>> as filter_manuell_tombstones
+	agent "filter-soknad-tombstone" <<Processor>> as filter_soknad_tombstone
 	agent "aap.aap-soknad-sendt.v1-joined-aap.sokere.v1" <<Processor>> as aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	agent "aap.manuell.v1-joined-aap.sokere.v1" <<Processor>> as aap_manuell_v1_joined_aap_sokere_v1
-	agent "skip-eksisterende-soker" <<Processor>> as skip_eksisterende_soker
-	agent "KSTREAM-MAPVALUES-0000000039" <<Processor>> as KSTREAM_MAPVALUES_0000000039
-	agent "opprett-soknad" <<Processor>> as opprett_soknad
+	agent "KSTREAM-MAPVALUES-0000000011" <<Processor>> as KSTREAM_MAPVALUES_0000000011
+	agent "KSTREAM-MAPVALUES-0000000041" <<Processor>> as KSTREAM_MAPVALUES_0000000041
 	agent "manuell-hent-ut-behov" <<Processor>> as manuell_hent_ut_behov
 	agent "soknad-hent-ut-behov" <<Processor>> as soknad_hent_ut_behov
 	agent "manuell-split-behov" <<Processor>> as manuell_split_behov
 	agent "soknad-split-behov" <<Processor>> as soknad_split_behov
-	agent "inntekter-mottatt" <<Source>> as inntekter_mottatt
-	agent "soker-consumed" <<Source>> as soker_consumed
-	agent "KSTREAM-TRANSFORMVALUES-0000000001" <<Processor>> as KSTREAM_TRANSFORMVALUES_0000000001
-	agent "KSTREAM-TRANSFORMVALUES-0000000054" <<Processor>> as KSTREAM_TRANSFORMVALUES_0000000054
-	agent "KSTREAM-FILTER-0000000002" <<Processor>> as KSTREAM_FILTER_0000000002
+	agent "consume-aap.inntekter.v1" <<Source>> as consume_aap_inntekter_v1
+	agent "KSTREAM-PEEK-0000000056" <<Processor>> as KSTREAM_PEEK_0000000056
+	agent "consume-aap.sokere.v1" <<Source>> as consume_aap_sokere_v1
+	agent "KSTREAM-PEEK-0000000001" <<Processor>> as KSTREAM_PEEK_0000000001
+	agent "remove-inntekter-tombstones" <<Processor>> as remove_inntekter_tombstones
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-source" <<Source>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_source
+	agent "filter-soker-tombstones" <<Processor>> as filter_soker_tombstones
 	agent "inntekter-filter-responses" <<Processor>> as inntekter_filter_responses
 	agent "KSTREAM-PEEK-0000000003" <<Processor>> as KSTREAM_PEEK_0000000003
 	agent "aap.inntekter.v1-joined-aap.sokere.v1" <<Processor>> as aap_inntekter_v1_joined_aap_sokere_v1
@@ -35,23 +37,23 @@ package "Sub-topology: 0" {
 	agent "manuell-split-behov-branch-manuell-medlem" <<Processor>> as manuell_split_behov_branch_manuell_medlem
 	agent "soknad-split-behov-branch-soknad-inntekter" <<Processor>> as soknad_split_behov_branch_soknad_inntekter
 	agent "soknad-split-behov-branch-soknad-medlem" <<Processor>> as soknad_split_behov_branch_soknad_medlem
-	agent "KSTREAM-MAPVALUES-0000000033" <<Processor>> as KSTREAM_MAPVALUES_0000000033
-	agent "KSTREAM-MAPVALUES-0000000057" <<Processor>> as KSTREAM_MAPVALUES_0000000057
+	agent "KSTREAM-MAPVALUES-0000000034" <<Processor>> as KSTREAM_MAPVALUES_0000000034
+	agent "KSTREAM-MAPVALUES-0000000060" <<Processor>> as KSTREAM_MAPVALUES_0000000060
 	agent "branch-manuell-inntekter-map-behov" <<Processor>> as branch_manuell_inntekter_map_behov
 	agent "branch-manuell-medlem-map-behov" <<Processor>> as branch_manuell_medlem_map_behov
 	agent "branch-soknad-inntekter-map-behov" <<Processor>> as branch_soknad_inntekter_map_behov
 	agent "branch-soknad-medlem-map-behov" <<Processor>> as branch_soknad_medlem_map_behov
 	agent "manuell-hent-ut-soker" <<Processor>> as manuell_hent_ut_soker
-	agent "sokere-as-ktable" <<Processor>> as sokere_as_ktable
+	agent "sokere-as-table" <<Processor>> as sokere_as_table
 	agent "soknad-hent-ut-soker" <<Processor>> as soknad_hent_ut_soker
 	agent "KSTREAM-PEEK-0000000013" <<Processor>> as KSTREAM_PEEK_0000000013
 	agent "KSTREAM-PEEK-0000000019" <<Processor>> as KSTREAM_PEEK_0000000019
 	agent "KSTREAM-PEEK-0000000023" <<Processor>> as KSTREAM_PEEK_0000000023
-	agent "KSTREAM-PEEK-0000000034" <<Processor>> as KSTREAM_PEEK_0000000034
-	agent "KSTREAM-PEEK-0000000041" <<Processor>> as KSTREAM_PEEK_0000000041
-	agent "KSTREAM-PEEK-0000000047" <<Processor>> as KSTREAM_PEEK_0000000047
-	agent "KSTREAM-PEEK-0000000051" <<Processor>> as KSTREAM_PEEK_0000000051
-	agent "KSTREAM-PEEK-0000000058" <<Processor>> as KSTREAM_PEEK_0000000058
+	agent "KSTREAM-PEEK-0000000035" <<Processor>> as KSTREAM_PEEK_0000000035
+	agent "KSTREAM-PEEK-0000000043" <<Processor>> as KSTREAM_PEEK_0000000043
+	agent "KSTREAM-PEEK-0000000049" <<Processor>> as KSTREAM_PEEK_0000000049
+	agent "KSTREAM-PEEK-0000000053" <<Processor>> as KSTREAM_PEEK_0000000053
+	agent "KSTREAM-PEEK-0000000061" <<Processor>> as KSTREAM_PEEK_0000000061
 	agent "KTABLE-TOSTREAM-0000000005" <<Processor>> as KTABLE_TOSTREAM_0000000005
 	agent "KSTREAM-PROCESSOR-0000000006" <<Processor>> as KSTREAM_PROCESSOR_0000000006
 	agent "branch-manuell-inntekter-produced-behov" <<Sink>> as branch_manuell_inntekter_produced_behov
@@ -62,16 +64,16 @@ package "Sub-topology: 0" {
 	agent "produced-soker-med-handtert-inntekter" <<Sink>> as produced_soker_med_handtert_inntekter
 	agent "produced-soker-med-handtert-losning" <<Sink>> as produced_soker_med_handtert_losning
 	agent "produced-soker-med-medlem" <<Sink>> as produced_soker_med_medlem
-	aap_aap_soknad_sendt_v1 --> soknad_mottatt
-	aap_manuell_v1 --> losning_mottatt
+	aap_aap_soknad_sendt_v1 --> consume_aap_aap_soknad_sendt_v1
+	aap_manuell_v1 --> consume_aap_manuell_v1
 	soker_state_store_v1 -- aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	soker_state_store_v1 -- aap_manuell_v1_joined_aap_sokere_v1
-	aap_inntekter_v1 --> inntekter_mottatt
-	aap_sokere_v1 --> soker_consumed
+	aap_inntekter_v1 --> consume_aap_inntekter_v1
+	aap_sokere_v1 --> consume_aap_sokere_v1
 	aap_medlem_v1_joined_aap_sokere_v1_repartition --> aap_medlem_v1_joined_aap_sokere_v1_repartition_source
 	soker_state_store_v1 -- aap_inntekter_v1_joined_aap_sokere_v1
 	soker_state_store_v1 -- aap_medlem_v1_joined_aap_sokere_v1
-	soker_state_store_v1 -- sokere_as_ktable
+	soker_state_store_v1 -- sokere_as_table
 	soker_state_store_v1 -- KSTREAM_PROCESSOR_0000000006
 	aap_inntekter_v1 <-- branch_manuell_inntekter_produced_behov
 	aap_medlem_v1 <-- branch_manuell_medlem_produced_behov
@@ -81,68 +83,72 @@ package "Sub-topology: 0" {
 	aap_sokere_v1 <-- produced_soker_med_handtert_inntekter
 	aap_sokere_v1 <-- produced_soker_med_handtert_losning
 	aap_sokere_v1 <-- produced_soker_med_medlem
-	soknad_mottatt --> KSTREAM_TRANSFORMVALUES_0000000008
-	KSTREAM_TRANSFORMVALUES_0000000008 --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
-	losning_mottatt --> KSTREAM_TRANSFORMVALUES_0000000037
-	KSTREAM_TRANSFORMVALUES_0000000037 --> aap_manuell_v1_joined_aap_sokere_v1
-	aap_aap_soknad_sendt_v1_joined_aap_sokere_v1 --> skip_eksisterende_soker
-	aap_manuell_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000039
-	skip_eksisterende_soker --> opprett_soknad
-	KSTREAM_MAPVALUES_0000000039 --> manuell_hent_ut_behov
-	KSTREAM_MAPVALUES_0000000039 --> manuell_hent_ut_soker
-	opprett_soknad --> soknad_hent_ut_behov
-	opprett_soknad --> soknad_hent_ut_soker
+	consume_aap_aap_soknad_sendt_v1 --> KSTREAM_PEEK_0000000008
+	consume_aap_manuell_v1 --> KSTREAM_PEEK_0000000038
+	KSTREAM_PEEK_0000000008 --> filter_soknad_tombstone
+	KSTREAM_PEEK_0000000038 --> filter_manuell_tombstones
+	filter_manuell_tombstones --> aap_manuell_v1_joined_aap_sokere_v1
+	filter_soknad_tombstone --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
+	aap_aap_soknad_sendt_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000011
+	aap_manuell_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000041
+	KSTREAM_MAPVALUES_0000000011 --> soknad_hent_ut_behov
+	KSTREAM_MAPVALUES_0000000011 --> soknad_hent_ut_soker
+	KSTREAM_MAPVALUES_0000000041 --> manuell_hent_ut_behov
+	KSTREAM_MAPVALUES_0000000041 --> manuell_hent_ut_soker
 	manuell_hent_ut_behov --> manuell_split_behov
 	soknad_hent_ut_behov --> soknad_split_behov
 	manuell_split_behov --> manuell_split_behov_branch_manuell_inntekter
 	manuell_split_behov --> manuell_split_behov_branch_manuell_medlem
 	soknad_split_behov --> soknad_split_behov_branch_soknad_medlem
 	soknad_split_behov --> soknad_split_behov_branch_soknad_inntekter
-	inntekter_mottatt --> KSTREAM_TRANSFORMVALUES_0000000054
-	soker_consumed --> KSTREAM_TRANSFORMVALUES_0000000001
-	KSTREAM_TRANSFORMVALUES_0000000001 --> KSTREAM_FILTER_0000000002
-	KSTREAM_TRANSFORMVALUES_0000000054 --> inntekter_filter_responses
-	KSTREAM_FILTER_0000000002 --> KSTREAM_PEEK_0000000003
+	consume_aap_inntekter_v1 --> KSTREAM_PEEK_0000000056
+	KSTREAM_PEEK_0000000056 --> remove_inntekter_tombstones
+	consume_aap_sokere_v1 --> KSTREAM_PEEK_0000000001
+	KSTREAM_PEEK_0000000001 --> filter_soker_tombstones
+	remove_inntekter_tombstones --> inntekter_filter_responses
 	aap_medlem_v1_joined_aap_sokere_v1_repartition_source --> aap_medlem_v1_joined_aap_sokere_v1
+	filter_soker_tombstones --> KSTREAM_PEEK_0000000003
 	inntekter_filter_responses --> aap_inntekter_v1_joined_aap_sokere_v1
-	KSTREAM_PEEK_0000000003 --> sokere_as_ktable
-	aap_inntekter_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000057
-	aap_medlem_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000033
+	KSTREAM_PEEK_0000000003 --> sokere_as_table
+	aap_inntekter_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000060
+	aap_medlem_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000034
 	manuell_split_behov_branch_manuell_inntekter --> branch_manuell_inntekter_map_behov
 	manuell_split_behov_branch_manuell_medlem --> branch_manuell_medlem_map_behov
 	soknad_split_behov_branch_soknad_inntekter --> branch_soknad_inntekter_map_behov
 	soknad_split_behov_branch_soknad_medlem --> branch_soknad_medlem_map_behov
-	KSTREAM_MAPVALUES_0000000033 --> KSTREAM_PEEK_0000000034
-	KSTREAM_MAPVALUES_0000000057 --> KSTREAM_PEEK_0000000058
-	branch_manuell_inntekter_map_behov --> KSTREAM_PEEK_0000000051
-	branch_manuell_medlem_map_behov --> KSTREAM_PEEK_0000000047
+	KSTREAM_MAPVALUES_0000000034 --> KSTREAM_PEEK_0000000035
+	KSTREAM_MAPVALUES_0000000060 --> KSTREAM_PEEK_0000000061
+	branch_manuell_inntekter_map_behov --> KSTREAM_PEEK_0000000053
+	branch_manuell_medlem_map_behov --> KSTREAM_PEEK_0000000049
 	branch_soknad_inntekter_map_behov --> KSTREAM_PEEK_0000000023
 	branch_soknad_medlem_map_behov --> KSTREAM_PEEK_0000000019
-	manuell_hent_ut_soker --> KSTREAM_PEEK_0000000041
-	sokere_as_ktable --> KTABLE_TOSTREAM_0000000005
+	manuell_hent_ut_soker --> KSTREAM_PEEK_0000000043
+	sokere_as_table --> KTABLE_TOSTREAM_0000000005
 	soknad_hent_ut_soker --> KSTREAM_PEEK_0000000013
 	KSTREAM_PEEK_0000000013 --> produced_ny_soker
 	KSTREAM_PEEK_0000000019 --> branch_soknad_medlem_produced_behov
 	KSTREAM_PEEK_0000000023 --> branch_soknad_inntekter_produced_behov
-	KSTREAM_PEEK_0000000034 --> produced_soker_med_medlem
-	KSTREAM_PEEK_0000000041 --> produced_soker_med_handtert_losning
-	KSTREAM_PEEK_0000000047 --> branch_manuell_medlem_produced_behov
-	KSTREAM_PEEK_0000000051 --> branch_manuell_inntekter_produced_behov
-	KSTREAM_PEEK_0000000058 --> produced_soker_med_handtert_inntekter
+	KSTREAM_PEEK_0000000035 --> produced_soker_med_medlem
+	KSTREAM_PEEK_0000000043 --> produced_soker_med_handtert_losning
+	KSTREAM_PEEK_0000000049 --> branch_manuell_medlem_produced_behov
+	KSTREAM_PEEK_0000000053 --> branch_manuell_inntekter_produced_behov
+	KSTREAM_PEEK_0000000061 --> produced_soker_med_handtert_inntekter
 	KTABLE_TOSTREAM_0000000005 --> KSTREAM_PROCESSOR_0000000006
 }
 package "Sub-topology: 1" {
-	agent "medlem-mottatt" <<Source>> as medlem_mottatt
-	agent "KSTREAM-TRANSFORMVALUES-0000000026" <<Processor>> as KSTREAM_TRANSFORMVALUES_0000000026
-	agent "filter-responses" <<Processor>> as filter_responses
+	agent "consume-aap.medlem.v1" <<Source>> as consume_aap_medlem_v1
+	agent "KSTREAM-PEEK-0000000026" <<Processor>> as KSTREAM_PEEK_0000000026
+	agent "filter-medlem-tombstones" <<Processor>> as filter_medlem_tombstones
+	agent "KSTREAM-FILTER-0000000028" <<Processor>> as KSTREAM_FILTER_0000000028
 	agent "keyed_personident" <<Processor>> as keyed_personident
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-filter" <<Processor>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_filter
 	agent "aap.medlem.v1-joined-aap.sokere.v1-repartition-sink" <<Sink>> as aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
-	aap_medlem_v1 --> medlem_mottatt
+	aap_medlem_v1 --> consume_aap_medlem_v1
 	aap_medlem_v1_joined_aap_sokere_v1_repartition <-- aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
-	medlem_mottatt --> KSTREAM_TRANSFORMVALUES_0000000026
-	KSTREAM_TRANSFORMVALUES_0000000026 --> filter_responses
-	filter_responses --> keyed_personident
+	consume_aap_medlem_v1 --> KSTREAM_PEEK_0000000026
+	KSTREAM_PEEK_0000000026 --> filter_medlem_tombstones
+	filter_medlem_tombstones --> KSTREAM_FILTER_0000000028
+	KSTREAM_FILTER_0000000028 --> keyed_personident
 	keyed_personident --> aap_medlem_v1_joined_aap_sokere_v1_repartition_filter
 	aap_medlem_v1_joined_aap_sokere_v1_repartition_filter --> aap_medlem_v1_joined_aap_sokere_v1_repartition_sink
 }
