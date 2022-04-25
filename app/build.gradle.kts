@@ -8,11 +8,10 @@ application {
 }
 
 dependencies {
-    val aapLibVersion = "0.0.31"
     implementation(project(":domene"))
 
-    implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
+    implementation("com.github.navikt.aap-libs:ktor-utils:0.0.32")
+    implementation("com.github.navikt.aap-libs:kafka:0.0.32")
 
     implementation("com.github.navikt:aap-avro:3.0.7")
 
@@ -45,7 +44,7 @@ dependencies {
     runtimeOnly("net.logstash.logback:logstash-logback-encoder:7.1.1")
 
     testImplementation(kotlin("test"))
-    testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
+    testImplementation("com.github.navikt.aap-libs:kafka-test:0.0.32")
     testImplementation("io.ktor:ktor-server-test-host:2.0.0")
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
 }
