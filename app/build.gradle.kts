@@ -14,6 +14,8 @@ dependencies {
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
 
+    implementation("com.github.navikt:aap-avro:3.0.7")
+
     implementation("io.ktor:ktor-server-core:2.0.0")
     implementation("io.ktor:ktor-server-netty:2.0.0")
     implementation("io.ktor:ktor-client-jackson:2.0.0")
@@ -33,11 +35,6 @@ dependencies {
 
     implementation("io.ktor:ktor-server-metrics-micrometer:2.0.0")
     implementation("io.micrometer:micrometer-registry-prometheus:1.8.5")
-
-    implementation("com.github.navikt.aap-avro:sokere:3.0.7")
-    implementation("com.github.navikt.aap-avro:manuell:3.0.7")
-    implementation("com.github.navikt.aap-avro:inntekter:3.0.7")
-    implementation("com.github.navikt.aap-avro:medlem:3.0.7")
 
     implementation("no.nav.security:token-validation-ktor:2.0.14")
     implementation("no.nav.security:token-client-core:2.0.14")
