@@ -14,7 +14,7 @@ dependencies {
     implementation("com.github.navikt.aap-libs:kafka:0.0.40")
     testImplementation("com.github.navikt.aap-libs:kafka-test:0.0.40")
 
-    implementation("com.github.navikt:aap-avro:3.0.7")
+    implementation("com.github.navikt:aap-avro:3.0.9")
 
     implementation("io.ktor:ktor-server-core:2.0.0")
     implementation("io.ktor:ktor-server-netty:2.0.0")
