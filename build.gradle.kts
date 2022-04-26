@@ -29,4 +29,13 @@ subprojects {
             }
         }
     }
+
+    configurations.all {
+        resolutionStrategy {
+            force(
+                "org.apache.kafka:kafka-clients:3.1.0",
+                "org.rocksdb:rocksdbjni:6.29.4.1"
+            )
+        }
+    }
 }
