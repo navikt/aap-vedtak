@@ -7,6 +7,7 @@ import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_4AndreOgTredjeLedd
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -16,11 +17,12 @@ private val log = LoggerFactory.getLogger("Paragraf_11_4AndreOgTredjeLedd")
 internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
     vilkårsvurderingsid: UUID,
     private var tilstand: Tilstand
-) :
-    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_4, Ledd.LEDD_2 + Ledd.LEDD_3) {
+) : Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_4, Ledd.LEDD_2 + Ledd.LEDD_3) {
     private lateinit var løsning: LøsningParagraf_11_4AndreOgTredjeLedd
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -60,6 +62,8 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             IKKE_RELEVANT({ IkkeRelevant })
         }
 
+        abstract fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_4AndreOgTredjeLedd)
+
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
@@ -86,6 +90,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_4AndreOgTredjeLedd) =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
                 søknad: Søknad,
@@ -99,8 +107,24 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
                 ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
         }
 
-        object SøknadMottatt :
-            Tilstand(tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT, erOppfylt = false, erIkkeOppfylt = false) {
+        object SøknadMottatt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
+            erOppfylt = false,
+            erIkkeOppfylt = false,
+        ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_4AndreOgTredjeLedd) {
+                visitor.`preVisit §11-4 L2 L3`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §11-4 L2 L3`()
+            }
+
             override fun onEntry(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {
                 hendelse.opprettBehov(Behov_11_4AndreOgTredjeLedd())
             }
@@ -131,6 +155,18 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_4AndreOgTredjeLedd) {
+                visitor.`preVisit §11-4 L2 L3`(paragraf.løsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-4 L2 L3`(paragraf.løsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -145,6 +181,18 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_4AndreOgTredjeLedd) {
+                visitor.`preVisit §11-4 L2 L3`(paragraf.løsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-4 L2 L3`(paragraf.løsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -159,6 +207,18 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_4AndreOgTredjeLedd) {
+                visitor.`preVisit §11-4 L2 L3`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-4 L2 L3`()
+            }
+
             override fun toDto(paragraf: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -184,6 +244,6 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
                 .tilknyttetTilstand()
                 .let { tilstand -> Paragraf_11_4AndreOgTredjeLedd(vilkårsvurdering.vilkårsvurderingsid, tilstand) }
-                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+                .apply { tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
     }
 }

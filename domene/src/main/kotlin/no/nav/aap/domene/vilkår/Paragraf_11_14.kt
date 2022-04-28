@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -18,6 +19,8 @@ internal class Paragraf_11_14 private constructor(
     private var erStudent by Delegates.notNull<Boolean>()
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand) {
         this.tilstand = nyTilstand
@@ -45,6 +48,19 @@ internal class Paragraf_11_14 private constructor(
             IKKE_VURDERT({ IkkeVurdert }),
             OPPFYLT({ Oppfylt }),
             IKKE_OPPFYLT({ IkkeOppfylt }),
+        }
+
+        // fixme abstract
+        fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_14) {
+            visitor.`preVisit §11-14`()
+            visitor.visitVilkårsvurdering(
+                tilstandsnavn = tilstandsnavn.name,
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                paragraf = paragraf.paragraf,
+                ledd = paragraf.ledd,
+                måVurderesManuelt = false,
+            )
+            visitor.`postVisit §11-14`()
         }
 
         internal fun erOppfylt() = erOppfylt

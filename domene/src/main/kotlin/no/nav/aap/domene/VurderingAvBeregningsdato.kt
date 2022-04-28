@@ -4,6 +4,7 @@ import no.nav.aap.dto.DtoVurderingAvBeregningsdato
 import no.nav.aap.hendelse.LøsningVurderingAvBeregningsdato
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.BehovVurderingAvBeregningsdato
+import no.nav.aap.visitor.SøkerVisitor
 import java.time.LocalDate
 
 internal class VurderingAvBeregningsdato private constructor(
@@ -13,13 +14,14 @@ internal class VurderingAvBeregningsdato private constructor(
 
     internal constructor() : this(Tilstand.Start)
 
-    internal fun håndterSøknad(søknad: Søknad) {
-        tilstand.håndterSøknad(this, søknad)
+    fun accept(visitor: SøkerVisitor) {
+        visitor.preVisitVurderingAvBeregningsdato()
+        tilstand.accept(visitor, this)
+        visitor.postVisitVurderingAvBeregningsdato()
     }
 
-    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) {
-        tilstand.håndterLøsning(this, løsning)
-    }
+    internal fun håndterSøknad(søknad: Søknad) = tilstand.håndterSøknad(this, søknad)
+    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) = tilstand.håndterLøsning(this, løsning)
 
     internal fun erFerdig() = tilstand.erFerdig()
 
@@ -32,12 +34,10 @@ internal class VurderingAvBeregningsdato private constructor(
             FERDIG({ Ferdig })
         }
 
+        abstract fun accept(visitor: SøkerVisitor, vurderingAvBeregningsdato: VurderingAvBeregningsdato)
+
         internal open fun håndterSøknad(vurderingAvBeregningsdato: VurderingAvBeregningsdato, søknad: Søknad) {}
-        internal open fun håndterLøsning(
-            vurderingAvBeregningsdato: VurderingAvBeregningsdato,
-            løsning: LøsningVurderingAvBeregningsdato
-        ) {
-        }
+        internal open fun håndterLøsning(vurderingAvBeregningsdato: VurderingAvBeregningsdato, løsning: LøsningVurderingAvBeregningsdato) {}
 
         internal open fun erFerdig() = false
 
@@ -45,6 +45,9 @@ internal class VurderingAvBeregningsdato private constructor(
             error("Kan ikke hente beregningsdato uten løsning")
 
         internal object Start : Tilstand(Tilstandsnavn.START) {
+            override fun accept(visitor: SøkerVisitor, vurderingAvBeregningsdato: VurderingAvBeregningsdato) =
+                visitor.visitVurderingAvBeregningsdatoTilstandStart()
+
             override fun håndterSøknad(vurderingAvBeregningsdato: VurderingAvBeregningsdato, søknad: Søknad) {
                 søknad.opprettBehov(BehovVurderingAvBeregningsdato())
                 vurderingAvBeregningsdato.tilstand = SøknadMottatt
@@ -52,6 +55,9 @@ internal class VurderingAvBeregningsdato private constructor(
         }
 
         internal object SøknadMottatt : Tilstand(Tilstandsnavn.SØKNAD_MOTTATT) {
+            override fun accept(visitor: SøkerVisitor, vurderingAvBeregningsdato: VurderingAvBeregningsdato) =
+                visitor.visitVurderingAvBeregningsdatoTilstandSøknadMottatt()
+
             override fun håndterLøsning(
                 vurderingAvBeregningsdato: VurderingAvBeregningsdato,
                 løsning: LøsningVurderingAvBeregningsdato
@@ -62,6 +68,9 @@ internal class VurderingAvBeregningsdato private constructor(
         }
 
         internal object Ferdig : Tilstand(Tilstandsnavn.FERDIG) {
+            override fun accept(visitor: SøkerVisitor, vurderingAvBeregningsdato: VurderingAvBeregningsdato) =
+                visitor.visitVurderingAvBeregningsdatoTilstandFerdig(vurderingAvBeregningsdato.beregningsdato())
+
             override fun beregningsdato(vurderingAvBeregningsdato: VurderingAvBeregningsdato): LocalDate =
                 vurderingAvBeregningsdato.løsning.beregningsdato
 

@@ -7,6 +7,7 @@ import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_2
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -22,6 +23,8 @@ internal class Paragraf_11_2 private constructor(
     private lateinit var manueltLøsning: LøsningParagraf_11_2
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -65,6 +68,8 @@ internal class Paragraf_11_2 private constructor(
             IKKE_OPPFYLT_MANUELT({ IkkeOppfyltManuelt })
         }
 
+        abstract fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2)
+
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
@@ -90,6 +95,18 @@ internal class Paragraf_11_2 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`()
+            }
+
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_2,
                 søknad: Søknad,
@@ -105,6 +122,19 @@ internal class Paragraf_11_2 private constructor(
 
         object SøknadMottatt :
             Tilstand(tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT, erOppfylt = false, erIkkeOppfylt = false) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`()
+            }
+
             override fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {
                 //send ut behov for innhenting av maskinell medlemskapsvurdering
                 hendelse.opprettBehov(Behov_11_2())
@@ -133,6 +163,18 @@ internal class Paragraf_11_2 private constructor(
 
         object ManuellVurderingTrengs :
             Tilstand(tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS, erOppfylt = false, erIkkeOppfylt = false) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`(maskinellLøsning = paragraf.maskineltLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`(maskinellLøsning = paragraf.maskineltLøsning)
+            }
 
             override fun vurderMedlemskap(
                 vilkårsvurdering: Paragraf_11_2,
@@ -164,6 +206,19 @@ internal class Paragraf_11_2 private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`(maskinellLøsning = paragraf.maskineltLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`(maskinellLøsning = paragraf.maskineltLøsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -183,6 +238,19 @@ internal class Paragraf_11_2 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`(maskinellLøsning = paragraf.maskineltLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`(maskinellLøsning = paragraf.maskineltLøsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -202,6 +270,19 @@ internal class Paragraf_11_2 private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`(paragraf.maskineltLøsning, paragraf.manueltLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`(paragraf.maskineltLøsning, paragraf.manueltLøsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -223,6 +304,19 @@ internal class Paragraf_11_2 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_2) {
+                visitor.`preVisit §11-2`(paragraf.maskineltLøsning, paragraf.manueltLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-2`(paragraf.maskineltLøsning, paragraf.manueltLøsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,

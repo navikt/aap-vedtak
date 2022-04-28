@@ -1,7 +1,6 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektshistorikk
-import no.nav.aap.domene.beregning.Yrkesskade as YrkesskadeBeregning
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
@@ -9,7 +8,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.DtoSakstype
 import no.nav.aap.hendelse.*
-import org.slf4j.LoggerFactory
+import no.nav.aap.visitor.SøkerVisitor
 import java.time.LocalDate
 import java.util.*
 
@@ -25,55 +24,31 @@ internal abstract class Sakstype private constructor(
         STUDENT
     }
 
-    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-        vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
+    internal fun accept(visitor: SøkerVisitor) {
+        visitor.preVisitSakstype(type, aktiv)
+        vilkårsvurderinger.forEach { it.accept(visitor) }
+        visitor.postVisitSakstype(type, aktiv)
     }
 
-    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
+    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) = vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
 
-    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
+    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_3) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_29) = vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_3) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal open fun håndterLøsning(løsning: LøsningParagraf_11_22) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    abstract fun opprettVedtak(inntektshistorikk: Inntektshistorikk, beregningsdato: LocalDate, fødselsdato: Fødselsdato): Vedtak
+    abstract fun opprettVedtak(
+        inntektshistorikk: Inntektshistorikk,
+        beregningsdato: LocalDate,
+        fødselsdato: Fødselsdato
+    ): Vedtak
 
     internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
     internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
@@ -208,8 +183,6 @@ internal abstract class Sakstype private constructor(
     )
 
     internal companion object {
-        private val log = LoggerFactory.getLogger("sakstype")
-
         internal fun Iterable<Sakstype>.toDto() = map(Sakstype::toDto)
 
         internal fun gjenopprett(dtoSakstype: DtoSakstype): Sakstype {

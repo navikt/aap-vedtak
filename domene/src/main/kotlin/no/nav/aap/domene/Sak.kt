@@ -6,6 +6,7 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -26,61 +27,30 @@ internal class Sak private constructor(
 
     constructor() : this(UUID.randomUUID(), Tilstand.Start, mutableListOf(), Inntektshistorikk())
 
-    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) {
-        tilstand.håndterSøknad(this, søknad, fødselsdato)
+    fun accept(visitor: SøkerVisitor) {
+        visitor.preVisitSak(saksid, vurderingsdato, søknadstidspunkt)
+        tilstand.accept(visitor)
+        sakstyper.forEach { it.accept(visitor) }
+        inntektshistorikk.accept(visitor)
+        vurderingAvBeregningsdato.accept(visitor)
+        vedtak.accept(visitor)
+        visitor.postVisitSak(saksid, vurderingsdato, søknadstidspunkt)
     }
 
-    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_3) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    internal fun håndterLøsning(løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
-        tilstand.håndterLøsning(this, løsning, fødselsdato)
-    }
+    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato) = tilstand.håndterSøknad(this, søknad, fødselsdato)
+    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_3) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_29) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) = tilstand.håndterLøsning(this, løsning)
+    internal fun håndterLøsning(løsning: LøsningInntekter, fødselsdato: Fødselsdato) = tilstand.håndterLøsning(this, løsning, fødselsdato)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         nyTilstand.onExit(this, hendelse)
@@ -99,63 +69,27 @@ internal class Sak private constructor(
             IKKE_OPPFYLT
         }
 
+        abstract fun accept(visitor: SøkerVisitor)
+
         open fun onEntry(sak: Sak, hendelse: Hendelse) {}
         open fun onExit(sak: Sak, hendelse: Hendelse) {}
-        open fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato) {
-            log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
-        }
 
-        open fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellMedlemskapYrkesskade) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
+        private fun logUventetLøsning() = log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
 
-        open fun håndterLøsning(sak: Sak, løsning: LøsningManuellMedlemskapYrkesskade) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5_yrkesskade) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_22) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
-        open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
-            log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
-        }
+        open fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellMedlemskapYrkesskade) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningManuellMedlemskapYrkesskade) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_3) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_4AndreOgTredjeLedd) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5_yrkesskade) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_6) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_12FørsteLedd) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_22) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_29) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) = logUventetLøsning()
+        open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) = logUventetLøsning()
 
         open fun toDto(sak: Sak) = DtoSak(
             saksid = sak.saksid,
@@ -174,6 +108,8 @@ internal class Sak private constructor(
         }
 
         object Start : Tilstand(Tilstandsnavn.START) {
+            override fun accept(visitor: SøkerVisitor) = visitor.visitSakTilstandStart()
+
             override fun håndterSøknad(sak: Sak, søknad: Søknad, fødselsdato: Fødselsdato) {
                 sak.søknadstidspunkt = LocalDateTime.now()
                 sak.vurderingsdato = LocalDate.now()
@@ -210,6 +146,8 @@ internal class Sak private constructor(
         }
 
         object SøknadMottatt : Tilstand(Tilstandsnavn.SØKNAD_MOTTATT) {
+            override fun accept(visitor: SøkerVisitor) = visitor.visitSakTilstandSøknadMottatt()
+
             override fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellMedlemskapYrkesskade) {
                 sak.sakstype.håndterLøsning(løsning)
                 vurderNesteTilstand(sak, løsning)
@@ -272,15 +210,14 @@ internal class Sak private constructor(
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 when {
-                    sak.sakstype.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
-                        sak.tilstand(BeregnInntekt, hendelse)
-                    sak.sakstype.erNoenIkkeOppfylt() ->
-                        sak.tilstand(IkkeOppfylt, hendelse)
+                    sak.sakstype.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() -> sak.tilstand(BeregnInntekt, hendelse)
+                    sak.sakstype.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt, hendelse)
                 }
             }
         }
 
         object BeregnInntekt : Tilstand(Tilstandsnavn.BEREGN_INNTEKT) {
+            override fun accept(visitor: SøkerVisitor) = visitor.visitSakTilstandBeregnInntekt()
 
             override fun onEntry(sak: Sak, hendelse: Hendelse) {
                 hendelse.opprettBehov(
@@ -305,6 +242,7 @@ internal class Sak private constructor(
         }
 
         object VedtakFattet : Tilstand(Tilstandsnavn.VEDTAK_FATTET) {
+            override fun accept(visitor: SøkerVisitor) = visitor.visitSakTilstandVedtakFattet()
 
             override fun toDto(sak: Sak) = DtoSak(
                 saksid = sak.saksid,
@@ -325,7 +263,9 @@ internal class Sak private constructor(
             }
         }
 
-        object IkkeOppfylt : Tilstand(Tilstandsnavn.IKKE_OPPFYLT)
+        object IkkeOppfylt : Tilstand(Tilstandsnavn.IKKE_OPPFYLT) {
+            override fun accept(visitor: SøkerVisitor) = visitor.visitSakTilstandIkkeOppfylt()
+        }
     }
 
     private fun toDto() = tilstand.toDto(this)

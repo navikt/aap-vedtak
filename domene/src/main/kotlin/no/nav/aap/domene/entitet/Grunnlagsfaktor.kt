@@ -1,21 +1,19 @@
 package no.nav.aap.domene.entitet
 
 import no.nav.aap.domene.beregning.Beløp
+import no.nav.aap.visitor.SøkerVisitor
 import kotlin.math.round
 
 internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
 
     private val verdi: Double = round(verdi.toDouble() * 1_000_000) / 1_000_000
 
+    fun accept(visitor: SøkerVisitor) = visitor.visitGrunnlagsfaktor(verdi)
+
     internal operator fun plus(addend: Grunnlagsfaktor) = Grunnlagsfaktor(this.verdi + addend.verdi)
-
     internal operator fun times(faktor: Beløp): Beløp = faktor * verdi
-
     internal operator fun times(faktor: Double): Grunnlagsfaktor = Grunnlagsfaktor(faktor * verdi)
-
     internal operator fun div(nevner: Int) = Grunnlagsfaktor(verdi / nevner)
-
-    override fun compareTo(other: Grunnlagsfaktor) = this.verdi.compareTo(other.verdi)
 
     internal companion object {
         internal fun Iterable<Grunnlagsfaktor>.summer() = Grunnlagsfaktor(sumOf { it.verdi })
@@ -35,8 +33,6 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
     }
 
     override fun hashCode() = verdi.hashCode()
-
-    override fun toString(): String {
-        return verdi.toString()
-    }
+    override fun toString() = verdi.toString()
+    override fun compareTo(other: Grunnlagsfaktor) = this.verdi.compareTo(other.verdi)
 }

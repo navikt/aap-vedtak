@@ -9,6 +9,7 @@ import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_22
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -23,6 +24,8 @@ internal class Paragraf_11_22 private constructor(
     private lateinit var løsning: LøsningParagraf_11_22
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -55,6 +58,8 @@ internal class Paragraf_11_22 private constructor(
             IKKE_OPPFYLT({ IkkeOppfylt }),
         }
 
+        abstract fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_22)
+
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_22, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_22, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
@@ -85,6 +90,9 @@ internal class Paragraf_11_22 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_22) =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_22,
                 søknad: Søknad,
@@ -103,6 +111,18 @@ internal class Paragraf_11_22 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_22) {
+                visitor.`preVisit §11-22`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §11-22`()
+            }
+
             override fun onEntry(vilkårsvurdering: Paragraf_11_22, hendelse: Hendelse) {
                 hendelse.opprettBehov(Behov_11_22())
             }
@@ -134,6 +154,20 @@ internal class Paragraf_11_22 private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_22) {
+                visitor.`preVisit §11-22`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                paragraf.løsning.accept(visitor)
+                paragraf.løsning.yrkesskade().accept(visitor)
+                visitor.`postVisit §11-22`()
+            }
+
             override fun yrkesskade(paragraf1122: Paragraf_11_22) = paragraf1122.løsning.yrkesskade()
 
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -161,6 +195,20 @@ internal class Paragraf_11_22 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_22) {
+                visitor.`preVisit §11-22`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                paragraf.løsning.accept(visitor)
+                paragraf.løsning.yrkesskade().accept(visitor)
+                visitor.`postVisit §11-22`()
+            }
+
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,

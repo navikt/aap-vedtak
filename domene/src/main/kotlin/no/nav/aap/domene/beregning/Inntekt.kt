@@ -3,6 +3,8 @@ package no.nav.aap.domene.beregning
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
 import no.nav.aap.dto.DtoInntekt
+import no.nav.aap.visitor.BeregningVisitor
+import no.nav.aap.visitor.SøkerVisitor
 import java.time.Year
 import java.time.YearMonth
 
@@ -11,6 +13,8 @@ class Inntekt(
     private val inntekstmåned: YearMonth,
     private val beløp: Beløp
 ) {
+    internal fun accept(visitor: BeregningVisitor) = visitor.visitInntektshistorikk(arbeidsgiver, inntekstmåned, beløp)
+
     internal companion object {
         internal fun Iterable<Inntekt>.inntektSiste3Kalenderår(år: Year) = this
             .filter { Year.from(it.inntekstmåned) in år.minusYears(2)..år }

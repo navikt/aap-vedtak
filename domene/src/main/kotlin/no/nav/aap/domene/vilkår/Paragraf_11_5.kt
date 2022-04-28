@@ -7,6 +7,7 @@ import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -22,6 +23,8 @@ internal class Paragraf_11_5 private constructor(
     private lateinit var nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -59,6 +62,8 @@ internal class Paragraf_11_5 private constructor(
             IKKE_OPPFYLT({ IkkeOppfylt }),
         }
 
+        abstract fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5)
+
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
@@ -86,6 +91,10 @@ internal class Paragraf_11_5 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5) =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_5,
                 søknad: Søknad,
@@ -104,6 +113,18 @@ internal class Paragraf_11_5 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5) {
+                visitor.`preVisit §11-5`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §11-5`()
+            }
+
             override fun onEntry(vilkårsvurdering: Paragraf_11_5, hendelse: Hendelse) {
                 hendelse.opprettBehov(Behov_11_5())
             }
@@ -136,6 +157,18 @@ internal class Paragraf_11_5 private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5) {
+                visitor.`preVisit §11-5`(paragraf.nedsattArbeidsevnegrad)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-5`(paragraf.nedsattArbeidsevnegrad)
+            }
+
             override fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -156,6 +189,18 @@ internal class Paragraf_11_5 private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5) {
+                visitor.`preVisit §11-5`(paragraf.nedsattArbeidsevnegrad)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-5`(paragraf.nedsattArbeidsevnegrad)
+            }
+
             override fun toDto(paragraf: Paragraf_11_5): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,

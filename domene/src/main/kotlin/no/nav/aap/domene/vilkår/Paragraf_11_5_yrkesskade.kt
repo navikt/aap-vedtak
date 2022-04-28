@@ -1,12 +1,13 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.UlovligTilstandException
+import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_5_yrkesskade
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5_yrkesskade
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -21,6 +22,8 @@ internal class Paragraf_11_5_yrkesskade private constructor(
     private lateinit var løsning: LøsningParagraf_11_5_yrkesskade
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -51,6 +54,8 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             IKKE_OPPFYLT({ IkkeOppfylt }),
         }
 
+        abstract fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5_yrkesskade)
+
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_5_yrkesskade, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: Paragraf_11_5_yrkesskade, hendelse: Hendelse) {}
         internal fun erOppfylt() = erOppfylt
@@ -77,6 +82,9 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5_yrkesskade) =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+
             override fun håndterSøknad(
                 vilkårsvurdering: Paragraf_11_5_yrkesskade,
                 søknad: Søknad,
@@ -87,7 +95,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
 
             override fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering =
-                UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
         }
 
         object SøknadMottatt : Tilstand(
@@ -95,6 +103,18 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5_yrkesskade) {
+                visitor.`preVisit §11-5 yrkesskade`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §11-5 yrkesskade`()
+            }
+
             override fun onEntry(vilkårsvurdering: Paragraf_11_5_yrkesskade, hendelse: Hendelse) {
                 hendelse.opprettBehov(Behov_11_5_yrkesskade())
             }
@@ -125,6 +145,18 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5_yrkesskade) {
+                visitor.`preVisit §11-5 yrkesskade`(paragraf.løsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-5 yrkesskade`(paragraf.løsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -151,6 +183,18 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: Paragraf_11_5_yrkesskade) {
+                visitor.`preVisit §11-5 yrkesskade`(paragraf.løsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §11-5 yrkesskade`(paragraf.løsning)
+            }
+
             override fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,

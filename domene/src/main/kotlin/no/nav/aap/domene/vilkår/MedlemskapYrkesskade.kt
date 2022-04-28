@@ -1,13 +1,14 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.UlovligTilstandException
+import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.Hendelse
-import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
 import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade
+import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_2
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -23,6 +24,8 @@ internal class MedlemskapYrkesskade private constructor(
     private lateinit var manuellLøsning: LøsningManuellMedlemskapYrkesskade
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+
+    override fun accept(visitor: SøkerVisitor) = tilstand.accept(visitor, this)
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         this.tilstand.onExit(this, hendelse)
@@ -46,7 +49,7 @@ internal class MedlemskapYrkesskade private constructor(
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
-        val dtoMaskinell = requireNotNull(vilkårsvurdering. løsning_medlemskap_yrkesskade_maskinell)
+        val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
         maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(dtoMaskinell.erMedlem))
     }
 
@@ -69,6 +72,8 @@ internal class MedlemskapYrkesskade private constructor(
             OPPFYLT_MANUELT({ OppfyltManuelt }),
             IKKE_OPPFYLT_MANUELT({ IkkeOppfyltManuelt })
         }
+
+        abstract fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade)
 
         internal open fun onEntry(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {}
@@ -102,6 +107,9 @@ internal class MedlemskapYrkesskade private constructor(
             erOppfylt = false,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) =
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+
             override fun håndterSøknad(
                 vilkårsvurdering: MedlemskapYrkesskade,
                 søknad: Søknad,
@@ -112,11 +120,27 @@ internal class MedlemskapYrkesskade private constructor(
             }
 
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering =
-                UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
         }
 
-        object SøknadMottatt :
-            Tilstand(tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT, erOppfylt = false, erIkkeOppfylt = false) {
+        object SøknadMottatt : Tilstand(
+            tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
+            erOppfylt = false,
+            erIkkeOppfylt = false,
+        ) {
+
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) {
+                visitor.`preVisit §2`()
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = false,
+                )
+                visitor.`postVisit §2`()
+            }
+
             override fun onEntry(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {
                 //send ut behov for innhenting av maskinell medlemskapsvurdering
                 hendelse.opprettBehov(Behov_11_2())
@@ -143,8 +167,22 @@ internal class MedlemskapYrkesskade private constructor(
             )
         }
 
-        object ManuellVurderingTrengs :
-            Tilstand(tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS, erOppfylt = false, erIkkeOppfylt = false) {
+        object ManuellVurderingTrengs : Tilstand(
+            tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS,
+            erOppfylt = false,
+            erIkkeOppfylt = false,
+        ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) {
+                visitor.`preVisit §2`(maskinell = paragraf.maskinellLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §2`(maskinell = paragraf.maskinellLøsning)
+            }
 
             override fun håndterLøsning(
                 vilkårsvurdering: MedlemskapYrkesskade,
@@ -176,6 +214,18 @@ internal class MedlemskapYrkesskade private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) {
+                visitor.`preVisit §2`(maskinell = paragraf.maskinellLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §2`(maskinell = paragraf.maskinellLøsning)
+            }
+
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -195,6 +245,18 @@ internal class MedlemskapYrkesskade private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) {
+                visitor.`preVisit §2`(maskinell = paragraf.maskinellLøsning)
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §2`(maskinell = paragraf.maskinellLøsning)
+            }
+
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -214,6 +276,24 @@ internal class MedlemskapYrkesskade private constructor(
             erOppfylt = true,
             erIkkeOppfylt = false
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) {
+                visitor.`preVisit §2`(
+                    maskinell = paragraf.maskinellLøsning,
+                    manuell = paragraf.manuellLøsning
+                )
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §2`(
+                    maskinell = paragraf.maskinellLøsning,
+                    manuell = paragraf.manuellLøsning
+                )
+            }
+
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,
@@ -235,6 +315,24 @@ internal class MedlemskapYrkesskade private constructor(
             erOppfylt = false,
             erIkkeOppfylt = true
         ) {
+            override fun accept(visitor: SøkerVisitor, paragraf: MedlemskapYrkesskade) {
+                visitor.`preVisit §2`(
+                    maskinell = paragraf.maskinellLøsning,
+                    manuell = paragraf.manuellLøsning
+                )
+                visitor.visitVilkårsvurdering(
+                    tilstandsnavn = tilstandsnavn.name,
+                    vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                    paragraf = paragraf.paragraf,
+                    ledd = paragraf.ledd,
+                    måVurderesManuelt = true,
+                )
+                visitor.`postVisit §2`(
+                    maskinell = paragraf.maskinellLøsning,
+                    manuell = paragraf.manuellLøsning
+                )
+            }
+
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
                 paragraf = paragraf.paragraf.name,

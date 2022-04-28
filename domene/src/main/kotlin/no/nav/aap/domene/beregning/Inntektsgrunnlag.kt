@@ -13,6 +13,7 @@ import no.nav.aap.domene.entitet.Grunnlagsfaktor.Companion.summer
 import no.nav.aap.dto.DtoInntekterForBeregning
 import no.nav.aap.dto.DtoInntektsgrunnlag
 import no.nav.aap.dto.DtoInntektsgrunnlagForÅr
+import no.nav.aap.visitor.SøkerVisitor
 import java.time.LocalDate
 import java.time.Year
 
@@ -25,6 +26,15 @@ internal class Inntektsgrunnlag private constructor(
     //Dette tallet representerer hele utregningen av 11-19
     private val grunnlagsfaktor: Grunnlagsfaktor
 ) {
+
+    fun accept(visitor: SøkerVisitor) {
+        visitor.preVisitInntektsgrunnlag(beregningsdato, sisteKalenderår)
+        inntekterSiste3Kalenderår.forEach { it.accept(visitor) }
+        yrkesskade?.accept(visitor)
+        fødselsdato.accept(visitor)
+        grunnlagsfaktor.accept(visitor)
+        visitor.postVisitInntektsgrunnlag(beregningsdato, sisteKalenderår)
+    }
 
     internal fun grunnlagForDag(dato: LocalDate) =
         Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, grunnlagsfaktor))
@@ -90,6 +100,13 @@ internal class InntekterForBeregning private constructor(
     private val inntektsgrunnlagForÅr: InntektsgrunnlagForÅr
 ) {
 
+    fun accept(visitor: SøkerVisitor) {
+        visitor.preVisitInntekterForBeregning()
+        inntektsgrunnlagForÅr.accept(visitor)
+        inntekter.forEach { it.accept(visitor) }
+        visitor.postVisitInntekterForBeregning()
+    }
+
     internal companion object {
 
         internal fun Iterable<InntekterForBeregning>.totalBeregningsfaktor(
@@ -154,6 +171,15 @@ internal class InntektsgrunnlagForÅr private constructor(
     private val erBeløpJustertFor6G: Boolean,
     private val grunnlagsfaktor: Grunnlagsfaktor
 ) {
+
+    internal fun accept(visitor: SøkerVisitor) =
+        visitor.visitInntektsgrunnlagForÅr(
+            år = år,
+            beløpFørJustering = beløpFørJustering,
+            beløpJustertFor6G = beløpJustertFor6G,
+            erBeløpJustertFor6G = erBeløpJustertFor6G,
+            grunnlagsfaktor = grunnlagsfaktor
+        )
 
     internal companion object {
         private const val ANTALL_ÅR_FOR_GJENNOMSNITT = 3

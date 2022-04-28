@@ -1,8 +1,13 @@
 package no.nav.aap.domene.entitet
 
+import no.nav.aap.visitor.SøkerVisitor
+
 class Personident(
     private val ident: String
 ) {
+
+    internal fun accept(visitor: SøkerVisitor) = visitor.visitPersonident(ident)
+
     internal fun toDto() = ident
 
     override fun equals(other: Any?): Boolean {

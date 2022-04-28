@@ -1,9 +1,9 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.Sakstype
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
+import no.nav.aap.visitor.SøkerVisitor
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -40,6 +40,8 @@ internal abstract class Vilkårsvurdering(
 
         operator fun plus(other: Ledd) = listOf(this, other)
     }
+
+    abstract fun accept(visitor: SøkerVisitor)
 
     internal abstract fun erOppfylt(): Boolean
     internal abstract fun erIkkeOppfylt(): Boolean

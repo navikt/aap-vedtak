@@ -1,5 +1,6 @@
 package no.nav.aap.domene.entitet
 
+import no.nav.aap.visitor.SøkerVisitor
 import java.time.LocalDate
 
 class Fødselsdato(private val dato: LocalDate) {
@@ -12,6 +13,8 @@ class Fødselsdato(private val dato: LocalDate) {
         private val MINSTE_GRUNNLAGSFAKTOR_OVER_25_ÅR = Grunnlagsfaktor(2.0 / .66)
         private val MINSTE_GRUNNLAGSFAKTOR_UNDER_25_ÅR = Grunnlagsfaktor(4.0 / 3 / .66)
     }
+
+    internal fun accept(visitor: SøkerVisitor) = visitor.visitFødselsdato(dato)
 
     internal fun erMellom18Og67År(vurderingsdato: LocalDate) = vurderingsdato in `18ÅrsDagen`..`67ÅrsDagen`
     internal fun erUnder18År(dato: LocalDate) = dato < `18ÅrsDagen`

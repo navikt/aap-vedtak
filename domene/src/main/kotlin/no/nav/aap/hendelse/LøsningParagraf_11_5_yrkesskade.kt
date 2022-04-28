@@ -8,6 +8,7 @@ class LøsningParagraf_11_5_yrkesskade(
 ) : Hendelse() {
 
     internal fun erNedsattMedMinst30Prosent() = arbeidsevneErNedsattMedMinst30Prosent
+    internal fun erNedsattMedMinst50Prosent() = arbeidsevneErNedsattMedMinst50Prosent
 
     internal fun toDto() = DtoLøsningParagraf_11_5_yrkesskade(
         arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,

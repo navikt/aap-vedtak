@@ -104,7 +104,12 @@ data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
     }
 }
 
-data class DtoLøsningParagraf_11_5(val grad: Int) {
+data class DtoLøsningParagraf_11_5(
+    @Deprecated("byttet ut med de to andre")
+    val grad: Int,
+    val kravOmNedsattArbeidsevneErOppfylt: Boolean = false,
+    val nedsettelseSkyldesSykdomEllerSkade: Boolean = false,
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(grad))
         søker.håndterLøsning(løsning)
