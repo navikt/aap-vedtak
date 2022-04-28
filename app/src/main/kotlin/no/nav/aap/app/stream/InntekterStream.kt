@@ -2,17 +2,16 @@ package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.InntekterKafkaDto
-import no.nav.aap.app.modell.toAvro
-import no.nav.aap.app.modell.toDto
+import no.nav.aap.app.modell.SøkereKafkaDto
+import no.nav.aap.app.modell.toJson
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.DtoInntekter
 import no.nav.aap.dto.DtoSøker
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
     consume(topics.inntekter)
         .filterNotNull { "remove-inntekter-tombstones" }
         .filter({ _, inntekter -> inntekter.response != null }) { "inntekter-filter-responses" }
@@ -21,17 +20,17 @@ internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>,
         .produce(topics.søkere) { "produced-soker-med-handtert-inntekter" }
 }
 
-private fun håndterInntekter(inntekterAndSøker: InntekterAndSøker): AvroSøker {
+private fun håndterInntekter(inntekterAndSøker: InntekterAndSøker): SøkereKafkaDto {
     val søker = Søker.gjenopprett(inntekterAndSøker.dtoSøker)
 
     inntekterAndSøker.inntekter.håndter(søker)
 
-    return søker.toDto().toAvro()
+    return søker.toDto().toJson()
 }
 
 private data class InntekterAndSøker(val inntekter: DtoInntekter, val dtoSøker: DtoSøker) {
     companion object {
-        fun create(løsning: InntekterKafkaDto, søker: AvroSøker): InntekterAndSøker =
+        fun create(løsning: InntekterKafkaDto, søker: SøkereKafkaDto): InntekterAndSøker =
             InntekterAndSøker(løsning.toDto(), søker.toDto())
     }
 }

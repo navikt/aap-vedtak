@@ -3,8 +3,8 @@ package no.nav.aap.app.stream
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.modell.ManuellKafkaDto
-import no.nav.aap.app.modell.toAvro
-import no.nav.aap.app.modell.toDto
+import no.nav.aap.app.modell.SøkereKafkaDto
+import no.nav.aap.app.modell.toJson
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.DtoManuell
 import no.nav.aap.dto.DtoSøker
@@ -12,9 +12,8 @@ import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
-internal fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
+internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
     val søkerOgBehov =
         consume(topics.manuell)
             .filterNotNull { "filter-manuell-tombstones" }
@@ -30,7 +29,7 @@ internal fun StreamsBuilder.manuellStream(søkere: KTable<String, AvroSøker>, t
         .sendBehov("manuell", topics)
 }
 
-private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<AvroSøker, List<DtoBehov>> {
+private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<SøkereKafkaDto, List<DtoBehov>> {
     val søker = Søker.gjenopprett(løsningAndSøker.dtoSøker)
 
     val dtoBehov = mutableListOf<DtoBehov>()
@@ -52,12 +51,12 @@ private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<
     løsningAndSøker.løsning.løsningVurderingAvBeregningsdato?.håndter(søker)
         ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
 
-    return søker.toDto().toAvro() to dtoBehov
+    return søker.toDto().toJson() to dtoBehov
 }
 
 private data class LøsningAndSøker(val løsning: DtoManuell, val dtoSøker: DtoSøker) {
     companion object {
-        fun create(løsning: ManuellKafkaDto, søker: AvroSøker): LøsningAndSøker =
+        fun create(løsning: ManuellKafkaDto, søker: SøkereKafkaDto): LøsningAndSøker =
             LøsningAndSøker(løsning.toDto(), søker.toDto())
     }
 }

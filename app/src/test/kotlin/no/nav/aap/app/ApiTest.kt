@@ -18,7 +18,6 @@ import java.time.Year
 import java.time.YearMonth
 import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
 import no.nav.aap.avro.medlem.v1.Response as AvroMedlemResponse
-import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal class ApiTest {
 
@@ -34,7 +33,7 @@ internal class ApiTest {
             val manuellTopic = mocks.kafka.inputTopic(topics.manuell)
             val inntektTopic = mocks.kafka.inputTopic(topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(topics.inntekter)
-            val stateStore = mocks.kafka.getStore<AvroSøker>(SØKERE_STORE_NAME)
+            val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
             søknadTopic.produce("123") {
                 JsonSøknad(JsonPersonident("FNR", "123"), LocalDate.now().minusYears(40))
