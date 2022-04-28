@@ -72,7 +72,7 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_3(true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true)))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_6(true))

@@ -19,7 +19,7 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50))
+        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true))
         løsning.vurderNedsattArbeidsevne(vilkår)
 
         assertTrue(vilkår.erOppfylt())
@@ -35,7 +35,7 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(49))
+        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(false, true))
         løsning.vurderNedsattArbeidsevne(vilkår)
 
         assertFalse(vilkår.erOppfylt())

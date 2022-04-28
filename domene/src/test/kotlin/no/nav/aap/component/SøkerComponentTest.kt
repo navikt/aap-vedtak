@@ -90,7 +90,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true)))
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -177,7 +177,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true)))
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -247,7 +247,7 @@ internal class SøkerComponentTest {
 
         søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
         søker.håndterLøsning(LøsningParagraf_11_3(true))
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50)))
+        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true)))
         søker.håndterLøsning(LøsningParagraf_11_6(true))
         søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
         søker.håndterLøsning(LøsningParagraf_11_29(true))
@@ -283,7 +283,7 @@ internal class SøkerComponentTest {
 
         medSøker { håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)) }
         medSøker { håndterLøsning(LøsningParagraf_11_3(true)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(50))) }
+        medSøker { håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true))) }
         medSøker { håndterLøsning(LøsningParagraf_11_6(true)) }
         medSøker { håndterLøsning(LøsningParagraf_11_12FørsteLedd(true)) }
         medSøker { håndterLøsning(LøsningParagraf_11_29(true)) }

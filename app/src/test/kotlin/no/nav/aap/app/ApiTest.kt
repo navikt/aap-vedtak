@@ -3,11 +3,9 @@ package no.nav.aap.app
 import io.ktor.server.testing.*
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.modell.InntekterKafkaDto
+import no.nav.aap.app.modell.*
 import no.nav.aap.app.modell.InntekterKafkaDto.Response.Inntekt
-import no.nav.aap.app.modell.JsonPersonident
-import no.nav.aap.app.modell.JsonSøknad
-import no.nav.aap.app.modell.toDto
+import no.nav.aap.app.modell.ManuellKafkaDto.*
 import no.nav.aap.dto.*
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.streams.TestInputTopic
@@ -18,15 +16,6 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
-import no.nav.aap.avro.manuell.v1.LosningVurderingAvBeregningsdato as AvroLøsningVurderingAvBeregningsdato
-import no.nav.aap.avro.manuell.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
-import no.nav.aap.avro.manuell.v1.Losning_11_2 as AvroLøsning_11_2
-import no.nav.aap.avro.manuell.v1.Losning_11_29 as AvroLøsning_11_29
-import no.nav.aap.avro.manuell.v1.Losning_11_3 as AvroLøsning_11_3
-import no.nav.aap.avro.manuell.v1.Losning_11_4_l2_l3 as AvroLøsning_11_4_l2_l3
-import no.nav.aap.avro.manuell.v1.Losning_11_5 as AvroLøsning_11_5
-import no.nav.aap.avro.manuell.v1.Losning_11_6 as AvroLøsning_11_6
-import no.nav.aap.avro.manuell.v1.Manuell as AvroManuell
 import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
 import no.nav.aap.avro.medlem.v1.Response as AvroMedlemResponse
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
@@ -58,14 +47,14 @@ internal class ApiTest {
                 }
             }
 
-            manuellTopic.produserLøsning(key = "123", losning_11_3_manuell = AvroLøsning_11_3(true))
-            manuellTopic.produserLøsning(key = "123", losning_11_5_manuell = AvroLøsning_11_5(60))
-            manuellTopic.produserLøsning(key = "123", losning_11_6_manuell = AvroLøsning_11_6(true))
-            manuellTopic.produserLøsning(key = "123", losning_11_12_l1_manuell = AvroLøsning_11_12_l1(true))
-            manuellTopic.produserLøsning(key = "123", losning_11_29_manuell = AvroLøsning_11_29(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_3_manuell = Løsning_11_3_manuell(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_5_manuell = Løsning_11_5_manuell(true, true))
+            manuellTopic.produserLøsning(key = "123", losning_11_6_manuell = Løsning_11_6_manuell(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell(true))
+            manuellTopic.produserLøsning(key = "123", losning_11_29_manuell = Løsning_11_29_manuell(true))
             manuellTopic.produserLøsning(
                 key = "123",
-                losningVurderingAvBeregningsdato = AvroLøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
+                losningVurderingAvBeregningsdato = LøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
@@ -139,7 +128,10 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT",
                                         måVurderesManuelt = false,
-                                        løsning_11_5_manuell = DtoLøsningParagraf_11_5(60)
+                                        løsning_11_5_manuell = DtoLøsningParagraf_11_5(
+                                            kravOmNedsattArbeidsevneErOppfylt = true,
+                                            nedsettelseSkyldesSykdomEllerSkade = true,
+                                        )
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(5),
@@ -246,19 +238,19 @@ internal class ApiTest {
         }
     }
 
-    private fun TestInputTopic<String, AvroManuell>.produserLøsning(
+    private fun TestInputTopic<String, ManuellKafkaDto>.produserLøsning(
         key: String,
-        losning_11_2_manuell: AvroLøsning_11_2? = null,
-        losning_11_3_manuell: AvroLøsning_11_3? = null,
-        losning_11_4_l2_l3_manuell: AvroLøsning_11_4_l2_l3? = null,
-        losning_11_5_manuell: AvroLøsning_11_5? = null,
-        losning_11_6_manuell: AvroLøsning_11_6? = null,
-        losning_11_12_l1_manuell: AvroLøsning_11_12_l1? = null,
-        losning_11_29_manuell: AvroLøsning_11_29? = null,
-        losningVurderingAvBeregningsdato: AvroLøsningVurderingAvBeregningsdato? = null
+        losning_11_2_manuell: Løsning_11_2_manuell? = null,
+        losning_11_3_manuell: Løsning_11_3_manuell? = null,
+        losning_11_4_l2_l3_manuell: Løsning_11_4_ledd2_ledd3_manuell? = null,
+        losning_11_5_manuell: Løsning_11_5_manuell? = null,
+        losning_11_6_manuell: Løsning_11_6_manuell? = null,
+        losning_11_12_l1_manuell: Løsning_11_12_ledd1_manuell? = null,
+        losning_11_29_manuell: Løsning_11_29_manuell? = null,
+        losningVurderingAvBeregningsdato: LøsningVurderingAvBeregningsdato? = null
     ) {
         produce(key) {
-            AvroManuell(
+            ManuellKafkaDto(
                 losning_11_2_manuell,
                 losning_11_3_manuell,
                 losning_11_4_l2_l3_manuell,

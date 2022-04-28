@@ -115,7 +115,7 @@ internal class Paragraf_11_5 private constructor(
             ) {
                 vilkårsvurdering.løsning = løsning
                 vilkårsvurdering.nedsattArbeidsevnegrad = nedsattArbeidsevnegrad
-                if (nedsattArbeidsevnegrad.erNedsattMedMinstHalvparten()) {
+                if (nedsattArbeidsevnegrad.erOppfylt()) {
                     vilkårsvurdering.tilstand(Oppfylt, løsning)
                 } else {
                     vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
@@ -147,7 +147,12 @@ internal class Paragraf_11_5 private constructor(
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_manuell)
-                paragraf.løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(løsning.grad))
+                paragraf.løsning = LøsningParagraf_11_5(
+                    LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                        kravOmNedsattArbeidsevneErOppfylt = løsning.kravOmNedsattArbeidsevneErOppfylt,
+                        nedsettelseSkyldesSykdomEllerSkade = løsning.nedsettelseSkyldesSykdomEllerSkade,
+                    )
+                )
             }
         }
 
@@ -167,7 +172,12 @@ internal class Paragraf_11_5 private constructor(
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_5, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_manuell)
-                paragraf.løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(løsning.grad))
+                paragraf.løsning = LøsningParagraf_11_5(
+                    LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                        kravOmNedsattArbeidsevneErOppfylt = løsning.kravOmNedsattArbeidsevneErOppfylt,
+                        nedsettelseSkyldesSykdomEllerSkade = løsning.nedsettelseSkyldesSykdomEllerSkade,
+                    )
+                )
             }
         }
 

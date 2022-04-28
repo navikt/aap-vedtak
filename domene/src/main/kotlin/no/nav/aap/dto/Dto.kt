@@ -104,9 +104,17 @@ data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
     }
 }
 
-data class DtoLøsningParagraf_11_5(val grad: Int) {
+data class DtoLøsningParagraf_11_5(
+    val kravOmNedsattArbeidsevneErOppfylt: Boolean,
+    val nedsettelseSkyldesSykdomEllerSkade: Boolean
+) {
     fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(grad))
+        val løsning = LøsningParagraf_11_5(
+            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+                nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+            )
+        )
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
