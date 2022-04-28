@@ -6,14 +6,13 @@ metadata:
   labels:
     team: aap
   annotations:
-    # Revurder om topic skal slettes sammen med kubernetesressursen når topic opprettes i prod
     kafka.nais.io/removeDataWhenResourceIsDeleted: "true"
     githubUrl: "https://github.com/navikt/aap-vedtak"
 spec:
   pool: {{kafka-pool}}
   config:
     cleanupPolicy: compact,delete
-    partitions: 2
+    partitions: 12
     retentionHours: 1
   acl:
     - team: medlemskap
