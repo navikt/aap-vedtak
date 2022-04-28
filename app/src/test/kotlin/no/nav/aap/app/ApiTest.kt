@@ -3,6 +3,8 @@ package no.nav.aap.app
 import io.ktor.server.testing.*
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.modell.InntekterKafkaDto
+import no.nav.aap.app.modell.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.app.modell.JsonPersonident
 import no.nav.aap.app.modell.JsonSøknad
 import no.nav.aap.app.modell.toDto
@@ -16,8 +18,6 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
-import no.nav.aap.avro.inntekter.v1.Inntekt as AvroInntekt
-import no.nav.aap.avro.inntekter.v1.Response as AvroInntekterResponse
 import no.nav.aap.avro.manuell.v1.LosningVurderingAvBeregningsdato as AvroLøsningVurderingAvBeregningsdato
 import no.nav.aap.avro.manuell.v1.Losning_11_12_l1 as AvroLøsning_11_12_l1
 import no.nav.aap.avro.manuell.v1.Losning_11_2 as AvroLøsning_11_2
@@ -68,19 +68,17 @@ internal class ApiTest {
                 losningVurderingAvBeregningsdato = AvroLøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
 
-            val inntektRequest = inntektOutputTopic.readValue()
+            val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
             inntektTopic.produce("123") {
-                inntektRequest.apply {
-                    response = AvroInntekterResponse.newBuilder()
-                        .setInntekter(
-                            listOf(
-                                AvroInntekt("321", request.fom.plusYears(2), 400000.0),
-                                AvroInntekt("321", request.fom.plusYears(1), 400000.0),
-                                AvroInntekt("321", request.fom, 400000.0)
-                            )
+                inntekter.copy(
+                    response = InntekterKafkaDto.Response(
+                        listOf(
+                            Inntekt("321", inntekter.request.fom.plusYears(2), 400000.0),
+                            Inntekt("321", inntekter.request.fom.plusYears(1), 400000.0),
+                            Inntekt("321", inntekter.request.fom, 400000.0),
                         )
-                        .build()
-                }
+                    )
+                )
             }
 
             val søker = stateStore["123"]

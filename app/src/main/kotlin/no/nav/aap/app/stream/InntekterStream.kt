@@ -1,6 +1,7 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.app.modell.toAvro
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.domene.Søker
@@ -9,7 +10,6 @@ import no.nav.aap.dto.DtoSøker
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import no.nav.aap.avro.inntekter.v1.Inntekter as AvroInntekter
 import no.nav.aap.avro.sokere.v1.Soker as AvroSøker
 
 internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, AvroSøker>, topics: Topics) {
@@ -31,7 +31,7 @@ private fun håndterInntekter(inntekterAndSøker: InntekterAndSøker): AvroSøke
 
 private data class InntekterAndSøker(val inntekter: DtoInntekter, val dtoSøker: DtoSøker) {
     companion object {
-        fun create(løsning: AvroInntekter, søker: AvroSøker): InntekterAndSøker =
+        fun create(løsning: InntekterKafkaDto, søker: AvroSøker): InntekterAndSøker =
             InntekterAndSøker(løsning.toDto(), søker.toDto())
     }
 }
