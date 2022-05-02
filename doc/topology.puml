@@ -3,19 +3,19 @@
 queue "aap.inntekter.v1" <<topic>> as aap_inntekter_v1
 queue "aap.medlem.v1" <<topic>> as aap_medlem_v1
 queue "aap.sokere.v1" <<topic>> as aap_sokere_v1
-queue "aap.aap-soknad-sendt.v1" <<topic>> as aap_aap_soknad_sendt_v1
 queue "aap.manuell.v1" <<topic>> as aap_manuell_v1
+queue "aap.soknad-sendt.v1" <<topic>> as aap_soknad_sendt_v1
 queue "aap.medlem.v1-joined-aap.sokere.v1-repartition" <<topic>> as aap_medlem_v1_joined_aap_sokere_v1_repartition
 package "Sub-topology: 0" {
-	database "soker-state-store-v1" <<State Store>> as soker_state_store_v1
-	agent "consume-aap.aap-soknad-sendt.v1" <<Source>> as consume_aap_aap_soknad_sendt_v1
+	database "soker-state-store-v2" <<State Store>> as soker_state_store_v2
 	agent "consume-aap.manuell.v1" <<Source>> as consume_aap_manuell_v1
+	agent "consume-aap.soknad-sendt.v1" <<Source>> as consume_aap_soknad_sendt_v1
 	agent "KSTREAM-PEEK-0000000008" <<Processor>> as KSTREAM_PEEK_0000000008
 	agent "KSTREAM-PEEK-0000000038" <<Processor>> as KSTREAM_PEEK_0000000038
 	agent "filter-manuell-tombstones" <<Processor>> as filter_manuell_tombstones
 	agent "filter-soknad-tombstone" <<Processor>> as filter_soknad_tombstone
-	agent "aap.aap-soknad-sendt.v1-joined-aap.sokere.v1" <<Processor>> as aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
 	agent "aap.manuell.v1-joined-aap.sokere.v1" <<Processor>> as aap_manuell_v1_joined_aap_sokere_v1
+	agent "aap.soknad-sendt.v1-joined-aap.sokere.v1" <<Processor>> as aap_soknad_sendt_v1_joined_aap_sokere_v1
 	agent "KSTREAM-MAPVALUES-0000000011" <<Processor>> as KSTREAM_MAPVALUES_0000000011
 	agent "KSTREAM-MAPVALUES-0000000041" <<Processor>> as KSTREAM_MAPVALUES_0000000041
 	agent "manuell-hent-ut-behov" <<Processor>> as manuell_hent_ut_behov
@@ -64,17 +64,17 @@ package "Sub-topology: 0" {
 	agent "produced-soker-med-handtert-inntekter" <<Sink>> as produced_soker_med_handtert_inntekter
 	agent "produced-soker-med-handtert-losning" <<Sink>> as produced_soker_med_handtert_losning
 	agent "produced-soker-med-medlem" <<Sink>> as produced_soker_med_medlem
-	aap_aap_soknad_sendt_v1 --> consume_aap_aap_soknad_sendt_v1
 	aap_manuell_v1 --> consume_aap_manuell_v1
-	soker_state_store_v1 -- aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
-	soker_state_store_v1 -- aap_manuell_v1_joined_aap_sokere_v1
+	aap_soknad_sendt_v1 --> consume_aap_soknad_sendt_v1
+	soker_state_store_v2 -- aap_manuell_v1_joined_aap_sokere_v1
+	soker_state_store_v2 -- aap_soknad_sendt_v1_joined_aap_sokere_v1
 	aap_inntekter_v1 --> consume_aap_inntekter_v1
 	aap_sokere_v1 --> consume_aap_sokere_v1
 	aap_medlem_v1_joined_aap_sokere_v1_repartition --> aap_medlem_v1_joined_aap_sokere_v1_repartition_source
-	soker_state_store_v1 -- aap_inntekter_v1_joined_aap_sokere_v1
-	soker_state_store_v1 -- aap_medlem_v1_joined_aap_sokere_v1
-	soker_state_store_v1 -- sokere_as_table
-	soker_state_store_v1 -- KSTREAM_PROCESSOR_0000000006
+	soker_state_store_v2 -- aap_inntekter_v1_joined_aap_sokere_v1
+	soker_state_store_v2 -- aap_medlem_v1_joined_aap_sokere_v1
+	soker_state_store_v2 -- sokere_as_table
+	soker_state_store_v2 -- KSTREAM_PROCESSOR_0000000006
 	aap_inntekter_v1 <-- branch_manuell_inntekter_produced_behov
 	aap_medlem_v1 <-- branch_manuell_medlem_produced_behov
 	aap_inntekter_v1 <-- branch_soknad_inntekter_produced_behov
@@ -83,14 +83,14 @@ package "Sub-topology: 0" {
 	aap_sokere_v1 <-- produced_soker_med_handtert_inntekter
 	aap_sokere_v1 <-- produced_soker_med_handtert_losning
 	aap_sokere_v1 <-- produced_soker_med_medlem
-	consume_aap_aap_soknad_sendt_v1 --> KSTREAM_PEEK_0000000008
 	consume_aap_manuell_v1 --> KSTREAM_PEEK_0000000038
+	consume_aap_soknad_sendt_v1 --> KSTREAM_PEEK_0000000008
 	KSTREAM_PEEK_0000000008 --> filter_soknad_tombstone
 	KSTREAM_PEEK_0000000038 --> filter_manuell_tombstones
 	filter_manuell_tombstones --> aap_manuell_v1_joined_aap_sokere_v1
-	filter_soknad_tombstone --> aap_aap_soknad_sendt_v1_joined_aap_sokere_v1
-	aap_aap_soknad_sendt_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000011
+	filter_soknad_tombstone --> aap_soknad_sendt_v1_joined_aap_sokere_v1
 	aap_manuell_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000041
+	aap_soknad_sendt_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000011
 	KSTREAM_MAPVALUES_0000000011 --> soknad_hent_ut_behov
 	KSTREAM_MAPVALUES_0000000011 --> soknad_hent_ut_soker
 	KSTREAM_MAPVALUES_0000000041 --> manuell_hent_ut_behov

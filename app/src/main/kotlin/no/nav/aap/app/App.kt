@@ -19,7 +19,6 @@ import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
-import no.nav.aap.app.stream.mock.soknadProducer
 import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.KafkaConfig
 import no.nav.aap.kafka.streams.*
@@ -54,8 +53,6 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     kafka.start(config.kafka, prometheus) {
         streamsBuilder(topics, tables)
     }
-
-    soknadProducer(kafka, config.kafka, topics)
 
     routing {
         devTools(kafka, config.kafka, topics)
