@@ -24,3 +24,6 @@ spec:
     - team: aap
       application: aap-kafka-manager
       access: read
+    - team: aap
+      application: aap-kafka-cli
+      access: readwrite
