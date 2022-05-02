@@ -16,7 +16,7 @@ dependencies {
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.7")
 
-    implementation("io.ktor:ktor-server-core:2.0.0")
+    implementation("io.ktor:ktor-server-core:2.0.1")
     implementation("io.ktor:ktor-server-netty:2.0.0")
     implementation("io.ktor:ktor-server-content-negotiation:2.0.0")
     implementation("io.ktor:ktor-serialization-jackson:2.0.0")
