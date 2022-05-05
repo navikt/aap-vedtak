@@ -1,0 +1,29 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: vedtak.v1
+  namespace: aap
+  labels:
+    team: aap
+  annotations:
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "true"
+    githubUrl: "https://github.com/navikt/aap-vedtak"
+spec:
+  pool: {{kafka-pool}}
+  config:
+    cleanupPolicy: compact,delete
+    partitions: 12
+    retentionHours: 1
+  acl:
+    - team: aap
+      application: vedtak
+      access: write
+    - team: aap
+      application: utbetaling
+      access: readwrite
+    - team: aap
+      application: aap-kafka-manager
+      access: read
+    - team: aap
+      application: kafka-cli
+      access: readwrite

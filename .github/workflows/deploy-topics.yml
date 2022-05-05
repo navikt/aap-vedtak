@@ -9,6 +9,7 @@ on:
       - '.nais/topic-søkere.yml'
       - '.nais/topic-manuell.yml'
       - '.nais/topic-inntekter.yml'
+      - '.nais/topic-vedtak.yml'
       - '.github/workflows/deploy-topics.yml'
 
 jobs:
@@ -65,5 +66,19 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: .nais/topic-inntekter.yml
+          VARS: .nais/dev.yml
+          PRINT_PAYLOAD: true
+
+  deploy-vedtak:
+    name: Deploy inntekter
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy aap.vedtak.v1 to dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/topic-vedtak.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
