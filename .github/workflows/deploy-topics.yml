@@ -70,7 +70,7 @@ jobs:
           PRINT_PAYLOAD: true
 
   deploy-vedtak:
-    name: Deploy inntekter
+    name: Deploy vedtak
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
