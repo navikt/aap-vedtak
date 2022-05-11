@@ -206,7 +206,7 @@ internal class InntektsgrunnlagForÅr private constructor(
                 beløpFørJustering = beløpFørJustering,
                 beløpJustertFor6G = beløpJustertFor6G,
                 erBeløpJustertFor6G = beløpFørJustering != beløpJustertFor6G,
-                grunnlagsfaktor = Grunnbeløp.finnBeregningsfaktor(år, beløpJustertFor6G)
+                grunnlagsfaktor = Grunnbeløp.finnGrunnlagsfaktor(år, beløpJustertFor6G)
             )
         }
     }

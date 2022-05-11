@@ -1,7 +1,7 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.beløpJustertFor6G
-import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.finnBeregningsfaktor
+import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.finnGrunnlagsfaktor
 import no.nav.aap.domene.beregning.Grunnbeløp.Element.Companion.justerInntekt
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import java.time.LocalDate
@@ -60,7 +60,7 @@ internal object Grunnbeløp {
                 return minOf(beløpFørJustering, grunnbeløpForInntektsår.gjennomsnittBeløp * 6)
             }
 
-            fun Iterable<Element>.finnBeregningsfaktor(år: Year, beløp: Beløp): Grunnlagsfaktor {
+            fun Iterable<Element>.finnGrunnlagsfaktor(år: Year, beløp: Beløp): Grunnlagsfaktor {
                 return Grunnlagsfaktor(beløp / finnGrunnbeløpForÅr(år).gjennomsnittBeløp)
             }
         }
@@ -72,6 +72,6 @@ internal object Grunnbeløp {
     internal fun justerInntekt(beregningsdato: LocalDate, grunnlagsfaktor: Grunnlagsfaktor) =
         grunnbeløp.justerInntekt(beregningsdato, grunnlagsfaktor)
 
-    internal fun finnBeregningsfaktor(år: Year, beløp: Beløp) =
-        grunnbeløp.finnBeregningsfaktor(år, beløp)
+    internal fun finnGrunnlagsfaktor(år: Year, beløp: Beløp) =
+        grunnbeløp.finnGrunnlagsfaktor(år, beløp)
 }
