@@ -62,7 +62,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 
 internal fun StreamsBuilder.streamsBuilder(topics: Topics, tables: Tables) {
     val søkerKTable = consume(topics.søkere)
-        .filterNotNull { "filter-soker-tombstones" }
+        .filterNotNull("filter-soker-tombstones")
         .produce(tables.søkere)
 
     søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) { record ->

@@ -15,30 +15,24 @@ import org.apache.kafka.streams.kstream.KTable
 
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
     val søkerOgBehov = consume(topics.søknad)
-        .filterNotNull { "filter-soknad-tombstone" }
-        .leftJoin(topics.søknad with topics.søkere, søkere, SøknadAndSøker::join)
+        .filterNotNull("filter-soknad-tombstone")
+        .leftJoin(topics.søknad with topics.søkere, søkere) { jsonSøknad, _ -> jsonSøknad }
         .mapValues(::opprettSøker)
 
     søkerOgBehov
-        .mapValues(named("soknad-hent-ut-soker")) { (søker) -> søker }
-        .produce(topics.søkere) { "produced-ny-soker" }
+        .mapValues("soknad-hent-ut-soker") { (søker) -> søker }
+        .produce(topics.søkere, "produced-ny-soker")
 
     søkerOgBehov
-        .flatMapValues(named("soknad-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
+        .flatMapValues("soknad-hent-ut-behov") { (_, dtoBehov) -> dtoBehov }
         .sendBehov("soknad", topics)
 }
 
-private fun opprettSøker(wrapper: SøknadAndSøker): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val ident = wrapper.søknad.ident.verdi
-    val søknad = Søknad(Personident(ident), Fødselsdato(wrapper.søknad.fødselsdato))
+private fun opprettSøker(jsonSøknad: JsonSøknad): Pair<SøkereKafkaDto, List<DtoBehov>> {
+    val ident = jsonSøknad.ident.verdi
+    val søknad = Søknad(Personident(ident), Fødselsdato(jsonSøknad.fødselsdato))
     val søker = søknad.opprettSøker()
     søker.håndterSøknad(søknad)
 
     return søker.toDto().toJson() to søknad.behov().map { it.toDto(ident) }
-}
-
-private data class SøknadAndSøker(val søknad: JsonSøknad, val søker: SøkereKafkaDto?) {
-    companion object {
-        fun join(søknad: JsonSøknad, søker: SøkereKafkaDto?) = SøknadAndSøker(søknad, søker)
-    }
 }

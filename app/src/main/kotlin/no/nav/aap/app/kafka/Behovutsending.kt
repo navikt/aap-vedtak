@@ -30,8 +30,8 @@ private fun <JSON : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
 ) where MAPPER : ToKafka<JSON>, MAPPER : Lytter =
     branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
         chain
-            .mapValues(named("branch-$branchName-map-behov")) { value -> getMapper().also(value::accept).toJson() }
-            .produce(topic) { "branch-$branchName-produced-behov" }
+            .mapValues("branch-$branchName-map-behov") { value -> getMapper().also(value::accept).toJson() }
+            .produce(topic, "branch-$branchName-produced-behov")
     }.withName("-branch-$branchName"))
 
 private interface ToKafka<out JSON> {

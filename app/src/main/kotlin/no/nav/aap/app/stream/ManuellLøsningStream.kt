@@ -16,16 +16,16 @@ import org.apache.kafka.streams.kstream.KTable
 internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
     val søkerOgBehov =
         consume(topics.manuell)
-            .filterNotNull { "filter-manuell-tombstones" }
+            .filterNotNull("filter-manuell-tombstones")
             .join(topics.manuell with topics.søkere, søkere, LøsningAndSøker::create)
             .mapValues(::håndterManuellLøsning)
 
     søkerOgBehov
-        .mapValues(named("manuell-hent-ut-soker")) { (søker) -> søker }
-        .produce(topics.søkere) { "produced-soker-med-handtert-losning" }
+        .mapValues("manuell-hent-ut-soker") { (søker) -> søker }
+        .produce(topics.søkere, "produced-soker-med-handtert-losning")
 
     søkerOgBehov
-        .flatMapValues(named("manuell-hent-ut-behov")) { (_, dtoBehov) -> dtoBehov }
+        .flatMapValues("manuell-hent-ut-behov") { (_, dtoBehov) -> dtoBehov }
         .sendBehov("manuell", topics)
 }
 
