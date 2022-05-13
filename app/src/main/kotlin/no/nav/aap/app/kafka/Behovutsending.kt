@@ -4,12 +4,11 @@ import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.avro.medlem.v1.Medlem
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
-import no.nav.aap.kafka.streams.Topic
+import no.nav.aap.kafka.streams.Behov
+import no.nav.aap.kafka.streams.BehovExtractor
+import no.nav.aap.kafka.streams.branch
+import no.nav.aap.kafka.streams.sendBehov
 import no.nav.aap.kafka.streams.mapValues
-import no.nav.aap.kafka.streams.named
-import no.nav.aap.kafka.streams.produce
-import org.apache.kafka.streams.kstream.Branched
-import org.apache.kafka.streams.kstream.BranchedKStream
 import org.apache.kafka.streams.kstream.KStream
 import java.time.LocalDate
 import java.time.Year
@@ -17,28 +16,29 @@ import java.time.YearMonth
 import java.util.*
 
 internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
-    split(named("$name-split-behov"))
-        .branch(Topics.medlem, "$name-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
-        .branch(Topics.inntekter, "$name-inntekter", DtoBehov::erInntekter, ::ToInntekterKafkaDto)
+    mapValues("$name-wrap-behov") { value -> DtoBehovWrapper(value) }
+        .sendBehov(name) {
+            branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToAvroMedlem)
+            branch(Topics.inntekter, "$name-inntekter", DtoBehovWrapper::erInntekter, ::ToInntekterKafkaDto)
+        }
 }
 
-private fun <JSON : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(
-    topic: Topic<JSON>,
-    branchName: String,
-    predicate: (DtoBehov) -> Boolean,
-    getMapper: () -> MAPPER
-) where MAPPER : ToKafka<JSON>, MAPPER : Lytter =
-    branch({ _, value -> predicate(value) }, Branched.withConsumer<String?, DtoBehov?> { chain ->
-        chain
-            .mapValues("branch-$branchName-map-behov") { value -> getMapper().also(value::accept).toJson() }
-            .produce(topic, "branch-$branchName-produced-behov")
-    }.withName("-branch-$branchName"))
-
-private interface ToKafka<out JSON> {
-    fun toJson(): JSON
+internal interface BehovVedtak : Behov<Lytter> {
+    fun erMedlem() = false
+    fun erInntekter() = false
 }
 
-private class ToAvroMedlem : Lytter, ToKafka<Medlem> {
+internal class DtoBehovWrapper(
+    private val dtoBehov: DtoBehov
+) : BehovVedtak {
+    override fun erMedlem() = dtoBehov.erMedlem()
+    override fun erInntekter() = dtoBehov.erInntekter()
+    override fun accept(visitor: Lytter) {
+        dtoBehov.accept(visitor)
+    }
+}
+
+private class ToAvroMedlem : Lytter, BehovExtractor<Medlem> {
     private lateinit var ident: String
 
     override fun medlem(ident: String) {
@@ -56,7 +56,7 @@ private class ToAvroMedlem : Lytter, ToKafka<Medlem> {
         ).build()
 }
 
-private class ToInntekterKafkaDto : Lytter, ToKafka<InntekterKafkaDto> {
+private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {
     private lateinit var ident: String
     private lateinit var fom: YearMonth
     private lateinit var tom: YearMonth
