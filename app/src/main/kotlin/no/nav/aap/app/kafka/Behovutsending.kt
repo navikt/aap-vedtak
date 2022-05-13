@@ -16,10 +16,10 @@ import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
-internal fun KStream<String, DtoBehov>.sendBehov(name: String, topics: Topics) {
+internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
     split(named("$name-split-behov"))
-        .branch(topics.medlem, "$name-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
-        .branch(topics.inntekter, "$name-inntekter", DtoBehov::erInntekter, ::ToInntekterKafkaDto)
+        .branch(Topics.medlem, "$name-medlem", DtoBehov::erMedlem, ::ToAvroMedlem)
+        .branch(Topics.inntekter, "$name-inntekter", DtoBehov::erInntekter, ::ToInntekterKafkaDto)
 }
 
 private fun <JSON : Any, MAPPER> BranchedKStream<String, DtoBehov>.branch(

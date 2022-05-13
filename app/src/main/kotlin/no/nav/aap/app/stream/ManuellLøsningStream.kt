@@ -13,20 +13,20 @@ import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
+internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov =
-        consume(topics.manuell)
+        consume(Topics.manuell)
             .filterNotNull("filter-manuell-tombstones")
-            .join(topics.manuell with topics.søkere, søkere, LøsningAndSøker::create)
+            .join(Topics.manuell with Topics.søkere, søkere, LøsningAndSøker::create)
             .mapValues(::håndterManuellLøsning)
 
     søkerOgBehov
         .mapValues("manuell-hent-ut-soker") { (søker) -> søker }
-        .produce(topics.søkere, "produced-soker-med-handtert-losning")
+        .produce(Topics.søkere, "produced-soker-med-handtert-losning")
 
     søkerOgBehov
         .flatMapValues("manuell-hent-ut-behov") { (_, dtoBehov) -> dtoBehov }
-        .sendBehov("manuell", topics)
+        .sendBehov("manuell")
 }
 
 private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<SøkereKafkaDto, List<DtoBehov>> {

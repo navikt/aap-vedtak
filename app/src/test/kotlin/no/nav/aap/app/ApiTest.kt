@@ -24,15 +24,12 @@ internal class ApiTest {
     @Test
     fun `søker får innvilget vedtak`() {
         withTestApp { mocks ->
-            val config = loadConfig<Config>()
-            val topics = Topics(config.kafka)
-
-            val søknadTopic = mocks.kafka.inputTopic(topics.søknad)
-            val medlemTopic = mocks.kafka.inputTopic(topics.medlem)
-            val medlemOutputTopic = mocks.kafka.outputTopic(topics.medlem)
-            val manuellTopic = mocks.kafka.inputTopic(topics.manuell)
-            val inntektTopic = mocks.kafka.inputTopic(topics.inntekter)
-            val inntektOutputTopic = mocks.kafka.outputTopic(topics.inntekter)
+            val søknadTopic = mocks.kafka.inputTopic(Topics.søknad)
+            val medlemTopic = mocks.kafka.inputTopic(Topics.medlem)
+            val medlemOutputTopic = mocks.kafka.outputTopic(Topics.medlem)
+            val manuellTopic = mocks.kafka.inputTopic(Topics.manuell)
+            val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
+            val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
             søknadTopic.produce("123") {
@@ -278,7 +275,6 @@ private fun containerProperties(): Map<String, String> = mapOf(
     "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
     "KAFKA_BROKERS" to "mock://kafka",
     "KAFKA_TRUSTSTORE_PATH" to "",
-    "KAFKA_SECURITY_ENABLED" to "false",
     "KAFKA_KEYSTORE_PATH" to "",
     "KAFKA_CREDSTORE_PASSWORD" to "",
     "KAFKA_CLIENT_ID" to "vedtak",

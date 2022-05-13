@@ -11,13 +11,13 @@ import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
-    consume(topics.inntekter)
+internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafkaDto>) {
+    consume(Topics.inntekter)
         .filterNotNull("remove-inntekter-tombstones")
         .filter("inntekter-filter-responses") { _, inntekter -> inntekter.response != null }
-        .join(topics.inntekter with topics.søkere, søkere, InntekterAndSøker::create)
+        .join(Topics.inntekter with Topics.søkere, søkere, InntekterAndSøker::create)
         .mapValues(::håndterInntekter)
-        .produce(topics.søkere, "produced-soker-med-handtert-inntekter")
+        .produce(Topics.søkere, "produced-soker-med-handtert-inntekter")
 }
 
 private fun håndterInntekter(inntekterAndSøker: InntekterAndSøker): SøkereKafkaDto {

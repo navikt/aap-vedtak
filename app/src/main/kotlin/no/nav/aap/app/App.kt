@@ -47,32 +47,29 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
-    val topics = Topics(config.kafka)
-    val tables = Tables(topics)
-
     kafka.start(config.kafka, prometheus) {
-        streamsBuilder(topics, tables)
+        streamsBuilder()
     }
 
     routing {
-        devTools(kafka, config.kafka, topics)
+        devTools(kafka, config.kafka)
         actuator(prometheus, kafka)
     }
 }
 
-internal fun StreamsBuilder.streamsBuilder(topics: Topics, tables: Tables) {
-    val søkerKTable = consume(topics.søkere)
+internal fun StreamsBuilder.streamsBuilder() {
+    val søkerKTable = consume(Topics.søkere)
         .filterNotNull("filter-soker-tombstones")
-        .produce(tables.søkere)
+        .produce(Tables.søkere)
 
     søkerKTable.scheduleCleanup(SØKERE_STORE_NAME) { record ->
         søkereToDelete.removeIf { it == record.value().personident }
     }
 
-    søknadStream(søkerKTable, topics)
-    medlemStream(søkerKTable, topics)
-    manuellStream(søkerKTable, topics)
-    inntekterStream(søkerKTable, topics)
+    søknadStream(søkerKTable)
+    medlemStream(søkerKTable)
+    manuellStream(søkerKTable)
+    inntekterStream(søkerKTable)
 }
 
 private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStreams) {
@@ -93,11 +90,11 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStream
 
 val søkereToDelete: MutableList<String> = mutableListOf()
 
-private fun Routing.devTools(kafka: KStreams, config: KafkaConfig, topics: Topics) {
-    val søkerProducer = kafka.createProducer(config, topics.søkere)
+private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
+    val søkerProducer = kafka.createProducer(config, Topics.søkere)
 
     fun <V> Producer<String, V>.tombstone(key: String) {
-        send(ProducerRecord(topics.søkere.name, key, null)).get()
+        send(ProducerRecord(Topics.søkere.name, key, null)).get()
     }
 
     route("/delete/{personident}") {
@@ -105,7 +102,7 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig, topics: Topic
             val personident = call.parameters.getOrFail("personident")
             søkerProducer.tombstone(personident).also {
                 søkereToDelete.add(personident)
-                secureLog.info("produced [${topics.søkere.name}] [$personident] [tombstone]")
+                secureLog.info("produced [${Topics.søkere.name}] [$personident] [tombstone]")
             }
             call.respondText("Deleted $personident")
         }

@@ -11,14 +11,14 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 
-internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
-    consume(topics.medlem)
+internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto>) {
+    consume(Topics.medlem)
         .filterNotNull("filter-medlem-tombstones")
         .filter { _, value -> value.response != null }
         .selectKey("keyed_personident") { _, value -> value.personident }
-        .join(topics.medlem with topics.søkere, søkere, MedlemAndSøker::create)
+        .join(Topics.medlem with Topics.søkere, søkere, MedlemAndSøker::create)
         .mapValues(::medlemLøsning)
-        .produce(topics.søkere, "produced-soker-med-medlem")
+        .produce(Topics.søkere, "produced-soker-med-medlem")
 }
 
 private fun medlemLøsning(medlemAndSøker: MedlemAndSøker): SøkereKafkaDto {

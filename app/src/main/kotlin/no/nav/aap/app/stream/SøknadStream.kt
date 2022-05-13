@@ -13,19 +13,19 @@ import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>, topics: Topics) {
-    val søkerOgBehov = consume(topics.søknad)
+internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
+    val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
-        .leftJoin(topics.søknad with topics.søkere, søkere) { jsonSøknad, _ -> jsonSøknad }
+        .leftJoin(Topics.søknad with Topics.søkere, søkere) { jsonSøknad, _ -> jsonSøknad }
         .mapValues(::opprettSøker)
 
     søkerOgBehov
         .mapValues("soknad-hent-ut-soker") { (søker) -> søker }
-        .produce(topics.søkere, "produced-ny-soker")
+        .produce(Topics.søkere, "produced-ny-soker")
 
     søkerOgBehov
         .flatMapValues("soknad-hent-ut-behov") { (_, dtoBehov) -> dtoBehov }
-        .sendBehov("soknad", topics)
+        .sendBehov("soknad")
 }
 
 private fun opprettSøker(jsonSøknad: JsonSøknad): Pair<SøkereKafkaDto, List<DtoBehov>> {
