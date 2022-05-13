@@ -16,7 +16,7 @@ package "Sub-topology: 0" {
 	agent "filter-soknad-tombstone" <<Processor>> as filter_soknad_tombstone
 	agent "aap.manuell.v1-joined-aap.sokere.v1" <<Processor>> as aap_manuell_v1_joined_aap_sokere_v1
 	agent "aap.soknad-sendt.v1-joined-aap.sokere.v1" <<Processor>> as aap_soknad_sendt_v1_joined_aap_sokere_v1
-	agent "KSTREAM-MAPVALUES-0000000011" <<Processor>> as KSTREAM_MAPVALUES_0000000011
+	agent "KSTREAM-MAP-0000000011" <<Processor>> as KSTREAM_MAP_0000000011
 	agent "KSTREAM-MAPVALUES-0000000041" <<Processor>> as KSTREAM_MAPVALUES_0000000041
 	agent "manuell-hent-ut-behov" <<Processor>> as manuell_hent_ut_behov
 	agent "soknad-hent-ut-behov" <<Processor>> as soknad_hent_ut_behov
@@ -90,9 +90,9 @@ package "Sub-topology: 0" {
 	filter_manuell_tombstones --> aap_manuell_v1_joined_aap_sokere_v1
 	filter_soknad_tombstone --> aap_soknad_sendt_v1_joined_aap_sokere_v1
 	aap_manuell_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000041
-	aap_soknad_sendt_v1_joined_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000011
-	KSTREAM_MAPVALUES_0000000011 --> soknad_hent_ut_behov
-	KSTREAM_MAPVALUES_0000000011 --> soknad_hent_ut_soker
+	aap_soknad_sendt_v1_joined_aap_sokere_v1 --> KSTREAM_MAP_0000000011
+	KSTREAM_MAP_0000000011 --> soknad_hent_ut_behov
+	KSTREAM_MAP_0000000011 --> soknad_hent_ut_soker
 	KSTREAM_MAPVALUES_0000000041 --> manuell_hent_ut_behov
 	KSTREAM_MAPVALUES_0000000041 --> manuell_hent_ut_soker
 	manuell_hent_ut_behov --> manuell_split_behov
