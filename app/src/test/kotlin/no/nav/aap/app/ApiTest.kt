@@ -32,30 +32,30 @@ internal class ApiTest {
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
-            val fnr40årSiden = LocalDate.now().minusYears(40).format(DateTimeFormatter.ofPattern("ddMMyy"))
-            søknadTopic.produce(fnr40årSiden) {
-                JsonSøknad()
+            val fnr = "123"
+            søknadTopic.produce(fnr) {
+                JsonSøknad(fødselsdato = LocalDate.now().minusYears(40))
             }
 
             val medlemRequest = medlemOutputTopic.readValue()
-            medlemTopic.produce(fnr40årSiden) {
+            medlemTopic.produce(fnr) {
                 medlemRequest.apply {
                     response = AvroMedlemResponse.newBuilder().setErMedlem(AvroErMedlem.JA).build()
                 }
             }
 
-            manuellTopic.produserLøsning(key = fnr40årSiden, losning_11_3_manuell = Løsning_11_3_manuell(true))
-            manuellTopic.produserLøsning(key = fnr40årSiden, losning_11_5_manuell = Løsning_11_5_manuell(true, true))
-            manuellTopic.produserLøsning(key = fnr40årSiden, losning_11_6_manuell = Løsning_11_6_manuell(true))
-            manuellTopic.produserLøsning(key = fnr40årSiden, losning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell(true))
-            manuellTopic.produserLøsning(key = fnr40årSiden, losning_11_29_manuell = Løsning_11_29_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, losning_11_3_manuell = Løsning_11_3_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, losning_11_5_manuell = Løsning_11_5_manuell(true, true))
+            manuellTopic.produserLøsning(key = fnr, losning_11_6_manuell = Løsning_11_6_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, losning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, losning_11_29_manuell = Løsning_11_29_manuell(true))
             manuellTopic.produserLøsning(
-                key = fnr40årSiden,
+                key = fnr,
                 losningVurderingAvBeregningsdato = LøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
-            inntektTopic.produce(fnr40årSiden) {
+            inntektTopic.produce(fnr) {
                 inntekter.copy(
                     response = InntekterKafkaDto.Response(
                         listOf(
@@ -67,7 +67,7 @@ internal class ApiTest {
                 )
             }
 
-            val søker = stateStore[fnr40årSiden]
+            val søker = stateStore[fnr]
             assertNotNull(søker)
             val actual = søker.toDto()
             assertNotNull(actual.saker.firstOrNull()?.vedtak) { "Saken mangler vedtak - $actual" }
@@ -77,7 +77,7 @@ internal class ApiTest {
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].vilkårsvurderingsid
 
             val expected = DtoSøker(
-                personident = fnr40årSiden,
+                personident = fnr,
                 fødselsdato = LocalDate.now().minusYears(40),
                 saker = listOf(
                     DtoSak(

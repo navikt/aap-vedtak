@@ -103,17 +103,24 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     route("/søknad/{personident}") {
         get {
             val personident = call.parameters.getOrFail("personident")
+
+            søknadProducer.produce(Topics.søknad, personident, null).also {
+                secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
+            }
+
             søkerProducer.produce(Topics.søkere, personident, null).also {
                 søkereToDelete.add(personident)
-                secureLog.info("produced [${Topics.søkere.name}] [$personident] [tombstone]")
+                secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
                 delay(2000L) // vent på delete i state store
-
-            }
-            søknadProducer.produce(Topics.søknad, personident, JsonSøknad()).also {
-                secureLog.info("produced [${Topics.søkere.name}] [$personident] [mock søknad]")
             }
 
-            call.respondText("Mock søknad mottatt!")
+            val søknad = JsonSøknad()
+
+            søknadProducer.produce(Topics.søknad, personident, søknad).also {
+                secureLog.info("produced [${Topics.søkere}] [$personident] [$søknad]")
+            }
+
+            call.respondText("Søknad $søknad mottatt!")
         }
     }
 }

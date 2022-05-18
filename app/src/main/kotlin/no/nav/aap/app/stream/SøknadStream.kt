@@ -12,8 +12,6 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov = consume(Topics.søknad)
@@ -32,8 +30,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
 }
 
 private fun opprettSøker(ident: String, jsonSøknad: JsonSøknad): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val fødselsdato = LocalDate.parse(ident.take(6), DateTimeFormatter.ofPattern("ddMMyy")).minusYears(100)
-    val søknad = Søknad(Personident(ident), Fødselsdato(fødselsdato))
+    val søknad = Søknad(Personident(ident), Fødselsdato(jsonSøknad.fødselsdato))
     val søker = søknad.opprettSøker()
     søker.håndterSøknad(søknad)
 
