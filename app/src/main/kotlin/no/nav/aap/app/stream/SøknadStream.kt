@@ -10,7 +10,6 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.kafka.streams.*
-import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 import java.time.LocalDate
@@ -19,8 +18,9 @@ import java.time.format.DateTimeFormatter
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
-        .leftJoin(Topics.søknad with Topics.søkere, søkere) { jsonSøknad, _ -> jsonSøknad }
-        .map(::opprettSøker)
+        .leftJoin(Topics.søknad with Topics.søkere, søkere) { jsonSøknad, søker -> jsonSøknad to søker }
+        .filter("filter-soknad-ny") { _, (_, søker) -> søker == null }
+        .mapValues { personident, (søknad, _) -> opprettSøker(personident, søknad) }
 
     søkerOgBehov
         .mapValues("soknad-hent-ut-soker") { (søker) -> søker }
@@ -31,11 +31,11 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
         .sendBehov("soknad")
 }
 
-private fun opprettSøker(ident: String, jsonSøknad: JsonSøknad): KeyValue<String, Pair<SøkereKafkaDto, List<DtoBehov>>> {
+private fun opprettSøker(ident: String, jsonSøknad: JsonSøknad): Pair<SøkereKafkaDto, List<DtoBehov>> {
     val fødselsdato = LocalDate.parse(ident.take(6), DateTimeFormatter.ofPattern("ddMMyy")).minusYears(100)
     val søknad = Søknad(Personident(ident), Fødselsdato(fødselsdato))
     val søker = søknad.opprettSøker()
     søker.håndterSøknad(søknad)
 
-    return KeyValue(ident, søker.toDto().toJson() to søknad.behov().map { it.toDto(ident) })
+    return søker.toDto().toJson() to søknad.behov().map { it.toDto(ident) }
 }
