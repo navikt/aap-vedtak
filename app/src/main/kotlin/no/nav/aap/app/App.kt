@@ -13,9 +13,12 @@ import io.ktor.server.routing.*
 import io.ktor.server.util.*
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import kotlinx.coroutines.delay
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.modell.JsonSøknad
+import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
@@ -92,19 +95,25 @@ val søkereToDelete: MutableList<String> = mutableListOf()
 
 private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     val søkerProducer = kafka.createProducer(config, Topics.søkere)
+    val søknadProducer = kafka.createProducer(config, Topics.søknad)
 
-    fun <V> Producer<String, V>.tombstone(key: String) {
-        send(ProducerRecord(Topics.søkere.name, key, null)).get()
-    }
+    fun <V> Producer<String, V>.produce(topic: Topic<V>, key: String, value: V?) =
+        send(ProducerRecord(topic.name, key, value)).get()
 
-    route("/delete/{personident}") {
+    route("/søknad/{personident}") {
         get {
             val personident = call.parameters.getOrFail("personident")
-            søkerProducer.tombstone(personident).also {
+            søkerProducer.produce(Topics.søkere, personident, null).also {
                 søkereToDelete.add(personident)
                 secureLog.info("produced [${Topics.søkere.name}] [$personident] [tombstone]")
+                delay(2000L) // vent på delete i state store
+
             }
-            call.respondText("Deleted $personident")
+            søknadProducer.produce(Topics.søknad, personident, JsonSøknad()).also {
+                secureLog.info("produced [${Topics.søkere.name}] [$personident] [mock søknad]")
+            }
+
+            call.respondText("Mock søknad mottatt!")
         }
     }
 }
