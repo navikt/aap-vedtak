@@ -325,7 +325,9 @@ internal class Sak private constructor(
             }
         }
 
-        object IkkeOppfylt : Tilstand(Tilstandsnavn.IKKE_OPPFYLT)
+        object IkkeOppfylt : Tilstand(Tilstandsnavn.IKKE_OPPFYLT) {
+            override fun onEntry(sak: Sak, hendelse: Hendelse) = hendelse.kansellerAlleBehov()
+        }
     }
 
     private fun toDto() = tilstand.toDto(this)

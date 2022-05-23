@@ -5,6 +5,8 @@ import java.time.Year
 open class Hendelse {
     private val behov = mutableListOf<Behov>()
 
+    internal fun kansellerAlleBehov() = behov.clear()
+
     internal fun opprettBehov(behov: Behov) {
         this.behov.add(behov)
     }

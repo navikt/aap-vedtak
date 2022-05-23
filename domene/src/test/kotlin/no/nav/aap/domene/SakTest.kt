@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.Year
+import kotlin.test.assertTrue
 
 internal class SakTest {
     @Test
@@ -171,6 +172,28 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_22)
         assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+    }
+
+    @Test
+    fun `alle behov blir kansellert dersom et vilkår blir satt til ikke oppfylt`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val sak = Sak()
+
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("IKKE_OPPFYLT", sak)
+
+        val saker = listOf(sak).toDto()
+        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_OPPFYLT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTrue(søknad.behov().isEmpty())
     }
 
     private fun assertTilstand(actual: String, expected: Sak) {
