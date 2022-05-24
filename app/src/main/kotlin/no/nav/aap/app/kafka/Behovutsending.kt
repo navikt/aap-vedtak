@@ -4,11 +4,7 @@ import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.avro.medlem.v1.Medlem
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
-import no.nav.aap.kafka.streams.Behov
-import no.nav.aap.kafka.streams.BehovExtractor
-import no.nav.aap.kafka.streams.branch
-import no.nav.aap.kafka.streams.sendBehov
-import no.nav.aap.kafka.streams.mapValues
+import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.kstream.KStream
 import java.time.LocalDate
 import java.time.Year
@@ -23,18 +19,30 @@ internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
         }
 }
 
-internal interface BehovVedtak : Behov<Lytter> {
-    fun erMedlem() = false
-    fun erInntekter() = false
-}
-
-internal class DtoBehovWrapper(
+private class DtoBehovWrapper(
     private val dtoBehov: DtoBehov
-) : BehovVedtak {
-    override fun erMedlem() = dtoBehov.erMedlem()
-    override fun erInntekter() = dtoBehov.erInntekter()
+) : Behov<Lytter> {
+    fun erMedlem() = Sjekk.ErMedlem().apply(this::accept).er()
+    fun erInntekter() = Sjekk.ErInntekter().apply(this::accept).er()
     override fun accept(visitor: Lytter) {
         dtoBehov.accept(visitor)
+    }
+}
+
+private sealed class Sjekk : Lytter {
+    protected var er = false
+    fun er() = er
+
+    class ErMedlem : Sjekk() {
+        override fun medlem(ident: String) {
+            er = true
+        }
+    }
+
+    class ErInntekter : Sjekk() {
+        override fun behovInntekter(ident: String, fom: Year, tom: Year) {
+            er = true
+        }
     }
 }
 
