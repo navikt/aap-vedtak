@@ -48,7 +48,6 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             IKKE_VURDERT({ IkkeVurdert }),
             SØKNAD_MOTTATT({ SøknadMottatt }),
             OPPFYLT({ Oppfylt }),
-            IKKE_OPPFYLT({ IkkeOppfylt }),
         }
 
         internal open fun onEntry(vilkårsvurdering: Paragraf_11_12FørsteLedd, hendelse: Hendelse) {}
@@ -104,11 +103,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
                 løsning: LøsningParagraf_11_12FørsteLedd
             ) {
                 vilkårsvurdering.løsning = løsning
-                if (løsning.erManueltOppfylt()) {
-                    vilkårsvurdering.tilstand(Oppfylt, løsning)
-                } else {
-                    vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
-                }
+                vilkårsvurdering.tilstand(Oppfylt, løsning)
             }
 
             override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -139,30 +134,12 @@ internal class Paragraf_11_12FørsteLedd private constructor(
                 vilkårsvurdering: DtoVilkårsvurdering
             ) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_12_ledd1_manuell)
-                paragraf.løsning = LøsningParagraf_11_12FørsteLedd(løsning.erOppfylt)
-            }
-        }
-
-        object IkkeOppfylt : Tilstand(
-            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT,
-            erOppfylt = false,
-            erIkkeOppfylt = true
-        ) {
-            override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
-                paragraf = paragraf.paragraf.name,
-                ledd = paragraf.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
-                løsning_11_12_ledd1_manuell = paragraf.løsning.toDto()
-            )
-
-            override fun gjenopprettTilstand(
-                paragraf: Paragraf_11_12FørsteLedd,
-                vilkårsvurdering: DtoVilkårsvurdering
-            ) {
-                val løsning = requireNotNull(vilkårsvurdering.løsning_11_12_ledd1_manuell)
-                paragraf.løsning = LøsningParagraf_11_12FørsteLedd(løsning.erOppfylt)
+                paragraf.løsning = LøsningParagraf_11_12FørsteLedd(
+                    bestemmesAv = løsning.bestemmesAv,
+                    unntak = løsning.unntak,
+                    unntaksbegrunnelse = løsning.unntaksbegrunnelse,
+                    manueltSattVirkningsdato = løsning.manueltSattVirkningsdato
+                )
             }
         }
 

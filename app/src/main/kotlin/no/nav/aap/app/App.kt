@@ -18,7 +18,6 @@ import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
-import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream

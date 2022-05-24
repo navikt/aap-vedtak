@@ -20,26 +20,10 @@ internal class `§11-12 første ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_12FørsteLedd(true)
+        val løsning = LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now())
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
-    }
-
-    @Test
-    fun `Hvis saksbehandler manuelt IKKE har oppfylt 11-12, settes vilkår til ikke oppfylt`() {
-        val personident = Personident("12345678910")
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
-
-        val vilkår = Paragraf_11_12FørsteLedd()
-
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
-
-        val løsning = LøsningParagraf_11_12FørsteLedd(false)
-        vilkår.håndterLøsning(løsning)
-
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
     }
 }

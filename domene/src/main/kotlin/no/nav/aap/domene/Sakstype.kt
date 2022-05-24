@@ -1,7 +1,6 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektshistorikk
-import no.nav.aap.domene.beregning.Yrkesskade as YrkesskadeBeregning
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt

@@ -1,6 +1,5 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.Sakstype
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*

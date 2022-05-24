@@ -68,9 +68,8 @@ internal object Grunnbeløp {
                 return minOf(beløpFørJustering, grunnbeløpForInntektsår.gjennomsnittBeløp * 6)
             }
 
-            fun Iterable<Element>.finnGrunnlagsfaktor(år: Year, beløp: Beløp): Grunnlagsfaktor {
-                return Grunnlagsfaktor(beløp / finnGrunnbeløpForÅr(år).gjennomsnittBeløp)
-            }
+            fun Iterable<Element>.finnGrunnlagsfaktor(år: Year, beløp: Beløp) =
+                Grunnlagsfaktor(beløp / finnGrunnbeløpForÅr(år).gjennomsnittBeløp)
         }
     }
 

@@ -4,7 +4,6 @@ import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.hendelse.LøsningParagraf_11_22
-import no.nav.aap.hendelse.LøsningParagraf_11_29
 import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue

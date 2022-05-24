@@ -136,7 +136,11 @@ internal class Paragraf_11_6 private constructor(
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_6, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_6_manuell)
-                paragraf.løsning = LøsningParagraf_11_6(løsning.erOppfylt)
+                paragraf.løsning = LøsningParagraf_11_6(
+                    harBehovForBehandling = løsning.harBehovForBehandling,
+                    harBehovForTiltak = løsning.harBehovForTiltak,
+                    harMulighetForÅKommeIArbeid = løsning.harMulighetForÅKommeIArbeid
+                )
             }
         }
 
@@ -156,7 +160,11 @@ internal class Paragraf_11_6 private constructor(
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_6, vilkårsvurdering: DtoVilkårsvurdering) {
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_6_manuell)
-                paragraf.løsning = LøsningParagraf_11_6(løsning.erOppfylt)
+                paragraf.løsning = LøsningParagraf_11_6(
+                    harBehovForBehandling = løsning.harBehovForBehandling,
+                    harBehovForTiltak = løsning.harBehovForTiltak,
+                    harMulighetForÅKommeIArbeid = løsning.harMulighetForÅKommeIArbeid
+                )
             }
         }
 

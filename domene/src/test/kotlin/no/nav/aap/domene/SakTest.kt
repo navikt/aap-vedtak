@@ -73,13 +73,20 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_3(true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(true, true)))
+        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+            kravOmNedsattArbeidsevneErOppfylt = true,
+            nedsettelseSkyldesSykdomEllerSkade = true
+        )))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_6(true))
+        sak.håndterLøsning(LøsningParagraf_11_6(
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        ))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
+        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now()))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_29(true))
@@ -132,10 +139,14 @@ internal class SakTest {
         ))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_6(true))
+        sak.håndterLøsning(LøsningParagraf_11_6(
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        ))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd(true))
+        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now()))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_22(

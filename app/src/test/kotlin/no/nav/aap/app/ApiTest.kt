@@ -3,9 +3,12 @@ package no.nav.aap.app
 import io.ktor.server.testing.*
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.modell.*
+import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.app.modell.InntekterKafkaDto.Response.Inntekt
+import no.nav.aap.app.modell.JsonSøknad
+import no.nav.aap.app.modell.ManuellKafkaDto
 import no.nav.aap.app.modell.ManuellKafkaDto.*
+import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.dto.*
 import org.apache.kafka.streams.TestInputTopic
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -15,7 +18,6 @@ import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
-import java.time.format.DateTimeFormatter
 import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
 import no.nav.aap.avro.medlem.v1.Response as AvroMedlemResponse
 
@@ -45,9 +47,16 @@ internal class ApiTest {
             }
 
             manuellTopic.produserLøsning(key = fnr, losning_11_3_manuell = Løsning_11_3_manuell(true))
-            manuellTopic.produserLøsning(key = fnr, losning_11_5_manuell = Løsning_11_5_manuell(true, true))
-            manuellTopic.produserLøsning(key = fnr, losning_11_6_manuell = Løsning_11_6_manuell(true))
-            manuellTopic.produserLøsning(key = fnr, losning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, losning_11_5_manuell = Løsning_11_5_manuell(
+                kravOmNedsattArbeidsevneErOppfylt = true,
+                nedsettelseSkyldesSykdomEllerSkade = true
+            ))
+            manuellTopic.produserLøsning(key = fnr, losning_11_6_manuell = Løsning_11_6_manuell(
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            ))
+            manuellTopic.produserLøsning(key = fnr, losning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell("SPS", "INGEN", "", LocalDate.now()))
             manuellTopic.produserLøsning(key = fnr, losning_11_29_manuell = Løsning_11_29_manuell(true))
             manuellTopic.produserLøsning(
                 key = fnr,
@@ -136,7 +145,11 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
                                         måVurderesManuelt = false,
-                                        løsning_11_6_manuell = DtoLøsningParagraf_11_6(true)
+                                        løsning_11_6_manuell = DtoLøsningParagraf_11_6(
+                                            harBehovForBehandling = true,
+                                            harBehovForTiltak = true,
+                                            harMulighetForÅKommeIArbeid = true
+                                        )
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(6),
@@ -144,7 +157,7 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
                                         måVurderesManuelt = false,
-                                        løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(true)
+                                        løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1("SPS", "INGEN", "", LocalDate.now())
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(7),

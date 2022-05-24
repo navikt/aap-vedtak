@@ -1,6 +1,5 @@
 package no.nav.aap.app.modell
 
-import no.nav.aap.domene.entitet.Fødselsdato
 import java.time.LocalDate
 import kotlin.random.Random
 

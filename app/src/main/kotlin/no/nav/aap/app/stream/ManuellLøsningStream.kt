@@ -35,21 +35,21 @@ private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<
     val dtoBehov = mutableListOf<DtoBehov>()
 
     løsningAndSøker.løsning.løsning_11_2_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsning_11_3_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsning_11_4_ledd2_ledd3_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsning_11_5_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsning_11_6_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsning_11_12_ledd1_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsning_11_29_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
     løsningAndSøker.løsning.løsningVurderingAvBeregningsdato?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { it.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
 
     return søker.toDto().toJson() to dtoBehov
 }

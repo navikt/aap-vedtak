@@ -21,8 +21,19 @@ data class ManuellKafkaDto(
         val nedsettelseSkyldesSykdomEllerSkade: Boolean
     )
 
-    data class Løsning_11_6_manuell(val erOppfylt: Boolean)
-    data class Løsning_11_12_ledd1_manuell(val erOppfylt: Boolean)
+    data class Løsning_11_6_manuell(
+        val harBehovForBehandling: Boolean,
+        val harBehovForTiltak: Boolean,
+        val harMulighetForÅKommeIArbeid: Boolean
+    )
+
+    data class Løsning_11_12_ledd1_manuell(
+        val bestemmesAv: String,
+        val unntak: String,
+        val unntaksbegrunnelse: String,
+        val manueltSattVirkningsdato: LocalDate
+    )
+
     data class Løsning_11_29_manuell(val erOppfylt: Boolean)
     data class LøsningVurderingAvBeregningsdato(val beregningsdato: LocalDate)
 
@@ -38,8 +49,21 @@ data class ManuellKafkaDto(
                 nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
             )
         },
-        løsning_11_6_manuell = løsning_11_6_manuell?.let { DtoLøsningParagraf_11_6(it.erOppfylt) },
-        løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.let { DtoLøsningParagraf_11_12_ledd1(it.erOppfylt) },
+        løsning_11_6_manuell = løsning_11_6_manuell?.let {
+            DtoLøsningParagraf_11_6(
+                harBehovForBehandling = it.harBehovForBehandling,
+                harBehovForTiltak = it.harBehovForTiltak,
+                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+            )
+        },
+        løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.let {
+            DtoLøsningParagraf_11_12_ledd1(
+                bestemmesAv = it.bestemmesAv,
+                unntak = it.unntak,
+                unntaksbegrunnelse = it.unntaksbegrunnelse,
+                manueltSattVirkningsdato = it.manueltSattVirkningsdato
+            )
+        },
         løsning_11_29_manuell = løsning_11_29_manuell?.let { DtoLøsningParagraf_11_29(it.erOppfylt) },
         løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.let {
             DtoLøsningVurderingAvBeregningsdato(it.beregningsdato)
@@ -56,8 +80,21 @@ data class ManuellKafkaDto(
                 nedsettelseSkyldesSykdomEllerSkade = true
             )
         },
-        løsning_11_6_manuell?.let { Løsning_11_6_manuell(it.erOppfylt) },
-        løsning_11_12_ledd1_manuell?.let { Løsning_11_12_ledd1_manuell(it.erOppfylt) },
+        løsning_11_6_manuell?.let {
+            Løsning_11_6_manuell(
+                harBehovForBehandling = it.harBehovForBehandling,
+                harBehovForTiltak = it.harBehovForTiltak,
+                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+            )
+        },
+        løsning_11_12_ledd1_manuell?.let {
+            Løsning_11_12_ledd1_manuell(
+                bestemmesAv = it.bestemmesAv,
+                unntak = it.unntak,
+                unntaksbegrunnelse = it.unntaksbegrunnelse,
+                manueltSattVirkningsdato = it.manueltSattVirkningsdato
+            )
+        },
         løsning_11_29_manuell?.let { Løsning_11_29_manuell(it.erOppfylt) },
         løsningVurderingAvBeregningsdato?.let { LøsningVurderingAvBeregningsdato(it.beregningsdato) }
     )

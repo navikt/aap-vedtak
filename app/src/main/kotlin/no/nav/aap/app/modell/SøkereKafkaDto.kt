@@ -124,12 +124,30 @@ data class SøkereKafkaDto(
         )
     }
 
-    data class LøsningParagraf_11_6(val erOppfylt: Boolean) {
-        fun toDto() = DtoLøsningParagraf_11_6(erOppfylt)
+    data class LøsningParagraf_11_6(
+        val harBehovForBehandling: Boolean,
+        val harBehovForTiltak: Boolean,
+        val harMulighetForÅKommeIArbeid: Boolean
+    ) {
+        fun toDto() = DtoLøsningParagraf_11_6(
+            harBehovForBehandling = harBehovForBehandling,
+            harBehovForTiltak = harBehovForTiltak,
+            harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        )
     }
 
-    data class LøsningParagraf_11_12_ledd1(val erOppfylt: Boolean) {
-        fun toDto() = DtoLøsningParagraf_11_12_ledd1(erOppfylt)
+    data class LøsningParagraf_11_12_ledd1(
+        val bestemmesAv: String,
+        val unntak: String,
+        val unntaksbegrunnelse: String,
+        val manueltSattVirkningsdato: LocalDate
+    ) {
+        fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+            bestemmesAv = bestemmesAv,
+            unntak = unntak,
+            unntaksbegrunnelse = unntaksbegrunnelse,
+            manueltSattVirkningsdato = manueltSattVirkningsdato
+        )
     }
 
     data class LøsningParagraf_11_22(
@@ -304,10 +322,19 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_6_manuell = vilkår.løsning_11_6_manuell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_6(erOppfylt = it.erOppfylt)
+                                SøkereKafkaDto.LøsningParagraf_11_6(
+                                    harBehovForBehandling = it.harBehovForBehandling,
+                                    harBehovForTiltak = it.harBehovForTiltak,
+                                    harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+                                )
                             },
                             løsning_11_12_ledd1_manuell = vilkår.løsning_11_12_ledd1_manuell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_12_ledd1(erOppfylt = it.erOppfylt)
+                                SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
+                                    bestemmesAv = it.bestemmesAv,
+                                    unntak = it.unntak,
+                                    unntaksbegrunnelse = it.unntaksbegrunnelse,
+                                    manueltSattVirkningsdato = it.manueltSattVirkningsdato
+                                )
                             },
                             løsning_11_22_manuell = vilkår.løsning_11_22_manuell?.let {
                                 SøkereKafkaDto.LøsningParagraf_11_22(

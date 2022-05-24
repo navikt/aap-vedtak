@@ -20,7 +20,11 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_6(true)
+        val løsning = LøsningParagraf_11_6(
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
@@ -28,7 +32,7 @@ internal class `§11-6 Test` {
     }
 
     @Test
-    fun `Hvis saksbehandler manuelt IKKE har oppfylt 11-6, settes vilkår til ikke oppfylt`() {
+    fun `Hvis bruker ikke har behov for behandling, settes vilkår til ikke oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -36,7 +40,51 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_6(false)
+        val løsning = LøsningParagraf_11_6(
+            harBehovForBehandling = false,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterLøsning(løsning)
+
+        assertFalse(vilkår.erOppfylt())
+        assertTrue(vilkår.erIkkeOppfylt())
+    }
+
+    @Test
+    fun `Hvis bruker ikke har behov for tiltak, settes vilkår til ikke oppfylt`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_6()
+
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsning = LøsningParagraf_11_6(
+            harBehovForBehandling = true,
+            harBehovForTiltak = false,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterLøsning(løsning)
+
+        assertFalse(vilkår.erOppfylt())
+        assertTrue(vilkår.erIkkeOppfylt())
+    }
+
+    @Test
+    fun `Hvis bruker ikke har mulighet til å komme i arbeid, settes vilkår til ikke oppfylt`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_6()
+
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsning = LøsningParagraf_11_6(
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = false
+        )
         vilkår.håndterLøsning(løsning)
 
         assertFalse(vilkår.erOppfylt())

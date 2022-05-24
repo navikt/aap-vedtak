@@ -134,17 +134,35 @@ data class DtoLøsningParagraf_11_5_yrkesskade(
     }
 }
 
-data class DtoLøsningParagraf_11_6(val erOppfylt: Boolean) {
+data class DtoLøsningParagraf_11_6(
+    val harBehovForBehandling: Boolean,
+    val harBehovForTiltak: Boolean,
+    val harMulighetForÅKommeIArbeid: Boolean
+) {
     fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_6(erOppfylt)
+        val løsning = LøsningParagraf_11_6(
+            harBehovForBehandling = harBehovForBehandling,
+            harBehovForTiltak = harBehovForTiltak,
+            harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        )
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 }
 
-data class DtoLøsningParagraf_11_12_ledd1(val erOppfylt: Boolean) {
+data class DtoLøsningParagraf_11_12_ledd1(
+    val bestemmesAv: String,
+    val unntak: String,
+    val unntaksbegrunnelse: String,
+    val manueltSattVirkningsdato: LocalDate
+) {
     fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_12FørsteLedd(erOppfylt)
+        val løsning = LøsningParagraf_11_12FørsteLedd(
+            bestemmesAv = bestemmesAv,
+            unntak = unntak,
+            unntaksbegrunnelse = unntaksbegrunnelse,
+            manueltSattVirkningsdato = manueltSattVirkningsdato
+        )
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
