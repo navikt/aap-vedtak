@@ -100,27 +100,40 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     fun <V> Producer<String, V>.produce(topic: Topic<V>, key: String, value: V?) =
         send(ProducerRecord(topic.name, key, value)).get()
 
-    route("/søknad/{personident}") {
-        get {
-            val personident = call.parameters.getOrFail("personident")
+    get("/delete/{personident}") {
+        val personident = call.parameters.getOrFail("personident")
 
-            søknadProducer.produce(Topics.søknad, personident, null).also {
-                secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
-            }
-
-            søkerProducer.produce(Topics.søkere, personident, null).also {
-                søkereToDelete.add(personident)
-                secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
-                delay(2000L) // vent på delete i state store
-            }
-
-            val søknad = JsonSøknad()
-
-            søknadProducer.produce(Topics.søknad, personident, søknad).also {
-                secureLog.info("produced [${Topics.søkere}] [$personident] [$søknad]")
-            }
-
-            call.respondText("Søknad $søknad mottatt!")
+        søknadProducer.produce(Topics.søknad, personident, null).also {
+            secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
         }
+
+        søkerProducer.produce(Topics.søkere, personident, null).also {
+            søkereToDelete.add(personident)
+            secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
+        }
+
+        call.respondText("Søknad og søker med ident $personident slettes!")
+    }
+
+    get("/søknad/{personident}") {
+        val personident = call.parameters.getOrFail("personident")
+
+        søknadProducer.produce(Topics.søknad, personident, null).also {
+            secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
+        }
+
+        søkerProducer.produce(Topics.søkere, personident, null).also {
+            søkereToDelete.add(personident)
+            secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
+            delay(2000L) // vent på delete i state store
+        }
+
+        val søknad = JsonSøknad()
+
+        søknadProducer.produce(Topics.søknad, personident, søknad).also {
+            secureLog.info("produced [${Topics.søkere}] [$personident] [$søknad]")
+        }
+
+        call.respondText("Søknad $søknad mottatt!")
     }
 }
