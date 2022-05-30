@@ -12,6 +12,9 @@ import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
+import org.slf4j.LoggerFactory
+
+private val secureLog = LoggerFactory.getLogger("secureLog")
 
 internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov =
@@ -30,28 +33,35 @@ internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDt
 }
 
 private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val søker = Søker.gjenopprett(løsningAndSøker.dtoSøker)
+    try {
+        val søker = Søker.gjenopprett(løsningAndSøker.dtoSøker)
 
-    val dtoBehov = mutableListOf<DtoBehov>()
+        val dtoBehov = mutableListOf<DtoBehov>()
 
-    løsningAndSøker.løsning.løsning_11_2_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsning_11_3_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsning_11_4_ledd2_ledd3_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsning_11_5_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsning_11_6_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsning_11_12_ledd1_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsning_11_29_manuell?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
-    løsningAndSøker.løsning.løsningVurderingAvBeregningsdato?.håndter(søker)
-        ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_2_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_3_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_4_ledd2_ledd3_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_5_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_6_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_12_ledd1_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsning_11_29_manuell?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
+        løsningAndSøker.løsning.løsningVurderingAvBeregningsdato?.håndter(søker)
+            ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
 
-    return søker.toDto().toJson() to dtoBehov
+        return søker.toDto().toJson() to dtoBehov
+    } catch (throwable: Throwable) {
+        secureLog.error("Feil i behandling av manuell løsning", throwable)
+        throw throwable
+    } finally {
+        secureLog.info("Var her ved behandling av manuell løsning")
+    }
 }
 
 private data class LøsningAndSøker(val løsning: DtoManuell, val dtoSøker: DtoSøker) {

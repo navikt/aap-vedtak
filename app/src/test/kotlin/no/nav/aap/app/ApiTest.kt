@@ -46,21 +46,21 @@ internal class ApiTest {
                 }
             }
 
-            manuellTopic.produserLøsning(key = fnr, losning_11_3_manuell = Løsning_11_3_manuell(true))
-            manuellTopic.produserLøsning(key = fnr, losning_11_5_manuell = Løsning_11_5_manuell(
+            manuellTopic.produserLøsning(key = fnr, løsning_11_3_manuell = Løsning_11_3_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, løsning_11_5_manuell = Løsning_11_5_manuell(
                 kravOmNedsattArbeidsevneErOppfylt = true,
                 nedsettelseSkyldesSykdomEllerSkade = true
             ))
-            manuellTopic.produserLøsning(key = fnr, losning_11_6_manuell = Løsning_11_6_manuell(
+            manuellTopic.produserLøsning(key = fnr, løsning_11_6_manuell = Løsning_11_6_manuell(
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
                 harMulighetForÅKommeIArbeid = true
             ))
-            manuellTopic.produserLøsning(key = fnr, losning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell("SPS", "INGEN", "", LocalDate.now()))
-            manuellTopic.produserLøsning(key = fnr, losning_11_29_manuell = Løsning_11_29_manuell(true))
+            manuellTopic.produserLøsning(key = fnr, løsning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell("SPS", "INGEN", "", LocalDate.now()))
+            manuellTopic.produserLøsning(key = fnr, løsning_11_29_manuell = Løsning_11_29_manuell(true))
             manuellTopic.produserLøsning(
                 key = fnr,
-                losningVurderingAvBeregningsdato = LøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
+                løsningVurderingAvBeregningsdato = LøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
@@ -250,25 +250,25 @@ internal class ApiTest {
 
     private fun TestInputTopic<String, ManuellKafkaDto>.produserLøsning(
         key: String,
-        losning_11_2_manuell: Løsning_11_2_manuell? = null,
-        losning_11_3_manuell: Løsning_11_3_manuell? = null,
-        losning_11_4_l2_l3_manuell: Løsning_11_4_ledd2_ledd3_manuell? = null,
-        losning_11_5_manuell: Løsning_11_5_manuell? = null,
-        losning_11_6_manuell: Løsning_11_6_manuell? = null,
-        losning_11_12_l1_manuell: Løsning_11_12_ledd1_manuell? = null,
-        losning_11_29_manuell: Løsning_11_29_manuell? = null,
-        losningVurderingAvBeregningsdato: LøsningVurderingAvBeregningsdato? = null
+        løsning_11_2_manuell: Løsning_11_2_manuell? = null,
+        løsning_11_3_manuell: Løsning_11_3_manuell? = null,
+        løsning_11_4_l2_l3_manuell: Løsning_11_4_ledd2_ledd3_manuell? = null,
+        løsning_11_5_manuell: Løsning_11_5_manuell? = null,
+        løsning_11_6_manuell: Løsning_11_6_manuell? = null,
+        løsning_11_12_l1_manuell: Løsning_11_12_ledd1_manuell? = null,
+        løsning_11_29_manuell: Løsning_11_29_manuell? = null,
+        løsningVurderingAvBeregningsdato: LøsningVurderingAvBeregningsdato? = null
     ) {
         produce(key) {
             ManuellKafkaDto(
-                losning_11_2_manuell,
-                losning_11_3_manuell,
-                losning_11_4_l2_l3_manuell,
-                losning_11_5_manuell,
-                losning_11_6_manuell,
-                losning_11_12_l1_manuell,
-                losning_11_29_manuell,
-                losningVurderingAvBeregningsdato
+                løsning_11_2_manuell = løsning_11_2_manuell,
+                løsning_11_3_manuell = løsning_11_3_manuell,
+                løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_l2_l3_manuell,
+                løsning_11_5_manuell = løsning_11_5_manuell,
+                løsning_11_6_manuell = løsning_11_6_manuell,
+                løsning_11_12_ledd1_manuell = løsning_11_12_l1_manuell,
+                løsning_11_29_manuell = løsning_11_29_manuell,
+                løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato
             )
         }
     }
