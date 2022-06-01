@@ -10,17 +10,17 @@ application {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("com.github.navikt.aap-libs:ktor-utils:0.1.4")
-    implementation("com.github.navikt.aap-libs:kafka:0.1.4")
-    testImplementation("com.github.navikt.aap-libs:kafka-test:0.1.4")
+    implementation("com.github.navikt.aap-libs:ktor-utils:0.1.8")
+    implementation("com.github.navikt.aap-libs:kafka:0.1.8")
+    testImplementation("com.github.navikt.aap-libs:kafka-test:0.1.8")
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.9")
 
-    implementation("io.ktor:ktor-server-core:2.0.1")
-    implementation("io.ktor:ktor-server-netty:2.0.1")
-    implementation("io.ktor:ktor-server-content-negotiation:2.0.1")
-    implementation("io.ktor:ktor-serialization-jackson:2.0.1")
-    implementation("io.ktor:ktor-server-metrics-micrometer:2.0.1")
+    implementation("io.ktor:ktor-server-core:2.0.2")
+    implementation("io.ktor:ktor-server-netty:2.0.2")
+    implementation("io.ktor:ktor-server-content-negotiation:2.0.2")
+    implementation("io.ktor:ktor-serialization-jackson:2.0.2")
+    implementation("io.ktor:ktor-server-metrics-micrometer:2.0.2")
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.0")
 
@@ -32,6 +32,6 @@ dependencies {
 
     testImplementation(kotlin("test"))
 
-    testImplementation("io.ktor:ktor-server-test-host:2.0.1")
+    testImplementation("io.ktor:ktor-server-test-host:2.0.2")
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
 }
