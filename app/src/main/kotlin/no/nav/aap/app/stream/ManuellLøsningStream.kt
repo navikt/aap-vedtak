@@ -12,9 +12,6 @@ import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import org.slf4j.LoggerFactory
-
-private val secureLog = LoggerFactory.getLogger("secureLog")
 
 internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov =
@@ -33,7 +30,6 @@ internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDt
 }
 
 private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    try {
         val søker = Søker.gjenopprett(løsningAndSøker.dtoSøker)
 
         val dtoBehov = mutableListOf<DtoBehov>()
@@ -56,12 +52,6 @@ private fun håndterManuellLøsning(løsningAndSøker: LøsningAndSøker): Pair<
             ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(løsningAndSøker.dtoSøker.personident) }) }
 
         return søker.toDto().toJson() to dtoBehov
-    } catch (throwable: Throwable) {
-        secureLog.error("Feil i behandling av manuell løsning", throwable)
-        throw throwable
-    } finally {
-        secureLog.info("Var her ved behandling av manuell løsning")
-    }
 }
 
 private data class LøsningAndSøker(val løsning: DtoManuell, val dtoSøker: DtoSøker) {
