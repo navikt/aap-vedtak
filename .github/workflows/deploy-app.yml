@@ -8,6 +8,7 @@ on:
       - main
     paths-ignore:
       - 'doc/topology.puml'
+      - 'doc/topology.svg'
       - '.github/workflows/topology.yml'
 
 env:
