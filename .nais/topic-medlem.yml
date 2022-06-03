@@ -6,14 +6,15 @@ metadata:
   labels:
     team: aap
   annotations:
-    kafka.nais.io/removeDataWhenResourceIsDeleted: "true"
-    githubUrl: "https://github.com/navikt/aap-vedtak"
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "{{kafka.permanent-delete-topics}}"
+    kafka.format: json
+    kafka.state: "false"
+    github.url: https://github.com/navikt/aap-vedtak
 spec:
-  pool: {{kafka-pool}}
+  pool: {{kafka.pool}}
   config:
-    cleanupPolicy: compact,delete
+    cleanupPolicy: compact
     partitions: 12
-    retentionHours: 1
   acl:
     - team: medlemskap
       application: medlemskap-aap-listener

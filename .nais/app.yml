@@ -10,7 +10,7 @@ spec:
   secureLogs:
     enabled: true
   kafka:
-    pool: {{kafka-pool}}
+    pool: {{kafka.pool}}
     streams: true
   ingresses:
     - {{ingress}}

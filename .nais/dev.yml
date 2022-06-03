@@ -1,2 +1,5 @@
 ingress: https://aap-vedtak.dev.intern.nav.no
-kafka-pool: nav-dev
+
+kafka:
+  pool: nav-dev
+  permanent-delete-topics: true
