@@ -7,9 +7,10 @@ on:
     branches:
       - main
     paths-ignore:
-      - 'doc/topology.puml'
-      - 'doc/topology.svg'
+      - '.nais/topic-*.yml'
+      - 'doc/**'
       - '.github/workflows/topology.yml'
+      - '.github/workflows/deploy-topics.yml'
 
 env:
   IMAGE: ghcr.io/${{ github.repository }}:${{ github.sha }}

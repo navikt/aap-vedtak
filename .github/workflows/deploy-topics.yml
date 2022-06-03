@@ -5,11 +5,7 @@ on:
     branches:
       - main
     paths:
-      - '.nais/topic-medlem.yml'
-      - '.nais/topic-søkere.yml'
-      - '.nais/topic-manuell.yml'
-      - '.nais/topic-inntekter.yml'
-      - '.nais/topic-vedtak.yml'
+      - '.nais/topic-*.yml'
       - '.github/workflows/deploy-topics.yml'
 
 jobs:
