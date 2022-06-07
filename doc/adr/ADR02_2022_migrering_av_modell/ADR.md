@@ -8,7 +8,6 @@ forget".
 Siden vi bruker Kafka som plattform for kommunikasjon mellom apper, 
 så får vi et problem dersom en app som produserer meldinger endrer 
 på formatet på en sånn måte at det ikke kan parses av konsumentene.
-![img](migrering1.png)
 
 En løsning på dette er å slette alle meldinger på topic, oppgradere 
 alle apper og begynne på nytt. Men det kan vi ikke gjøre med streams
