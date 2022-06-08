@@ -16,9 +16,11 @@ import org.apache.kafka.streams.kstream.KTable
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
-        .leftJoin(Topics.søknad with Topics.søkere, søkere) { jsonSøknad, søker -> jsonSøknad to søker }
-        .filter("filter-soknad-ny") { _, (_, søker) -> søker == null }
-        .mapValues { personident, (søknad, _) -> opprettSøker(personident, søknad) }
+        .leftJoin(Topics.søknad with Topics.søkere, søkere, ::Pair)
+        .filter("filter-soknad-ny") { _, (_, søkereKafkaDto) -> søkereKafkaDto == null }
+        .mapValues("soknad-opprett-soker-og-handter") { personident, (jsonSøknad, _) ->
+            opprettSøker(personident, jsonSøknad)
+        }
 
     søkerOgBehov
         .mapValues("soknad-hent-ut-soker") { (søker) -> søker }
