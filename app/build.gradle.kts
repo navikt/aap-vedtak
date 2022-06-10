@@ -10,9 +10,9 @@ application {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("com.github.navikt.aap-libs:ktor-utils:0.1.9")
-    implementation("com.github.navikt.aap-libs:kafka:0.1.9")
-    testImplementation("com.github.navikt.aap-libs:kafka-test:0.1.9")
+    implementation("com.github.navikt.aap-libs:ktor-utils:1.2.0")
+    implementation("com.github.navikt.aap-libs:kafka:1.2.0")
+    testImplementation("com.github.navikt.aap-libs:kafka-test:1.2.0")
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.9")
 

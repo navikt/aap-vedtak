@@ -1,25 +1,18 @@
 package no.nav.aap
 
-import no.nav.aap.app.streamsBuilder
-import no.nav.aap.kafka.streams.uml.KStreamsUML
-import org.apache.kafka.streams.StreamsBuilder
+import no.nav.aap.app.topology
+import no.nav.aap.kafka.streams.topology.Mermaid
 import org.junit.jupiter.api.Test
-import org.slf4j.LoggerFactory
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
+import java.io.File
 
-internal class GenerateUML {
-    private companion object {
-        private val log = LoggerFactory.getLogger("GenerateUML")
-    }
-
+internal class CreateMermaidDiagram {
     @Test
-    fun `generate topology UML`() {
+    fun `generate mermaid diagram`() {
         EnvironmentVariables(containerProperties()).execute {
-            val topology = StreamsBuilder().apply { streamsBuilder() }.build()
+            val flowchart = Mermaid.graph("Vedtak", topology())
 
-            KStreamsUML.create(topology).also {
-                log.info("Generated topology UML ${it.absoluteFile}. Online editor: https://plantuml-editor.kkeisuke.dev")
-            }
+            File("../doc/topology.txt").apply { writeText(flowchart) }
         }
     }
 

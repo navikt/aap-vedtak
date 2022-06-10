@@ -29,6 +29,7 @@ import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
+import org.apache.kafka.streams.Topology
 import org.slf4j.LoggerFactory
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
@@ -49,9 +50,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
-    kafka.start(config.kafka, prometheus) {
-        streamsBuilder()
-    }
+    kafka.connect(config.kafka, prometheus, topology())
 
     routing {
         devTools(kafka, config.kafka)
@@ -59,17 +58,21 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
-internal fun StreamsBuilder.streamsBuilder() {
-    val søkerKTable = consume(Topics.søkere)
+internal fun topology(): Topology {
+    val streams = StreamsBuilder()
+    val søkerKTable = streams
+        .consume(Topics.søkere)
         .filterNotNull("filter-soker-tombstones")
         .produce(Tables.søkere)
 
     søkerKTable.scheduleCleanup(SØKERE_STORE_NAME, søkereToDelete)
 
-    søknadStream(søkerKTable)
-    medlemStream(søkerKTable)
-    manuellStream(søkerKTable)
-    inntekterStream(søkerKTable)
+    streams.søknadStream(søkerKTable)
+    streams.medlemStream(søkerKTable)
+    streams.manuellStream(søkerKTable)
+    streams.inntekterStream(søkerKTable)
+
+    return streams.build()
 }
 
 private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStreams) {
