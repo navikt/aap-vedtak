@@ -11,6 +11,7 @@ import io.ktor.server.plugins.contentnegotiation.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.server.util.*
+import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import kotlinx.coroutines.delay
@@ -25,12 +26,25 @@ import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.KafkaConfig
 import no.nav.aap.kafka.streams.*
 import no.nav.aap.kafka.streams.store.scheduleCleanup
+import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.kstream.KTable
+import org.apache.kafka.streams.processor.PunctuationType
+import org.apache.kafka.streams.processor.api.Processor
+import org.apache.kafka.streams.processor.api.ProcessorContext
+import org.apache.kafka.streams.processor.api.ProcessorSupplier
+import org.apache.kafka.streams.processor.api.Record
+import org.apache.kafka.streams.state.KeyValueStore
+import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
@@ -50,7 +64,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
-    kafka.connect(config.kafka, prometheus, topology())
+    kafka.connect(config.kafka, prometheus, topology(prometheus))
 
     routing {
         devTools(kafka, config.kafka)
@@ -58,14 +72,15 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
-internal fun topology(): Topology {
+internal fun topology(registry: MeterRegistry): Topology {
     val streams = StreamsBuilder()
     val søkerKTable = streams
         .consume(Topics.søkere)
         .filterNotNull("filter-soker-tombstones")
         .produce(Tables.søkere)
 
-    søkerKTable.scheduleCleanup(SØKERE_STORE_NAME, søkereToDelete)
+    søkerKTable.scheduleCleanup(Tables.søkere, 1.seconds, søkereToDelete)
+    søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
     streams.søknadStream(søkerKTable)
     streams.medlemStream(søkerKTable)
@@ -82,11 +97,11 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStream
         }
         get("/live") {
             val status = if (kafka.isLive()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respondText( "vedtak", status = status)
+            call.respondText("vedtak", status = status)
         }
         get("/ready") {
             val status = if (kafka.isReady()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respondText( "vedtak", status = status)
+            call.respondText("vedtak", status = status)
         }
     }
 }
