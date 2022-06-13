@@ -78,15 +78,15 @@ internal fun topology(): Topology {
 private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStreams) {
     route("/actuator") {
         get("/metrics") {
-            call.respond(prometheus.scrape())
+            call.respondText(prometheus.scrape())
         }
         get("/live") {
             val status = if (kafka.isLive()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respond(status, "vedtak")
+            call.respondText( "vedtak", status = status)
         }
         get("/ready") {
             val status = if (kafka.isReady()) HttpStatusCode.OK else HttpStatusCode.InternalServerError
-            call.respond(status, "vedtak")
+            call.respondText( "vedtak", status = status)
         }
     }
 }

@@ -13,6 +13,7 @@ internal class CreateMermaidDiagram {
             val flowchart = Mermaid.graph("Vedtak", topology())
             val mermaidFlowcharMarkdown = markdown(flowchart)
             File("../doc/topology.md").apply { writeText(mermaidFlowcharMarkdown) }
+            File("../doc/topology.mermaid").apply { writeText(flowchart) }
         }
     }
 
