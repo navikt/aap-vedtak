@@ -11,8 +11,8 @@ internal class CreateMermaidDiagram {
     fun `generate mermaid diagram`() {
         EnvironmentVariables(containerProperties()).execute {
             val flowchart = Mermaid.graph("Vedtak", topology())
-
-            File("../doc/topology.txt").apply { writeText(flowchart) }
+            val mermaidFlowcharMarkdown = markdown(flowchart)
+            File("../doc/topology.md").apply { writeText(mermaidFlowcharMarkdown) }
         }
     }
 
@@ -29,3 +29,9 @@ internal class CreateMermaidDiagram {
         "KAFKA_SCHEMA_REGISTRY_PASSWORD" to "",
     )
 }
+
+fun markdown(mermaid: String) = """
+```mermaid
+$mermaid
+```
+"""

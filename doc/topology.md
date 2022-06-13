@@ -1,3 +1,6 @@
+
+```mermaid
+
 %%{init: {'theme': 'dark', 'themeVariables': { 'primaryColor': '#07cff6', 'textColor': '#dad9e0', 'lineColor': '#07cff6'}}}%%
 
 graph LR
@@ -64,3 +67,5 @@ style aap.medlem.v1-joined-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204
 style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style cleanup-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
+
+```
