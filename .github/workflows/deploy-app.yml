@@ -8,8 +8,6 @@ on:
       - main
     paths-ignore:
       - '.nais/topic-*.yml'
-      - 'doc/**'
-      - '.github/workflows/topology.yml'
       - '.github/workflows/deploy-topics.yml'
 
 env:
@@ -32,11 +30,6 @@ jobs:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
           arguments: test app:shadowJar --continue --no-daemon --no-build-cache
-
-      - uses: actions/upload-artifact@v3
-        with:
-          name: topology.puml
-          path: app/build/topology.puml
 
       - uses: dorny/test-reporter@v1.5.0
         if: success() || failure()
