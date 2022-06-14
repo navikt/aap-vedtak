@@ -11,7 +11,7 @@ dependencies {
     implementation(project(":domene"))
 
     implementation("com.github.navikt.aap-libs:ktor-utils:2.0.1")
-    implementation("com.github.navikt.aap-libs:kafka:2.0.1")
+    implementation("com.github.navikt.aap-libs:kafka:2.0.2")
     testImplementation("com.github.navikt.aap-libs:kafka-test:2.0.1")
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.9")
