@@ -7,11 +7,14 @@ import no.nav.aap.dto.DtoLøsningParagraf_11_22
 import java.time.Year
 
 class LøsningParagraf_11_22(
+    private val vurdertAv: String,
     private val erOppfylt: Boolean,
     private val andelNedsattArbeidsevne: Int,
     private val år: Year,
     private val antattÅrligArbeidsinntekt: Beløp
 ) : Hendelse() {
+
+    internal fun vurdertAv() = vurdertAv
 
     internal fun yrkesskade() = Yrkesskade(
         andelNedsattArbeidsevne = andelNedsattArbeidsevne.toDouble(),

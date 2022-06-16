@@ -3,7 +3,10 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.vilkår.Paragraf_11_5
 import no.nav.aap.dto.DtoLøsningParagraf_11_5
 
-class LøsningParagraf_11_5(private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad) : Hendelse() {
+class LøsningParagraf_11_5(
+    private val vurdertAv: String,
+    private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad
+) : Hendelse() {
     class NedsattArbeidsevnegrad(
         private val kravOmNedsattArbeidsevneErOppfylt: Boolean,
         private val nedsettelseSkyldesSykdomEllerSkade: Boolean,
@@ -16,6 +19,8 @@ class LøsningParagraf_11_5(private val nedsattArbeidsevnegrad: NedsattArbeidsev
             nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
         )
     }
+
+    internal fun vurdertAv() = vurdertAv
 
     internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5) {
         vilkår.vurderNedsattArbeidsevne(this, nedsattArbeidsevnegrad)

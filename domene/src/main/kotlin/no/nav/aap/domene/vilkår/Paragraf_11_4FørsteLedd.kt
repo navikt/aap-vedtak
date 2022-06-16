@@ -2,6 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Søknad
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -71,6 +72,16 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             ) {
                 vilkårsvurdering.vurderAldersvilkår(fødselsdato, vurderingsdato)
             }
+
+            override fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_VURDERT
+            )
         }
 
         object Oppfylt : Tilstand(
@@ -86,6 +97,16 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             ) {
                 log.info("Vilkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
             }
+
+            override fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                godkjentAv = null,
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT
+            )
         }
 
         object IkkeOppfylt : Tilstand(
@@ -101,6 +122,16 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             ) {
                 log.info("Vilkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
             }
+
+            override fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                godkjentAv = null,
+                paragraf = paragraf.paragraf.name,
+                ledd = paragraf.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT
+            )
         }
 
         internal open fun gjenopprettTilstand(
@@ -109,13 +140,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         ) {
         }
 
-        internal fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
-            vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
-            paragraf = paragraf.paragraf.name,
-            ledd = paragraf.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            måVurderesManuelt = false
-        )
+        internal abstract fun toDto(paragraf: Paragraf_11_4FørsteLedd): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

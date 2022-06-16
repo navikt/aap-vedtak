@@ -3,9 +3,10 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
-import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
 import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade
+import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_2
 import org.slf4j.LoggerFactory
@@ -46,13 +47,14 @@ internal class MedlemskapYrkesskade private constructor(
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
-        val dtoMaskinell = requireNotNull(vilkårsvurdering. løsning_medlemskap_yrkesskade_maskinell)
+        val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
         maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(dtoMaskinell.erMedlem))
     }
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
         val dtoManuell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_manuell)
-        manuellLøsning = LøsningManuellMedlemskapYrkesskade(enumValueOf(dtoManuell.erMedlem))
+        manuellLøsning = LøsningManuellMedlemskapYrkesskade(vurdertAv, enumValueOf(dtoManuell.erMedlem))
     }
 
     internal sealed class Tilstand(
@@ -136,10 +138,12 @@ internal class MedlemskapYrkesskade private constructor(
 
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false
+                utfall = Utfall.IKKE_VURDERT
             )
         }
 
@@ -159,10 +163,12 @@ internal class MedlemskapYrkesskade private constructor(
 
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = true,
+                utfall = Utfall.IKKE_VURDERT,
                 løsning_medlemskap_yrkesskade_maskinell = paragraf.maskinellLøsning.toDto(),
             )
 
@@ -178,10 +184,12 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_medlemskap_yrkesskade_maskinell = paragraf.maskinellLøsning.toDto(),
             )
 
@@ -197,10 +205,12 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_medlemskap_yrkesskade_maskinell = paragraf.maskinellLøsning.toDto(),
             )
 
@@ -216,10 +226,12 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.manuellLøsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_medlemskap_yrkesskade_maskinell = paragraf.maskinellLøsning.toDto(),
                 løsning_medlemskap_yrkesskade_manuell = paragraf.manuellLøsning.toDto()
             )
@@ -237,10 +249,12 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             override fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.manuellLøsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_medlemskap_yrkesskade_maskinell = paragraf.maskinellLøsning.toDto(),
                 løsning_medlemskap_yrkesskade_manuell = paragraf.manuellLøsning.toDto()
             )

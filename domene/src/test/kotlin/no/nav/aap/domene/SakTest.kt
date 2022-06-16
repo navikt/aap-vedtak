@@ -67,32 +67,40 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(LøsningParagraf_11_2("saksbehandler", LøsningParagraf_11_2.ErMedlem.JA))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(true))
+        sak.håndterLøsning(LøsningParagraf_11_3("saksbehandler", true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-            kravOmNedsattArbeidsevneErOppfylt = true,
-            nedsettelseSkyldesSykdomEllerSkade = true
-        )))
+        sak.håndterLøsning(
+            LøsningParagraf_11_5(
+                vurdertAv = "veileder",
+                nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_6(
-            harBehovForBehandling = true,
-            harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
-        ))
+        sak.håndterLøsning(
+            LøsningParagraf_11_6(
+                vurdertAv = "saksbehandler",
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now()))
+        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", "SPS", "INGEN", "", LocalDate.now()))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(true))
+        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        sak.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -130,37 +138,46 @@ internal class SakTest {
         sak.håndterLøsning(LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(true))
+        sak.håndterLøsning(LøsningParagraf_11_3("saksbehandler", true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_5_yrkesskade(
-            arbeidsevneErNedsattMedMinst50Prosent = true,
-            arbeidsevneErNedsattMedMinst30Prosent = true
-        ))
+        sak.håndterLøsning(
+            LøsningParagraf_11_5_yrkesskade(
+                vurdertAv = "veileder",
+                arbeidsevneErNedsattMedMinst50Prosent = true,
+                arbeidsevneErNedsattMedMinst30Prosent = true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_6(
-            harBehovForBehandling = true,
-            harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
-        ))
+        sak.håndterLøsning(
+            LøsningParagraf_11_6(
+                vurdertAv = "saksbehandler",
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now()))
+        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", "SPS", "INGEN", "", LocalDate.now()))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_22(
-            erOppfylt = true,
-            andelNedsattArbeidsevne = 50,
-            år = Year.of(2018),
-            antattÅrligArbeidsinntekt = 400000.beløp
-        ))
+        sak.håndterLøsning(
+            LøsningParagraf_11_22(
+                vurdertAv = "saksbehandler",
+                erOppfylt = true,
+                andelNedsattArbeidsevne = 50,
+                år = Year.of(2018),
+                antattÅrligArbeidsinntekt = 400000.beløp
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(true))
+        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        sak.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()

@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_3
 import no.nav.aap.hendelse.Søknad
@@ -113,10 +114,12 @@ internal class Paragraf_11_3 private constructor(
 
             override fun toDto(paragraf: Paragraf_11_3): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = true
+                utfall = Utfall.IKKE_VURDERT
             )
         }
 
@@ -127,16 +130,19 @@ internal class Paragraf_11_3 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_3): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.løsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_11_3_manuell = paragraf.løsning.toDto()
             )
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {
+                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
                 val løsning113Manuell = requireNotNull(vilkårsvurdering.løsning_11_3_manuell)
-                paragraf.løsning = LøsningParagraf_11_3(løsning113Manuell.erOppfylt)
+                paragraf.løsning = LøsningParagraf_11_3(vurdertAv, løsning113Manuell.erOppfylt)
             }
         }
 
@@ -147,16 +153,19 @@ internal class Paragraf_11_3 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_3): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.løsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_11_3_manuell = paragraf.løsning.toDto()
             )
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_3, vilkårsvurdering: DtoVilkårsvurdering) {
+                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
                 val løsning113Manuell = requireNotNull(vilkårsvurdering.løsning_11_3_manuell)
-                paragraf.løsning = LøsningParagraf_11_3(løsning113Manuell.erOppfylt)
+                paragraf.løsning = LøsningParagraf_11_3(vurdertAv, løsning113Manuell.erOppfylt)
             }
         }
 

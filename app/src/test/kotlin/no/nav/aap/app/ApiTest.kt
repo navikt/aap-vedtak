@@ -46,20 +46,41 @@ internal class ApiTest {
                 }
             }
 
-            manuellTopic.produserLøsning(key = fnr, løsning_11_3_manuell = Løsning_11_3_manuell(true))
-            manuellTopic.produserLøsning(key = fnr, løsning_11_5_manuell = Løsning_11_5_manuell(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                nedsettelseSkyldesSykdomEllerSkade = true
-            ))
-            manuellTopic.produserLøsning(key = fnr, løsning_11_6_manuell = Løsning_11_6_manuell(
-                harBehovForBehandling = true,
-                harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
-            ))
-            manuellTopic.produserLøsning(key = fnr, løsning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell("SPS", "INGEN", "", LocalDate.now()))
-            manuellTopic.produserLøsning(key = fnr, løsning_11_29_manuell = Løsning_11_29_manuell(true))
             manuellTopic.produserLøsning(
                 key = fnr,
+                vurdertAv = "saksbehandler",
+                løsning_11_3_manuell = Løsning_11_3_manuell(true)
+            )
+            manuellTopic.produserLøsning(
+                key = fnr,
+                vurdertAv = "veileder",
+                løsning_11_5_manuell = Løsning_11_5_manuell(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            )
+            manuellTopic.produserLøsning(
+                key = fnr,
+                vurdertAv = "saksbehandler",
+                løsning_11_6_manuell = Løsning_11_6_manuell(
+                    harBehovForBehandling = true,
+                    harBehovForTiltak = true,
+                    harMulighetForÅKommeIArbeid = true
+                )
+            )
+            manuellTopic.produserLøsning(
+                key = fnr,
+                vurdertAv = "saksbehandler",
+                løsning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell("SPS", "INGEN", "", LocalDate.now())
+            )
+            manuellTopic.produserLøsning(
+                key = fnr,
+                vurdertAv = "saksbehandler",
+                løsning_11_29_manuell = Løsning_11_29_manuell(true)
+            )
+            manuellTopic.produserLøsning(
+                key = fnr,
+                vurdertAv = "saksbehandler",
                 løsningVurderingAvBeregningsdato = LøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
             )
 
@@ -100,40 +121,50 @@ internal class ApiTest {
                                 vilkårsvurderinger = listOf(
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(0),
+                                        vurdertAv = "maskinell saksbehandling",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_2",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
-                                        måVurderesManuelt = false,
+                                        utfall = Utfall.OPPFYLT,
                                         løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(1),
+                                        vurdertAv = "saksbehandler",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_3",
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT",
-                                        måVurderesManuelt = false,
+                                        utfall = Utfall.OPPFYLT,
                                         løsning_11_3_manuell = DtoLøsningParagraf_11_3(true)
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
+                                        vurdertAv = "maskinell saksbehandling",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
-                                        måVurderesManuelt = false
+                                        utfall = Utfall.OPPFYLT
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(3),
+                                        vurdertAv = null,
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_2", "LEDD_3"),
                                         tilstand = "IKKE_RELEVANT",
-                                        måVurderesManuelt = false
+                                        utfall = Utfall.IKKE_RELEVANT
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(4),
+                                        vurdertAv = "veileder",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_5",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT",
-                                        måVurderesManuelt = false,
+                                        utfall = Utfall.OPPFYLT,
                                         løsning_11_5_manuell = DtoLøsningParagraf_11_5(
                                             kravOmNedsattArbeidsevneErOppfylt = true,
                                             nedsettelseSkyldesSykdomEllerSkade = true,
@@ -141,10 +172,12 @@ internal class ApiTest {
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(5),
+                                        vurdertAv = "saksbehandler",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_6",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
-                                        måVurderesManuelt = false,
+                                        utfall = Utfall.OPPFYLT,
                                         løsning_11_6_manuell = DtoLøsningParagraf_11_6(
                                             harBehovForBehandling = true,
                                             harBehovForTiltak = true,
@@ -153,18 +186,27 @@ internal class ApiTest {
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(6),
+                                        vurdertAv = "saksbehandler",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_12",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
-                                        måVurderesManuelt = false,
-                                        løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1("SPS", "INGEN", "", LocalDate.now())
+                                        utfall = Utfall.OPPFYLT,
+                                        løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(
+                                            "SPS",
+                                            "INGEN",
+                                            "",
+                                            LocalDate.now()
+                                        )
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(7),
+                                        vurdertAv = "saksbehandler",
+                                        godkjentAv = null,
                                         paragraf = "PARAGRAF_11_29",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
-                                        måVurderesManuelt = false,
+                                        utfall = Utfall.OPPFYLT,
                                         løsning_11_29_manuell = DtoLøsningParagraf_11_29(true)
                                     )
                                 )
@@ -173,7 +215,8 @@ internal class ApiTest {
                         vurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
                             tilstand = "FERDIG",
                             løsningVurderingAvBeregningsdato = DtoLøsningVurderingAvBeregningsdato(
-                                LocalDate.of(2022, 1, 1)
+                                vurdertAv = "saksbehandler",
+                                beregningsdato = LocalDate.of(2022, 1, 1)
                             )
                         ),
                         søknadstidspunkt = søknadstidspunkt,
@@ -250,6 +293,7 @@ internal class ApiTest {
 
     private fun TestInputTopic<String, ManuellKafkaDto>.produserLøsning(
         key: String,
+        vurdertAv: String,
         løsning_11_2_manuell: Løsning_11_2_manuell? = null,
         løsning_11_3_manuell: Løsning_11_3_manuell? = null,
         løsning_11_4_l2_l3_manuell: Løsning_11_4_ledd2_ledd3_manuell? = null,
@@ -261,6 +305,7 @@ internal class ApiTest {
     ) {
         produce(key) {
             ManuellKafkaDto(
+                vurdertAv = vurdertAv,
                 løsning_11_2_manuell = løsning_11_2_manuell,
                 løsning_11_3_manuell = løsning_11_3_manuell,
                 løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_l2_l3_manuell,

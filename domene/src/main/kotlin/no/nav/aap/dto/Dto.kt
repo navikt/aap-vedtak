@@ -11,6 +11,10 @@ import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
+enum class Utfall {
+    OPPFYLT, IKKE_OPPFYLT, IKKE_VURDERT, IKKE_RELEVANT
+}
+
 data class DtoSøker(
     val personident: String,
     val fødselsdato: LocalDate,
@@ -35,10 +39,12 @@ data class DtoSakstype(
 
 data class DtoVilkårsvurdering(
     val vilkårsvurderingsid: UUID,
+    val vurdertAv: String?,
+    val godkjentAv: String?,
     val paragraf: String,
     val ledd: List<String>,
     val tilstand: String,
-    val måVurderesManuelt: Boolean,
+    val utfall: Utfall,
     val løsning_medlemskap_yrkesskade_maskinell: DtoLøsningMaskinellMedlemskapYrkesskade? = null,
     val løsning_medlemskap_yrkesskade_manuell: DtoLøsningManuellMedlemskapYrkesskade? = null,
     val løsning_11_2_maskinell: DtoLøsningParagraf_11_2? = null,
@@ -54,6 +60,7 @@ data class DtoVilkårsvurdering(
 )
 
 data class DtoManuell(
+    val vurdertAv: String,
     val løsning_11_2_manuell: DtoLøsningParagraf_11_2? = null,
     val løsning_11_3_manuell: DtoLøsningParagraf_11_3? = null,
     val løsning_11_4_ledd2_ledd3_manuell: DtoLøsningParagraf_11_4_ledd2_ledd3? = null,
@@ -65,7 +72,7 @@ data class DtoManuell(
 )
 
 data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
         val løsning = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(erMedlem.uppercase()))
         søker.håndterLøsning(løsning)
         return løsning.behov()
@@ -73,32 +80,32 @@ data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
 }
 
 data class DtoLøsningManuellMedlemskapYrkesskade(val erMedlem: String) {
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningManuellMedlemskapYrkesskade(enumValueOf(erMedlem.uppercase()))
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
+        val løsning = LøsningManuellMedlemskapYrkesskade(vurdertAv, enumValueOf(erMedlem.uppercase()))
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_2(val erMedlem: String) {
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_2(enumValueOf(erMedlem.uppercase()))
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
+        val løsning = LøsningParagraf_11_2(vurdertAv, enumValueOf(erMedlem.uppercase()))
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_3(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_3(erOppfylt)
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
+        val løsning = LøsningParagraf_11_3(vurdertAv, erOppfylt)
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 }
 
 data class DtoLøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd(erOppfylt)
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
+        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd(vurdertAv,erOppfylt)
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
@@ -108,9 +115,10 @@ data class DtoLøsningParagraf_11_5(
     val kravOmNedsattArbeidsevneErOppfylt: Boolean,
     val nedsettelseSkyldesSykdomEllerSkade: Boolean
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
         val løsning = LøsningParagraf_11_5(
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                vurdertAv = vurdertAv,
+            nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                 kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
                 nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
             )
@@ -124,8 +132,9 @@ data class DtoLøsningParagraf_11_5_yrkesskade(
     val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
     val arbeidsevneErNedsattMedMinst30Prosent: Boolean
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
         val løsning = LøsningParagraf_11_5_yrkesskade(
+            vurdertAv = vurdertAv,
             arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
             arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent
         )
@@ -139,8 +148,9 @@ data class DtoLøsningParagraf_11_6(
     val harBehovForTiltak: Boolean,
     val harMulighetForÅKommeIArbeid: Boolean
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
         val løsning = LøsningParagraf_11_6(
+            vurdertAv = vurdertAv,
             harBehovForBehandling = harBehovForBehandling,
             harBehovForTiltak = harBehovForTiltak,
             harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
@@ -156,8 +166,9 @@ data class DtoLøsningParagraf_11_12_ledd1(
     val unntaksbegrunnelse: String,
     val manueltSattVirkningsdato: LocalDate
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
         val løsning = LøsningParagraf_11_12FørsteLedd(
+            vurdertAv = vurdertAv,
             bestemmesAv = bestemmesAv,
             unntak = unntak,
             unntaksbegrunnelse = unntaksbegrunnelse,
@@ -174,8 +185,9 @@ data class DtoLøsningParagraf_11_22(
     val år: Year,
     val antattÅrligArbeidsinntekt: Double
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
         val løsning = LøsningParagraf_11_22(
+            vurdertAv = vurdertAv,
             erOppfylt = erOppfylt,
             andelNedsattArbeidsevne = andelNedsattArbeidsevne,
             år = år,
@@ -187,8 +199,8 @@ data class DtoLøsningParagraf_11_22(
 }
 
 data class DtoLøsningParagraf_11_29(val erOppfylt: Boolean) {
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningParagraf_11_29(erOppfylt)
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
+        val løsning = LøsningParagraf_11_29(vurdertAv, erOppfylt)
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
@@ -200,10 +212,11 @@ data class DtoVurderingAvBeregningsdato(
 )
 
 data class DtoLøsningVurderingAvBeregningsdato(
+    val vurdertAv: String,
     val beregningsdato: LocalDate
 ) {
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = LøsningVurderingAvBeregningsdato(beregningsdato)
+    fun håndter(søker: Søker, vurdertAv: String): List<Behov> {
+        val løsning = LøsningVurderingAvBeregningsdato(vurdertAv, beregningsdato)
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }

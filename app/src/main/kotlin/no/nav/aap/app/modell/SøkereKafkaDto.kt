@@ -46,10 +46,12 @@ data class SøkereKafkaDto(
 
     data class Vilkårsvurdering(
         val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val godkjentAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
-        val måVurderesManuelt: Boolean,
+        val utfall: String,
         val løsning_medlemskap_yrkesskade_maskinell: LøsningMaskinellMedlemskapYrkesskade? = null,
         val løsning_medlemskap_yrkesskade_manuell: LøsningManuellMedlemskapYrkesskade? = null,
         val løsning_11_2_maskinell: LøsningParagraf_11_2? = null,
@@ -65,10 +67,12 @@ data class SøkereKafkaDto(
     ) {
         fun toDto() = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurderingsid,
+            vurdertAv = vurdertAv,
+            godkjentAv = godkjentAv,
             paragraf = paragraf,
             ledd = ledd,
             tilstand = tilstand,
-            måVurderesManuelt = måVurderesManuelt,
+            utfall = enumValueOf(utfall),
             løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.toDto(),
             løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.toDto(),
             løsning_11_2_maskinell = løsning_11_2_maskinell?.toDto(),
@@ -223,9 +227,10 @@ data class SøkereKafkaDto(
     }
 
     data class LøsningVurderingAvBeregningsdato(
+        val vurdertAv: String = "saksbehandler", //FIXME: Feltet mangler i oppgavestyring
         val beregningsdato: LocalDate
     ) {
-        fun toDto() = DtoLøsningVurderingAvBeregningsdato(beregningsdato)
+        fun toDto() = DtoLøsningVurderingAvBeregningsdato(vurdertAv, beregningsdato)
     }
 
     data class Inntekt(
@@ -287,10 +292,12 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                     vilkårsvurderinger = sakstype.vilkårsvurderinger.map { vilkår ->
                         SøkereKafkaDto.Vilkårsvurdering(
                             vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
+                            vurdertAv = vilkår.vurdertAv,
+                            godkjentAv = vilkår.godkjentAv,
                             paragraf = vilkår.paragraf,
                             ledd = vilkår.ledd,
                             tilstand = vilkår.tilstand,
-                            måVurderesManuelt = vilkår.måVurderesManuelt,
+                            utfall = vilkår.utfall.name,
                             løsning_medlemskap_yrkesskade_maskinell = vilkår.løsning_medlemskap_yrkesskade_maskinell?.let {
                                 SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(erMedlem = it.erMedlem)
                             },
@@ -355,7 +362,10 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
             vurderingAvBeregningsdato = SøkereKafkaDto.VurderingAvBeregningsdato(
                 tilstand = sak.vurderingAvBeregningsdato.tilstand,
                 løsningVurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.løsningVurderingAvBeregningsdato?.let {
-                    SøkereKafkaDto.LøsningVurderingAvBeregningsdato(it.beregningsdato)
+                    SøkereKafkaDto.LøsningVurderingAvBeregningsdato(
+                        vurdertAv = it.vurdertAv,
+                        beregningsdato = it.beregningsdato
+                    )
                 }
             ),
             søknadstidspunkt = sak.søknadstidspunkt,

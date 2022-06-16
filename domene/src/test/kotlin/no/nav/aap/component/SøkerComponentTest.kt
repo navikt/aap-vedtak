@@ -90,10 +90,15 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-            kravOmNedsattArbeidsevneErOppfylt = true,
-            nedsettelseSkyldesSykdomEllerSkade = true
-        )))
+        søker.håndterLøsning(
+            LøsningParagraf_11_5(
+                "veileder",
+                LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            )
+        )
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -180,10 +185,15 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-            kravOmNedsattArbeidsevneErOppfylt = true,
-            nedsettelseSkyldesSykdomEllerSkade = true
-        )))
+        søker.håndterLøsning(
+            LøsningParagraf_11_5(
+                "veileder",
+                LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            )
+        )
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -217,7 +227,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningParagraf_11_2("saksbehandler", LøsningParagraf_11_2.ErMedlem.JA))
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -251,20 +261,28 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA))
-        søker.håndterLøsning(LøsningParagraf_11_3(true))
-        søker.håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-            kravOmNedsattArbeidsevneErOppfylt = true,
-            nedsettelseSkyldesSykdomEllerSkade = true
-        )))
-        søker.håndterLøsning(LøsningParagraf_11_6(
-            harBehovForBehandling = true,
-            harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
-        ))
-        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now()))
-        søker.håndterLøsning(LøsningParagraf_11_29(true))
-        søker.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        søker.håndterLøsning(LøsningParagraf_11_2("saksbehandler", LøsningParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", true))
+        søker.håndterLøsning(
+            LøsningParagraf_11_5(
+                "veileder",
+                LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            )
+        )
+        søker.håndterLøsning(
+            LøsningParagraf_11_6(
+                vurdertAv = "saksbehandler",
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
+        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", "SPS", "INGEN", "", LocalDate.now()))
+        søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", true))
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -294,20 +312,42 @@ internal class SøkerComponentTest {
             dtoSøker = søker.toDto()
         }
 
-        medSøker { håndterLøsning(LøsningParagraf_11_2(LøsningParagraf_11_2.ErMedlem.JA)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_3(true)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_5(LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-            kravOmNedsattArbeidsevneErOppfylt = true,
-            nedsettelseSkyldesSykdomEllerSkade = true
-        ))) }
-        medSøker { håndterLøsning(LøsningParagraf_11_6(
-            harBehovForBehandling = true,
-            harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
-        )) }
-        medSøker { håndterLøsning(LøsningParagraf_11_12FørsteLedd("SPS", "INGEN", "", LocalDate.now())) }
-        medSøker { håndterLøsning(LøsningParagraf_11_29(true)) }
-        medSøker { håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_2("saksbehandler", LøsningParagraf_11_2.ErMedlem.JA)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_3("saksbehandler", true)) }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_5(
+                    "veileder",
+                    LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                        kravOmNedsattArbeidsevneErOppfylt = true,
+                        nedsettelseSkyldesSykdomEllerSkade = true
+                    )
+                )
+            )
+        }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_6(
+                    vurdertAv = "saksbehandler",
+                    harBehovForBehandling = true,
+                    harBehovForTiltak = true,
+                    harMulighetForÅKommeIArbeid = true
+                )
+            )
+        }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_12FørsteLedd(
+                    "saksbehandler",
+                    "SPS",
+                    "INGEN",
+                    "",
+                    LocalDate.now()
+                )
+            )
+        }
+        medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", true)) }
+        medSøker { håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021)) }
         medSøker {
             håndterLøsning(
                 LøsningInntekter(
@@ -333,7 +373,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningVurderingAvBeregningsdato(13 september 2021))
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(

@@ -20,7 +20,7 @@ internal class `§11-4 andre og tredje ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd(true)
+        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd("saksbehandler", true)
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
@@ -36,7 +36,7 @@ internal class `§11-4 andre og tredje ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd(false)
+        val løsning = LøsningParagraf_11_4AndreOgTredjeLedd("saksbehandler", false)
         vilkår.håndterLøsning(løsning)
 
         assertFalse(vilkår.erOppfylt())

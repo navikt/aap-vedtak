@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_5_yrkesskade
 import no.nav.aap.hendelse.Søknad
@@ -113,10 +114,12 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
             override fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = true
+                utfall = Utfall.IKKE_VURDERT
             )
         }
 
@@ -127,10 +130,12 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.løsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_11_5_yrkesskade_manuell = paragraf.løsning.toDto()
             )
 
@@ -138,8 +143,10 @@ internal class Paragraf_11_5_yrkesskade private constructor(
                 paragraf: Paragraf_11_5_yrkesskade,
                 vilkårsvurdering: DtoVilkårsvurdering
             ) {
+                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_yrkesskade_manuell)
                 paragraf.løsning = LøsningParagraf_11_5_yrkesskade(
+                    vurdertAv = vurdertAv,
                     arbeidsevneErNedsattMedMinst50Prosent = løsning.arbeidsevneErNedsattMedMinst50Prosent,
                     arbeidsevneErNedsattMedMinst30Prosent = løsning.arbeidsevneErNedsattMedMinst30Prosent
                 )
@@ -153,10 +160,12 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.løsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_11_5_yrkesskade_manuell = paragraf.løsning.toDto()
             )
 
@@ -164,8 +173,10 @@ internal class Paragraf_11_5_yrkesskade private constructor(
                 paragraf: Paragraf_11_5_yrkesskade,
                 vilkårsvurdering: DtoVilkårsvurdering
             ) {
+                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_5_yrkesskade_manuell)
                 paragraf.løsning = LøsningParagraf_11_5_yrkesskade(
+                    vurdertAv = vurdertAv,
                     arbeidsevneErNedsattMedMinst50Prosent = løsning.arbeidsevneErNedsattMedMinst50Prosent,
                     arbeidsevneErNedsattMedMinst30Prosent = løsning.arbeidsevneErNedsattMedMinst30Prosent
                 )

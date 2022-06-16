@@ -5,6 +5,7 @@ import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Yrkesskade
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.Søknad
@@ -122,10 +123,12 @@ internal class Paragraf_11_22 private constructor(
 
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = true
+                utfall = Utfall.IKKE_VURDERT
             )
         }
 
@@ -138,16 +141,20 @@ internal class Paragraf_11_22 private constructor(
 
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.løsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_11_22_manuell = paragraf.løsning.toDto()
             )
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_22, vilkårsvurdering: DtoVilkårsvurdering) {
+                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_22_manuell)
                 paragraf.løsning = LøsningParagraf_11_22(
+                    vurdertAv = vurdertAv,
                     erOppfylt = løsning.erOppfylt,
                     andelNedsattArbeidsevne = løsning.andelNedsattArbeidsevne,
                     år = løsning.år,
@@ -163,16 +170,20 @@ internal class Paragraf_11_22 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.løsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_11_22_manuell = paragraf.løsning.toDto()
             )
 
             override fun gjenopprettTilstand(paragraf: Paragraf_11_22, vilkårsvurdering: DtoVilkårsvurdering) {
+                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
                 val løsning = requireNotNull(vilkårsvurdering.løsning_11_22_manuell)
                 paragraf.løsning = LøsningParagraf_11_22(
+                    vurdertAv = vurdertAv,
                     erOppfylt = løsning.erOppfylt,
                     andelNedsattArbeidsevne = løsning.andelNedsattArbeidsevne,
                     år = løsning.år,

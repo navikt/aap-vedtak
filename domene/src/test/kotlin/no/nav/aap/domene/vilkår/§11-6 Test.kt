@@ -21,6 +21,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            vurdertAv = "saksbehandler",
             harBehovForBehandling = true,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = true
@@ -41,6 +42,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            vurdertAv = "saksbehandler",
             harBehovForBehandling = false,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = true
@@ -61,6 +63,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            vurdertAv = "saksbehandler",
             harBehovForBehandling = true,
             harBehovForTiltak = false,
             harMulighetForÅKommeIArbeid = true
@@ -81,6 +84,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            vurdertAv = "saksbehandler",
             harBehovForBehandling = true,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = false

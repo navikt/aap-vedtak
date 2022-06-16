@@ -28,7 +28,7 @@ internal class VurderingAvBeregningsdatoTest {
         val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
         vurderingAvBeregningsdato.håndterSøknad(søknad)
 
-        vurderingAvBeregningsdato.håndterLøsning(LøsningVurderingAvBeregningsdato(15 august 2018))
+        vurderingAvBeregningsdato.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 15 august 2018))
 
         assertEquals(15 august 2018, vurderingAvBeregningsdato.beregningsdato())
     }

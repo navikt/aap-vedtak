@@ -34,21 +34,21 @@ private fun håndterManuellLøsning(løsningAndSøker: Pair<ManuellKafkaDto, Sø
 
     val dtoBehov = mutableListOf<DtoBehov>()
 
-    løsning.løsning_11_2_manuell?.håndter(søker)
+    løsning.løsning_11_2_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsning_11_3_manuell?.håndter(søker)
+    løsning.løsning_11_3_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsning_11_4_ledd2_ledd3_manuell?.håndter(søker)
+    løsning.løsning_11_4_ledd2_ledd3_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsning_11_5_manuell?.håndter(søker)
+    løsning.løsning_11_5_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsning_11_6_manuell?.håndter(søker)
+    løsning.løsning_11_6_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsning_11_12_ledd1_manuell?.håndter(søker)
+    løsning.løsning_11_12_ledd1_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsning_11_29_manuell?.håndter(søker)
+    løsning.løsning_11_29_manuell?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
-    løsning.løsningVurderingAvBeregningsdato?.håndter(søker)
+    løsning.løsningVurderingAvBeregningsdato?.håndter(søker, løsning.vurdertAv)
         ?.also { dtoBehov.addAll(it.map { behov -> behov.toDto(søkereKafkaDto.personident) }) }
 
     return søker.toDto().toJson() to dtoBehov

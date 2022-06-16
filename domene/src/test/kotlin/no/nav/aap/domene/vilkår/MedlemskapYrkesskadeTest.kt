@@ -3,11 +3,16 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.hendelse.*
+import no.nav.aap.dto.Utfall
+import no.nav.aap.hendelse.Hendelse
+import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade
+import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
+import no.nav.aap.hendelse.Søknad
 import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import kotlin.test.assertEquals
 
 internal class MedlemskapYrkesskadeTest {
     @Test
@@ -20,12 +25,12 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.OPPFYLT, vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -41,12 +46,12 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -62,12 +67,13 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
-        assertMåVurderesManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -84,15 +90,17 @@ internal class MedlemskapYrkesskadeTest {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
-        assertMåVurderesManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
+        val manuellLøsning =
+            LøsningManuellMedlemskapYrkesskade("saksbehandler", LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.OPPFYLT, vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -109,15 +117,19 @@ internal class MedlemskapYrkesskadeTest {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
-        assertMåVurderesManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI)
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
+            "saksbehandler",
+            LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
+        )
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())
@@ -141,7 +153,7 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
-        assertSkalIkkeVurdersManuelt(vilkår)
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -155,11 +167,7 @@ internal class MedlemskapYrkesskadeTest {
         assertTrue(hendelse.behov().isEmpty())
     }
 
-    private fun assertMåVurderesManuelt(vilkårsvurdering: Vilkårsvurdering) {
-        assertTrue(listOf(vilkårsvurdering).toDto().first().måVurderesManuelt)
-    }
-
-    private fun assertSkalIkkeVurdersManuelt(vilkårsvurdering: Vilkårsvurdering) {
-        assertFalse(listOf(vilkårsvurdering).toDto().first().måVurderesManuelt)
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Vilkårsvurdering) {
+        assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 }

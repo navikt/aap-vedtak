@@ -20,7 +20,7 @@ internal class `§11-29 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_29(true)
+        val løsning = LøsningParagraf_11_29("saksbehandler", true)
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
@@ -36,7 +36,7 @@ internal class `§11-29 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_29(false)
+        val løsning = LøsningParagraf_11_29("saksbehandler", false)
         vilkår.håndterLøsning(løsning)
 
         assertFalse(vilkår.erOppfylt())

@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_2
 import no.nav.aap.hendelse.Søknad
@@ -41,13 +42,15 @@ internal class Paragraf_11_2 private constructor(
     override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoVurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_11_2_maskinell)
-        maskineltLøsning = LøsningParagraf_11_2(enumValueOf(dtoMaskinell.erMedlem))
+        maskineltLøsning = LøsningParagraf_11_2(dtoVurdertAv, enumValueOf(dtoMaskinell.erMedlem))
     }
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoVurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
         val dtoManuell = requireNotNull(vilkårsvurdering.løsning_11_2_manuell)
-        manueltLøsning = LøsningParagraf_11_2(enumValueOf(dtoManuell.erMedlem))
+        manueltLøsning = LøsningParagraf_11_2(dtoVurdertAv, enumValueOf(dtoManuell.erMedlem))
     }
 
     internal sealed class Tilstand(
@@ -124,10 +127,12 @@ internal class Paragraf_11_2 private constructor(
 
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false
+                utfall = Utfall.IKKE_VURDERT
             )
         }
 
@@ -147,10 +152,12 @@ internal class Paragraf_11_2 private constructor(
 
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = null,
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = true,
+                utfall = Utfall.IKKE_VURDERT,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
@@ -166,10 +173,12 @@ internal class Paragraf_11_2 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
@@ -185,10 +194,12 @@ internal class Paragraf_11_2 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
             )
 
@@ -204,10 +215,12 @@ internal class Paragraf_11_2 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.manueltLøsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.OPPFYLT,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )
@@ -225,10 +238,12 @@ internal class Paragraf_11_2 private constructor(
         ) {
             override fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering = DtoVilkårsvurdering(
                 vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
+                vurdertAv = paragraf.manueltLøsning.vurdertAv(),
+                godkjentAv = null,
                 paragraf = paragraf.paragraf.name,
                 ledd = paragraf.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
-                måVurderesManuelt = false,
+                utfall = Utfall.IKKE_OPPFYLT,
                 løsning_11_2_maskinell = paragraf.maskineltLøsning.toDto(),
                 løsning_11_2_manuell = paragraf.manueltLøsning.toDto()
             )

@@ -22,7 +22,7 @@ internal class `§11-22 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_22(true, 50, Year.of(2019), 400000.beløp)
+        val løsning = LøsningParagraf_11_22("saksbehandler", true, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
@@ -38,7 +38,7 @@ internal class `§11-22 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_22(false, 50, Year.of(2019), 400000.beløp)
+        val løsning = LøsningParagraf_11_22("saksbehandler", false, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
         assertFalse(vilkår.erOppfylt())
