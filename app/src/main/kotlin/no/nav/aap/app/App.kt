@@ -165,7 +165,7 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
         val søknad = JsonSøknad()
 
         søknadProducer.produce(Topics.søknad, personident, søknad).also {
-            secureLog.info("produced [${Topics.søkere}] [$personident] [$søknad]")
+            secureLog.info("produced [${Topics.søknad}] [$personident] [$søknad]")
         }
 
         call.respondText("Søknad $søknad mottatt!")
