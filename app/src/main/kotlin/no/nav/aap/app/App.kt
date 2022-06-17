@@ -29,7 +29,6 @@ import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.streams.KeyValue
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.KTable
@@ -134,7 +133,7 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
         call.respondText("Søknad og søker med ident $personident slettes!")
     }
 
-    get("/deleteAll}") {
+    get("/deleteAll") {
         purgeListeners.add { personident ->
             søknadProducer.produce(Topics.søknad, personident, null).also {
                 secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
@@ -187,11 +186,10 @@ private class StateStorePurger<K, V>(
         val store = context.getStateStore<KeyValueStore<K, ValueAndTimestamp<V>>>(table.stateStoreName)
         context.schedule(interval.toJavaDuration(), PunctuationType.WALL_CLOCK_TIME) {
             if (purgeFlag.getAndSet(false)) {
-                val keyValueIterator = store.all()
-                while (keyValueIterator.hasNext()) {
-                    val next: KeyValue<K, ValueAndTimestamp<V>> = keyValueIterator.next()
-                    purgeListeners.forEach { listener -> listener(next.key) }
-                    keyValueIterator.remove()
+                secureLog.info("Sletter ca ${store.approximateNumEntries()} fra state store")
+                store.all().forEach { keyValue ->
+                    purgeListeners.forEach { listener -> listener(keyValue.key) }
+                    store.delete(keyValue.key)
                 }
                 purgeListeners.clear()
             }
