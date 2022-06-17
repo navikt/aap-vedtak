@@ -11,6 +11,7 @@ data class SøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
+    val version: Int = 1, // Denne bumpes ved hver migrering
 ) {
     data class Sak(
         val saksid: UUID,
