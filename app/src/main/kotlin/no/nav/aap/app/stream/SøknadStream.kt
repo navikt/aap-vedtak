@@ -12,12 +12,19 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
+import org.slf4j.LoggerFactory
+
+private val secureLog = LoggerFactory.getLogger("secureLog")
 
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
         .leftJoin(Topics.søknad with Topics.søkere, søkere, ::Pair)
-        .filter("filter-soknad-ny") { _, (_, søkereKafkaDto) -> søkereKafkaDto == null }
+        .filter("filter-soknad-ny") { _, (_, søkereKafkaDto) ->
+            if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
+
+            søkereKafkaDto == null
+        }
         .mapValues("soknad-opprett-soker-og-handter") { personident, (jsonSøknad, _) ->
             opprettSøker(personident, jsonSøknad)
         }
