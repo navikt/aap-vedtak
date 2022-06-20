@@ -26,6 +26,7 @@ subgraph Vedtak
     %% PROCESSOR API JOBS
     cleanup-soker-state-store-v2((cleanup-soker-state-store-v2))
 	metrics-soker-state-store-v2((metrics-soker-state-store-v2))
+	migrate-soker-state-store-v2((migrate-soker-state-store-v2))
     
     %% JOIN STREAMS
     aap.soknad-sendt.v1 --> join-0
@@ -48,6 +49,7 @@ subgraph Vedtak
     %% JOB STREAMS
     cleanup-soker-state-store-v2 --> soker-state-store-v2
 	metrics-soker-state-store-v2 --> soker-state-store-v2
+	migrate-soker-state-store-v2 --> soker-state-store-v2
     
     %% REPARTITION STREAMS
     aap.medlem.v1 --> |re-key| aap.medlem.v1-joined-aap.sokere.v1-repartition
@@ -70,5 +72,6 @@ style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204
 style soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style cleanup-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style metrics-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style migrate-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 
 ```

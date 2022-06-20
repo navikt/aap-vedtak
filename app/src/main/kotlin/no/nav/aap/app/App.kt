@@ -14,7 +14,6 @@ import io.ktor.server.util.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import kotlinx.coroutines.delay
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
@@ -31,6 +30,12 @@ import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.processor.api.Processor
+import org.apache.kafka.streams.processor.api.ProcessorContext
+import org.apache.kafka.streams.processor.api.ProcessorSupplier
+import org.apache.kafka.streams.processor.api.Record
+import org.apache.kafka.streams.state.KeyValueStore
+import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.time.Duration.Companion.minutes
@@ -72,12 +77,39 @@ internal fun topology(registry: MeterRegistry): Topology {
     søkerKTable.scheduleCleanup(Tables.søkere, 10.seconds, søkereToDelete::poll)
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
+    søkerKTable.toStream().process(
+        ProcessorSupplier { StateStoreMigrator(Tables.søkere) },
+        named("migrate-${Tables.søkere.stateStoreName}"),
+        Tables.søkere.stateStoreName
+    )
+
     streams.søknadStream(søkerKTable)
     streams.medlemStream(søkerKTable)
     streams.manuellStream(søkerKTable)
     streams.inntekterStream(søkerKTable)
 
     return streams.build()
+}
+
+private class StateStoreMigrator<K, V>(
+    private val table: Table<V>,
+) : Processor<K, V, Void, Void> {
+    override fun process(record: Record<K, V>) {
+        secureLog.info("state store migrator prosesserer: $record")
+    }
+
+    override fun init(context: ProcessorContext<Void, Void>) {
+        val store = context.getStateStore<KeyValueStore<K, ValueAndTimestamp<V>>>(table.stateStoreName)
+        store.all().asSequence().forEach { keyvalue ->
+            store.put(keyvalue.key, keyvalue.value).also {
+                secureLog.info("Migrated ${keyvalue.key} : ${keyvalue.value}")
+            }
+        }
+    }
+
+    private companion object {
+        private val secureLog = LoggerFactory.getLogger("secureLog")
+    }
 }
 
 private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStreams) {
