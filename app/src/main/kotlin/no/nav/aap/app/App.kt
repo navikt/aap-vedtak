@@ -99,10 +99,12 @@ private class StateStoreMigrator<K, V>(
     }
 
     override fun init(context: ProcessorContext<Void, Void>) {
-        val store = context.getStateStore<KeyValueStore<K, ValueAndTimestamp<V>>>(table.stateStoreName)
-        store.all().asSequence().forEach { keyvalue ->
-            store.put(keyvalue.key, keyvalue.value).also {
-                secureLog.info("Migrated ${keyvalue.key} : ${keyvalue.value}")
+        val store = context.getStateStore<KeyValueStore<K, V>>(table.stateStoreName)
+        store.all().use {
+            it.asSequence().forEach { keyvalue ->
+                store.put(keyvalue.key, keyvalue.value).also {
+                    secureLog.info("Migrated ${keyvalue.key} : ${keyvalue.value}")
+                }
             }
         }
     }
