@@ -3,6 +3,7 @@ package no.nav.aap
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import no.nav.aap.app.topology
 import no.nav.aap.kafka.streams.topology.Mermaid
+import org.apache.kafka.clients.producer.MockProducer
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.io.File
@@ -12,7 +13,7 @@ internal class CreateMermaidDiagram {
     fun `generate mermaid diagram`() {
         EnvironmentVariables(containerProperties()).execute {
             val registry = SimpleMeterRegistry()
-            val topology = topology(registry)
+            val topology = topology(registry, MockProducer())
             val flowchart = Mermaid.graph("Vedtak", topology)
             val mermaidFlowcharMarkdown = markdown(flowchart)
             File("../doc/topology.md").apply { writeText(mermaidFlowcharMarkdown) }

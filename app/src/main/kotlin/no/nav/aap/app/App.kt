@@ -17,6 +17,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
+import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuellStream
 import no.nav.aap.app.stream.medlemStream
@@ -35,7 +36,6 @@ import org.apache.kafka.streams.processor.api.ProcessorContext
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
 import org.apache.kafka.streams.processor.api.Record
 import org.apache.kafka.streams.state.KeyValueStore
-import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.time.Duration.Companion.minutes
@@ -59,7 +59,14 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
-    kafka.connect(config.kafka, prometheus, topology(prometheus))
+    val migrationProducer = kafka.createProducer(config.kafka, Topics.søkere)
+    val topology = topology(prometheus, migrationProducer)
+
+    kafka.connect(
+        config = config.kafka,
+        registry = prometheus,
+        topology = topology,
+    )
 
     routing {
         devTools(kafka, config.kafka)
@@ -67,7 +74,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
-internal fun topology(registry: MeterRegistry): Topology {
+internal fun topology(registry: MeterRegistry, migrationProducer: Producer<String, SøkereKafkaDto>): Topology {
     val streams = StreamsBuilder()
     val søkerKTable = streams
         .consume(Topics.søkere)
@@ -78,7 +85,7 @@ internal fun topology(registry: MeterRegistry): Topology {
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
     søkerKTable.toStream().process(
-        ProcessorSupplier { StateStoreMigrator(Tables.søkere) },
+        ProcessorSupplier { StateStoreMigrator(Tables.søkere, migrationProducer) },
         named("migrate-${Tables.søkere.stateStoreName}"),
         Tables.søkere.stateStoreName
     )
@@ -93,6 +100,7 @@ internal fun topology(registry: MeterRegistry): Topology {
 
 private class StateStoreMigrator<K, V>(
     private val table: Table<V>,
+    private val producer: Producer<K, V>,
 ) : Processor<K, V, Void, Void> {
     override fun process(record: Record<K, V>) {
         secureLog.info("state store migrator prosesserer: $record")
@@ -102,8 +110,9 @@ private class StateStoreMigrator<K, V>(
         val store = context.getStateStore<KeyValueStore<K, V>>(table.stateStoreName)
         store.all().use {
             it.asSequence().forEach { keyvalue ->
-                store.put(keyvalue.key, keyvalue.value).also {
-                    secureLog.info("Migrated ${keyvalue.key} : ${keyvalue.value}")
+                producer.send(ProducerRecord(table.source.name, keyvalue.key, keyvalue.value)) { meta, error ->
+                    if (error == null) secureLog.info("Migrated [$meta] ${keyvalue.key} : ${keyvalue.value}")
+                    else secureLog.error("klarte ikke sende migrert dto", error)
                 }
             }
         }
