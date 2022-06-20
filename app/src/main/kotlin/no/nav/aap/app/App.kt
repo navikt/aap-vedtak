@@ -24,8 +24,6 @@ import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.KafkaConfig
 import no.nav.aap.kafka.streams.*
-import no.nav.aap.kafka.streams.store.PurgeListener
-import no.nav.aap.kafka.streams.store.purge
 import no.nav.aap.kafka.streams.store.scheduleCleanup
 import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
@@ -33,20 +31,10 @@ import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
-import org.apache.kafka.streams.kstream.KTable
-import org.apache.kafka.streams.processor.PunctuationType
-import org.apache.kafka.streams.processor.api.Processor
-import org.apache.kafka.streams.processor.api.ProcessorContext
-import org.apache.kafka.streams.processor.api.ProcessorSupplier
-import org.apache.kafka.streams.processor.api.Record
-import org.apache.kafka.streams.state.KeyValueStore
-import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
-import java.util.concurrent.atomic.AtomicBoolean
-import kotlin.time.Duration
+import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
-import kotlin.time.toJavaDuration
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
@@ -81,8 +69,7 @@ internal fun topology(registry: MeterRegistry): Topology {
         .filterNotNull("filter-soker-tombstones")
         .produce(Tables.søkere)
 
-    søkerKTable.scheduleCleanup(Tables.søkere, 1.seconds, søkereToDelete)
-    søkerKTable.purge(Tables.søkere, 1.seconds, purgeFlag, purgeListeners)
+    søkerKTable.scheduleCleanup(Tables.søkere, 1.seconds, søkereToDelete::poll)
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
     streams.søknadStream(søkerKTable)
@@ -109,9 +96,7 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStream
     }
 }
 
-val søkereToDelete: MutableList<String> = mutableListOf()
-val purgeListeners: MutableList<PurgeListener<String>> = mutableListOf()
-val purgeFlag: AtomicBoolean = AtomicBoolean(false)
+private val søkereToDelete: ConcurrentLinkedQueue<String> = ConcurrentLinkedQueue<String>()
 
 private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     val søkerProducer = kafka.createProducer(config, Topics.søkere)
@@ -133,22 +118,6 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
         }
 
         call.respondText("Søknad og søker med ident $personident slettes!")
-    }
-
-    get("/deleteAll") {
-        purgeListeners.add { personident ->
-            søknadProducer.produce(Topics.søknad, personident, null).also {
-                secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
-            }
-
-            søkerProducer.produce(Topics.søkere, personident, null).also {
-                søkereToDelete.add(personident)
-                secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
-            }
-        }
-        purgeFlag.set(true)
-
-        call.respondText("Sletter alle søknader og søkere!")
     }
 
     get("/søknad/{personident}") {
