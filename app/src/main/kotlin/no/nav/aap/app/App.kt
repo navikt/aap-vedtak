@@ -36,6 +36,7 @@ import org.apache.kafka.streams.processor.api.ProcessorContext
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
 import org.apache.kafka.streams.processor.api.Record
 import org.apache.kafka.streams.state.KeyValueStore
+import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
 import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.time.Duration.Companion.minutes
@@ -107,11 +108,11 @@ private class StateStoreMigrator<K, V>(
     }
 
     override fun init(context: ProcessorContext<Void, Void>) {
-        val store = context.getStateStore<KeyValueStore<K, V>>(table.stateStoreName)
+        val store = context.getStateStore<KeyValueStore<K, ValueAndTimestamp<V>>>(table.stateStoreName)
         store.all().use {
             it.asSequence().forEach { keyvalue ->
-                producer.send(ProducerRecord(table.source.name, keyvalue.key, keyvalue.value)) { meta, error ->
-                    if (error == null) secureLog.info("Migrated [$meta] ${keyvalue.key} : ${keyvalue.value}")
+                producer.send(ProducerRecord(table.source.name, keyvalue.key, keyvalue.value.value())) { meta, error ->
+                    if (error == null) secureLog.info("Migrated [$meta] ${keyvalue.key} : ${keyvalue.value.value()}")
                     else secureLog.error("klarte ikke sende migrert dto", error)
                 }
             }
