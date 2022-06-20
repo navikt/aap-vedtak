@@ -69,7 +69,7 @@ internal fun topology(registry: MeterRegistry): Topology {
         .filterNotNull("filter-soker-tombstones")
         .produce(Tables.søkere)
 
-    søkerKTable.scheduleCleanup(Tables.søkere, 1.seconds, søkereToDelete::poll)
+    søkerKTable.scheduleCleanup(Tables.søkere, 10.seconds, søkereToDelete::poll)
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
     streams.søknadStream(søkerKTable)
@@ -123,15 +123,15 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     get("/søknad/{personident}") {
         val personident = call.parameters.getOrFail("personident")
 
-        søknadProducer.produce(Topics.søknad, personident, null).also {
-            secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
-        }
-
-        søkerProducer.produce(Topics.søkere, personident, null).also {
-            søkereToDelete.add(personident)
-            secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
-            delay(2000L) // vent på delete i state store
-        }
+//        søknadProducer.produce(Topics.søknad, personident, null).also {
+//            secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
+//        }
+//
+//        søkerProducer.produce(Topics.søkere, personident, null).also {
+//            søkereToDelete.add(personident)
+//            secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
+//            delay(2000L) // vent på delete i state store
+//        }
 
         val søknad = JsonSøknad()
 
