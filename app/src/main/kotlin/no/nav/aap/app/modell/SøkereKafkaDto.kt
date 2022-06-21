@@ -11,8 +11,11 @@ data class SøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 1, // Denne bumpes ved hver migrering
+    val version: Int = VERSION, // Denne bumpes ved hver migrering
 ) {
+    internal companion object{
+        internal const val VERSION = 2
+    }
     data class Sak(
         val saksid: UUID,
         val tilstand: String,
@@ -93,48 +96,54 @@ data class SøkereKafkaDto(
         fun toDto() = DtoLøsningMaskinellMedlemskapYrkesskade(erMedlem)
     }
 
-    data class LøsningManuellMedlemskapYrkesskade(val erMedlem: String) {
-        fun toDto() = DtoLøsningManuellMedlemskapYrkesskade(erMedlem)
+    data class LøsningManuellMedlemskapYrkesskade(val vurdertAv: String, val erMedlem: String) {
+        fun toDto() = DtoLøsningManuellMedlemskapYrkesskade(vurdertAv, erMedlem)
     }
 
-    data class LøsningParagraf_11_2(val erMedlem: String) {
-        fun toDto() = DtoLøsningParagraf_11_2(erMedlem)
+    data class LøsningParagraf_11_2(val vurdertAv: String, val erMedlem: String) {
+        fun toDto() = DtoLøsningParagraf_11_2(vurdertAv, erMedlem)
     }
 
-    data class LøsningParagraf_11_3(val erOppfylt: Boolean) {
-        fun toDto() = DtoLøsningParagraf_11_3(erOppfylt)
+    data class LøsningParagraf_11_3(val vurdertAv: String, val erOppfylt: Boolean) {
+        fun toDto() = DtoLøsningParagraf_11_3(vurdertAv, erOppfylt)
     }
 
-    data class LøsningParagraf_11_4_ledd2_ledd3(val erOppfylt: Boolean) {
-        fun toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(erOppfylt)
+    data class LøsningParagraf_11_4_ledd2_ledd3(val vurdertAv: String, val erOppfylt: Boolean) {
+        fun toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(vurdertAv, erOppfylt)
     }
 
     data class LøsningParagraf_11_5(
+        val vurdertAv: String,
         val kravOmNedsattArbeidsevneErOppfylt: Boolean,
         val nedsettelseSkyldesSykdomEllerSkade: Boolean
     ) {
         fun toDto() = DtoLøsningParagraf_11_5(
+            vurdertAv = vurdertAv,
             kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
             nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
         )
     }
 
     data class LøsningParagraf_11_5_yrkesskade(
+        val vurdertAv: String,
         val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
         val arbeidsevneErNedsattMedMinst30Prosent: Boolean
     ) {
         fun toDto() = DtoLøsningParagraf_11_5_yrkesskade(
+            vurdertAv = vurdertAv,
             arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
             arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent,
         )
     }
 
     data class LøsningParagraf_11_6(
+        val vurdertAv: String,
         val harBehovForBehandling: Boolean,
         val harBehovForTiltak: Boolean,
         val harMulighetForÅKommeIArbeid: Boolean
     ) {
         fun toDto() = DtoLøsningParagraf_11_6(
+            vurdertAv = vurdertAv,
             harBehovForBehandling = harBehovForBehandling,
             harBehovForTiltak = harBehovForTiltak,
             harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
@@ -142,12 +151,14 @@ data class SøkereKafkaDto(
     }
 
     data class LøsningParagraf_11_12_ledd1(
+        val vurdertAv: String,
         val bestemmesAv: String,
         val unntak: String,
         val unntaksbegrunnelse: String,
         val manueltSattVirkningsdato: LocalDate
     ) {
         fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+            vurdertAv = vurdertAv,
             bestemmesAv = bestemmesAv,
             unntak = unntak,
             unntaksbegrunnelse = unntaksbegrunnelse,
@@ -156,12 +167,14 @@ data class SøkereKafkaDto(
     }
 
     data class LøsningParagraf_11_22(
+        val vurdertAv: String,
         val erOppfylt: Boolean,
         val andelNedsattArbeidsevne: Int,
         val år: Year,
         val antattÅrligArbeidsinntekt: Double
     ) {
         fun toDto() = DtoLøsningParagraf_11_22(
+            vurdertAv = vurdertAv,
             erOppfylt = erOppfylt,
             andelNedsattArbeidsevne = andelNedsattArbeidsevne,
             år = år,
@@ -169,8 +182,8 @@ data class SøkereKafkaDto(
         )
     }
 
-    data class LøsningParagraf_11_29(val erOppfylt: Boolean) {
-        fun toDto() = DtoLøsningParagraf_11_29(erOppfylt)
+    data class LøsningParagraf_11_29(val vurdertAv: String, val erOppfylt: Boolean) {
+        fun toDto() = DtoLøsningParagraf_11_29(vurdertAv, erOppfylt)
     }
 
     data class Vedtak(
@@ -303,34 +316,52 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(erMedlem = it.erMedlem)
                             },
                             løsning_medlemskap_yrkesskade_manuell = vilkår.løsning_medlemskap_yrkesskade_manuell?.let {
-                                SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(erMedlem = it.erMedlem)
+                                SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(
+                                    vurdertAv = it.vurdertAv,
+                                    erMedlem = it.erMedlem
+                                )
                             },
                             løsning_11_2_maskinell = vilkår.løsning_11_2_maskinell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_2(erMedlem = it.erMedlem)
+                                SøkereKafkaDto.LøsningParagraf_11_2(
+                                    vurdertAv = it.vurdertAv,
+                                    erMedlem = it.erMedlem
+                                )
                             },
                             løsning_11_2_manuell = vilkår.løsning_11_2_manuell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_2(erMedlem = it.erMedlem)
+                                SøkereKafkaDto.LøsningParagraf_11_2(
+                                    vurdertAv = it.vurdertAv,
+                                    erMedlem = it.erMedlem
+                                )
                             },
                             løsning_11_3_manuell = vilkår.løsning_11_3_manuell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_3(erOppfylt = it.erOppfylt)
+                                SøkereKafkaDto.LøsningParagraf_11_3(
+                                    vurdertAv = it.vurdertAv,
+                                    erOppfylt = it.erOppfylt
+                                )
                             },
                             løsning_11_4_ledd2_ledd3_manuell = vilkår.løsning_11_4_ledd2_ledd3_manuell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(erOppfylt = it.erOppfylt)
+                                SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(
+                                    vurdertAv = it.vurdertAv,
+                                    erOppfylt = it.erOppfylt
+                                )
                             },
                             løsning_11_5_manuell = vilkår.løsning_11_5_manuell?.let {
                                 SøkereKafkaDto.LøsningParagraf_11_5(
+                                    vurdertAv = it.vurdertAv,
                                     kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
                                     nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
                                 )
                             },
                             løsning_11_5_yrkesskade_manuell = vilkår.løsning_11_5_yrkesskade_manuell?.let {
                                 SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
+                                    vurdertAv = it.vurdertAv,
                                     arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent,
                                     arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
                                 )
                             },
                             løsning_11_6_manuell = vilkår.løsning_11_6_manuell?.let {
                                 SøkereKafkaDto.LøsningParagraf_11_6(
+                                    vurdertAv = it.vurdertAv,
                                     harBehovForBehandling = it.harBehovForBehandling,
                                     harBehovForTiltak = it.harBehovForTiltak,
                                     harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
@@ -338,6 +369,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_12_ledd1_manuell = vilkår.løsning_11_12_ledd1_manuell?.let {
                                 SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
+                                    vurdertAv = it.vurdertAv,
                                     bestemmesAv = it.bestemmesAv,
                                     unntak = it.unntak,
                                     unntaksbegrunnelse = it.unntaksbegrunnelse,
@@ -346,6 +378,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_22_manuell = vilkår.løsning_11_22_manuell?.let {
                                 SøkereKafkaDto.LøsningParagraf_11_22(
+                                    vurdertAv = it.vurdertAv,
                                     erOppfylt = it.erOppfylt,
                                     andelNedsattArbeidsevne = it.andelNedsattArbeidsevne,
                                     år = it.år,
@@ -353,7 +386,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_29_manuell = vilkår.løsning_11_29_manuell?.let {
-                                SøkereKafkaDto.LøsningParagraf_11_29(erOppfylt = it.erOppfylt)
+                                SøkereKafkaDto.LøsningParagraf_11_29(
+                                    vurdertAv = it.vurdertAv, erOppfylt = it.erOppfylt
+                                )
                             },
                         )
                     }

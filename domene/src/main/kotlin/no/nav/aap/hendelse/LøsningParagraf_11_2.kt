@@ -13,5 +13,5 @@ class LøsningParagraf_11_2(
     internal fun vurdertAv() = vurdertAv
     internal fun erMedlem() = erMedlem == ErMedlem.JA
     internal fun erIkkeMedlem() = erMedlem == ErMedlem.NEI
-    internal fun toDto(): DtoLøsningParagraf_11_2 = DtoLøsningParagraf_11_2(erMedlem.name)
+    internal fun toDto(): DtoLøsningParagraf_11_2 = DtoLøsningParagraf_11_2(vurdertAv, erMedlem.name)
 }

@@ -1,104 +1,78 @@
 package no.nav.aap.app.modell
 
+import no.nav.aap.domene.Søker
 import no.nav.aap.dto.*
 import java.time.LocalDate
 
-data class ManuellKafkaDto(
+data class Løsning_11_2_manuell(val vurdertAv: String, val erMedlem: String) {
+    private fun toDto() = DtoLøsningParagraf_11_2(vurdertAv, erMedlem)
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class Løsning_11_3_manuell(val vurdertAv: String, val erOppfylt: Boolean) {
+    private fun toDto() = DtoLøsningParagraf_11_3(vurdertAv, erOppfylt)
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class Løsning_11_4_ledd2_ledd3_manuell(val vurdertAv: String, val erOppfylt: Boolean) {
+    private fun toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(vurdertAv, erOppfylt)
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class Løsning_11_5_manuell(
     val vurdertAv: String,
-    val løsning_11_2_manuell: Løsning_11_2_manuell? = null,
-    val løsning_11_3_manuell: Løsning_11_3_manuell? = null,
-    val løsning_11_4_ledd2_ledd3_manuell: Løsning_11_4_ledd2_ledd3_manuell? = null,
-    val løsning_11_5_manuell: Løsning_11_5_manuell? = null,
-    val løsning_11_6_manuell: Løsning_11_6_manuell? = null,
-    val løsning_11_12_ledd1_manuell: Løsning_11_12_ledd1_manuell? = null,
-    val løsning_11_29_manuell: Løsning_11_29_manuell? = null,
-    val løsningVurderingAvBeregningsdato: LøsningVurderingAvBeregningsdato? = null,
+    val kravOmNedsattArbeidsevneErOppfylt: Boolean,
+    val nedsettelseSkyldesSykdomEllerSkade: Boolean
 ) {
-    data class Løsning_11_2_manuell(val erMedlem: String)
-    data class Løsning_11_3_manuell(val erOppfylt: Boolean)
-    data class Løsning_11_4_ledd2_ledd3_manuell(val erOppfylt: Boolean)
-    data class Løsning_11_5_manuell(
-        val kravOmNedsattArbeidsevneErOppfylt: Boolean,
-        val nedsettelseSkyldesSykdomEllerSkade: Boolean
-    )
-
-    data class Løsning_11_6_manuell(
-        val harBehovForBehandling: Boolean,
-        val harBehovForTiltak: Boolean,
-        val harMulighetForÅKommeIArbeid: Boolean
-    )
-
-    data class Løsning_11_12_ledd1_manuell(
-        val bestemmesAv: String,
-        val unntak: String,
-        val unntaksbegrunnelse: String,
-        val manueltSattVirkningsdato: LocalDate
-    )
-
-    data class Løsning_11_29_manuell(val erOppfylt: Boolean)
-    data class LøsningVurderingAvBeregningsdato(val beregningsdato: LocalDate)
-
-    fun toDto(): DtoManuell = DtoManuell(
+    private fun toDto() = DtoLøsningParagraf_11_5(
         vurdertAv = vurdertAv,
-        løsning_11_2_manuell = løsning_11_2_manuell?.let { DtoLøsningParagraf_11_2(it.erMedlem) },
-        løsning_11_3_manuell = løsning_11_3_manuell?.let { DtoLøsningParagraf_11_3(it.erOppfylt) },
-        løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.let {
-            DtoLøsningParagraf_11_4_ledd2_ledd3(it.erOppfylt)
-        },
-        løsning_11_5_manuell = løsning_11_5_manuell?.let {
-            DtoLøsningParagraf_11_5(
-                kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
-                nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
-            )
-        },
-        løsning_11_6_manuell = løsning_11_6_manuell?.let {
-            DtoLøsningParagraf_11_6(
-                harBehovForBehandling = it.harBehovForBehandling,
-                harBehovForTiltak = it.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
-            )
-        },
-        løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.let {
-            DtoLøsningParagraf_11_12_ledd1(
-                bestemmesAv = it.bestemmesAv,
-                unntak = it.unntak,
-                unntaksbegrunnelse = it.unntaksbegrunnelse,
-                manueltSattVirkningsdato = it.manueltSattVirkningsdato
-            )
-        },
-        løsning_11_29_manuell = løsning_11_29_manuell?.let { DtoLøsningParagraf_11_29(it.erOppfylt) },
-        løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.let {
-            DtoLøsningVurderingAvBeregningsdato(vurdertAv = vurdertAv, beregningsdato = it.beregningsdato)
-        }
+        kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+        nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade
     )
 
-    fun DtoManuell.toJson(): ManuellKafkaDto = ManuellKafkaDto(
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class Løsning_11_6_manuell(
+    val vurdertAv: String,
+    val harBehovForBehandling: Boolean,
+    val harBehovForTiltak: Boolean,
+    val harMulighetForÅKommeIArbeid: Boolean
+) {
+    private fun toDto() = DtoLøsningParagraf_11_6(
         vurdertAv = vurdertAv,
-        løsning_11_2_manuell = løsning_11_2_manuell?.let { Løsning_11_2_manuell(it.erMedlem) },
-        løsning_11_3_manuell = løsning_11_3_manuell?.let { Løsning_11_3_manuell(it.erOppfylt) },
-        løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.let { Løsning_11_4_ledd2_ledd3_manuell(it.erOppfylt) },
-        løsning_11_5_manuell = løsning_11_5_manuell?.let {
-            Løsning_11_5_manuell(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                nedsettelseSkyldesSykdomEllerSkade = true
-            )
-        },
-        løsning_11_6_manuell = løsning_11_6_manuell?.let {
-            Løsning_11_6_manuell(
-                harBehovForBehandling = it.harBehovForBehandling,
-                harBehovForTiltak = it.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
-            )
-        },
-        løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.let {
-            Løsning_11_12_ledd1_manuell(
-                bestemmesAv = it.bestemmesAv,
-                unntak = it.unntak,
-                unntaksbegrunnelse = it.unntaksbegrunnelse,
-                manueltSattVirkningsdato = it.manueltSattVirkningsdato
-            )
-        },
-        løsning_11_29_manuell = løsning_11_29_manuell?.let { Løsning_11_29_manuell(it.erOppfylt) },
-        løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.let { LøsningVurderingAvBeregningsdato(it.beregningsdato) }
+        harBehovForBehandling = harBehovForBehandling,
+        harBehovForTiltak = harBehovForTiltak,
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
     )
+
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class Løsning_11_12_ledd1_manuell(
+    val vurdertAv: String,
+    val bestemmesAv: String,
+    val unntak: String,
+    val unntaksbegrunnelse: String,
+    val manueltSattVirkningsdato: LocalDate
+) {
+    private fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+        vurdertAv = vurdertAv,
+        bestemmesAv = bestemmesAv,
+        unntak = unntak,
+        unntaksbegrunnelse = unntaksbegrunnelse,
+        manueltSattVirkningsdato = manueltSattVirkningsdato
+    )
+
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class Løsning_11_29_manuell(val vurdertAv: String, val erOppfylt: Boolean) {
+    private fun toDto() = DtoLøsningParagraf_11_29(vurdertAv, erOppfylt)
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
+}
+
+data class LøsningVurderingAvBeregningsdato(val vurdertAv: String, val beregningsdato: LocalDate) {
+    private fun toDto() = DtoLøsningVurderingAvBeregningsdato(vurdertAv, beregningsdato)
+    internal fun håndter(søker: Søker) = toDto().håndter(søker)
 }

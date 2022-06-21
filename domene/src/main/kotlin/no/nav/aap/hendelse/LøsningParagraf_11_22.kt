@@ -6,7 +6,7 @@ import no.nav.aap.domene.beregning.Yrkesskade
 import no.nav.aap.dto.DtoLøsningParagraf_11_22
 import java.time.Year
 
-class LøsningParagraf_11_22(
+internal class LøsningParagraf_11_22(
     private val vurdertAv: String,
     private val erOppfylt: Boolean,
     private val andelNedsattArbeidsevne: Int,
@@ -24,6 +24,7 @@ class LøsningParagraf_11_22(
     internal fun erOppfylt() = erOppfylt
 
     internal fun toDto() = DtoLøsningParagraf_11_22(
+        vurdertAv = vurdertAv,
         erOppfylt = erOppfylt,
         andelNedsattArbeidsevne = andelNedsattArbeidsevne,
         år = år,

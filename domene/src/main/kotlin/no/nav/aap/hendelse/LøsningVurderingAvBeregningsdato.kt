@@ -3,7 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.dto.DtoLøsningVurderingAvBeregningsdato
 import java.time.LocalDate
 
-class LøsningVurderingAvBeregningsdato(
+internal class LøsningVurderingAvBeregningsdato(
     private val vurdertAv: String,
     internal val beregningsdato: LocalDate
 ) : Hendelse() {

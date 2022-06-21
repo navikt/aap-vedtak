@@ -12,6 +12,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
 ) : Hendelse() {
     internal fun vurdertAv() = vurdertAv
     internal fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+        vurdertAv = vurdertAv,
         bestemmesAv = bestemmesAv,
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,

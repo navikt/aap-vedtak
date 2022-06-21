@@ -2,7 +2,7 @@ package no.nav.aap.hendelse
 
 import no.nav.aap.dto.DtoLøsningMaskinellMedlemskapYrkesskade
 
-class LøsningMaskinellMedlemskapYrkesskade(private val erMedlem: ErMedlem) : Hendelse() {
+internal class LøsningMaskinellMedlemskapYrkesskade(private val erMedlem: ErMedlem) : Hendelse() {
     enum class ErMedlem {
         JA, NEI, UAVKLART
     }

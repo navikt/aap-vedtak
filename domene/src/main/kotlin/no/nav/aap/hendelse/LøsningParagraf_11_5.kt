@@ -3,7 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.vilkår.Paragraf_11_5
 import no.nav.aap.dto.DtoLøsningParagraf_11_5
 
-class LøsningParagraf_11_5(
+internal class LøsningParagraf_11_5(
     private val vurdertAv: String,
     private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad
 ) : Hendelse() {
@@ -14,7 +14,8 @@ class LøsningParagraf_11_5(
 
         internal fun erOppfylt() = kravOmNedsattArbeidsevneErOppfylt && nedsettelseSkyldesSykdomEllerSkade
 
-        internal fun toDto() = DtoLøsningParagraf_11_5(
+        internal fun toDto(vurdertAv: String) = DtoLøsningParagraf_11_5(
+            vurdertAv = vurdertAv,
             kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
             nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
         )
@@ -26,5 +27,5 @@ class LøsningParagraf_11_5(
         vilkår.vurderNedsattArbeidsevne(this, nedsattArbeidsevnegrad)
     }
 
-    internal fun toDto() = nedsattArbeidsevnegrad.toDto()
+    internal fun toDto() = nedsattArbeidsevnegrad.toDto(vurdertAv)
 }

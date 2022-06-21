@@ -19,11 +19,11 @@ class Søker private constructor(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
-    fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
+    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
+    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
@@ -31,19 +31,19 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_3) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_3) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_5) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
@@ -55,19 +55,19 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_22) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_29) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) {
+    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningInntekter) {
+    internal fun håndterLøsning(løsning: LøsningInntekter) {
         saker.forEach { it.håndterLøsning(løsning, fødselsdato) }
     }
 

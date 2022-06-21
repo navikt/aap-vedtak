@@ -1,0 +1,31 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: manuell.11-5.v1
+  namespace: aap
+  labels:
+    team: aap
+  annotations:
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "{{kafka.permanent-delete-topics}}"
+    kafka.format: json
+    kafka.state: "false"
+    github.url: https://github.com/navikt/aap-vedtak
+spec:
+  pool: {{kafka.pool}}
+  config:
+    cleanupPolicy: compact,delete
+    partitions: 12
+    retentionHours: 168
+  acl:
+    - team: aap
+      application: vedtak
+      access: readwrite
+    - team: aap
+      application: oppgavestyring
+      access: readwrite
+    - team: aap
+      application: aap-kafka-manager
+      access: read
+    - team: aap
+      application: kafka-cli
+      access: readwrite

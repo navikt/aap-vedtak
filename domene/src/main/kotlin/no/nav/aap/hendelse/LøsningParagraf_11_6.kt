@@ -14,6 +14,7 @@ internal class LøsningParagraf_11_6(
         harBehovForBehandling && harBehovForTiltak && harMulighetForÅKommeIArbeid
 
     internal fun toDto() = DtoLøsningParagraf_11_6(
+        vurdertAv = vurdertAv,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
         harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid

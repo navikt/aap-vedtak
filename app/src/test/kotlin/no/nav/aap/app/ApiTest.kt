@@ -3,14 +3,9 @@ package no.nav.aap.app
 import io.ktor.server.testing.*
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.modell.InntekterKafkaDto
+import no.nav.aap.app.modell.*
 import no.nav.aap.app.modell.InntekterKafkaDto.Response.Inntekt
-import no.nav.aap.app.modell.JsonSøknad
-import no.nav.aap.app.modell.ManuellKafkaDto
-import no.nav.aap.app.modell.ManuellKafkaDto.*
-import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.dto.*
-import org.apache.kafka.streams.TestInputTopic
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -29,7 +24,12 @@ internal class ApiTest {
             val søknadTopic = mocks.kafka.inputTopic(Topics.søknad)
             val medlemTopic = mocks.kafka.inputTopic(Topics.medlem)
             val medlemOutputTopic = mocks.kafka.outputTopic(Topics.medlem)
-            val manuellTopic = mocks.kafka.inputTopic(Topics.manuell)
+            val manuell_11_3_Topic = mocks.kafka.inputTopic(Topics.manuell_11_3)
+            val manuell_11_5_Topic = mocks.kafka.inputTopic(Topics.manuell_11_5)
+            val manuell_11_6_Topic = mocks.kafka.inputTopic(Topics.manuell_11_6)
+            val manuell_11_12_Topic = mocks.kafka.inputTopic(Topics.manuell_11_12)
+            val manuell_11_29_Topic = mocks.kafka.inputTopic(Topics.manuell_11_29)
+            val manuell_beregningsdato_Topic = mocks.kafka.inputTopic(Topics.manuell_beregningsdato)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
@@ -46,43 +46,39 @@ internal class ApiTest {
                 }
             }
 
-            manuellTopic.produserLøsning(
-                key = fnr,
-                vurdertAv = "saksbehandler",
-                løsning_11_3_manuell = Løsning_11_3_manuell(true)
-            )
-            manuellTopic.produserLøsning(
-                key = fnr,
-                vurdertAv = "veileder",
-                løsning_11_5_manuell = Løsning_11_5_manuell(
+            manuell_11_3_Topic.produce(fnr) {
+                Løsning_11_3_manuell("saksbehandler", true)
+            }
+            manuell_11_5_Topic.produce(fnr) {
+                Løsning_11_5_manuell(
+                    vurdertAv = "veileder",
                     kravOmNedsattArbeidsevneErOppfylt = true,
                     nedsettelseSkyldesSykdomEllerSkade = true
                 )
-            )
-            manuellTopic.produserLøsning(
-                key = fnr,
-                vurdertAv = "saksbehandler",
-                løsning_11_6_manuell = Løsning_11_6_manuell(
+            }
+            manuell_11_6_Topic.produce(fnr) {
+                Løsning_11_6_manuell(
+                    vurdertAv = "saksbehandler",
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
                     harMulighetForÅKommeIArbeid = true
                 )
-            )
-            manuellTopic.produserLøsning(
-                key = fnr,
-                vurdertAv = "saksbehandler",
-                løsning_11_12_l1_manuell = Løsning_11_12_ledd1_manuell("SPS", "INGEN", "", LocalDate.now())
-            )
-            manuellTopic.produserLøsning(
-                key = fnr,
-                vurdertAv = "saksbehandler",
-                løsning_11_29_manuell = Løsning_11_29_manuell(true)
-            )
-            manuellTopic.produserLøsning(
-                key = fnr,
-                vurdertAv = "saksbehandler",
-                løsningVurderingAvBeregningsdato = LøsningVurderingAvBeregningsdato(LocalDate.of(2022, 1, 1))
-            )
+            }
+            manuell_11_12_Topic.produce(fnr) {
+                Løsning_11_12_ledd1_manuell(
+                    vurdertAv = "saksbehandler",
+                    bestemmesAv = "SPS",
+                    unntak = "INGEN",
+                    unntaksbegrunnelse = "",
+                    manueltSattVirkningsdato = LocalDate.now()
+                )
+            }
+            manuell_11_29_Topic.produce(fnr) {
+                Løsning_11_29_manuell("saksbehandler", true)
+            }
+            manuell_beregningsdato_Topic.produce(fnr) {
+                LøsningVurderingAvBeregningsdato("saksbehandler", LocalDate.of(2022, 1, 1))
+            }
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
             inntektTopic.produce(fnr) {
@@ -127,7 +123,10 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_2_maskinell = DtoLøsningParagraf_11_2("JA"),
+                                        løsning_11_2_maskinell = DtoLøsningParagraf_11_2(
+                                            "maskinell saksbehandling",
+                                            "JA"
+                                        ),
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(1),
@@ -137,7 +136,7 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_3_manuell = DtoLøsningParagraf_11_3(true)
+                                        løsning_11_3_manuell = DtoLøsningParagraf_11_3("saksbehandler", true)
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
@@ -166,6 +165,7 @@ internal class ApiTest {
                                         tilstand = "OPPFYLT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_5_manuell = DtoLøsningParagraf_11_5(
+                                            vurdertAv = "veileder",
                                             kravOmNedsattArbeidsevneErOppfylt = true,
                                             nedsettelseSkyldesSykdomEllerSkade = true,
                                         )
@@ -179,6 +179,7 @@ internal class ApiTest {
                                         tilstand = "OPPFYLT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_6_manuell = DtoLøsningParagraf_11_6(
+                                            vurdertAv = "saksbehandler",
                                             harBehovForBehandling = true,
                                             harBehovForTiltak = true,
                                             harMulighetForÅKommeIArbeid = true
@@ -193,10 +194,11 @@ internal class ApiTest {
                                         tilstand = "OPPFYLT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(
-                                            "SPS",
-                                            "INGEN",
-                                            "",
-                                            LocalDate.now()
+                                            vurdertAv = "saksbehandler",
+                                            bestemmesAv = "SPS",
+                                            unntak = "INGEN",
+                                            unntaksbegrunnelse = "",
+                                            manueltSattVirkningsdato = LocalDate.now()
                                         )
                                     ),
                                     DtoVilkårsvurdering(
@@ -207,7 +209,7 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_29_manuell = DtoLøsningParagraf_11_29(true)
+                                        løsning_11_29_manuell = DtoLøsningParagraf_11_29("saksbehandler", true)
                                     )
                                 )
                             )
@@ -291,31 +293,16 @@ internal class ApiTest {
         }
     }
 
-    private fun TestInputTopic<String, ManuellKafkaDto>.produserLøsning(
-        key: String,
-        vurdertAv: String,
-        løsning_11_2_manuell: Løsning_11_2_manuell? = null,
-        løsning_11_3_manuell: Løsning_11_3_manuell? = null,
-        løsning_11_4_l2_l3_manuell: Løsning_11_4_ledd2_ledd3_manuell? = null,
-        løsning_11_5_manuell: Løsning_11_5_manuell? = null,
-        løsning_11_6_manuell: Løsning_11_6_manuell? = null,
-        løsning_11_12_l1_manuell: Løsning_11_12_ledd1_manuell? = null,
-        løsning_11_29_manuell: Løsning_11_29_manuell? = null,
-        løsningVurderingAvBeregningsdato: LøsningVurderingAvBeregningsdato? = null
-    ) {
-        produce(key) {
-            ManuellKafkaDto(
-                vurdertAv = vurdertAv,
-                løsning_11_2_manuell = løsning_11_2_manuell,
-                løsning_11_3_manuell = løsning_11_3_manuell,
-                løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_l2_l3_manuell,
-                løsning_11_5_manuell = løsning_11_5_manuell,
-                løsning_11_6_manuell = løsning_11_6_manuell,
-                løsning_11_12_ledd1_manuell = løsning_11_12_l1_manuell,
-                løsning_11_29_manuell = løsning_11_29_manuell,
-                løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato
-            )
-        }
+    @Test
+    fun `SøkereKafkaDto opprettes med nyeste versjon`() {
+        val nyeste = SøkereKafkaDto("", LocalDate.now(), emptyList())
+        assertEquals(SøkereKafkaDto.VERSION, nyeste.version)
+    }
+
+    @Test
+    fun `versjon på forrige søkereKafkaDto skal være 1 mindre enn nyeste versjon`() {
+        val forrige = ForrigeSøkereKafkaDto("", LocalDate.now(), emptyList())
+        assertEquals(SøkereKafkaDto.VERSION - 1, forrige.version)
     }
 }
 

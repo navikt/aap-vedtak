@@ -3,7 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.beregning.Inntektshistorikk
 
-class LøsningInntekter(
+internal class LøsningInntekter(
     private val inntekter: List<Inntekt>
 ) : Hendelse() {
 
