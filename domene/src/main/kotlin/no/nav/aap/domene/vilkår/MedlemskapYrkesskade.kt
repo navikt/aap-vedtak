@@ -17,19 +17,18 @@ private val log = LoggerFactory.getLogger("MedlemskapYrkesskade")
 
 internal class MedlemskapYrkesskade private constructor(
     vilkårsvurderingsid: UUID,
-    private var tilstand: Tilstand
+    tilstand: Tilstand
 ) :
-    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.MEDLEMSKAP_YRKESSKADE, Ledd.LEDD_1 + Ledd.LEDD_2) {
+    Vilkårsvurdering<MedlemskapYrkesskade, MedlemskapYrkesskade.Tilstand>(
+        vilkårsvurderingsid,
+        Paragraf.MEDLEMSKAP_YRKESSKADE,
+        Ledd.LEDD_1 + Ledd.LEDD_2,
+        tilstand
+    ) {
     private lateinit var maskinellLøsning: LøsningMaskinellMedlemskapYrkesskade
     private lateinit var manuellLøsning: LøsningManuellMedlemskapYrkesskade
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
-
-    private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
-        this.tilstand.onExit(this, hendelse)
-        this.tilstand = nyTilstand
-        nyTilstand.onEntry(this, hendelse)
-    }
 
     override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
@@ -43,8 +42,13 @@ internal class MedlemskapYrkesskade private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
-    override fun erOppfylt() = tilstand.erOppfylt()
-    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
+    override fun onEntry(hendelse: Hendelse) {
+        tilstand.onEntry(this, hendelse)
+    }
+
+    override fun onExit(hendelse: Hendelse) {
+        tilstand.onExit(this, hendelse)
+    }
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
@@ -61,7 +65,7 @@ internal class MedlemskapYrkesskade private constructor(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
-    ) {
+    ) : Vilkårsvurderingstilstand<MedlemskapYrkesskade> {
         enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
             IKKE_VURDERT({ IkkeVurdert }),
             SØKNAD_MOTTATT({ SøknadMottatt }),
@@ -72,10 +76,8 @@ internal class MedlemskapYrkesskade private constructor(
             IKKE_OPPFYLT_MANUELT({ IkkeOppfyltManuelt })
         }
 
-        internal open fun onEntry(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {}
-        internal open fun onExit(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {}
-        internal fun erOppfylt() = erOppfylt
-        internal fun erIkkeOppfylt() = erIkkeOppfylt
+        override fun erOppfylt() = erOppfylt
+        override fun erIkkeOppfylt() = erIkkeOppfylt
         internal open fun håndterSøknad(
             vilkårsvurdering: MedlemskapYrkesskade,
             søknad: Søknad,
@@ -264,9 +266,6 @@ internal class MedlemskapYrkesskade private constructor(
                 paragraf.settManuellLøsning(vilkårsvurdering)
             }
         }
-
-        internal open fun gjenopprettTilstand(paragraf: MedlemskapYrkesskade, vilkårsvurdering: DtoVilkårsvurdering) {}
-        internal abstract fun toDto(paragraf: MedlemskapYrkesskade): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

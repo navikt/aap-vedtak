@@ -16,18 +16,17 @@ private val log = LoggerFactory.getLogger("Paragraf_11_5_yrkesskade")
 
 internal class Paragraf_11_5_yrkesskade private constructor(
     vilkårsvurderingsid: UUID,
-    private var tilstand: Tilstand
+    tilstand: Tilstand
 ) :
-    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_5_YRKESSKADE, Ledd.LEDD_1 + Ledd.LEDD_2) {
+    Vilkårsvurdering<Paragraf_11_5_yrkesskade, Paragraf_11_5_yrkesskade.Tilstand>(
+        vilkårsvurderingsid,
+        Paragraf.PARAGRAF_11_5_YRKESSKADE,
+        Ledd.LEDD_1 + Ledd.LEDD_2,
+        tilstand
+    ) {
     private lateinit var løsning: LøsningParagraf_11_5_yrkesskade
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
-
-    private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
-        this.tilstand.onExit(this, hendelse)
-        this.tilstand = nyTilstand
-        nyTilstand.onEntry(this, hendelse)
-    }
 
     override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
@@ -37,14 +36,19 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
-    override fun erOppfylt() = tilstand.erOppfylt()
-    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
+    override fun onEntry(hendelse: Hendelse) {
+        tilstand.onEntry(this, hendelse)
+    }
+
+    override fun onExit(hendelse: Hendelse) {
+        tilstand.onExit(this, hendelse)
+    }
 
     internal sealed class Tilstand(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
-    ) {
+    ) : Vilkårsvurderingstilstand<Paragraf_11_5_yrkesskade> {
         enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
             IKKE_VURDERT({ IkkeVurdert }),
             SØKNAD_MOTTATT({ SøknadMottatt }),
@@ -52,10 +56,8 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             IKKE_OPPFYLT({ IkkeOppfylt }),
         }
 
-        internal open fun onEntry(vilkårsvurdering: Paragraf_11_5_yrkesskade, hendelse: Hendelse) {}
-        internal open fun onExit(vilkårsvurdering: Paragraf_11_5_yrkesskade, hendelse: Hendelse) {}
-        internal fun erOppfylt() = erOppfylt
-        internal fun erIkkeOppfylt() = erIkkeOppfylt
+        override fun erOppfylt() = erOppfylt
+        override fun erIkkeOppfylt() = erIkkeOppfylt
 
         internal open fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
@@ -182,14 +184,6 @@ internal class Paragraf_11_5_yrkesskade private constructor(
                 )
             }
         }
-
-        internal open fun gjenopprettTilstand(
-            paragraf: Paragraf_11_5_yrkesskade,
-            vilkårsvurdering: DtoVilkårsvurdering
-        ) {
-        }
-
-        internal abstract fun toDto(paragraf: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

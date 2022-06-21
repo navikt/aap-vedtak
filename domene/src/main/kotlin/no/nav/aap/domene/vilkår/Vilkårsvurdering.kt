@@ -7,16 +7,18 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 
-internal abstract class Vilkårsvurdering(
+internal abstract class Vilkårsvurdering<in PARAGRAF, TILSTAND : Vilkårsvurderingstilstand<PARAGRAF>>(
     protected val vilkårsvurderingsid: UUID,
     protected val paragraf: Paragraf,
-    protected val ledd: List<Ledd>
+    protected val ledd: List<Ledd>,
+    protected var tilstand: TILSTAND,
 ) {
     internal constructor(
         vilkårsvurderingsid: UUID,
         paragraf: Paragraf,
-        ledd: Ledd
-    ) : this(vilkårsvurderingsid, paragraf, listOf(ledd))
+        ledd: Ledd,
+        tilstand: TILSTAND,
+    ) : this(vilkårsvurderingsid, paragraf, listOf(ledd), tilstand)
 
     internal enum class Paragraf {
         MEDLEMSKAP_YRKESSKADE,
@@ -40,8 +42,17 @@ internal abstract class Vilkårsvurdering(
         operator fun plus(other: Ledd) = listOf(this, other)
     }
 
-    internal abstract fun erOppfylt(): Boolean
-    internal abstract fun erIkkeOppfylt(): Boolean
+    protected abstract fun onEntry(hendelse: Hendelse)
+    protected abstract fun onExit(hendelse: Hendelse)
+
+    protected fun tilstand(nyTilstand: TILSTAND, hendelse: Hendelse) {
+        onExit(hendelse)
+        this.tilstand = nyTilstand
+        onEntry(hendelse)
+    }
+
+    internal fun erOppfylt(): Boolean = tilstand.erOppfylt()
+    internal fun erIkkeOppfylt(): Boolean = tilstand.erIkkeOppfylt()
 
     internal open fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {}
     internal open fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {}
@@ -60,11 +71,11 @@ internal abstract class Vilkårsvurdering(
     internal companion object {
         private val log = LoggerFactory.getLogger("Vilkårsvurdering")
 
-        internal fun Iterable<Vilkårsvurdering>.erAlleOppfylt() = all(Vilkårsvurdering::erOppfylt)
-        internal fun Iterable<Vilkårsvurdering>.erNoenIkkeOppfylt() = any(Vilkårsvurdering::erIkkeOppfylt)
-        internal fun Iterable<Vilkårsvurdering>.toDto() = map(Vilkårsvurdering::toDto)
+        internal fun Iterable<Vilkårsvurdering<*, *>>.erAlleOppfylt() = all { it.erOppfylt() }
+        internal fun Iterable<Vilkårsvurdering<*, *>>.erNoenIkkeOppfylt() = any { it.erIkkeOppfylt() }
+        internal fun Iterable<Vilkårsvurdering<*, *>>.toDto() = map { it.toDto() }
 
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering? =
+        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering<*, *>? =
             when (enumValueOf<Paragraf>(vilkårsvurdering.paragraf)) {
                 Paragraf.MEDLEMSKAP_YRKESSKADE -> MedlemskapYrkesskade.gjenopprett(vilkårsvurdering)
                 Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.gjenopprett(vilkårsvurdering)

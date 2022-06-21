@@ -16,19 +16,18 @@ private val log = LoggerFactory.getLogger("Paragraf_11_2")
 
 internal class Paragraf_11_2 private constructor(
     vilkårsvurderingsid: UUID,
-    private var tilstand: Tilstand
+    tilstand: Tilstand
 ) :
-    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_2, Ledd.LEDD_1 + Ledd.LEDD_2) {
+    Vilkårsvurdering<Paragraf_11_2, Paragraf_11_2.Tilstand>(
+        vilkårsvurderingsid,
+        Paragraf.PARAGRAF_11_2,
+        Ledd.LEDD_1 + Ledd.LEDD_2,
+        tilstand
+    ) {
     private lateinit var maskineltLøsning: LøsningParagraf_11_2
     private lateinit var manueltLøsning: LøsningParagraf_11_2
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
-
-    private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
-        this.tilstand.onExit(this, hendelse)
-        this.tilstand = nyTilstand
-        nyTilstand.onEntry(this, hendelse)
-    }
 
     override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
@@ -38,8 +37,13 @@ internal class Paragraf_11_2 private constructor(
         tilstand.vurderMedlemskap(this, løsning)
     }
 
-    override fun erOppfylt() = tilstand.erOppfylt()
-    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
+    override fun onEntry(hendelse: Hendelse) {
+        tilstand.onEntry(this, hendelse)
+    }
+
+    override fun onExit(hendelse: Hendelse) {
+        tilstand.onExit(this, hendelse)
+    }
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoVurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
@@ -57,7 +61,7 @@ internal class Paragraf_11_2 private constructor(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
-    ) {
+    ) : Vilkårsvurderingstilstand<Paragraf_11_2> {
         enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
             IKKE_VURDERT({ IkkeVurdert }),
             SØKNAD_MOTTATT({ SøknadMottatt }),
@@ -68,10 +72,8 @@ internal class Paragraf_11_2 private constructor(
             IKKE_OPPFYLT_MANUELT({ IkkeOppfyltManuelt })
         }
 
-        internal open fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
-        internal open fun onExit(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {}
-        internal fun erOppfylt() = erOppfylt
-        internal fun erIkkeOppfylt() = erIkkeOppfylt
+        override fun erOppfylt() = erOppfylt
+        override fun erIkkeOppfylt() = erIkkeOppfylt
         internal open fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_2,
             søknad: Søknad,
@@ -253,9 +255,6 @@ internal class Paragraf_11_2 private constructor(
                 paragraf.settManuellLøsning(vilkårsvurdering)
             }
         }
-
-        internal open fun gjenopprettTilstand(paragraf: Paragraf_11_2, vilkårsvurdering: DtoVilkårsvurdering) {}
-        internal abstract fun toDto(paragraf: Paragraf_11_2): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

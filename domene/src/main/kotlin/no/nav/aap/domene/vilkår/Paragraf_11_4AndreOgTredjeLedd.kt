@@ -16,18 +16,17 @@ private val log = LoggerFactory.getLogger("Paragraf_11_4AndreOgTredjeLedd")
 
 internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
     vilkårsvurderingsid: UUID,
-    private var tilstand: Tilstand
+    tilstand: Tilstand
 ) :
-    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_4, Ledd.LEDD_2 + Ledd.LEDD_3) {
+    Vilkårsvurdering<Paragraf_11_4AndreOgTredjeLedd, Paragraf_11_4AndreOgTredjeLedd.Tilstand>(
+        vilkårsvurderingsid,
+        Paragraf.PARAGRAF_11_4,
+        Ledd.LEDD_2 + Ledd.LEDD_3,
+        tilstand
+    ) {
     private lateinit var løsning: LøsningParagraf_11_4AndreOgTredjeLedd
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
-
-    private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
-        this.tilstand.onExit(this, hendelse)
-        this.tilstand = nyTilstand
-        nyTilstand.onEntry(this, hendelse)
-    }
 
     override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
@@ -35,6 +34,14 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
     override fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
         tilstand.håndterLøsning(this, løsning)
+    }
+
+    override fun onEntry(hendelse: Hendelse) {
+        tilstand.onEntry(this, hendelse)
+    }
+
+    override fun onExit(hendelse: Hendelse) {
+        tilstand.onExit(this, hendelse)
     }
 
     private fun vurderAlder(hendelse: Hendelse, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
@@ -45,14 +52,11 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         }
     }
 
-    override fun erOppfylt() = tilstand.erOppfylt()
-    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
-
     internal sealed class Tilstand(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
-    ) {
+    ) : Vilkårsvurderingstilstand<Paragraf_11_4AndreOgTredjeLedd> {
         enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
             IKKE_VURDERT({ IkkeVurdert }),
             SØKNAD_MOTTATT({ SøknadMottatt }),
@@ -61,10 +65,8 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             IKKE_RELEVANT({ IkkeRelevant })
         }
 
-        internal open fun onEntry(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {}
-        internal open fun onExit(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {}
-        internal fun erOppfylt() = erOppfylt
-        internal fun erIkkeOppfylt() = erIkkeOppfylt
+        override fun erOppfylt() = erOppfylt
+        override fun erIkkeOppfylt() = erIkkeOppfylt
 
         internal open fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
@@ -176,14 +178,6 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
                 utfall = Utfall.IKKE_RELEVANT
             )
         }
-
-        internal open fun gjenopprettTilstand(
-            paragraf: Paragraf_11_4AndreOgTredjeLedd,
-            vilkårsvurdering: DtoVilkårsvurdering
-        ) {
-        }
-
-        internal abstract fun toDto(paragraf: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)

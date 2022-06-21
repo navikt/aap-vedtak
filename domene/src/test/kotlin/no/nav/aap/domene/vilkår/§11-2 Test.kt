@@ -184,7 +184,7 @@ internal class `§11-2 Test` {
         assertTrue(hendelse.behov().isEmpty())
     }
 
-    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Vilkårsvurdering) {
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_2) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 }

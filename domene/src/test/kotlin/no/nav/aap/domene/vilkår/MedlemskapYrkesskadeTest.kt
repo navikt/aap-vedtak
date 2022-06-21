@@ -167,7 +167,7 @@ internal class MedlemskapYrkesskadeTest {
         assertTrue(hendelse.behov().isEmpty())
     }
 
-    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Vilkårsvurdering) {
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: MedlemskapYrkesskade) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 }

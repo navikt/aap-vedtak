@@ -15,7 +15,7 @@ import java.util.*
 internal abstract class Sakstype private constructor(
     protected val type: Type,
     private var aktiv: Boolean,
-    protected val vilkårsvurderinger: List<Vilkårsvurdering>
+    protected val vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
 ) {
 
     internal enum class Type {
@@ -72,13 +72,17 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
-    abstract fun opprettVedtak(inntektshistorikk: Inntektshistorikk, beregningsdato: LocalDate, fødselsdato: Fødselsdato): Vedtak
+    abstract fun opprettVedtak(
+        inntektshistorikk: Inntektshistorikk,
+        beregningsdato: LocalDate,
+        fødselsdato: Fødselsdato
+    ): Vedtak
 
     internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
     internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
 
     internal class Standard private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering>
+        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
     ) : Sakstype(
         type = Type.STANDARD,
         aktiv = true,
@@ -116,13 +120,14 @@ internal abstract class Sakstype private constructor(
                 return Standard(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering>) = Standard(vilkårsvurderinger)
+            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
+                Standard(vilkårsvurderinger)
         }
     }
 
     internal class Yrkesskade private constructor(
         private val paragraf1122: Paragraf_11_22,
-        vilkårsvurderinger: List<Vilkårsvurdering>
+        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
     ) : Sakstype(
         type = Type.YRKESSKADE,
         aktiv = true,
@@ -134,7 +139,8 @@ internal abstract class Sakstype private constructor(
             beregningsdato: LocalDate,
             fødselsdato: Fødselsdato
         ): Vedtak {
-            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, paragraf1122.yrkesskade())
+            val inntektsgrunnlag =
+                inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, paragraf1122.yrkesskade())
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
@@ -162,13 +168,13 @@ internal abstract class Sakstype private constructor(
                 return Yrkesskade(paragraf1122, vilkårsvurderinger)
             }
 
-            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering>) =
+            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
                 Yrkesskade(vilkårsvurderinger.filterIsInstance<Paragraf_11_22>().first(), vilkårsvurderinger)
         }
     }
 
     internal class Student private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering>
+        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
     ) : Sakstype(
         type = Type.STUDENT,
         aktiv = true,
@@ -196,7 +202,8 @@ internal abstract class Sakstype private constructor(
                 return Student(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStudent(vilkårsvurderinger: List<Vilkårsvurdering>) = Student(vilkårsvurderinger)
+            internal fun gjenopprettStudent(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
+                Student(vilkårsvurderinger)
         }
     }
 
@@ -213,7 +220,7 @@ internal abstract class Sakstype private constructor(
 
         internal fun gjenopprett(dtoSakstype: DtoSakstype): Sakstype {
             val vilkårsvurderinger =
-                dtoSakstype.vilkårsvurderinger.mapNotNull(Vilkårsvurdering::gjenopprett).toMutableList()
+                dtoSakstype.vilkårsvurderinger.mapNotNull(Vilkårsvurdering.Companion::gjenopprett).toMutableList()
             return when (enumValueOf<Type>(dtoSakstype.type)) {
                 Type.STANDARD -> Standard.gjenopprettStandard(vilkårsvurderinger)
                 Type.YRKESSKADE -> Yrkesskade.gjenopprettYrkesskade(vilkårsvurderinger)

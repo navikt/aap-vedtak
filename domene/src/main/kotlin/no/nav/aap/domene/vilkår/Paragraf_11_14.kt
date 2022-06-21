@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
+import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.Søknad
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -13,43 +14,49 @@ private val log = LoggerFactory.getLogger("Paragraf_11_14")
 
 internal class Paragraf_11_14 private constructor(
     vilkårsvurderingsid: UUID,
-    private var tilstand: Tilstand
+    tilstand: Tilstand
 ) :
-    Vilkårsvurdering(vilkårsvurderingsid, Paragraf.PARAGRAF_11_14, Ledd.LEDD_1) {
+    Vilkårsvurdering<Paragraf_11_14, Paragraf_11_14.Tilstand>(
+        vilkårsvurderingsid,
+        Paragraf.PARAGRAF_11_14,
+        Ledd.LEDD_1,
+        tilstand
+    ) {
     private var erStudent by Delegates.notNull<Boolean>()
 
     internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
 
-    private fun tilstand(nyTilstand: Tilstand) {
-        this.tilstand = nyTilstand
-    }
-
-    private fun vurderErStudent(erStudent: Boolean) {
+    private fun vurderErStudent(søknad: Søknad, erStudent: Boolean) {
         this.erStudent = erStudent
-        if (erStudent) tilstand(Tilstand.Oppfylt)
-        else tilstand(Tilstand.IkkeOppfylt)
+        if (erStudent) tilstand(Tilstand.Oppfylt, søknad)
+        else tilstand(Tilstand.IkkeOppfylt, søknad)
     }
 
     override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         tilstand.håndterSøknad(this, søknad)
     }
 
-    override fun erOppfylt() = tilstand.erOppfylt()
-    override fun erIkkeOppfylt() = tilstand.erIkkeOppfylt()
+    override fun onEntry(hendelse: Hendelse) {
+        tilstand.onEntry(this, hendelse)
+    }
+
+    override fun onExit(hendelse: Hendelse) {
+        tilstand.onExit(this, hendelse)
+    }
 
     internal sealed class Tilstand(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
         private val erIkkeOppfylt: Boolean
-    ) {
+    ) : Vilkårsvurderingstilstand<Paragraf_11_14> {
         enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
             IKKE_VURDERT({ IkkeVurdert }),
             OPPFYLT({ Oppfylt }),
             IKKE_OPPFYLT({ IkkeOppfylt }),
         }
 
-        internal fun erOppfylt() = erOppfylt
-        internal fun erIkkeOppfylt() = erIkkeOppfylt
+        override fun erOppfylt() = erOppfylt
+        override fun erIkkeOppfylt() = erIkkeOppfylt
 
         internal open fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_14,
@@ -67,7 +74,7 @@ internal class Paragraf_11_14 private constructor(
                 vilkårsvurdering: Paragraf_11_14,
                 søknad: Søknad
             ) {
-                vilkårsvurdering.vurderErStudent(søknad.erStudent())
+                vilkårsvurdering.vurderErStudent(søknad, søknad.erStudent())
             }
 
             override fun toDto(paragraf: Paragraf_11_14): DtoVilkårsvurdering = DtoVilkårsvurdering(
@@ -112,14 +119,6 @@ internal class Paragraf_11_14 private constructor(
                 utfall = Utfall.IKKE_OPPFYLT
             )
         }
-
-        internal open fun gjenopprettTilstand(
-            paragraf: Paragraf_11_14,
-            vilkårsvurdering: DtoVilkårsvurdering
-        ) {
-        }
-
-        internal abstract fun toDto(paragraf: Paragraf_11_14): DtoVilkårsvurdering
     }
 
     override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
