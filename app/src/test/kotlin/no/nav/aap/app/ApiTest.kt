@@ -134,7 +134,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_3",
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-                                        tilstand = "OPPFYLT",
+                                        tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_3_manuell = DtoLøsningParagraf_11_3("saksbehandler", true)
                                     ),
@@ -144,7 +144,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT",
+                                        tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT
                                     ),
                                     DtoVilkårsvurdering(
@@ -162,7 +162,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_5",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
-                                        tilstand = "OPPFYLT",
+                                        tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_5_manuell = DtoLøsningParagraf_11_5(
                                             vurdertAv = "veileder",
@@ -176,7 +176,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_6",
                                         ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT",
+                                        tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_6_manuell = DtoLøsningParagraf_11_6(
                                             vurdertAv = "saksbehandler",
@@ -191,7 +191,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_12",
                                         ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT",
+                                        tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(
                                             vurdertAv = "saksbehandler",
@@ -207,7 +207,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_29",
                                         ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT",
+                                        tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_29_manuell = DtoLøsningParagraf_11_29("saksbehandler", true)
                                     )

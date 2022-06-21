@@ -25,7 +25,7 @@ internal class `§11-5 Test` {
                 nedsettelseSkyldesSykdomEllerSkade = true
             )
         )
-        løsning.vurderNedsattArbeidsevne(vilkår)
+        løsning.vurderNedsattArbeidsevne(Paragraf_11_5.SøknadMottatt, vilkår)
 
         assertTrue(vilkår.erOppfylt())
         assertFalse(vilkår.erIkkeOppfylt())
@@ -46,7 +46,7 @@ internal class `§11-5 Test` {
                 nedsettelseSkyldesSykdomEllerSkade = true
             )
         )
-        løsning.vurderNedsattArbeidsevne(vilkår)
+        løsning.vurderNedsattArbeidsevne(Paragraf_11_5.SøknadMottatt, vilkår)
 
         assertFalse(vilkår.erOppfylt())
         assertTrue(vilkår.erIkkeOppfylt())

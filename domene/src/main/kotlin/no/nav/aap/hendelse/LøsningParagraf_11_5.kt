@@ -23,8 +23,8 @@ internal class LøsningParagraf_11_5(
 
     internal fun vurdertAv() = vurdertAv
 
-    internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5) {
-        vilkår.vurderNedsattArbeidsevne(this, nedsattArbeidsevnegrad)
+    internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5.SøknadMottatt, vilkårsvurdering: Paragraf_11_5) {
+        vilkår.vurderNedsattArbeidsevne(vilkårsvurdering, this, nedsattArbeidsevnegrad)
     }
 
     internal fun toDto() = nedsattArbeidsevnegrad.toDto(vurdertAv)

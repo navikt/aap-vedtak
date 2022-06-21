@@ -36,7 +36,7 @@ internal class SøkerComponentTest {
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -55,7 +55,7 @@ internal class SøkerComponentTest {
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
-            "IKKE_OPPFYLT",
+            "IKKE_OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -75,7 +75,7 @@ internal class SøkerComponentTest {
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -106,11 +106,11 @@ internal class SøkerComponentTest {
         assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -129,7 +129,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -161,7 +161,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -203,7 +203,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -213,7 +213,7 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
@@ -237,7 +237,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT",
+            "OPPFYLT_MANUELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )

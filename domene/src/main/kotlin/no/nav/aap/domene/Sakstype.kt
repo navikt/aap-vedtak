@@ -15,7 +15,7 @@ import java.util.*
 internal abstract class Sakstype private constructor(
     protected val type: Type,
     private var aktiv: Boolean,
-    protected val vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
+    protected val vilkårsvurderinger: List<Vilkårsvurdering<*>>
 ) {
 
     internal enum class Type {
@@ -82,7 +82,7 @@ internal abstract class Sakstype private constructor(
     internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
 
     internal class Standard private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
+        vilkårsvurderinger: List<Vilkårsvurdering<*>>
     ) : Sakstype(
         type = Type.STANDARD,
         aktiv = true,
@@ -120,14 +120,14 @@ internal abstract class Sakstype private constructor(
                 return Standard(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
+            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
                 Standard(vilkårsvurderinger)
         }
     }
 
     internal class Yrkesskade private constructor(
         private val paragraf1122: Paragraf_11_22,
-        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
+        vilkårsvurderinger: List<Vilkårsvurdering<*>>
     ) : Sakstype(
         type = Type.YRKESSKADE,
         aktiv = true,
@@ -168,13 +168,13 @@ internal abstract class Sakstype private constructor(
                 return Yrkesskade(paragraf1122, vilkårsvurderinger)
             }
 
-            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
+            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
                 Yrkesskade(vilkårsvurderinger.filterIsInstance<Paragraf_11_22>().first(), vilkårsvurderinger)
         }
     }
 
     internal class Student private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
+        vilkårsvurderinger: List<Vilkårsvurdering<*>>
     ) : Sakstype(
         type = Type.STUDENT,
         aktiv = true,
@@ -202,7 +202,7 @@ internal abstract class Sakstype private constructor(
                 return Student(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStudent(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
+            internal fun gjenopprettStudent(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
                 Student(vilkårsvurderinger)
         }
     }

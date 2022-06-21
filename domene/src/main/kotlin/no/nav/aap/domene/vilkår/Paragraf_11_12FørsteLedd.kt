@@ -2,6 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.vilkår.Paragraf_11_12FørsteLedd.SøknadMottatt
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
@@ -16,9 +17,9 @@ private val log = LoggerFactory.getLogger("Paragraf_11_12FørsteLedd")
 
 internal class Paragraf_11_12FørsteLedd private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand
+    tilstand: Tilstand<Paragraf_11_12FørsteLedd>
 ) :
-    Vilkårsvurdering<Paragraf_11_12FørsteLedd, Paragraf_11_12FørsteLedd.Tilstand>(
+    Vilkårsvurdering<Paragraf_11_12FørsteLedd>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_12,
         Ledd.LEDD_1,
@@ -26,140 +27,89 @@ internal class Paragraf_11_12FørsteLedd private constructor(
     ) {
     private lateinit var løsning: LøsningParagraf_11_12FørsteLedd
 
-    internal constructor() : this(UUID.randomUUID(), Tilstand.IkkeVurdert)
+    internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
-    override fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
-        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
-    }
+    override fun <T> callWithReceiver(block: Paragraf_11_12FørsteLedd.() -> T) = this.block()
 
-    override fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
-        tilstand.håndterLøsning(this, løsning)
-    }
-
-    override fun onEntry(hendelse: Hendelse) {
-        tilstand.onEntry(this, hendelse)
-    }
-
-    override fun onExit(hendelse: Hendelse) {
-        tilstand.onExit(this, hendelse)
-    }
-
-    internal sealed class Tilstand(
-        protected val tilstandsnavn: Tilstandsnavn,
-        private val erOppfylt: Boolean,
-        private val erIkkeOppfylt: Boolean
-    ) : Vilkårsvurderingstilstand<Paragraf_11_12FørsteLedd> {
-        enum class Tilstandsnavn(internal val tilknyttetTilstand: () -> Tilstand) {
-            IKKE_VURDERT({ IkkeVurdert }),
-            SØKNAD_MOTTATT({ SøknadMottatt }),
-            OPPFYLT({ Oppfylt }),
-        }
-
-        override fun erOppfylt() = erOppfylt
-        override fun erIkkeOppfylt() = erIkkeOppfylt
-
-        internal open fun håndterSøknad(
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_12FørsteLedd>() {
+        override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_12FørsteLedd,
             søknad: Søknad,
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            log.info("Søknad skal ikke håndteres i tilstand $tilstandsnavn")
+            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
         }
 
-        internal open fun håndterLøsning(
+        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering =
+            ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
+    }
+
+    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_12FørsteLedd>() {
+        override fun onEntry(vilkårsvurdering: Paragraf_11_12FørsteLedd, hendelse: Hendelse) {
+            hendelse.opprettBehov(Behov_11_12FørsteLedd())
+        }
+
+        override fun håndterLøsning(
             vilkårsvurdering: Paragraf_11_12FørsteLedd,
             løsning: LøsningParagraf_11_12FørsteLedd
         ) {
-            log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+            vilkårsvurdering.løsning = løsning
+            vilkårsvurdering.tilstand(Oppfylt, løsning)
         }
 
-        object IkkeVurdert : Tilstand(
-            tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
-            erOppfylt = false,
-            erIkkeOppfylt = false
+        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = null,
+            godkjentAv = null,
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            utfall = Utfall.IKKE_VURDERT,
+            tilstand = tilstandsnavn.name
+        )
+    }
+
+    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_12FørsteLedd>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            godkjentAv = null,
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.OPPFYLT,
+            løsning_11_12_ledd1_manuell = vilkårsvurdering.løsning.toDto()
+        )
+
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_12FørsteLedd,
+            dtoVilkårsvurdering: DtoVilkårsvurdering
         ) {
-            override fun håndterSøknad(
-                vilkårsvurdering: Paragraf_11_12FørsteLedd,
-                søknad: Søknad,
-                fødselsdato: Fødselsdato,
-                vurderingsdato: LocalDate
-            ) {
-                vilkårsvurdering.tilstand(SøknadMottatt, søknad)
-            }
-
-            override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering =
-                ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
-        }
-
-        object SøknadMottatt : Tilstand(
-            tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
-            erOppfylt = false,
-            erIkkeOppfylt = false
-        ) {
-            override fun onEntry(vilkårsvurdering: Paragraf_11_12FørsteLedd, hendelse: Hendelse) {
-                hendelse.opprettBehov(Behov_11_12FørsteLedd())
-            }
-
-            override fun håndterLøsning(
-                vilkårsvurdering: Paragraf_11_12FørsteLedd,
-                løsning: LøsningParagraf_11_12FørsteLedd
-            ) {
-                vilkårsvurdering.løsning = løsning
-                vilkårsvurdering.tilstand(Oppfylt, løsning)
-            }
-
-            override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
-                vurdertAv = null,
-                godkjentAv = null,
-                paragraf = paragraf.paragraf.name,
-                ledd = paragraf.ledd.map(Ledd::name),
-                utfall = Utfall.IKKE_VURDERT,
-                tilstand = tilstandsnavn.name
+            val vurdertAv = requireNotNull(dtoVilkårsvurdering.vurdertAv)
+            val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_12_ledd1_manuell)
+            vilkårsvurdering.løsning = LøsningParagraf_11_12FørsteLedd(
+                vurdertAv = vurdertAv,
+                bestemmesAv = løsning.bestemmesAv,
+                unntak = løsning.unntak,
+                unntaksbegrunnelse = løsning.unntaksbegrunnelse,
+                manueltSattVirkningsdato = løsning.manueltSattVirkningsdato
             )
-        }
-
-        object Oppfylt : Tilstand(
-            tilstandsnavn = Tilstandsnavn.OPPFYLT,
-            erOppfylt = true,
-            erIkkeOppfylt = false
-        ) {
-            override fun toDto(paragraf: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
-                vilkårsvurderingsid = paragraf.vilkårsvurderingsid,
-                vurdertAv = paragraf.løsning.vurdertAv(),
-                godkjentAv = null,
-                paragraf = paragraf.paragraf.name,
-                ledd = paragraf.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
-                utfall = Utfall.OPPFYLT,
-                løsning_11_12_ledd1_manuell = paragraf.løsning.toDto()
-            )
-
-            override fun gjenopprettTilstand(
-                paragraf: Paragraf_11_12FørsteLedd,
-                vilkårsvurdering: DtoVilkårsvurdering
-            ) {
-                val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
-                val løsning = requireNotNull(vilkårsvurdering.løsning_11_12_ledd1_manuell)
-                paragraf.løsning = LøsningParagraf_11_12FørsteLedd(
-                    vurdertAv = vurdertAv,
-                    bestemmesAv = løsning.bestemmesAv,
-                    unntak = løsning.unntak,
-                    unntaksbegrunnelse = løsning.unntaksbegrunnelse,
-                    manueltSattVirkningsdato = løsning.manueltSattVirkningsdato
-                )
-            }
         }
     }
 
-    override fun toDto(): DtoVilkårsvurdering = tilstand.toDto(this)
-
     internal companion object {
         internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_12FørsteLedd =
-            enumValueOf<Tilstand.Tilstandsnavn>(vilkårsvurdering.tilstand)
-                .tilknyttetTilstand()
-                .let { tilstand -> Paragraf_11_12FørsteLedd(vilkårsvurdering.vilkårsvurderingsid, tilstand) }
+            Paragraf_11_12FørsteLedd(
+                vilkårsvurdering.vilkårsvurderingsid,
+                tilknyttetTilstand(enumValueOf(vilkårsvurdering.tilstand))
+            )
                 .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+
+        private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
+            Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
+            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_12FørsteLedd")
+        }
     }
 }
