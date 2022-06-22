@@ -42,12 +42,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-2.v1 to dev
+      - name: Deploy aap.manuell.11-2.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-2.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
@@ -56,12 +56,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-3.v1 to dev
+      - name: Deploy aap.manuell.11-3.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-3.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
@@ -70,12 +70,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-4.v1 to dev
+      - name: Deploy aap.manuell.11-4.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-4.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
@@ -84,12 +84,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-4.v1 to dev
+      - name: Deploy aap.manuell.11-5.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-5.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
@@ -98,12 +98,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-4.v1 to dev
+      - name: Deploy aap.manuell.11-6.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-6.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
@@ -112,12 +112,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-4.v1 to dev
+      - name: Deploy aap.manuell.11-12.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-12.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
@@ -126,12 +126,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy aap.manuell-11-4.v1 to dev
+      - name: Deploy aap.manuell.11-29.v1 to dev
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-manuell.yml
+          RESOURCE: .nais/topic-manuell-11-29.yml
+          VARS: .nais/dev.yml
+          PRINT_PAYLOAD: true
+
+  deploy-manuell-beregningsdato:
+    name: Deploy manuell
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Deploy aap.manuell.beregningsdato.v1 to dev
+        uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: .nais/topic-manuell-beregningsdato.yml
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
 
