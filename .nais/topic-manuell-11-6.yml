@@ -1,7 +1,7 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: manuell.11-5.v1
+  name: manuell.11-6.v1
   namespace: aap
   labels:
     team: aap
