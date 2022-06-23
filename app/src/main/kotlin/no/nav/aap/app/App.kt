@@ -19,6 +19,7 @@ import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import net.logstash.logback.argument.StructuredArguments.kv
 import net.logstash.logback.argument.StructuredArguments.raw
+import net.logstash.logback.marker.Markers
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
@@ -65,8 +66,8 @@ fun <K> Logger.log(key: K, msg: String) = info(msg, kv("personident", key))
 fun <K, V : Any> Logger.log(key: K, value: V?, msg: String) =
     info(
         msg,
-        kv("personident", key),
-        raw("soker", jackson.writeValueAsString(value))
+        kv("key", key),
+        Markers.appendRaw("soker", jackson.writeValueAsString(value))
     )
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
