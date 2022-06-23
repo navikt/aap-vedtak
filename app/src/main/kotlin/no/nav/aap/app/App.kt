@@ -37,9 +37,7 @@ import org.apache.kafka.streams.processor.api.Record
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
-import java.util.concurrent.ConcurrentLinkedQueue
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
@@ -142,17 +140,24 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     val søkerProducer = kafka.createProducer(config, Topics.søkere)
     val søknadProducer = kafka.createProducer(config, Topics.søknad)
 
-    fun <V> Producer<String, V>.produce(topic: Topic<V>, key: String, value: V?) =
+    fun <V> Producer<String, V>.produce(topic: Topic<V>, key: String, value: V) {
         send(ProducerRecord(topic.name, key, value)).get()
+    }
+
+    fun <V> Producer<String, V>.tombstone(topic: Topic<V>, key: String) {
+        for (partition in 0 until 12) {
+            send(ProducerRecord(topic.name, partition, key, null)).get()
+        }
+    }
 
     get("/delete/{personident}") {
         val personident = call.parameters.getOrFail("personident")
 
-        søknadProducer.produce(Topics.søknad, personident, null).also {
+        søknadProducer.tombstone(Topics.søknad, personident).also {
             secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
         }
 
-        søkerProducer.produce(Topics.søkere, personident, null).also {
+        søkerProducer.tombstone(Topics.søkere, personident).also {
             secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
         }
 
