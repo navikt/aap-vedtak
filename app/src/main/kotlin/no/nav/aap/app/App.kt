@@ -24,7 +24,6 @@ import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.KafkaConfig
 import no.nav.aap.kafka.streams.*
-import no.nav.aap.kafka.streams.store.scheduleCleanup
 import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
@@ -82,7 +81,6 @@ internal fun topology(registry: MeterRegistry, migrationProducer: Producer<Strin
         .filterNotNull("filter-soker-tombstones")
         .produce(Tables.søkere)
 
-    søkerKTable.scheduleCleanup(Tables.søkere, 10.seconds, søkereToDelete::poll)
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
     søkerKTable.toStream().process(
@@ -140,8 +138,6 @@ private fun Routing.actuator(prometheus: PrometheusMeterRegistry, kafka: KStream
     }
 }
 
-private val søkereToDelete: ConcurrentLinkedQueue<String> = ConcurrentLinkedQueue<String>()
-
 private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     val søkerProducer = kafka.createProducer(config, Topics.søkere)
     val søknadProducer = kafka.createProducer(config, Topics.søknad)
@@ -157,7 +153,6 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
         }
 
         søkerProducer.produce(Topics.søkere, personident, null).also {
-            søkereToDelete.add(personident)
             secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
         }
 
@@ -166,16 +161,6 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
 
     get("/søknad/{personident}") {
         val personident = call.parameters.getOrFail("personident")
-
-//        søknadProducer.produce(Topics.søknad, personident, null).also {
-//            secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
-//        }
-//
-//        søkerProducer.produce(Topics.søkere, personident, null).also {
-//            søkereToDelete.add(personident)
-//            secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
-//            delay(2000L) // vent på delete i state store
-//        }
 
         val søknad = JsonSøknad()
 

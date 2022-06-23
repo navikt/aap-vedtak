@@ -38,8 +38,7 @@ subgraph Vedtak
     soker-state-store-v2[(soker-state-store-v2)]
     
     %% PROCESSOR API JOBS
-    cleanup-soker-state-store-v2((cleanup-soker-state-store-v2))
-	metrics-soker-state-store-v2((metrics-soker-state-store-v2))
+    metrics-soker-state-store-v2((metrics-soker-state-store-v2))
 	migrate-soker-state-store-v2((migrate-soker-state-store-v2))
     
     %% JOIN STREAMS
@@ -96,8 +95,7 @@ subgraph Vedtak
 	join-10 --> |produced-soker-med-medlem| aap.sokere.v1
     
     %% JOB STREAMS
-    cleanup-soker-state-store-v2 --> soker-state-store-v2
-	metrics-soker-state-store-v2 --> soker-state-store-v2
+    metrics-soker-state-store-v2 --> soker-state-store-v2
 	migrate-soker-state-store-v2 --> soker-state-store-v2
     
     %% REPARTITION STREAMS
@@ -126,7 +124,6 @@ style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a
 style aap.medlem.v1-joined-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style cleanup-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style metrics-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style migrate-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 
