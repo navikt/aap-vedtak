@@ -1,6 +1,9 @@
 package no.nav.aap.app
 
+import com.fasterxml.jackson.databind.DeserializationFeature
+import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.http.*
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
@@ -52,8 +55,18 @@ fun main() {
 
 data class Config(val kafka: KafkaConfig)
 
+private val jackson: ObjectMapper = jacksonObjectMapper().apply {
+    registerModule(JavaTimeModule())
+    disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+}
+
 fun <K> Logger.log(key: K, msg: String) = info(msg, kv("personident", key))
-fun <K, V: Any> Logger.log(key: K, value: V?, msg: String) = info(msg, kv("personident", key), kv("soker", value.toString()))
+fun <K, V: Any> Logger.log(key: K, value: V?, msg: String) =
+    info(
+        msg,
+        kv("personident", key),
+        kv("soker", jackson.writeValueAsString(value))
+    )
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
