@@ -18,6 +18,7 @@ import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
 import net.logstash.logback.argument.StructuredArguments.kv
+import net.logstash.logback.argument.StructuredArguments.raw
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
@@ -61,11 +62,11 @@ private val jackson: ObjectMapper = jacksonObjectMapper().apply {
 }
 
 fun <K> Logger.log(key: K, msg: String) = info(msg, kv("personident", key))
-fun <K, V: Any> Logger.log(key: K, value: V?, msg: String) =
+fun <K, V : Any> Logger.log(key: K, value: V?, msg: String) =
     info(
         msg,
         kv("personident", key),
-        kv("soker", jackson.writeValueAsString(value))
+        raw("soker", jackson.writeValueAsString(value))
     )
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
@@ -144,7 +145,7 @@ private class StateStoreMigrator<K, V : Migratable>(
                     if (value.erMigrertAkkuratNå()) {
                         val migrertRecord = ProducerRecord(table.source.name, key, value)
                         producer.send(migrertRecord) { meta, error ->
-                            if (error == null) secureLog.log(key, "Migrated [$meta] [$key] [$value]")
+                            if (error == null) secureLog.log(key, value, "Migrated [$meta]")
                             else secureLog.error("klarte ikke sende migrert dto", error)
                         }
                     } else {
