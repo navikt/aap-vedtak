@@ -14,8 +14,8 @@ subgraph Vedtak
 	aap.manuell.11-5.v1([aap.manuell.11-5.v1])
 	aap.manuell.11-6.v1([aap.manuell.11-6.v1])
 	aap.manuell.beregningsdato.v1([aap.manuell.beregningsdato.v1])
-	aap.sokere.v1([aap.sokere.v1])
 	aap.inntekter.v1([aap.inntekter.v1])
+	aap.sokere.v1([aap.sokere.v1])
 	aap.medlem.v1-joined-aap.sokere.v1-repartition([aap.medlem.v1-joined-aap.sokere.v1-repartition])
 	aap.medlem.v1([aap.medlem.v1])
     
@@ -36,8 +36,7 @@ subgraph Vedtak
     soker-state-store-v2[(soker-state-store-v2)]
     
     %% PROCESSOR API JOBS
-    metrics-soker-state-store-v2((metrics-soker-state-store-v2))
-	migrate-soker-state-store-v2((migrate-soker-state-store-v2))
+    migrate-soker-state-store-v2((migrate-soker-state-store-v2))
     
     %% JOIN STREAMS
     aap.soknad-sendt.v1 --> join-0
@@ -93,8 +92,7 @@ subgraph Vedtak
 	join-10 --> |produced-soker-med-medlem| aap.sokere.v1
     
     %% JOB STREAMS
-    metrics-soker-state-store-v2 --> soker-state-store-v2
-	migrate-soker-state-store-v2 --> soker-state-store-v2
+    migrate-soker-state-store-v2 --> soker-state-store-v2
     
     %% REPARTITION STREAMS
     aap.medlem.v1 --> |re-key| aap.medlem.v1-joined-aap.sokere.v1-repartition
@@ -117,10 +115,9 @@ style aap.manuell.11-4.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:
 style aap.manuell.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.beregningsdato.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1-joined-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style metrics-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style migrate-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
