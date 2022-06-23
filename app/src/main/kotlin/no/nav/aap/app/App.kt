@@ -24,13 +24,16 @@ import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.KafkaConfig
 import no.nav.aap.kafka.streams.*
+import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
+import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.kstream.KTable
+import org.apache.kafka.streams.kstream.Materialized
 import org.apache.kafka.streams.processor.api.Processor
 import org.apache.kafka.streams.processor.api.ProcessorContext
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
@@ -38,6 +41,7 @@ import org.apache.kafka.streams.processor.api.Record
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.ValueAndTimestamp
 import org.slf4j.LoggerFactory
+import kotlin.time.Duration.Companion.minutes
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
@@ -76,15 +80,20 @@ fun <K, V> KTable<K, V?>.filterNotNull(name: String): KTable<K, V> =
     filter({ _, value -> value != null }, named(name))
         .mapValues { value -> value as V }
 
+fun <V> KStream<String, V?>.produce(table: Table<V>): KTable<String, V> =
+    peek(
+        { key, value -> secureLog.info("produced [${table.stateStoreName}] K:$key V:$value") },
+        named("log-produced-${table.name}")
+    ).toTable(named("${table.name}-as-table"), materialized(table.stateStoreName, table.source))
+        .filterNotNull("filter-not-null-${table.name}-as-table")
+
 internal fun topology(registry: MeterRegistry, migrationProducer: Producer<String, SøkereKafkaDto>): Topology {
     val streams = StreamsBuilder()
-    val søkerKTableWithTombstones = streams
+    val søkerKTable = streams
         .consume(Topics.søkere)
-        .produceNullable(Tables.søkere) // todo: cast as not null i extension function
+        .produce(Tables.søkere)
 
-    val søkerKTable = søkerKTableWithTombstones.filterNotNull("ktable-sokere-rm-tombstone")
-
-//    søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
+    søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
 
     søkerKTable.toStream().process(
         ProcessorSupplier { StateStoreMigrator(Tables.søkere, migrationProducer) },
@@ -148,7 +157,7 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     fun <V> Producer<String, V>.produce(topic: Topic<V>, key: String, value: V) {
         send(ProducerRecord(topic.name, key, value)).get()
     }
-
+// todo: send ut tombstone på kun default partisjon
     fun <V> Producer<String, V>.tombstone(topic: Topic<V>, key: String) {
         for (partition in 0 until 12) {
             send(ProducerRecord(topic.name, partition, key, null)).get()
