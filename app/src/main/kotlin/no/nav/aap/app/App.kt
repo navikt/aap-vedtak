@@ -14,6 +14,7 @@ import io.ktor.server.util.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
+import net.logstash.logback.argument.StructuredArguments.keyValue
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
@@ -39,16 +40,19 @@ import org.apache.kafka.streams.processor.api.ProcessorSupplier
 import org.apache.kafka.streams.processor.api.Record
 import org.apache.kafka.streams.state.KeyValueStore
 import org.apache.kafka.streams.state.ValueAndTimestamp
+import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import kotlin.time.Duration.Companion.minutes
 
-private val secureLog = LoggerFactory.getLogger("secureLog")
+private val secureLog: Logger = LoggerFactory.getLogger("secureLog")
 
 fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
 data class Config(val kafka: KafkaConfig)
+
+fun <K> Logger.log(key: K, msg: String) = info(msg, keyValue("personident", key))
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
@@ -75,13 +79,13 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
+@Suppress("UNCHECKED_CAST")
 fun <K, V> KTable<K, V?>.filterNotNull(name: String): KTable<K, V> =
-    filter({ _, value -> value != null }, named(name))
-        .mapValues { value -> value as V }
+    filter({ _, value -> value != null }, named(name)).mapValues { value -> value as V }
 
 fun <V> KStream<String, V?>.produce(table: Table<V>): KTable<String, V> =
     peek(
-        { key, value -> secureLog.info("produced [${table.stateStoreName}] K:$key V:$value") },
+        { key, value -> secureLog.log(key, "produced [${table.stateStoreName}] K:$key V:$value") },
         named("log-produced-${table.name}")
     ).toTable(named("${table.name}-as-table"), materialized(table.stateStoreName, table.source))
         .filterNotNull("filter-not-null-${table.name}-as-table")
@@ -117,17 +121,19 @@ private class StateStoreMigrator<K, V : Migratable>(
     override fun init(context: ProcessorContext<Void, Void>) {
         val store = context.getStateStore<KeyValueStore<K, ValueAndTimestamp<V>>>(table.stateStoreName)
         store.all().use {
-            it.asSequence().forEach { keyvalue ->
-                if (keyvalue.value.value().erMigrertAkkuratNå()) {
-                    val migrertRecord = ProducerRecord(table.source.name, keyvalue.key, keyvalue.value.value())
-                    producer.send(migrertRecord) { meta, error ->
-                        if (error == null) secureLog.info("Migrated [$meta] [${keyvalue.key}] [${keyvalue.value.value()}]")
-                        else secureLog.error("klarte ikke sende migrert dto", error)
+            it.asSequence()
+                .forEach { record ->
+                    val (key, value) = record.key to record.value.value()
+                    if (value.erMigrertAkkuratNå()) {
+                        val migrertRecord = ProducerRecord(table.source.name, key, value)
+                        producer.send(migrertRecord) { meta, error ->
+                            if (error == null) secureLog.log(key, "Migrated [$meta] [$key] [$value]")
+                            else secureLog.error("klarte ikke sende migrert dto", error)
+                        }
+                    } else {
+                        secureLog.log(key, "Alreade Migrated K[$key] V:[$value]")
                     }
-                } else {
-                    secureLog.info("Alreade Migrated K[${keyvalue.key}] V:[${keyvalue.value.value()}]")
                 }
-            }
         }
     }
 
@@ -168,11 +174,11 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
         val personident = call.parameters.getOrFail("personident")
 
         søknadProducer.tombstone(Topics.søknad, personident).also {
-            secureLog.info("produced [${Topics.søknad}] [$personident] [tombstone]")
+            secureLog.log(personident, "produced [${Topics.søknad}] [$personident] [tombstone]")
         }
 
         søkerProducer.tombstone(Topics.søkere, personident).also {
-            secureLog.info("produced [${Topics.søkere}] [$personident] [tombstone]")
+            secureLog.log(personident, "produced [${Topics.søkere}] [$personident] [tombstone]")
         }
 
         call.respondText("Søknad og søker med ident $personident slettes!")
@@ -184,7 +190,7 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
         val søknad = JsonSøknad()
 
         søknadProducer.produce(Topics.søknad, personident, søknad).also {
-            secureLog.info("produced [${Topics.søknad}] [$personident] [$søknad]")
+            secureLog.log(personident, "produced [${Topics.søknad}] [$personident] [$søknad]")
         }
 
         call.respondText("Søknad $søknad mottatt!")
