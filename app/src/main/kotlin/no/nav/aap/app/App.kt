@@ -53,7 +53,7 @@ fun main() {
 data class Config(val kafka: KafkaConfig)
 
 fun <K> Logger.log(key: K, msg: String) = info(msg, kv("personident", key))
-fun <K, V: Any> Logger.log(key: K, value: V, msg: String) = info(msg, kv("personident", key), kv("soker", value.toString()))
+fun <K, V: Any> Logger.log(key: K, value: V?, msg: String) = info(msg, kv("personident", key), kv("soker", value.toString()))
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
