@@ -14,7 +14,7 @@ import io.ktor.server.util.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import net.logstash.logback.argument.StructuredArguments.keyValue
+import net.logstash.logback.argument.StructuredArguments.kv
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.JsonSøknad
@@ -52,7 +52,8 @@ fun main() {
 
 data class Config(val kafka: KafkaConfig)
 
-fun <K> Logger.log(key: K, msg: String) = info(msg, keyValue("personident", key))
+fun <K> Logger.log(key: K, msg: String) = info(msg, kv("personident", key))
+fun <K, V> Logger.log(key: K, value: V, msg: String) = info(msg, kv("personident", key), kv("soker", value))
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
@@ -85,7 +86,10 @@ fun <K, V> KTable<K, V?>.filterNotNull(name: String): KTable<K, V> =
 
 fun <V> KStream<String, V?>.produce(table: Table<V>): KTable<String, V> =
     peek(
-        { key, value -> secureLog.log(key, "produced [${table.stateStoreName}] K:$key V:$value") },
+        { key, value ->
+            secureLog.log(key, "produced [${table.stateStoreName}] K:$key V:$value")
+//            secureLog.log(key, value, "produced [${table.stateStoreName}]")
+        },
         named("log-produced-${table.name}")
     ).toTable(named("${table.name}-as-table"), materialized(table.stateStoreName, table.source))
         .filterNotNull("filter-not-null-${table.name}-as-table")
@@ -131,7 +135,7 @@ private class StateStoreMigrator<K, V : Migratable>(
                             else secureLog.error("klarte ikke sende migrert dto", error)
                         }
                     } else {
-                        secureLog.log(key, "Alreade Migrated K[$key] V:[$value]")
+                        secureLog.log(key, value, "Aldready Migrated [${table.stateStoreName}]")
                     }
                 }
         }
