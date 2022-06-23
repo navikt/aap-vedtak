@@ -1,6 +1,7 @@
 package no.nav.aap.app.modell
 
 import no.nav.aap.dto.*
+import no.nav.aap.kafka.serde.json.Migratable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
@@ -12,10 +13,14 @@ data class SøkereKafkaDto(
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
     val version: Int = VERSION, // Denne bumpes ved hver migrering
-) {
-    internal companion object{
+) : Migratable {
+
+    private var erMigrertAkkuratNå: Boolean = false
+
+    internal companion object {
         internal const val VERSION = 2
     }
+
     data class Sak(
         val saksid: UUID,
         val tilstand: String,
@@ -290,6 +295,12 @@ data class SøkereKafkaDto(
         fødselsdato = fødselsdato,
         saker = saker.map(Sak::toDto),
     )
+
+    override fun markerSomMigrertAkkuratNå() {
+        erMigrertAkkuratNå = true
+    }
+
+    override fun erMigrertAkkuratNå(): Boolean = erMigrertAkkuratNå
 }
 
 fun DtoSøker.toJson() = SøkereKafkaDto(

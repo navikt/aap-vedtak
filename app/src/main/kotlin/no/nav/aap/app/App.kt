@@ -23,17 +23,16 @@ import no.nav.aap.app.stream.manuell.manuellStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.KafkaConfig
+import no.nav.aap.kafka.serde.json.Migratable
 import no.nav.aap.kafka.streams.*
 import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.Topology
 import org.apache.kafka.streams.kstream.KStream
 import org.apache.kafka.streams.kstream.KTable
-import org.apache.kafka.streams.kstream.Materialized
 import org.apache.kafka.streams.processor.api.Processor
 import org.apache.kafka.streams.processor.api.ProcessorContext
 import org.apache.kafka.streams.processor.api.ProcessorSupplier
@@ -109,21 +108,24 @@ internal fun topology(registry: MeterRegistry, migrationProducer: Producer<Strin
     return streams.build()
 }
 
-private class StateStoreMigrator<K, V>(
+private class StateStoreMigrator<K, V : Migratable>(
     private val table: Table<V>,
     private val producer: Producer<K, V>,
 ) : Processor<K, V, Void, Void> {
-    override fun process(record: Record<K, V>) {
-        secureLog.info("state store migrator prosesserer: $record")
-    }
+    override fun process(record: Record<K, V>) {}
 
     override fun init(context: ProcessorContext<Void, Void>) {
         val store = context.getStateStore<KeyValueStore<K, ValueAndTimestamp<V>>>(table.stateStoreName)
         store.all().use {
             it.asSequence().forEach { keyvalue ->
-                producer.send(ProducerRecord(table.source.name, keyvalue.key, keyvalue.value.value())) { meta, error ->
-                    if (error == null) secureLog.info("Migrated [$meta] ${keyvalue.key} : ${keyvalue.value.value()}")
-                    else secureLog.error("klarte ikke sende migrert dto", error)
+                if (keyvalue.value.value().erMigrertAkkuratNå()) {
+                    val migrertRecord = ProducerRecord(table.source.name, keyvalue.key, keyvalue.value.value())
+                    producer.send(migrertRecord) { meta, error ->
+                        if (error == null) secureLog.info("Migrated [$meta] [${keyvalue.key}] [${keyvalue.value.value()}]")
+                        else secureLog.error("klarte ikke sende migrert dto", error)
+                    }
+                } else {
+                    secureLog.info("Alreade Migrated K[${keyvalue.key}] V:[${keyvalue.value.value()}]")
                 }
             }
         }
@@ -157,11 +159,9 @@ private fun Routing.devTools(kafka: KStreams, config: KafkaConfig) {
     fun <V> Producer<String, V>.produce(topic: Topic<V>, key: String, value: V) {
         send(ProducerRecord(topic.name, key, value)).get()
     }
-// todo: send ut tombstone på kun default partisjon
+
     fun <V> Producer<String, V>.tombstone(topic: Topic<V>, key: String) {
-        for (partition in 0 until 12) {
-            send(ProducerRecord(topic.name, partition, key, null)).get()
-        }
+        send(ProducerRecord(topic.name, key, null)).get()
     }
 
     get("/delete/{personident}") {
