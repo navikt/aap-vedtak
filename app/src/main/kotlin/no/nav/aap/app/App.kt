@@ -87,8 +87,8 @@ fun <K, V> KTable<K, V?>.filterNotNull(name: String): KTable<K, V> =
 fun <V> KStream<String, V?>.produce(table: Table<V>): KTable<String, V> =
     peek(
         { key, value ->
-            secureLog.log(key, "produced [${table.stateStoreName}] K:$key V:$value")
-//            secureLog.log(key, value, "produced [${table.stateStoreName}]")
+//            secureLog.log(key, "produced [${table.stateStoreName}] K:$key V:$value")
+            secureLog.log(key, value, "produced [${table.stateStoreName}]")
         },
         named("log-produced-${table.name}")
     ).toTable(named("${table.name}-as-table"), materialized(table.stateStoreName, table.source))
