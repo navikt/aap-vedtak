@@ -10,7 +10,7 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 1,
+    val version: Int = 2,
 ) {
     data class Sak(
         val saksid: UUID,
@@ -73,18 +73,18 @@ data class ForrigeSøkereKafkaDto(
             ledd = ledd,
             tilstand = tilstand,
             utfall = utfall,
-            løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.toDto(),
-            løsning_11_2_maskinell = løsning_11_2_maskinell?.toDto(),
-            løsning_11_2_manuell = løsning_11_2_manuell?.toDto(),
-            løsning_11_3_manuell = løsning_11_3_manuell?.toDto(),
-            løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.toDto(),
-            løsning_11_5_manuell = løsning_11_5_manuell?.toDto(),
-            løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.toDto(),
-            løsning_11_6_manuell = løsning_11_6_manuell?.toDto(),
-            løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.toDto(),
-            løsning_11_22_manuell = løsning_11_22_manuell?.toDto(),
-            løsning_11_29_manuell = løsning_11_29_manuell?.toDto(),
+            løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.toDto()?.let(::listOf),
+            løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.toDto()?.let(::listOf),
+            løsning_11_2_maskinell = løsning_11_2_maskinell?.toDto()?.let(::listOf),
+            løsning_11_2_manuell = løsning_11_2_manuell?.toDto()?.let(::listOf),
+            løsning_11_3_manuell = løsning_11_3_manuell?.toDto()?.let(::listOf),
+            løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.toDto()?.let(::listOf),
+            løsning_11_5_manuell = løsning_11_5_manuell?.toDto()?.let(::listOf),
+            løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.toDto()?.let(::listOf),
+            løsning_11_6_manuell = løsning_11_6_manuell?.toDto()?.let(::listOf),
+            løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.toDto()?.let(::listOf),
+            løsning_11_22_manuell = løsning_11_22_manuell?.toDto()?.let(::listOf),
+            løsning_11_29_manuell = løsning_11_29_manuell?.toDto()?.let(::listOf),
         )
     }
 
@@ -227,7 +227,7 @@ data class ForrigeSøkereKafkaDto(
     ) {
         fun toDto() = SøkereKafkaDto.VurderingAvBeregningsdato(
             tilstand = tilstand,
-            løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.toDto()
+            løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.toDto()?.let(::listOf)
         )
     }
 

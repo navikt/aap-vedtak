@@ -6,13 +6,11 @@ import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd
+import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_4AndreOgTredjeLedd
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
-
-private val log = LoggerFactory.getLogger("Paragraf_11_4AndreOgTredjeLedd")
 
 internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
     vilkårsvurderingsid: UUID,
@@ -24,7 +22,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         Ledd.LEDD_2 + Ledd.LEDD_3,
         tilstand
     ) {
-    private lateinit var løsning: LøsningParagraf_11_4AndreOgTredjeLedd
+    private val løsninger = mutableListOf<LøsningParagraf_11_4AndreOgTredjeLedd>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -61,7 +59,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
             løsning: LøsningParagraf_11_4AndreOgTredjeLedd
         ) {
-            vilkårsvurdering.løsning = løsning
+            vilkårsvurdering.løsninger.add(løsning)
             if (løsning.erManueltOppfylt()) {
                 vilkårsvurdering.tilstand(Oppfylt, løsning)
             } else {
@@ -76,31 +74,34 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT
+            utfall = Utfall.IKKE_VURDERT,
+            løsning_11_4_ledd2_ledd3_manuell = null
         )
     }
 
     object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_4AndreOgTredjeLedd>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT
+            utfall = Utfall.OPPFYLT,
+            løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto()
         )
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_4AndreOgTredjeLedd>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT
+            utfall = Utfall.IKKE_OPPFYLT,
+            løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto()
         )
     }
 
@@ -112,7 +113,8 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_RELEVANT
+            utfall = Utfall.IKKE_RELEVANT,
+            løsning_11_4_ledd2_ledd3_manuell = null
         )
     }
 

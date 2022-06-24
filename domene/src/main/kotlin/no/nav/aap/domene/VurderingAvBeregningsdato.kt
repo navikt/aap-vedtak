@@ -2,6 +2,7 @@ package no.nav.aap.domene
 
 import no.nav.aap.dto.DtoVurderingAvBeregningsdato
 import no.nav.aap.hendelse.LøsningVurderingAvBeregningsdato
+import no.nav.aap.hendelse.LøsningVurderingAvBeregningsdato.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.BehovVurderingAvBeregningsdato
 import java.time.LocalDate
@@ -9,7 +10,7 @@ import java.time.LocalDate
 internal class VurderingAvBeregningsdato private constructor(
     private var tilstand: Tilstand
 ) {
-    private lateinit var løsning: LøsningVurderingAvBeregningsdato
+    private val løsninger = mutableListOf<LøsningVurderingAvBeregningsdato>()
 
     internal constructor() : this(Tilstand.Start)
 
@@ -56,20 +57,20 @@ internal class VurderingAvBeregningsdato private constructor(
                 vurderingAvBeregningsdato: VurderingAvBeregningsdato,
                 løsning: LøsningVurderingAvBeregningsdato
             ) {
-                vurderingAvBeregningsdato.løsning = løsning
+                vurderingAvBeregningsdato.løsninger.add(løsning)
                 vurderingAvBeregningsdato.tilstand = Ferdig
             }
         }
 
         internal object Ferdig : Tilstand(Tilstandsnavn.FERDIG) {
             override fun beregningsdato(vurderingAvBeregningsdato: VurderingAvBeregningsdato): LocalDate =
-                vurderingAvBeregningsdato.løsning.beregningsdato
+                vurderingAvBeregningsdato.løsninger.last().beregningsdato
 
             override fun erFerdig() = true
 
             override fun toDto(vurderingAvBeregningsdato: VurderingAvBeregningsdato) = DtoVurderingAvBeregningsdato(
                 tilstand = navn.name,
-                løsningVurderingAvBeregningsdato = vurderingAvBeregningsdato.løsning.toDto()
+                løsningVurderingAvBeregningsdato = vurderingAvBeregningsdato.løsninger.toDto()
             )
 
             override fun gjenopprettTilstand(
@@ -78,8 +79,10 @@ internal class VurderingAvBeregningsdato private constructor(
             ) {
                 val dtoLøsningVurderingAvBeregningsdato =
                     requireNotNull(dtoVurderingAvBeregningsdato.løsningVurderingAvBeregningsdato)
-                vurderingAvBeregningsdato.løsning =
-                    LøsningVurderingAvBeregningsdato.gjenopprett(dtoLøsningVurderingAvBeregningsdato)
+                vurderingAvBeregningsdato.løsninger.addAll(dtoLøsningVurderingAvBeregningsdato.map {
+                    LøsningVurderingAvBeregningsdato.gjenopprett(it)
+                }
+                )
             }
         }
 

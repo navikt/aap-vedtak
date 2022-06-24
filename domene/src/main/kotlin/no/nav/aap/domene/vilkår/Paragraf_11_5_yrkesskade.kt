@@ -7,13 +7,11 @@ import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_5_yrkesskade
+import no.nav.aap.hendelse.LøsningParagraf_11_5_yrkesskade.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5_yrkesskade
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
-
-private val log = LoggerFactory.getLogger("Paragraf_11_5_yrkesskade")
 
 internal class Paragraf_11_5_yrkesskade private constructor(
     vilkårsvurderingsid: UUID,
@@ -25,7 +23,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         Ledd.LEDD_1 + Ledd.LEDD_2,
         tilstand
     ) {
-    private lateinit var løsning: LøsningParagraf_11_5_yrkesskade
+    private val løsninger = mutableListOf<LøsningParagraf_11_5_yrkesskade>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -54,7 +52,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             løsning: LøsningParagraf_11_5_yrkesskade
         ) {
-            vilkårsvurdering.løsning = løsning
+            vilkårsvurdering.løsninger.add(løsning)
             if (løsning.erNedsattMedMinst30Prosent()) {
                 vilkårsvurdering.tilstand(Oppfylt, løsning)
             } else {
@@ -76,52 +74,54 @@ internal class Paragraf_11_5_yrkesskade private constructor(
     object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_5_yrkesskade>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsning.toDto()
+            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto()
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             dtoVilkårsvurdering: DtoVilkårsvurdering
         ) {
-            val vurdertAv = requireNotNull(dtoVilkårsvurdering.vurdertAv)
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_5_yrkesskade_manuell)
-            vilkårsvurdering.løsning = LøsningParagraf_11_5_yrkesskade(
-                vurdertAv = vurdertAv,
-                arbeidsevneErNedsattMedMinst50Prosent = løsning.arbeidsevneErNedsattMedMinst50Prosent,
-                arbeidsevneErNedsattMedMinst30Prosent = løsning.arbeidsevneErNedsattMedMinst30Prosent
-            )
+            vilkårsvurdering.løsninger.addAll(løsning.map {
+                LøsningParagraf_11_5_yrkesskade(
+                    vurdertAv = it.vurdertAv,
+                    arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
+                    arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent
+                )
+            })
         }
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_5_yrkesskade>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsning.toDto()
+            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto()
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             dtoVilkårsvurdering: DtoVilkårsvurdering
         ) {
-            val vurdertAv = requireNotNull(dtoVilkårsvurdering.vurdertAv)
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_5_yrkesskade_manuell)
-            vilkårsvurdering.løsning = LøsningParagraf_11_5_yrkesskade(
-                vurdertAv = vurdertAv,
-                arbeidsevneErNedsattMedMinst50Prosent = løsning.arbeidsevneErNedsattMedMinst50Prosent,
-                arbeidsevneErNedsattMedMinst30Prosent = løsning.arbeidsevneErNedsattMedMinst30Prosent
-            )
+            vilkårsvurdering.løsninger.addAll(løsning.map {
+                LøsningParagraf_11_5_yrkesskade(
+                    vurdertAv = it.vurdertAv,
+                    arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
+                    arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent
+                )
+            })
         }
     }
 

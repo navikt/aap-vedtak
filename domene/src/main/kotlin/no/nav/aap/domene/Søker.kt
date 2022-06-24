@@ -27,7 +27,11 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    fun håndterLøsning(løsning: LøsningParagraf_11_2) {
+    fun håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
+        saker.forEach { it.håndterLøsning(løsning) }
+    }
+
+    fun håndterLøsning(løsning: LøsningManuellParagraf_11_2) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 

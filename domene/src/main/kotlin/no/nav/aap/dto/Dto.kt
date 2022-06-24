@@ -45,18 +45,18 @@ data class DtoVilkårsvurdering(
     val ledd: List<String>,
     val tilstand: String,
     val utfall: Utfall,
-    val løsning_medlemskap_yrkesskade_maskinell: DtoLøsningMaskinellMedlemskapYrkesskade? = null,
-    val løsning_medlemskap_yrkesskade_manuell: DtoLøsningManuellMedlemskapYrkesskade? = null,
-    val løsning_11_2_maskinell: DtoLøsningParagraf_11_2? = null,
-    val løsning_11_2_manuell: DtoLøsningParagraf_11_2? = null,
-    val løsning_11_3_manuell: DtoLøsningParagraf_11_3? = null,
-    val løsning_11_4_ledd2_ledd3_manuell: DtoLøsningParagraf_11_4_ledd2_ledd3? = null,
-    val løsning_11_5_manuell: DtoLøsningParagraf_11_5? = null,
-    val løsning_11_5_yrkesskade_manuell: DtoLøsningParagraf_11_5_yrkesskade? = null,
-    val løsning_11_6_manuell: DtoLøsningParagraf_11_6? = null,
-    val løsning_11_12_ledd1_manuell: DtoLøsningParagraf_11_12_ledd1? = null,
-    val løsning_11_22_manuell: DtoLøsningParagraf_11_22? = null,
-    val løsning_11_29_manuell: DtoLøsningParagraf_11_29? = null,
+    val løsning_medlemskap_yrkesskade_maskinell: List<DtoLøsningMaskinellMedlemskapYrkesskade>? = null,
+    val løsning_medlemskap_yrkesskade_manuell: List<DtoLøsningManuellMedlemskapYrkesskade>? = null,
+    val løsning_11_2_maskinell: List<DtoLøsningParagraf_11_2>? = null,
+    val løsning_11_2_manuell: List<DtoLøsningParagraf_11_2>? = null,
+    val løsning_11_3_manuell: List<DtoLøsningParagraf_11_3>? = null,
+    val løsning_11_4_ledd2_ledd3_manuell: List<DtoLøsningParagraf_11_4_ledd2_ledd3>? = null,
+    val løsning_11_5_manuell: List<DtoLøsningParagraf_11_5>? = null,
+    val løsning_11_5_yrkesskade_manuell: List<DtoLøsningParagraf_11_5_yrkesskade>? = null,
+    val løsning_11_6_manuell: List<DtoLøsningParagraf_11_6>? = null,
+    val løsning_11_12_ledd1_manuell: List<DtoLøsningParagraf_11_12_ledd1>? = null,
+    val løsning_11_22_manuell: List<DtoLøsningParagraf_11_22>? = null,
+    val løsning_11_29_manuell: List<DtoLøsningParagraf_11_29>? = null,
 )
 
 data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
@@ -86,7 +86,7 @@ data class DtoLøsningParagraf_11_2(val vurdertAv: String, val erMedlem: String)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_2(vurdertAv, enumValueOf(erMedlem.uppercase()))
+    private fun toLøsning() = LøsningManuellParagraf_11_2(vurdertAv, enumValueOf(erMedlem.uppercase()))
 }
 
 data class DtoLøsningParagraf_11_3(val vurdertAv: String, val erOppfylt: Boolean) {
@@ -223,7 +223,7 @@ data class DtoLøsningParagraf_11_29(val vurdertAv: String, val erOppfylt: Boole
 
 data class DtoVurderingAvBeregningsdato(
     val tilstand: String,
-    val løsningVurderingAvBeregningsdato: DtoLøsningVurderingAvBeregningsdato?
+    val løsningVurderingAvBeregningsdato: List<DtoLøsningVurderingAvBeregningsdato>?
 )
 
 data class DtoLøsningVurderingAvBeregningsdato(

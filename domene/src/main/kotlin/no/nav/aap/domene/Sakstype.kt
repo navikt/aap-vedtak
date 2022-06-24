@@ -8,7 +8,6 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.DtoSakstype
 import no.nav.aap.hendelse.*
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 
@@ -36,7 +35,11 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
+    internal fun håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
+        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    }
+
+    internal fun håndterLøsning(løsning: LøsningManuellParagraf_11_2) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
@@ -214,8 +217,6 @@ internal abstract class Sakstype private constructor(
     )
 
     internal companion object {
-        private val log = LoggerFactory.getLogger("sakstype")
-
         internal fun Iterable<Sakstype>.toDto() = map(Sakstype::toDto)
 
         internal fun gjenopprett(dtoSakstype: DtoSakstype): Sakstype {

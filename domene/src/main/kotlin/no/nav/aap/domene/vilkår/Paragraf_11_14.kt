@@ -4,12 +4,9 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Søknad
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 import kotlin.properties.Delegates
-
-private val log = LoggerFactory.getLogger("Paragraf_11_14")
 
 internal class Paragraf_11_14 private constructor(
     vilkårsvurderingsid: UUID,

@@ -1,9 +1,10 @@
 package no.nav.aap.app.modell
 
 import no.nav.aap.avro.medlem.v1.Medlem
-import no.nav.aap.hendelse.LøsningParagraf_11_2
+import no.nav.aap.hendelse.LøsningManuellParagraf_11_2
+import no.nav.aap.hendelse.LøsningMaskinellParagraf_11_2
 
-fun Medlem.toDto(): LøsningParagraf_11_2 = LøsningParagraf_11_2(
+fun Medlem.toDto(): LøsningMaskinellParagraf_11_2 = LøsningMaskinellParagraf_11_2(
     vurdertAv = "maskinell saksbehandling",
-    erMedlem = LøsningParagraf_11_2.ErMedlem.valueOf(response.erMedlem.name)
+    erMedlem = LøsningMaskinellParagraf_11_2.ErMedlem.valueOf(response.erMedlem.name)
 )

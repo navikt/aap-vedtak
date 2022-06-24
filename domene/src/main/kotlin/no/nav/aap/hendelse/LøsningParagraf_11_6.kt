@@ -9,6 +9,10 @@ internal class LøsningParagraf_11_6(
     private val harMulighetForÅKommeIArbeid: Boolean
 ) : Hendelse() {
 
+    internal companion object {
+        internal fun Iterable<LøsningParagraf_11_6>.toDto() = map(LøsningParagraf_11_6::toDto)
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun erManueltOppfylt(): Boolean =
         harBehovForBehandling && harBehovForTiltak && harMulighetForÅKommeIArbeid

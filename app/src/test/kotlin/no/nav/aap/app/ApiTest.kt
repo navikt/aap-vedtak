@@ -123,10 +123,10 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_2_maskinell = DtoLøsningParagraf_11_2(
+                                        løsning_11_2_maskinell = listOf(DtoLøsningParagraf_11_2(
                                             "maskinell saksbehandling",
                                             "JA"
-                                        ),
+                                        )),
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(1),
@@ -136,7 +136,7 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_3_manuell = DtoLøsningParagraf_11_3("saksbehandler", true)
+                                        løsning_11_3_manuell = listOf(DtoLøsningParagraf_11_3("saksbehandler", true))
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
@@ -164,12 +164,12 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_5_manuell = DtoLøsningParagraf_11_5(
+                                        løsning_11_5_manuell = listOf(DtoLøsningParagraf_11_5(
                                             vurdertAv = "veileder",
                                             kravOmNedsattArbeidsevneErOppfylt = true,
                                             nedsettelseSkyldesSykdomEllerSkade = true,
                                         )
-                                    ),
+                                    )),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(5),
                                         vurdertAv = "saksbehandler",
@@ -178,13 +178,13 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_6_manuell = DtoLøsningParagraf_11_6(
+                                        løsning_11_6_manuell = listOf(DtoLøsningParagraf_11_6(
                                             vurdertAv = "saksbehandler",
                                             harBehovForBehandling = true,
                                             harBehovForTiltak = true,
                                             harMulighetForÅKommeIArbeid = true
                                         )
-                                    ),
+                                    )),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(6),
                                         vurdertAv = "saksbehandler",
@@ -193,14 +193,14 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_12_ledd1_manuell = DtoLøsningParagraf_11_12_ledd1(
+                                        løsning_11_12_ledd1_manuell = listOf(DtoLøsningParagraf_11_12_ledd1(
                                             vurdertAv = "saksbehandler",
                                             bestemmesAv = "SPS",
                                             unntak = "INGEN",
                                             unntaksbegrunnelse = "",
                                             manueltSattVirkningsdato = LocalDate.now()
                                         )
-                                    ),
+                                    )),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(7),
                                         vurdertAv = "saksbehandler",
@@ -209,18 +209,18 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_29_manuell = DtoLøsningParagraf_11_29("saksbehandler", true)
+                                        løsning_11_29_manuell = listOf(DtoLøsningParagraf_11_29("saksbehandler", true))
                                     )
                                 )
                             )
                         ),
                         vurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
                             tilstand = "FERDIG",
-                            løsningVurderingAvBeregningsdato = DtoLøsningVurderingAvBeregningsdato(
+                            løsningVurderingAvBeregningsdato = listOf(DtoLøsningVurderingAvBeregningsdato(
                                 vurdertAv = "saksbehandler",
                                 beregningsdato = LocalDate.of(2022, 1, 1)
                             )
-                        ),
+                        )),
                         søknadstidspunkt = søknadstidspunkt,
                         vedtak = DtoVedtak(
                             vedtaksid = actual.saker.first().vedtak!!.vedtaksid,

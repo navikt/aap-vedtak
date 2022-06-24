@@ -7,13 +7,11 @@ import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningParagraf_11_6
+import no.nav.aap.hendelse.LøsningParagraf_11_6.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_6
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
-
-private val log = LoggerFactory.getLogger("Paragraf_11_6")
 
 internal class Paragraf_11_6 private constructor(
     vilkårsvurderingsid: UUID,
@@ -25,7 +23,7 @@ internal class Paragraf_11_6 private constructor(
         Ledd.LEDD_1,
         tilstand
     ) {
-    private lateinit var løsning: LøsningParagraf_11_6
+    private val løsninger = mutableListOf<LøsningParagraf_11_6>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -54,7 +52,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering: Paragraf_11_6,
             løsning: LøsningParagraf_11_6
         ) {
-            vilkårsvurdering.løsning = løsning
+            vilkårsvurdering.løsninger.add(løsning)
             if (løsning.erManueltOppfylt()) {
                 vilkårsvurdering.tilstand(Oppfylt, løsning)
             } else {
@@ -76,48 +74,50 @@ internal class Paragraf_11_6 private constructor(
     object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_6>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_6): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
-            løsning_11_6_manuell = vilkårsvurdering.løsning.toDto()
+            løsning_11_6_manuell = vilkårsvurdering.løsninger.toDto()
         )
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_6, dtoVilkårsvurdering: DtoVilkårsvurdering) {
-            val vurdertAv = requireNotNull(dtoVilkårsvurdering.vurdertAv)
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_6_manuell)
-            vilkårsvurdering.løsning = LøsningParagraf_11_6(
-                vurdertAv = vurdertAv,
-                harBehovForBehandling = løsning.harBehovForBehandling,
-                harBehovForTiltak = løsning.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = løsning.harMulighetForÅKommeIArbeid
-            )
+            vilkårsvurdering.løsninger.addAll(løsning.map {
+                LøsningParagraf_11_6(
+                    vurdertAv = it.vurdertAv,
+                    harBehovForBehandling = it.harBehovForBehandling,
+                    harBehovForTiltak = it.harBehovForTiltak,
+                    harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+                )
+            })
         }
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_6>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_6): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
-            løsning_11_6_manuell = vilkårsvurdering.løsning.toDto()
+            løsning_11_6_manuell = vilkårsvurdering.løsninger.toDto()
         )
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_6, dtoVilkårsvurdering: DtoVilkårsvurdering) {
-            val vurdertAv = requireNotNull(dtoVilkårsvurdering.vurdertAv)
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_6_manuell)
-            vilkårsvurdering.løsning = LøsningParagraf_11_6(
-                vurdertAv = vurdertAv,
-                harBehovForBehandling = løsning.harBehovForBehandling,
-                harBehovForTiltak = løsning.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = løsning.harMulighetForÅKommeIArbeid
-            )
+            vilkårsvurdering.løsninger.addAll(løsning.map {
+                LøsningParagraf_11_6(
+                    vurdertAv = it.vurdertAv,
+                    harBehovForBehandling = it.harBehovForBehandling,
+                    harBehovForTiltak = it.harBehovForTiltak,
+                    harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+                )
+            })
         }
     }
 

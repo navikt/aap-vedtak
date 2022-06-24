@@ -70,7 +70,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     protected abstract fun <T> callWithReceiver(block: PARAGRAF.() -> T): T
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) = callWithReceiver {
+    internal fun håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) = callWithReceiver {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningManuellParagraf_11_2) = callWithReceiver {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -164,7 +168,14 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
-            løsning: LøsningParagraf_11_2
+            løsning: LøsningMaskinellParagraf_11_2
+        ) {
+            log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
+        internal open fun håndterLøsning(
+            vilkårsvurdering: PARAGRAF,
+            løsning: LøsningManuellParagraf_11_2
         ) {
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
         }

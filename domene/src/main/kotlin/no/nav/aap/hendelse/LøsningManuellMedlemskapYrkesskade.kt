@@ -10,6 +10,10 @@ internal class LøsningManuellMedlemskapYrkesskade(
         JA, NEI
     }
 
+    internal companion object {
+        internal fun Iterable<LøsningManuellMedlemskapYrkesskade>.toDto() = map(LøsningManuellMedlemskapYrkesskade::toDto)
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun erMedlem() = erMedlem == ErMedlem.JA
     internal fun toDto() = DtoLøsningManuellMedlemskapYrkesskade(vurdertAv, erMedlem.name)

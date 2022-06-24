@@ -10,8 +10,13 @@ internal class LøsningParagraf_11_12FørsteLedd(
     private val unntaksbegrunnelse: String,
     private val manueltSattVirkningsdato: LocalDate
 ) : Hendelse() {
+    internal companion object {
+        internal fun Iterable<LøsningParagraf_11_12FørsteLedd>.toDto() = map(LøsningParagraf_11_12FørsteLedd::toDto)
+    }
+
     internal fun vurdertAv() = vurdertAv
-    internal fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+
+    private fun toDto() = DtoLøsningParagraf_11_12_ledd1(
         vurdertAv = vurdertAv,
         bestemmesAv = bestemmesAv,
         unntak = unntak,

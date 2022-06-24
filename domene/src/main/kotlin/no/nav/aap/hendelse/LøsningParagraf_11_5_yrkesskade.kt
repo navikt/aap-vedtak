@@ -8,10 +8,14 @@ internal class LøsningParagraf_11_5_yrkesskade(
     private val arbeidsevneErNedsattMedMinst30Prosent: Boolean
 ) : Hendelse() {
 
+    internal companion object {
+        internal fun Iterable<LøsningParagraf_11_5_yrkesskade>.toDto() = map(LøsningParagraf_11_5_yrkesskade::toDto)
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun erNedsattMedMinst30Prosent() = arbeidsevneErNedsattMedMinst30Prosent
 
-    internal fun toDto() = DtoLøsningParagraf_11_5_yrkesskade(
+    private fun toDto() = DtoLøsningParagraf_11_5_yrkesskade(
         vurdertAv = vurdertAv,
         arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
         arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent

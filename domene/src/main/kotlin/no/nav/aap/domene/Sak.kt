@@ -38,7 +38,11 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_2) {
+    internal fun håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningManuellParagraf_11_2) {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -113,7 +117,11 @@ internal class Sak private constructor(
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellParagraf_11_2) {
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterLøsning(sak: Sak, løsning: LøsningManuellParagraf_11_2) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
@@ -220,7 +228,12 @@ internal class Sak private constructor(
                 vurderNesteTilstand(sak, løsning)
             }
 
-            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_2) {
+            override fun håndterLøsning(sak: Sak, løsning: LøsningMaskinellParagraf_11_2) {
+                sak.sakstype.håndterLøsning(løsning)
+                vurderNesteTilstand(sak, løsning)
+            }
+
+            override fun håndterLøsning(sak: Sak, løsning: LøsningManuellParagraf_11_2) {
                 sak.sakstype.håndterLøsning(løsning)
                 vurderNesteTilstand(sak, løsning)
             }

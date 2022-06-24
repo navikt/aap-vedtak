@@ -7,6 +7,10 @@ internal class LøsningParagraf_11_3(
     private val erOppfylt: Boolean
 ) : Hendelse() {
 
+    internal companion object {
+        internal fun Iterable<LøsningParagraf_11_3>.toDto() = map(LøsningParagraf_11_3::toDto)
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun erManueltOppfylt() = erOppfylt
 

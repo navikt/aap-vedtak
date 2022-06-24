@@ -13,6 +13,9 @@ internal class LøsningParagraf_11_22(
     private val år: Year,
     private val antattÅrligArbeidsinntekt: Beløp
 ) : Hendelse() {
+    internal companion object {
+        internal fun Iterable<LøsningParagraf_11_22>.toDto() = map(LøsningParagraf_11_22::toDto)
+    }
 
     internal fun vurdertAv() = vurdertAv
 

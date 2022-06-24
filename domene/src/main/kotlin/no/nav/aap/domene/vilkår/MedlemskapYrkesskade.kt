@@ -7,14 +7,13 @@ import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade
+import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
+import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_2
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
-
-private val log = LoggerFactory.getLogger("MedlemskapYrkesskade")
 
 internal class MedlemskapYrkesskade private constructor(
     vilkårsvurderingsid: UUID,
@@ -26,8 +25,8 @@ internal class MedlemskapYrkesskade private constructor(
         Ledd.LEDD_1 + Ledd.LEDD_2,
         tilstand
     ) {
-    private lateinit var maskinellLøsning: LøsningMaskinellMedlemskapYrkesskade
-    private lateinit var manuellLøsning: LøsningManuellMedlemskapYrkesskade
+    private val maskinelleLøsninger = mutableListOf<LøsningMaskinellMedlemskapYrkesskade>()
+    private val manuelleLøsninger = mutableListOf<LøsningManuellMedlemskapYrkesskade>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -35,13 +34,12 @@ internal class MedlemskapYrkesskade private constructor(
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
-        maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(dtoMaskinell.erMedlem))
+        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellMedlemskapYrkesskade(enumValueOf(it.erMedlem)) })
     }
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
-        val vurdertAv = requireNotNull(vilkårsvurdering.vurdertAv)
         val dtoManuell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_manuell)
-        manuellLøsning = LøsningManuellMedlemskapYrkesskade(vurdertAv, enumValueOf(dtoManuell.erMedlem))
+        manuelleLøsninger.addAll(dtoManuell.map { LøsningManuellMedlemskapYrkesskade(it.vurdertAv, enumValueOf(it.erMedlem)) })
     }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<MedlemskapYrkesskade>() {
@@ -68,7 +66,7 @@ internal class MedlemskapYrkesskade private constructor(
             vilkårsvurdering: MedlemskapYrkesskade,
             løsning: LøsningMaskinellMedlemskapYrkesskade
         ) {
-            vilkårsvurdering.maskinellLøsning = løsning
+            vilkårsvurdering.maskinelleLøsninger.add(løsning)
             when {
                 løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskinelt, løsning)
                 løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskinelt, løsning)
@@ -92,7 +90,7 @@ internal class MedlemskapYrkesskade private constructor(
             vilkårsvurdering: MedlemskapYrkesskade,
             løsning: LøsningManuellMedlemskapYrkesskade
         ) {
-            vilkårsvurdering.manuellLøsning = løsning
+            vilkårsvurdering.manuelleLøsninger.add(løsning)
             when {
                 løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManuelt, løsning)
                 else -> vilkårsvurdering.tilstand(IkkeOppfyltManuelt, løsning)
@@ -107,7 +105,7 @@ internal class MedlemskapYrkesskade private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinellLøsning.toDto(),
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -127,7 +125,7 @@ internal class MedlemskapYrkesskade private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinellLøsning.toDto(),
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -147,7 +145,7 @@ internal class MedlemskapYrkesskade private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinellLøsning.toDto(),
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -161,14 +159,14 @@ internal class MedlemskapYrkesskade private constructor(
     object OppfyltManuelt : Tilstand.OppfyltManuelt<MedlemskapYrkesskade>() {
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.manuellLøsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinellLøsning.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuellLøsning.toDto()
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto()
         )
 
         override fun gjenopprettTilstand(
@@ -183,14 +181,14 @@ internal class MedlemskapYrkesskade private constructor(
     object IkkeOppfyltManuelt : Tilstand.IkkeOppfyltManuelt<MedlemskapYrkesskade>() {
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.manuellLøsning.vurdertAv(),
+            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
             godkjentAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinellLøsning.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuellLøsning.toDto()
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto()
         )
 
         override fun gjenopprettTilstand(

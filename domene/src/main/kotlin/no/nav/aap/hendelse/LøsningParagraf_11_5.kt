@@ -21,6 +21,10 @@ internal class LøsningParagraf_11_5(
         )
     }
 
+    internal companion object {
+        internal fun Iterable<LøsningParagraf_11_5>.toDto() = map(LøsningParagraf_11_5::toDto)
+    }
+
     internal fun vurdertAv() = vurdertAv
 
     internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5.SøknadMottatt, vilkårsvurdering: Paragraf_11_5) {
