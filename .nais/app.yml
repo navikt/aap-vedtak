@@ -39,7 +39,3 @@ spec:
   prometheus:
     enabled: true
     path: /actuator/metrics
-
-  env:
-    - name: LOG_APPENDER
-      value: json
