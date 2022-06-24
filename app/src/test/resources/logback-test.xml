@@ -7,6 +7,14 @@
         </encoder>
     </appender>
 
+    <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+        <jsonGeneratorDecorator class="net.logstash.logback.decorate.CompositeJsonGeneratorDecorator">
+            <decorator class="net.logstash.logback.decorate.PrettyPrintingJsonGeneratorDecorator"/>
+        </jsonGeneratorDecorator>
+        </encoder>
+    </appender>
+
     <logger name="no.nav.aap.app" level="TRACE" additivity="false"/>
     <logger name="kafka" level="WARN"/>
     <logger name="io.confluent.kafka.serializers" level="WARN"/>
@@ -16,4 +24,9 @@
     <root level="INFO">
         <appender-ref ref="pretty"/>
     </root>
+
+    <logger name="secureLog" level="TRACE" additivity="false">
+        <appender-ref ref="json"/>
+    </logger>
+
 </configuration>

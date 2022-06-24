@@ -26,21 +26,21 @@
 
 
     <logger name="no.nav.aap.app" level="TRACE" additivity="false">
-        <appender-ref ref="${LOG_APPENDER:-pretty}"/>
+        <appender-ref ref="json"/>
     </logger>
 
-    <logger name="kafka" level="WARN"/>
+    <logger name="kafka" level="INFO"/>
     <logger name="io.confluent.kafka.serializers" level="WARN"/>
     <logger name="org.apache.zookeeper" level="WARN"/>
     <logger name="org.apache.kafka" level="WARN" additivity="false">
-        <appender-ref ref="${LOG_APPENDER:-pretty}"/>
+        <appender-ref ref="json"/>
     </logger>
 
-    <logger name="secureLog" level="INFO" additivity="false">
+    <logger name="secureLog" level="TRACE" additivity="false">
         <appender-ref ref="secureLog"/>
     </logger>
 
-    <root level="${LOG_LEVEL:-INFO}">
-        <appender-ref ref="${LOG_APPENDER:-pretty}"/>
+    <root level="$INFO">
+        <appender-ref ref="json"/>
     </root>
 </configuration>
