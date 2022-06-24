@@ -27,7 +27,7 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.JA)
+        val løsning = LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -48,7 +48,7 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        val løsning = LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)

@@ -67,7 +67,7 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(LøsningParagraf_11_3("saksbehandler", true))

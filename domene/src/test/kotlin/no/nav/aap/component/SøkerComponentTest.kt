@@ -227,7 +227,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA))
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -261,7 +261,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA))
         søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", true))
         søker.håndterLøsning(
             LøsningParagraf_11_5(
@@ -312,7 +312,7 @@ internal class SøkerComponentTest {
             dtoSøker = søker.toDto()
         }
 
-        medSøker { håndterLøsning(LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.JA)) }
+        medSøker { håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA)) }
         medSøker { håndterLøsning(LøsningParagraf_11_3("saksbehandler", true)) }
         medSøker {
             håndterLøsning(
