@@ -122,12 +122,8 @@ internal class Paragraf_11_6 private constructor(
     }
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_6 =
-            Paragraf_11_6(
-                vilkårsvurdering.vilkårsvurderingsid,
-                tilknyttetTilstand(enumValueOf(vilkårsvurdering.tilstand))
-            )
-                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
+            Paragraf_11_6(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

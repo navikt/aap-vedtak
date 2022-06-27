@@ -98,12 +98,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
     }
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_4FørsteLedd =
-            Paragraf_11_4FørsteLedd(
-                vilkårsvurdering.vilkårsvurderingsid,
-                tilknyttetTilstand(enumValueOf(vilkårsvurdering.tilstand))
-            )
-                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
+            Paragraf_11_4FørsteLedd(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

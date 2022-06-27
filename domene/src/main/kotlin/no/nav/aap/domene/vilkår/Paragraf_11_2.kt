@@ -2,6 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.vilkår.Paragraf_11_2.*
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
@@ -174,7 +175,12 @@ internal class Paragraf_11_2 private constructor(
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_11_2_maskinell)
-        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellParagraf_11_2(it.vurdertAv, enumValueOf(it.erMedlem)) })
+        maskinelleLøsninger.addAll(dtoMaskinell.map {
+            LøsningMaskinellParagraf_11_2(
+                it.vurdertAv,
+                enumValueOf(it.erMedlem)
+            )
+        })
     }
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
@@ -183,12 +189,8 @@ internal class Paragraf_11_2 private constructor(
     }
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_2 =
-            Paragraf_11_2(
-                vilkårsvurdering.vilkårsvurderingsid,
-                tilknyttetTilstand(enumValueOf(vilkårsvurdering.tilstand))
-            )
-                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
+            Paragraf_11_2(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

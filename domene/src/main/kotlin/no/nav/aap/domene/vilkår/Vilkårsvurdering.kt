@@ -12,11 +12,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     protected val vilkårsvurderingsid: UUID,
     protected val paragraf: Paragraf,
     protected val ledd: List<Ledd>,
-    tilstand: Tilstand<PARAGRAF>,
+    private var tilstand: Tilstand<PARAGRAF>,
 ) {
-    protected var tilstand = tilstand
-        private set
-
     internal constructor(
         vilkårsvurderingsid: UUID,
         paragraf: Paragraf,
@@ -312,36 +309,58 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         internal fun Iterable<Vilkårsvurdering<*>>.erNoenIkkeOppfylt() = any { it.erIkkeOppfylt() }
         internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
 
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Vilkårsvurdering<*>? =
-            when (enumValueOf<Paragraf>(vilkårsvurdering.paragraf)) {
-                Paragraf.MEDLEMSKAP_YRKESSKADE -> MedlemskapYrkesskade.gjenopprett(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_2 -> Paragraf_11_2.gjenopprett(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_3 -> Paragraf_11_3.gjenopprett(vilkårsvurdering)
+        internal fun gjenopprett(dtoVilkårsvurdering: DtoVilkårsvurdering) =
+            when (enumValueOf<Paragraf>(dtoVilkårsvurdering.paragraf)) {
+                Paragraf.MEDLEMSKAP_YRKESSKADE ->
+                    gjenopprett(dtoVilkårsvurdering, MedlemskapYrkesskade.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_2 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_2.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_3 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_3.Companion::gjenopprett)
                 Paragraf.PARAGRAF_11_4 -> {
-                    vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
+                    dtoVilkårsvurdering.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
-                            listOf(Ledd.LEDD_1) -> Paragraf_11_4FørsteLedd.gjenopprett(vilkårsvurdering)
-                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) -> Paragraf_11_4AndreOgTredjeLedd.gjenopprett(
-                                vilkårsvurdering
-                            )
-                            else -> null.also { log.warn("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                            listOf(Ledd.LEDD_1) ->
+                                gjenopprett(dtoVilkårsvurdering, Paragraf_11_4FørsteLedd.Companion::gjenopprett)
+                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) ->
+                                gjenopprett(dtoVilkårsvurdering, Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett)
+                            else -> null.also { log.warn("Paragraf ${dtoVilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
-                Paragraf.PARAGRAF_11_5 -> Paragraf_11_5.gjenopprett(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_5_YRKESSKADE -> Paragraf_11_5_yrkesskade.gjenopprett(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_6 -> Paragraf_11_6.gjenopprett(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_5 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_5.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_5_YRKESSKADE ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_5_yrkesskade.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_6 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_6.Companion::gjenopprett)
                 Paragraf.PARAGRAF_11_12 -> {
-                    vilkårsvurdering.ledd.map { enumValueOf<Ledd>(it) }.let { ledd ->
+                    dtoVilkårsvurdering.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
-                            listOf(Ledd.LEDD_1) -> Paragraf_11_12FørsteLedd.gjenopprett(vilkårsvurdering)
-                            else -> null.also { log.warn("Paragraf ${vilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                            listOf(Ledd.LEDD_1) ->
+                                gjenopprett(dtoVilkårsvurdering, Paragraf_11_12FørsteLedd.Companion::gjenopprett)
+                            else -> null.also { log.warn("Paragraf ${dtoVilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
-                Paragraf.PARAGRAF_11_14 -> Paragraf_11_14.gjenopprett(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_22 -> Paragraf_11_22.gjenopprett(vilkårsvurdering)
-                Paragraf.PARAGRAF_11_29 -> Paragraf_11_29.gjenopprett(vilkårsvurdering)
+                Paragraf.PARAGRAF_11_14 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_14.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_22 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_22.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_29 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_29.Companion::gjenopprett)
             }
+
+        private inline fun <PARAGRAF : Vilkårsvurdering<PARAGRAF>> gjenopprett(
+            dtoVilkårsvurdering: DtoVilkårsvurdering,
+            gjenopprettParagraf: (UUID, Tilstand.Tilstandsnavn) -> PARAGRAF
+        ): PARAGRAF {
+            val paragraf = gjenopprettParagraf(
+                dtoVilkårsvurdering.vilkårsvurderingsid,
+                enumValueOf(dtoVilkårsvurdering.tilstand)
+            )
+            paragraf.tilstand.gjenopprettTilstand(paragraf, dtoVilkårsvurdering)
+            return paragraf
+        }
     }
 }

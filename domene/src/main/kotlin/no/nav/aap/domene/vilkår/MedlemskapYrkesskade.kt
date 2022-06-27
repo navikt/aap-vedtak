@@ -39,7 +39,12 @@ internal class MedlemskapYrkesskade private constructor(
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoManuell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_manuell)
-        manuelleLøsninger.addAll(dtoManuell.map { LøsningManuellMedlemskapYrkesskade(it.vurdertAv, enumValueOf(it.erMedlem)) })
+        manuelleLøsninger.addAll(dtoManuell.map {
+            LøsningManuellMedlemskapYrkesskade(
+                it.vurdertAv,
+                enumValueOf(it.erMedlem)
+            )
+        })
     }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<MedlemskapYrkesskade>() {
@@ -201,12 +206,8 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): MedlemskapYrkesskade =
-            MedlemskapYrkesskade(
-                vilkårsvurdering.vilkårsvurderingsid,
-                tilknyttetTilstand(enumValueOf(vilkårsvurdering.tilstand))
-            )
-                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
+            MedlemskapYrkesskade(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

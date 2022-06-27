@@ -17,15 +17,10 @@ import java.util.*
 private val log = LoggerFactory.getLogger("Paragraf_11_3")
 
 internal class Paragraf_11_3 private constructor(
-    vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_3>
-) :
-    Vilkårsvurdering<Paragraf_11_3>(
-        vilkårsvurderingsid,
-        Paragraf.PARAGRAF_11_3,
-        Ledd.LEDD_1 + Ledd.LEDD_2 + Ledd.LEDD_3,
-        tilstand
-    ) {
+    vilkårsvurderingsid: UUID, tilstand: Tilstand<Paragraf_11_3>
+) : Vilkårsvurdering<Paragraf_11_3>(
+    vilkårsvurderingsid, Paragraf.PARAGRAF_11_3, Ledd.LEDD_1 + Ledd.LEDD_2 + Ledd.LEDD_3, tilstand
+) {
     private val løsninger = mutableListOf<LøsningParagraf_11_3>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
@@ -34,10 +29,7 @@ internal class Paragraf_11_3 private constructor(
 
     object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_3>() {
         override fun håndterSøknad(
-            vilkårsvurdering: Paragraf_11_3,
-            søknad: Søknad,
-            fødselsdato: Fødselsdato,
-            vurderingsdato: LocalDate
+            vilkårsvurdering: Paragraf_11_3, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate
         ) {
             vilkårsvurdering.tilstand(SøknadMottatt, søknad)
         }
@@ -52,8 +44,7 @@ internal class Paragraf_11_3 private constructor(
         }
 
         override fun håndterLøsning(
-            vilkårsvurdering: Paragraf_11_3,
-            løsning: LøsningParagraf_11_3
+            vilkårsvurdering: Paragraf_11_3, løsning: LøsningParagraf_11_3
         ) {
             vilkårsvurdering.løsninger.add(løsning)
             if (løsning.erManueltOppfylt()) {
@@ -88,7 +79,9 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_3, dtoVilkårsvurdering: DtoVilkårsvurdering) {
             val løsning113Manuell = requireNotNull(dtoVilkårsvurdering.løsning_11_3_manuell)
-            vilkårsvurdering.løsninger.addAll(løsning113Manuell.map { LøsningParagraf_11_3(it.vurdertAv, it.erOppfylt) })
+            vilkårsvurdering.løsninger.addAll(løsning113Manuell.map {
+                LøsningParagraf_11_3(it.vurdertAv, it.erOppfylt)
+            })
         }
     }
 
@@ -106,17 +99,15 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_3, dtoVilkårsvurdering: DtoVilkårsvurdering) {
             val løsning113Manuell = requireNotNull(dtoVilkårsvurdering.løsning_11_3_manuell)
-            vilkårsvurdering.løsninger.addAll(løsning113Manuell.map { LøsningParagraf_11_3(it.vurdertAv, it.erOppfylt) })
+            vilkårsvurdering.løsninger.addAll(løsning113Manuell.map {
+                LøsningParagraf_11_3(it.vurdertAv, it.erOppfylt)
+            })
         }
     }
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurdering: DtoVilkårsvurdering): Paragraf_11_3 =
-            Paragraf_11_3(
-                vilkårsvurdering.vilkårsvurderingsid,
-                tilknyttetTilstand(enumValueOf(vilkårsvurdering.tilstand))
-            )
-                .apply { this.tilstand.gjenopprettTilstand(this, vilkårsvurdering) }
+        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
+            Paragraf_11_3(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
