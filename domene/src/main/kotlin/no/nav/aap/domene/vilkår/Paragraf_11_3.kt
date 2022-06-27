@@ -80,7 +80,7 @@ internal class Paragraf_11_3 private constructor(
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_3, dtoVilkårsvurdering: DtoVilkårsvurdering) {
             val løsning113Manuell = requireNotNull(dtoVilkårsvurdering.løsning_11_3_manuell)
             vilkårsvurdering.løsninger.addAll(løsning113Manuell.map {
-                LøsningParagraf_11_3(it.vurdertAv, it.erOppfylt)
+                LøsningParagraf_11_3(it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt)
             })
         }
     }
@@ -100,7 +100,7 @@ internal class Paragraf_11_3 private constructor(
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_3, dtoVilkårsvurdering: DtoVilkårsvurdering) {
             val løsning113Manuell = requireNotNull(dtoVilkårsvurdering.løsning_11_3_manuell)
             vilkårsvurdering.løsninger.addAll(løsning113Manuell.map {
-                LøsningParagraf_11_3(it.vurdertAv, it.erOppfylt)
+                LøsningParagraf_11_3(it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt)
             })
         }
     }

@@ -91,6 +91,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_5_yrkesskade(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
                     arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent
                 )
@@ -118,6 +119,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_5_yrkesskade(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
                     arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent
                 )

@@ -86,7 +86,9 @@ internal class Paragraf_11_5 private constructor(
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_5_manuell)
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_5(
-                    vurdertAv = it.vurdertAv, nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
+                    nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                         kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
                         nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
                     )
@@ -111,7 +113,9 @@ internal class Paragraf_11_5 private constructor(
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_5_manuell)
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_5(
-                    vurdertAv = it.vurdertAv, nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
+                    nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                         kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
                         nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
                     )

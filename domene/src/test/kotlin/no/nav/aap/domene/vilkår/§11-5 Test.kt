@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class `§11-5 Test` {
     @Test
@@ -20,7 +21,9 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
-            "veileder", LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+            "veileder",
+            LocalDateTime.now(),
+            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                 kravOmNedsattArbeidsevneErOppfylt = true,
                 nedsettelseSkyldesSykdomEllerSkade = true
             )
@@ -41,7 +44,9 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
-            "veileder", LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+            "veileder",
+            LocalDateTime.now(),
+            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                 kravOmNedsattArbeidsevneErOppfylt = false,
                 nedsettelseSkyldesSykdomEllerSkade = true
             )

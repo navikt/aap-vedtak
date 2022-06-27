@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class `§11-6 Test` {
 
@@ -22,6 +23,7 @@ internal class `§11-6 Test` {
 
         val løsning = LøsningParagraf_11_6(
             vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = true
@@ -43,6 +45,7 @@ internal class `§11-6 Test` {
 
         val løsning = LøsningParagraf_11_6(
             vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = true
@@ -64,6 +67,7 @@ internal class `§11-6 Test` {
 
         val løsning = LøsningParagraf_11_6(
             vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = false,
             harMulighetForÅKommeIArbeid = true
@@ -85,6 +89,7 @@ internal class `§11-6 Test` {
 
         val løsning = LøsningParagraf_11_6(
             vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = false

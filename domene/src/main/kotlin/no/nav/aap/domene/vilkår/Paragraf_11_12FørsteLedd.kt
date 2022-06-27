@@ -87,6 +87,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_12FørsteLedd(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     bestemmesAv = it.bestemmesAv,
                     unntak = it.unntak,
                     unntaksbegrunnelse = it.unntaksbegrunnelse,

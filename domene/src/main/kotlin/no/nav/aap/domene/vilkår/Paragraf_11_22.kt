@@ -92,6 +92,7 @@ internal class Paragraf_11_22 private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_22(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     erOppfylt = it.erOppfylt,
                     andelNedsattArbeidsevne = it.andelNedsattArbeidsevne,
                     år = it.år,
@@ -118,6 +119,7 @@ internal class Paragraf_11_22 private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_22(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     erOppfylt = it.erOppfylt,
                     andelNedsattArbeidsevne = it.andelNedsattArbeidsevne,
                     år = it.år,

@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 internal class MedlemskapYrkesskadeTest {
@@ -97,7 +98,7 @@ internal class MedlemskapYrkesskadeTest {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val manuellLøsning =
-            LøsningManuellMedlemskapYrkesskade("saksbehandler", LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
+            LøsningManuellMedlemskapYrkesskade("saksbehandler", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -125,6 +126,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
             "saksbehandler",
+            LocalDateTime.now(),
             LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
         )
         vilkår.håndterLøsning(manuellLøsning)

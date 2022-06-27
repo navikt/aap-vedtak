@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.time.Year
 import java.time.YearMonth
 import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
@@ -35,6 +36,7 @@ internal class ApiTest {
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
             val fnr = "123"
+            val tidspunktForVurdering = LocalDateTime.now()
             søknadTopic.produce(fnr) {
                 JsonSøknad(fødselsdato = LocalDate.now().minusYears(40))
             }
@@ -47,11 +49,12 @@ internal class ApiTest {
             }
 
             manuell_11_3_Topic.produce(fnr) {
-                Løsning_11_3_manuell("saksbehandler", true)
+                Løsning_11_3_manuell("saksbehandler", tidspunktForVurdering,true)
             }
             manuell_11_5_Topic.produce(fnr) {
                 Løsning_11_5_manuell(
                     vurdertAv = "veileder",
+                    tidspunktForVurdering = tidspunktForVurdering,
                     kravOmNedsattArbeidsevneErOppfylt = true,
                     nedsettelseSkyldesSykdomEllerSkade = true
                 )
@@ -59,6 +62,7 @@ internal class ApiTest {
             manuell_11_6_Topic.produce(fnr) {
                 Løsning_11_6_manuell(
                     vurdertAv = "saksbehandler",
+                    tidspunktForVurdering = tidspunktForVurdering,
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
                     harMulighetForÅKommeIArbeid = true
@@ -67,6 +71,7 @@ internal class ApiTest {
             manuell_11_12_Topic.produce(fnr) {
                 Løsning_11_12_ledd1_manuell(
                     vurdertAv = "saksbehandler",
+                    tidspunktForVurdering = tidspunktForVurdering,
                     bestemmesAv = "SPS",
                     unntak = "INGEN",
                     unntaksbegrunnelse = "",
@@ -74,10 +79,10 @@ internal class ApiTest {
                 )
             }
             manuell_11_29_Topic.produce(fnr) {
-                Løsning_11_29_manuell("saksbehandler", true)
+                Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering,true)
             }
             manuell_beregningsdato_Topic.produce(fnr) {
-                LøsningVurderingAvBeregningsdato("saksbehandler", LocalDate.of(2022, 1, 1))
+                LøsningVurderingAvBeregningsdato("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
             }
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
@@ -123,10 +128,11 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_2_maskinell = listOf(DtoLøsningParagraf_11_2(
-                                            "maskinell saksbehandling",
+                                        løsning_11_2_maskinell = listOf(
+                                            DtoLøsningMaskinellParagraf_11_2(
                                             "JA"
-                                        )),
+                                        )
+                                        ),
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(1),
@@ -136,7 +142,8 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_3_manuell = listOf(DtoLøsningParagraf_11_3("saksbehandler", true))
+                                        løsning_11_3_manuell = listOf(DtoLøsningParagraf_11_3("saksbehandler",
+                                            tidspunktForVurdering,true))
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
@@ -166,6 +173,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_5_manuell = listOf(DtoLøsningParagraf_11_5(
                                             vurdertAv = "veileder",
+                                            tidspunktForVurdering = tidspunktForVurdering,
                                             kravOmNedsattArbeidsevneErOppfylt = true,
                                             nedsettelseSkyldesSykdomEllerSkade = true,
                                         )
@@ -180,6 +188,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_6_manuell = listOf(DtoLøsningParagraf_11_6(
                                             vurdertAv = "saksbehandler",
+                                            tidspunktForVurdering = tidspunktForVurdering,
                                             harBehovForBehandling = true,
                                             harBehovForTiltak = true,
                                             harMulighetForÅKommeIArbeid = true
@@ -195,6 +204,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_12_ledd1_manuell = listOf(DtoLøsningParagraf_11_12_ledd1(
                                             vurdertAv = "saksbehandler",
+                                            tidspunktForVurdering = tidspunktForVurdering,
                                             bestemmesAv = "SPS",
                                             unntak = "INGEN",
                                             unntaksbegrunnelse = "",
@@ -209,7 +219,8 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_29_manuell = listOf(DtoLøsningParagraf_11_29("saksbehandler", true))
+                                        løsning_11_29_manuell = listOf(DtoLøsningParagraf_11_29("saksbehandler",
+                                            tidspunktForVurdering,true))
                                     )
                                 )
                             )
@@ -218,6 +229,7 @@ internal class ApiTest {
                             tilstand = "FERDIG",
                             løsningVurderingAvBeregningsdato = listOf(DtoLøsningVurderingAvBeregningsdato(
                                 vurdertAv = "saksbehandler",
+                                tidspunktForVurdering = tidspunktForVurdering,
                                 beregningsdato = LocalDate.of(2022, 1, 1)
                             )
                         )),

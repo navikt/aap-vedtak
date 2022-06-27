@@ -88,6 +88,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_6(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     harBehovForBehandling = it.harBehovForBehandling,
                     harBehovForTiltak = it.harBehovForTiltak,
                     harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
@@ -113,6 +114,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering.løsninger.addAll(løsning.map {
                 LøsningParagraf_11_6(
                     vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
                     harBehovForBehandling = it.harBehovForBehandling,
                     harBehovForTiltak = it.harBehovForTiltak,
                     harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid

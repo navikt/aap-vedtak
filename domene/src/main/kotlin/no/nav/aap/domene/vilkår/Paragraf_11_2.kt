@@ -177,7 +177,6 @@ internal class Paragraf_11_2 private constructor(
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_11_2_maskinell)
         maskinelleLøsninger.addAll(dtoMaskinell.map {
             LøsningMaskinellParagraf_11_2(
-                it.vurdertAv,
                 enumValueOf(it.erMedlem)
             )
         })
@@ -185,7 +184,7 @@ internal class Paragraf_11_2 private constructor(
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoManuell = requireNotNull(vilkårsvurdering.løsning_11_2_manuell)
-        manuelleLøsninger.addAll(dtoManuell.map { LøsningManuellParagraf_11_2(it.vurdertAv, enumValueOf(it.erMedlem)) })
+        manuelleLøsninger.addAll(dtoManuell.map { LøsningManuellParagraf_11_2(it.vurdertAv, it.tidspunktForVurdering, enumValueOf(it.erMedlem)) })
     }
 
     internal companion object {

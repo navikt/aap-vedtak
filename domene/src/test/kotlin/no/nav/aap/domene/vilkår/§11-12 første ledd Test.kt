@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class `§11-12 første ledd Test` {
 
@@ -20,7 +21,7 @@ internal class `§11-12 første ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_12FørsteLedd("saksbehandler", "SPS", "INGEN", "", LocalDate.now())
+        val løsning = LøsningParagraf_11_12FørsteLedd("saksbehandler", LocalDateTime.now(),"SPS", "INGEN", "", LocalDate.now())
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())

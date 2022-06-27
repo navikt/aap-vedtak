@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertFalse
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 import kotlin.test.assertEquals
 
 internal class `§11-2 Test` {
@@ -27,7 +28,7 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        val løsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -48,7 +49,7 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
+        val løsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -69,7 +70,7 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2("maskinell saksbehandling", LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -89,12 +90,12 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2("maskinell saksbehandling", LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.JA)
+        val manuellLøsning = LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -114,12 +115,12 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2("maskinell saksbehandling", LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("saksbehandler", LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        val manuellLøsning = LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)

@@ -16,6 +16,7 @@ import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 internal class SøkerComponentTest {
 
@@ -93,6 +94,7 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningParagraf_11_5(
                 "veileder",
+                LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
                     nedsettelseSkyldesSykdomEllerSkade = true
@@ -188,6 +190,7 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningParagraf_11_5(
                 "veileder",
+                LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
                     nedsettelseSkyldesSykdomEllerSkade = true
@@ -227,7 +230,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA))
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -261,11 +264,12 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA))
-        søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", true))
+        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(),true))
         søker.håndterLøsning(
             LøsningParagraf_11_5(
                 "veileder",
+                LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
                     nedsettelseSkyldesSykdomEllerSkade = true
@@ -275,14 +279,15 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningParagraf_11_6(
                 vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", "SPS", "INGEN", "", LocalDate.now()))
-        søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", true))
-        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021))
+        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", LocalDateTime.now(), "SPS", "INGEN", "", LocalDate.now()))
+        søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(),13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -312,12 +317,13 @@ internal class SøkerComponentTest {
             dtoSøker = søker.toDto()
         }
 
-        medSøker { håndterLøsning(LøsningMaskinellParagraf_11_2("saksbehandler", LøsningMaskinellParagraf_11_2.ErMedlem.JA)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_3("saksbehandler", true)) }
+        medSøker { håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true)) }
         medSøker {
             håndterLøsning(
                 LøsningParagraf_11_5(
                     "veileder",
+                    LocalDateTime.now(),
                     LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                         kravOmNedsattArbeidsevneErOppfylt = true,
                         nedsettelseSkyldesSykdomEllerSkade = true
@@ -329,6 +335,7 @@ internal class SøkerComponentTest {
             håndterLøsning(
                 LøsningParagraf_11_6(
                     vurdertAv = "saksbehandler",
+                    tidspunktForVurdering = LocalDateTime.now(),
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
                     harMulighetForÅKommeIArbeid = true
@@ -339,6 +346,7 @@ internal class SøkerComponentTest {
             håndterLøsning(
                 LøsningParagraf_11_12FørsteLedd(
                     "saksbehandler",
+                    LocalDateTime.now(),
                     "SPS",
                     "INGEN",
                     "",
@@ -346,8 +354,8 @@ internal class SøkerComponentTest {
                 )
             )
         }
-        medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", true)) }
-        medSøker { håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true)) }
+        medSøker { håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(),13 september 2021)) }
         medSøker {
             håndterLøsning(
                 LøsningInntekter(
@@ -373,7 +381,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 13 september 2021))
+        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(), 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(

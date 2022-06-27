@@ -5,6 +5,5 @@ import no.nav.aap.hendelse.LøsningManuellParagraf_11_2
 import no.nav.aap.hendelse.LøsningMaskinellParagraf_11_2
 
 fun Medlem.toDto(): LøsningMaskinellParagraf_11_2 = LøsningMaskinellParagraf_11_2(
-    vurdertAv = "maskinell saksbehandling",
     erMedlem = LøsningMaskinellParagraf_11_2.ErMedlem.valueOf(response.erMedlem.name)
 )

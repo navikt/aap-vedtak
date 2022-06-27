@@ -42,6 +42,7 @@ internal class MedlemskapYrkesskade private constructor(
         manuelleLøsninger.addAll(dtoManuell.map {
             LøsningManuellMedlemskapYrkesskade(
                 it.vurdertAv,
+                it.tidspunktForVurdering,
                 enumValueOf(it.erMedlem)
             )
         })

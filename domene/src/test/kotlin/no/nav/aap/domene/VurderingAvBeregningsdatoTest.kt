@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 
 internal class VurderingAvBeregningsdatoTest {
 
@@ -28,7 +29,7 @@ internal class VurderingAvBeregningsdatoTest {
         val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
         vurderingAvBeregningsdato.håndterSøknad(søknad)
 
-        vurderingAvBeregningsdato.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", 15 august 2018))
+        vurderingAvBeregningsdato.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(), 15 august 2018))
 
         assertEquals(15 august 2018, vurderingAvBeregningsdato.beregningsdato())
     }
