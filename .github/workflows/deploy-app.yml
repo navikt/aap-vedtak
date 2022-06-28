@@ -18,14 +18,14 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: styfle/cancel-workflow-action@0.9.1
+      - uses: styfle/cancel-workflow-action@0.10.0
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
         with:
           java-version: 18
           distribution: 'temurin'
 
-      - uses: gradle/gradle-build-action@v2.2.0
+      - uses: gradle/gradle-build-action@v2.2.1
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
