@@ -4,6 +4,10 @@ import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.avro.medlem.v1.Medlem
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
+import no.nav.aap.kafka.streams.Behov
+import no.nav.aap.kafka.streams.BehovExtractor
+import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.kafka.streams.sendBehov
 import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.kstream.KStream
 import java.time.LocalDate

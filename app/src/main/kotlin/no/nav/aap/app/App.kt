@@ -21,12 +21,11 @@ import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuell.manuellStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
-import no.nav.aap.kafka.KafkaConfig
-import no.nav.aap.kafka.streams.KStreams
-import no.nav.aap.kafka.streams.KafkaStreams
-import no.nav.aap.kafka.streams.consume
-import no.nav.aap.kafka.streams.produce
+import no.nav.aap.kafka.streams.*
+import no.nav.aap.kafka.streams.extension.consume
+import no.nav.aap.kafka.streams.extension.produce
 import no.nav.aap.kafka.streams.store.scheduleMetrics
+import no.nav.aap.kafka.vanilla.KafkaConfig
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.streams.StreamsBuilder
@@ -37,7 +36,7 @@ fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-data class Config(val kafka: KafkaConfig)
+data class Config(val kafka: KStreamsConfig)
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
@@ -49,8 +48,8 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
     environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
 
-    val søknadProducer = kafka.createProducer(config.kafka, Topics.søknad)
-    val søkerProducer = kafka.createProducer(config.kafka, Topics.søkere)
+    val søknadProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søknad)
+    val søkerProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søkere)
 
     kafka.connect(
         config = config.kafka,
@@ -64,14 +63,14 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
-internal fun topology(registry: MeterRegistry, migrationProducer: Producer<String, SøkereKafkaDto>): Topology {
+internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, SøkereKafkaDto>): Topology {
     val streams = StreamsBuilder()
     val søkerKTable = streams
         .consume(Topics.søkere)
         .produce(Tables.søkere)
 
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
-    søkerKTable.migrateStateStore(Tables.søkere, migrationProducer)
+    søkerKTable.migrateStateStore(Tables.søkere, søkerProducer)
 
     streams.søknadStream(søkerKTable)
     streams.medlemStream(søkerKTable)

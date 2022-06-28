@@ -1,10 +1,11 @@
 kafka:
   application-id: ${KAFKA_STREAMS_APPLICATION_ID:-vedtak}
   brokers: ${KAFKA_BROKERS:-localhost:9092}
-  truststorePath: ${KAFKA_TRUSTSTORE_PATH:-}
-  keystorePath: ${KAFKA_KEYSTORE_PATH:-}
-  credstorePsw: ${KAFKA_CREDSTORE_PASSWORD:-}
-  clientId: ${KAFKA_CLIENT_ID:-vedtak}
-  schema-registry-url: ${KAFKA_SCHEMA_REGISTRY:-http://localhost:8081}
-  schema-registry-user: ${KAFKA_SCHEMA_REGISTRY_USER:-}
-  schema-registry-pwd: ${KAFKA_SCHEMA_REGISTRY_PASSWORD:-}
+  ssl:
+    truststorePath: ${KAFKA_TRUSTSTORE_PATH:-}
+    keystorePath: ${KAFKA_KEYSTORE_PATH:-}
+    credstorePsw: ${KAFKA_CREDSTORE_PASSWORD:-}
+  schema-registry:
+    url: ${KAFKA_SCHEMA_REGISTRY:-http://localhost:8081}
+    user: ${KAFKA_SCHEMA_REGISTRY_USER:-}
+    password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD:-}

@@ -6,7 +6,8 @@ import no.nav.aap.app.modell.*
 import no.nav.aap.domene.Søker
 import no.nav.aap.hendelse.Behov
 import no.nav.aap.hendelse.DtoBehov
-import no.nav.aap.kafka.streams.*
+import no.nav.aap.kafka.streams.Topic
+import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 

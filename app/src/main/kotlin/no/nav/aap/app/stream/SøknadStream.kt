@@ -9,7 +9,7 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Søknad
-import no.nav.aap.kafka.streams.*
+import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 import org.slf4j.LoggerFactory
