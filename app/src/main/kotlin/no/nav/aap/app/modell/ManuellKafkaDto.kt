@@ -80,6 +80,6 @@ data class Løsning_11_29_manuell(val vurdertAv: String, val tidspunktForVurderi
 }
 
 data class LøsningVurderingAvBeregningsdato(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime,  val beregningsdato: LocalDate) {
-    private fun toDto() = DtoLøsningVurderingAvBeregningsdato(vurdertAv, tidspunktForVurdering, beregningsdato)
+    private fun toDto() = DtoLøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
     internal fun håndter(søker: Søker) = toDto().håndter(søker)
 }

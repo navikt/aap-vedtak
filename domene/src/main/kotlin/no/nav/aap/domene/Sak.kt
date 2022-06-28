@@ -19,7 +19,6 @@ internal class Sak private constructor(
     private val inntektshistorikk: Inntektshistorikk
 ) {
     private val sakstype: Sakstype get() = sakstyper.last()
-    private lateinit var vurderingAvBeregningsdato: VurderingAvBeregningsdato
     private lateinit var vurderingsdato: LocalDate
     private lateinit var søknadstidspunkt: LocalDateTime
     private lateinit var vedtak: Vedtak
@@ -78,7 +77,7 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
-    internal fun håndterLøsning(løsning: LøsningVurderingAvBeregningsdato) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_19) {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -157,7 +156,7 @@ internal class Sak private constructor(
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_19) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
@@ -170,7 +169,6 @@ internal class Sak private constructor(
             tilstand = tilstandsnavn.name,
             sakstyper = sak.sakstyper.toDto(),
             vurderingsdato = sak.vurderingsdato, // ALLTID SATT
-            vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
             søknadstidspunkt = sak.søknadstidspunkt,
             vedtak = null
         )
@@ -178,7 +176,6 @@ internal class Sak private constructor(
         open fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
             sak.søknadstidspunkt = dtoSak.søknadstidspunkt
             sak.vurderingsdato = dtoSak.vurderingsdato
-            sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
         }
 
         object Start : Tilstand(Tilstandsnavn.START) {
@@ -188,9 +185,6 @@ internal class Sak private constructor(
 
                 opprettLøype(sak, søknad)
                 sak.sakstype.håndterSøknad(søknad, fødselsdato, sak.vurderingsdato)
-
-                sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato()
-                sak.vurderingAvBeregningsdato.håndterSøknad(søknad)
 
                 vurderNestetilstand(sak, søknad)
             }
@@ -278,14 +272,14 @@ internal class Sak private constructor(
                 vurderNesteTilstand(sak, løsning)
             }
 
-            override fun håndterLøsning(sak: Sak, løsning: LøsningVurderingAvBeregningsdato) {
-                sak.vurderingAvBeregningsdato.håndterLøsning(løsning)
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_19) {
+                sak.sakstype.håndterLøsning(løsning)
                 vurderNesteTilstand(sak, løsning)
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 when {
-                    sak.sakstype.erAlleOppfylt() && sak.vurderingAvBeregningsdato.erFerdig() ->
+                    sak.sakstype.erAlleOppfylt() ->
                         sak.tilstand(BeregnInntekt, hendelse)
                     sak.sakstype.erNoenIkkeOppfylt() ->
                         sak.tilstand(IkkeOppfylt, hendelse)
@@ -298,8 +292,8 @@ internal class Sak private constructor(
             override fun onEntry(sak: Sak, hendelse: Hendelse) {
                 hendelse.opprettBehov(
                     BehovInntekter(
-                        fom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(3),
-                        tom = Year.from(sak.vurderingAvBeregningsdato.beregningsdato()).minusYears(1)
+                        fom = Year.from(sak.sakstype.beregningsdato()).minusYears(3),
+                        tom = Year.from(sak.sakstype.beregningsdato()).minusYears(1)
                     )
                 )
             }
@@ -309,7 +303,7 @@ internal class Sak private constructor(
 
                 sak.vedtak = sak.sakstype.opprettVedtak(
                     sak.inntektshistorikk,
-                    sak.vurderingAvBeregningsdato.beregningsdato(),
+                    sak.sakstype.beregningsdato(),
                     fødselsdato
                 )
 
@@ -324,7 +318,6 @@ internal class Sak private constructor(
                 tilstand = tilstandsnavn.name,
                 sakstyper = sak.sakstyper.toDto(),
                 vurderingsdato = sak.vurderingsdato, // ALLTID SATT
-                vurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.toDto(),
                 søknadstidspunkt = sak.søknadstidspunkt,
                 vedtak = sak.vedtak.toDto()
             )
@@ -332,7 +325,6 @@ internal class Sak private constructor(
             override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
                 sak.søknadstidspunkt = dtoSak.søknadstidspunkt
                 sak.vurderingsdato = dtoSak.vurderingsdato
-                sak.vurderingAvBeregningsdato = VurderingAvBeregningsdato.gjenopprett(dtoSak.vurderingAvBeregningsdato)
                 val dtoVedtak = requireNotNull(dtoSak.vedtak)
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }

@@ -49,7 +49,7 @@ internal class ApiTest {
             }
 
             manuell_11_3_Topic.produce(fnr) {
-                Løsning_11_3_manuell("saksbehandler", tidspunktForVurdering,true)
+                Løsning_11_3_manuell("saksbehandler", tidspunktForVurdering, true)
             }
             manuell_11_5_Topic.produce(fnr) {
                 Løsning_11_5_manuell(
@@ -79,7 +79,7 @@ internal class ApiTest {
                 )
             }
             manuell_11_29_Topic.produce(fnr) {
-                Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering,true)
+                Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering, true)
             }
             manuell_beregningsdato_Topic.produce(fnr) {
                 LøsningVurderingAvBeregningsdato("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
@@ -130,8 +130,8 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_2_maskinell = listOf(
                                             DtoLøsningMaskinellParagraf_11_2(
-                                            "JA"
-                                        )
+                                                "JA"
+                                            )
                                         ),
                                     ),
                                     DtoVilkårsvurdering(
@@ -142,8 +142,12 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_3_manuell = listOf(DtoLøsningParagraf_11_3("saksbehandler",
-                                            tidspunktForVurdering,true))
+                                        løsning_11_3_manuell = listOf(
+                                            DtoLøsningParagraf_11_3(
+                                                "saksbehandler",
+                                                tidspunktForVurdering, true
+                                            )
+                                        )
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
@@ -171,13 +175,15 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_5_manuell = listOf(DtoLøsningParagraf_11_5(
-                                            vurdertAv = "veileder",
-                                            tidspunktForVurdering = tidspunktForVurdering,
-                                            kravOmNedsattArbeidsevneErOppfylt = true,
-                                            nedsettelseSkyldesSykdomEllerSkade = true,
+                                        løsning_11_5_manuell = listOf(
+                                            DtoLøsningParagraf_11_5(
+                                                vurdertAv = "veileder",
+                                                tidspunktForVurdering = tidspunktForVurdering,
+                                                kravOmNedsattArbeidsevneErOppfylt = true,
+                                                nedsettelseSkyldesSykdomEllerSkade = true,
+                                            )
                                         )
-                                    )),
+                                    ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(5),
                                         vurdertAv = "saksbehandler",
@@ -186,14 +192,16 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_6_manuell = listOf(DtoLøsningParagraf_11_6(
-                                            vurdertAv = "saksbehandler",
-                                            tidspunktForVurdering = tidspunktForVurdering,
-                                            harBehovForBehandling = true,
-                                            harBehovForTiltak = true,
-                                            harMulighetForÅKommeIArbeid = true
+                                        løsning_11_6_manuell = listOf(
+                                            DtoLøsningParagraf_11_6(
+                                                vurdertAv = "saksbehandler",
+                                                tidspunktForVurdering = tidspunktForVurdering,
+                                                harBehovForBehandling = true,
+                                                harBehovForTiltak = true,
+                                                harMulighetForÅKommeIArbeid = true
+                                            )
                                         )
-                                    )),
+                                    ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(6),
                                         vurdertAv = "saksbehandler",
@@ -202,37 +210,51 @@ internal class ApiTest {
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_12_ledd1_manuell = listOf(DtoLøsningParagraf_11_12_ledd1(
-                                            vurdertAv = "saksbehandler",
-                                            tidspunktForVurdering = tidspunktForVurdering,
-                                            bestemmesAv = "SPS",
-                                            unntak = "INGEN",
-                                            unntaksbegrunnelse = "",
-                                            manueltSattVirkningsdato = LocalDate.now()
+                                        løsning_11_12_ledd1_manuell = listOf(
+                                            DtoLøsningParagraf_11_12_ledd1(
+                                                vurdertAv = "saksbehandler",
+                                                tidspunktForVurdering = tidspunktForVurdering,
+                                                bestemmesAv = "SPS",
+                                                unntak = "INGEN",
+                                                unntaksbegrunnelse = "",
+                                                manueltSattVirkningsdato = LocalDate.now()
+                                            )
                                         )
-                                    )),
+                                    ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(7),
+                                        vurdertAv = "saksbehandler",
+                                        godkjentAv = null,
+                                        paragraf = "PARAGRAF_11_19",
+                                        ledd = listOf("LEDD_1"),
+                                        tilstand = "OPPFYLT_MANUELT",
+                                        utfall = Utfall.OPPFYLT,
+                                        løsning_11_19_manuell = listOf(
+                                            DtoLøsningParagraf_11_19(
+                                                vurdertAv = "saksbehandler",
+                                                tidspunktForVurdering = tidspunktForVurdering,
+                                                beregningsdato = LocalDate.of(2022, 1, 1)
+                                            )
+                                        )
+                                    ),
+                                    DtoVilkårsvurdering(
+                                        vilkårsvurderingsid = vilkårsvurderingsid(8),
                                         vurdertAv = "saksbehandler",
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_29",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
-                                        løsning_11_29_manuell = listOf(DtoLøsningParagraf_11_29("saksbehandler",
-                                            tidspunktForVurdering,true))
+                                        løsning_11_29_manuell = listOf(
+                                            DtoLøsningParagraf_11_29(
+                                                "saksbehandler",
+                                                tidspunktForVurdering, true
+                                            )
+                                        )
                                     )
                                 )
                             )
                         ),
-                        vurderingAvBeregningsdato = DtoVurderingAvBeregningsdato(
-                            tilstand = "FERDIG",
-                            løsningVurderingAvBeregningsdato = listOf(DtoLøsningVurderingAvBeregningsdato(
-                                vurdertAv = "saksbehandler",
-                                tidspunktForVurdering = tidspunktForVurdering,
-                                beregningsdato = LocalDate.of(2022, 1, 1)
-                            )
-                        )),
                         søknadstidspunkt = søknadstidspunkt,
                         vedtak = DtoVedtak(
                             vedtaksid = actual.saker.first().vedtak!!.vedtaksid,

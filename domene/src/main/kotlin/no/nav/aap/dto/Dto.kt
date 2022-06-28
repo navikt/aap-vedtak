@@ -26,7 +26,6 @@ data class DtoSak(
     val tilstand: String,
     val sakstyper: List<DtoSakstype>,
     val vurderingsdato: LocalDate,
-    val vurderingAvBeregningsdato: DtoVurderingAvBeregningsdato,
     val søknadstidspunkt: LocalDateTime,
     val vedtak: DtoVedtak?
 )
@@ -55,6 +54,7 @@ data class DtoVilkårsvurdering(
     val løsning_11_5_yrkesskade_manuell: List<DtoLøsningParagraf_11_5_yrkesskade>? = null,
     val løsning_11_6_manuell: List<DtoLøsningParagraf_11_6>? = null,
     val løsning_11_12_ledd1_manuell: List<DtoLøsningParagraf_11_12_ledd1>? = null,
+    val løsning_11_19_manuell: List<DtoLøsningParagraf_11_19>? = null,
     val løsning_11_22_manuell: List<DtoLøsningParagraf_11_22>? = null,
     val løsning_11_29_manuell: List<DtoLøsningParagraf_11_29>? = null,
 )
@@ -243,10 +243,10 @@ data class DtoLøsningParagraf_11_29(val vurdertAv: String, val tidspunktForVurd
 
 data class DtoVurderingAvBeregningsdato(
     val tilstand: String,
-    val løsningVurderingAvBeregningsdato: List<DtoLøsningVurderingAvBeregningsdato>?
+    val løsningVurderingAvBeregningsdato: List<DtoLøsningParagraf_11_19>?
 )
 
-data class DtoLøsningVurderingAvBeregningsdato(
+data class DtoLøsningParagraf_11_19(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val beregningsdato: LocalDate
@@ -257,7 +257,7 @@ data class DtoLøsningVurderingAvBeregningsdato(
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningVurderingAvBeregningsdato(vurdertAv, tidspunktForVurdering, beregningsdato)
+    private fun toLøsning() = LøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
 }
 
 data class DtoVedtak(

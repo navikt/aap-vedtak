@@ -73,7 +73,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MANUELT",
@@ -105,7 +105,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MANUELT",
@@ -126,7 +126,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -158,7 +158,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -201,7 +201,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -235,7 +235,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(8, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -287,7 +287,7 @@ internal class SøkerComponentTest {
         )
         søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", LocalDateTime.now(), "SPS", "INGEN", "", LocalDate.now()))
         søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
-        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(),13 september 2021))
+        søker.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -355,7 +355,7 @@ internal class SøkerComponentTest {
             )
         }
         medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true)) }
-        medSøker { håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(),13 september 2021)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021)) }
         medSøker {
             håndterLøsning(
                 LøsningInntekter(
@@ -381,7 +381,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(), 13 september 2021))
+        søker.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(

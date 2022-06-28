@@ -20,13 +20,13 @@ interface Behov {
 
 interface Lytter {
     fun medlem(ident: String) {}
-    fun behovVurderingAvBeregningsdato(ident: String) {}
     fun behov_11_3(ident: String) {}
     fun behov_11_4FørsteLedd(ident: String) {}
     fun behov_11_4AndreOgTredjeLedd(ident: String) {}
     fun behov_11_5(ident: String) {}
     fun behov_11_6(ident: String) {}
     fun behov_11_12FørsteLedd(ident: String) {}
+    fun behov_11_19(ident: String) {}
     fun behov_11_22(ident: String) {}
     fun behov_11_29(ident: String) {}
     fun behovInntekter(ident: String, fom: Year, tom: Year) {}
@@ -83,15 +83,15 @@ interface DtoBehov {
         }
     }
 
-    class DtoBehov_11_29(private val ident: String) : DtoBehov {
+    class DtoBehov_11_19(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
-            visitor.behov_11_29(ident)
+            visitor.behov_11_19(ident)
         }
     }
 
-    class DtoBehovVurderingAvBeregningsdato(private val ident: String) : DtoBehov {
+    class DtoBehov_11_29(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
-            visitor.behovVurderingAvBeregningsdato(ident)
+            visitor.behov_11_29(ident)
         }
     }
 

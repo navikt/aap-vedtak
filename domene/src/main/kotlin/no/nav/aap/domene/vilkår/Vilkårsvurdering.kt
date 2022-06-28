@@ -31,6 +31,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         PARAGRAF_11_6,
         PARAGRAF_11_12,
         PARAGRAF_11_14,
+        PARAGRAF_11_19,
         PARAGRAF_11_22,
         PARAGRAF_11_29
     }
@@ -107,6 +108,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_19) = callWithReceiver {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_22) = callWithReceiver {
         tilstand.håndterLøsning(this, løsning)
     }
@@ -123,6 +128,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     internal fun yrkesskade() = callWithReceiver {
         tilstand.yrkesskade(this)
     }
+
+    internal fun beregningsdato() = callWithReceiver { tilstand.beregningsdato(this) }
 
     internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
         protected val tilstandsnavn: Tilstandsnavn,
@@ -235,6 +242,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
+            løsning: LøsningParagraf_11_19
+        ) {
+            log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
+        internal open fun håndterLøsning(
+            vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_22
         ) {
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
@@ -249,8 +263,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         //FIXME: Noe skurr med denne også
         internal open fun yrkesskade(paragraf1122: PARAGRAF): Yrkesskade {
-            error("") //FIXME
+            error("Kun for 11-22") //FIXME
         }
+
+        internal open fun beregningsdato(vilkårsvurdering: PARAGRAF): LocalDate? = null //TODO("Kun for 11-19")
 
         internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
@@ -345,6 +361,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 }
                 Paragraf.PARAGRAF_11_14 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_14.Companion::gjenopprett)
+                Paragraf.PARAGRAF_11_19 ->
+                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_19.Companion::gjenopprett)
                 Paragraf.PARAGRAF_11_22 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_22.Companion::gjenopprett)
                 Paragraf.PARAGRAF_11_29 ->

@@ -71,6 +71,10 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
+    internal open fun håndterLøsning(løsning: LøsningParagraf_11_19) {
+        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
@@ -83,6 +87,8 @@ internal abstract class Sakstype private constructor(
 
     internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
     internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
+
+    internal fun beregningsdato() = vilkårsvurderinger.firstNotNullOf { it.beregningsdato() }
 
     internal class Standard private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering<*>>
@@ -117,7 +123,8 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_5(),
                     Paragraf_11_6(),
                     Paragraf_11_12FørsteLedd(),
-                    Paragraf_11_29()
+                    Paragraf_11_19(),
+                    Paragraf_11_29(),
                 )
 
                 return Standard(vilkårsvurderinger)
@@ -165,7 +172,8 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_6(),
                     Paragraf_11_12FørsteLedd(),
                     paragraf1122,
-                    Paragraf_11_29()
+                    Paragraf_11_19(),
+                    Paragraf_11_29(),
                 )
 
                 return Yrkesskade(paragraf1122, vilkårsvurderinger)
@@ -201,7 +209,10 @@ internal abstract class Sakstype private constructor(
 
         internal companion object {
             internal fun opprettStudent(): Student {
-                val vilkårsvurderinger = listOf(Paragraf_11_14())
+                val vilkårsvurderinger = listOf(
+                    Paragraf_11_14(),
+                    Paragraf_11_19(),
+                )
                 return Student(vilkårsvurderinger)
             }
 

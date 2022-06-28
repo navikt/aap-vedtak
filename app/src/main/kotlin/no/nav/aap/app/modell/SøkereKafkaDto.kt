@@ -5,6 +5,7 @@ import no.nav.aap.app.modell.SøkereKafkaDto.LøsningManuellParagraf_11_2.Compan
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningMaskinellParagraf_11_2.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_12_ledd1.Companion.toDto
+import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_19.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_22.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_29.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_3.Companion.toDto
@@ -12,7 +13,6 @@ import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3.C
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_5.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_6.Companion.toDto
-import no.nav.aap.app.modell.SøkereKafkaDto.LøsningVurderingAvBeregningsdato.Companion.toDto
 import no.nav.aap.dto.*
 import no.nav.aap.kafka.serde.json.Migratable
 import java.time.LocalDate
@@ -31,7 +31,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     internal companion object {
-        internal const val VERSION = 4
+        internal const val VERSION = 5
     }
 
     data class Sak(
@@ -39,7 +39,6 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val sakstyper: List<Sakstype>,
         val vurderingsdato: LocalDate,
-        val vurderingAvBeregningsdato: VurderingAvBeregningsdato,
         val søknadstidspunkt: LocalDateTime,
         val vedtak: Vedtak?
     ) {
@@ -48,7 +47,6 @@ data class SøkereKafkaDto(
             tilstand = tilstand,
             vurderingsdato = vurderingsdato,
             sakstyper = sakstyper.map(Sakstype::toDto),
-            vurderingAvBeregningsdato = vurderingAvBeregningsdato.toDto(),
             søknadstidspunkt = søknadstidspunkt,
             vedtak = vedtak?.toDto()
         )
@@ -84,6 +82,7 @@ data class SøkereKafkaDto(
         val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5_yrkesskade>? = null,
         val løsning_11_6_manuell: List<LøsningParagraf_11_6>? = null,
         val løsning_11_12_ledd1_manuell: List<LøsningParagraf_11_12_ledd1>? = null,
+        val løsning_11_19_manuell: List<LøsningParagraf_11_19>? = null,
         val løsning_11_22_manuell: List<LøsningParagraf_11_22>? = null,
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>? = null,
     ) {
@@ -105,6 +104,7 @@ data class SøkereKafkaDto(
             løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.toDto(),
             løsning_11_6_manuell = løsning_11_6_manuell?.toDto(),
             løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.toDto(),
+            løsning_11_19_manuell = løsning_11_19_manuell?.toDto(),
             løsning_11_22_manuell = løsning_11_22_manuell?.toDto(),
             løsning_11_29_manuell = løsning_11_29_manuell?.toDto(),
         )
@@ -112,16 +112,23 @@ data class SøkereKafkaDto(
 
     data class LøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
         internal companion object {
-            internal fun Iterable<LøsningMaskinellMedlemskapYrkesskade>.toDto() = map(LøsningMaskinellMedlemskapYrkesskade::toDto)
+            internal fun Iterable<LøsningMaskinellMedlemskapYrkesskade>.toDto() =
+                map(LøsningMaskinellMedlemskapYrkesskade::toDto)
         }
 
         fun toDto() = DtoLøsningMaskinellMedlemskapYrkesskade(erMedlem)
     }
 
-    data class LøsningManuellMedlemskapYrkesskade(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erMedlem: String) {
+    data class LøsningManuellMedlemskapYrkesskade(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erMedlem: String
+    ) {
         internal companion object {
-            internal fun Iterable<LøsningManuellMedlemskapYrkesskade>.toDto() = map(LøsningManuellMedlemskapYrkesskade::toDto)
+            internal fun Iterable<LøsningManuellMedlemskapYrkesskade>.toDto() =
+                map(LøsningManuellMedlemskapYrkesskade::toDto)
         }
+
         fun toDto() = DtoLøsningManuellMedlemskapYrkesskade(vurdertAv, tidspunktForVurdering, erMedlem)
     }
 
@@ -129,27 +136,44 @@ data class SøkereKafkaDto(
         internal companion object {
             internal fun Iterable<LøsningMaskinellParagraf_11_2>.toDto() = map(LøsningMaskinellParagraf_11_2::toDto)
         }
+
         fun toDto() = DtoLøsningMaskinellParagraf_11_2(erMedlem)
     }
 
-    data class LøsningManuellParagraf_11_2(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erMedlem: String) {
+    data class LøsningManuellParagraf_11_2(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erMedlem: String
+    ) {
         internal companion object {
             internal fun Iterable<LøsningManuellParagraf_11_2>.toDto() = map(LøsningManuellParagraf_11_2::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_2(vurdertAv, tidspunktForVurdering, erMedlem)
     }
 
-    data class LøsningParagraf_11_3(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erOppfylt: Boolean) {
+    data class LøsningParagraf_11_3(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erOppfylt: Boolean
+    ) {
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_3>.toDto() = map(LøsningParagraf_11_3::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_3(vurdertAv, tidspunktForVurdering, erOppfylt)
     }
 
-    data class LøsningParagraf_11_4_ledd2_ledd3(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erOppfylt: Boolean) {
+    data class LøsningParagraf_11_4_ledd2_ledd3(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erOppfylt: Boolean
+    ) {
         internal companion object {
-            internal fun Iterable<LøsningParagraf_11_4_ledd2_ledd3>.toDto() = map(LøsningParagraf_11_4_ledd2_ledd3::toDto)
+            internal fun Iterable<LøsningParagraf_11_4_ledd2_ledd3>.toDto() =
+                map(LøsningParagraf_11_4_ledd2_ledd3::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(vurdertAv, tidspunktForVurdering, erOppfylt)
     }
 
@@ -162,6 +186,7 @@ data class SøkereKafkaDto(
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_5>.toDto() = map(LøsningParagraf_11_5::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_5(
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
@@ -179,6 +204,7 @@ data class SøkereKafkaDto(
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_5_yrkesskade>.toDto() = map(LøsningParagraf_11_5_yrkesskade::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_5_yrkesskade(
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
@@ -197,6 +223,7 @@ data class SøkereKafkaDto(
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_6>.toDto() = map(LøsningParagraf_11_6::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_6(
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
@@ -217,6 +244,7 @@ data class SøkereKafkaDto(
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_12_ledd1>.toDto() = map(LøsningParagraf_11_12_ledd1::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_12_ledd1(
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
@@ -225,6 +253,18 @@ data class SøkereKafkaDto(
             unntaksbegrunnelse = unntaksbegrunnelse,
             manueltSattVirkningsdato = manueltSattVirkningsdato
         )
+    }
+
+    data class LøsningParagraf_11_19(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val beregningsdato: LocalDate
+    ) {
+        internal companion object {
+            internal fun Iterable<LøsningParagraf_11_19>.toDto() = map(LøsningParagraf_11_19::toDto)
+        }
+
+        fun toDto() = DtoLøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
     }
 
     data class LøsningParagraf_11_22(
@@ -238,6 +278,7 @@ data class SøkereKafkaDto(
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_22>.toDto() = map(LøsningParagraf_11_22::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_22(
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
@@ -248,10 +289,15 @@ data class SøkereKafkaDto(
         )
     }
 
-    data class LøsningParagraf_11_29(val vurdertAv: String,  val tidspunktForVurdering: LocalDateTime, val erOppfylt: Boolean) {
+    data class LøsningParagraf_11_29(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erOppfylt: Boolean
+    ) {
         internal companion object {
             internal fun Iterable<LøsningParagraf_11_29>.toDto() = map(LøsningParagraf_11_29::toDto)
         }
+
         fun toDto() = DtoLøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
     }
 
@@ -297,27 +343,6 @@ data class SøkereKafkaDto(
             inntekter = inntekter.map { it.toDto() },
             inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toDto(),
         )
-    }
-
-    data class VurderingAvBeregningsdato(
-        val tilstand: String,
-        val løsningVurderingAvBeregningsdato: List<LøsningVurderingAvBeregningsdato>?
-    ) {
-        fun toDto() = DtoVurderingAvBeregningsdato(
-            tilstand = tilstand,
-            løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.toDto()
-        )
-    }
-
-    data class LøsningVurderingAvBeregningsdato(
-        val vurdertAv: String,
-        val tidspunktForVurdering: LocalDateTime,
-        val beregningsdato: LocalDate
-    ) {
-        internal companion object {
-            internal fun Iterable<LøsningVurderingAvBeregningsdato>.toDto() = map(LøsningVurderingAvBeregningsdato::toDto)
-        }
-        fun toDto() = DtoLøsningVurderingAvBeregningsdato(vurdertAv, tidspunktForVurdering, beregningsdato)
     }
 
     data class Inntekt(
@@ -462,6 +487,13 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                     manueltSattVirkningsdato = it.manueltSattVirkningsdato
                                 )
                             },
+                            løsning_11_19_manuell = vilkår.løsning_11_19_manuell?.map {
+                                SøkereKafkaDto.LøsningParagraf_11_19(
+                                    vurdertAv = it.vurdertAv,
+                                    tidspunktForVurdering = it.tidspunktForVurdering,
+                                    beregningsdato = it.beregningsdato
+                                )
+                            },
                             løsning_11_22_manuell = vilkår.løsning_11_22_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_22(
                                     vurdertAv = it.vurdertAv,
@@ -484,16 +516,6 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                 )
             },
             vurderingsdato = sak.vurderingsdato,
-            vurderingAvBeregningsdato = SøkereKafkaDto.VurderingAvBeregningsdato(
-                tilstand = sak.vurderingAvBeregningsdato.tilstand,
-                løsningVurderingAvBeregningsdato = sak.vurderingAvBeregningsdato.løsningVurderingAvBeregningsdato?.map {
-                    SøkereKafkaDto.LøsningVurderingAvBeregningsdato(
-                        vurdertAv = it.vurdertAv,
-                        tidspunktForVurdering = it.tidspunktForVurdering,
-                        beregningsdato = it.beregningsdato
-                    )
-                }
-            ),
             søknadstidspunkt = sak.søknadstidspunkt,
             vedtak = sak.vedtak?.let { vedtak ->
                 SøkereKafkaDto.Vedtak(

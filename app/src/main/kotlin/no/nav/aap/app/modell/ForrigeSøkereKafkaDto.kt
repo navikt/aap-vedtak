@@ -10,7 +10,7 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 3,
+    val version: Int = 4,
 ) {
     data class Sak(
         val saksid: UUID,
@@ -25,8 +25,7 @@ data class ForrigeSøkereKafkaDto(
             saksid = saksid,
             tilstand = tilstand,
             vurderingsdato = vurderingsdato,
-            sakstyper = sakstyper.map(Sakstype::toDto),
-            vurderingAvBeregningsdato = vurderingAvBeregningsdato.toDto(),
+            sakstyper = sakstyper.map { it.toDto(vurderingAvBeregningsdato.toDto()) },
             søknadstidspunkt = søknadstidspunkt,
             vedtak = vedtak?.toDto()
         )
@@ -37,10 +36,10 @@ data class ForrigeSøkereKafkaDto(
         val aktiv: Boolean,
         val vilkårsvurderinger: List<Vilkårsvurdering>,
     ) {
-        fun toDto() = SøkereKafkaDto.Sakstype(
+        fun toDto(paragraf_11_19: SøkereKafkaDto.Vilkårsvurdering) = SøkereKafkaDto.Sakstype(
             type = type,
             aktiv = aktiv,
-            vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto)
+            vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto) + paragraf_11_19
         )
     }
 
@@ -54,8 +53,8 @@ data class ForrigeSøkereKafkaDto(
         val utfall: String,
         val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskade>? = null,
         val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskade>? = null,
-        val løsning_11_2_maskinell: List<LøsningParagraf_11_2>? = null,
-        val løsning_11_2_manuell: List<LøsningParagraf_11_2>? = null,
+        val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2>? = null,
+        val løsning_11_2_manuell: List<LøsningManuellParagraf_11_2>? = null,
         val løsning_11_3_manuell: List<LøsningParagraf_11_3>? = null,
         val løsning_11_4_ledd2_ledd3_manuell: List<LøsningParagraf_11_4_ledd2_ledd3>? = null,
         val løsning_11_5_manuell: List<LøsningParagraf_11_5>? = null,
@@ -92,30 +91,51 @@ data class ForrigeSøkereKafkaDto(
         fun toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(erMedlem)
     }
 
-    data class LøsningManuellMedlemskapYrkesskade(val vurdertAv: String, val erMedlem: String) {
-        fun toDto() = SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(vurdertAv, LocalDateTime.now(), erMedlem)
+    data class LøsningManuellMedlemskapYrkesskade(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erMedlem: String
+    ) {
+        fun toDto() = SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(vurdertAv, tidspunktForVurdering, erMedlem)
     }
 
-    data class LøsningParagraf_11_2(val vurdertAv: String, val erMedlem: String) {
-        fun toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2(vurdertAv, LocalDateTime.now(), erMedlem)
+    data class LøsningMaskinellParagraf_11_2(val erMedlem: String) {
+        fun toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_2(erMedlem)
     }
 
-    data class LøsningParagraf_11_3(val vurdertAv: String, val erOppfylt: Boolean) {
-        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_3(vurdertAv, LocalDateTime.now(), erOppfylt)
+    data class LøsningManuellParagraf_11_2(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erMedlem: String
+    ) {
+        fun toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2(vurdertAv, tidspunktForVurdering, erMedlem)
     }
 
-    data class LøsningParagraf_11_4_ledd2_ledd3(val vurdertAv: String, val erOppfylt: Boolean) {
-        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(vurdertAv, LocalDateTime.now(), erOppfylt)
+    data class LøsningParagraf_11_3(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erOppfylt: Boolean
+    ) {
+        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_3(vurdertAv, tidspunktForVurdering, erOppfylt)
+    }
+
+    data class LøsningParagraf_11_4_ledd2_ledd3(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erOppfylt: Boolean
+    ) {
+        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(vurdertAv, tidspunktForVurdering, erOppfylt)
     }
 
     data class LøsningParagraf_11_5(
         val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
         val kravOmNedsattArbeidsevneErOppfylt: Boolean,
         val nedsettelseSkyldesSykdomEllerSkade: Boolean
     ) {
         fun toDto() = SøkereKafkaDto.LøsningParagraf_11_5(
             vurdertAv = vurdertAv,
-            tidspunktForVurdering = LocalDateTime.now(),
+            tidspunktForVurdering = tidspunktForVurdering,
             kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
             nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
         )
@@ -123,12 +143,13 @@ data class ForrigeSøkereKafkaDto(
 
     data class LøsningParagraf_11_5_yrkesskade(
         val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
         val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
         val arbeidsevneErNedsattMedMinst30Prosent: Boolean
     ) {
         fun toDto() = SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
             vurdertAv = vurdertAv,
-            tidspunktForVurdering = LocalDateTime.now(),
+            tidspunktForVurdering = tidspunktForVurdering,
             arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
             arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent,
         )
@@ -136,13 +157,14 @@ data class ForrigeSøkereKafkaDto(
 
     data class LøsningParagraf_11_6(
         val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
         val harBehovForBehandling: Boolean,
         val harBehovForTiltak: Boolean,
         val harMulighetForÅKommeIArbeid: Boolean
     ) {
         fun toDto() = SøkereKafkaDto.LøsningParagraf_11_6(
             vurdertAv = vurdertAv,
-            tidspunktForVurdering = LocalDateTime.now(),
+            tidspunktForVurdering = tidspunktForVurdering,
             harBehovForBehandling = harBehovForBehandling,
             harBehovForTiltak = harBehovForTiltak,
             harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
@@ -151,6 +173,7 @@ data class ForrigeSøkereKafkaDto(
 
     data class LøsningParagraf_11_12_ledd1(
         val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
         val bestemmesAv: String,
         val unntak: String,
         val unntaksbegrunnelse: String,
@@ -158,7 +181,7 @@ data class ForrigeSøkereKafkaDto(
     ) {
         fun toDto() = SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
             vurdertAv = vurdertAv,
-            tidspunktForVurdering = LocalDateTime.now(),
+            tidspunktForVurdering = tidspunktForVurdering,
             bestemmesAv = bestemmesAv,
             unntak = unntak,
             unntaksbegrunnelse = unntaksbegrunnelse,
@@ -168,6 +191,7 @@ data class ForrigeSøkereKafkaDto(
 
     data class LøsningParagraf_11_22(
         val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean,
         val andelNedsattArbeidsevne: Int,
         val år: Year,
@@ -175,7 +199,7 @@ data class ForrigeSøkereKafkaDto(
     ) {
         fun toDto() = SøkereKafkaDto.LøsningParagraf_11_22(
             vurdertAv = vurdertAv,
-            tidspunktForVurdering = LocalDateTime.now(),
+            tidspunktForVurdering = tidspunktForVurdering,
             erOppfylt = erOppfylt,
             andelNedsattArbeidsevne = andelNedsattArbeidsevne,
             år = år,
@@ -183,8 +207,12 @@ data class ForrigeSøkereKafkaDto(
         )
     }
 
-    data class LøsningParagraf_11_29(val vurdertAv: String, val erOppfylt: Boolean) {
-        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_29(vurdertAv, LocalDateTime.now(), erOppfylt)
+    data class LøsningParagraf_11_29(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val erOppfylt: Boolean
+    ) {
+        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
     }
 
     data class Vedtak(
@@ -235,17 +263,28 @@ data class ForrigeSøkereKafkaDto(
         val tilstand: String,
         val løsningVurderingAvBeregningsdato: List<LøsningVurderingAvBeregningsdato>?
     ) {
-        fun toDto() = SøkereKafkaDto.VurderingAvBeregningsdato(
-            tilstand = tilstand,
-            løsningVurderingAvBeregningsdato = løsningVurderingAvBeregningsdato?.map { it.toDto() }
+        fun toDto() = SøkereKafkaDto.Vilkårsvurdering(
+            vilkårsvurderingsid = UUID.randomUUID(),
+            vurdertAv = løsningVurderingAvBeregningsdato?.last()?.vurdertAv,
+            godkjentAv = null,
+            paragraf = "PARAGRAF_11_19",
+            ledd = listOf("LEDD_1"),
+            tilstand = when (tilstand) {
+                "START" -> "IKKE_VURDERT"
+                "FERDIG" -> "OPPFYLT_MANUELT"
+                else -> tilstand
+            },
+            utfall = if (tilstand == "FERDIG") "OPPFYLT" else "IKKE_VURDERT",
+            løsning_11_19_manuell = løsningVurderingAvBeregningsdato?.map { it.toDto() }
         )
     }
 
     data class LøsningVurderingAvBeregningsdato(
         val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
         val beregningsdato: LocalDate
     ) {
-        fun toDto() = SøkereKafkaDto.LøsningVurderingAvBeregningsdato(vurdertAv, LocalDateTime.now(), beregningsdato)
+        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
     }
 
     data class Inntekt(

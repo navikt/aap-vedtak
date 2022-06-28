@@ -103,7 +103,7 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(),13 september 2021))
+        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -183,7 +183,7 @@ internal class SakTest {
         sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningVurderingAvBeregningsdato("saksbehandler", LocalDateTime.now(),13 september 2021))
+        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
