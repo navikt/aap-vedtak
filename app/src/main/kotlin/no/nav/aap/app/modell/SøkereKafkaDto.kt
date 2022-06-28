@@ -1,10 +1,10 @@
 package no.nav.aap.app.modell
 
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade.Companion.toDto
+import no.nav.aap.app.modell.SøkereKafkaDto.LøsningManuellParagraf_11_2.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningMaskinellParagraf_11_2.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_12_ledd1.Companion.toDto
-import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_2.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_22.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_29.Companion.toDto
 import no.nav.aap.app.modell.SøkereKafkaDto.LøsningParagraf_11_3.Companion.toDto
@@ -77,7 +77,7 @@ data class SøkereKafkaDto(
         val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskade>? = null,
         val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskade>? = null,
         val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2>? = null,
-        val løsning_11_2_manuell: List<LøsningParagraf_11_2>? = null,
+        val løsning_11_2_manuell: List<LøsningManuellParagraf_11_2>? = null,
         val løsning_11_3_manuell: List<LøsningParagraf_11_3>? = null,
         val løsning_11_4_ledd2_ledd3_manuell: List<LøsningParagraf_11_4_ledd2_ledd3>? = null,
         val løsning_11_5_manuell: List<LøsningParagraf_11_5>? = null,
@@ -132,9 +132,9 @@ data class SøkereKafkaDto(
         fun toDto() = DtoLøsningMaskinellParagraf_11_2(erMedlem)
     }
 
-    data class LøsningParagraf_11_2(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erMedlem: String) {
+    data class LøsningManuellParagraf_11_2(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erMedlem: String) {
         internal companion object {
-            internal fun Iterable<LøsningParagraf_11_2>.toDto() = map(LøsningParagraf_11_2::toDto)
+            internal fun Iterable<LøsningManuellParagraf_11_2>.toDto() = map(LøsningManuellParagraf_11_2::toDto)
         }
         fun toDto() = DtoLøsningParagraf_11_2(vurdertAv, tidspunktForVurdering, erMedlem)
     }
@@ -407,7 +407,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_2_manuell = vilkår.løsning_11_2_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_2(
+                                SøkereKafkaDto.LøsningManuellParagraf_11_2(
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erMedlem = it.erMedlem

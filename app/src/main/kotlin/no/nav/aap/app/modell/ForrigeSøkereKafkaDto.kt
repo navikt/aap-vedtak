@@ -97,7 +97,7 @@ data class ForrigeSøkereKafkaDto(
     }
 
     data class LøsningParagraf_11_2(val vurdertAv: String, val erMedlem: String) {
-        fun toDto() = SøkereKafkaDto.LøsningParagraf_11_2(vurdertAv, LocalDateTime.now(), erMedlem)
+        fun toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2(vurdertAv, LocalDateTime.now(), erMedlem)
     }
 
     data class LøsningParagraf_11_3(val vurdertAv: String, val erOppfylt: Boolean) {
