@@ -50,6 +50,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 
     val søknadProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søknad)
     val søkerProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søkere)
+    val inntekterProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.inntekter)
 
     kafka.connect(
         config = config.kafka,
@@ -58,7 +59,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     )
 
     routing {
-        devTools(søknadProducer, søkerProducer)
+        devTools(søknadProducer, søkerProducer, inntekterProducer)
         actuator(prometheus, kafka)
     }
 }
