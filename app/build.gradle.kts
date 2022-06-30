@@ -12,7 +12,7 @@ dependencies {
 
     implementation("com.github.navikt.aap-libs:ktor-utils:2.1.3")
     implementation("com.github.navikt.aap-libs:kafka:2.1.3")
-    testImplementation("com.github.navikt.aap-libs:kafka-test:2.1.3")
+    testImplementation("com.github.navikt.aap-libs:kafka-test:2.1.4")
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.9")
 
