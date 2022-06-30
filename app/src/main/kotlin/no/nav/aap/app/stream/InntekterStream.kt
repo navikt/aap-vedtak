@@ -3,6 +3,7 @@ package no.nav.aap.app.stream
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.app.modell.SøkereKafkaDto
+import no.nav.aap.app.modell.toDto
 import no.nav.aap.app.modell.toJson
 import no.nav.aap.domene.Søker
 import no.nav.aap.kafka.streams.extension.*
