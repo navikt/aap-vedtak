@@ -10,14 +10,14 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 4,
+    val version: Int = 5,
 ) {
+
     data class Sak(
         val saksid: UUID,
         val tilstand: String,
         val sakstyper: List<Sakstype>,
         val vurderingsdato: LocalDate,
-        val vurderingAvBeregningsdato: VurderingAvBeregningsdato,
         val søknadstidspunkt: LocalDateTime,
         val vedtak: Vedtak?
     )
@@ -46,6 +46,7 @@ data class ForrigeSøkereKafkaDto(
         val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5_yrkesskade>? = null,
         val løsning_11_6_manuell: List<LøsningParagraf_11_6>? = null,
         val løsning_11_12_ledd1_manuell: List<LøsningParagraf_11_12_ledd1>? = null,
+        val løsning_11_19_manuell: List<LøsningParagraf_11_19>? = null,
         val løsning_11_22_manuell: List<LøsningParagraf_11_22>? = null,
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>? = null,
     )
@@ -109,6 +110,12 @@ data class ForrigeSøkereKafkaDto(
         val manueltSattVirkningsdato: LocalDate
     )
 
+    data class LøsningParagraf_11_19(
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val beregningsdato: LocalDate
+    )
+
     data class LøsningParagraf_11_22(
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
@@ -144,17 +151,6 @@ data class ForrigeSøkereKafkaDto(
     data class InntekterForBeregning(
         val inntekter: List<Inntekt>,
         val inntektsgrunnlagForÅr: InntektsgrunnlagForÅr
-    )
-
-    data class VurderingAvBeregningsdato(
-        val tilstand: String,
-        val løsningVurderingAvBeregningsdato: List<LøsningVurderingAvBeregningsdato>?
-    )
-
-    data class LøsningVurderingAvBeregningsdato(
-        val vurdertAv: String,
-        val tidspunktForVurdering: LocalDateTime,
-        val beregningsdato: LocalDate
     )
 
     data class Inntekt(

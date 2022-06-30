@@ -1,7 +1,6 @@
 package no.nav.aap.app.modell
 
 import no.nav.aap.app.modell.ForrigeSøkereKafkaDto.*
-import java.util.*
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -13,15 +12,15 @@ private fun Sak.toDto() = SøkereKafkaDto.Sak(
     saksid = saksid,
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    sakstyper = sakstyper.map { it.toDto(vurderingAvBeregningsdato.toDto()) },
+    sakstyper = sakstyper.map { it.toDto() },
     søknadstidspunkt = søknadstidspunkt,
     vedtak = vedtak?.toDto()
 )
 
-private fun Sakstype.toDto(paragraf_11_19: SøkereKafkaDto.Vilkårsvurdering) = SøkereKafkaDto.Sakstype(
+private fun Sakstype.toDto() = SøkereKafkaDto.Sakstype(
     type = type,
     aktiv = aktiv,
-    vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto) + paragraf_11_19
+    vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto)
 )
 
 private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
@@ -30,7 +29,19 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     godkjentAv = godkjentAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand =
+    when {
+        paragraf == "PARAGRAF_11_4" && ledd == listOf("LEDD_1") -> when (tilstand) {
+            "OPPFYLT" -> "OPPFYLT_MASKINELT"
+            "IKKE_OPPFYLT" -> "IKKE_OPPFYLT_MASKINELT"
+            else -> tilstand
+        }
+        else -> when (tilstand) {
+            "OPPFYLT" -> "OPPFYLT_MANUELT"
+            "IKKE_OPPFYLT" -> "IKKE_OPPFYLT_MANUELT"
+            else -> tilstand
+        }
+    },
     utfall = utfall,
     løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() },
     løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() },
@@ -42,6 +53,7 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.map { it.toDto() },
     løsning_11_6_manuell = løsning_11_6_manuell?.map { it.toDto() },
     løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.map { it.toDto() },
+    løsning_11_19_manuell = løsning_11_19_manuell?.map { it.toDto() },
     løsning_11_22_manuell = løsning_11_22_manuell?.map { it.toDto() },
     løsning_11_29_manuell = løsning_11_29_manuell?.map { it.toDto() },
 )
@@ -109,6 +121,12 @@ private fun LøsningParagraf_11_12_ledd1.toDto() = SøkereKafkaDto.LøsningParag
     manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
+private fun LøsningParagraf_11_19.toDto() = SøkereKafkaDto.LøsningParagraf_11_19(
+    vurdertAv = vurdertAv,
+    tidspunktForVurdering = tidspunktForVurdering,
+    beregningsdato = beregningsdato
+)
+
 private fun LøsningParagraf_11_22.toDto() = SøkereKafkaDto.LøsningParagraf_11_22(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -144,27 +162,6 @@ private fun Inntektsgrunnlag.toDto() = SøkereKafkaDto.Inntektsgrunnlag(
 private fun InntekterForBeregning.toDto() = SøkereKafkaDto.InntekterForBeregning(
     inntekter = inntekter.map { it.toDto() },
     inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toDto(),
-)
-
-private fun VurderingAvBeregningsdato.toDto() = SøkereKafkaDto.Vilkårsvurdering(
-    vilkårsvurderingsid = UUID.randomUUID(),
-    vurdertAv = løsningVurderingAvBeregningsdato?.last()?.vurdertAv,
-    godkjentAv = null,
-    paragraf = "PARAGRAF_11_19",
-    ledd = listOf("LEDD_1"),
-    tilstand = when (tilstand) {
-        "START" -> "IKKE_VURDERT"
-        "FERDIG" -> "OPPFYLT_MANUELT"
-        else -> tilstand
-    },
-    utfall = if (tilstand == "FERDIG") "OPPFYLT" else "IKKE_VURDERT",
-    løsning_11_19_manuell = løsningVurderingAvBeregningsdato?.map { it.toDto() }
-)
-
-private fun ForrigeSøkereKafkaDto.LøsningVurderingAvBeregningsdato.toDto() = SøkereKafkaDto.LøsningParagraf_11_19(
-    vurdertAv = vurdertAv,
-    tidspunktForVurdering = tidspunktForVurdering,
-    beregningsdato = beregningsdato
 )
 
 private fun Inntekt.toDto() = SøkereKafkaDto.Inntekt(
