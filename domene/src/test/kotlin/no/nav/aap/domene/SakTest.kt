@@ -31,7 +31,7 @@ internal class SakTest {
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MANUELT",
+            "OPPFYLT_MASKINELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -112,7 +112,7 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MANUELT",
+            "OPPFYLT_MASKINELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -191,7 +191,7 @@ internal class SakTest {
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MANUELT",
+            "OPPFYLT_MASKINELT",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )

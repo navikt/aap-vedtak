@@ -155,7 +155,7 @@ internal class ApiTest {
                                         godkjentAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MANUELT",
+                                        tilstand = "OPPFYLT_MASKINELT",
                                         utfall = Utfall.OPPFYLT
                                     ),
                                     DtoVilkårsvurdering(

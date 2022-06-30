@@ -55,7 +55,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         )
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_4FørsteLedd>() {
+    object Oppfylt : Tilstand.OppfyltMaskinelt<Paragraf_11_4FørsteLedd>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
             søknad: Søknad,
@@ -76,7 +76,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         )
     }
 
-    object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_4FørsteLedd>() {
+    object IkkeOppfylt : Tilstand.IkkeOppfyltMaskinelt<Paragraf_11_4FørsteLedd>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
             søknad: Søknad,
@@ -103,8 +103,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfylt
+            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT -> Oppfylt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT -> IkkeOppfylt
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_4FørsteLedd")
         }
     }
