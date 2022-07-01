@@ -22,6 +22,8 @@ spec:
     - team: aap
       application: vedtak
       access: readwrite
-    - team: "{{this.team}}"
-      application: "{{this.application}}"
-      access: "{{this.access}}"
+  {{#each kafka.acl.dev as |dev|}}
+    - team: "{{dev.team}}"
+      application: "{{dev.application}}"
+      access: "{{dev.access}}"
+  {{/each}}
