@@ -13,9 +13,8 @@ metadata:
 spec:
   pool: {{kafka.pool}}
   config:
-    cleanupPolicy: compact,delete
+    cleanupPolicy: compact
     partitions: 12
-    retentionHours: 168
   acl:
     - team: aap
       application: vedtak
@@ -23,9 +22,6 @@ spec:
     - team: aap
       application: utbetaling
       access: readwrite
-    - team: aap
-      application: aap-kafka-manager
-      access: read
-    - team: aap
-      application: kafka-cli
-      access: readwrite
+    - team: "{{this.team}}"
+      application: "{{this.application}}"
+      access: "{{this.access}}"

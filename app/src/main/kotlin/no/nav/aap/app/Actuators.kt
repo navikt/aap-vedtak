@@ -1,4 +1,4 @@
-package no.nav.aap.app.route
+package no.nav.aap.app
 
 import io.ktor.http.*
 import io.ktor.server.application.*

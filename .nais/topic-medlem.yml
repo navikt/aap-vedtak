@@ -22,9 +22,6 @@ spec:
     - team: aap
       application: vedtak
       access: readwrite
-    - team: aap
-      application: aap-kafka-manager
-      access: read
-    - team: aap
-      application: kafka-cli
-      access: readwrite
+    - team: "{{this.team}}"
+      application: "{{this.application}}"
+      access: "{{this.access}}"

@@ -15,13 +15,13 @@ import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.migrateStateStore
 import no.nav.aap.app.modell.SøkereKafkaDto
-import no.nav.aap.app.route.actuator
-import no.nav.aap.app.route.devTools
 import no.nav.aap.app.stream.inntekterStream
 import no.nav.aap.app.stream.manuell.manuellStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
-import no.nav.aap.kafka.streams.*
+import no.nav.aap.kafka.streams.KStreams
+import no.nav.aap.kafka.streams.KStreamsConfig
+import no.nav.aap.kafka.streams.KafkaStreams
 import no.nav.aap.kafka.streams.extension.consume
 import no.nav.aap.kafka.streams.extension.produce
 import no.nav.aap.kafka.streams.store.scheduleMetrics
@@ -41,16 +41,16 @@ data class Config(val kafka: KStreamsConfig)
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val config = loadConfig<Config>()
+    val søkerProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søkere)
 
     install(MicrometerMetrics) { registry = prometheus }
     install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
 
     Thread.currentThread().setUncaughtExceptionHandler { _, e -> log.error("Uhåndtert feil", e) }
-    environment.monitor.subscribe(ApplicationStopping) { kafka.close() }
-
-    val søknadProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søknad)
-    val søkerProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søkere)
-    val inntekterProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.inntekter)
+    environment.monitor.subscribe(ApplicationStopping) {
+        kafka.close()
+        søkerProducer.close()
+    }
 
     kafka.connect(
         config = config.kafka,
@@ -59,7 +59,6 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     )
 
     routing {
-        devTools(søknadProducer, søkerProducer, inntekterProducer)
         actuator(prometheus, kafka)
     }
 }
