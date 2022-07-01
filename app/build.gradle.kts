@@ -1,3 +1,6 @@
+val aapLibVersion = "2.1.4"
+val ktorVersion = "2.0.3"
+
 plugins {
     id("com.github.johnrengelman.shadow")
     application
@@ -10,17 +13,17 @@ application {
 dependencies {
     implementation(project(":domene"))
 
-    implementation("com.github.navikt.aap-libs:ktor-utils:2.1.3")
-    implementation("com.github.navikt.aap-libs:kafka:2.1.3")
-    testImplementation("com.github.navikt.aap-libs:kafka-test:2.1.3")
+    implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
+    implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
+    testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.9")
 
-    implementation("io.ktor:ktor-server-core:2.0.2")
-    implementation("io.ktor:ktor-server-netty:2.0.2")
-    implementation("io.ktor:ktor-server-content-negotiation:2.0.2")
-    implementation("io.ktor:ktor-serialization-jackson:2.0.2")
-    implementation("io.ktor:ktor-server-metrics-micrometer:2.0.2")
+    implementation("io.ktor:ktor-server-core:$ktorVersion")
+    implementation("io.ktor:ktor-server-netty:$ktorVersion")
+    implementation("io.ktor:ktor-server-content-negotiation:$ktorVersion")
+    implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
+    implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.1")
 
@@ -32,6 +35,6 @@ dependencies {
 
     testImplementation(kotlin("test"))
 
-    testImplementation("io.ktor:ktor-server-test-host:2.0.2")
+    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
     testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
 }
