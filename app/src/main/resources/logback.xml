@@ -1,12 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="pretty" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%cyan(%d{HH:mm:ss.SSS}) %gray([%thread]) %highlight(%-5level) %magenta(%logger{36}) - %msg%n
-            </pattern>
-        </encoder>
-    </appender>
-
     <appender name="json" class="ch.qos.logback.core.ConsoleAppender">
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
@@ -24,23 +17,12 @@
         <encoder class="net.logstash.logback.encoder.LogstashEncoder"/>
     </appender>
 
-
-    <logger name="no.nav.aap.app" level="TRACE" additivity="false">
-        <appender-ref ref="json"/>
-    </logger>
-
-    <logger name="kafka" level="INFO"/>
-    <logger name="io.confluent.kafka.serializers" level="WARN"/>
-    <logger name="org.apache.zookeeper" level="WARN"/>
-    <logger name="org.apache.kafka" level="WARN" additivity="false">
-        <appender-ref ref="json"/>
-    </logger>
-
     <logger name="secureLog" level="TRACE" additivity="false">
         <appender-ref ref="secureLog"/>
     </logger>
 
-    <root level="$INFO">
+    <root level="INFO">
         <appender-ref ref="json"/>
     </root>
+
 </configuration>
