@@ -69,24 +69,38 @@ data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
     private fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(erMedlem.uppercase()))
 }
 
-data class DtoLøsningManuellMedlemskapYrkesskade(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erMedlem: String) {
+data class DtoLøsningManuellMedlemskapYrkesskade(
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val erMedlem: String
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningManuellMedlemskapYrkesskade(vurdertAv, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
+    private fun toLøsning() =
+        LøsningManuellMedlemskapYrkesskade(vurdertAv, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
 }
 
-data class DtoLøsningParagraf_11_2(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erMedlem: String) {
+data class DtoLøsningParagraf_11_2(
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val erMedlem: String
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningManuellParagraf_11_2(vurdertAv, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
+    private fun toLøsning() = LøsningManuellParagraf_11_2(
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        erMedlem = if (erMedlem.lowercase() in listOf("true", "ja"))
+            LøsningManuellParagraf_11_2.ErMedlem.JA else LøsningManuellParagraf_11_2.ErMedlem.NEI
+    )
 }
 
 data class DtoLøsningMaskinellParagraf_11_2(val erMedlem: String) {
@@ -99,7 +113,11 @@ data class DtoLøsningMaskinellParagraf_11_2(val erMedlem: String) {
     private fun toLøsning() = LøsningMaskinellParagraf_11_2(enumValueOf(erMedlem.uppercase()))
 }
 
-data class DtoLøsningParagraf_11_3(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erOppfylt: Boolean) {
+data class DtoLøsningParagraf_11_3(
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val erOppfylt: Boolean
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
@@ -109,7 +127,11 @@ data class DtoLøsningParagraf_11_3(val vurdertAv: String, val tidspunktForVurde
     private fun toLøsning() = LøsningParagraf_11_3(vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class DtoLøsningParagraf_11_4_ledd2_ledd3(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erOppfylt: Boolean) {
+data class DtoLøsningParagraf_11_4_ledd2_ledd3(
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val erOppfylt: Boolean
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
@@ -231,7 +253,11 @@ data class DtoLøsningParagraf_11_22(
     )
 }
 
-data class DtoLøsningParagraf_11_29(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val erOppfylt: Boolean) {
+data class DtoLøsningParagraf_11_29(
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val erOppfylt: Boolean
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
