@@ -5,7 +5,7 @@ kafka:
     dev:
       - team: aap
         application: devtools
-        access: write
+        access: readwrite
       - team: aap
         application: aap-kafka-manager
         access: read
