@@ -25,7 +25,7 @@ jobs:
           java-version: 18
           distribution: 'temurin'
 
-      - uses: gradle/gradle-build-action@v2.2.1
+      - uses: gradle/gradle-build-action@v2.2.2
         env:
           GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
