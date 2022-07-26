@@ -1,4 +1,4 @@
-val aapLibVersion = "2.1.10"
+val aapLibVersion = "2.1.11"
 val ktorVersion = "2.0.3"
 
 plugins {
@@ -25,7 +25,7 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.9.1")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.9.2")
 
     implementation("ch.qos.logback:logback-classic:1.2.11")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
