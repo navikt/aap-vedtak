@@ -11,15 +11,34 @@ on:
 
 jobs:
   deploy:
-    name: Deploy topics
+    strategy:
+      matrix:
+        name:
+          - .nais/topic-medlem.yml
+          - .nais/topic-søkere.yml
+          - .nais/topic-manuell-11-2.yml
+          - .nais/topic-manuell-11-3.yml
+          - .nais/topic-manuell-11-4.yml
+          - .nais/topic-manuell-11-5.yml
+          - .nais/topic-manuell-11-6.yml
+          - .nais/topic-manuell-11-12.yml
+          - .nais/topic-manuell-11-29.yml
+          - .nais/topic-manuell-beregningsdato.yml
+          - .nais/topic-inntekter.yml
+          - .nais/topic-vedtak.yml
+        cluster: [dev-gcp]
+        include:
+          - cluster: dev-gcp
+            vars: dev.yml
+    name: Deploy ${{ matrix.name }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: Deploy topics to dev
+      - name: Deploy ${{ matrix.name }} to ${{ matrix.cluster }}
         uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/topic-medlem.yml,.nais/topic-søkere.yml,.nais/topic-manuell-11-2.yml,.nais/topic-manuell-11-3.yml,.nais/topic-manuell-11-4.yml,.nais/topic-manuell-11-5.yml,.nais/topic-manuell-11-6.yml,.nais/topic-manuell-11-12.yml,.nais/topic-manuell-11-29.yml,.nais/topic-manuell-beregningsdato.yml,.nais/topic-inntekter.yml,.nais/topic-vedtak.yml
-          VARS: .nais/dev.yml
+          CLUSTER: ${{ matrix.cluster }}
+          RESOURCE: .nais/${{ matrix.name }}
+          VARS: .nais/${{ matrix.vars }}
           PRINT_PAYLOAD: true
