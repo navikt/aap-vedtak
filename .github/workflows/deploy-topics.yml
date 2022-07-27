@@ -31,7 +31,7 @@ jobs:
         include:
           - cluster: dev-gcp
             vars: dev.yml
-    name: Deploy ${{ matrix.name }}
+    name: Deploy ${{ matrix.name }} to ${{ matrix.cluster }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
