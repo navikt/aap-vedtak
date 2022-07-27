@@ -21,18 +21,18 @@ jobs:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
           RESOURCE: ${{ join((
-            '.nais/topic-medlem.yml'
-            '.nais/topic-søkere.yml'
-            '.nais/topic-manuell-11-2.yml'
-            '.nais/topic-manuell-11-3.yml'
-            '.nais/topic-manuell-11-4.yml'
-            '.nais/topic-manuell-11-5.yml'
-            '.nais/topic-manuell-11-6.yml'
-            '.nais/topic-manuell-11-12.yml'
-            '.nais/topic-manuell-11-29.yml'
-            '.nais/topic-manuell-beregningsdato.yml'
-            '.nais/topic-inntekter.yml'
-            '.nais/topic-vedtak.yml'
+            .nais/topic-medlem.yml
+            .nais/topic-søkere.yml
+            .nais/topic-manuell-11-2.yml
+            .nais/topic-manuell-11-3.yml
+            .nais/topic-manuell-11-4.yml
+            .nais/topic-manuell-11-5.yml
+            .nais/topic-manuell-11-6.yml
+            .nais/topic-manuell-11-12.yml
+            .nais/topic-manuell-11-29.yml
+            .nais/topic-manuell-beregningsdato.yml
+            .nais/topic-inntekter.yml
+            .nais/topic-vedtak.yml
             ), ',') }}
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
