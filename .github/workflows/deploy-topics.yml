@@ -14,18 +14,18 @@ jobs:
     strategy:
       matrix:
         name:
-          - .nais/topic-medlem.yml
-          - .nais/topic-søkere.yml
-          - .nais/topic-manuell-11-2.yml
-          - .nais/topic-manuell-11-3.yml
-          - .nais/topic-manuell-11-4.yml
-          - .nais/topic-manuell-11-5.yml
-          - .nais/topic-manuell-11-6.yml
-          - .nais/topic-manuell-11-12.yml
-          - .nais/topic-manuell-11-29.yml
-          - .nais/topic-manuell-beregningsdato.yml
-          - .nais/topic-inntekter.yml
-          - .nais/topic-vedtak.yml
+          - topic-medlem.yml
+          - topic-søkere.yml
+          - topic-manuell-11-2.yml
+          - topic-manuell-11-3.yml
+          - topic-manuell-11-4.yml
+          - topic-manuell-11-5.yml
+          - topic-manuell-11-6.yml
+          - topic-manuell-11-12.yml
+          - topic-manuell-11-29.yml
+          - topic-manuell-beregningsdato.yml
+          - topic-inntekter.yml
+          - topic-vedtak.yml
         cluster: [dev-gcp]
         include:
           - cluster: dev-gcp
