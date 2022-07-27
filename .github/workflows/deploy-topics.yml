@@ -26,7 +26,8 @@ jobs:
           - topic-manuell-beregningsdato.yml
           - topic-inntekter.yml
           - topic-vedtak.yml
-        cluster: [dev-gcp]
+        cluster:
+          - dev-gcp
         include:
           - cluster: dev-gcp
             vars: dev.yml
