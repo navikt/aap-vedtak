@@ -20,7 +20,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: >
+          RESOURCE: ${{ join([
             .nais/topic-medlem.yml,
             .nais/topic-søkere.yml,
             .nais/topic-manuell-11-2.yml,
@@ -33,5 +33,6 @@ jobs:
             .nais/topic-manuell-beregningsdato.yml,
             .nais/topic-inntekter.yml,
             .nais/topic-vedtak.yml
+            ], ',') }}
           VARS: .nais/dev.yml
           PRINT_PAYLOAD: true
