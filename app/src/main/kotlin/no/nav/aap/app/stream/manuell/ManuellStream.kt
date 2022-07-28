@@ -29,9 +29,9 @@ internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDt
 
 private fun <T> StreamsBuilder.manuellStream(
     søkere: KTable<String, SøkereKafkaDto>,
-    topic: Topic<T>,
+    topic: Topic<T & Any>,
     kafkaNameFilter: String,
-    håndter: T.(Søker) -> List<Behov>,
+    håndter: (T & Any).(Søker) -> List<Behov>,
 ) {
     val søkerOgBehov =
         consume(topic)
