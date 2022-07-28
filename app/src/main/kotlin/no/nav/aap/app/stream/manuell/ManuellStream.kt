@@ -36,17 +36,18 @@ private fun <T> StreamsBuilder.manuellStream(
     val søkerOgBehov =
         consume(topic)
             .filterNotNull("filter-$kafkaNameFilter-tombstones")
-            .join(topic with Topics.søkere, søkere, ::Pair)
+            .join(topic with Topics.søkere, søkere)
             .mapValues("$kafkaNameFilter-handter-losning") { løsningAndSøker ->
                 håndterManuellLøsning(løsningAndSøker, håndter)
             }
 
     søkerOgBehov
-        .mapValues("$kafkaNameFilter-hent-ut-soker") { (søker) -> søker }
+        .firstPairValue("$kafkaNameFilter-hent-ut-soker")
         .produce(Topics.søkere, "produced-soker-med-$kafkaNameFilter")
 
     søkerOgBehov
-        .flatMapValues("$kafkaNameFilter-hent-ut-behov") { (_, dtoBehov) -> dtoBehov }
+        .secondPairValue("$kafkaNameFilter-hent-ut-behov")
+        .flatten("$kafkaNameFilter-flatten-behov")
         .sendBehov(kafkaNameFilter)
 }
 

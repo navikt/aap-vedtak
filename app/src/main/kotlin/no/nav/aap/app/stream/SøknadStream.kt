@@ -19,22 +19,24 @@ private val secureLog = LoggerFactory.getLogger("secureLog")
 internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
-        .leftJoin(Topics.søknad with Topics.søkere, søkere, ::Pair)
+        .leftJoin(Topics.søknad with Topics.søkere, søkere)
         .filter("filter-soknad-ny") { _, (_, søkereKafkaDto) ->
             if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
 
             søkereKafkaDto == null
         }
-        .mapValues("soknad-opprett-soker-og-handter") { personident, (jsonSøknad, _) ->
+        .firstPairValue("soknad-hent-ut-soknad-fra-join")
+        .mapValues("soknad-opprett-soker-og-handter") { personident, jsonSøknad ->
             opprettSøker(personident, jsonSøknad)
         }
 
     søkerOgBehov
-        .mapValues("soknad-hent-ut-soker") { (søker) -> søker }
+        .firstPairValue("soknad-hent-ut-soker")
         .produce(Topics.søkere, "produced-ny-soker")
 
     søkerOgBehov
-        .flatMapValues("soknad-hent-ut-behov") { (_, dtoBehov) -> dtoBehov }
+        .secondPairValue("soknad-hent-ut-behov")
+        .flatten("soknad-flatten-behov")
         .sendBehov("soknad")
 }
 

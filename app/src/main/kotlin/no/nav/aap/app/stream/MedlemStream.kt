@@ -13,9 +13,9 @@ import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto>) {
     consume(Topics.medlem)
         .filterNotNull("filter-medlem-tombstones")
-        .filter { _, value -> value.response != null }
+        .filter("inntekter-medlem-responses") { _, value -> value.response != null }
         .selectKey("keyed_personident") { _, value -> value.personident }
-        .join(Topics.medlem with Topics.søkere, søkere, ::Pair)
+        .join(Topics.medlem with Topics.søkere, søkere)
         .mapValues("medlem-handter-losning", ::medlemLøsning)
         .produce(Topics.søkere, "produced-soker-med-medlem")
 }

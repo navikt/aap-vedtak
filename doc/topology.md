@@ -69,9 +69,9 @@ subgraph Vedtak
 	join-4 --> |produced-soker-med-manuell-11-3| aap.sokere.v1
 	aap.manuell.11-4.v1 --> join-5
 	soker-state-store-v2 --> join-5
-	join-5 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
 	join-5 --> |branch-manuell-11-4-medlem-produced-behov| aap.medlem.v1
 	join-5 --> |branch-manuell-11-4-inntekter-produced-behov| aap.inntekter.v1
+	join-5 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
 	aap.manuell.11-5.v1 --> join-6
 	soker-state-store-v2 --> join-6
 	join-6 --> |produced-soker-med-manuell-11-5| aap.sokere.v1

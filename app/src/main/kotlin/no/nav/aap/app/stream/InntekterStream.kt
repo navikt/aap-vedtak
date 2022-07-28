@@ -14,7 +14,7 @@ internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafka
     consume(Topics.inntekter)
         .filterNotNull("remove-inntekter-tombstones")
         .filter("inntekter-filter-responses") { _, inntekter -> inntekter.response != null }
-        .join(Topics.inntekter with Topics.søkere, søkere, ::Pair)
+        .join(Topics.inntekter with Topics.søkere, søkere)
         .mapValues("inntekter-handter-losning", ::håndterInntekter)
         .produce(Topics.søkere, "produced-soker-med-handtert-inntekter")
 }
