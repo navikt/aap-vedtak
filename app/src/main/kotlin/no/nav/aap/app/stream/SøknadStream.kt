@@ -26,9 +26,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
             søkereKafkaDto == null
         }
         .firstPairValue("soknad-hent-ut-soknad-fra-join")
-        .mapValues("soknad-opprett-soker-og-handter") { personident, jsonSøknad ->
-            opprettSøker(personident, jsonSøknad)
-        }
+        .mapValues("soknad-opprett-soker-og-handter", ::opprettSøker)
 
     søkerOgBehov
         .firstPairValue("soknad-hent-ut-soker")
