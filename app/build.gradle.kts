@@ -1,4 +1,4 @@
-val aapLibVersion = "2.1.11"
+val aapLibVersion = "3.0.0"
 val ktorVersion = "2.0.3"
 
 plugins {
@@ -15,6 +15,7 @@ dependencies {
 
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
+    implementation("com.github.navikt.aap-libs:kafka-avroserde:$aapLibVersion")
     testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
 
     implementation("com.github.navikt.aap-avro:medlem:3.0.9")
