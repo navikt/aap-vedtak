@@ -97,13 +97,22 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", LocalDateTime.now(),"SPS", "INGEN", "", LocalDate.now()))
+        sak.håndterLøsning(
+            LøsningParagraf_11_12FørsteLedd(
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                "INGEN",
+                "",
+                LocalDate.now()
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
+        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021))
+        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -141,7 +150,7 @@ internal class SakTest {
         sak.håndterLøsning(LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(),true))
+        sak.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -165,7 +174,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", LocalDateTime.now(),"SPS", "INGEN", "", LocalDate.now()))
+        sak.håndterLøsning(
+            LøsningParagraf_11_12FørsteLedd(
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                "INGEN",
+                "",
+                LocalDate.now()
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -180,10 +198,10 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
+        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true))
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021))
+        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()

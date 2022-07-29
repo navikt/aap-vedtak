@@ -7,7 +7,7 @@ import java.time.LocalDateTime
 internal class LøsningParagraf_11_12FørsteLedd(
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
-    private val bestemmesAv: String,
+    private val bestemmesAv: BestemmesAv,
     private val unntak: String,
     private val unntaksbegrunnelse: String,
     private val manueltSattVirkningsdato: LocalDate
@@ -16,12 +16,21 @@ internal class LøsningParagraf_11_12FørsteLedd(
         internal fun Iterable<LøsningParagraf_11_12FørsteLedd>.toDto() = map(LøsningParagraf_11_12FørsteLedd::toDto)
     }
 
+    internal enum class BestemmesAv{
+        soknadstidspunkt,
+        maksdatoSykepenger,
+        ermiraSays,
+        unntaksvurderingForhindret,
+        unntaksvurderingMangelfull,
+        etterSisteLoenn,
+    }
+
     internal fun vurdertAv() = vurdertAv
 
     private fun toDto() = DtoLøsningParagraf_11_12_ledd1(
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
-        bestemmesAv = bestemmesAv,
+        bestemmesAv = bestemmesAv.name,
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
         manueltSattVirkningsdato = manueltSattVirkningsdato

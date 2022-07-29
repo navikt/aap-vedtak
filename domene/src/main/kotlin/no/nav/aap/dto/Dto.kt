@@ -222,7 +222,15 @@ data class DtoLøsningParagraf_11_12_ledd1(
     private fun toLøsning() = LøsningParagraf_11_12FørsteLedd(
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
-        bestemmesAv = bestemmesAv,
+        bestemmesAv = when {
+            bestemmesAv == "soknadstidspunkt" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt
+            bestemmesAv == "maksdatoSykepenger" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger
+            bestemmesAv == "ermiraSays" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.ermiraSays
+            bestemmesAv == "unntaksvurdering" && unntak == "forhindret" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.unntaksvurderingForhindret
+            bestemmesAv == "unntaksvurdering" && unntak == "mangelfull" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.unntaksvurderingMangelfull
+            bestemmesAv == "etterSisteLoenn" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.etterSisteLoenn
+            else -> error("Ukjent bestemmesAv: $bestemmesAv og unntak: $unntak")
+        },
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
         manueltSattVirkningsdato = manueltSattVirkningsdato

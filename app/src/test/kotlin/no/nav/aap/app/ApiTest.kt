@@ -72,7 +72,7 @@ internal class ApiTest {
                 Løsning_11_12_ledd1_manuell(
                     vurdertAv = "saksbehandler",
                     tidspunktForVurdering = tidspunktForVurdering,
-                    bestemmesAv = "SPS",
+                    bestemmesAv = "soknadstidspunkt",
                     unntak = "INGEN",
                     unntaksbegrunnelse = "",
                     manueltSattVirkningsdato = LocalDate.now()
@@ -214,7 +214,7 @@ internal class ApiTest {
                                             DtoLøsningParagraf_11_12_ledd1(
                                                 vurdertAv = "saksbehandler",
                                                 tidspunktForVurdering = tidspunktForVurdering,
-                                                bestemmesAv = "SPS",
+                                                bestemmesAv = "soknadstidspunkt",
                                                 unntak = "INGEN",
                                                 unntaksbegrunnelse = "",
                                                 manueltSattVirkningsdato = LocalDate.now()

@@ -88,7 +88,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
                 LøsningParagraf_11_12FørsteLedd(
                     vurdertAv = it.vurdertAv,
                     tidspunktForVurdering = it.tidspunktForVurdering,
-                    bestemmesAv = it.bestemmesAv,
+                    bestemmesAv = enumValueOf(it.bestemmesAv),
                     unntak = it.unntak,
                     unntaksbegrunnelse = it.unntaksbegrunnelse,
                     manueltSattVirkningsdato = it.manueltSattVirkningsdato

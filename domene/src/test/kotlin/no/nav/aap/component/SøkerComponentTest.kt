@@ -265,7 +265,7 @@ internal class SøkerComponentTest {
         søker.håndterSøknad(søknad)
 
         søker.håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA))
-        søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(),true))
+        søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true))
         søker.håndterLøsning(
             LøsningParagraf_11_5(
                 "veileder",
@@ -285,9 +285,18 @@ internal class SøkerComponentTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        søker.håndterLøsning(LøsningParagraf_11_12FørsteLedd("saksbehandler", LocalDateTime.now(), "SPS", "INGEN", "", LocalDate.now()))
-        søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true))
-        søker.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021))
+        søker.håndterLøsning(
+            LøsningParagraf_11_12FørsteLedd(
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                "INGEN",
+                "",
+                LocalDate.now()
+            )
+        )
+        søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true))
+        søker.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -347,15 +356,15 @@ internal class SøkerComponentTest {
                 LøsningParagraf_11_12FørsteLedd(
                     "saksbehandler",
                     LocalDateTime.now(),
-                    "SPS",
+                    LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
                     "INGEN",
                     "",
                     LocalDate.now()
                 )
             )
         }
-        medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(),true)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(),13 september 2021)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021)) }
         medSøker {
             håndterLøsning(
                 LøsningInntekter(
