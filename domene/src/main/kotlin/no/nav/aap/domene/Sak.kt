@@ -303,7 +303,6 @@ internal class Sak private constructor(
 
                 sak.vedtak = sak.sakstype.opprettVedtak(
                     sak.inntektshistorikk,
-                    sak.sakstype.beregningsdato(),
                     fødselsdato
                 )
 

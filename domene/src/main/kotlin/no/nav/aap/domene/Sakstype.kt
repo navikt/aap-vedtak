@@ -81,8 +81,7 @@ internal abstract class Sakstype private constructor(
 
     abstract fun opprettVedtak(
         inntektshistorikk: Inntektshistorikk,
-        beregningsdato: LocalDate,
-        fødselsdato: Fødselsdato
+        fødselsdato: Fødselsdato,
     ): Vedtak
 
     internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
@@ -100,10 +99,9 @@ internal abstract class Sakstype private constructor(
 
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
-            beregningsdato: LocalDate,
-            fødselsdato: Fødselsdato
+            fødselsdato: Fødselsdato,
         ): Vedtak {
-            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, null)
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, null)
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
@@ -146,11 +144,10 @@ internal abstract class Sakstype private constructor(
 
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
-            beregningsdato: LocalDate,
-            fødselsdato: Fødselsdato
+            fødselsdato: Fødselsdato,
         ): Vedtak {
             val inntektsgrunnlag =
-                inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, paragraf1122.yrkesskade())
+                inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, paragraf1122.yrkesskade())
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
@@ -194,10 +191,9 @@ internal abstract class Sakstype private constructor(
 
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
-            beregningsdato: LocalDate,
-            fødselsdato: Fødselsdato
+            fødselsdato: Fødselsdato,
         ): Vedtak {
-            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato, fødselsdato, null)
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, null)
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
