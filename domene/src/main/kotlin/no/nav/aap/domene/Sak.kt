@@ -98,6 +98,7 @@ internal class Sak private constructor(
             START,
             SØKNAD_MOTTATT,
             BEREGN_INNTEKT,
+            VENTER_SYKEPENGER,
             VEDTAK_FATTET,
             IKKE_OPPFYLT
         }
@@ -306,7 +307,27 @@ internal class Sak private constructor(
                     fødselsdato
                 )
 
+                //Vente på sykepenger etter totrinnskontroll, og ikke her?
                 sak.tilstand(VedtakFattet, løsning)
+            }
+        }
+
+        object VenterSykepenger : Tilstand(Tilstandsnavn.VENTER_SYKEPENGER) {
+
+            override fun toDto(sak: Sak) = DtoSak(
+                saksid = sak.saksid,
+                tilstand = tilstandsnavn.name,
+                sakstyper = sak.sakstyper.toDto(),
+                vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+                søknadstidspunkt = sak.søknadstidspunkt,
+                vedtak = sak.vedtak.toDto()
+            )
+
+            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
+                sak.vurderingsdato = dtoSak.vurderingsdato
+                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+                sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
         }
 
@@ -347,6 +368,7 @@ internal class Sak private constructor(
                 Tilstand.Tilstandsnavn.START -> Tilstand.Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> Tilstand.BeregnInntekt
+                Tilstand.Tilstandsnavn.VENTER_SYKEPENGER -> Tilstand.VenterSykepenger
                 Tilstand.Tilstandsnavn.VEDTAK_FATTET -> Tilstand.VedtakFattet
                 Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> Tilstand.IkkeOppfylt
             },

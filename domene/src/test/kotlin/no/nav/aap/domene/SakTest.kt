@@ -1,14 +1,18 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.Sak.Companion.toDto
+import no.nav.aap.domene.beregning.Arbeidsgiver
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
+import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
+import no.nav.aap.januar
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -246,6 +250,98 @@ internal class SakTest {
             Vilkårsvurdering.Ledd.LEDD_1
         )
         assertTrue(søknad.behov().isEmpty())
+    }
+
+    @Disabled("Skal vi vente på sykepenger etter totrinnskontrollen?")
+    @Test
+    fun `Hvis virkningsdato skal bestemmes av når sykepenger er brukt opp, vil sak vente på at gjenstående sykedager er 0`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val sak = Sak()
+
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_5(
+                vurdertAv = "veileder",
+                tidspunktForVurdering = LocalDateTime.now(),
+                nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            )
+        )
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_6(
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_12FørsteLedd(
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger,
+                "INGEN",
+                "",
+                LocalDate.now()
+            )
+        )
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true))
+        assertTilstand("SØKNAD_MOTTATT", sak)
+
+        sak.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
+        assertTilstand("BEREGN_INNTEKT", sak)
+
+        sak.håndterLøsning(
+            LøsningInntekter(
+                listOf(
+                    Inntekt(Arbeidsgiver("123456789"), januar(2020), 500000.beløp),
+                    Inntekt(Arbeidsgiver("123456789"), januar(2019), 500000.beløp),
+                    Inntekt(Arbeidsgiver("123456789"), januar(2018), 500000.beløp)
+                )
+            ),
+            fødselsdato
+        )
+        assertTilstand("VENTER_SYKEPENGER", sak)
+
+        val saker = listOf(sak).toDto()
+        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
+        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MASKINELT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_1
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "IKKE_RELEVANT",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
+            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
+        )
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     private fun assertTilstand(actual: String, expected: Sak) {
