@@ -7,7 +7,6 @@ import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.app.modell.toJson
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
@@ -20,13 +19,13 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
         .leftJoin(Topics.søknad with Topics.søkere, søkere)
-        .filter("filter-soknad-ny") { _, (_, søkereKafkaDto) ->
+        .filterValues("filter-soknad-ny") { (_, søkereKafkaDto) ->
             if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
 
             søkereKafkaDto == null
         }
         .firstPairValue("soknad-hent-ut-soknad-fra-join")
-        .mapValues("soknad-opprett-soker-og-handter", ::opprettSøker)
+        .mapValues("soknad-opprett-soker-og-handter", opprettSøker)
 
     søkerOgBehov
         .firstPairValue("soknad-hent-ut-soker")
@@ -38,10 +37,10 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
         .sendBehov("soknad")
 }
 
-private fun opprettSøker(ident: String, jsonSøknad: JsonSøknad): Pair<SøkereKafkaDto, List<DtoBehov>> {
+private val opprettSøker = { ident: String, jsonSøknad: JsonSøknad ->
     val søknad = Søknad(Personident(ident), Fødselsdato(jsonSøknad.fødselsdato))
     val søker = søknad.opprettSøker()
     søker.håndterSøknad(søknad)
 
-    return søker.toDto().toJson() to søknad.behov().map { it.toDto(ident) }
+    søker.toDto().toJson() to søknad.behov().map { it.toDto(ident) }
 }

@@ -36,9 +36,8 @@ private fun <T> StreamsBuilder.manuellStream(
     val søkerOgBehov =
         consume(topic)
             .filterNotNull("filter-$kafkaNameFilter-tombstones")
-            .join(topic with Topics.søkere, søkere)
-            .mapValues("$kafkaNameFilter-handter-losning") { løsningAndSøker ->
-                håndterManuellLøsning(løsningAndSøker, håndter)
+            .join(topic with Topics.søkere, søkere) { løsning, søker ->
+                håndterManuellLøsning(løsning, søker, håndter)
             }
 
     søkerOgBehov
@@ -52,10 +51,10 @@ private fun <T> StreamsBuilder.manuellStream(
 }
 
 private fun <T> håndterManuellLøsning(
-    løsningAndSøker: Pair<T, SøkereKafkaDto>,
+    manuellKafkaDto: T,
+    søkereKafkaDto: SøkereKafkaDto,
     håndter: T.(Søker) -> List<Behov>,
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val (manuellKafkaDto, søkereKafkaDto) = løsningAndSøker
     val søker = Søker.gjenopprett(søkereKafkaDto.toDto())
 
     val dtoBehov = manuellKafkaDto.håndter(søker)

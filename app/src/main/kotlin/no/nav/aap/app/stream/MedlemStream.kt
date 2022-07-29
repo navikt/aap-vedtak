@@ -14,17 +14,15 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto
     consume(Topics.medlem)
         .filterNotNullBy("medlem-filter-tombstones-og-responses") { medlem -> medlem.response }
         .selectKey("keyed_personident") { _, value -> value.personident }
-        .join(Topics.medlem with Topics.søkere, søkere)
-        .mapValues("medlem-handter-losning", ::medlemLøsning)
+        .join(Topics.medlem with Topics.søkere, søkere, håndterMedlem)
         .produce(Topics.søkere, "produced-soker-med-medlem")
 }
 
-private fun medlemLøsning(medlemAndSøker: Pair<AvroMedlem, SøkereKafkaDto>): SøkereKafkaDto {
-    val (avroMedlem, søkereKafkaDto) = medlemAndSøker
+private val håndterMedlem = { avroMedlem: AvroMedlem, søkereKafkaDto: SøkereKafkaDto ->
     val søker = Søker.gjenopprett(søkereKafkaDto.toDto()).apply {
         val medlem = avroMedlem.toDto()
         håndterLøsning(medlem)
     }
 
-    return søker.toDto().toJson()
+    søker.toDto().toJson()
 }
