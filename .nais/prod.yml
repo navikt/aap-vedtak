@@ -2,4 +2,7 @@ kafka:
   pool: nav-prod
   permanent-delete-topics: false
   acl:
-    dev: []
+    dev:
+      - team: aap
+        application: kafka-cli
+        access: readwrite
