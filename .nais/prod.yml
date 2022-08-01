@@ -1,0 +1,5 @@
+kafka:
+  pool: nav-prod
+  permanent-delete-topics: false
+  acl:
+    dev: []

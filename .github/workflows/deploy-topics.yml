@@ -8,6 +8,7 @@ on:
       - '.nais/topic-*.yml'
       - '.github/workflows/deploy-topics.yml'
       - '.nais/dev.yml'
+      - '.nais/prod.yml'
 
 jobs:
   deploy:
@@ -28,9 +29,12 @@ jobs:
           - topic-vedtak.yml
         cluster:
           - dev-gcp
+          - prod-gcp
         include:
           - cluster: dev-gcp
             vars: dev.yml
+          - cluster: prod-gcp
+            vars: prod.yml
     name: Deploy ${{ matrix.name }} to ${{ matrix.cluster }}
     runs-on: ubuntu-latest
     steps:
