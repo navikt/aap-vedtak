@@ -23,7 +23,16 @@ jobs:
           - topic-manuell-11-5.yml
           - topic-manuell-11-6.yml
           - topic-manuell-11-12.yml
+          - topic-manuell-11-19.yml
           - topic-manuell-11-29.yml
+          - topic-kvalitetssikring-11-2.yml
+          - topic-kvalitetssikring-11-3.yml
+          - topic-kvalitetssikring-11-4.yml
+          - topic-kvalitetssikring-11-5.yml
+          - topic-kvalitetssikring-11-6.yml
+          - topic-kvalitetssikring-11-12.yml
+          - topic-kvalitetssikring-11-19.yml
+          - topic-kvalitetssikring-11-29.yml
           - topic-manuell-beregningsdato.yml
           - topic-inntekter.yml
           - topic-vedtak.yml

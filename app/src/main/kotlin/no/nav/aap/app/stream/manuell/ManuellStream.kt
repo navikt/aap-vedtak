@@ -21,9 +21,9 @@ internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDt
     manuellStream(søkere, Topics.manuell_11_29, "manuell-11-29", Løsning_11_29_manuell::håndter)
     manuellStream(
         søkere,
-        Topics.manuell_beregningsdato,
+        Topics.manuell_11_19,
         "manuell-beregningsdato",
-        LøsningVurderingAvBeregningsdato::håndter
+        Løsning_11_19_manuell::håndter
     )
 }
 

@@ -30,7 +30,7 @@ internal class ApiTest {
             val manuell_11_6_Topic = mocks.kafka.inputTopic(Topics.manuell_11_6)
             val manuell_11_12_Topic = mocks.kafka.inputTopic(Topics.manuell_11_12)
             val manuell_11_29_Topic = mocks.kafka.inputTopic(Topics.manuell_11_29)
-            val manuell_beregningsdato_Topic = mocks.kafka.inputTopic(Topics.manuell_beregningsdato)
+            val manuell_beregningsdato_Topic = mocks.kafka.inputTopic(Topics.manuell_11_19)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
@@ -82,7 +82,7 @@ internal class ApiTest {
                 Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering, true)
             }
             manuell_beregningsdato_Topic.produce(fnr) {
-                LøsningVurderingAvBeregningsdato("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
+                Løsning_11_19_manuell("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
             }
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()

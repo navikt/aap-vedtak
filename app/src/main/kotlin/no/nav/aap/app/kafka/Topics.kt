@@ -17,7 +17,6 @@ object Topics {
     val manuell_11_5 = Topic("aap.manuell.11-5.v1", JsonSerde.jackson<Løsning_11_5_manuell>())
     val manuell_11_6 = Topic("aap.manuell.11-6.v1", JsonSerde.jackson<Løsning_11_6_manuell>())
     val manuell_11_12 = Topic("aap.manuell.11-12.v1", JsonSerde.jackson<Løsning_11_12_ledd1_manuell>())
+    val manuell_11_19 = Topic("aap.manuell.11-19.v1", JsonSerde.jackson<Løsning_11_19_manuell>())
     val manuell_11_29 = Topic("aap.manuell.11-29.v1", JsonSerde.jackson<Løsning_11_29_manuell>())
-    val manuell_beregningsdato =
-        Topic("aap.manuell.beregningsdato.v1", JsonSerde.jackson<LøsningVurderingAvBeregningsdato>())
 }

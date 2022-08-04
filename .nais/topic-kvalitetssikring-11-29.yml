@@ -1,12 +1,12 @@
 apiVersion: kafka.nais.io/v1
 kind: Topic
 metadata:
-  name: manuell.beregningsdato.v1
+  name: kvalitetssikring.11-29.v1
   namespace: aap
   labels:
     team: aap
   annotations:
-    kafka.nais.io/removeDataWhenResourceIsDeleted: "true"
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "{{kafka.permanent-delete-topics}}"
     kafka.format: json
     kafka.state: "false"
     github.url: https://github.com/navikt/aap-vedtak
