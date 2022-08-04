@@ -33,7 +33,6 @@ jobs:
           - topic-kvalitetssikring-11-12.yml
           - topic-kvalitetssikring-11-19.yml
           - topic-kvalitetssikring-11-29.yml
-          - topic-manuell-beregningsdato.yml
           - topic-inntekter.yml
           - topic-vedtak.yml
         cluster:
