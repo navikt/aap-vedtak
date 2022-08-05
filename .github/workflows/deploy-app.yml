@@ -29,7 +29,7 @@ jobs:
 #        env:
 #          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
-          arguments: test app:shadowJar --continue
+          arguments: test app:shadowJar --continue --no-daemon
 
       - uses: dorny/test-reporter@v1.5.0
         if: success() || failure()
