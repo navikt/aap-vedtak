@@ -26,10 +26,10 @@ jobs:
           distribution: 'temurin'
 
       - uses: gradle/gradle-build-action@v2.2.2
-        env:
-          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
+#        env:
+#          GRADLE_BUILD_ACTION_CACHE_DEBUG_ENABLED: true
         with:
-          arguments: test app:shadowJar --continue --no-daemon --no-build-cache
+          arguments: test app:shadowJar --continue
 
       - uses: dorny/test-reporter@v1.5.0
         if: success() || failure()
