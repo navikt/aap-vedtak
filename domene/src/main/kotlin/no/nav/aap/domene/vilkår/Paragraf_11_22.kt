@@ -65,7 +65,7 @@ internal class Paragraf_11_22 private constructor(
         override fun toDto(vilkårsvurdering: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = null,
-            godkjentAv = null,
+            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -79,7 +79,7 @@ internal class Paragraf_11_22 private constructor(
         override fun toDto(vilkårsvurdering: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            godkjentAv = null,
+            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -106,7 +106,7 @@ internal class Paragraf_11_22 private constructor(
         override fun toDto(vilkårsvurdering: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            godkjentAv = null,
+            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,

@@ -120,6 +120,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) = callWithReceiver {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
     protected fun toDto(): DtoVilkårsvurdering = callWithReceiver {
         tilstand.toDto(this)
     }
@@ -141,9 +145,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             SØKNAD_MOTTATT,
             MANUELL_VURDERING_TRENGS,
             OPPFYLT_MASKINELT,
+            OPPFYLT_MASKINELT_KVALITETSSIKRET,
             IKKE_OPPFYLT_MASKINELT,
+            IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
             OPPFYLT_MANUELT,
+            OPPFYLT_MANUELT_KVALITETSSIKRET,
             IKKE_OPPFYLT_MANUELT,
+            IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
             IKKE_RELEVANT,
         }
 
@@ -261,6 +269,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
+        internal open fun håndterKvalitetssikring(
+            vilkårsvurdering: PARAGRAF,
+            kvalitetssikring: KvalitetssikringParagraf_11_2
+        ) {
+            log.info("Kvalitetssikring skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
         //FIXME: Noe skurr med denne også
         internal open fun yrkesskade(paragraf1122: PARAGRAF): Yrkesskade {
             error("Kun for 11-22") //FIXME
@@ -292,8 +307,20 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false
         )
 
+        internal abstract class OppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET,
+            erOppfylt = true,
+            erIkkeOppfylt = false
+        )
+
         internal abstract class IkkeOppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
+            erOppfylt = false,
+            erIkkeOppfylt = true
+        )
+
+        internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
             erOppfylt = false,
             erIkkeOppfylt = true
         )
@@ -304,8 +331,20 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false
         )
 
+        internal abstract class OppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET,
+            erOppfylt = true,
+            erIkkeOppfylt = false
+        )
+
         internal abstract class IkkeOppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
+            erOppfylt = false,
+            erIkkeOppfylt = true
+        )
+
+        internal abstract class IkkeOppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
             erOppfylt = false,
             erIkkeOppfylt = true
         )

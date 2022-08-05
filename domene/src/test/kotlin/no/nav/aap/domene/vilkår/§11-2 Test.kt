@@ -4,12 +4,8 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.Utfall
-import no.nav.aap.hendelse.Hendelse
-import no.nav.aap.hendelse.LøsningManuellParagraf_11_2
-import no.nav.aap.hendelse.LøsningMaskinellParagraf_11_2
-import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import no.nav.aap.hendelse.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -153,6 +149,186 @@ internal class `§11-2 Test` {
         assertFalse(vilkår.erIkkeOppfylt())
     }
 
+    @Test
+    fun `Hvis tilstand oppfylt maskinelt blir godkjent av kvalitetssikrer, blir tilstand satt til oppfylt maskinelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt maskinelt blir godkjent av kvalitetssikrer, blir tilstand satt til ikke oppfylt maskinelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand oppfylt manuelt blir godkjent av kvalitetssikrer, blir tilstand satt til oppfylt manuelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt manuelt blir godkjent av kvalitetssikrer, blir tilstand satt til ikke oppfylt manuelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand oppfylt maskinelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til oppfylt maskinelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt maskinelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til ikke oppfylt maskinelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand oppfylt manuelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til oppfylt manuelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt manuelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til ikke oppfylt manuelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_2()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
     private fun assertHarBehov(hendelse: Hendelse) {
         assertTrue(hendelse.behov().isNotEmpty())
     }
@@ -163,5 +339,17 @@ internal class `§11-2 Test` {
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_2) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
+    }
+
+    private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_2) {
+        assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
+    }
+
+    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_2) {
+        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
+    }
+
+    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_2) {
+        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

@@ -75,6 +75,10 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning, fødselsdato) }
     }
 
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
     fun toDto() = DtoSøker(
         personident = personident.toDto(),
         fødselsdato = fødselsdato.toDto(),

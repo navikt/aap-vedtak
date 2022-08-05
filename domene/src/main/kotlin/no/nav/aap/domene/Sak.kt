@@ -85,6 +85,10 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
 
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         nyTilstand.onExit(this, hendelse)
         tilstand = nyTilstand
@@ -98,6 +102,7 @@ internal class Sak private constructor(
             START,
             SØKNAD_MOTTATT,
             BEREGN_INNTEKT,
+            AVVENTER_KVALITETSSIKRING,
             VENTER_SYKEPENGER,
             VEDTAK_FATTET,
             IKKE_OPPFYLT
@@ -163,6 +168,10 @@ internal class Sak private constructor(
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_2) {
+            log.info("Forventet ikke kvalitetssikring på paragraf 11-2 i tilstand ${tilstandsnavn.name}")
         }
 
         open fun toDto(sak: Sak) = DtoSak(
@@ -312,6 +321,40 @@ internal class Sak private constructor(
             }
         }
 
+        object AvventerKvalitetssikring : Tilstand(Tilstandsnavn.AVVENTER_KVALITETSSIKRING) {
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_2) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun toDto(sak: Sak) = DtoSak(
+                saksid = sak.saksid,
+                tilstand = tilstandsnavn.name,
+                sakstyper = sak.sakstyper.toDto(),
+                vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+                søknadstidspunkt = sak.søknadstidspunkt,
+                vedtak = sak.vedtak.toDto()
+            )
+
+            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
+                sak.vurderingsdato = dtoSak.vurderingsdato
+                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+                sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
+            }
+
+            // TODO: Her må vi sjekke tilstander på en annen måte
+            private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
+                when {
+                    sak.sakstype.erAlleOppfylt() ->
+                        sak.tilstand(VedtakFattet, hendelse)
+                    sak.sakstype.erNoenIkkeOppfylt() ->
+                        sak.tilstand(VedtakFattet, hendelse)
+                }
+            }
+        }
+
         object VenterSykepenger : Tilstand(Tilstandsnavn.VENTER_SYKEPENGER) {
 
             override fun toDto(sak: Sak) = DtoSak(
@@ -368,6 +411,7 @@ internal class Sak private constructor(
                 Tilstand.Tilstandsnavn.START -> Tilstand.Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> Tilstand.BeregnInntekt
+                Tilstand.Tilstandsnavn.AVVENTER_KVALITETSSIKRING -> Tilstand.AvventerKvalitetssikring
                 Tilstand.Tilstandsnavn.VENTER_SYKEPENGER -> Tilstand.VenterSykepenger
                 Tilstand.Tilstandsnavn.VEDTAK_FATTET -> Tilstand.VedtakFattet
                 Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> Tilstand.IkkeOppfylt

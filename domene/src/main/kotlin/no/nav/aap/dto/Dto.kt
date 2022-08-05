@@ -39,7 +39,7 @@ data class DtoSakstype(
 data class DtoVilkårsvurdering(
     val vilkårsvurderingsid: UUID,
     val vurdertAv: String?,
-    val godkjentAv: String?,
+    val kvalitetssikretAv: String?,
     val paragraf: String,
     val ledd: List<String>,
     val tilstand: String,
@@ -57,6 +57,7 @@ data class DtoVilkårsvurdering(
     val løsning_11_19_manuell: List<DtoLøsningParagraf_11_19>? = null,
     val løsning_11_22_manuell: List<DtoLøsningParagraf_11_22>? = null,
     val løsning_11_29_manuell: List<DtoLøsningParagraf_11_29>? = null,
+    val kvalitetssikringer_11_2: List<DtoKvalitetssikringParagraf_11_2>? = null
 )
 
 data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
@@ -100,6 +101,22 @@ data class DtoLøsningParagraf_11_2(
         tidspunktForVurdering = tidspunktForVurdering,
         erMedlem = if (erMedlem.lowercase() in listOf("true", "ja"))
             LøsningManuellParagraf_11_2.ErMedlem.JA else LøsningManuellParagraf_11_2.ErMedlem.NEI
+    )
+}
+
+data class DtoKvalitetssikringParagraf_11_2(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
     )
 }
 

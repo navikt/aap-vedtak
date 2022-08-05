@@ -123,7 +123,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(0),
                                         vurdertAv = "maskinell saksbehandling",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_2",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MASKINELT",
@@ -137,7 +137,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(1),
                                         vurdertAv = "saksbehandler",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_3",
                                         ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
                                         tilstand = "OPPFYLT_MANUELT",
@@ -152,7 +152,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
                                         vurdertAv = "maskinell saksbehandling",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MASKINELT",
@@ -161,7 +161,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(3),
                                         vurdertAv = null,
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_2", "LEDD_3"),
                                         tilstand = "IKKE_RELEVANT",
@@ -170,7 +170,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(4),
                                         vurdertAv = "veileder",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_5",
                                         ledd = listOf("LEDD_1", "LEDD_2"),
                                         tilstand = "OPPFYLT_MANUELT",
@@ -187,7 +187,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(5),
                                         vurdertAv = "saksbehandler",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_6",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
@@ -205,7 +205,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(6),
                                         vurdertAv = "saksbehandler",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_12",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
@@ -224,7 +224,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(7),
                                         vurdertAv = "saksbehandler",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_19",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",
@@ -240,7 +240,7 @@ internal class ApiTest {
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(8),
                                         vurdertAv = "saksbehandler",
-                                        godkjentAv = null,
+                                        kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_29",
                                         ledd = listOf("LEDD_1"),
                                         tilstand = "OPPFYLT_MANUELT",

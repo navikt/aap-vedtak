@@ -202,7 +202,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                         SøkereKafkaDto.Vilkårsvurdering(
                             vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                             vurdertAv = vilkår.vurdertAv,
-                            godkjentAv = vilkår.godkjentAv,
+                            godkjentAv = vilkår.kvalitetssikretAv,
                             paragraf = vilkår.paragraf,
                             ledd = vilkår.ledd,
                             tilstand = vilkår.tilstand,

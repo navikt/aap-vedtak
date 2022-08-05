@@ -57,7 +57,7 @@ internal class Paragraf_11_19 private constructor(
             DtoVilkårsvurdering(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null, //TODO
-                godkjentAv = null,
+                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
@@ -74,7 +74,7 @@ internal class Paragraf_11_19 private constructor(
             DtoVilkårsvurdering(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-                godkjentAv = null,
+                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
