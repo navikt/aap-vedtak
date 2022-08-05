@@ -57,7 +57,7 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning)
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -85,7 +85,47 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
 
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_22) {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
 
@@ -142,7 +182,7 @@ internal class Sak private constructor(
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5_yrkesskade) {
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5Yrkesskade) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
@@ -154,6 +194,10 @@ internal class Sak private constructor(
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
+        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_19) {
+            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+        }
+
         open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_22) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
@@ -162,16 +206,52 @@ internal class Sak private constructor(
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_19) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
-        }
-
         open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
         open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_2) {
-            log.info("Forventet ikke kvalitetssikring på paragraf 11-2 i tilstand ${tilstandsnavn.name}")
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_3) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_5) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_6) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_19) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_22) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_29) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
 
         open fun toDto(sak: Sak) = DtoSak(
@@ -257,7 +337,7 @@ internal class Sak private constructor(
                 vurderNesteTilstand(sak, løsning)
             }
 
-            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5_yrkesskade) {
+            override fun håndterLøsning(sak: Sak, løsning: LøsningParagraf_11_5Yrkesskade) {
                 sak.sakstype.håndterLøsning(løsning)
                 vurderNesteTilstand(sak, løsning)
             }
@@ -323,7 +403,57 @@ internal class Sak private constructor(
 
         object AvventerKvalitetssikring : Tilstand(Tilstandsnavn.AVVENTER_KVALITETSSIKRING) {
 
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
             override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_2) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_3) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_5) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_6) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_19) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_22) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+                vurderNesteTilstand(sak, kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_29) {
                 sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
                 vurderNesteTilstand(sak, kvalitetssikring)
             }

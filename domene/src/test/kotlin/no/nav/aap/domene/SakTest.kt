@@ -158,7 +158,7 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_5_yrkesskade(
+            LøsningParagraf_11_5Yrkesskade(
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 arbeidsevneErNedsattMedMinst50Prosent = true,

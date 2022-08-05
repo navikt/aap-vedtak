@@ -47,7 +47,7 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
         saker.forEach { it.håndterLøsning(løsning) }
     }
 
@@ -75,7 +75,47 @@ class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning, fødselsdato) }
     }
 
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_22) {
+        saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
         saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
     }
 

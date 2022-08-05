@@ -49,11 +49,11 @@ data class DtoVilkårsvurdering(
     val løsning_11_2_maskinell: List<DtoLøsningMaskinellParagraf_11_2>? = null,
     val løsning_11_2_manuell: List<DtoLøsningParagraf_11_2>? = null,
     val løsning_11_3_manuell: List<DtoLøsningParagraf_11_3>? = null,
-    val løsning_11_4_ledd2_ledd3_manuell: List<DtoLøsningParagraf_11_4_ledd2_ledd3>? = null,
+    val løsning_11_4_ledd2_ledd3_manuell: List<DtoLøsningParagraf_11_4AndreOgTredjeLedd>? = null,
     val løsning_11_5_manuell: List<DtoLøsningParagraf_11_5>? = null,
-    val løsning_11_5_yrkesskade_manuell: List<DtoLøsningParagraf_11_5_yrkesskade>? = null,
+    val løsning_11_5_yrkesskade_manuell: List<DtoLøsningParagraf_11_5Yrkesskade>? = null,
     val løsning_11_6_manuell: List<DtoLøsningParagraf_11_6>? = null,
-    val løsning_11_12_ledd1_manuell: List<DtoLøsningParagraf_11_12_ledd1>? = null,
+    val løsning_11_12_ledd1_manuell: List<DtoLøsningParagraf_11_12FørsteLedd>? = null,
     val løsning_11_19_manuell: List<DtoLøsningParagraf_11_19>? = null,
     val løsning_11_22_manuell: List<DtoLøsningParagraf_11_22>? = null,
     val løsning_11_29_manuell: List<DtoLøsningParagraf_11_29>? = null,
@@ -83,6 +83,22 @@ data class DtoLøsningManuellMedlemskapYrkesskade(
 
     private fun toLøsning() =
         LøsningManuellMedlemskapYrkesskade(vurdertAv, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
+}
+
+data class DtoKvalitetssikringMedlemskapYrkesskade(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
 }
 
 data class DtoLøsningParagraf_11_2(
@@ -144,7 +160,23 @@ data class DtoLøsningParagraf_11_3(
     private fun toLøsning() = LøsningParagraf_11_3(vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class DtoLøsningParagraf_11_4_ledd2_ledd3(
+data class DtoKvalitetssikringParagraf_11_3(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+}
+
+data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean
@@ -156,6 +188,22 @@ data class DtoLøsningParagraf_11_4_ledd2_ledd3(
     }
 
     private fun toLøsning() = LøsningParagraf_11_4AndreOgTredjeLedd(vurdertAv, tidspunktForVurdering, erOppfylt)
+}
+
+data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
 }
 
 data class DtoLøsningParagraf_11_5(
@@ -180,7 +228,23 @@ data class DtoLøsningParagraf_11_5(
     )
 }
 
-data class DtoLøsningParagraf_11_5_yrkesskade(
+data class DtoKvalitetssikringParagraf_11_5(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+}
+
+data class DtoLøsningParagraf_11_5Yrkesskade(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
@@ -192,11 +256,27 @@ data class DtoLøsningParagraf_11_5_yrkesskade(
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_5_yrkesskade(
+    private fun toLøsning() = LøsningParagraf_11_5Yrkesskade(
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
         arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent
+    )
+}
+
+data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
     )
 }
 
@@ -222,7 +302,23 @@ data class DtoLøsningParagraf_11_6(
     )
 }
 
-data class DtoLøsningParagraf_11_12_ledd1(
+data class DtoKvalitetssikringParagraf_11_6(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+}
+
+data class DtoLøsningParagraf_11_12FørsteLedd(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val bestemmesAv: String,
@@ -254,6 +350,22 @@ data class DtoLøsningParagraf_11_12_ledd1(
     )
 }
 
+data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_12FørsteLedd(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+}
+
 data class DtoLøsningParagraf_11_22(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -278,6 +390,22 @@ data class DtoLøsningParagraf_11_22(
     )
 }
 
+data class DtoKvalitetssikringParagraf_11_22(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+}
+
 data class DtoLøsningParagraf_11_29(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -290,6 +418,22 @@ data class DtoLøsningParagraf_11_29(
     }
 
     private fun toLøsning() = LøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
+}
+
+data class DtoKvalitetssikringParagraf_11_29(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_29(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
 }
 
 data class DtoVurderingAvBeregningsdato(
@@ -309,6 +453,22 @@ data class DtoLøsningParagraf_11_19(
     }
 
     private fun toLøsning() = LøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
+}
+
+data class DtoKvalitetssikringParagraf_11_19(
+    val kvalitetssikretAv: String,
+    val erGodkjent: Boolean,
+    val begrunnelse: String
+) {
+    fun håndter(søker: Søker) {
+        søker.håndterKvalitetssikring(toKvalitetssikring())
+    }
+
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_19(
+        kvalitetssikretAv = kvalitetssikretAv,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
 }
 
 data class DtoVedtak(

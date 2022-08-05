@@ -55,7 +55,7 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5_yrkesskade) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
@@ -67,11 +67,11 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_19) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_19) {
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
@@ -79,7 +79,47 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
     }
 
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_22) {
+        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
         vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
     }
 

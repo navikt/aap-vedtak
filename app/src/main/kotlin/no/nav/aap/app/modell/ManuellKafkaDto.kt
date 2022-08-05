@@ -16,7 +16,7 @@ data class Løsning_11_3_manuell(val vurdertAv: String, val tidspunktForVurderin
 }
 
 data class Løsning_11_4_ledd2_ledd3_manuell(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime,  val erOppfylt: Boolean) {
-    private fun toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(vurdertAv, tidspunktForVurdering, erOppfylt)
+    private fun toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(vurdertAv, tidspunktForVurdering, erOppfylt)
     internal fun håndter(søker: Søker) = toDto().håndter(søker)
 }
 
@@ -62,7 +62,7 @@ data class Løsning_11_12_ledd1_manuell(
     val unntaksbegrunnelse: String,
     val manueltSattVirkningsdato: LocalDate
 ) {
-    private fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+    private fun toDto() = DtoLøsningParagraf_11_12FørsteLedd(
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         bestemmesAv = bestemmesAv,

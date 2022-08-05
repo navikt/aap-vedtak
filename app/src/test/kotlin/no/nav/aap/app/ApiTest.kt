@@ -211,7 +211,7 @@ internal class ApiTest {
                                         tilstand = "OPPFYLT_MANUELT",
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_12_ledd1_manuell = listOf(
-                                            DtoLøsningParagraf_11_12_ledd1(
+                                            DtoLøsningParagraf_11_12FørsteLedd(
                                                 vurdertAv = "saksbehandler",
                                                 tidspunktForVurdering = tidspunktForVurdering,
                                                 bestemmesAv = "soknadstidspunkt",

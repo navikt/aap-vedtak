@@ -1,6 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoLøsningParagraf_11_12_ledd1
+import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_12FørsteLedd
+import no.nav.aap.dto.DtoLøsningParagraf_11_12FørsteLedd
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -27,7 +28,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
 
     internal fun vurdertAv() = vurdertAv
 
-    private fun toDto() = DtoLøsningParagraf_11_12_ledd1(
+    private fun toDto() = DtoLøsningParagraf_11_12FørsteLedd(
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         bestemmesAv = bestemmesAv.name,
@@ -36,3 +37,19 @@ internal class LøsningParagraf_11_12FørsteLedd(
         manueltSattVirkningsdato = manueltSattVirkningsdato
     )
 }
+
+class KvalitetssikringParagraf_11_12FørsteLedd(
+    private val kvalitetssikretAv: String,
+    private val erGodkjent: Boolean,
+    private val begrunnelse: String
+) : Hendelse() {
+
+    internal companion object {
+        internal fun Iterable<KvalitetssikringParagraf_11_12FørsteLedd>.toDto() = map(KvalitetssikringParagraf_11_12FørsteLedd::toDto)
+    }
+
+    internal fun erGodkjent() = erGodkjent
+    internal fun kvalitetssikretAv() = kvalitetssikretAv
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikretAv, erGodkjent, begrunnelse)
+}
+

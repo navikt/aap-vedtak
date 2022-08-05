@@ -6,8 +6,8 @@ import no.nav.aap.domene.vilkår.Paragraf_11_5_yrkesskade.SøknadMottatt
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
-import no.nav.aap.hendelse.LøsningParagraf_11_5_yrkesskade
-import no.nav.aap.hendelse.LøsningParagraf_11_5_yrkesskade.Companion.toDto
+import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
+import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5_yrkesskade
 import java.time.LocalDate
@@ -23,7 +23,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         Ledd.LEDD_1 + Ledd.LEDD_2,
         tilstand
     ) {
-    private val løsninger = mutableListOf<LøsningParagraf_11_5_yrkesskade>()
+    private val løsninger = mutableListOf<LøsningParagraf_11_5Yrkesskade>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -50,7 +50,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
         override fun håndterLøsning(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            løsning: LøsningParagraf_11_5_yrkesskade
+            løsning: LøsningParagraf_11_5Yrkesskade
         ) {
             vilkårsvurdering.løsninger.add(løsning)
             if (løsning.erNedsattMedMinst30Prosent()) {
@@ -89,7 +89,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         ) {
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_5_yrkesskade_manuell)
             vilkårsvurdering.løsninger.addAll(løsning.map {
-                LøsningParagraf_11_5_yrkesskade(
+                LøsningParagraf_11_5Yrkesskade(
                     vurdertAv = it.vurdertAv,
                     tidspunktForVurdering = it.tidspunktForVurdering,
                     arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
@@ -117,7 +117,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         ) {
             val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_5_yrkesskade_manuell)
             vilkårsvurdering.løsninger.addAll(løsning.map {
-                LøsningParagraf_11_5_yrkesskade(
+                LøsningParagraf_11_5Yrkesskade(
                     vurdertAv = it.vurdertAv,
                     tidspunktForVurdering = it.tidspunktForVurdering,
                     arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,

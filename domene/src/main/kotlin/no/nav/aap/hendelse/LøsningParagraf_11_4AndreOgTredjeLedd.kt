@@ -1,6 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoLøsningParagraf_11_4_ledd2_ledd3
+import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd
+import no.nav.aap.dto.DtoLøsningParagraf_11_4AndreOgTredjeLedd
 import java.time.LocalDateTime
 
 internal class LøsningParagraf_11_4AndreOgTredjeLedd(
@@ -16,9 +17,25 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
     internal fun vurdertAv() = vurdertAv
     internal fun erManueltOppfylt() = erOppfylt
 
-    private fun toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(
+    private fun toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         erOppfylt = erOppfylt
     )
 }
+
+class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+    private val kvalitetssikretAv: String,
+    private val erGodkjent: Boolean,
+    private val begrunnelse: String
+) : Hendelse() {
+
+    internal companion object {
+        internal fun Iterable<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>.toDto() = map(KvalitetssikringParagraf_11_4AndreOgTredjeLedd::toDto)
+    }
+
+    internal fun erGodkjent() = erGodkjent
+    internal fun kvalitetssikretAv() = kvalitetssikretAv
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(kvalitetssikretAv, erGodkjent, begrunnelse)
+}
+

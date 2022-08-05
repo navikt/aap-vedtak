@@ -73,7 +73,7 @@ private fun LøsningParagraf_11_3.toDto() = DtoLøsningParagraf_11_3(
     erOppfylt = erOppfylt
 )
 
-private fun LøsningParagraf_11_4_ledd2_ledd3.toDto() = DtoLøsningParagraf_11_4_ledd2_ledd3(
+private fun LøsningParagraf_11_4_ledd2_ledd3.toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
@@ -86,7 +86,7 @@ private fun LøsningParagraf_11_5.toDto() = DtoLøsningParagraf_11_5(
     nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
 )
 
-private fun LøsningParagraf_11_5_yrkesskade.toDto() = DtoLøsningParagraf_11_5_yrkesskade(
+private fun LøsningParagraf_11_5_yrkesskade.toDto() = DtoLøsningParagraf_11_5Yrkesskade(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
@@ -101,7 +101,7 @@ private fun LøsningParagraf_11_6.toDto() = DtoLøsningParagraf_11_6(
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun LøsningParagraf_11_12_ledd1.toDto() = DtoLøsningParagraf_11_12_ledd1(
+private fun LøsningParagraf_11_12_ledd1.toDto() = DtoLøsningParagraf_11_12FørsteLedd(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     bestemmesAv = bestemmesAv,
