@@ -485,42 +485,56 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             when (enumValueOf<Paragraf>(dtoVilkårsvurdering.paragraf)) {
                 Paragraf.MEDLEMSKAP_YRKESSKADE ->
                     gjenopprett(dtoVilkårsvurdering, MedlemskapYrkesskade.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_2 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_2.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_3 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_3.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_4 -> {
                     dtoVilkårsvurdering.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) ->
                                 gjenopprett(dtoVilkårsvurdering, Paragraf_11_4FørsteLedd.Companion::gjenopprett)
+
                             listOf(Ledd.LEDD_2, Ledd.LEDD_3) ->
                                 gjenopprett(dtoVilkårsvurdering, Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett)
+
                             else -> null.also { log.warn("Paragraf ${dtoVilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
+
                 Paragraf.PARAGRAF_11_5 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_5.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_5_YRKESSKADE ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_5_yrkesskade.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_6 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_6.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_12 -> {
                     dtoVilkårsvurdering.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) ->
                                 gjenopprett(dtoVilkårsvurdering, Paragraf_11_12FørsteLedd.Companion::gjenopprett)
+
                             else -> null.also { log.warn("Paragraf ${dtoVilkårsvurdering.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
+
                 Paragraf.PARAGRAF_11_14 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_14.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_19 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_19.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_22 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_22.Companion::gjenopprett)
+
                 Paragraf.PARAGRAF_11_29 ->
                     gjenopprett(dtoVilkårsvurdering, Paragraf_11_29.Companion::gjenopprett)
             }
