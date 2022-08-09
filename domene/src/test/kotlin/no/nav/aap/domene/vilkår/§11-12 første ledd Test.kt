@@ -7,13 +7,10 @@ import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
 
 internal class `§11-12 første ledd Test` {
 
@@ -98,7 +95,10 @@ internal class `§11-12 første ledd Test` {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 
-    private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_12FørsteLedd) {
+    private fun assertTilstand(
+        tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
+        vilkårsvurdering: Paragraf_11_12FørsteLedd
+    ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
     }
 
@@ -107,6 +107,6 @@ internal class `§11-12 første ledd Test` {
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_12FørsteLedd) {
-        Assertions.assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
+        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

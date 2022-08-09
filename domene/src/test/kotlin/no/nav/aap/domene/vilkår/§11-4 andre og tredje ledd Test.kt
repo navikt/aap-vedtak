@@ -7,13 +7,10 @@ import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
 
 internal class `§11-4 andre og tredje ledd Test` {
 
@@ -145,6 +142,6 @@ internal class `§11-4 andre og tredje ledd Test` {
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd) {
-        Assertions.assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
+        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

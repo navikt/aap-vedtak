@@ -4,16 +4,11 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.Utfall
-import no.nav.aap.hendelse.Hendelse
-import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade
-import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
-import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import no.nav.aap.hendelse.*
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
-import kotlin.test.assertEquals
 
 internal class MedlemskapYrkesskadeTest {
     @Test
@@ -161,6 +156,186 @@ internal class MedlemskapYrkesskadeTest {
         assertFalse(vilkår.erIkkeOppfylt())
     }
 
+    @Test
+    fun `Hvis tilstand oppfylt maskinelt blir godkjent av kvalitetssikrer, blir tilstand satt til oppfylt maskinelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt maskinelt blir godkjent av kvalitetssikrer, blir tilstand satt til ikke oppfylt maskinelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand oppfylt manuelt blir godkjent av kvalitetssikrer, blir tilstand satt til oppfylt manuelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade("Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt manuelt blir godkjent av kvalitetssikrer, blir tilstand satt til ikke oppfylt manuelt kvalitetssikret`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade("Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", true, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertKvalitetssikretAv("X", vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand oppfylt maskinelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til manuell vurdering trengs`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", false, "NEI")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt maskinelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til manuell vurdering trengs`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", false, "NEI")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand oppfylt manuelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til manuell vurdering trengs`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade("Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", false, "NEI")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
+    fun `Hvis tilstand ikke oppfylt manuelt ikke blir godkjent av kvalitetssikrer, blir tilstand satt til manuell vurdering trengs`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade("Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI)
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade("X", false, "NEI")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
     private fun assertHarBehov(hendelse: Hendelse) {
         assertTrue(hendelse.behov().isNotEmpty())
     }
@@ -171,5 +346,17 @@ internal class MedlemskapYrkesskadeTest {
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: MedlemskapYrkesskade) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
+    }
+
+    private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: MedlemskapYrkesskade) {
+        assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
+    }
+
+    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: MedlemskapYrkesskade) {
+        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
+    }
+
+    private fun assertIkkeKvalitetssikret(vilkårsvurdering: MedlemskapYrkesskade) {
+        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

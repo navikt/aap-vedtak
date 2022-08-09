@@ -6,6 +6,8 @@ import no.nav.aap.domene.vilkår.Paragraf_11_29.SøknadMottatt
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
+import no.nav.aap.hendelse.KvalitetssikringParagraf_11_29
+import no.nav.aap.hendelse.KvalitetssikringParagraf_11_29.Companion.toDto
 import no.nav.aap.hendelse.LøsningParagraf_11_29
 import no.nav.aap.hendelse.LøsningParagraf_11_29.Companion.toDto
 import no.nav.aap.hendelse.Søknad
@@ -24,6 +26,7 @@ internal class Paragraf_11_29 private constructor(
         tilstand
     ) {
     private val løsninger = mutableListOf<LøsningParagraf_11_29>()
+    private val kvalitetssikringer = mutableListOf<KvalitetssikringParagraf_11_29>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -67,11 +70,29 @@ internal class Paragraf_11_29 private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT
+            utfall = Utfall.IKKE_VURDERT,
+            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
+
+        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, dtoVilkårsvurdering: DtoVilkårsvurdering) {
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
     }
 
     object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_29>() {
+        override fun håndterKvalitetssikring(
+            vilkårsvurdering: Paragraf_11_29,
+            kvalitetssikring: KvalitetssikringParagraf_11_29
+        ) {
+            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            when {
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: Paragraf_11_29): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -80,16 +101,47 @@ internal class Paragraf_11_29 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
-            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto()
+            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, dtoVilkårsvurdering: DtoVilkårsvurdering) {
-            val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_29_manuell)
-            vilkårsvurdering.løsninger.addAll(løsning.map { LøsningParagraf_11_29(it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt) })
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
+    }
+
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_29>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.OPPFYLT,
+            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, dtoVilkårsvurdering: DtoVilkårsvurdering) {
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_29>() {
+        override fun håndterKvalitetssikring(
+            vilkårsvurdering: Paragraf_11_29,
+            kvalitetssikring: KvalitetssikringParagraf_11_29
+        ) {
+            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            when {
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(IkkeOppfyltKvalitetssikret, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: Paragraf_11_29): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -98,13 +150,51 @@ internal class Paragraf_11_29 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
-            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto()
+            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, dtoVilkårsvurdering: DtoVilkårsvurdering) {
-            val løsning = requireNotNull(dtoVilkårsvurdering.løsning_11_29_manuell)
-            vilkårsvurdering.løsninger.addAll(løsning.map { LøsningParagraf_11_29(it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt) })
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
+    }
+
+    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_29>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.IKKE_OPPFYLT,
+            løsning_11_29_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, dtoVilkårsvurdering: DtoVilkårsvurdering) {
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
+    }
+
+    private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoLøsninger = vilkårsvurdering.løsning_11_29_manuell ?: emptyList()
+        løsninger.addAll(dtoLøsninger.map {
+            LøsningParagraf_11_29(
+                vurdertAv = it.vurdertAv,
+                tidspunktForVurdering = it.tidspunktForVurdering,
+                erOppfylt = it.erOppfylt
+            )
+        })
+    }
+
+    private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_29 ?: emptyList()
+        kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
+            KvalitetssikringParagraf_11_29(it.kvalitetssikretAv, it.erGodkjent, it.begrunnelse)
+        })
     }
 
     internal companion object {

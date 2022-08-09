@@ -5,12 +5,10 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.MedlemskapYrkesskade.*
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.dto.Utfall
-import no.nav.aap.hendelse.Hendelse
-import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade
+import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.KvalitetssikringMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade.Companion.toDto
-import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade
 import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade.Companion.toDto
-import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_2
 import java.time.LocalDate
 import java.util.*
@@ -27,26 +25,11 @@ internal class MedlemskapYrkesskade private constructor(
     ) {
     private val maskinelleLøsninger = mutableListOf<LøsningMaskinellMedlemskapYrkesskade>()
     private val manuelleLøsninger = mutableListOf<LøsningManuellMedlemskapYrkesskade>()
+    private val kvalitetssikringer = mutableListOf<KvalitetssikringMedlemskapYrkesskade>()
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
     override fun <T> callWithReceiver(block: MedlemskapYrkesskade.() -> T) = this.block()
-
-    private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
-        val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
-        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellMedlemskapYrkesskade(enumValueOf(it.erMedlem)) })
-    }
-
-    private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
-        val dtoManuell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_manuell)
-        manuelleLøsninger.addAll(dtoManuell.map {
-            LøsningManuellMedlemskapYrkesskade(
-                it.vurdertAv,
-                it.tidspunktForVurdering,
-                enumValueOf(it.erMedlem)
-            )
-        })
-    }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<MedlemskapYrkesskade>() {
         override fun håndterSøknad(
@@ -87,7 +70,7 @@ internal class MedlemskapYrkesskade private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT
+            utfall = Utfall.IKKE_VURDERT,
         )
     }
 
@@ -112,6 +95,8 @@ internal class MedlemskapYrkesskade private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
             løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -119,10 +104,27 @@ internal class MedlemskapYrkesskade private constructor(
             dtoVilkårsvurdering: DtoVilkårsvurdering
         ) {
             vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
     }
 
     object OppfyltMaskinelt : Tilstand.OppfyltMaskinelt<MedlemskapYrkesskade>() {
+        override fun håndterKvalitetssikring(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
+        ) {
+            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            when {
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    OppfyltMaskineltKvalitetssikret,
+                    kvalitetssikring
+                )
+
+                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
@@ -132,6 +134,8 @@ internal class MedlemskapYrkesskade private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
             løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -139,10 +143,51 @@ internal class MedlemskapYrkesskade private constructor(
             dtoVilkårsvurdering: DtoVilkårsvurdering
         ) {
             vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
+    }
+
+    object OppfyltMaskineltKvalitetssikret : Tilstand.OppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = "maskinell saksbehandling",
+            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.OPPFYLT,
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            dtoVilkårsvurdering: DtoVilkårsvurdering
+        ) {
+            vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
     }
 
     object IkkeOppfyltMaskinelt : Tilstand.IkkeOppfyltMaskinelt<MedlemskapYrkesskade>() {
+        override fun håndterKvalitetssikring(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
+        ) {
+            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            when {
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    IkkeOppfyltMaskineltKvalitetssikret,
+                    kvalitetssikring
+                )
+
+                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
@@ -152,6 +197,8 @@ internal class MedlemskapYrkesskade private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
             løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -159,10 +206,51 @@ internal class MedlemskapYrkesskade private constructor(
             dtoVilkårsvurdering: DtoVilkårsvurdering
         ) {
             vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
+    }
+
+    object IkkeOppfyltMaskineltKvalitetssikret : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = "maskinell saksbehandling",
+            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.IKKE_OPPFYLT,
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            dtoVilkårsvurdering: DtoVilkårsvurdering
+        ) {
+            vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
     }
 
     object OppfyltManuelt : Tilstand.OppfyltManuelt<MedlemskapYrkesskade>() {
+        override fun håndterKvalitetssikring(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
+        ) {
+            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            when {
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    OppfyltManueltKvalitetssikret,
+                    kvalitetssikring
+                )
+
+                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
@@ -172,7 +260,8 @@ internal class MedlemskapYrkesskade private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
             løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto()
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -181,10 +270,50 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
             vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
+    }
+
+    object OppfyltManueltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<MedlemskapYrkesskade>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
+            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.OPPFYLT,
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            dtoVilkårsvurdering: DtoVilkårsvurdering
+        ) {
+            vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
     }
 
     object IkkeOppfyltManuelt : Tilstand.IkkeOppfyltManuelt<MedlemskapYrkesskade>() {
+        override fun håndterKvalitetssikring(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
+        ) {
+            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            when {
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    IkkeOppfyltManueltKvalitetssikret,
+                    kvalitetssikring
+                )
+
+                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
@@ -194,7 +323,8 @@ internal class MedlemskapYrkesskade private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
             løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto()
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
         override fun gjenopprettTilstand(
@@ -203,7 +333,55 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
             vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
         }
+    }
+
+    object IkkeOppfyltManueltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<MedlemskapYrkesskade>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
+            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.IKKE_OPPFYLT,
+            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: MedlemskapYrkesskade,
+            dtoVilkårsvurdering: DtoVilkårsvurdering
+        ) {
+            vilkårsvurdering.settMaskinellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
+            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+        }
+    }
+
+    private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
+        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellMedlemskapYrkesskade(enumValueOf(it.erMedlem)) })
+    }
+
+    private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoManuell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_manuell)
+        manuelleLøsninger.addAll(dtoManuell.map {
+            LøsningManuellMedlemskapYrkesskade(
+                it.vurdertAv,
+                it.tidspunktForVurdering,
+                enumValueOf(it.erMedlem)
+            )
+        })
+    }
+
+    private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
+        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_medlemskap_yrkesskade ?: emptyList()
+        kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
+            KvalitetssikringMedlemskapYrkesskade(it.kvalitetssikretAv, it.erGodkjent, it.begrunnelse)
+        })
     }
 
     internal companion object {

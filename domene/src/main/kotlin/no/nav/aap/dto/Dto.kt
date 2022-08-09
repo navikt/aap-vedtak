@@ -57,6 +57,7 @@ data class DtoVilkårsvurdering(
     val løsning_11_19_manuell: List<DtoLøsningParagraf_11_19>? = null,
     val løsning_11_22_manuell: List<DtoLøsningParagraf_11_22>? = null,
     val løsning_11_29_manuell: List<DtoLøsningParagraf_11_29>? = null,
+    val kvalitetssikringer_medlemskap_yrkesskade: List<DtoKvalitetssikringMedlemskapYrkesskade>? = null,
     val kvalitetssikringer_11_2: List<DtoKvalitetssikringParagraf_11_2>? = null,
     val kvalitetssikringer_11_3: List<DtoKvalitetssikringParagraf_11_3>? = null,
     val kvalitetssikringer_11_4_ledd2_ledd3: List<DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd>? = null,
@@ -64,6 +65,9 @@ data class DtoVilkårsvurdering(
     val kvalitetssikringer_11_5_yrkesskade: List<DtoKvalitetssikringParagraf_11_5Yrkesskade>? = null,
     val kvalitetssikringer_11_6: List<DtoKvalitetssikringParagraf_11_6>? = null,
     val kvalitetssikringer_11_12_ledd1: List<DtoKvalitetssikringParagraf_11_12FørsteLedd>? = null,
+    val kvalitetssikringer_11_19: List<DtoKvalitetssikringParagraf_11_19>? = null,
+    val kvalitetssikringer_11_22: List<DtoKvalitetssikringParagraf_11_22>? = null,
+    val kvalitetssikringer_11_29: List<DtoKvalitetssikringParagraf_11_29>? = null,
 )
 
 data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {

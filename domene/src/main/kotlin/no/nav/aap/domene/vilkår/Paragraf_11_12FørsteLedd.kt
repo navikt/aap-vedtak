@@ -150,7 +150,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
     }
 
     private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
-        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_5_yrkesskade ?: emptyList()
+        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_12_ledd1 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_12FørsteLedd(it.kvalitetssikretAv, it.erGodkjent, it.begrunnelse)
         })
