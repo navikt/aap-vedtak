@@ -393,9 +393,13 @@ internal class MedlemskapYrkesskade private constructor(
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
             Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT -> OppfyltMaskinelt
+            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> OppfyltMaskineltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT -> IkkeOppfyltMaskinelt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfyltMaskineltKvalitetssikret
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> OppfyltManuelt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltManueltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfyltManuelt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltManueltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_2")
         }
     }

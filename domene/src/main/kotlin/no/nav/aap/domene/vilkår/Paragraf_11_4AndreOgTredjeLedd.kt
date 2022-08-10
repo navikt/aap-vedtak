@@ -246,8 +246,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT -> Oppfylt
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT -> IkkeOppfylt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfylt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_4AndreOgTredjeLedd")
         }

@@ -195,7 +195,9 @@ internal class Paragraf_11_3 private constructor(
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfylt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_3")
         }
     }
