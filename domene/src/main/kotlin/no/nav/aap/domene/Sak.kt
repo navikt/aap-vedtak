@@ -375,6 +375,50 @@ internal class Sak private constructor(
                         sak.tilstand(IkkeOppfylt, hendelse)
                 }
             }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_2) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_3) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_5) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_6) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_19) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_22) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
+
+            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_29) {
+                sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
+            }
         }
 
         object BeregnInntekt : Tilstand(Tilstandsnavn.BEREGN_INNTEKT) {
@@ -396,8 +440,7 @@ internal class Sak private constructor(
                     fødselsdato
                 )
 
-                //Vente på sykepenger etter totrinnskontroll, og ikke her?
-                sak.tilstand(VedtakFattet, løsning)
+                sak.tilstand(AvventerKvalitetssikring, løsning)
             }
         }
 
@@ -474,13 +517,12 @@ internal class Sak private constructor(
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
 
-            // TODO: Her må vi sjekke tilstander på en annen måte
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 when {
-                    sak.sakstype.erAlleOppfylt() ->
+                    sak.sakstype.erAlleKvalitetssikret() ->
                         sak.tilstand(VedtakFattet, hendelse)
-                    sak.sakstype.erNoenIkkeOppfylt() ->
-                        sak.tilstand(VedtakFattet, hendelse)
+                    sak.sakstype.erNoenIkkeIKvalitetssikring() ->
+                        sak.tilstand(SøknadMottatt, hendelse)
                 }
             }
         }

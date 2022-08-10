@@ -3,7 +3,9 @@ package no.nav.aap.domene
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleKvalitetssikret
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeIKvalitetssikring
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.DtoSakstype
@@ -130,6 +132,9 @@ internal abstract class Sakstype private constructor(
 
     internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
     internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
+
+    internal fun erAlleKvalitetssikret() = vilkårsvurderinger.erAlleKvalitetssikret()
+    internal fun erNoenIkkeIKvalitetssikring() = vilkårsvurderinger.erNoenIkkeIKvalitetssikring()
 
     internal fun beregningsdato() = vilkårsvurderinger.firstNotNullOf { it.beregningsdato() }
 

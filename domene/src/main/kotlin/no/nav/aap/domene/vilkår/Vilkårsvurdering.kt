@@ -60,6 +60,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal fun erOppfylt(): Boolean = tilstand.erOppfylt()
     internal fun erIkkeOppfylt(): Boolean = tilstand.erIkkeOppfylt()
+    internal fun erKvalitetssikret(): Boolean = tilstand.erKvalitetssikret()
+    internal fun erIKvalitetssikring(): Boolean = tilstand.erIKvalitetssikring()
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) =
         callWithReceiver {
@@ -181,7 +183,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
-        private val erIkkeOppfylt: Boolean
+        private val erIkkeOppfylt: Boolean,
+        private val erKvalitetssikret: Boolean,
+        private val erIKvalitetssikring: Boolean,
     ) {
         enum class Tilstandsnavn {
             IKKE_VURDERT,
@@ -211,6 +215,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal fun erOppfylt() = erOppfylt
         internal fun erIkkeOppfylt() = erIkkeOppfylt
+        internal fun erKvalitetssikret() = erKvalitetssikret
+        internal fun erIKvalitetssikring() = erIKvalitetssikring
 
         internal open fun håndterSøknad(
             vilkårsvurdering: PARAGRAF,
@@ -399,77 +405,102 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
             erOppfylt = false,
-            erIkkeOppfylt = false
+            erIkkeOppfylt = false,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = false,
         )
 
         internal abstract class SøknadMottatt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
             erOppfylt = false,
-            erIkkeOppfylt = false
+            erIkkeOppfylt = false,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = false,
         )
 
         internal abstract class ManuellVurderingTrengs<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS,
             erOppfylt = false,
-            erIkkeOppfylt = false
+            erIkkeOppfylt = false,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = false,
         )
 
         internal abstract class OppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT,
             erOppfylt = true,
-            erIkkeOppfylt = false
+            erIkkeOppfylt = false,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = true,
         )
 
         internal abstract class OppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET,
                 erOppfylt = true,
-                erIkkeOppfylt = false
+                erIkkeOppfylt = false,
+                erKvalitetssikret = true,
+                erIKvalitetssikring = true,
             )
 
         internal abstract class IkkeOppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             erOppfylt = false,
-            erIkkeOppfylt = true
+            erIkkeOppfylt = true,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = true,
         )
 
         internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
                 erOppfylt = false,
-                erIkkeOppfylt = true
+                erIkkeOppfylt = true,
+                erKvalitetssikret = true,
+                erIKvalitetssikring = true,
             )
 
         internal abstract class OppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT,
             erOppfylt = true,
-            erIkkeOppfylt = false
+            erIkkeOppfylt = false,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = true,
         )
 
         internal abstract class OppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET,
                 erOppfylt = true,
-                erIkkeOppfylt = false
+                erIkkeOppfylt = false,
+                erKvalitetssikret = true,
+                erIKvalitetssikring = true,
             )
 
         internal abstract class IkkeOppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
             erOppfylt = false,
-            erIkkeOppfylt = true
+            erIkkeOppfylt = true,
+            erKvalitetssikret = false,
+            erIKvalitetssikring = true,
         )
 
         internal abstract class IkkeOppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
                 erOppfylt = false,
-                erIkkeOppfylt = true
+                erIkkeOppfylt = true,
+                erKvalitetssikret = true,
+                erIKvalitetssikring = true,
             )
 
         internal abstract class IkkeRelevant<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_RELEVANT,
             erOppfylt = true,
-            erIkkeOppfylt = false
+            erIkkeOppfylt = false,
+            //IkkeRelevant skal ikke hindre saken i å bli kvalitetssikret.
+            erKvalitetssikret = true,
+            erIKvalitetssikring = true,
         )
     }
 
@@ -479,6 +510,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal fun Iterable<Vilkårsvurdering<*>>.erAlleOppfylt() = all { it.erOppfylt() }
         internal fun Iterable<Vilkårsvurdering<*>>.erNoenIkkeOppfylt() = any { it.erIkkeOppfylt() }
+        internal fun Iterable<Vilkårsvurdering<*>>.erAlleKvalitetssikret() = all { it.erKvalitetssikret() }
+        internal fun Iterable<Vilkårsvurdering<*>>.erNoenIkkeIKvalitetssikring() =
+            none() || any { !it.erIKvalitetssikring() }
+
         internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
 
         internal fun gjenopprett(dtoVilkårsvurdering: DtoVilkårsvurdering) =

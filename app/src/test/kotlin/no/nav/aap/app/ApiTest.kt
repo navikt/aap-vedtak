@@ -113,7 +113,7 @@ internal class ApiTest {
                 saker = listOf(
                     DtoSak(
                         saksid = actual.saker.first().saksid,
-                        tilstand = "VEDTAK_FATTET",
+                        tilstand = "AVVENTER_KVALITETSSIKRING",
                         vurderingsdato = LocalDate.now(),
                         sakstyper = listOf(
                             DtoSakstype(
@@ -155,7 +155,7 @@ internal class ApiTest {
                                         kvalitetssikretAv = null,
                                         paragraf = "PARAGRAF_11_4",
                                         ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MASKINELT",
+                                        tilstand = "OPPFYLT_MASKINELT_KVALITETSSIKRET",
                                         utfall = Utfall.OPPFYLT
                                     ),
                                     DtoVilkårsvurdering(

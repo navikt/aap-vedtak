@@ -37,7 +37,7 @@ internal class SøkerComponentTest {
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -56,7 +56,7 @@ internal class SøkerComponentTest {
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
         assertTilstand(
             vilkårsvurderinger,
-            "IKKE_OPPFYLT_MANUELT",
+            "IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -76,7 +76,7 @@ internal class SøkerComponentTest {
         assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -108,7 +108,7 @@ internal class SøkerComponentTest {
         assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -131,7 +131,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -163,7 +163,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -206,7 +206,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -240,7 +240,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
+            "OPPFYLT_MASKINELT_KVALITETSSIKRET",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
@@ -309,7 +309,7 @@ internal class SøkerComponentTest {
 
         val dtoSøker = søker.toDto()
 
-        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("AVVENTER_KVALITETSSIKRING", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
@@ -378,7 +378,7 @@ internal class SøkerComponentTest {
         }
         medSøker { }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
 
-        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("AVVENTER_KVALITETSSIKRING", dtoSøker.saker.single().tilstand)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
@@ -403,7 +403,7 @@ internal class SøkerComponentTest {
 
         val dtoSøker = søker.toDto()
 
-        assertEquals("VEDTAK_FATTET", dtoSøker.saker.single().tilstand)
+        assertEquals("AVVENTER_KVALITETSSIKRING", dtoSøker.saker.single().tilstand)
         assertEquals("STUDENT", dtoSøker.saker.single().sakstyper.last().type)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
