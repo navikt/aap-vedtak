@@ -17,7 +17,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
         internal fun Iterable<LøsningParagraf_11_12FørsteLedd>.toDto() = map(LøsningParagraf_11_12FørsteLedd::toDto)
     }
 
-    internal enum class BestemmesAv{
+    internal enum class BestemmesAv {
         soknadstidspunkt,
         maksdatoSykepenger,
         ermiraSays,
@@ -40,16 +40,23 @@ internal class LøsningParagraf_11_12FørsteLedd(
 
 class KvalitetssikringParagraf_11_12FørsteLedd(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<KvalitetssikringParagraf_11_12FørsteLedd>.toDto() = map(KvalitetssikringParagraf_11_12FørsteLedd::toDto)
+        internal fun Iterable<KvalitetssikringParagraf_11_12FørsteLedd>.toDto() =
+            map(KvalitetssikringParagraf_11_12FørsteLedd::toDto)
     }
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_12FørsteLedd(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }
 

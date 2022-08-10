@@ -121,7 +121,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -148,7 +148,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -175,7 +175,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -202,7 +202,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

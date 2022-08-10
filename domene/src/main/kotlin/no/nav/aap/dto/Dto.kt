@@ -97,6 +97,7 @@ data class DtoLøsningManuellMedlemskapYrkesskade(
 
 data class DtoKvalitetssikringMedlemskapYrkesskade(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -106,6 +107,7 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
 
     private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -132,6 +134,7 @@ data class DtoLøsningParagraf_11_2(
 
 data class DtoKvalitetssikringParagraf_11_2(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -141,6 +144,7 @@ data class DtoKvalitetssikringParagraf_11_2(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -172,6 +176,7 @@ data class DtoLøsningParagraf_11_3(
 
 data class DtoKvalitetssikringParagraf_11_3(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -181,6 +186,7 @@ data class DtoKvalitetssikringParagraf_11_3(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -202,6 +208,7 @@ data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
 
 data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -211,6 +218,7 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -240,6 +248,7 @@ data class DtoLøsningParagraf_11_5(
 
 data class DtoKvalitetssikringParagraf_11_5(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -249,6 +258,7 @@ data class DtoKvalitetssikringParagraf_11_5(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -276,6 +286,7 @@ data class DtoLøsningParagraf_11_5Yrkesskade(
 
 data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -285,6 +296,7 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -314,6 +326,7 @@ data class DtoLøsningParagraf_11_6(
 
 data class DtoKvalitetssikringParagraf_11_6(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -323,6 +336,7 @@ data class DtoKvalitetssikringParagraf_11_6(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -362,6 +376,7 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
 
 data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -371,6 +386,7 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_12FørsteLedd(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -402,6 +418,7 @@ data class DtoLøsningParagraf_11_22(
 
 data class DtoKvalitetssikringParagraf_11_22(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -411,6 +428,7 @@ data class DtoKvalitetssikringParagraf_11_22(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -432,6 +450,7 @@ data class DtoLøsningParagraf_11_29(
 
 data class DtoKvalitetssikringParagraf_11_29(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -441,6 +460,7 @@ data class DtoKvalitetssikringParagraf_11_29(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_29(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
@@ -467,6 +487,7 @@ data class DtoLøsningParagraf_11_19(
 
 data class DtoKvalitetssikringParagraf_11_19(
     val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
@@ -476,6 +497,7 @@ data class DtoKvalitetssikringParagraf_11_19(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_19(
         kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )

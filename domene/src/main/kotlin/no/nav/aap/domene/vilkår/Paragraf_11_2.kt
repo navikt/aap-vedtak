@@ -112,7 +112,11 @@ internal class Paragraf_11_2 private constructor(
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltMaskineltKvalitetssikret, kvalitetssikring)
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    OppfyltMaskineltKvalitetssikret,
+                    kvalitetssikring
+                )
+
                 else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
             }
         }
@@ -161,7 +165,11 @@ internal class Paragraf_11_2 private constructor(
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskineltKvalitetssikret, kvalitetssikring)
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    IkkeOppfyltMaskineltKvalitetssikret,
+                    kvalitetssikring
+                )
+
                 else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
             }
         }
@@ -209,7 +217,11 @@ internal class Paragraf_11_2 private constructor(
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltManueltKvalitetssikret, kvalitetssikring)
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    OppfyltManueltKvalitetssikret,
+                    kvalitetssikring
+                )
+
                 else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
             }
         }
@@ -262,7 +274,11 @@ internal class Paragraf_11_2 private constructor(
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(IkkeOppfyltManueltKvalitetssikret, kvalitetssikring)
+                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
+                    IkkeOppfyltManueltKvalitetssikret,
+                    kvalitetssikring
+                )
+
                 else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
             }
         }
@@ -333,6 +349,7 @@ internal class Paragraf_11_2 private constructor(
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_2(
                 it.kvalitetssikretAv,
+                it.tidspunktForKvalitetssikring,
                 it.erGodkjent,
                 it.begrunnelse
             )

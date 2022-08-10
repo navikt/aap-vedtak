@@ -1,7 +1,6 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.dto.DtoKvalitetssikringMedlemskapYrkesskade
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_2
 import no.nav.aap.dto.DtoLøsningManuellMedlemskapYrkesskade
 import java.time.LocalDateTime
 
@@ -15,7 +14,8 @@ internal class LøsningManuellMedlemskapYrkesskade(
     }
 
     internal companion object {
-        internal fun Iterable<LøsningManuellMedlemskapYrkesskade>.toDto() = map(LøsningManuellMedlemskapYrkesskade::toDto)
+        internal fun Iterable<LøsningManuellMedlemskapYrkesskade>.toDto() =
+            map(LøsningManuellMedlemskapYrkesskade::toDto)
     }
 
     internal fun vurdertAv() = vurdertAv
@@ -25,16 +25,23 @@ internal class LøsningManuellMedlemskapYrkesskade(
 
 class KvalitetssikringMedlemskapYrkesskade(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<KvalitetssikringMedlemskapYrkesskade>.toDto() = map(KvalitetssikringMedlemskapYrkesskade::toDto)
+        internal fun Iterable<KvalitetssikringMedlemskapYrkesskade>.toDto() =
+            map(KvalitetssikringMedlemskapYrkesskade::toDto)
     }
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringMedlemskapYrkesskade(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringMedlemskapYrkesskade(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }
 

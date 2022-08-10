@@ -235,7 +235,12 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
     private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_4_ledd2_ledd3 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
-            KvalitetssikringParagraf_11_4AndreOgTredjeLedd(it.kvalitetssikretAv, it.erGodkjent, it.begrunnelse)
+            KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+                it.kvalitetssikretAv,
+                it.tidspunktForKvalitetssikring,
+                it.erGodkjent,
+                it.begrunnelse
+            )
         })
     }
 

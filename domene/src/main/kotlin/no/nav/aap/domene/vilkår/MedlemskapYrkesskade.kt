@@ -380,7 +380,12 @@ internal class MedlemskapYrkesskade private constructor(
     private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_medlemskap_yrkesskade ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
-            KvalitetssikringMedlemskapYrkesskade(it.kvalitetssikretAv, it.erGodkjent, it.begrunnelse)
+            KvalitetssikringMedlemskapYrkesskade(
+                it.kvalitetssikretAv,
+                it.tidspunktForKvalitetssikring,
+                it.erGodkjent,
+                it.begrunnelse
+            )
         })
     }
 

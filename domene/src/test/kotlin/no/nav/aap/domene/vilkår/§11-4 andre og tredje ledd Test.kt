@@ -58,7 +58,7 @@ internal class `§11-4 andre og tredje ledd Test` {
         val løsning = LøsningParagraf_11_4AndreOgTredjeLedd("saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -78,7 +78,7 @@ internal class `§11-4 andre og tredje ledd Test` {
         val løsning = LøsningParagraf_11_4AndreOgTredjeLedd("saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -98,7 +98,7 @@ internal class `§11-4 andre og tredje ledd Test` {
         val løsning = LøsningParagraf_11_4AndreOgTredjeLedd("saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -118,7 +118,7 @@ internal class `§11-4 andre og tredje ledd Test` {
         val løsning = LøsningParagraf_11_4AndreOgTredjeLedd("saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_4AndreOgTredjeLedd("X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

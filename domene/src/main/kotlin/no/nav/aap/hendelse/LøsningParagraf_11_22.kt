@@ -3,7 +3,6 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.beregning.Beløp
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr
 import no.nav.aap.domene.beregning.Yrkesskade
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_2
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_22
 import no.nav.aap.dto.DtoLøsningParagraf_11_22
 import java.time.LocalDateTime
@@ -42,6 +41,7 @@ internal class LøsningParagraf_11_22(
 
 class KvalitetssikringParagraf_11_22(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
@@ -52,5 +52,10 @@ class KvalitetssikringParagraf_11_22(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_22(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_22(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }

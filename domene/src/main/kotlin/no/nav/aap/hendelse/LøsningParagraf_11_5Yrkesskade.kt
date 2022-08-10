@@ -28,16 +28,23 @@ internal class LøsningParagraf_11_5Yrkesskade(
 
 class KvalitetssikringParagraf_11_5Yrkesskade(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<KvalitetssikringParagraf_11_5Yrkesskade>.toDto() = map(KvalitetssikringParagraf_11_5Yrkesskade::toDto)
+        internal fun Iterable<KvalitetssikringParagraf_11_5Yrkesskade>.toDto() =
+            map(KvalitetssikringParagraf_11_5Yrkesskade::toDto)
     }
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_5Yrkesskade(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_5Yrkesskade(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }
 

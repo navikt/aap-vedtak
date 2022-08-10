@@ -19,11 +19,13 @@ class LøsningManuellParagraf_11_2(
 
     internal fun vurdertAv() = vurdertAv
     internal fun erMedlem() = erMedlem == ErMedlem.JA
-    internal fun toDto(): DtoLøsningParagraf_11_2 = DtoLøsningParagraf_11_2(vurdertAv, tidspunktForVurdering, erMedlem.name)
+    internal fun toDto(): DtoLøsningParagraf_11_2 =
+        DtoLøsningParagraf_11_2(vurdertAv, tidspunktForVurdering, erMedlem.name)
 }
 
 class KvalitetssikringParagraf_11_2(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
@@ -34,5 +36,10 @@ class KvalitetssikringParagraf_11_2(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_2(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_2(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }

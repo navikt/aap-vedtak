@@ -11,7 +11,8 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<LøsningParagraf_11_4AndreOgTredjeLedd>.toDto() = map(LøsningParagraf_11_4AndreOgTredjeLedd::toDto)
+        internal fun Iterable<LøsningParagraf_11_4AndreOgTredjeLedd>.toDto() =
+            map(LøsningParagraf_11_4AndreOgTredjeLedd::toDto)
     }
 
     internal fun vurdertAv() = vurdertAv
@@ -26,16 +27,23 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
 
 class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>.toDto() = map(KvalitetssikringParagraf_11_4AndreOgTredjeLedd::toDto)
+        internal fun Iterable<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>.toDto() =
+            map(KvalitetssikringParagraf_11_4AndreOgTredjeLedd::toDto)
     }
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }
 

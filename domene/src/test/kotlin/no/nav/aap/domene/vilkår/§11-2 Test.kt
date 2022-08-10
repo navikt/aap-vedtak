@@ -90,7 +90,8 @@ internal class `§11-2 Test` {
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+        val manuellLøsning =
+            LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -115,7 +116,8 @@ internal class `§11-2 Test` {
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        val manuellLøsning =
+            LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -161,7 +163,7 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -182,7 +184,7 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -203,10 +205,11 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+        val manuellLøsning =
+            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -227,10 +230,11 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        val manuellLøsning =
+            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -251,7 +255,7 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -272,7 +276,7 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -293,10 +297,11 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+        val manuellLøsning =
+            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -317,10 +322,11 @@ internal class `§11-2 Test` {
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val manuellLøsning = LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+        val manuellLøsning =
+            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

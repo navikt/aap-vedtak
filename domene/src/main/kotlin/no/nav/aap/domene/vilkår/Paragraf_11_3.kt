@@ -183,7 +183,12 @@ internal class Paragraf_11_3 private constructor(
     private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_3 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
-            KvalitetssikringParagraf_11_3(it.kvalitetssikretAv, it.erGodkjent, it.begrunnelse)
+            KvalitetssikringParagraf_11_3(
+                it.kvalitetssikretAv,
+                it.tidspunktForKvalitetssikring,
+                it.erGodkjent,
+                it.begrunnelse
+            )
         })
     }
 

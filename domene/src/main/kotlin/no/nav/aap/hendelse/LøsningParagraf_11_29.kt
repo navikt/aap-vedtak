@@ -1,6 +1,5 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_2
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_29
 import no.nav.aap.dto.DtoLøsningParagraf_11_29
 import java.time.LocalDateTime
@@ -22,6 +21,7 @@ internal class LøsningParagraf_11_29(
 
 class KvalitetssikringParagraf_11_29(
     private val kvalitetssikretAv: String,
+    private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
 ) : Hendelse() {
@@ -32,6 +32,11 @@ class KvalitetssikringParagraf_11_29(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_29(kvalitetssikretAv, erGodkjent, begrunnelse)
+    internal fun toDto() = DtoKvalitetssikringParagraf_11_29(
+        kvalitetssikretAv,
+        tidspunktForKvalitetssikring,
+        erGodkjent,
+        begrunnelse
+    )
 }
 
