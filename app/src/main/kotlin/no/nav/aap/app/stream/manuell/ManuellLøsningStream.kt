@@ -11,23 +11,18 @@ import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.manuellStream(søkere: KTable<String, SøkereKafkaDto>) {
-    manuellStream(søkere, Topics.manuell_11_2, "manuell-11-2", Løsning_11_2_manuell::håndter)
-    manuellStream(søkere, Topics.manuell_11_3, "manuell-11-3", Løsning_11_3_manuell::håndter)
-    manuellStream(søkere, Topics.manuell_11_4, "manuell-11-4", Løsning_11_4_ledd2_ledd3_manuell::håndter)
-    manuellStream(søkere, Topics.manuell_11_5, "manuell-11-5", Løsning_11_5_manuell::håndter)
-    manuellStream(søkere, Topics.manuell_11_6, "manuell-11-6", Løsning_11_6_manuell::håndter)
-    manuellStream(søkere, Topics.manuell_11_12, "manuell-11-12", Løsning_11_12_ledd1_manuell::håndter)
-    manuellStream(søkere, Topics.manuell_11_29, "manuell-11-29", Løsning_11_29_manuell::håndter)
-    manuellStream(
-        søkere,
-        Topics.manuell_11_19,
-        "manuell-beregningsdato",
-        Løsning_11_19_manuell::håndter
-    )
+internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, SøkereKafkaDto>) {
+    stream(søkere, Topics.manuell_11_2, "manuell-11-2", Løsning_11_2_manuell::håndter)
+    stream(søkere, Topics.manuell_11_3, "manuell-11-3", Løsning_11_3_manuell::håndter)
+    stream(søkere, Topics.manuell_11_4, "manuell-11-4", Løsning_11_4_ledd2_ledd3_manuell::håndter)
+    stream(søkere, Topics.manuell_11_5, "manuell-11-5", Løsning_11_5_manuell::håndter)
+    stream(søkere, Topics.manuell_11_6, "manuell-11-6", Løsning_11_6_manuell::håndter)
+    stream(søkere, Topics.manuell_11_12, "manuell-11-12", Løsning_11_12_ledd1_manuell::håndter)
+    stream(søkere, Topics.manuell_11_19, "manuell-11-19", Løsning_11_19_manuell::håndter)
+    stream(søkere, Topics.manuell_11_29, "manuell-11-29", Løsning_11_29_manuell::håndter)
 }
 
-private fun <T> StreamsBuilder.manuellStream(
+private fun <T> StreamsBuilder.stream(
     søkere: KTable<String, SøkereKafkaDto>,
     topic: Topic<T & Any>,
     kafkaNameFilter: String,
@@ -36,9 +31,7 @@ private fun <T> StreamsBuilder.manuellStream(
     val søkerOgBehov =
         consume(topic)
             .filterNotNull("filter-$kafkaNameFilter-tombstones")
-            .join(topic with Topics.søkere, søkere) { løsning, søker ->
-                håndterManuellLøsning(løsning, søker, håndter)
-            }
+            .join(topic with Topics.søkere, søkere) { løsning, søker -> håndter(løsning, søker, håndter) }
 
     søkerOgBehov
         .firstPairValue("$kafkaNameFilter-hent-ut-soker")
@@ -50,7 +43,7 @@ private fun <T> StreamsBuilder.manuellStream(
         .sendBehov(kafkaNameFilter)
 }
 
-private fun <T> håndterManuellLøsning(
+private fun <T> håndter(
     manuellKafkaDto: T,
     søkereKafkaDto: SøkereKafkaDto,
     håndter: T.(Søker) -> List<Behov>,

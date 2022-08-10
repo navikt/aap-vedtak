@@ -16,7 +16,8 @@ import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.migrateStateStore
 import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.app.stream.inntekterStream
-import no.nav.aap.app.stream.manuell.manuellStream
+import no.nav.aap.app.stream.manuell.manuellKvalitetssikringStream
+import no.nav.aap.app.stream.manuell.manuellLøsningStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream
 import no.nav.aap.kafka.streams.KStreams
@@ -75,7 +76,8 @@ internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, 
     streams.søknadStream(søkerKTable)
     streams.medlemStream(søkerKTable)
     streams.inntekterStream(søkerKTable)
-    streams.manuellStream(søkerKTable)
+    streams.manuellLøsningStream(søkerKTable)
+    streams.manuellKvalitetssikringStream(søkerKTable)
 
     return streams.build()
 }

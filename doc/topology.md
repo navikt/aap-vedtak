@@ -18,6 +18,14 @@ subgraph Vedtak
 	aap.manuell.11-6.v1([aap.manuell.11-6.v1])
 	aap.sokere.v1([aap.sokere.v1])
 	aap.inntekter.v1([aap.inntekter.v1])
+	aap.kvalitetssikring.11-12.v1([aap.kvalitetssikring.11-12.v1])
+	aap.kvalitetssikring.11-19.v1([aap.kvalitetssikring.11-19.v1])
+	aap.kvalitetssikring.11-2.v1([aap.kvalitetssikring.11-2.v1])
+	aap.kvalitetssikring.11-29.v1([aap.kvalitetssikring.11-29.v1])
+	aap.kvalitetssikring.11-3.v1([aap.kvalitetssikring.11-3.v1])
+	aap.kvalitetssikring.11-4.v1([aap.kvalitetssikring.11-4.v1])
+	aap.kvalitetssikring.11-5.v1([aap.kvalitetssikring.11-5.v1])
+	aap.kvalitetssikring.11-6.v1([aap.kvalitetssikring.11-6.v1])
 	aap.medlem.v1-joined-aap.sokere.v1-repartition([aap.medlem.v1-joined-aap.sokere.v1-repartition])
 	aap.medlem.v1([aap.medlem.v1])
     
@@ -33,6 +41,14 @@ subgraph Vedtak
 	join-8{join}
 	join-9{join}
 	join-10{join}
+	join-11{join}
+	join-12{join}
+	join-13{join}
+	join-14{join}
+	join-15{join}
+	join-16{join}
+	join-17{join}
+	join-18{join}
     
     %% STATE STORES
     soker-state-store-v2[(soker-state-store-v2)]
@@ -54,9 +70,9 @@ subgraph Vedtak
 	join-1 --> |produced-soker-med-manuell-11-12| aap.sokere.v1
 	aap.manuell.11-19.v1 --> join-2
 	soker-state-store-v2 --> join-2
-	join-2 --> |branch-manuell-beregningsdato-inntekter-produced-behov| aap.inntekter.v1
-	join-2 --> |branch-manuell-beregningsdato-medlem-produced-behov| aap.medlem.v1
-	join-2 --> |produced-soker-med-manuell-beregningsdato| aap.sokere.v1
+	join-2 --> |branch-manuell-11-19-inntekter-produced-behov| aap.inntekter.v1
+	join-2 --> |branch-manuell-11-19-medlem-produced-behov| aap.medlem.v1
+	join-2 --> |produced-soker-med-manuell-11-19| aap.sokere.v1
 	aap.manuell.11-2.v1 --> join-3
 	soker-state-store-v2 --> join-3
 	join-3 --> |branch-manuell-11-2-medlem-produced-behov| aap.medlem.v1
@@ -90,9 +106,33 @@ subgraph Vedtak
 	aap.inntekter.v1 --> join-9
 	soker-state-store-v2 --> join-9
 	join-9 --> |produced-soker-med-handtert-inntekter| aap.sokere.v1
-	aap.medlem.v1-joined-aap.sokere.v1-repartition --> join-10
+	aap.kvalitetssikring.11-12.v1 --> join-10
 	soker-state-store-v2 --> join-10
-	join-10 --> |produced-soker-med-medlem| aap.sokere.v1
+	join-10 --> |produced-soker-med-kvalitetssikring-11-12| aap.sokere.v1
+	aap.kvalitetssikring.11-19.v1 --> join-11
+	soker-state-store-v2 --> join-11
+	join-11 --> |produced-soker-med-kvalitetssikring-11-19| aap.sokere.v1
+	aap.kvalitetssikring.11-2.v1 --> join-12
+	soker-state-store-v2 --> join-12
+	join-12 --> |produced-soker-med-kvalitetssikring-11-2| aap.sokere.v1
+	aap.kvalitetssikring.11-29.v1 --> join-13
+	soker-state-store-v2 --> join-13
+	join-13 --> |produced-soker-med-kvalitetssikring-11-29| aap.sokere.v1
+	aap.kvalitetssikring.11-3.v1 --> join-14
+	soker-state-store-v2 --> join-14
+	join-14 --> |produced-soker-med-kvalitetssikring-11-3| aap.sokere.v1
+	aap.kvalitetssikring.11-4.v1 --> join-15
+	soker-state-store-v2 --> join-15
+	join-15 --> |produced-soker-med-kvalitetssikring-11-4| aap.sokere.v1
+	aap.kvalitetssikring.11-5.v1 --> join-16
+	soker-state-store-v2 --> join-16
+	join-16 --> |produced-soker-med-kvalitetssikring-11-5| aap.sokere.v1
+	aap.kvalitetssikring.11-6.v1 --> join-17
+	soker-state-store-v2 --> join-17
+	join-17 --> |produced-soker-med-kvalitetssikring-11-6| aap.sokere.v1
+	aap.medlem.v1-joined-aap.sokere.v1-repartition --> join-18
+	soker-state-store-v2 --> join-18
+	join-18 --> |produced-soker-med-medlem| aap.sokere.v1
     
     %% JOB STREAMS
     metrics-soker-state-store-v2 --> soker-state-store-v2
@@ -121,6 +161,14 @@ style aap.manuell.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:
 style aap.manuell.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-12.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-19.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-2.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-29.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-3.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-4.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1-joined-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
