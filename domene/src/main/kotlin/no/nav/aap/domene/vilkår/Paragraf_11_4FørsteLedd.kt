@@ -103,7 +103,11 @@ internal class Paragraf_11_4FørsteLedd private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
+            //TODO: Skal bare bruke OPPFYLT_MASKINELT_KVALITETSSIKRET
+            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> Oppfylt
+            //TODO: Skal bare bruke IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfylt
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_4FørsteLedd")
         }
