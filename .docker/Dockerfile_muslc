@@ -1,0 +1,44 @@
+FROM alpine:3.16
+
+# update Alpine with latest versions
+RUN echo '@edge https://nl.alpinelinux.org/alpine/edge/main/' >> /etc/apk/repositories \
+  && echo '@community https://nl.alpinelinux.org/alpine/edge/community' >> /etc/apk/repositories \
+  && apk update \
+  && apk upgrade
+
+# install CA certificates
+RUN apk add ca-certificates
+
+# install build tools
+RUN apk add build-base coreutils file git perl automake autoconf cmake
+
+# install tool dependencies for building RocksDB static library
+RUN apk add curl bash wget tar openssl
+
+# install RocksDB dependencies
+RUN apk add snappy snappy-dev zlib zlib-dev bzip2 bzip2-dev lz4 lz4-dev zstd zstd-dev linux-headers
+
+ENV ESUM='bc9bb8cebd403ef67ca727e05f5bd046ffc8421538fb1ba0a3634c6ec97eda49'
+ENV BINARY_URL='https://github.com/adoptium/temurin18-binaries/releases/download/jdk-18.0.2%2B9/OpenJDK18U-jre_x64_alpine-linux_hotspot_18.0.2_9.tar.gz'
+
+# Install JDK
+RUN wget -O /tmp/openjdk.tar.gz ${BINARY_URL}; \
+  echo "${ESUM} */tmp/openjdk.tar.gz" | sha256sum -c -; \
+  mkdir -p /opt/java/openjdk; \
+  tar --extract --file /tmp/openjdk.tar.gz --directory /opt/java/openjdk --strip-components 1 --no-same-owner; \
+  # cleanup
+  rm -rf /tmp/openjdk.tar.gz /var/cache/apk/*;
+
+ENV JAVA_HOME=/opt/java/openjdk PATH="/opt/java/openjdk/bin:$PATH"
+
+# gflags from source
+RUN cd /tmp &&\
+  git clone -b v2.0 --single-branch https://github.com/gflags/gflags.git &&\
+  cd gflags &&\
+  ./configure --prefix=/usr && make && make install &&\
+  rm -rf /tmp/*
+
+COPY /app/build/libs/app-all.jar app.jar
+
+#CMD ["tail", "-f", "/dev/null"]
+CMD ["java", "-Xmx4G", "-Xms2G", "-XX:+UseParallelGC", "-jar", "app.jar"]
