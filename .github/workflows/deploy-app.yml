@@ -47,7 +47,7 @@ jobs:
 
       - name: Publish container
         run: |
-          docker build -f .docker/Dockerfile_alpine --tag ${{ env.IMAGE }} --tag ghcr.io/${{ github.repository }}:latest .
+          docker build --pull -f .docker/Dockerfile_jre_alpine --tag ${{ env.IMAGE }} --tag ghcr.io/${{ github.repository }}:latest .
           docker push ghcr.io/${{ github.repository }} --all-tags
 
   deploy-dev:

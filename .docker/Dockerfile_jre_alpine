@@ -1,20 +1,36 @@
-# RocksDB (kafka streams KTable) bruker noen gclibs som ikke er inkludert i alpine.
-# Alpine bruker noe som heter 'musl libc' i steden for 'gclib' som vi trenger, og vi får derfor ikke
-# lagt inn pakken manuelt. Vi mangler libc6-compat, som finnes i 17-jdk-focal som er ubunt-basert.
-#FROM eclipse-temurin:18-jdk-focal
-FROM eclipse-temurin:18.0.2_9-jre-alpine
+FROM alpine:3.16 as app
+
+RUN apk --update --no-cache add zip
 
 COPY /app/build/libs/app-all.jar app.jar
 
-RUN wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk
-RUN apk add glibc-2.35-r0.apk
+RUN zip -d app.jar \
+    librocksdbjni-linux32.so \
+    librocksdbjni-linux32-musl.so \
+    librocksdbjni-linux64-musl.so \
+    librocksdbjni-linux-aarch64.so \
+    librocksdbjni-linux-aarch64-musl.so \
+    librocksdbjni-linux-ppc64le.so \
+    librocksdbjni-linux-ppc64le-musl.so \
+    librocksdbjni-linux-s390x.so \
+    librocksdbjni-linux-s390x-musl.so \
+    librocksdbjni-osx-arm64.jnilib \
+    librocksdbjni-osx-x86_64.jnilib \
+    librocksdbjni-win64.dll
 
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-bin-2.35-r0.apk
-RUN wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-i18n-2.35-r0.apk
-RUN apk --update --no-cache add glibc-bin-2.35-r0.apk glibc-i18n-2.35-r0.apk
-RUN /usr/glibc-compat/bin/localedef -i nb_NO -f UTF-8 nb_NO.UTF-8
+FROM eclipse-temurin:18.0.2_9-jre-alpine
 
-RUN apk add --no-cache libstdc++
+RUN \
+  wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub; \
+  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk; \
+  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-bin-2.35-r0.apk; \
+  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-i18n-2.35-r0.apk; \
+  apk --update --no-cache add glibc-bin-2.35-r0.apk glibc-i18n-2.35-r0.apk glibc-2.35-r0.apk libstdc++ ; \
+  # Locale
+  /usr/glibc-compat/bin/localedef -i nb_NO -f UTF-8 nb_NO.UTF-8; \
+  # Cleanup
+  rm -rf glibc-i18n-2.35-r0.apk glibc-bin-2.35-r0.apk glibc-2.35-r0.apk /var/cache/apk/*;
+
+COPY --from=app app.jar .
 
 CMD ["java", "-Xmx4G", "-Xms2G", "-XX:+UseParallelGC", "-jar", "app.jar"]
