@@ -7,9 +7,10 @@ COPY /app/build/libs/app-all.jar app.jar
 RUN zip -d app.jar \
     librocksdbjni-linux32.so \
     librocksdbjni-linux32-musl.so \
+    librocksdbjni-linux64.so \
 #    librocksdbjni-linux64-musl.so \
-#    librocksdbjni-linux-aarch64.so \
-#    librocksdbjni-linux-aarch64-musl.so \
+    librocksdbjni-linux-aarch64.so \
+    librocksdbjni-linux-aarch64-musl.so \
     librocksdbjni-linux-ppc64le.so \
     librocksdbjni-linux-ppc64le-musl.so \
     librocksdbjni-linux-s390x.so \
@@ -20,16 +21,19 @@ RUN zip -d app.jar \
 
 FROM eclipse-temurin:18.0.2_9-jre-alpine
 
-RUN \
-  wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub; \
-  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk; \
-  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-bin-2.35-r0.apk; \
-  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-i18n-2.35-r0.apk; \
-  apk --update --no-cache add glibc-bin-2.35-r0.apk glibc-i18n-2.35-r0.apk glibc-2.35-r0.apk libstdc++ ; \
+ENV LANG='nb_NO.UTF-8' LANGUAGE='nb_NO:nb' LC_ALL='nb:NO.UTF-8' TZ="Europe/Oslo"
+
+# RUN \
+#  wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub; \
+#  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk; \
+#  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-bin-2.35-r0.apk; \
+#  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-i18n-2.35-r0.apk; \
+#  apk --update --no-cache add glibc-bin-2.35-r0.apk glibc-i18n-2.35-r0.apk glibc-2.35-r0.apk libstdc++ ; \
   # Locale
-  /usr/glibc-compat/bin/localedef -i nb_NO -f UTF-8 nb_NO.UTF-8; \
+#  /usr/glibc-compat/bin/localedef -i nb_NO -f UTF-8 nb_NO.UTF-8; \
   # Cleanup
-  rm -rf glibc-i18n-2.35-r0.apk glibc-bin-2.35-r0.apk glibc-2.35-r0.apk /var/cache/apk/*;
+#  rm -rf glibc-i18n-2.35-r0.apk glibc-bin-2.35-r0.apk glibc-2.35-r0.apk /var/cache/apk/*;
+#  rm -rf /var/cache/apk/*;
 
 COPY --from=app app.jar .
 
