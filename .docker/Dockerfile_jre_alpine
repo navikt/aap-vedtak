@@ -23,6 +23,8 @@ FROM eclipse-temurin:18.0.2_9-jre-alpine
 
 ENV LANG='nb_NO.UTF-8' LANGUAGE='nb_NO:nb' LC_ALL='nb:NO.UTF-8' TZ="Europe/Oslo"
 
+RUN apk --update --no-cache add libstdc++ # libc6-compat
+
 # RUN \
 #  wget -q -O /etc/apk/keys/sgerrand.rsa.pub https://alpine-pkgs.sgerrand.com/sgerrand.rsa.pub; \
 #  wget https://github.com/sgerrand/alpine-pkg-glibc/releases/download/2.35-r0/glibc-2.35-r0.apk; \
