@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
   push:
-    branches: [ main]
+    branches: [ main ]
     paths-ignore:
       - '.nais/topic-*.yml'
       - '.github/workflows/deploy-topics.yml'
@@ -42,12 +42,9 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - uses: docker/build-push-action@v3.1.1
-        with:
-          file: .docker/Dockerfile_jre_alpine
-          push: true
-          pull: true
-          tags: ${{ env.IMAGE }},ghcr.io/${{ github.repository }}:latest
+      - run: |
+          docker build --pull -f .docker/Dockerfile_jre_alpine --tag ${{ env.IMAGE }} --tag ghcr.io/${{ github.repository }}:latest .
+          docker push ghcr.io/${{ github.repository }} --all-tags
 
   deploy-dev:
     name: Deploy (dev)
