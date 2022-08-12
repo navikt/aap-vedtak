@@ -4,10 +4,11 @@ RUN apk --update --no-cache add zip
 
 COPY /app/build/libs/app-all.jar app.jar
 
+# Only keep the used rocksdb instance (librocksdbjni-linux64-musl.so)
 RUN zip -d app.jar \
     librocksdbjni-linux32.so \
     librocksdbjni-linux32-musl.so \
-    librocksdbjni-linux64-musl.so \
+    librocksdbjni-linux64.so \
     librocksdbjni-linux-aarch64.so \
     librocksdbjni-linux-aarch64-musl.so \
     librocksdbjni-linux-ppc64le.so \

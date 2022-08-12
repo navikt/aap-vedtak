@@ -1,7 +1,7 @@
 # RocksDB (kafka streams KTable) bruker noen gclibs som ikke er inkludert i alpine.
 # Alpine bruker noe som heter 'musl libc' i steden for 'gclib' som vi trenger, og vi får derfor ikke
 # lagt inn pakken manuelt. Vi mangler libc6-compat, som finnes i 17-jdk-focal som er ubunt-basert.
-FROM eclipse-temurin:18.0.2_9-jre-focal
+FROM eclipse-temurin:18-jdk-focal
 
 COPY /app/build/libs/*.jar app.jar
 

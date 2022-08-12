@@ -43,7 +43,7 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - run: |
-          docker build --pull -f .docker/Dockerfile_jre_alpine --tag ${{ env.IMAGE }} --tag ghcr.io/${{ github.repository }}:latest .
+          docker build --pull --tag ${{ env.IMAGE }} --tag ghcr.io/${{ github.repository }}:latest .
           docker push ghcr.io/${{ github.repository }} --all-tags
 
   deploy-dev:
