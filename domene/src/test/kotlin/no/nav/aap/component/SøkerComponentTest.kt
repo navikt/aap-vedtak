@@ -17,6 +17,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 internal class SøkerComponentTest {
 
@@ -93,6 +94,7 @@ internal class SøkerComponentTest {
 
         søker.håndterLøsning(
             LøsningParagraf_11_5(
+                løsningId = UUID.randomUUID(),
                 "veileder",
                 LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -189,6 +191,7 @@ internal class SøkerComponentTest {
 
         søker.håndterLøsning(
             LøsningParagraf_11_5(
+                løsningId = UUID.randomUUID(),
                 "veileder",
                 LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -230,7 +233,11 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        )
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -264,10 +271,15 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA))
-        søker.håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true))
+        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        )
+        søker.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
         søker.håndterLøsning(
             LøsningParagraf_11_5(
+                løsningId = UUID.randomUUID(),
                 "veileder",
                 LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -278,6 +290,7 @@ internal class SøkerComponentTest {
         )
         søker.håndterLøsning(
             LøsningParagraf_11_6(
+                løsningId = UUID.randomUUID(),
                 vurdertAv = "saksbehandler",
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
@@ -287,6 +300,7 @@ internal class SøkerComponentTest {
         )
         søker.håndterLøsning(
             LøsningParagraf_11_12FørsteLedd(
+                løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
                 LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
@@ -295,8 +309,8 @@ internal class SøkerComponentTest {
                 LocalDate.now()
             )
         )
-        søker.håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true))
-        søker.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
+        søker.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        søker.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -326,11 +340,16 @@ internal class SøkerComponentTest {
             dtoSøker = søker.toDto()
         }
 
-        medSøker { håndterLøsning(LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true)) }
+        medSøker { håndterLøsning(LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        ) }
+        medSøker { håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true)) }
         medSøker {
             håndterLøsning(
                 LøsningParagraf_11_5(
+                    løsningId = UUID.randomUUID(),
                     "veileder",
                     LocalDateTime.now(),
                     LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -343,6 +362,7 @@ internal class SøkerComponentTest {
         medSøker {
             håndterLøsning(
                 LøsningParagraf_11_6(
+                    løsningId = UUID.randomUUID(),
                     vurdertAv = "saksbehandler",
                     tidspunktForVurdering = LocalDateTime.now(),
                     harBehovForBehandling = true,
@@ -354,6 +374,7 @@ internal class SøkerComponentTest {
         medSøker {
             håndterLøsning(
                 LøsningParagraf_11_12FørsteLedd(
+                    løsningId = UUID.randomUUID(),
                     "saksbehandler",
                     LocalDateTime.now(),
                     LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
@@ -363,8 +384,8 @@ internal class SøkerComponentTest {
                 )
             )
         }
-        medSøker { håndterLøsning(LøsningParagraf_11_29("saksbehandler", LocalDateTime.now(), true)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true)) }
+        medSøker { håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021)) }
         medSøker {
             håndterLøsning(
                 LøsningInntekter(
@@ -390,7 +411,7 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_19("saksbehandler", LocalDateTime.now(), 13 september 2021))
+        søker.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(

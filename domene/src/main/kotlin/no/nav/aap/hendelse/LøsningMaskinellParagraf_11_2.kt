@@ -1,8 +1,12 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.dto.DtoLøsningMaskinellParagraf_11_2
+import java.time.LocalDateTime
+import java.util.*
 
 class LøsningMaskinellParagraf_11_2(
+    private val løsningId: UUID,
+    private val tidspunktForVurdering: LocalDateTime,
     private val erMedlem: ErMedlem
 ) : Hendelse() {
     enum class ErMedlem {
@@ -15,5 +19,5 @@ class LøsningMaskinellParagraf_11_2(
 
     internal fun erMedlem() = erMedlem == ErMedlem.JA
     internal fun erIkkeMedlem() = erMedlem == ErMedlem.NEI
-    internal fun toDto() = DtoLøsningMaskinellParagraf_11_2(erMedlem.name)
+    internal fun toDto() = DtoLøsningMaskinellParagraf_11_2(løsningId, tidspunktForVurdering, erMedlem.name)
 }

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 internal class `§11-5 Test` {
     @Test
@@ -23,6 +24,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
+            UUID.randomUUID(),
             "veileder",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -46,6 +48,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
+            UUID.randomUUID(),
             "veileder",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -90,6 +93,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
+            UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -99,7 +103,7 @@ internal class `§11-5 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_5("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_5(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -117,6 +121,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
+            UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -126,7 +131,7 @@ internal class `§11-5 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_5("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_5(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -144,6 +149,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
+            UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -153,7 +159,7 @@ internal class `§11-5 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_5("X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_5(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -171,6 +177,7 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
+            UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -180,7 +187,7 @@ internal class `§11-5 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_5("X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_5(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

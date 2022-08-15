@@ -182,6 +182,7 @@ internal class Paragraf_11_5 private constructor(
         val dtoLøsninger = vilkårsvurdering.løsning_11_5_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
             LøsningParagraf_11_5(
+                løsningId = it.løsningId,
                 vurdertAv = it.vurdertAv,
                 tidspunktForVurdering = it.tidspunktForVurdering,
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -196,10 +197,11 @@ internal class Paragraf_11_5 private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_5 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_5(
-                it.kvalitetssikretAv,
-                it.tidspunktForKvalitetssikring,
-                it.erGodkjent,
-                it.begrunnelse
+                kvalitetssikringId = it.kvalitetssikringId,
+                kvalitetssikretAv = it.kvalitetssikretAv,
+                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
+                erGodkjent = it.erGodkjent,
+                begrunnelse = it.begrunnelse
             )
         })
     }

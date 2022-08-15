@@ -3,6 +3,7 @@ package no.nav.aap.app.modell
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.*
 import java.time.LocalDateTime
+import java.util.*
 
 data class Kvalitetssikring_11_2(
     val kvalitetssikretAv: String,

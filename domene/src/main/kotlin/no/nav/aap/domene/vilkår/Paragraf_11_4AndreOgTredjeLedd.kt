@@ -228,7 +228,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoLøsninger = vilkårsvurdering.løsning_11_4_ledd2_ledd3_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
-            LøsningParagraf_11_4AndreOgTredjeLedd(it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt)
+            LøsningParagraf_11_4AndreOgTredjeLedd(it.løsningId, it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt)
         })
     }
 
@@ -236,10 +236,11 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_4_ledd2_ledd3 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
-                it.kvalitetssikretAv,
-                it.tidspunktForKvalitetssikring,
-                it.erGodkjent,
-                it.begrunnelse
+                kvalitetssikringId = it.kvalitetssikringId,
+                kvalitetssikretAv = it.kvalitetssikretAv,
+                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
+                erGodkjent = it.erGodkjent,
+                begrunnelse = it.begrunnelse
             )
         })
     }

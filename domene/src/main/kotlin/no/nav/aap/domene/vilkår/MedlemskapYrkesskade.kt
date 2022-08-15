@@ -363,13 +363,14 @@ internal class MedlemskapYrkesskade private constructor(
 
     private fun settMaskinellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
-        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellMedlemskapYrkesskade(enumValueOf(it.erMedlem)) })
+        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellMedlemskapYrkesskade(it.løsningId, enumValueOf(it.erMedlem)) })
     }
 
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoManuell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_manuell)
         manuelleLøsninger.addAll(dtoManuell.map {
             LøsningManuellMedlemskapYrkesskade(
+                it.løsningId,
                 it.vurdertAv,
                 it.tidspunktForVurdering,
                 enumValueOf(it.erMedlem)
@@ -381,6 +382,7 @@ internal class MedlemskapYrkesskade private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_medlemskap_yrkesskade ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringMedlemskapYrkesskade(
+                it.kvalitetssikringId,
                 it.kvalitetssikretAv,
                 it.tidspunktForKvalitetssikring,
                 it.erGodkjent,

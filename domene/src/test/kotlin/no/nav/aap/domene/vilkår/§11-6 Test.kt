@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 internal class `§11-6 Test` {
 
@@ -24,6 +25,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -46,6 +48,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -68,6 +71,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -90,6 +94,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -112,6 +117,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -121,7 +127,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -139,6 +145,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -148,7 +155,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -166,6 +173,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -175,7 +183,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -193,6 +201,7 @@ internal class `§11-6 Test` {
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -202,7 +211,7 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6("X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

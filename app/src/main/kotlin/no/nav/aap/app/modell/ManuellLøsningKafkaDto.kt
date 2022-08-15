@@ -74,12 +74,12 @@ data class Løsning_11_12_ledd1_manuell(
     internal fun håndter(søker: Søker) = toDto().håndter(søker)
 }
 
-data class Løsning_11_29_manuell(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime,  val erOppfylt: Boolean) {
-    private fun toDto() = DtoLøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
+data class Løsning_11_19_manuell(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val beregningsdato: LocalDate) {
+    private fun toDto() = DtoLøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
     internal fun håndter(søker: Søker) = toDto().håndter(søker)
 }
 
-data class Løsning_11_19_manuell(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime, val beregningsdato: LocalDate) {
-    private fun toDto() = DtoLøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
+data class Løsning_11_29_manuell(val vurdertAv: String, val tidspunktForVurdering: LocalDateTime,  val erOppfylt: Boolean) {
+    private fun toDto() = DtoLøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
     internal fun håndter(søker: Søker) = toDto().håndter(søker)
 }

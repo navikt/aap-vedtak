@@ -328,7 +328,9 @@ internal class Paragraf_11_2 private constructor(
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_11_2_maskinell)
         maskinelleLøsninger.addAll(dtoMaskinell.map {
             LøsningMaskinellParagraf_11_2(
-                enumValueOf(it.erMedlem)
+                løsningId = it.løsningId,
+                tidspunktForVurdering = it.tidspunktForVurdering,
+                erMedlem = enumValueOf(it.erMedlem)
             )
         })
     }
@@ -337,9 +339,10 @@ internal class Paragraf_11_2 private constructor(
         val dtoManuell = vilkårsvurdering.løsning_11_2_manuell ?: emptyList()
         manuelleLøsninger.addAll(dtoManuell.map {
             LøsningManuellParagraf_11_2(
-                it.vurdertAv,
-                it.tidspunktForVurdering,
-                enumValueOf(it.erMedlem)
+                løsningId = it.løsningId,
+                vurdertAv = it.vurdertAv,
+                tidspunktForVurdering = it.tidspunktForVurdering,
+                erMedlem = enumValueOf(it.erMedlem)
             )
         })
     }
@@ -348,10 +351,11 @@ internal class Paragraf_11_2 private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_2 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_2(
-                it.kvalitetssikretAv,
-                it.tidspunktForKvalitetssikring,
-                it.erGodkjent,
-                it.begrunnelse
+                kvalitetssikringId = it.kvalitetssikringId,
+                kvalitetssikretAv = it.kvalitetssikretAv,
+                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
+                erGodkjent = it.erGodkjent,
+                begrunnelse = it.begrunnelse
             )
         })
     }

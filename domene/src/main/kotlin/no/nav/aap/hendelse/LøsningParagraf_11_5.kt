@@ -4,8 +4,10 @@ import no.nav.aap.domene.vilkår.Paragraf_11_5
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_5
 import no.nav.aap.dto.DtoLøsningParagraf_11_5
 import java.time.LocalDateTime
+import java.util.*
 
 internal class LøsningParagraf_11_5(
+    private val løsningId: UUID,
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
     private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad
@@ -17,7 +19,8 @@ internal class LøsningParagraf_11_5(
 
         internal fun erOppfylt() = kravOmNedsattArbeidsevneErOppfylt && nedsettelseSkyldesSykdomEllerSkade
 
-        internal fun toDto(vurdertAv: String, tidspunktForVurdering: LocalDateTime) = DtoLøsningParagraf_11_5(
+        internal fun toDto(løsningId: UUID, vurdertAv: String, tidspunktForVurdering: LocalDateTime) = DtoLøsningParagraf_11_5(
+            løsningId = løsningId,
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
             kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
@@ -35,10 +38,11 @@ internal class LøsningParagraf_11_5(
         vilkår.vurderNedsattArbeidsevne(vilkårsvurdering, this, nedsattArbeidsevnegrad)
     }
 
-    internal fun toDto() = nedsattArbeidsevnegrad.toDto(vurdertAv, tidspunktForVurdering)
+    internal fun toDto() = nedsattArbeidsevnegrad.toDto(løsningId, vurdertAv, tidspunktForVurdering)
 }
 
 class KvalitetssikringParagraf_11_5(
+    private val kvalitetssikringId: UUID, 
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
@@ -52,10 +56,11 @@ class KvalitetssikringParagraf_11_5(
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     internal fun toDto() = DtoKvalitetssikringParagraf_11_5(
-        kvalitetssikretAv,
-        tidspunktForKvalitetssikring,
-        erGodkjent,
-        begrunnelse
+        kvalitetssikringId = kvalitetssikringId,
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
     )
 }
 

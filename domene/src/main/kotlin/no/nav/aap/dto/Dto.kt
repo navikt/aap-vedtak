@@ -70,17 +70,21 @@ data class DtoVilkårsvurdering(
     val kvalitetssikringer_11_29: List<DtoKvalitetssikringParagraf_11_29>? = null,
 )
 
-data class DtoLøsningMaskinellMedlemskapYrkesskade(val erMedlem: String) {
+data class DtoLøsningMaskinellMedlemskapYrkesskade(
+    val løsningId: UUID,
+    val erMedlem: String
+) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(enumValueOf(erMedlem.uppercase()))
+    private fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(løsningId, enumValueOf(erMedlem.uppercase()))
 }
 
 data class DtoLøsningManuellMedlemskapYrkesskade(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erMedlem: String
@@ -92,10 +96,16 @@ data class DtoLøsningManuellMedlemskapYrkesskade(
     }
 
     private fun toLøsning() =
-        LøsningManuellMedlemskapYrkesskade(vurdertAv, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
+        LøsningManuellMedlemskapYrkesskade(
+            løsningId,
+            vurdertAv,
+            tidspunktForVurdering,
+            enumValueOf(erMedlem.uppercase())
+        )
 }
 
 data class DtoKvalitetssikringMedlemskapYrkesskade(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -106,6 +116,7 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
     }
 
     private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -114,10 +125,23 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
 }
 
 data class DtoLøsningParagraf_11_2(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erMedlem: String
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        erMedlem: String
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        erMedlem = erMedlem
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
@@ -125,6 +149,7 @@ data class DtoLøsningParagraf_11_2(
     }
 
     private fun toLøsning() = LøsningManuellParagraf_11_2(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         erMedlem = if (erMedlem.lowercase() in listOf("true", "ja"))
@@ -133,16 +158,32 @@ data class DtoLøsningParagraf_11_2(
 }
 
 data class DtoKvalitetssikringParagraf_11_2(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -150,41 +191,84 @@ data class DtoKvalitetssikringParagraf_11_2(
     )
 }
 
-data class DtoLøsningMaskinellParagraf_11_2(val erMedlem: String) {
+data class DtoLøsningMaskinellParagraf_11_2(
+    val løsningId: UUID,
+    val tidspunktForVurdering: LocalDateTime,
+    val erMedlem: String
+) {
+
+    constructor(
+        erMedlem: String
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        tidspunktForVurdering = LocalDateTime.now(),
+        erMedlem = erMedlem
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningMaskinellParagraf_11_2(enumValueOf(erMedlem.uppercase()))
+    private fun toLøsning() =
+        LøsningMaskinellParagraf_11_2(løsningId, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
 }
 
 data class DtoLøsningParagraf_11_3(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        erOppfylt: Boolean
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        erOppfylt = erOppfylt
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_3(vurdertAv, tidspunktForVurdering, erOppfylt)
+    private fun toLøsning() = LøsningParagraf_11_3(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
 data class DtoKvalitetssikringParagraf_11_3(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -193,30 +277,60 @@ data class DtoKvalitetssikringParagraf_11_3(
 }
 
 data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        erOppfylt: Boolean
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        erOppfylt = erOppfylt
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_4AndreOgTredjeLedd(vurdertAv, tidspunktForVurdering, erOppfylt)
+    private fun toLøsning() =
+        LøsningParagraf_11_4AndreOgTredjeLedd(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
 data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -225,11 +339,26 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
 }
 
 data class DtoLøsningParagraf_11_5(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val kravOmNedsattArbeidsevneErOppfylt: Boolean,
     val nedsettelseSkyldesSykdomEllerSkade: Boolean
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        kravOmNedsattArbeidsevneErOppfylt: Boolean,
+        nedsettelseSkyldesSykdomEllerSkade: Boolean
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+        nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
@@ -237,6 +366,7 @@ data class DtoLøsningParagraf_11_5(
     }
 
     private fun toLøsning() = LøsningParagraf_11_5(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -247,16 +377,32 @@ data class DtoLøsningParagraf_11_5(
 }
 
 data class DtoKvalitetssikringParagraf_11_5(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -265,6 +411,7 @@ data class DtoKvalitetssikringParagraf_11_5(
 }
 
 data class DtoLøsningParagraf_11_5Yrkesskade(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
@@ -277,6 +424,7 @@ data class DtoLøsningParagraf_11_5Yrkesskade(
     }
 
     private fun toLøsning() = LøsningParagraf_11_5Yrkesskade(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
@@ -285,6 +433,7 @@ data class DtoLøsningParagraf_11_5Yrkesskade(
 }
 
 data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -295,6 +444,7 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -303,12 +453,29 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
 }
 
 data class DtoLøsningParagraf_11_6(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
     val harMulighetForÅKommeIArbeid: Boolean
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        harBehovForBehandling: Boolean,
+        harBehovForTiltak: Boolean,
+        harMulighetForÅKommeIArbeid: Boolean
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        harBehovForBehandling = harBehovForBehandling,
+        harBehovForTiltak = harBehovForTiltak,
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
@@ -316,6 +483,7 @@ data class DtoLøsningParagraf_11_6(
     }
 
     private fun toLøsning() = LøsningParagraf_11_6(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
@@ -325,16 +493,32 @@ data class DtoLøsningParagraf_11_6(
 }
 
 data class DtoKvalitetssikringParagraf_11_6(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -343,6 +527,7 @@ data class DtoKvalitetssikringParagraf_11_6(
 }
 
 data class DtoLøsningParagraf_11_12FørsteLedd(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val bestemmesAv: String,
@@ -350,6 +535,24 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
     val unntaksbegrunnelse: String,
     val manueltSattVirkningsdato: LocalDate
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        bestemmesAv: String,
+        unntak: String,
+        unntaksbegrunnelse: String,
+        manueltSattVirkningsdato: LocalDate
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        bestemmesAv = bestemmesAv,
+        unntak = unntak,
+        unntaksbegrunnelse = unntaksbegrunnelse,
+        manueltSattVirkningsdato = manueltSattVirkningsdato
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
@@ -357,6 +560,7 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
     }
 
     private fun toLøsning() = LøsningParagraf_11_12FørsteLedd(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         bestemmesAv = when {
@@ -375,16 +579,32 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
 }
 
 data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_12FørsteLedd(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -393,6 +613,7 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
 }
 
 data class DtoLøsningParagraf_11_22(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean,
@@ -407,6 +628,7 @@ data class DtoLøsningParagraf_11_22(
     }
 
     private fun toLøsning() = LøsningParagraf_11_22(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         erOppfylt = erOppfylt,
@@ -417,6 +639,7 @@ data class DtoLøsningParagraf_11_22(
 }
 
 data class DtoKvalitetssikringParagraf_11_22(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -427,6 +650,7 @@ data class DtoKvalitetssikringParagraf_11_22(
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -435,30 +659,59 @@ data class DtoKvalitetssikringParagraf_11_22(
 }
 
 data class DtoLøsningParagraf_11_29(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        erOppfylt: Boolean
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        erOppfylt = erOppfylt
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
+    private fun toLøsning() = LøsningParagraf_11_29(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
 data class DtoKvalitetssikringParagraf_11_29(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_29(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -472,30 +725,59 @@ data class DtoVurderingAvBeregningsdato(
 )
 
 data class DtoLøsningParagraf_11_19(
+    val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val beregningsdato: LocalDate
 ) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        beregningsdato: LocalDate
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        beregningsdato = beregningsdato
+    )
+
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
         søker.håndterLøsning(løsning)
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
+    private fun toLøsning() = LøsningParagraf_11_19(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
 }
 
 data class DtoKvalitetssikringParagraf_11_19(
+    val kvalitetssikringId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
+
+    constructor(
+        kvalitetssikretAv: String,
+        tidspunktForKvalitetssikring: LocalDateTime,
+        erGodkjent: Boolean,
+        begrunnelse: String
+    ) : this(
+        kvalitetssikringId = UUID.randomUUID(),
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
+
     fun håndter(søker: Søker) {
         søker.håndterKvalitetssikring(toKvalitetssikring())
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_19(
+        kvalitetssikringId = kvalitetssikringId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,

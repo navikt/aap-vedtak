@@ -3,8 +3,10 @@ package no.nav.aap.hendelse
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.dto.DtoLøsningParagraf_11_4AndreOgTredjeLedd
 import java.time.LocalDateTime
+import java.util.*
 
 internal class LøsningParagraf_11_4AndreOgTredjeLedd(
+    private val løsningId: UUID,
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
     private val erOppfylt: Boolean
@@ -19,6 +21,7 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
     internal fun erManueltOppfylt() = erOppfylt
 
     private fun toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+        løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         erOppfylt = erOppfylt
@@ -26,6 +29,7 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
 }
 
 class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+    private val kvalitetssikringId: UUID, 
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
@@ -40,10 +44,11 @@ class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     internal fun toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
-        kvalitetssikretAv,
-        tidspunktForKvalitetssikring,
-        erGodkjent,
-        begrunnelse
+        kvalitetssikringId = kvalitetssikringId,
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
     )
 }
 

@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 internal class `§11-3 Test` {
 
@@ -23,7 +24,7 @@ internal class `§11-3 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true)
+        val løsning = LøsningParagraf_11_3(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
 
         assertTrue(vilkår.erOppfylt())
@@ -39,7 +40,7 @@ internal class `§11-3 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), false)
+        val løsning = LøsningParagraf_11_3(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
 
         assertFalse(vilkår.erOppfylt())
@@ -55,10 +56,10 @@ internal class `§11-3 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true)
+        val løsning = LøsningParagraf_11_3(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_3("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_3(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -75,10 +76,10 @@ internal class `§11-3 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), false)
+        val løsning = LøsningParagraf_11_3(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_3("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_3(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -95,10 +96,10 @@ internal class `§11-3 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), true)
+        val løsning = LøsningParagraf_11_3(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_3("X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_3(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -115,10 +116,10 @@ internal class `§11-3 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_3("saksbehandler", LocalDateTime.now(), false)
+        val løsning = LøsningParagraf_11_3(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_3("X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_3(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

@@ -1,6 +1,8 @@
 package no.nav.aap.app.modell
 
 import no.nav.aap.app.modell.ForrigeSøkereKafkaDto.*
+import java.time.LocalDateTime
+import java.util.*
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -29,23 +31,11 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     godkjentAv = godkjentAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand =
-    when {
-        paragraf == "PARAGRAF_11_4" && ledd == listOf("LEDD_1") -> when (tilstand) {
-            "OPPFYLT" -> "OPPFYLT_MASKINELT"
-            "IKKE_OPPFYLT" -> "IKKE_OPPFYLT_MASKINELT"
-            else -> tilstand
-        }
-        else -> when (tilstand) {
-            "OPPFYLT" -> "OPPFYLT_MANUELT"
-            "IKKE_OPPFYLT" -> "IKKE_OPPFYLT_MANUELT"
-            else -> tilstand
-        }
-    },
+    tilstand = tilstand,
     utfall = utfall,
     løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() },
     løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() },
-    løsning_11_2_maskinell = løsning_11_2_maskinell?.map { SøkereKafkaDto.LøsningMaskinellParagraf_11_2(it.erMedlem) },
+    løsning_11_2_maskinell = løsning_11_2_maskinell?.map { it.toDto() },
     løsning_11_2_manuell = løsning_11_2_manuell?.map { it.toDto() },
     løsning_11_3_manuell = løsning_11_3_manuell?.map { it.toDto() },
     løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.map { it.toDto() },
@@ -59,38 +49,46 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
+    løsningId = UUID.randomUUID(),
     erMedlem = erMedlem
 )
 
 private fun LøsningManuellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
 private fun LøsningMaskinellParagraf_11_2.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_2(
+    løsningId = UUID.randomUUID(),
+    tidspunktForVurdering = LocalDateTime.now(),
     erMedlem = erMedlem
 )
 
 private fun LøsningManuellParagraf_11_2.toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
 private fun LøsningParagraf_11_3.toDto() = SøkereKafkaDto.LøsningParagraf_11_3(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
 private fun LøsningParagraf_11_4_ledd2_ledd3.toDto() = SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
 private fun LøsningParagraf_11_5.toDto() = SøkereKafkaDto.LøsningParagraf_11_5(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
@@ -98,6 +96,7 @@ private fun LøsningParagraf_11_5.toDto() = SøkereKafkaDto.LøsningParagraf_11_
 )
 
 private fun LøsningParagraf_11_5_yrkesskade.toDto() = SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
@@ -105,6 +104,7 @@ private fun LøsningParagraf_11_5_yrkesskade.toDto() = SøkereKafkaDto.LøsningP
 )
 
 private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_6(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
@@ -113,6 +113,7 @@ private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_
 )
 
 private fun LøsningParagraf_11_12_ledd1.toDto() = SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     bestemmesAv = bestemmesAv,
@@ -122,12 +123,14 @@ private fun LøsningParagraf_11_12_ledd1.toDto() = SøkereKafkaDto.LøsningParag
 )
 
 private fun LøsningParagraf_11_19.toDto() = SøkereKafkaDto.LøsningParagraf_11_19(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     beregningsdato = beregningsdato
 )
 
 private fun LøsningParagraf_11_22.toDto() = SøkereKafkaDto.LøsningParagraf_11_22(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt,
@@ -137,6 +140,7 @@ private fun LøsningParagraf_11_22.toDto() = SøkereKafkaDto.LøsningParagraf_11
 )
 
 private fun LøsningParagraf_11_29.toDto() = SøkereKafkaDto.LøsningParagraf_11_29(
+    løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt

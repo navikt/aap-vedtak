@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 internal class `§11-2 Test` {
     @Test
@@ -23,7 +24,9 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        val løsning = LøsningMaskinellParagraf_11_2(UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -44,7 +47,9 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
+        val løsning = LøsningMaskinellParagraf_11_2(UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -65,7 +70,10 @@ internal class `§11-2 Test` {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -85,13 +93,16 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val manuellLøsning =
-            LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+            LøsningManuellParagraf_11_2(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -111,13 +122,16 @@ internal class `§11-2 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val manuellLøsning =
-            LøsningManuellParagraf_11_2("saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+            LøsningManuellParagraf_11_2(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -160,10 +174,12 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -181,10 +197,13 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -202,14 +221,17 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning =
-            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+            LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -227,14 +249,17 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning =
-            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+            LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -252,10 +277,13 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -273,10 +301,13 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -294,14 +325,17 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning =
-            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
+            LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -319,14 +353,17 @@ internal class `§11-2 Test` {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellParagraf_11_2(LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
+        val maskinellLøsning = LøsningMaskinellParagraf_11_2(
+            UUID.randomUUID(),
+            LocalDateTime.now(),
+            LøsningMaskinellParagraf_11_2.ErMedlem.UAVKLART)
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning =
-            LøsningManuellParagraf_11_2("Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
+            LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2("X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

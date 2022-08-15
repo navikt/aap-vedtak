@@ -48,38 +48,46 @@ private fun Vilkårsvurdering.toDto() = DtoVilkårsvurdering(
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = DtoLøsningMaskinellMedlemskapYrkesskade(
+    løsningId = løsningId,
     erMedlem = erMedlem
 )
 
 private fun LøsningManuellMedlemskapYrkesskade.toDto() = DtoLøsningManuellMedlemskapYrkesskade(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
 private fun LøsningMaskinellParagraf_11_2.toDto() = DtoLøsningMaskinellParagraf_11_2(
+    løsningId = løsningId,
+    tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
 private fun LøsningManuellParagraf_11_2.toDto() = DtoLøsningParagraf_11_2(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
 private fun LøsningParagraf_11_3.toDto() = DtoLøsningParagraf_11_3(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
 private fun LøsningParagraf_11_4_ledd2_ledd3.toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
 private fun LøsningParagraf_11_5.toDto() = DtoLøsningParagraf_11_5(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
@@ -87,6 +95,7 @@ private fun LøsningParagraf_11_5.toDto() = DtoLøsningParagraf_11_5(
 )
 
 private fun LøsningParagraf_11_5_yrkesskade.toDto() = DtoLøsningParagraf_11_5Yrkesskade(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
@@ -94,6 +103,7 @@ private fun LøsningParagraf_11_5_yrkesskade.toDto() = DtoLøsningParagraf_11_5Y
 )
 
 private fun LøsningParagraf_11_6.toDto() = DtoLøsningParagraf_11_6(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
@@ -102,6 +112,7 @@ private fun LøsningParagraf_11_6.toDto() = DtoLøsningParagraf_11_6(
 )
 
 private fun LøsningParagraf_11_12_ledd1.toDto() = DtoLøsningParagraf_11_12FørsteLedd(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     bestemmesAv = bestemmesAv,
@@ -111,12 +122,14 @@ private fun LøsningParagraf_11_12_ledd1.toDto() = DtoLøsningParagraf_11_12Før
 )
 
 private fun LøsningParagraf_11_19.toDto() = DtoLøsningParagraf_11_19(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     beregningsdato = beregningsdato
 )
 
 private fun LøsningParagraf_11_22.toDto() = DtoLøsningParagraf_11_22(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt,
@@ -126,6 +139,7 @@ private fun LøsningParagraf_11_22.toDto() = DtoLøsningParagraf_11_22(
 )
 
 private fun LøsningParagraf_11_29.toDto() = DtoLøsningParagraf_11_29(
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt

@@ -107,6 +107,30 @@ internal class ApiTest {
             fun vilkårsvurderingsid(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].vilkårsvurderingsid
 
+            fun løsningsid2(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_2_maskinell!![0].løsningId
+
+            fun tidspunkt2(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_2_maskinell!![0].tidspunktForVurdering
+
+            fun løsningsid3(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_3_manuell!![0].løsningId
+
+            fun løsningsid5(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_5_manuell!![0].løsningId
+
+            fun løsningsid6(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_6_manuell!![0].løsningId
+
+            fun løsningsid12(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_12_ledd1_manuell!![0].løsningId
+
+            fun løsningsid19(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_19_manuell!![0].løsningId
+
+            fun løsningsid29(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_29_manuell!![0].løsningId
+
             val expected = DtoSøker(
                 personident = fnr,
                 fødselsdato = LocalDate.now().minusYears(40),
@@ -130,6 +154,8 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_2_maskinell = listOf(
                                             DtoLøsningMaskinellParagraf_11_2(
+                                                løsningsid2(0),
+                                                tidspunkt2(0),
                                                 "JA"
                                             )
                                         ),
@@ -144,6 +170,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_3_manuell = listOf(
                                             DtoLøsningParagraf_11_3(
+                                                løsningsid3(1),
                                                 "saksbehandler",
                                                 tidspunktForVurdering, true
                                             )
@@ -177,6 +204,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_5_manuell = listOf(
                                             DtoLøsningParagraf_11_5(
+                                                løsningsid5(4),
                                                 vurdertAv = "veileder",
                                                 tidspunktForVurdering = tidspunktForVurdering,
                                                 kravOmNedsattArbeidsevneErOppfylt = true,
@@ -194,6 +222,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_6_manuell = listOf(
                                             DtoLøsningParagraf_11_6(
+                                                løsningsid6(5),
                                                 vurdertAv = "saksbehandler",
                                                 tidspunktForVurdering = tidspunktForVurdering,
                                                 harBehovForBehandling = true,
@@ -212,6 +241,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_12_ledd1_manuell = listOf(
                                             DtoLøsningParagraf_11_12FørsteLedd(
+                                                løsningsid12(6),
                                                 vurdertAv = "saksbehandler",
                                                 tidspunktForVurdering = tidspunktForVurdering,
                                                 bestemmesAv = "soknadstidspunkt",
@@ -231,6 +261,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_19_manuell = listOf(
                                             DtoLøsningParagraf_11_19(
+                                                løsningsid19(7),
                                                 vurdertAv = "saksbehandler",
                                                 tidspunktForVurdering = tidspunktForVurdering,
                                                 beregningsdato = LocalDate.of(2022, 1, 1)
@@ -247,6 +278,7 @@ internal class ApiTest {
                                         utfall = Utfall.OPPFYLT,
                                         løsning_11_29_manuell = listOf(
                                             DtoLøsningParagraf_11_29(
+                                                løsningsid29(8),
                                                 "saksbehandler",
                                                 tidspunktForVurdering, true
                                             )

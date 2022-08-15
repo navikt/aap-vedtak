@@ -21,7 +21,7 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto
 private val håndterMedlem = { avroMedlem: AvroMedlem, søkereKafkaDto: SøkereKafkaDto ->
     val søker = Søker.gjenopprett(søkereKafkaDto.toDto()).apply {
         val medlem = avroMedlem.toDto()
-        håndterLøsning(medlem)
+        medlem.håndter(this)
     }
 
     søker.toDto().toJson()

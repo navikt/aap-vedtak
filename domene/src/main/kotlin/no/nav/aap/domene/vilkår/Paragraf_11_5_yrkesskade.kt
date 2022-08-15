@@ -198,6 +198,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         val dtoLøsninger = vilkårsvurdering.løsning_11_5_yrkesskade_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
             LøsningParagraf_11_5Yrkesskade(
+                løsningId = it.løsningId,
                 vurdertAv = it.vurdertAv,
                 tidspunktForVurdering = it.tidspunktForVurdering,
                 arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
@@ -211,10 +212,11 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_5_yrkesskade ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_5Yrkesskade(
-                it.kvalitetssikretAv,
-                it.tidspunktForKvalitetssikring,
-                it.erGodkjent,
-                it.begrunnelse
+                kvalitetssikringId = it.kvalitetssikringId,
+                kvalitetssikretAv = it.kvalitetssikretAv,
+                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
+                erGodkjent = it.erGodkjent,
+                begrunnelse = it.begrunnelse
             )
         })
     }

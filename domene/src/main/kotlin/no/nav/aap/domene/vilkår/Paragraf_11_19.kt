@@ -137,6 +137,7 @@ internal class Paragraf_11_19 private constructor(
         val dtoLøsninger = vilkårsvurdering.løsning_11_19_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
             LøsningParagraf_11_19(
+                løsningId = it.løsningId,
                 vurdertAv = it.vurdertAv,
                 tidspunktForVurdering = it.tidspunktForVurdering,
                 beregningsdato = it.beregningsdato,
@@ -148,10 +149,11 @@ internal class Paragraf_11_19 private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_19 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_19(
-                it.kvalitetssikretAv,
-                it.tidspunktForKvalitetssikring,
-                it.erGodkjent,
-                it.begrunnelse
+                kvalitetssikringId = it.kvalitetssikringId,
+                kvalitetssikretAv = it.kvalitetssikretAv,
+                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
+                erGodkjent = it.erGodkjent,
+                begrunnelse = it.begrunnelse
             )
         })
     }

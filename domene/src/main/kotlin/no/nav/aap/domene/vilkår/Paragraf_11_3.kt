@@ -12,11 +12,8 @@ import no.nav.aap.hendelse.LøsningParagraf_11_3
 import no.nav.aap.hendelse.LøsningParagraf_11_3.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_3
-import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
-
-private val log = LoggerFactory.getLogger("Paragraf_11_3")
 
 internal class Paragraf_11_3 private constructor(
     vilkårsvurderingsid: UUID, tilstand: Tilstand<Paragraf_11_3>
@@ -176,7 +173,7 @@ internal class Paragraf_11_3 private constructor(
     private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
         val dtoLøsninger = vilkårsvurdering.løsning_11_3_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
-            LøsningParagraf_11_3(it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt)
+            LøsningParagraf_11_3(it.løsningId, it.vurdertAv, it.tidspunktForVurdering, it.erOppfylt)
         })
     }
 
@@ -184,10 +181,11 @@ internal class Paragraf_11_3 private constructor(
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_3 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_3(
-                it.kvalitetssikretAv,
-                it.tidspunktForKvalitetssikring,
-                it.erGodkjent,
-                it.begrunnelse
+                kvalitetssikringId = it.kvalitetssikringId,
+                kvalitetssikretAv = it.kvalitetssikretAv,
+                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
+                erGodkjent = it.erGodkjent,
+                begrunnelse = it.begrunnelse
             )
         })
     }

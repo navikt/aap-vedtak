@@ -18,7 +18,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     internal companion object {
-        internal const val VERSION = 6
+        internal const val VERSION = 7
     }
 
     data class Sak(
@@ -59,35 +59,47 @@ data class SøkereKafkaDto(
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>? = null,
     )
 
-    data class LøsningMaskinellMedlemskapYrkesskade(val erMedlem: String)
+    data class LøsningMaskinellMedlemskapYrkesskade(
+        val løsningId: UUID,
+        val erMedlem: String
+    )
 
     data class LøsningManuellMedlemskapYrkesskade(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erMedlem: String
     )
 
-    data class LøsningMaskinellParagraf_11_2(val erMedlem: String)
+    data class LøsningMaskinellParagraf_11_2(
+        val løsningId: UUID,
+        val tidspunktForVurdering: LocalDateTime,
+        val erMedlem: String
+    )
 
     data class LøsningManuellParagraf_11_2(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erMedlem: String
     )
 
     data class LøsningParagraf_11_3(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
     )
 
     data class LøsningParagraf_11_4_ledd2_ledd3(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
     )
 
     data class LøsningParagraf_11_5(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val kravOmNedsattArbeidsevneErOppfylt: Boolean,
@@ -95,6 +107,7 @@ data class SøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_5_yrkesskade(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
@@ -102,6 +115,7 @@ data class SøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_6(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val harBehovForBehandling: Boolean,
@@ -110,6 +124,7 @@ data class SøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_12_ledd1(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val bestemmesAv: String,
@@ -119,12 +134,14 @@ data class SøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_19(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val beregningsdato: LocalDate
     )
 
     data class LøsningParagraf_11_22(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean,
@@ -134,6 +151,7 @@ data class SøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_29(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
@@ -208,10 +226,14 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             tilstand = vilkår.tilstand,
                             utfall = vilkår.utfall.name,
                             løsning_medlemskap_yrkesskade_maskinell = vilkår.løsning_medlemskap_yrkesskade_maskinell?.map {
-                                SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(erMedlem = it.erMedlem)
+                                SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
+                                    løsningId = it.løsningId,
+                                    erMedlem = it.erMedlem
+                                )
                             },
                             løsning_medlemskap_yrkesskade_manuell = vilkår.løsning_medlemskap_yrkesskade_manuell?.map {
                                 SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erMedlem = it.erMedlem
@@ -219,11 +241,14 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_2_maskinell = vilkår.løsning_11_2_maskinell?.map {
                                 SøkereKafkaDto.LøsningMaskinellParagraf_11_2(
+                                    løsningId = it.løsningId,
+                                    tidspunktForVurdering = it.tidspunktForVurdering,
                                     erMedlem = it.erMedlem
                                 )
                             },
                             løsning_11_2_manuell = vilkår.løsning_11_2_manuell?.map {
                                 SøkereKafkaDto.LøsningManuellParagraf_11_2(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erMedlem = it.erMedlem
@@ -231,6 +256,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_3_manuell = vilkår.løsning_11_3_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_3(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erOppfylt = it.erOppfylt
@@ -238,6 +264,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_4_ledd2_ledd3_manuell = vilkår.løsning_11_4_ledd2_ledd3_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erOppfylt = it.erOppfylt
@@ -245,6 +272,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_5_manuell = vilkår.løsning_11_5_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_5(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
@@ -253,6 +281,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_5_yrkesskade_manuell = vilkår.løsning_11_5_yrkesskade_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent,
@@ -261,6 +290,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_6_manuell = vilkår.løsning_11_6_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_6(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     harBehovForBehandling = it.harBehovForBehandling,
@@ -270,6 +300,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_12_ledd1_manuell = vilkår.løsning_11_12_ledd1_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     bestemmesAv = it.bestemmesAv,
@@ -280,6 +311,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_19_manuell = vilkår.løsning_11_19_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_19(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     beregningsdato = it.beregningsdato
@@ -287,6 +319,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_22_manuell = vilkår.løsning_11_22_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_22(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erOppfylt = it.erOppfylt,
@@ -297,6 +330,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             },
                             løsning_11_29_manuell = vilkår.løsning_11_29_manuell?.map {
                                 SøkereKafkaDto.LøsningParagraf_11_29(
+                                    løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erOppfylt = it.erOppfylt
