@@ -1,6 +1,5 @@
 package no.nav.aap.app.modell
 
-import no.nav.aap.dto.DtoSøker
 import no.nav.aap.kafka.serde.json.Migratable
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -57,6 +56,17 @@ data class SøkereKafkaDto(
         val løsning_11_19_manuell: List<LøsningParagraf_11_19>? = null,
         val løsning_11_22_manuell: List<LøsningParagraf_11_22>? = null,
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>? = null,
+        val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskade>? = null,
+        val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2>? = null,
+        val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3>? = null,
+        val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>? = null,
+        val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5>? = null,
+        val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5Yrkesskade>? = null,
+        val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6>? = null,
+        val kvalitetssikringer_11_12_ledd1: List<KvalitetssikringParagraf_11_12FørsteLedd>? = null,
+        val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19>? = null,
+        val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22>? = null,
+        val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29>? = null,
     )
 
     data class LøsningMaskinellMedlemskapYrkesskade(
@@ -157,6 +167,94 @@ data class SøkereKafkaDto(
         val erOppfylt: Boolean
     )
 
+    data class KvalitetssikringMedlemskapYrkesskade(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_2(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_3(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_5(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_5Yrkesskade(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_6(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_12FørsteLedd(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_22(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_19(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_29(
+        val kvalitetssikringId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
     data class Vedtak(
         val vedtaksid: UUID,
         val innvilget: Boolean,
@@ -204,194 +302,3 @@ data class SøkereKafkaDto(
 
     override fun erMigrertAkkuratNå(): Boolean = erMigrertAkkuratNå
 }
-
-fun DtoSøker.toJson() = SøkereKafkaDto(
-    personident = personident,
-    fødselsdato = fødselsdato,
-    saker = saker.map { sak ->
-        SøkereKafkaDto.Sak(
-            saksid = sak.saksid,
-            tilstand = sak.tilstand,
-            sakstyper = sak.sakstyper.map { sakstype ->
-                SøkereKafkaDto.Sakstype(
-                    type = sakstype.type,
-                    aktiv = sakstype.aktiv,
-                    vilkårsvurderinger = sakstype.vilkårsvurderinger.map { vilkår ->
-                        SøkereKafkaDto.Vilkårsvurdering(
-                            vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
-                            vurdertAv = vilkår.vurdertAv,
-                            godkjentAv = vilkår.kvalitetssikretAv,
-                            paragraf = vilkår.paragraf,
-                            ledd = vilkår.ledd,
-                            tilstand = vilkår.tilstand,
-                            utfall = vilkår.utfall.name,
-                            løsning_medlemskap_yrkesskade_maskinell = vilkår.løsning_medlemskap_yrkesskade_maskinell?.map {
-                                SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
-                                    løsningId = it.løsningId,
-                                    erMedlem = it.erMedlem
-                                )
-                            },
-                            løsning_medlemskap_yrkesskade_manuell = vilkår.løsning_medlemskap_yrkesskade_manuell?.map {
-                                SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erMedlem = it.erMedlem
-                                )
-                            },
-                            løsning_11_2_maskinell = vilkår.løsning_11_2_maskinell?.map {
-                                SøkereKafkaDto.LøsningMaskinellParagraf_11_2(
-                                    løsningId = it.løsningId,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erMedlem = it.erMedlem
-                                )
-                            },
-                            løsning_11_2_manuell = vilkår.løsning_11_2_manuell?.map {
-                                SøkereKafkaDto.LøsningManuellParagraf_11_2(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erMedlem = it.erMedlem
-                                )
-                            },
-                            løsning_11_3_manuell = vilkår.løsning_11_3_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_3(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erOppfylt = it.erOppfylt
-                                )
-                            },
-                            løsning_11_4_ledd2_ledd3_manuell = vilkår.løsning_11_4_ledd2_ledd3_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erOppfylt = it.erOppfylt
-                                )
-                            },
-                            løsning_11_5_manuell = vilkår.løsning_11_5_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_5(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
-                                    nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
-                                )
-                            },
-                            løsning_11_5_yrkesskade_manuell = vilkår.løsning_11_5_yrkesskade_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    arbeidsevneErNedsattMedMinst30Prosent = it.arbeidsevneErNedsattMedMinst30Prosent,
-                                    arbeidsevneErNedsattMedMinst50Prosent = it.arbeidsevneErNedsattMedMinst50Prosent,
-                                )
-                            },
-                            løsning_11_6_manuell = vilkår.løsning_11_6_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_6(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    harBehovForBehandling = it.harBehovForBehandling,
-                                    harBehovForTiltak = it.harBehovForTiltak,
-                                    harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
-                                )
-                            },
-                            løsning_11_12_ledd1_manuell = vilkår.løsning_11_12_ledd1_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    bestemmesAv = it.bestemmesAv,
-                                    unntak = it.unntak,
-                                    unntaksbegrunnelse = it.unntaksbegrunnelse,
-                                    manueltSattVirkningsdato = it.manueltSattVirkningsdato
-                                )
-                            },
-                            løsning_11_19_manuell = vilkår.løsning_11_19_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_19(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    beregningsdato = it.beregningsdato
-                                )
-                            },
-                            løsning_11_22_manuell = vilkår.løsning_11_22_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_22(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erOppfylt = it.erOppfylt,
-                                    andelNedsattArbeidsevne = it.andelNedsattArbeidsevne,
-                                    år = it.år,
-                                    antattÅrligArbeidsinntekt = it.antattÅrligArbeidsinntekt
-                                )
-                            },
-                            løsning_11_29_manuell = vilkår.løsning_11_29_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_29(
-                                    løsningId = it.løsningId,
-                                    vurdertAv = it.vurdertAv,
-                                    tidspunktForVurdering = it.tidspunktForVurdering,
-                                    erOppfylt = it.erOppfylt
-                                )
-                            },
-                        )
-                    }
-                )
-            },
-            vurderingsdato = sak.vurderingsdato,
-            søknadstidspunkt = sak.søknadstidspunkt,
-            vedtak = sak.vedtak?.let { vedtak ->
-                SøkereKafkaDto.Vedtak(
-                    vedtaksid = vedtak.vedtaksid,
-                    innvilget = vedtak.innvilget,
-                    inntektsgrunnlag = vedtak.inntektsgrunnlag.let { inntektsgrunnlag ->
-                        SøkereKafkaDto.Inntektsgrunnlag(
-                            beregningsdato = inntektsgrunnlag.beregningsdato,
-                            inntekterSiste3Kalenderår = inntektsgrunnlag.inntekterSiste3Kalenderår.map { siste3år ->
-                                SøkereKafkaDto.InntekterForBeregning(
-                                    inntekter = siste3år.inntekter.map { inntekt ->
-                                        SøkereKafkaDto.Inntekt(
-                                            arbeidsgiver = inntekt.arbeidsgiver,
-                                            inntekstmåned = inntekt.inntekstmåned,
-                                            beløp = inntekt.beløp,
-                                        )
-                                    },
-                                    inntektsgrunnlagForÅr = siste3år.inntektsgrunnlagForÅr.let { år ->
-                                        SøkereKafkaDto.InntektsgrunnlagForÅr(
-                                            år = år.år,
-                                            beløpFørJustering = år.beløpFørJustering,
-                                            beløpJustertFor6G = år.beløpJustertFor6G,
-                                            erBeløpJustertFor6G = år.erBeløpJustertFor6G,
-                                            grunnlagsfaktor = år.grunnlagsfaktor,
-                                        )
-                                    }
-                                )
-                            },
-                            yrkesskade = inntektsgrunnlag.yrkesskade?.let { yrkesskade ->
-                                SøkereKafkaDto.Yrkesskade(
-                                    gradAvNedsattArbeidsevneKnyttetTilYrkesskade = yrkesskade.gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
-                                    inntektsgrunnlag = yrkesskade.inntektsgrunnlag.let { år ->
-                                        SøkereKafkaDto.InntektsgrunnlagForÅr(
-                                            år = år.år,
-                                            beløpFørJustering = år.beløpFørJustering,
-                                            beløpJustertFor6G = år.beløpJustertFor6G,
-                                            erBeløpJustertFor6G = år.erBeløpJustertFor6G,
-                                            grunnlagsfaktor = år.grunnlagsfaktor,
-                                        )
-                                    }
-                                )
-                            },
-                            fødselsdato = inntektsgrunnlag.fødselsdato,
-                            sisteKalenderår = inntektsgrunnlag.sisteKalenderår,
-                            grunnlagsfaktor = inntektsgrunnlag.grunnlagsfaktor,
-                        )
-                    },
-                    vedtaksdato = vedtak.vedtaksdato,
-                    virkningsdato = vedtak.virkningsdato,
-                )
-            }
-        )
-    },
-)
