@@ -169,6 +169,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringMedlemskapYrkesskade(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -177,6 +178,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_2(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -185,6 +187,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_3(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -193,6 +196,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -201,6 +205,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_5(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -209,6 +214,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_5Yrkesskade(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -217,6 +223,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_6(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -225,6 +232,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_12FørsteLedd(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -233,6 +241,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_22(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -241,6 +250,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_19(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
@@ -249,6 +259,7 @@ data class SøkereKafkaDto(
 
     data class KvalitetssikringParagraf_11_29(
         val kvalitetssikringId: UUID,
+        val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,

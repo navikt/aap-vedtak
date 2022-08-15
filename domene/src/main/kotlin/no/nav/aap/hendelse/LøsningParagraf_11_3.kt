@@ -24,6 +24,7 @@ internal class LøsningParagraf_11_3(
 
 class KvalitetssikringParagraf_11_3(
     private val kvalitetssikringId: UUID, 
+    private val løsningId: UUID, 
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
@@ -38,6 +39,7 @@ class KvalitetssikringParagraf_11_3(
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     internal fun toDto() = DtoKvalitetssikringParagraf_11_3(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,

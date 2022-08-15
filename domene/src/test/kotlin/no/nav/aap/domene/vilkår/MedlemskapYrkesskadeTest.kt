@@ -176,7 +176,7 @@ internal class MedlemskapYrkesskadeTest {
         val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -197,7 +197,7 @@ internal class MedlemskapYrkesskadeTest {
         val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -223,7 +223,7 @@ internal class MedlemskapYrkesskadeTest {
             LøsningManuellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),"Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -253,7 +253,7 @@ internal class MedlemskapYrkesskadeTest {
         )
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -274,7 +274,7 @@ internal class MedlemskapYrkesskadeTest {
         val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -295,7 +295,7 @@ internal class MedlemskapYrkesskadeTest {
         val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -321,7 +321,7 @@ internal class MedlemskapYrkesskadeTest {
             LøsningManuellMedlemskapYrkesskade(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -351,7 +351,7 @@ internal class MedlemskapYrkesskadeTest {
         )
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

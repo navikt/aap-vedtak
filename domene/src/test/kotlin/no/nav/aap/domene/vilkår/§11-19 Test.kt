@@ -57,7 +57,7 @@ internal class `§11-19 Test` {
 
         vilkår.håndterLøsning(LøsningParagraf_11_19(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), 15 august 2018))
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_19(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_19(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -76,7 +76,7 @@ internal class `§11-19 Test` {
 
         vilkår.håndterLøsning(LøsningParagraf_11_19(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), 15 august 2018))
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_19(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_19(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

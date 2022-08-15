@@ -27,7 +27,8 @@ internal class LøsningManuellMedlemskapYrkesskade(
 }
 
 class KvalitetssikringMedlemskapYrkesskade(
-    private val kvalitetssikringId: UUID,
+    private val kvalitetssikringId: UUID, 
+    private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
@@ -43,6 +44,7 @@ class KvalitetssikringMedlemskapYrkesskade(
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     internal fun toDto() = DtoKvalitetssikringMedlemskapYrkesskade(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,

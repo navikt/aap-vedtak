@@ -65,7 +65,7 @@ internal class `§11-22 Test` {
         val løsning = LøsningParagraf_11_22(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -86,7 +86,7 @@ internal class `§11-22 Test` {
             LøsningParagraf_11_22(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -106,7 +106,7 @@ internal class `§11-22 Test` {
         val løsning = LøsningParagraf_11_22(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -127,7 +127,7 @@ internal class `§11-22 Test` {
             LøsningParagraf_11_22(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_11_22(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

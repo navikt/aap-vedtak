@@ -383,6 +383,7 @@ internal class MedlemskapYrkesskade private constructor(
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringMedlemskapYrkesskade(
                 it.kvalitetssikringId,
+                it.løsningId,
                 it.kvalitetssikretAv,
                 it.tidspunktForKvalitetssikring,
                 it.erGodkjent,

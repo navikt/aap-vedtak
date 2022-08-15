@@ -179,7 +179,7 @@ internal class `§11-2 Test` {
             LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -203,7 +203,7 @@ internal class `§11-2 Test` {
             LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -231,7 +231,7 @@ internal class `§11-2 Test` {
             LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -259,7 +259,7 @@ internal class `§11-2 Test` {
             LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -283,7 +283,7 @@ internal class `§11-2 Test` {
             LøsningMaskinellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -307,7 +307,7 @@ internal class `§11-2 Test` {
             LøsningMaskinellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -335,7 +335,7 @@ internal class `§11-2 Test` {
             LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.JA)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -363,7 +363,7 @@ internal class `§11-2 Test` {
             LøsningManuellParagraf_11_2(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellParagraf_11_2.ErMedlem.NEI)
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_11_2(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

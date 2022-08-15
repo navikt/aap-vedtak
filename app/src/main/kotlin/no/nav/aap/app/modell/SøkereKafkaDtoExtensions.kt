@@ -158,6 +158,7 @@ private fun LøsningParagraf_11_29.toDto() = DtoLøsningParagraf_11_29(
 
 private fun KvalitetssikringMedlemskapYrkesskade.toDto() = DtoKvalitetssikringMedlemskapYrkesskade(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -166,6 +167,7 @@ private fun KvalitetssikringMedlemskapYrkesskade.toDto() = DtoKvalitetssikringMe
 
 private fun KvalitetssikringParagraf_11_2.toDto() = DtoKvalitetssikringParagraf_11_2(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -174,6 +176,7 @@ private fun KvalitetssikringParagraf_11_2.toDto() = DtoKvalitetssikringParagraf_
 
 private fun KvalitetssikringParagraf_11_3.toDto() = DtoKvalitetssikringParagraf_11_3(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -182,6 +185,7 @@ private fun KvalitetssikringParagraf_11_3.toDto() = DtoKvalitetssikringParagraf_
 
 private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -190,6 +194,7 @@ private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() = DtoKvalitet
 
 private fun KvalitetssikringParagraf_11_5.toDto() = DtoKvalitetssikringParagraf_11_5(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -198,6 +203,7 @@ private fun KvalitetssikringParagraf_11_5.toDto() = DtoKvalitetssikringParagraf_
 
 private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = DtoKvalitetssikringParagraf_11_5Yrkesskade(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -206,6 +212,7 @@ private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = DtoKvalitetssikrin
 
 private fun KvalitetssikringParagraf_11_6.toDto() = DtoKvalitetssikringParagraf_11_6(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -214,6 +221,7 @@ private fun KvalitetssikringParagraf_11_6.toDto() = DtoKvalitetssikringParagraf_
 
 private fun KvalitetssikringParagraf_11_12FørsteLedd.toDto() = DtoKvalitetssikringParagraf_11_12FørsteLedd(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -222,6 +230,7 @@ private fun KvalitetssikringParagraf_11_12FørsteLedd.toDto() = DtoKvalitetssikr
 
 private fun KvalitetssikringParagraf_11_19.toDto() = DtoKvalitetssikringParagraf_11_19(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -230,6 +239,7 @@ private fun KvalitetssikringParagraf_11_19.toDto() = DtoKvalitetssikringParagraf
 
 private fun KvalitetssikringParagraf_11_22.toDto() = DtoKvalitetssikringParagraf_11_22(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -238,6 +248,7 @@ private fun KvalitetssikringParagraf_11_22.toDto() = DtoKvalitetssikringParagraf
 
 private fun KvalitetssikringParagraf_11_29.toDto() = DtoKvalitetssikringParagraf_11_29(
     kvalitetssikringId = kvalitetssikringId,
+    løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
@@ -290,15 +301,15 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
     personident = personident,
     fødselsdato = fødselsdato,
     saker = saker.map { sak ->
-        SøkereKafkaDto.Sak(
+        Sak(
             saksid = sak.saksid,
             tilstand = sak.tilstand,
             sakstyper = sak.sakstyper.map { sakstype ->
-                SøkereKafkaDto.Sakstype(
+                Sakstype(
                     type = sakstype.type,
                     aktiv = sakstype.aktiv,
                     vilkårsvurderinger = sakstype.vilkårsvurderinger.map { vilkår ->
-                        SøkereKafkaDto.Vilkårsvurdering(
+                        Vilkårsvurdering(
                             vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                             vurdertAv = vilkår.vurdertAv,
                             godkjentAv = vilkår.kvalitetssikretAv,
@@ -307,13 +318,13 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                             tilstand = vilkår.tilstand,
                             utfall = vilkår.utfall.name,
                             løsning_medlemskap_yrkesskade_maskinell = vilkår.løsning_medlemskap_yrkesskade_maskinell?.map {
-                                SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
+                                LøsningMaskinellMedlemskapYrkesskade(
                                     løsningId = it.løsningId,
                                     erMedlem = it.erMedlem
                                 )
                             },
                             løsning_medlemskap_yrkesskade_manuell = vilkår.løsning_medlemskap_yrkesskade_manuell?.map {
-                                SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(
+                                LøsningManuellMedlemskapYrkesskade(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -321,14 +332,14 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_2_maskinell = vilkår.løsning_11_2_maskinell?.map {
-                                SøkereKafkaDto.LøsningMaskinellParagraf_11_2(
+                                LøsningMaskinellParagraf_11_2(
                                     løsningId = it.løsningId,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
                                     erMedlem = it.erMedlem
                                 )
                             },
                             løsning_11_2_manuell = vilkår.løsning_11_2_manuell?.map {
-                                SøkereKafkaDto.LøsningManuellParagraf_11_2(
+                                LøsningManuellParagraf_11_2(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -336,7 +347,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_3_manuell = vilkår.løsning_11_3_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_3(
+                                LøsningParagraf_11_3(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -344,7 +355,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_4_ledd2_ledd3_manuell = vilkår.løsning_11_4_ledd2_ledd3_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_4_ledd2_ledd3(
+                                LøsningParagraf_11_4_ledd2_ledd3(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -352,7 +363,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_5_manuell = vilkår.løsning_11_5_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_5(
+                                LøsningParagraf_11_5(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -361,7 +372,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_5_yrkesskade_manuell = vilkår.løsning_11_5_yrkesskade_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
+                                LøsningParagraf_11_5_yrkesskade(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -370,7 +381,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_6_manuell = vilkår.løsning_11_6_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_6(
+                                LøsningParagraf_11_6(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -380,7 +391,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_12_ledd1_manuell = vilkår.løsning_11_12_ledd1_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
+                                LøsningParagraf_11_12_ledd1(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -391,7 +402,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_19_manuell = vilkår.løsning_11_19_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_19(
+                                LøsningParagraf_11_19(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -399,7 +410,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_22_manuell = vilkår.løsning_11_22_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_22(
+                                LøsningParagraf_11_22(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -410,7 +421,7 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             løsning_11_29_manuell = vilkår.løsning_11_29_manuell?.map {
-                                SøkereKafkaDto.LøsningParagraf_11_29(
+                                LøsningParagraf_11_29(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -418,8 +429,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_medlemskap_yrkesskade = vilkår.kvalitetssikringer_medlemskap_yrkesskade?.map {
-                                SøkereKafkaDto.KvalitetssikringMedlemskapYrkesskade(
+                                KvalitetssikringMedlemskapYrkesskade(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -427,8 +439,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_2 = vilkår.kvalitetssikringer_11_2?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_2(
+                                KvalitetssikringParagraf_11_2(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -436,8 +449,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_3 = vilkår.kvalitetssikringer_11_3?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_3(
+                                KvalitetssikringParagraf_11_3(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -445,8 +459,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_4_ledd2_ledd3 = vilkår.kvalitetssikringer_11_4_ledd2_ledd3?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+                                KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -454,8 +469,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_5 = vilkår.kvalitetssikringer_11_5?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_5(
+                                KvalitetssikringParagraf_11_5(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -463,8 +479,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_5_yrkesskade = vilkår.kvalitetssikringer_11_5_yrkesskade?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_5Yrkesskade(
+                                KvalitetssikringParagraf_11_5Yrkesskade(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -472,8 +489,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_6 = vilkår.kvalitetssikringer_11_6?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_6(
+                                KvalitetssikringParagraf_11_6(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -481,8 +499,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_12_ledd1 = vilkår.kvalitetssikringer_11_12_ledd1?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_12FørsteLedd(
+                                KvalitetssikringParagraf_11_12FørsteLedd(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -490,8 +509,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_19 = vilkår.kvalitetssikringer_11_19?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_19(
+                                KvalitetssikringParagraf_11_19(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -499,8 +519,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_22 = vilkår.kvalitetssikringer_11_22?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_22(
+                                KvalitetssikringParagraf_11_22(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -508,8 +529,9 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             kvalitetssikringer_11_29 = vilkår.kvalitetssikringer_11_29?.map {
-                                SøkereKafkaDto.KvalitetssikringParagraf_11_29(
+                                KvalitetssikringParagraf_11_29(
                                     kvalitetssikringId = it.kvalitetssikringId,
+                                    løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,
                                     tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                                     erGodkjent = it.erGodkjent,
@@ -523,23 +545,23 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
             vurderingsdato = sak.vurderingsdato,
             søknadstidspunkt = sak.søknadstidspunkt,
             vedtak = sak.vedtak?.let { vedtak ->
-                SøkereKafkaDto.Vedtak(
+                Vedtak(
                     vedtaksid = vedtak.vedtaksid,
                     innvilget = vedtak.innvilget,
                     inntektsgrunnlag = vedtak.inntektsgrunnlag.let { inntektsgrunnlag ->
-                        SøkereKafkaDto.Inntektsgrunnlag(
+                        Inntektsgrunnlag(
                             beregningsdato = inntektsgrunnlag.beregningsdato,
                             inntekterSiste3Kalenderår = inntektsgrunnlag.inntekterSiste3Kalenderår.map { siste3år ->
-                                SøkereKafkaDto.InntekterForBeregning(
+                                InntekterForBeregning(
                                     inntekter = siste3år.inntekter.map { inntekt ->
-                                        SøkereKafkaDto.Inntekt(
+                                        Inntekt(
                                             arbeidsgiver = inntekt.arbeidsgiver,
                                             inntekstmåned = inntekt.inntekstmåned,
                                             beløp = inntekt.beløp,
                                         )
                                     },
                                     inntektsgrunnlagForÅr = siste3år.inntektsgrunnlagForÅr.let { år ->
-                                        SøkereKafkaDto.InntektsgrunnlagForÅr(
+                                        InntektsgrunnlagForÅr(
                                             år = år.år,
                                             beløpFørJustering = år.beløpFørJustering,
                                             beløpJustertFor6G = år.beløpJustertFor6G,
@@ -550,10 +572,10 @@ fun DtoSøker.toJson() = SøkereKafkaDto(
                                 )
                             },
                             yrkesskade = inntektsgrunnlag.yrkesskade?.let { yrkesskade ->
-                                SøkereKafkaDto.Yrkesskade(
+                                Yrkesskade(
                                     gradAvNedsattArbeidsevneKnyttetTilYrkesskade = yrkesskade.gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
                                     inntektsgrunnlag = yrkesskade.inntektsgrunnlag.let { år ->
-                                        SøkereKafkaDto.InntektsgrunnlagForÅr(
+                                        InntektsgrunnlagForÅr(
                                             år = år.år,
                                             beløpFørJustering = år.beløpFørJustering,
                                             beløpJustertFor6G = år.beløpJustertFor6G,

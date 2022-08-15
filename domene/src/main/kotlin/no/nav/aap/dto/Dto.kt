@@ -106,6 +106,7 @@ data class DtoLøsningManuellMedlemskapYrkesskade(
 
 data class DtoKvalitetssikringMedlemskapYrkesskade(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -117,6 +118,7 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
 
     private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -159,6 +161,7 @@ data class DtoLøsningParagraf_11_2(
 
 data class DtoKvalitetssikringParagraf_11_2(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -166,12 +169,14 @@ data class DtoKvalitetssikringParagraf_11_2(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -184,6 +189,7 @@ data class DtoKvalitetssikringParagraf_11_2(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -244,6 +250,7 @@ data class DtoLøsningParagraf_11_3(
 
 data class DtoKvalitetssikringParagraf_11_3(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -251,12 +258,14 @@ data class DtoKvalitetssikringParagraf_11_3(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -269,6 +278,7 @@ data class DtoKvalitetssikringParagraf_11_3(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -306,6 +316,7 @@ data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
 
 data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -313,12 +324,14 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -331,6 +344,7 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -378,6 +392,7 @@ data class DtoLøsningParagraf_11_5(
 
 data class DtoKvalitetssikringParagraf_11_5(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -385,12 +400,14 @@ data class DtoKvalitetssikringParagraf_11_5(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -403,6 +420,7 @@ data class DtoKvalitetssikringParagraf_11_5(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -434,6 +452,7 @@ data class DtoLøsningParagraf_11_5Yrkesskade(
 
 data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -445,6 +464,7 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -494,6 +514,7 @@ data class DtoLøsningParagraf_11_6(
 
 data class DtoKvalitetssikringParagraf_11_6(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -501,12 +522,14 @@ data class DtoKvalitetssikringParagraf_11_6(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -519,6 +542,7 @@ data class DtoKvalitetssikringParagraf_11_6(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -580,6 +604,7 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
 
 data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -587,12 +612,14 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -605,6 +632,7 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_12FørsteLedd(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -640,6 +668,7 @@ data class DtoLøsningParagraf_11_22(
 
 data class DtoKvalitetssikringParagraf_11_22(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -651,6 +680,7 @@ data class DtoKvalitetssikringParagraf_11_22(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -687,6 +717,7 @@ data class DtoLøsningParagraf_11_29(
 
 data class DtoKvalitetssikringParagraf_11_29(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -694,12 +725,14 @@ data class DtoKvalitetssikringParagraf_11_29(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -712,6 +745,7 @@ data class DtoKvalitetssikringParagraf_11_29(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_29(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -753,6 +787,7 @@ data class DtoLøsningParagraf_11_19(
 
 data class DtoKvalitetssikringParagraf_11_19(
     val kvalitetssikringId: UUID,
+    val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
@@ -760,12 +795,14 @@ data class DtoKvalitetssikringParagraf_11_19(
 ) {
 
     constructor(
+        løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
         begrunnelse: String
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,
@@ -778,6 +815,7 @@ data class DtoKvalitetssikringParagraf_11_19(
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_19(
         kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
         erGodkjent = erGodkjent,

@@ -205,6 +205,7 @@ internal class Paragraf_11_22 private constructor(
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_22(
                 kvalitetssikringId = it.kvalitetssikringId,
+                løsningId = it.løsningId,
                 kvalitetssikretAv = it.kvalitetssikretAv,
                 tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                 erGodkjent = it.erGodkjent,
