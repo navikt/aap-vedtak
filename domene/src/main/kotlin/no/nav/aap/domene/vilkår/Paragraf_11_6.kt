@@ -101,7 +101,8 @@ internal class Paragraf_11_6 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
-            løsning_11_6_manuell = vilkårsvurdering.løsninger.toDto()
+            løsning_11_6_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_6 = vilkårsvurdering.kvalitetssikringer.toDto()
         )
 
         override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_6, dtoVilkårsvurdering: DtoVilkårsvurdering) {

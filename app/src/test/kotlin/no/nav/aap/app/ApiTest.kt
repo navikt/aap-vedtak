@@ -158,7 +158,7 @@ internal class ApiTest {
                                                 tidspunkt2(0),
                                                 "JA"
                                             )
-                                        ),
+                                        )
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(1),
@@ -174,7 +174,8 @@ internal class ApiTest {
                                                 "saksbehandler",
                                                 tidspunktForVurdering, true
                                             )
-                                        )
+                                        ),
+                                        kvalitetssikringer_11_3 = emptyList()
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(2),
@@ -210,7 +211,8 @@ internal class ApiTest {
                                                 kravOmNedsattArbeidsevneErOppfylt = true,
                                                 nedsettelseSkyldesSykdomEllerSkade = true,
                                             )
-                                        )
+                                        ),
+                                        kvalitetssikringer_11_5 = emptyList()
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(5),
@@ -229,7 +231,8 @@ internal class ApiTest {
                                                 harBehovForTiltak = true,
                                                 harMulighetForÅKommeIArbeid = true
                                             )
-                                        )
+                                        ),
+                                        kvalitetssikringer_11_6 = emptyList()
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(6),
@@ -249,7 +252,8 @@ internal class ApiTest {
                                                 unntaksbegrunnelse = "",
                                                 manueltSattVirkningsdato = LocalDate.now()
                                             )
-                                        )
+                                        ),
+                                        kvalitetssikringer_11_12_ledd1 = emptyList()
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(7),
@@ -266,7 +270,8 @@ internal class ApiTest {
                                                 tidspunktForVurdering = tidspunktForVurdering,
                                                 beregningsdato = LocalDate.of(2022, 1, 1)
                                             )
-                                        )
+                                        ),
+                                        kvalitetssikringer_11_19 = emptyList()
                                     ),
                                     DtoVilkårsvurdering(
                                         vilkårsvurderingsid = vilkårsvurderingsid(8),
@@ -282,7 +287,8 @@ internal class ApiTest {
                                                 "saksbehandler",
                                                 tidspunktForVurdering, true
                                             )
-                                        )
+                                        ),
+                                        kvalitetssikringer_11_29 = emptyList()
                                     )
                                 )
                             )
