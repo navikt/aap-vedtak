@@ -158,7 +158,8 @@ internal class Paragraf_11_12FørsteLedd private constructor(
                 kvalitetssikretAv = it.kvalitetssikretAv,
                 tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                 erGodkjent = it.erGodkjent,
-                begrunnelse = it.begrunnelse
+                begrunnelse = it.begrunnelse,
+                løsningId = it.løsningId
             )
         })
     }

@@ -1,14 +1,14 @@
 package no.nav.aap.app.kafka
 
 import no.nav.aap.app.modell.InntekterKafkaDto
-import no.nav.aap.avro.medlem.v1.Medlem
+import no.nav.aap.app.modell.MedlemKafkaDto
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Behov
 import no.nav.aap.kafka.streams.BehovExtractor
-import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.kafka.streams.branch
+import no.nav.aap.kafka.streams.extension.mapValues
 import no.nav.aap.kafka.streams.sendBehov
-import no.nav.aap.kafka.streams.*
 import org.apache.kafka.streams.kstream.KStream
 import java.time.LocalDate
 import java.time.Year
@@ -18,7 +18,7 @@ import java.util.*
 internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
     mapValues("$name-wrap-behov") { value -> DtoBehovWrapper(value) }
         .sendBehov(name) {
-            branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToAvroMedlem)
+            branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToMedlemKafkaDto)
             branch(Topics.inntekter, "$name-inntekter", DtoBehovWrapper::erInntekter, ::ToInntekterKafkaDto)
         }
 }
@@ -50,22 +50,24 @@ private sealed class Sjekk : Lytter {
     }
 }
 
-private class ToAvroMedlem : Lytter, BehovExtractor<Medlem> {
+private class ToMedlemKafkaDto : Lytter, BehovExtractor<MedlemKafkaDto> {
     private lateinit var ident: String
 
     override fun medlem(ident: String) {
         this.ident = ident
     }
 
-    override fun toJson(): Medlem = Medlem.newBuilder()
-        .setId(UUID.randomUUID().toString()) // TraceId
-        .setPersonident(ident)
-        .setRequestBuilder(
-            no.nav.aap.avro.medlem.v1.Request.newBuilder()
-                .setArbeidetUtenlands(false)
-                .setMottattDato(LocalDate.now())
-                .setYtelse("AAP")
-        ).build()
+    override fun toJson(): MedlemKafkaDto =
+        MedlemKafkaDto(
+            personident = ident,
+            id = UUID.randomUUID(), // trace-id
+            response = null,
+            request = MedlemKafkaDto.Request(
+                mottattDato = LocalDate.now(),
+                ytelse = "AAP",
+                arbeidetUtenlands = false
+            ),
+        )
 }
 
 private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {

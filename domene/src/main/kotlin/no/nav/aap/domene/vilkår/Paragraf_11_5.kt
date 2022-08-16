@@ -201,7 +201,8 @@ internal class Paragraf_11_5 private constructor(
                 kvalitetssikretAv = it.kvalitetssikretAv,
                 tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                 erGodkjent = it.erGodkjent,
-                begrunnelse = it.begrunnelse
+                begrunnelse = it.begrunnelse,
+                løsningId = it.løsningId
             )
         })
     }

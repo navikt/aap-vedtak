@@ -14,8 +14,6 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
 import java.time.YearMonth
-import no.nav.aap.avro.medlem.v1.ErMedlem as AvroErMedlem
-import no.nav.aap.avro.medlem.v1.Response as AvroMedlemResponse
 
 internal class ApiTest {
 
@@ -43,9 +41,12 @@ internal class ApiTest {
 
             val medlemRequest = medlemOutputTopic.readValue()
             medlemTopic.produce(fnr) {
-                medlemRequest.apply {
-                    response = AvroMedlemResponse.newBuilder().setErMedlem(AvroErMedlem.JA).build()
-                }
+                medlemRequest.copy(
+                    response = MedlemKafkaDto.Response(
+                        erMedlem = MedlemKafkaDto.ErMedlem.JA,
+                        begrunnelse = null
+                    )
+                )
             }
 
             manuell_11_3_Topic.produce(fnr) {

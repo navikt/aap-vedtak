@@ -1,6 +1,7 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
+import no.nav.aap.app.modell.MedlemKafkaDto
 import no.nav.aap.app.modell.SøkereKafkaDto
 import no.nav.aap.app.modell.toDto
 import no.nav.aap.app.modell.toJson
@@ -8,7 +9,6 @@ import no.nav.aap.domene.Søker
 import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
-import no.nav.aap.avro.medlem.v1.Medlem as AvroMedlem
 
 internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto>) {
     consume(Topics.medlem)
@@ -18,9 +18,9 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto
         .produce(Topics.søkere, "produced-soker-med-medlem")
 }
 
-private val håndterMedlem = { avroMedlem: AvroMedlem, søkereKafkaDto: SøkereKafkaDto ->
+private val håndterMedlem = { medlemKafkaDto: MedlemKafkaDto, søkereKafkaDto: SøkereKafkaDto ->
     val søker = Søker.gjenopprett(søkereKafkaDto.toDto()).apply {
-        val medlem = avroMedlem.toDto()
+        val medlem = medlemKafkaDto.toDto()
         medlem.håndter(this)
     }
 

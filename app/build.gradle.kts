@@ -15,10 +15,7 @@ dependencies {
 
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
-    implementation("com.github.navikt.aap-libs:kafka-avroserde:$aapLibVersion")
     testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
-
-    implementation("com.github.navikt.aap-avro:medlem:3.0.9")
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
