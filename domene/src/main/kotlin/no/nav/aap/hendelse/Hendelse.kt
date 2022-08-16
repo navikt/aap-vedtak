@@ -1,5 +1,6 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.dto.DtoVedtak
 import java.time.Year
 
 open class Hendelse {
@@ -30,6 +31,7 @@ interface Lytter {
     fun behov_11_22(ident: String) {}
     fun behov_11_29(ident: String) {}
     fun behovInntekter(ident: String, fom: Year, tom: Year) {}
+    fun behovIverksettVedtak(dtoVedtak: DtoVedtak) {}
 }
 
 interface DtoBehov {
@@ -102,6 +104,14 @@ interface DtoBehov {
     ) : DtoBehov {
         override fun accept(visitor: Lytter) {
             visitor.behovInntekter(ident, fom, tom)
+        }
+    }
+
+    class DtoIverksettVedtak(
+        private val dtoVedtak: DtoVedtak,
+    ) : DtoBehov {
+        override fun accept(visitor: Lytter) {
+            visitor.behovIverksettVedtak(dtoVedtak)
         }
     }
 }

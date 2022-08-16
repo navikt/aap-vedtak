@@ -6,6 +6,7 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoSak
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
+import no.nav.aap.hendelse.behov.BehovIverksettVedtak
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -547,6 +548,13 @@ internal class Sak private constructor(
         }
 
         object VedtakFattet : Tilstand(Tilstandsnavn.VEDTAK_FATTET) {
+            override fun onEntry(sak: Sak, hendelse: Hendelse) {
+                hendelse.opprettBehov(BehovIverksettVedtak(sak.vedtak))
+            }
+
+//            override fun håndterLøsning(sak: Sak, vedtak: Iverksatt) {
+//                sak.tilstand(VedtakIverksatt, vedtak)
+//            }
 
             override fun toDto(sak: Sak) = DtoSak(
                 saksid = sak.saksid,
