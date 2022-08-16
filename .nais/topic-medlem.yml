@@ -6,8 +6,7 @@ metadata:
   labels:
     team: aap
   annotations:
-    kafka.nais.io/removeDataWhenResourceIsDeleted: "true"
-#    kafka.nais.io/removeDataWhenResourceIsDeleted: "{{kafka.permanent-delete-topics}}"
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "{{kafka.permanent-delete-topics}}"
     kafka.format: json
     kafka.state: "false"
     github.url: https://github.com/navikt/aap-vedtak
