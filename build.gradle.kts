@@ -8,8 +8,6 @@ plugins {
 allprojects {
     repositories {
         mavenCentral()
-        mavenLocal()
-        maven { url = uri("https://maven.pkg.jetbrains.space/public/p/ktor/eap") }
         maven("https://jitpack.io")
         maven("https://packages.confluent.io/maven/")
     }
