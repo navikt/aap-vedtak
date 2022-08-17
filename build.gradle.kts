@@ -27,12 +27,4 @@ subprojects {
             }
         }
     }
-
-    configurations.all {
-        resolutionStrategy {
-            force(
-                "org.apache.kafka:kafka-clients:3.2.0"
-            )
-        }
-    }
 }
