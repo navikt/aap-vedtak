@@ -37,7 +37,12 @@ internal object Grunnbeløp {
         Element(1998, 5, 1, 45370, 44413),
         Element(1997, 5, 1, 42500, 42000),
         Element(1996, 5, 1, 41000, 40410),
-        Element(1995, 5, 1, 39230, 38847)
+        Element(1995, 5, 1, 39230, 38847),
+        Element(1994, 5, 1, 38080, 37820),
+        Element(1993, 5, 1, 37300, 37033),
+        Element(1992, 5, 1, 36500, 36167),
+        Element(1991, 5, 1, 35500, 35033),
+        Element(1990, 12, 1, 34100, 33575)
     )
 
     private class Element(
