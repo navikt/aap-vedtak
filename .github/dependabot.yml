@@ -1,10 +1,4 @@
 version: 2
-registries:
-  aap-avro:
-    type: maven-repository
-    url: https://maven.pgk.github.com/navikt/aap-avro
-    username: x-access-token
-    password: ${{ secrets.DEPENDABOT_PAT }}
 updates:
 - package-ecosystem: github-actions
   directory: "/"
@@ -16,5 +10,3 @@ updates:
   schedule:
     interval: daily
   open-pull-requests-limit: 10
-  registries:
-    - aap-avro
