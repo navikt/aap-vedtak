@@ -2,6 +2,8 @@ package no.nav.aap.app.kafka
 
 import no.nav.aap.app.modell.InntekterKafkaDto
 import no.nav.aap.app.modell.MedlemKafkaDto
+import no.nav.aap.app.modell.IverksettVedtakKafkaDto
+import no.nav.aap.dto.DtoVedtak
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Behov
@@ -20,6 +22,7 @@ internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
         .sendBehov(name) {
             branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToMedlemKafkaDto)
             branch(Topics.inntekter, "$name-inntekter", DtoBehovWrapper::erInntekter, ::ToInntekterKafkaDto)
+            branch(Topics.vedtak, "$name-vedtak", DtoBehovWrapper::erIverksettVedtak, ::ToIverksettVedtakKafkaDto)
         }
 }
 
@@ -28,6 +31,7 @@ private class DtoBehovWrapper(
 ) : Behov<Lytter> {
     fun erMedlem() = Sjekk.ErMedlem().apply(this::accept).er()
     fun erInntekter() = Sjekk.ErInntekter().apply(this::accept).er()
+    fun erIverksettVedtak() = Sjekk.ErIverksettVedtak().apply(this::accept).er()
     override fun accept(visitor: Lytter) {
         dtoBehov.accept(visitor)
     }
@@ -45,6 +49,12 @@ private sealed class Sjekk : Lytter {
 
     class ErInntekter : Sjekk() {
         override fun behovInntekter(ident: String, fom: Year, tom: Year) {
+            er = true
+        }
+    }
+
+    class ErIverksettVedtak : Sjekk() {
+        override fun behovIverksettVedtak(dtoVedtak: DtoVedtak) {
             er = true
         }
     }
@@ -86,4 +96,34 @@ private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {
         request = InntekterKafkaDto.Request(fom, tom),
         response = null,
     )
+}
+
+private class ToIverksettVedtakKafkaDto : Lytter, BehovExtractor<IverksettVedtakKafkaDto> {
+    private lateinit var vedtaksid: UUID
+    private lateinit var innvilget: Innvilget
+    private lateinit var grunnlagsfaktor: Grunnlagsfaktor
+    private lateinit var vedtaksdato: LocalDate
+    private lateinit var virkningsdato: LocalDate
+    private lateinit var fødselsdato: LocalDate
+
+    override fun behovIverksettVedtak(dtoVedtak: DtoVedtak) {
+        this.vedtaksid = dtoVedtak.vedtaksid
+        this.innvilget = Innvilget(dtoVedtak.innvilget)
+        this.grunnlagsfaktor = Grunnlagsfaktor(dtoVedtak.inntektsgrunnlag.grunnlagsfaktor)
+        this.vedtaksdato = dtoVedtak.vedtaksdato
+        this.virkningsdato = dtoVedtak.virkningsdato
+        this.fødselsdato = dtoVedtak.inntektsgrunnlag.fødselsdato
+    }
+
+    override fun toJson(): IverksettVedtakKafkaDto = IverksettVedtakKafkaDto(
+        vedtaksid = vedtaksid,
+        innvilget = innvilget.innvilget,
+        grunnlagsfaktor = grunnlagsfaktor.grunnlagsfaktor,
+        vedtaksdato = vedtaksdato,
+        virkningsdato = virkningsdato,
+        fødselsdato = fødselsdato
+    )
+
+    private data class Innvilget(val innvilget: Boolean)
+    private data class Grunnlagsfaktor(val grunnlagsfaktor: Double)
 }

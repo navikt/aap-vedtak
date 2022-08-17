@@ -112,8 +112,11 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
@@ -183,8 +186,10 @@ data class DtoKvalitetssikringParagraf_11_2(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
@@ -272,8 +277,10 @@ data class DtoKvalitetssikringParagraf_11_3(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
@@ -338,8 +345,10 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
@@ -414,8 +423,10 @@ data class DtoKvalitetssikringParagraf_11_5(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
@@ -458,8 +469,11 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
@@ -536,8 +550,10 @@ data class DtoKvalitetssikringParagraf_11_6(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(
@@ -626,8 +642,10 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_12FørsteLedd(
@@ -674,8 +692,11 @@ data class DtoKvalitetssikringParagraf_11_22(
     val erGodkjent: Boolean,
     val begrunnelse: String
 ) {
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
@@ -739,8 +760,10 @@ data class DtoKvalitetssikringParagraf_11_29(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_29(
@@ -809,8 +832,10 @@ data class DtoKvalitetssikringParagraf_11_19(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker) {
-        søker.håndterKvalitetssikring(toKvalitetssikring())
+    fun håndter(søker: Søker): List<Behov> {
+        val kvalitetssikring = toKvalitetssikring()
+        søker.håndterKvalitetssikring(kvalitetssikring)
+        return kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_19(
