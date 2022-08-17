@@ -1,7 +1,13 @@
 package no.nav.aap.app.modell
 
+import java.time.LocalDate
+import java.util.*
+
 data class IverksettVedtakKafkaDto(
-    val personident: String,
-    val ved
-) {
-}
+    val vedtaksid: UUID,
+    val innvilget: Boolean,
+    val grunnlagsfaktor: Double,
+    val vedtaksdato: LocalDate,
+    val virkningsdato: LocalDate,
+    val fødselsdato: LocalDate
+)
