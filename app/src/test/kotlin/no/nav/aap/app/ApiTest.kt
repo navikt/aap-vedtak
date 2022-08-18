@@ -5,15 +5,13 @@ import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.modell.*
 import no.nav.aap.app.modell.InntekterKafkaDto.Response.Inntekt
-import no.nav.aap.dto.*
+import no.nav.aap.kafka.streams.test.readAndAssert
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.time.Year
-import java.time.YearMonth
 
 internal class ApiTest {
 
@@ -27,10 +25,18 @@ internal class ApiTest {
             val manuell_11_5_Topic = mocks.kafka.inputTopic(Topics.manuell_11_5)
             val manuell_11_6_Topic = mocks.kafka.inputTopic(Topics.manuell_11_6)
             val manuell_11_12_Topic = mocks.kafka.inputTopic(Topics.manuell_11_12)
+            val manuell_11_19_Topic = mocks.kafka.inputTopic(Topics.manuell_11_19)
             val manuell_11_29_Topic = mocks.kafka.inputTopic(Topics.manuell_11_29)
-            val manuell_beregningsdato_Topic = mocks.kafka.inputTopic(Topics.manuell_11_19)
+            val kvalitetssikring_11_2_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_2)
+            val kvalitetssikring_11_3_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_3)
+            val kvalitetssikring_11_5_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_5)
+            val kvalitetssikring_11_6_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_6)
+            val kvalitetssikring_11_12_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_12)
+            val kvalitetssikring_11_19_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_19)
+            val kvalitetssikring_11_29_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_29)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
+            val iverksettVedtakTopic = mocks.kafka.outputTopic(Topics.vedtak)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
             val fnr = "123"
@@ -79,11 +85,11 @@ internal class ApiTest {
                     manueltSattVirkningsdato = LocalDate.now()
                 )
             }
+            manuell_11_19_Topic.produce(fnr) {
+                Løsning_11_19_manuell("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
+            }
             manuell_11_29_Topic.produce(fnr) {
                 Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering, true)
-            }
-            manuell_beregningsdato_Topic.produce(fnr) {
-                Løsning_11_19_manuell("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
             }
 
             val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
@@ -102,17 +108,9 @@ internal class ApiTest {
             val søker = stateStore[fnr]
             assertNotNull(søker)
             val actual = søker.toDto()
-            assertNotNull(actual.saker.firstOrNull()?.vedtak) { "Saken mangler vedtak - $actual" }
-            val søknadstidspunkt = actual.saker.first().søknadstidspunkt
-
-            fun vilkårsvurderingsid(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].vilkårsvurderingsid
 
             fun løsningsid2(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_2_maskinell!![0].løsningId
-
-            fun tidspunkt2(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_2_maskinell!![0].tidspunktForVurdering
 
             fun løsningsid3(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_3_manuell!![0].løsningId
@@ -132,237 +130,80 @@ internal class ApiTest {
             fun løsningsid29(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_29_manuell!![0].løsningId
 
-            val expected = DtoSøker(
-                personident = fnr,
-                fødselsdato = LocalDate.now().minusYears(40),
-                saker = listOf(
-                    DtoSak(
-                        saksid = actual.saker.first().saksid,
-                        tilstand = "AVVENTER_KVALITETSSIKRING",
-                        vurderingsdato = LocalDate.now(),
-                        sakstyper = listOf(
-                            DtoSakstype(
-                                type = "STANDARD",
-                                aktiv = true,
-                                vilkårsvurderinger = listOf(
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(0),
-                                        vurdertAv = "maskinell saksbehandling",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_2",
-                                        ledd = listOf("LEDD_1", "LEDD_2"),
-                                        tilstand = "OPPFYLT_MASKINELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_2_maskinell = listOf(
-                                            DtoLøsningMaskinellParagraf_11_2(
-                                                løsningsid2(0),
-                                                tidspunkt2(0),
-                                                "JA"
-                                            )
-                                        )
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(1),
-                                        vurdertAv = "saksbehandler",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_3",
-                                        ledd = listOf("LEDD_1", "LEDD_2", "LEDD_3"),
-                                        tilstand = "OPPFYLT_MANUELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_3_manuell = listOf(
-                                            DtoLøsningParagraf_11_3(
-                                                løsningsid3(1),
-                                                "saksbehandler",
-                                                tidspunktForVurdering, true
-                                            )
-                                        ),
-                                        kvalitetssikringer_11_3 = emptyList()
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(2),
-                                        vurdertAv = "maskinell saksbehandling",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_4",
-                                        ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MASKINELT_KVALITETSSIKRET",
-                                        utfall = Utfall.OPPFYLT
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(3),
-                                        vurdertAv = null,
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_4",
-                                        ledd = listOf("LEDD_2", "LEDD_3"),
-                                        tilstand = "IKKE_RELEVANT",
-                                        utfall = Utfall.IKKE_RELEVANT
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(4),
-                                        vurdertAv = "veileder",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_5",
-                                        ledd = listOf("LEDD_1", "LEDD_2"),
-                                        tilstand = "OPPFYLT_MANUELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_5_manuell = listOf(
-                                            DtoLøsningParagraf_11_5(
-                                                løsningsid5(4),
-                                                vurdertAv = "veileder",
-                                                tidspunktForVurdering = tidspunktForVurdering,
-                                                kravOmNedsattArbeidsevneErOppfylt = true,
-                                                nedsettelseSkyldesSykdomEllerSkade = true,
-                                            )
-                                        ),
-                                        kvalitetssikringer_11_5 = emptyList()
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(5),
-                                        vurdertAv = "saksbehandler",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_6",
-                                        ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MANUELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_6_manuell = listOf(
-                                            DtoLøsningParagraf_11_6(
-                                                løsningsid6(5),
-                                                vurdertAv = "saksbehandler",
-                                                tidspunktForVurdering = tidspunktForVurdering,
-                                                harBehovForBehandling = true,
-                                                harBehovForTiltak = true,
-                                                harMulighetForÅKommeIArbeid = true
-                                            )
-                                        ),
-                                        kvalitetssikringer_11_6 = emptyList()
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(6),
-                                        vurdertAv = "saksbehandler",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_12",
-                                        ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MANUELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_12_ledd1_manuell = listOf(
-                                            DtoLøsningParagraf_11_12FørsteLedd(
-                                                løsningsid12(6),
-                                                vurdertAv = "saksbehandler",
-                                                tidspunktForVurdering = tidspunktForVurdering,
-                                                bestemmesAv = "soknadstidspunkt",
-                                                unntak = "INGEN",
-                                                unntaksbegrunnelse = "",
-                                                manueltSattVirkningsdato = LocalDate.now()
-                                            )
-                                        ),
-                                        kvalitetssikringer_11_12_ledd1 = emptyList()
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(7),
-                                        vurdertAv = "saksbehandler",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_19",
-                                        ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MANUELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_19_manuell = listOf(
-                                            DtoLøsningParagraf_11_19(
-                                                løsningsid19(7),
-                                                vurdertAv = "saksbehandler",
-                                                tidspunktForVurdering = tidspunktForVurdering,
-                                                beregningsdato = LocalDate.of(2022, 1, 1)
-                                            )
-                                        ),
-                                        kvalitetssikringer_11_19 = emptyList()
-                                    ),
-                                    DtoVilkårsvurdering(
-                                        vilkårsvurderingsid = vilkårsvurderingsid(8),
-                                        vurdertAv = "saksbehandler",
-                                        kvalitetssikretAv = null,
-                                        paragraf = "PARAGRAF_11_29",
-                                        ledd = listOf("LEDD_1"),
-                                        tilstand = "OPPFYLT_MANUELT",
-                                        utfall = Utfall.OPPFYLT,
-                                        løsning_11_29_manuell = listOf(
-                                            DtoLøsningParagraf_11_29(
-                                                løsningsid29(8),
-                                                "saksbehandler",
-                                                tidspunktForVurdering, true
-                                            )
-                                        ),
-                                        kvalitetssikringer_11_29 = emptyList()
-                                    )
-                                )
-                            )
-                        ),
-                        søknadstidspunkt = søknadstidspunkt,
-                        vedtak = DtoVedtak(
-                            vedtaksid = actual.saker.first().vedtak!!.vedtaksid,
-                            innvilget = true,
-                            inntektsgrunnlag = DtoInntektsgrunnlag(
-                                beregningsdato = LocalDate.of(2022, 1, 1),
-                                inntekterSiste3Kalenderår = listOf(
-                                    DtoInntekterForBeregning(
-                                        inntekter = listOf(
-                                            DtoInntekt(
-                                                arbeidsgiver = "321",
-                                                inntekstmåned = YearMonth.of(2021, 1),
-                                                beløp = 400000.0
-                                            )
-                                        ),
-                                        inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
-                                            år = Year.of(2021),
-                                            beløpFørJustering = 400000.0,
-                                            beløpJustertFor6G = 400000.0,
-                                            erBeløpJustertFor6G = false,
-                                            grunnlagsfaktor = 3.819856
-                                        )
-                                    ),
-                                    DtoInntekterForBeregning(
-                                        inntekter = listOf(
-                                            DtoInntekt(
-                                                arbeidsgiver = "321",
-                                                inntekstmåned = YearMonth.of(2020, 1),
-                                                beløp = 400000.0
-                                            )
-                                        ),
-                                        inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
-                                            år = Year.of(2020),
-                                            beløpFørJustering = 400000.0,
-                                            beløpJustertFor6G = 400000.0,
-                                            erBeløpJustertFor6G = false,
-                                            grunnlagsfaktor = 3.966169
-                                        )
-                                    ),
-                                    DtoInntekterForBeregning(
-                                        inntekter = listOf(
-                                            DtoInntekt(
-                                                arbeidsgiver = "321",
-                                                inntekstmåned = YearMonth.of(2019, 1),
-                                                beløp = 400000.0
-                                            )
-                                        ),
-                                        inntektsgrunnlagForÅr = DtoInntektsgrunnlagForÅr(
-                                            år = Year.of(2019),
-                                            beløpFørJustering = 400000.0,
-                                            beløpJustertFor6G = 400000.0,
-                                            erBeløpJustertFor6G = false,
-                                            grunnlagsfaktor = 4.04588
-                                        )
-                                    )
-                                ),
-                                fødselsdato = LocalDate.now().minusYears(40),
-                                yrkesskade = null,
-                                sisteKalenderår = Year.of(2021),
-                                grunnlagsfaktor = 3.943968
-                            ),
-                            vedtaksdato = LocalDate.now(),
-                            virkningsdato = LocalDate.now()
-                        )
-                    )
+            kvalitetssikring_11_2_Topic.produce(fnr) {
+                Kvalitetssikring_11_2(
+                    løsningId = løsningsid2(0),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
                 )
-            )
+            }
 
-            assertEquals(expected, actual)
+            kvalitetssikring_11_3_Topic.produce(fnr) {
+                Kvalitetssikring_11_3(
+                    løsningId = løsningsid3(1),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            kvalitetssikring_11_5_Topic.produce(fnr) {
+                Kvalitetssikring_11_5(
+                    løsningId = løsningsid5(4),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            kvalitetssikring_11_6_Topic.produce(fnr) {
+                Kvalitetssikring_11_6(
+                    løsningId = løsningsid6(5),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            kvalitetssikring_11_12_Topic.produce(fnr) {
+                Kvalitetssikring_11_12_ledd1(
+                    løsningId = løsningsid12(6),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            kvalitetssikring_11_19_Topic.produce(fnr) {
+                Kvalitetssikring_11_19(
+                    løsningId = løsningsid19(7),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            kvalitetssikring_11_29_Topic.produce(fnr) {
+                Kvalitetssikring_11_29(
+                    løsningId = løsningsid29(8),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            iverksettVedtakTopic.readAndAssert()
+                .hasNumberOfRecords(1)
+                .hasKey(fnr)
+                .hasLastValueMatching { it?.innvilget }
         }
     }
 
