@@ -179,6 +179,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     }
 
     internal fun beregningsdato() = callWithReceiver { tilstand.beregningsdato(this) }
+    internal fun virkningsdato() = callWithReceiver { tilstand.virkningsdato(this) }
 
     internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
         protected val tilstandsnavn: Tilstandsnavn,
@@ -401,6 +402,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         }
 
         internal open fun beregningsdato(vilkårsvurdering: PARAGRAF): LocalDate? = null //TODO("Kun for 11-19")
+        internal open fun virkningsdato(vilkårsvurdering: PARAGRAF): Pair<LøsningParagraf_11_12FørsteLedd.BestemmesAv, LocalDate?>? = null //TODO("Kun for 11-12")
 
         internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,

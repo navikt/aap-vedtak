@@ -137,6 +137,7 @@ internal abstract class Sakstype private constructor(
     internal fun erNoenIkkeIKvalitetssikring() = vilkårsvurderinger.erNoenIkkeIKvalitetssikring()
 
     internal fun beregningsdato() = vilkårsvurderinger.firstNotNullOf { it.beregningsdato() }
+    internal fun virkningsdato() = vilkårsvurderinger.firstNotNullOf { it.virkningsdato() }
 
     internal class Standard private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering<*>>

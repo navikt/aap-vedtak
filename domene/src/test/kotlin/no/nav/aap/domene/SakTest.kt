@@ -13,12 +13,11 @@ import no.nav.aap.hendelse.behov.BehovIverksettVedtak
 import no.nav.aap.januar
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
-import java.util.UUID
+import java.util.*
 import kotlin.test.assertTrue
 
 internal class SakTest {
@@ -537,7 +536,6 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
-    @Disabled("Skal vi vente på sykepenger etter totrinnskontrollen?")
     @Test
     fun `Hvis virkningsdato skal bestemmes av når sykepenger er brukt opp, vil sak vente på at gjenstående sykedager er 0`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
@@ -585,12 +583,12 @@ internal class SakTest {
         sak.håndterLøsning(
             LøsningParagraf_11_12FørsteLedd(
                 løsningId = UUID.randomUUID(),
-                "saksbehandler",
-                LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger,
-                "INGEN",
-                "",
-                LocalDate.now()
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                bestemmesAv = LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger,
+                unntak = "INGEN",
+                unntaksbegrunnelse = "",
+                manueltSattVirkningsdato = null
             )
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
@@ -611,28 +609,38 @@ internal class SakTest {
             ),
             fødselsdato
         )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_2(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_3(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_5(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "fatter", LocalDateTime.now(), true, "JA"))
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_6(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_19(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_29(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
         assertTilstand("VENTER_SYKEPENGER", sak)
 
-        val saker = listOf(sak).toDto()
-        val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
-        val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(
-            vilkårsvurderinger,
-            "OPPFYLT_MASKINELT",
-            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
-            Vilkårsvurdering.Ledd.LEDD_1
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                personident = personident,
+                gjenståendeSykedager = 0,
+                maksdato = LocalDate.now(),
+                kilde = LøsningSykepengedager.Kilde.SPLEIS,
+            )
         )
-        assertTilstand(
-            vilkårsvurderinger,
-            "IKKE_RELEVANT",
-            Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
-            Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
-        )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand("VEDTAK_FATTET", sak)
     }
 
     private fun assertTilstand(actual: String, expected: Sak) {

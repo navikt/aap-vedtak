@@ -86,6 +86,10 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
 
+    internal fun håndterLøsning(løsning: LøsningSykepengedager) {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
@@ -209,6 +213,10 @@ internal class Sak private constructor(
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
             log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
+            log.info("Forventet ikke løsning på sykepengedager i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
@@ -372,6 +380,7 @@ internal class Sak private constructor(
                 when {
                     sak.sakstype.erAlleOppfylt() ->
                         sak.tilstand(BeregnInntekt, hendelse)
+
                     sak.sakstype.erNoenIkkeOppfylt() ->
                         sak.tilstand(IkkeOppfylt, hendelse)
                 }
@@ -389,7 +398,10 @@ internal class Sak private constructor(
                 sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
             }
 
-            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+            override fun håndterKvalitetssikring(
+                sak: Sak,
+                kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd
+            ) {
                 sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
             }
 
@@ -462,7 +474,10 @@ internal class Sak private constructor(
                 vurderNesteTilstand(sak, kvalitetssikring)
             }
 
-            override fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
+            override fun håndterKvalitetssikring(
+                sak: Sak,
+                kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd
+            ) {
                 sak.sakstype.håndterKvalitetssikring(kvalitetssikring)
                 vurderNesteTilstand(sak, kvalitetssikring)
             }
@@ -520,8 +535,16 @@ internal class Sak private constructor(
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 when {
-                    sak.sakstype.erAlleKvalitetssikret() ->
-                        sak.tilstand(VedtakFattet, hendelse)
+                    sak.sakstype.erAlleKvalitetssikret() -> {
+                        val virkningsdato = sak.sakstype.virkningsdato()
+                        when (virkningsdato.first) {
+                            LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger ->
+                                sak.tilstand(VenterSykepenger, hendelse)
+
+                            else -> sak.tilstand(VedtakFattet, hendelse)
+                        }
+                    }
+
                     sak.sakstype.erNoenIkkeIKvalitetssikring() ->
                         sak.tilstand(SøknadMottatt, hendelse)
                 }
@@ -529,6 +552,11 @@ internal class Sak private constructor(
         }
 
         object VenterSykepenger : Tilstand(Tilstandsnavn.VENTER_SYKEPENGER) {
+            override fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
+                if (løsning.gjenståendeSykedager() == 0) {
+                    sak.tilstand(VedtakFattet, løsning)
+                }
+            }
 
             override fun toDto(sak: Sak) = DtoSak(
                 saksid = sak.saksid,

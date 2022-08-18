@@ -13,7 +13,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
     private val bestemmesAv: BestemmesAv,
     private val unntak: String,
     private val unntaksbegrunnelse: String,
-    private val manueltSattVirkningsdato: LocalDate
+    private val manueltSattVirkningsdato: LocalDate?,
 ) : Hendelse() {
     internal companion object {
         internal fun Iterable<LøsningParagraf_11_12FørsteLedd>.toDto() = map(LøsningParagraf_11_12FørsteLedd::toDto)
@@ -29,6 +29,8 @@ internal class LøsningParagraf_11_12FørsteLedd(
     }
 
     internal fun vurdertAv() = vurdertAv
+    internal fun bestemmesAv() = bestemmesAv
+    internal fun virkningsdato() = manueltSattVirkningsdato
 
     private fun toDto() = DtoLøsningParagraf_11_12FørsteLedd(
         løsningId = løsningId,

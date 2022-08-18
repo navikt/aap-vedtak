@@ -140,7 +140,7 @@ data class SøkereKafkaDto(
         val bestemmesAv: String,
         val unntak: String,
         val unntaksbegrunnelse: String,
-        val manueltSattVirkningsdato: LocalDate
+        val manueltSattVirkningsdato: LocalDate?,
     )
 
     data class LøsningParagraf_11_19(

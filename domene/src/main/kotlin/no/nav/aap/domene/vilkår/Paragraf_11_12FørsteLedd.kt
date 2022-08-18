@@ -92,6 +92,12 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             }
         }
 
+        override fun virkningsdato(vilkårsvurdering: Paragraf_11_12FørsteLedd): Pair<LøsningParagraf_11_12FørsteLedd.BestemmesAv, LocalDate?> =
+            when (val bestemmesAv = vilkårsvurdering.løsninger.last().bestemmesAv()) {
+                LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger -> bestemmesAv to null
+                else -> bestemmesAv to vilkårsvurdering.løsninger.last().virkningsdato()
+            }
+
         override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -114,6 +120,12 @@ internal class Paragraf_11_12FørsteLedd private constructor(
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_12FørsteLedd>() {
+        override fun virkningsdato(vilkårsvurdering: Paragraf_11_12FørsteLedd): Pair<LøsningParagraf_11_12FørsteLedd.BestemmesAv, LocalDate?> =
+            when (val bestemmesAv = vilkårsvurdering.løsninger.last().bestemmesAv()) {
+                LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger -> bestemmesAv to null
+                else -> bestemmesAv to vilkårsvurdering.løsninger.last().virkningsdato()
+            }
+
         override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
