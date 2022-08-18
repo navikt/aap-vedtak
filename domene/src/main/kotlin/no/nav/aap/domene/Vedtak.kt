@@ -29,4 +29,33 @@ internal class Vedtak(
             virkningsdato = dtoVedtak.virkningsdato
         )
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Vedtak
+
+        if (vedtaksid != other.vedtaksid) return false
+        if (innvilget != other.innvilget) return false
+        if (inntektsgrunnlag != other.inntektsgrunnlag) return false
+        if (vedtaksdato != other.vedtaksdato) return false
+        if (virkningsdato != other.virkningsdato) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = vedtaksid.hashCode()
+        result = 31 * result + innvilget.hashCode()
+        result = 31 * result + inntektsgrunnlag.hashCode()
+        result = 31 * result + vedtaksdato.hashCode()
+        result = 31 * result + virkningsdato.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "Vedtak(vedtaksid=$vedtaksid, innvilget=$innvilget, inntektsgrunnlag=$inntektsgrunnlag, vedtaksdato=$vedtaksdato, virkningsdato=$virkningsdato)"
+    }
+
 }

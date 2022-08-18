@@ -9,6 +9,7 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.behov.BehovIverksettVedtak
 import no.nav.aap.januar
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -358,7 +359,16 @@ internal class SakTest {
         sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_19(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_29(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+
+        val kvalitetssikringparagraf1129 = KvalitetssikringParagraf_11_29(
+            kvalitetssikringId = UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
+            kvalitetssikretAv = "beslutter",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = true,
+            begrunnelse = "JA"
+        )
+        sak.håndterKvalitetssikring(kvalitetssikringparagraf1129)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val saker = listOf(sak).toDto()
@@ -381,6 +391,13 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+
+        val vedtak = saker[0].vedtak!!
+        val behov = kvalitetssikringparagraf1129.behov()
+        val expectedVedtakBehov = BehovIverksettVedtak(
+            vedtak = Vedtak.gjenopprett(vedtak)
+        )
+        assertEquals(expectedVedtakBehov, behov.single())
     }
 
     @Test

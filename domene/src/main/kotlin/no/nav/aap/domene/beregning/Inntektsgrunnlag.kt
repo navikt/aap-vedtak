@@ -145,6 +145,12 @@ internal class InntekterForBeregning private constructor(
         result = 31 * result + inntektsgrunnlagForÅr.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "InntekterForBeregning(inntekter=$inntekter, inntektsgrunnlagForÅr=$inntektsgrunnlagForÅr)"
+    }
+
+
 }
 
 internal class InntektsgrunnlagForÅr private constructor(

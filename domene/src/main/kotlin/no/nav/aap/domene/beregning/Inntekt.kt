@@ -35,4 +35,29 @@ class Inntekt(
         inntekstmåned = inntekstmåned,
         beløp = beløp.toDto()
     )
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (javaClass != other?.javaClass) return false
+
+        other as Inntekt
+
+        if (arbeidsgiver != other.arbeidsgiver) return false
+        if (inntekstmåned != other.inntekstmåned) return false
+        if (beløp != other.beløp) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = arbeidsgiver.hashCode()
+        result = 31 * result + inntekstmåned.hashCode()
+        result = 31 * result + beløp.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "Inntekt(arbeidsgiver=$arbeidsgiver, inntekstmåned=$inntekstmåned, beløp=$beløp)"
+    }
+
 }
