@@ -1,7 +1,8 @@
-package no.nav.aap.app.modell
+package no.nav.aap.app.kafka
 
-import no.nav.aap.app.modell.SøkereKafkaDto.*
 import no.nav.aap.dto.*
+import no.nav.aap.dto.kafka.SøkereKafkaDto
+import no.nav.aap.dto.kafka.SøkereKafkaDto.*
 
 internal fun SøkereKafkaDto.toDto() = DtoSøker(
     personident = personident,
@@ -297,7 +298,7 @@ private fun Yrkesskade.toDto() = DtoYrkesskade(
     inntektsgrunnlag = inntektsgrunnlag.toDto(),
 )
 
-fun DtoSøker.toJson() = SøkereKafkaDto(
+internal fun DtoSøker.toJson() = SøkereKafkaDto(
     personident = personident,
     fødselsdato = fødselsdato,
     saker = saker.map { sak ->

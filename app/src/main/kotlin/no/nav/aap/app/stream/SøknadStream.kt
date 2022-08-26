@@ -2,11 +2,11 @@ package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.sendBehov
-import no.nav.aap.app.modell.JsonSøknad
-import no.nav.aap.app.modell.SøkereKafkaDto
-import no.nav.aap.app.modell.toJson
+import no.nav.aap.app.kafka.toJson
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.dto.kafka.SøkereKafkaDto
+import no.nav.aap.dto.kafka.SøknadKafkaDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
@@ -37,7 +37,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
         .sendBehov("soknad")
 }
 
-private val opprettSøker = { ident: String, jsonSøknad: JsonSøknad ->
+private val opprettSøker = { ident: String, jsonSøknad: SøknadKafkaDto ->
     val søknad = Søknad(Personident(ident), Fødselsdato(jsonSøknad.fødselsdato))
     val søker = søknad.opprettSøker()
     søker.håndterSøknad(søknad)

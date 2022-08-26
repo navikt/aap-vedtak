@@ -1,4 +1,4 @@
-package no.nav.aap.app.modell
+package no.nav.aap.dto.kafka
 
 import java.time.LocalDate
 import java.util.*

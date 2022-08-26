@@ -1,11 +1,12 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.app.modell.*
+import no.nav.aap.dto.kafka.*
+import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.kafka.serde.json.JsonSerde
 import no.nav.aap.kafka.streams.Topic
 
 object Topics {
-    val søknad = Topic("aap.soknad-sendt.v1", JsonSerde.jackson<JsonSøknad>())
+    val søknad = Topic("aap.soknad-sendt.v1", JsonSerde.jackson<SøknadKafkaDto>())
     val søkere = Topic("aap.sokere.v1", JsonSerde.jackson(SøkereKafkaDto.VERSION, ForrigeSøkereKafkaDto::toDto))
     val medlem = Topic("aap.medlem.v1", JsonSerde.jackson<MedlemKafkaDto>())
     val inntekter = Topic("aap.inntekter.v1", JsonSerde.jackson<InntekterKafkaDto>())

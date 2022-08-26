@@ -1,9 +1,8 @@
-package no.nav.aap.app.stream.manuell
+package no.nav.aap.app.stream
 
-import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.sendBehov
-import no.nav.aap.app.modell.*
+import no.nav.aap.app.kafka.*
 import no.nav.aap.domene.Søker
+import no.nav.aap.dto.kafka.*
 import no.nav.aap.hendelse.Behov
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.Topic

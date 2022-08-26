@@ -1,11 +1,11 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.modell.MedlemKafkaDto
-import no.nav.aap.app.modell.SøkereKafkaDto
-import no.nav.aap.app.modell.toDto
-import no.nav.aap.app.modell.toJson
+import no.nav.aap.app.kafka.toDto
+import no.nav.aap.app.kafka.toJson
 import no.nav.aap.domene.Søker
+import no.nav.aap.dto.kafka.MedlemKafkaDto
+import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable

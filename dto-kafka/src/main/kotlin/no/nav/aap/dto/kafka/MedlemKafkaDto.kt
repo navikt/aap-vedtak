@@ -1,6 +1,5 @@
-package no.nav.aap.app.modell
+package no.nav.aap.dto.kafka
 
-import no.nav.aap.dto.DtoLøsningMaskinellParagraf_11_2
 import java.time.LocalDate
 import java.util.*
 
@@ -10,10 +9,6 @@ data class MedlemKafkaDto(
     val request: Request?,
     val response: Response?
 ) {
-    fun toDto(): DtoLøsningMaskinellParagraf_11_2 = DtoLøsningMaskinellParagraf_11_2(
-        erMedlem = response?.erMedlem?.name ?: error("response fra medlemsskap mangler.")
-    )
-
     data class Request(
         val mottattDato: LocalDate,
         val ytelse: String = "AAP",

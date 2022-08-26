@@ -1,8 +1,8 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.app.modell.InntekterKafkaDto
-import no.nav.aap.app.modell.MedlemKafkaDto
-import no.nav.aap.app.modell.IverksettVedtakKafkaDto
+import no.nav.aap.dto.kafka.InntekterKafkaDto
+import no.nav.aap.dto.kafka.MedlemKafkaDto
+import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.dto.DtoVedtak
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter

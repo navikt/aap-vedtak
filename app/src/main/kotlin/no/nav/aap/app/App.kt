@@ -14,10 +14,10 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.migrateStateStore
-import no.nav.aap.app.modell.SøkereKafkaDto
+import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.app.stream.inntekterStream
-import no.nav.aap.app.stream.manuell.manuellKvalitetssikringStream
-import no.nav.aap.app.stream.manuell.manuellLøsningStream
+import no.nav.aap.app.stream.manuellKvalitetssikringStream
+import no.nav.aap.app.stream.manuellLøsningStream
 import no.nav.aap.app.stream.medlemResponseMockStream
 import no.nav.aap.app.stream.medlemStream
 import no.nav.aap.app.stream.søknadStream

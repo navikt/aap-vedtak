@@ -1,6 +1,8 @@
-package no.nav.aap.app.modell
+package no.nav.aap.app.kafka
 
-import no.nav.aap.app.modell.ForrigeSøkereKafkaDto.*
+import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto
+import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto.*
+import no.nav.aap.dto.kafka.SøkereKafkaDto
 import java.time.LocalDateTime
 import java.util.*
 

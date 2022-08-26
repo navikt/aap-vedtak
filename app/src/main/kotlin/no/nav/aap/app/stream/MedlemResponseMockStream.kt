@@ -1,7 +1,7 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.modell.MedlemKafkaDto
+import no.nav.aap.dto.kafka.MedlemKafkaDto
 import no.nav.aap.kafka.streams.extension.produce
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.Consumed

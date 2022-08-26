@@ -3,8 +3,9 @@ package no.nav.aap.app
 import io.ktor.server.testing.*
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.modell.*
-import no.nav.aap.app.modell.InntekterKafkaDto.Response.Inntekt
+import no.nav.aap.app.kafka.toDto
+import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
+import no.nav.aap.dto.kafka.*
 import no.nav.aap.kafka.streams.test.readAndAssert
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
@@ -42,7 +43,7 @@ internal class ApiTest {
             val fnr = "123"
             val tidspunktForVurdering = LocalDateTime.now()
             søknadTopic.produce(fnr) {
-                JsonSøknad(fødselsdato = LocalDate.now().minusYears(40))
+                SøknadKafkaDto(fødselsdato = LocalDate.now().minusYears(40))
             }
 
             val medlemRequest = medlemOutputTopic.readValue()
