@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'dto-kafka/**'
-      - '.docker/workflows/release-kafka-dto.yml',
+      - '.docker/workflows/release-kafka-dto.yml'
       - 'jitpack.yml'
 
 jobs:
