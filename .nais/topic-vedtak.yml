@@ -23,6 +23,9 @@ spec:
       application: sink
       access: read
     - team: aap
+      application: api
+      access: read
+    - team: aap
       application: utbetaling
       access: readwrite
   {{#each kafka.acl.dev as |dev|}}
