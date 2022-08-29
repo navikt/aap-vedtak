@@ -18,6 +18,7 @@ tasks {
         duplicatesStrategy = DuplicatesStrategy.INCLUDE
     }
 }
+
 java {
     withSourcesJar()
     withJavadocJar()
