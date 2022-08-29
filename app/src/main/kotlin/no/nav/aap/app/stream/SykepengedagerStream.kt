@@ -1,8 +1,6 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.*
-import no.nav.aap.app.kafka.toDto
-import no.nav.aap.app.kafka.toJson
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.kafka.LøsningSykepengedagerKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto

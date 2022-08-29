@@ -123,6 +123,10 @@ class Søker private constructor(
         saker.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
     }
 
+    internal fun håndterIverksettelse(iverksettelseAvVedtak: IverksettelseAvVedtak) {
+        saker.forEach { it.håndterIverksettelse(iverksettelseAvVedtak) }
+    }
+
     fun toDto() = DtoSøker(
         personident = personident.toDto(),
         fødselsdato = fødselsdato.toDto(),

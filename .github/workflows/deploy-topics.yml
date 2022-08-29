@@ -34,6 +34,7 @@ jobs:
           - topic-kvalitetssikring-11-19.yml
           - topic-kvalitetssikring-11-29.yml
           - topic-inntekter.yml
+          - topic-iverksettelse-av-vedtak.yml
           - topic-vedtak.yml
         cluster:
           - dev-gcp

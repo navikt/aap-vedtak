@@ -8,6 +8,7 @@ graph LR
 subgraph Vedtak
     %% TOPICS
     aap.soknad-sendt.v1([aap.soknad-sendt.v1])
+	aap.iverksettelse-av-vedtak.v1([aap.iverksettelse-av-vedtak.v1])
 	aap.kvalitetssikring.11-12.v1([aap.kvalitetssikring.11-12.v1])
 	aap.kvalitetssikring.11-19.v1([aap.kvalitetssikring.11-19.v1])
 	aap.kvalitetssikring.11-2.v1([aap.kvalitetssikring.11-2.v1])
@@ -52,6 +53,7 @@ subgraph Vedtak
 	join-17{join}
 	join-18{join}
 	join-19{join}
+	join-20{join}
     
     %% STATE STORES
     soker-state-store-v2[(soker-state-store-v2)]
@@ -67,114 +69,120 @@ subgraph Vedtak
 	join-0 --> |branch-soknad-vedtak-produced-behov| aap.vedtak.v1
 	join-0 --> |branch-soknad-medlem-produced-behov| aap.medlem.v1
 	join-0 --> |produced-ny-soker| aap.sokere.v1
-	aap.kvalitetssikring.11-12.v1 --> join-1
+	aap.iverksettelse-av-vedtak.v1 --> join-1
 	soker-state-store-v2 --> join-1
-	join-1 --> |branch-kvalitetssikring-11-12-inntekter-produced-behov| aap.inntekter.v1
-	join-1 --> |branch-kvalitetssikring-11-12-vedtak-produced-behov| aap.vedtak.v1
-	join-1 --> |branch-kvalitetssikring-11-12-medlem-produced-behov| aap.medlem.v1
-	join-1 --> |produced-soker-med-kvalitetssikring-11-12| aap.sokere.v1
-	aap.kvalitetssikring.11-19.v1 --> join-2
+	join-1 --> |branch-iverksettelse-av-vedtak-inntekter-produced-behov| aap.inntekter.v1
+	join-1 --> |branch-iverksettelse-av-vedtak-medlem-produced-behov| aap.medlem.v1
+	join-1 --> |branch-iverksettelse-av-vedtak-vedtak-produced-behov| aap.vedtak.v1
+	join-1 --> |produced-soker-med-iverksettelse-av-vedtak| aap.sokere.v1
+	aap.kvalitetssikring.11-12.v1 --> join-2
 	soker-state-store-v2 --> join-2
-	join-2 --> |branch-kvalitetssikring-11-19-vedtak-produced-behov| aap.vedtak.v1
-	join-2 --> |branch-kvalitetssikring-11-19-medlem-produced-behov| aap.medlem.v1
-	join-2 --> |branch-kvalitetssikring-11-19-inntekter-produced-behov| aap.inntekter.v1
-	join-2 --> |produced-soker-med-kvalitetssikring-11-19| aap.sokere.v1
-	aap.kvalitetssikring.11-2.v1 --> join-3
+	join-2 --> |branch-kvalitetssikring-11-12-inntekter-produced-behov| aap.inntekter.v1
+	join-2 --> |branch-kvalitetssikring-11-12-vedtak-produced-behov| aap.vedtak.v1
+	join-2 --> |branch-kvalitetssikring-11-12-medlem-produced-behov| aap.medlem.v1
+	join-2 --> |produced-soker-med-kvalitetssikring-11-12| aap.sokere.v1
+	aap.kvalitetssikring.11-19.v1 --> join-3
 	soker-state-store-v2 --> join-3
-	join-3 --> |branch-kvalitetssikring-11-2-inntekter-produced-behov| aap.inntekter.v1
-	join-3 --> |branch-kvalitetssikring-11-2-medlem-produced-behov| aap.medlem.v1
-	join-3 --> |branch-kvalitetssikring-11-2-vedtak-produced-behov| aap.vedtak.v1
-	join-3 --> |produced-soker-med-kvalitetssikring-11-2| aap.sokere.v1
-	aap.kvalitetssikring.11-29.v1 --> join-4
+	join-3 --> |branch-kvalitetssikring-11-19-vedtak-produced-behov| aap.vedtak.v1
+	join-3 --> |branch-kvalitetssikring-11-19-medlem-produced-behov| aap.medlem.v1
+	join-3 --> |branch-kvalitetssikring-11-19-inntekter-produced-behov| aap.inntekter.v1
+	join-3 --> |produced-soker-med-kvalitetssikring-11-19| aap.sokere.v1
+	aap.kvalitetssikring.11-2.v1 --> join-4
 	soker-state-store-v2 --> join-4
-	join-4 --> |branch-kvalitetssikring-11-29-inntekter-produced-behov| aap.inntekter.v1
-	join-4 --> |branch-kvalitetssikring-11-29-medlem-produced-behov| aap.medlem.v1
-	join-4 --> |branch-kvalitetssikring-11-29-vedtak-produced-behov| aap.vedtak.v1
-	join-4 --> |produced-soker-med-kvalitetssikring-11-29| aap.sokere.v1
-	aap.kvalitetssikring.11-3.v1 --> join-5
+	join-4 --> |branch-kvalitetssikring-11-2-inntekter-produced-behov| aap.inntekter.v1
+	join-4 --> |branch-kvalitetssikring-11-2-medlem-produced-behov| aap.medlem.v1
+	join-4 --> |branch-kvalitetssikring-11-2-vedtak-produced-behov| aap.vedtak.v1
+	join-4 --> |produced-soker-med-kvalitetssikring-11-2| aap.sokere.v1
+	aap.kvalitetssikring.11-29.v1 --> join-5
 	soker-state-store-v2 --> join-5
-	join-5 --> |branch-kvalitetssikring-11-3-inntekter-produced-behov| aap.inntekter.v1
-	join-5 --> |branch-kvalitetssikring-11-3-vedtak-produced-behov| aap.vedtak.v1
-	join-5 --> |branch-kvalitetssikring-11-3-medlem-produced-behov| aap.medlem.v1
-	join-5 --> |produced-soker-med-kvalitetssikring-11-3| aap.sokere.v1
-	aap.kvalitetssikring.11-4.v1 --> join-6
+	join-5 --> |branch-kvalitetssikring-11-29-inntekter-produced-behov| aap.inntekter.v1
+	join-5 --> |branch-kvalitetssikring-11-29-medlem-produced-behov| aap.medlem.v1
+	join-5 --> |branch-kvalitetssikring-11-29-vedtak-produced-behov| aap.vedtak.v1
+	join-5 --> |produced-soker-med-kvalitetssikring-11-29| aap.sokere.v1
+	aap.kvalitetssikring.11-3.v1 --> join-6
 	soker-state-store-v2 --> join-6
-	join-6 --> |branch-kvalitetssikring-11-4-inntekter-produced-behov| aap.inntekter.v1
-	join-6 --> |branch-kvalitetssikring-11-4-medlem-produced-behov| aap.medlem.v1
-	join-6 --> |branch-kvalitetssikring-11-4-vedtak-produced-behov| aap.vedtak.v1
-	join-6 --> |produced-soker-med-kvalitetssikring-11-4| aap.sokere.v1
-	aap.kvalitetssikring.11-5.v1 --> join-7
+	join-6 --> |branch-kvalitetssikring-11-3-inntekter-produced-behov| aap.inntekter.v1
+	join-6 --> |branch-kvalitetssikring-11-3-vedtak-produced-behov| aap.vedtak.v1
+	join-6 --> |branch-kvalitetssikring-11-3-medlem-produced-behov| aap.medlem.v1
+	join-6 --> |produced-soker-med-kvalitetssikring-11-3| aap.sokere.v1
+	aap.kvalitetssikring.11-4.v1 --> join-7
 	soker-state-store-v2 --> join-7
-	join-7 --> |branch-kvalitetssikring-11-5-vedtak-produced-behov| aap.vedtak.v1
-	join-7 --> |branch-kvalitetssikring-11-5-inntekter-produced-behov| aap.inntekter.v1
-	join-7 --> |branch-kvalitetssikring-11-5-medlem-produced-behov| aap.medlem.v1
-	join-7 --> |produced-soker-med-kvalitetssikring-11-5| aap.sokere.v1
-	aap.kvalitetssikring.11-6.v1 --> join-8
+	join-7 --> |branch-kvalitetssikring-11-4-inntekter-produced-behov| aap.inntekter.v1
+	join-7 --> |branch-kvalitetssikring-11-4-medlem-produced-behov| aap.medlem.v1
+	join-7 --> |branch-kvalitetssikring-11-4-vedtak-produced-behov| aap.vedtak.v1
+	join-7 --> |produced-soker-med-kvalitetssikring-11-4| aap.sokere.v1
+	aap.kvalitetssikring.11-5.v1 --> join-8
 	soker-state-store-v2 --> join-8
-	join-8 --> |branch-kvalitetssikring-11-6-inntekter-produced-behov| aap.inntekter.v1
-	join-8 --> |branch-kvalitetssikring-11-6-medlem-produced-behov| aap.medlem.v1
-	join-8 --> |branch-kvalitetssikring-11-6-vedtak-produced-behov| aap.vedtak.v1
-	join-8 --> |produced-soker-med-kvalitetssikring-11-6| aap.sokere.v1
-	aap.manuell.11-12.v1 --> join-9
+	join-8 --> |branch-kvalitetssikring-11-5-vedtak-produced-behov| aap.vedtak.v1
+	join-8 --> |branch-kvalitetssikring-11-5-inntekter-produced-behov| aap.inntekter.v1
+	join-8 --> |branch-kvalitetssikring-11-5-medlem-produced-behov| aap.medlem.v1
+	join-8 --> |produced-soker-med-kvalitetssikring-11-5| aap.sokere.v1
+	aap.kvalitetssikring.11-6.v1 --> join-9
 	soker-state-store-v2 --> join-9
-	join-9 --> |branch-manuell-11-12-inntekter-produced-behov| aap.inntekter.v1
-	join-9 --> |branch-manuell-11-12-medlem-produced-behov| aap.medlem.v1
-	join-9 --> |branch-manuell-11-12-vedtak-produced-behov| aap.vedtak.v1
-	join-9 --> |produced-soker-med-manuell-11-12| aap.sokere.v1
-	aap.manuell.11-19.v1 --> join-10
+	join-9 --> |branch-kvalitetssikring-11-6-inntekter-produced-behov| aap.inntekter.v1
+	join-9 --> |branch-kvalitetssikring-11-6-medlem-produced-behov| aap.medlem.v1
+	join-9 --> |branch-kvalitetssikring-11-6-vedtak-produced-behov| aap.vedtak.v1
+	join-9 --> |produced-soker-med-kvalitetssikring-11-6| aap.sokere.v1
+	aap.manuell.11-12.v1 --> join-10
 	soker-state-store-v2 --> join-10
-	join-10 --> |branch-manuell-11-19-inntekter-produced-behov| aap.inntekter.v1
-	join-10 --> |branch-manuell-11-19-vedtak-produced-behov| aap.vedtak.v1
-	join-10 --> |branch-manuell-11-19-medlem-produced-behov| aap.medlem.v1
-	join-10 --> |produced-soker-med-manuell-11-19| aap.sokere.v1
-	aap.manuell.11-2.v1 --> join-11
+	join-10 --> |branch-manuell-11-12-inntekter-produced-behov| aap.inntekter.v1
+	join-10 --> |branch-manuell-11-12-medlem-produced-behov| aap.medlem.v1
+	join-10 --> |branch-manuell-11-12-vedtak-produced-behov| aap.vedtak.v1
+	join-10 --> |produced-soker-med-manuell-11-12| aap.sokere.v1
+	aap.manuell.11-19.v1 --> join-11
 	soker-state-store-v2 --> join-11
-	join-11 --> |branch-manuell-11-2-medlem-produced-behov| aap.medlem.v1
-	join-11 --> |branch-manuell-11-2-vedtak-produced-behov| aap.vedtak.v1
-	join-11 --> |branch-manuell-11-2-inntekter-produced-behov| aap.inntekter.v1
-	join-11 --> |produced-soker-med-manuell-11-2| aap.sokere.v1
-	aap.manuell.11-29.v1 --> join-12
+	join-11 --> |branch-manuell-11-19-inntekter-produced-behov| aap.inntekter.v1
+	join-11 --> |branch-manuell-11-19-vedtak-produced-behov| aap.vedtak.v1
+	join-11 --> |branch-manuell-11-19-medlem-produced-behov| aap.medlem.v1
+	join-11 --> |produced-soker-med-manuell-11-19| aap.sokere.v1
+	aap.manuell.11-2.v1 --> join-12
 	soker-state-store-v2 --> join-12
-	join-12 --> |branch-manuell-11-29-inntekter-produced-behov| aap.inntekter.v1
-	join-12 --> |branch-manuell-11-29-medlem-produced-behov| aap.medlem.v1
-	join-12 --> |branch-manuell-11-29-vedtak-produced-behov| aap.vedtak.v1
-	join-12 --> |produced-soker-med-manuell-11-29| aap.sokere.v1
-	aap.manuell.11-3.v1 --> join-13
+	join-12 --> |branch-manuell-11-2-medlem-produced-behov| aap.medlem.v1
+	join-12 --> |branch-manuell-11-2-vedtak-produced-behov| aap.vedtak.v1
+	join-12 --> |branch-manuell-11-2-inntekter-produced-behov| aap.inntekter.v1
+	join-12 --> |produced-soker-med-manuell-11-2| aap.sokere.v1
+	aap.manuell.11-29.v1 --> join-13
 	soker-state-store-v2 --> join-13
-	join-13 --> |branch-manuell-11-3-inntekter-produced-behov| aap.inntekter.v1
-	join-13 --> |branch-manuell-11-3-medlem-produced-behov| aap.medlem.v1
-	join-13 --> |branch-manuell-11-3-vedtak-produced-behov| aap.vedtak.v1
-	join-13 --> |produced-soker-med-manuell-11-3| aap.sokere.v1
-	aap.manuell.11-4.v1 --> join-14
+	join-13 --> |branch-manuell-11-29-inntekter-produced-behov| aap.inntekter.v1
+	join-13 --> |branch-manuell-11-29-medlem-produced-behov| aap.medlem.v1
+	join-13 --> |branch-manuell-11-29-vedtak-produced-behov| aap.vedtak.v1
+	join-13 --> |produced-soker-med-manuell-11-29| aap.sokere.v1
+	aap.manuell.11-3.v1 --> join-14
 	soker-state-store-v2 --> join-14
-	join-14 --> |branch-manuell-11-4-medlem-produced-behov| aap.medlem.v1
-	join-14 --> |branch-manuell-11-4-vedtak-produced-behov| aap.vedtak.v1
-	join-14 --> |branch-manuell-11-4-inntekter-produced-behov| aap.inntekter.v1
-	join-14 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
-	aap.manuell.11-5.v1 --> join-15
+	join-14 --> |branch-manuell-11-3-inntekter-produced-behov| aap.inntekter.v1
+	join-14 --> |branch-manuell-11-3-medlem-produced-behov| aap.medlem.v1
+	join-14 --> |branch-manuell-11-3-vedtak-produced-behov| aap.vedtak.v1
+	join-14 --> |produced-soker-med-manuell-11-3| aap.sokere.v1
+	aap.manuell.11-4.v1 --> join-15
 	soker-state-store-v2 --> join-15
-	join-15 --> |produced-soker-med-manuell-11-5| aap.sokere.v1
-	join-15 --> |branch-manuell-11-5-vedtak-produced-behov| aap.vedtak.v1
-	join-15 --> |branch-manuell-11-5-inntekter-produced-behov| aap.inntekter.v1
-	join-15 --> |branch-manuell-11-5-medlem-produced-behov| aap.medlem.v1
-	aap.manuell.11-6.v1 --> join-16
+	join-15 --> |branch-manuell-11-4-medlem-produced-behov| aap.medlem.v1
+	join-15 --> |branch-manuell-11-4-vedtak-produced-behov| aap.vedtak.v1
+	join-15 --> |branch-manuell-11-4-inntekter-produced-behov| aap.inntekter.v1
+	join-15 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
+	aap.manuell.11-5.v1 --> join-16
 	soker-state-store-v2 --> join-16
-	join-16 --> |branch-manuell-11-6-medlem-produced-behov| aap.medlem.v1
-	join-16 --> |branch-manuell-11-6-inntekter-produced-behov| aap.inntekter.v1
-	join-16 --> |branch-manuell-11-6-vedtak-produced-behov| aap.vedtak.v1
-	join-16 --> |produced-soker-med-manuell-11-6| aap.sokere.v1
-	aap.sykepengedager.v1 --> join-17
+	join-16 --> |produced-soker-med-manuell-11-5| aap.sokere.v1
+	join-16 --> |branch-manuell-11-5-vedtak-produced-behov| aap.vedtak.v1
+	join-16 --> |branch-manuell-11-5-inntekter-produced-behov| aap.inntekter.v1
+	join-16 --> |branch-manuell-11-5-medlem-produced-behov| aap.medlem.v1
+	aap.manuell.11-6.v1 --> join-17
 	soker-state-store-v2 --> join-17
-	join-17 --> |branch-sykepengedager-inntekter-produced-behov| aap.inntekter.v1
-	join-17 --> |branch-sykepengedager-medlem-produced-behov| aap.medlem.v1
-	join-17 --> |branch-sykepengedager-vedtak-produced-behov| aap.vedtak.v1
-	join-17 --> |produced-soker-med-sykepengedager| aap.sokere.v1
-	aap.inntekter.v1 --> join-18
+	join-17 --> |branch-manuell-11-6-medlem-produced-behov| aap.medlem.v1
+	join-17 --> |branch-manuell-11-6-inntekter-produced-behov| aap.inntekter.v1
+	join-17 --> |branch-manuell-11-6-vedtak-produced-behov| aap.vedtak.v1
+	join-17 --> |produced-soker-med-manuell-11-6| aap.sokere.v1
+	aap.sykepengedager.v1 --> join-18
 	soker-state-store-v2 --> join-18
-	join-18 --> |produced-soker-med-handtert-inntekter| aap.sokere.v1
-	aap.medlem.v1-joined-aap.sokere.v1-repartition --> join-19
+	join-18 --> |branch-sykepengedager-inntekter-produced-behov| aap.inntekter.v1
+	join-18 --> |branch-sykepengedager-medlem-produced-behov| aap.medlem.v1
+	join-18 --> |branch-sykepengedager-vedtak-produced-behov| aap.vedtak.v1
+	join-18 --> |produced-soker-med-sykepengedager| aap.sokere.v1
+	aap.inntekter.v1 --> join-19
 	soker-state-store-v2 --> join-19
-	join-19 --> |produced-soker-med-medlem| aap.sokere.v1
+	join-19 --> |produced-soker-med-handtert-inntekter| aap.sokere.v1
+	aap.medlem.v1-joined-aap.sokere.v1-repartition --> join-20
+	soker-state-store-v2 --> join-20
+	join-20 --> |produced-soker-med-medlem| aap.sokere.v1
     
     %% JOB STREAMS
     metrics-soker-state-store-v2 --> soker-state-store-v2
@@ -193,6 +201,7 @@ end
 
 %% STYLES
 style aap.soknad-sendt.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.iverksettelse-av-vedtak.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.kvalitetssikring.11-12.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.kvalitetssikring.11-19.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.kvalitetssikring.11-2.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a

@@ -37,6 +37,20 @@ data class DtoSakstype(
     val vilkårsvurderinger: List<DtoVilkårsvurdering>
 )
 
+data class DtoIverksettelseAvVedtak(
+    val iverksattAv: String,
+) {
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = toLøsning()
+        søker.håndterIverksettelse(løsning)
+        return løsning.behov()
+    }
+
+    private fun toLøsning() = IverksettelseAvVedtak(
+        iverksattAv = iverksattAv,
+    )
+}
+
 data class DtoSykepengedager(
     val gjenståendeSykedager: Int,
     val foreløpigBeregnetSluttPåSykepenger: LocalDate,

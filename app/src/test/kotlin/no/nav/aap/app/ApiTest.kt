@@ -9,7 +9,6 @@ import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.kafka.streams.test.readAndAssert
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
@@ -17,7 +16,6 @@ import java.time.LocalDateTime
 
 internal class ApiTest {
 
-    @Disabled("Mangler mulighet for å iverksette vedtak")
     @Test
     fun `søker får innvilget vedtak`() {
         withTestApp { mocks ->
@@ -39,6 +37,7 @@ internal class ApiTest {
             val kvalitetssikring_11_29_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_29)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
+            val iverksettelseAvVedtakTopic = mocks.kafka.inputTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = mocks.kafka.outputTopic(Topics.vedtak)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
@@ -203,7 +202,12 @@ internal class ApiTest {
                 )
             }
 
-            //TODO: Mangler mulighet for å iverksette vedtak
+            iverksettelseAvVedtakTopic.produce(fnr) {
+                IverksettelseAvVedtakKafkaDto(
+                    iverksattAv = "X",
+                )
+            }
+
             iverksettVedtakTopic.readAndAssert()
                 .hasNumberOfRecords(1)
                 .hasKey(fnr)
