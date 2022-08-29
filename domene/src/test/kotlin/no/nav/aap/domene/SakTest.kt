@@ -636,7 +636,7 @@ internal class SakTest {
             LøsningSykepengedager(
                 personident = personident,
                 gjenståendeSykedager = 0,
-                maksdato = LocalDate.now(),
+                foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
                 kilde = LøsningSykepengedager.Kilde.SPLEIS,
             )
         )

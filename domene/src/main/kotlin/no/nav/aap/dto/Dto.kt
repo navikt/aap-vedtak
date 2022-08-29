@@ -4,6 +4,7 @@ import no.nav.aap.domene.Søker
 import no.nav.aap.domene.beregning.Arbeidsgiver
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt
+import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -35,6 +36,25 @@ data class DtoSakstype(
     val aktiv: Boolean,
     val vilkårsvurderinger: List<DtoVilkårsvurdering>
 )
+
+data class DtoSykepengedager(
+    val gjenståendeSykedager: Int,
+    val foreløpigBeregnetSluttPåSykepenger: LocalDate,
+    val kilde: String,
+) {
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = toLøsning()
+        søker.håndterLøsning(løsning)
+        return løsning.behov()
+    }
+
+    private fun toLøsning() = LøsningSykepengedager(
+        personident = Personident("slette?"),
+        gjenståendeSykedager = gjenståendeSykedager,
+        foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
+        kilde = LøsningSykepengedager.Kilde.valueOf(kilde)
+    )
+}
 
 data class DtoVilkårsvurdering(
     val vilkårsvurderingsid: UUID,

@@ -24,6 +24,7 @@ subgraph Vedtak
 	aap.manuell.11-4.v1([aap.manuell.11-4.v1])
 	aap.manuell.11-5.v1([aap.manuell.11-5.v1])
 	aap.manuell.11-6.v1([aap.manuell.11-6.v1])
+	aap.sykepengedager.v1([aap.sykepengedager.v1])
 	aap.sokere.v1([aap.sokere.v1])
 	aap.inntekter.v1([aap.inntekter.v1])
 	aap.medlem.v1-joined-aap.sokere.v1-repartition([aap.medlem.v1-joined-aap.sokere.v1-repartition])
@@ -50,6 +51,7 @@ subgraph Vedtak
 	join-16{join}
 	join-17{join}
 	join-18{join}
+	join-19{join}
     
     %% STATE STORES
     soker-state-store-v2[(soker-state-store-v2)]
@@ -161,12 +163,18 @@ subgraph Vedtak
 	join-16 --> |branch-manuell-11-6-inntekter-produced-behov| aap.inntekter.v1
 	join-16 --> |branch-manuell-11-6-vedtak-produced-behov| aap.vedtak.v1
 	join-16 --> |produced-soker-med-manuell-11-6| aap.sokere.v1
-	aap.inntekter.v1 --> join-17
+	aap.sykepengedager.v1 --> join-17
 	soker-state-store-v2 --> join-17
-	join-17 --> |produced-soker-med-handtert-inntekter| aap.sokere.v1
-	aap.medlem.v1-joined-aap.sokere.v1-repartition --> join-18
+	join-17 --> |branch-sykepengedager-inntekter-produced-behov| aap.inntekter.v1
+	join-17 --> |branch-sykepengedager-medlem-produced-behov| aap.medlem.v1
+	join-17 --> |branch-sykepengedager-vedtak-produced-behov| aap.vedtak.v1
+	join-17 --> |produced-soker-med-sykepengedager| aap.sokere.v1
+	aap.inntekter.v1 --> join-18
 	soker-state-store-v2 --> join-18
-	join-18 --> |produced-soker-med-medlem| aap.sokere.v1
+	join-18 --> |produced-soker-med-handtert-inntekter| aap.sokere.v1
+	aap.medlem.v1-joined-aap.sokere.v1-repartition --> join-19
+	soker-state-store-v2 --> join-19
+	join-19 --> |produced-soker-med-medlem| aap.sokere.v1
     
     %% JOB STREAMS
     metrics-soker-state-store-v2 --> soker-state-store-v2
@@ -201,6 +209,7 @@ style aap.manuell.11-3.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:
 style aap.manuell.11-4.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.sykepengedager.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1-joined-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a

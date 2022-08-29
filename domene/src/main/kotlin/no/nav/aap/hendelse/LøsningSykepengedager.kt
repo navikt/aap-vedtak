@@ -6,7 +6,7 @@ import java.time.LocalDate
 internal class LøsningSykepengedager(
     private val personident: Personident,
     private val gjenståendeSykedager: Int,
-    private val maksdato: LocalDate,
+    private val foreløpigBeregnetSluttPåSykepenger: LocalDate,
     private val kilde: Kilde,
 ) : Hendelse() {
     enum class Kilde {
