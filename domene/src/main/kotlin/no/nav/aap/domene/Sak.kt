@@ -134,6 +134,10 @@ internal class Sak private constructor(
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
 
+    internal fun håndterIverksettelse(iverksettelseAvVedtak: IverksettelseAvVedtak) {
+        tilstand.håndterIverksettelse(this, iverksettelseAvVedtak)
+    }
+
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
         nyTilstand.onExit(this, hendelse)
         tilstand = nyTilstand
@@ -148,8 +152,9 @@ internal class Sak private constructor(
             SØKNAD_MOTTATT,
             BEREGN_INNTEKT,
             AVVENTER_KVALITETSSIKRING,
-            VENTER_SYKEPENGER,
             VEDTAK_FATTET,
+            VENTER_SYKEPENGER,
+            VEDTAK_IVERKSATT,
             IKKE_OPPFYLT
         }
 
@@ -261,6 +266,10 @@ internal class Sak private constructor(
 
         open fun håndterKvalitetssikring(sak: Sak, kvalitetssikring: KvalitetssikringParagraf_11_29) {
             log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        open fun håndterIverksettelse(sak: Sak, iverksettelseAvVedtak: IverksettelseAvVedtak) {
+            log.info("Forventet ikke iverksettelse i tilstand ${tilstandsnavn.name}")
         }
 
         open fun toDto(sak: Sak) = DtoSak(
@@ -535,15 +544,8 @@ internal class Sak private constructor(
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 when {
-                    sak.sakstype.erAlleKvalitetssikret() -> {
-                        val virkningsdato = sak.sakstype.virkningsdato()
-                        when (virkningsdato.first) {
-                            LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger ->
-                                sak.tilstand(VenterSykepenger, hendelse)
-
-                            else -> sak.tilstand(VedtakFattet, hendelse)
-                        }
-                    }
+                    sak.sakstype.erAlleKvalitetssikret() ->
+                        sak.tilstand(VedtakFattet, hendelse)
 
                     sak.sakstype.erNoenIkkeIKvalitetssikring() ->
                         sak.tilstand(SøknadMottatt, hendelse)
@@ -551,10 +553,43 @@ internal class Sak private constructor(
             }
         }
 
+        object VedtakFattet : Tilstand(Tilstandsnavn.VEDTAK_FATTET) {
+
+            override fun håndterIverksettelse(sak: Sak, iverksettelseAvVedtak: IverksettelseAvVedtak) {
+                vurderNesteTilstand(sak, iverksettelseAvVedtak)
+            }
+
+            override fun toDto(sak: Sak) = DtoSak(
+                saksid = sak.saksid,
+                tilstand = tilstandsnavn.name,
+                sakstyper = sak.sakstyper.toDto(),
+                vurderingsdato = sak.vurderingsdato, // ALLTID SATT
+                søknadstidspunkt = sak.søknadstidspunkt,
+                vedtak = sak.vedtak.toDto()
+            )
+
+            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
+                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
+                sak.vurderingsdato = dtoSak.vurderingsdato
+                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+                sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
+            }
+
+            private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
+                val virkningsdato = sak.sakstype.virkningsdato()
+                when (virkningsdato.first) {
+                    LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger ->
+                        sak.tilstand(VenterSykepenger, hendelse)
+
+                    else -> sak.tilstand(VedtakIverksatt, hendelse)
+                }
+            }
+        }
+
         object VenterSykepenger : Tilstand(Tilstandsnavn.VENTER_SYKEPENGER) {
             override fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
                 if (løsning.gjenståendeSykedager() == 0) {
-                    sak.tilstand(VedtakFattet, løsning)
+                    sak.tilstand(VedtakIverksatt, løsning)
                 }
             }
 
@@ -575,14 +610,10 @@ internal class Sak private constructor(
             }
         }
 
-        object VedtakFattet : Tilstand(Tilstandsnavn.VEDTAK_FATTET) {
+        object VedtakIverksatt : Tilstand(Tilstandsnavn.VEDTAK_IVERKSATT) {
             override fun onEntry(sak: Sak, hendelse: Hendelse) {
                 hendelse.opprettBehov(BehovIverksettVedtak(sak.vedtak))
             }
-
-//            override fun håndterLøsning(sak: Sak, vedtak: Iverksatt) {
-//                sak.tilstand(VedtakIverksatt, vedtak)
-//            }
 
             override fun toDto(sak: Sak) = DtoSak(
                 saksid = sak.saksid,
@@ -620,8 +651,9 @@ internal class Sak private constructor(
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> Tilstand.BeregnInntekt
                 Tilstand.Tilstandsnavn.AVVENTER_KVALITETSSIKRING -> Tilstand.AvventerKvalitetssikring
-                Tilstand.Tilstandsnavn.VENTER_SYKEPENGER -> Tilstand.VenterSykepenger
                 Tilstand.Tilstandsnavn.VEDTAK_FATTET -> Tilstand.VedtakFattet
+                Tilstand.Tilstandsnavn.VENTER_SYKEPENGER -> Tilstand.VenterSykepenger
+                Tilstand.Tilstandsnavn.VEDTAK_IVERKSATT -> Tilstand.VedtakIverksatt
                 Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> Tilstand.IkkeOppfylt
             },
             sakstyper = dtoSak.sakstyper.map(Sakstype::gjenopprett).toMutableList(),
