@@ -1,9 +1,10 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.dto.kafka.InntekterKafkaDto
-import no.nav.aap.dto.kafka.MedlemKafkaDto
-import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.dto.DtoVedtak
+import no.nav.aap.dto.kafka.InntekterKafkaDto
+import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
+import no.nav.aap.dto.kafka.MedlemKafkaDto
+import no.nav.aap.dto.kafka.SykepengedakerKafkaDto
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Behov
@@ -23,18 +24,17 @@ internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
             branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToMedlemKafkaDto)
             branch(Topics.inntekter, "$name-inntekter", DtoBehovWrapper::erInntekter, ::ToInntekterKafkaDto)
             branch(Topics.vedtak, "$name-vedtak", DtoBehovWrapper::erIverksettVedtak, ::ToIverksettVedtakKafkaDto)
+            branch(Topics.sykepengedager, "$name-sykepengedager", DtoBehovWrapper::erSykepengedager, ::ToSykepengedagerKafkaDto)
         }
 }
 
-private class DtoBehovWrapper(
-    private val dtoBehov: DtoBehov
-) : Behov<Lytter> {
+private class DtoBehovWrapper(private val dtoBehov: DtoBehov) : Behov<Lytter> {
+    override fun accept(visitor: Lytter) = dtoBehov.accept(visitor)
+
     fun erMedlem() = Sjekk.ErMedlem().apply(this::accept).er()
+    fun erSykepengedager() = Sjekk.ErSykepengedager().apply(this::accept).er()
     fun erInntekter() = Sjekk.ErInntekter().apply(this::accept).er()
     fun erIverksettVedtak() = Sjekk.ErIverksettVedtak().apply(this::accept).er()
-    override fun accept(visitor: Lytter) {
-        dtoBehov.accept(visitor)
-    }
 }
 
 private sealed class Sjekk : Lytter {
@@ -43,6 +43,12 @@ private sealed class Sjekk : Lytter {
 
     class ErMedlem : Sjekk() {
         override fun medlem(ident: String) {
+            er = true
+        }
+    }
+
+    class ErSykepengedager : Sjekk() {
+        override fun behov_8_48AndreLedd(ident: String) {
             er = true
         }
     }
@@ -78,6 +84,10 @@ private class ToMedlemKafkaDto : Lytter, BehovExtractor<MedlemKafkaDto> {
                 arbeidetUtenlands = false
             ),
         )
+}
+
+private class ToSykepengedagerKafkaDto : Lytter, BehovExtractor<SykepengedakerKafkaDto> {
+    override fun toJson(): SykepengedakerKafkaDto = SykepengedakerKafkaDto(response = null)
 }
 
 private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {

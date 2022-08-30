@@ -12,6 +12,7 @@ import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_12FørsteLedd
+import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import java.time.LocalDate
 import java.util.*
 
@@ -49,6 +50,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
     object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_12FørsteLedd>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_12FørsteLedd, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_12FørsteLedd())
+            hendelse.opprettBehov(Behov_8_48AndreLedd())
         }
 
         override fun håndterLøsning(

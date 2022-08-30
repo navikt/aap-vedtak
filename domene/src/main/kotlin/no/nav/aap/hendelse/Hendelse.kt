@@ -19,8 +19,9 @@ interface Behov {
     fun toDto(ident: String): DtoBehov
 }
 
-interface Lytter {
+interface   Lytter {
     fun medlem(ident: String) {}
+    fun behov_8_48AndreLedd(ident: String) {}
     fun behov_11_3(ident: String) {}
     fun behov_11_4FørsteLedd(ident: String) {}
     fun behov_11_4AndreOgTredjeLedd(ident: String) {}
@@ -40,6 +41,12 @@ interface DtoBehov {
     class Medlem(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
             visitor.medlem(ident)
+        }
+    }
+
+    class DtoBehov_8_48AndreLedd(private val ident: String) : DtoBehov {
+        override fun accept(visitor: Lytter) {
+            visitor.behov_8_48AndreLedd(ident)
         }
     }
 

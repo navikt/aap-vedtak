@@ -66,6 +66,7 @@ subgraph Vedtak
     aap.soknad-sendt.v1 --> join-0
 	soker-state-store-v2 --> join-0
 	join-0 --> |branch-soknad-inntekter-produced-behov| aap.inntekter.v1
+	join-0 --> |branch-soknad-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-0 --> |branch-soknad-vedtak-produced-behov| aap.vedtak.v1
 	join-0 --> |branch-soknad-medlem-produced-behov| aap.medlem.v1
 	join-0 --> |produced-ny-soker| aap.sokere.v1
@@ -73,10 +74,12 @@ subgraph Vedtak
 	soker-state-store-v2 --> join-1
 	join-1 --> |branch-iverksettelse-av-vedtak-inntekter-produced-behov| aap.inntekter.v1
 	join-1 --> |branch-iverksettelse-av-vedtak-medlem-produced-behov| aap.medlem.v1
+	join-1 --> |branch-iverksettelse-av-vedtak-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-1 --> |branch-iverksettelse-av-vedtak-vedtak-produced-behov| aap.vedtak.v1
 	join-1 --> |produced-soker-med-iverksettelse-av-vedtak| aap.sokere.v1
 	aap.kvalitetssikring.11-12.v1 --> join-2
 	soker-state-store-v2 --> join-2
+	join-2 --> |branch-kvalitetssikring-11-12-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-2 --> |branch-kvalitetssikring-11-12-inntekter-produced-behov| aap.inntekter.v1
 	join-2 --> |branch-kvalitetssikring-11-12-vedtak-produced-behov| aap.vedtak.v1
 	join-2 --> |branch-kvalitetssikring-11-12-medlem-produced-behov| aap.medlem.v1
@@ -86,29 +89,34 @@ subgraph Vedtak
 	join-3 --> |branch-kvalitetssikring-11-19-vedtak-produced-behov| aap.vedtak.v1
 	join-3 --> |branch-kvalitetssikring-11-19-medlem-produced-behov| aap.medlem.v1
 	join-3 --> |branch-kvalitetssikring-11-19-inntekter-produced-behov| aap.inntekter.v1
+	join-3 --> |branch-kvalitetssikring-11-19-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-3 --> |produced-soker-med-kvalitetssikring-11-19| aap.sokere.v1
 	aap.kvalitetssikring.11-2.v1 --> join-4
 	soker-state-store-v2 --> join-4
 	join-4 --> |branch-kvalitetssikring-11-2-inntekter-produced-behov| aap.inntekter.v1
 	join-4 --> |branch-kvalitetssikring-11-2-medlem-produced-behov| aap.medlem.v1
+	join-4 --> |branch-kvalitetssikring-11-2-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-4 --> |branch-kvalitetssikring-11-2-vedtak-produced-behov| aap.vedtak.v1
 	join-4 --> |produced-soker-med-kvalitetssikring-11-2| aap.sokere.v1
 	aap.kvalitetssikring.11-29.v1 --> join-5
 	soker-state-store-v2 --> join-5
 	join-5 --> |branch-kvalitetssikring-11-29-inntekter-produced-behov| aap.inntekter.v1
 	join-5 --> |branch-kvalitetssikring-11-29-medlem-produced-behov| aap.medlem.v1
+	join-5 --> |branch-kvalitetssikring-11-29-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-5 --> |branch-kvalitetssikring-11-29-vedtak-produced-behov| aap.vedtak.v1
 	join-5 --> |produced-soker-med-kvalitetssikring-11-29| aap.sokere.v1
 	aap.kvalitetssikring.11-3.v1 --> join-6
 	soker-state-store-v2 --> join-6
 	join-6 --> |branch-kvalitetssikring-11-3-inntekter-produced-behov| aap.inntekter.v1
-	join-6 --> |branch-kvalitetssikring-11-3-vedtak-produced-behov| aap.vedtak.v1
 	join-6 --> |branch-kvalitetssikring-11-3-medlem-produced-behov| aap.medlem.v1
+	join-6 --> |branch-kvalitetssikring-11-3-sykepengedager-produced-behov| aap.sykepengedager.v1
+	join-6 --> |branch-kvalitetssikring-11-3-vedtak-produced-behov| aap.vedtak.v1
 	join-6 --> |produced-soker-med-kvalitetssikring-11-3| aap.sokere.v1
 	aap.kvalitetssikring.11-4.v1 --> join-7
 	soker-state-store-v2 --> join-7
 	join-7 --> |branch-kvalitetssikring-11-4-inntekter-produced-behov| aap.inntekter.v1
 	join-7 --> |branch-kvalitetssikring-11-4-medlem-produced-behov| aap.medlem.v1
+	join-7 --> |branch-kvalitetssikring-11-4-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-7 --> |branch-kvalitetssikring-11-4-vedtak-produced-behov| aap.vedtak.v1
 	join-7 --> |produced-soker-med-kvalitetssikring-11-4| aap.sokere.v1
 	aap.kvalitetssikring.11-5.v1 --> join-8
@@ -116,27 +124,32 @@ subgraph Vedtak
 	join-8 --> |branch-kvalitetssikring-11-5-vedtak-produced-behov| aap.vedtak.v1
 	join-8 --> |branch-kvalitetssikring-11-5-inntekter-produced-behov| aap.inntekter.v1
 	join-8 --> |branch-kvalitetssikring-11-5-medlem-produced-behov| aap.medlem.v1
+	join-8 --> |branch-kvalitetssikring-11-5-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-8 --> |produced-soker-med-kvalitetssikring-11-5| aap.sokere.v1
 	aap.kvalitetssikring.11-6.v1 --> join-9
 	soker-state-store-v2 --> join-9
 	join-9 --> |branch-kvalitetssikring-11-6-inntekter-produced-behov| aap.inntekter.v1
 	join-9 --> |branch-kvalitetssikring-11-6-medlem-produced-behov| aap.medlem.v1
+	join-9 --> |branch-kvalitetssikring-11-6-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-9 --> |branch-kvalitetssikring-11-6-vedtak-produced-behov| aap.vedtak.v1
 	join-9 --> |produced-soker-med-kvalitetssikring-11-6| aap.sokere.v1
 	aap.manuell.11-12.v1 --> join-10
 	soker-state-store-v2 --> join-10
 	join-10 --> |branch-manuell-11-12-inntekter-produced-behov| aap.inntekter.v1
+	join-10 --> |branch-manuell-11-12-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-10 --> |branch-manuell-11-12-medlem-produced-behov| aap.medlem.v1
 	join-10 --> |branch-manuell-11-12-vedtak-produced-behov| aap.vedtak.v1
 	join-10 --> |produced-soker-med-manuell-11-12| aap.sokere.v1
 	aap.manuell.11-19.v1 --> join-11
 	soker-state-store-v2 --> join-11
+	join-11 --> |branch-manuell-11-19-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-11 --> |branch-manuell-11-19-inntekter-produced-behov| aap.inntekter.v1
 	join-11 --> |branch-manuell-11-19-vedtak-produced-behov| aap.vedtak.v1
 	join-11 --> |branch-manuell-11-19-medlem-produced-behov| aap.medlem.v1
 	join-11 --> |produced-soker-med-manuell-11-19| aap.sokere.v1
 	aap.manuell.11-2.v1 --> join-12
 	soker-state-store-v2 --> join-12
+	join-12 --> |branch-manuell-11-2-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-12 --> |branch-manuell-11-2-medlem-produced-behov| aap.medlem.v1
 	join-12 --> |branch-manuell-11-2-vedtak-produced-behov| aap.vedtak.v1
 	join-12 --> |branch-manuell-11-2-inntekter-produced-behov| aap.inntekter.v1
@@ -146,11 +159,13 @@ subgraph Vedtak
 	join-13 --> |branch-manuell-11-29-inntekter-produced-behov| aap.inntekter.v1
 	join-13 --> |branch-manuell-11-29-medlem-produced-behov| aap.medlem.v1
 	join-13 --> |branch-manuell-11-29-vedtak-produced-behov| aap.vedtak.v1
+	join-13 --> |branch-manuell-11-29-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-13 --> |produced-soker-med-manuell-11-29| aap.sokere.v1
 	aap.manuell.11-3.v1 --> join-14
 	soker-state-store-v2 --> join-14
 	join-14 --> |branch-manuell-11-3-inntekter-produced-behov| aap.inntekter.v1
 	join-14 --> |branch-manuell-11-3-medlem-produced-behov| aap.medlem.v1
+	join-14 --> |branch-manuell-11-3-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-14 --> |branch-manuell-11-3-vedtak-produced-behov| aap.vedtak.v1
 	join-14 --> |produced-soker-med-manuell-11-3| aap.sokere.v1
 	aap.manuell.11-4.v1 --> join-15
@@ -158,6 +173,7 @@ subgraph Vedtak
 	join-15 --> |branch-manuell-11-4-medlem-produced-behov| aap.medlem.v1
 	join-15 --> |branch-manuell-11-4-vedtak-produced-behov| aap.vedtak.v1
 	join-15 --> |branch-manuell-11-4-inntekter-produced-behov| aap.inntekter.v1
+	join-15 --> |branch-manuell-11-4-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-15 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
 	aap.manuell.11-5.v1 --> join-16
 	soker-state-store-v2 --> join-16
@@ -165,16 +181,19 @@ subgraph Vedtak
 	join-16 --> |branch-manuell-11-5-vedtak-produced-behov| aap.vedtak.v1
 	join-16 --> |branch-manuell-11-5-inntekter-produced-behov| aap.inntekter.v1
 	join-16 --> |branch-manuell-11-5-medlem-produced-behov| aap.medlem.v1
+	join-16 --> |branch-manuell-11-5-sykepengedager-produced-behov| aap.sykepengedager.v1
 	aap.manuell.11-6.v1 --> join-17
 	soker-state-store-v2 --> join-17
 	join-17 --> |branch-manuell-11-6-medlem-produced-behov| aap.medlem.v1
 	join-17 --> |branch-manuell-11-6-inntekter-produced-behov| aap.inntekter.v1
+	join-17 --> |branch-manuell-11-6-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-17 --> |branch-manuell-11-6-vedtak-produced-behov| aap.vedtak.v1
 	join-17 --> |produced-soker-med-manuell-11-6| aap.sokere.v1
 	aap.sykepengedager.v1 --> join-18
 	soker-state-store-v2 --> join-18
 	join-18 --> |branch-sykepengedager-inntekter-produced-behov| aap.inntekter.v1
 	join-18 --> |branch-sykepengedager-medlem-produced-behov| aap.medlem.v1
+	join-18 --> |branch-sykepengedager-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-18 --> |branch-sykepengedager-vedtak-produced-behov| aap.vedtak.v1
 	join-18 --> |produced-soker-med-sykepengedager| aap.sokere.v1
 	aap.inntekter.v1 --> join-19

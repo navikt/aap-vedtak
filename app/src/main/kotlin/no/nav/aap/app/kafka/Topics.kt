@@ -10,7 +10,7 @@ object Topics {
     val medlem = Topic("aap.medlem.v1", JsonSerde.jackson<MedlemKafkaDto>())
     val inntekter = Topic("aap.inntekter.v1", JsonSerde.jackson<InntekterKafkaDto>())
     val vedtak = Topic("aap.vedtak.v1", JsonSerde.jackson<IverksettVedtakKafkaDto>())
-    val sykepengedager = Topic("aap.sykepengedager.v1", JsonSerde.jackson<LøsningSykepengedagerKafkaDto>())
+    val sykepengedager = Topic("aap.sykepengedager.v1", JsonSerde.jackson<SykepengedakerKafkaDto>())
     val iverksettelseAvVedtak = Topic("aap.iverksettelse-av-vedtak.v1", JsonSerde.jackson<IverksettelseAvVedtakKafkaDto>())
 
     val manuell_11_2 = Topic("aap.manuell.11-2.v1", JsonSerde.jackson<Løsning_11_2_manuell>())
