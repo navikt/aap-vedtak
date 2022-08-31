@@ -10,6 +10,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoSøker
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.januar
 import no.nav.aap.juli
 import no.nav.aap.september
@@ -82,6 +83,19 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Ledd.LEDD_1
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+    }
+
+    @Test
+    fun `Hvis vi mottar en søknad skal behov om sykependedager opprettes`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknad = Søknad(personident, fødselsdato)
+        val søker = søknad.opprettSøker()
+        søker.håndterSøknad(søknad)
+        val behov = søknad.behov()
+
+        val behovSykependedager = behov.filterIsInstance<Behov_8_48AndreLedd>()
+        assertEquals(1, behovSykependedager.size)
     }
 
     @Test
@@ -233,10 +247,12 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        søker.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
         )
 
         val saker = søker.toDto().saker
@@ -271,12 +287,21 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
+        søker.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
         )
-        søker.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        søker.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         søker.håndterLøsning(
             LøsningParagraf_11_5(
                 løsningId = UUID.randomUUID(),
@@ -309,8 +334,22 @@ internal class SøkerComponentTest {
                 LocalDate.now()
             )
         )
-        søker.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
-        søker.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        søker.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
+        søker.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -340,12 +379,25 @@ internal class SøkerComponentTest {
             dtoSøker = søker.toDto()
         }
 
-        medSøker { håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA)
-        ) }
-        medSøker { håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true)) }
+        medSøker {
+            håndterLøsning(
+                LøsningMaskinellParagraf_11_2(
+                    UUID.randomUUID(),
+                    LocalDateTime.now(),
+                    LøsningMaskinellParagraf_11_2.ErMedlem.JA
+                )
+            )
+        }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_3(
+                    løsningId = UUID.randomUUID(),
+                    "saksbehandler",
+                    LocalDateTime.now(),
+                    true
+                )
+            )
+        }
         medSøker {
             håndterLøsning(
                 LøsningParagraf_11_5(
@@ -384,8 +436,26 @@ internal class SøkerComponentTest {
                 )
             )
         }
-        medSøker { håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true)) }
-        medSøker { håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021)) }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_29(
+                    løsningId = UUID.randomUUID(),
+                    "saksbehandler",
+                    LocalDateTime.now(),
+                    true
+                )
+            )
+        }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_19(
+                    løsningId = UUID.randomUUID(),
+                    "saksbehandler",
+                    LocalDateTime.now(),
+                    13 september 2021
+                )
+            )
+        }
         medSøker {
             håndterLøsning(
                 LøsningInntekter(
@@ -411,7 +481,14 @@ internal class SøkerComponentTest {
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
-        søker.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        søker.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         søker.håndterLøsning(
             LøsningInntekter(
                 listOf(

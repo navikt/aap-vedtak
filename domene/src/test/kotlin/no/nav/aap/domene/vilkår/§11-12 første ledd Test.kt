@@ -7,6 +7,8 @@ import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.behov.Behov_11_12FørsteLedd
+import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -93,6 +95,22 @@ internal class `§11-12 første ledd Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.SØKNAD_MOTTATT, vilkår)
+    }
+
+    @Test
+    fun `Hvis vilkår opprettes vil behov om sykependedager og varighet opprettes`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_12FørsteLedd()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val behov = søknad.behov()
+        assertEquals(2, behov.size)
+        assertEquals(1, behov.filterIsInstance<Behov_8_48AndreLedd>().size)
+        assertEquals(1, behov.filterIsInstance<Behov_11_12FørsteLedd>().size)
     }
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_12FørsteLedd) {

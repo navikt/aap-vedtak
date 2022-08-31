@@ -37,6 +37,7 @@ internal class ApiTest {
             val kvalitetssikring_11_29_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_29)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
+            val sykependedagerOutputTopic = mocks.kafka.outputTopic(Topics.sykepengedager)
             val iverksettelseAvVedtakTopic = mocks.kafka.inputTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = mocks.kafka.outputTopic(Topics.vedtak)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
@@ -46,6 +47,8 @@ internal class ApiTest {
             søknadTopic.produce(fnr) {
                 SøknadKafkaDto(fødselsdato = LocalDate.now().minusYears(40))
             }
+
+            sykependedagerOutputTopic.readAndAssert().hasValuesForPredicate("123") { it.response == null }
 
             val medlemRequest = medlemOutputTopic.readValue()
             medlemTopic.produce(fnr) {

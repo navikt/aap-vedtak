@@ -19,7 +19,7 @@ interface Behov {
     fun toDto(ident: String): DtoBehov
 }
 
-interface   Lytter {
+interface Lytter {
     fun medlem(ident: String) {}
     fun behov_8_48AndreLedd(ident: String) {}
     fun behov_11_3(ident: String) {}
