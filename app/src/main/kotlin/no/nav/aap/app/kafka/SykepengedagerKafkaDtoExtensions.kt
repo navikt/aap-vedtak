@@ -2,11 +2,11 @@ package no.nav.aap.app.kafka
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.DtoSykepengedager
-import no.nav.aap.dto.kafka.SykepengedakerKafkaDto
+import no.nav.aap.dto.kafka.SykepengedagerKafkaDto
 
-internal fun SykepengedakerKafkaDto.Response.håndter(søker: Søker) = toDto().håndter(søker)
+internal fun SykepengedagerKafkaDto.Response.håndter(søker: Søker) = toDto().håndter(søker)
 
-private fun SykepengedakerKafkaDto.Response.toDto() = DtoSykepengedager(
+private fun SykepengedagerKafkaDto.Response.toDto() = DtoSykepengedager(
     gjenståendeSykedager = gjenståendeSykedager,
     foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
     kilde = kilde

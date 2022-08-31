@@ -2,7 +2,7 @@ package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.*
 import no.nav.aap.domene.Søker
-import no.nav.aap.dto.kafka.SykepengedakerKafkaDto
+import no.nav.aap.dto.kafka.SykepengedagerKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.extension.*
@@ -27,7 +27,7 @@ internal fun StreamsBuilder.sykepengedagerStream(søkere: KTable<String, Søkere
 }
 
 private fun håndter(
-    sykepengedagerKafkaDto: SykepengedakerKafkaDto,
+    sykepengedagerKafkaDto: SykepengedagerKafkaDto,
     søkereKafkaDto: SøkereKafkaDto
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
     val søker = Søker.gjenopprett(søkereKafkaDto.toDto())

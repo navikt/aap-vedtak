@@ -4,7 +4,7 @@ import no.nav.aap.dto.DtoVedtak
 import no.nav.aap.dto.kafka.InntekterKafkaDto
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.dto.kafka.MedlemKafkaDto
-import no.nav.aap.dto.kafka.SykepengedakerKafkaDto
+import no.nav.aap.dto.kafka.SykepengedagerKafkaDto
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Behov
@@ -86,8 +86,8 @@ private class ToMedlemKafkaDto : Lytter, BehovExtractor<MedlemKafkaDto> {
         )
 }
 
-private class ToSykepengedagerKafkaDto : Lytter, BehovExtractor<SykepengedakerKafkaDto> {
-    override fun toJson(): SykepengedakerKafkaDto = SykepengedakerKafkaDto(response = null)
+private class ToSykepengedagerKafkaDto : Lytter, BehovExtractor<SykepengedagerKafkaDto> {
+    override fun toJson(): SykepengedagerKafkaDto = SykepengedagerKafkaDto(response = null)
 }
 
 private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {
