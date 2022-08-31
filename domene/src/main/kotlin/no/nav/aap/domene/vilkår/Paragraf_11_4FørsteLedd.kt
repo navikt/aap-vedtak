@@ -51,7 +51,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT
+            utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
         )
     }
 
@@ -72,7 +73,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT
+            utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
         )
     }
 
@@ -93,7 +95,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT
+            utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
         )
     }
 

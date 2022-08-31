@@ -187,6 +187,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         private val erIkkeOppfylt: Boolean,
         private val erKvalitetssikret: Boolean,
         private val erIKvalitetssikring: Boolean,
+        protected val vurdertMaskinelt: Boolean
     ) {
         enum class Tilstandsnavn {
             IKKE_VURDERT,
@@ -410,6 +411,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false,
             erKvalitetssikret = false,
             erIKvalitetssikring = false,
+            vurdertMaskinelt = false
         )
 
         internal abstract class SøknadMottatt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -418,6 +420,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false,
             erKvalitetssikret = false,
             erIKvalitetssikring = false,
+            vurdertMaskinelt = false
         )
 
         internal abstract class ManuellVurderingTrengs<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -426,6 +429,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false,
             erKvalitetssikret = false,
             erIKvalitetssikring = false,
+            vurdertMaskinelt = false
         )
 
         internal abstract class OppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -434,6 +438,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false,
             erKvalitetssikret = false,
             erIKvalitetssikring = true,
+            vurdertMaskinelt = true
         )
 
         internal abstract class OppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
@@ -443,6 +448,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 erIkkeOppfylt = false,
                 erKvalitetssikret = true,
                 erIKvalitetssikring = true,
+                vurdertMaskinelt = true
             )
 
         internal abstract class IkkeOppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -451,6 +457,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = true,
             erKvalitetssikret = false,
             erIKvalitetssikring = true,
+            vurdertMaskinelt = true
         )
 
         internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
@@ -460,6 +467,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 erIkkeOppfylt = true,
                 erKvalitetssikret = true,
                 erIKvalitetssikring = true,
+                vurdertMaskinelt = true
             )
 
         internal abstract class OppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -468,6 +476,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = false,
             erKvalitetssikret = false,
             erIKvalitetssikring = true,
+            vurdertMaskinelt = false
         )
 
         internal abstract class OppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
@@ -477,6 +486,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 erIkkeOppfylt = false,
                 erKvalitetssikret = true,
                 erIKvalitetssikring = true,
+                vurdertMaskinelt = false
             )
 
         internal abstract class IkkeOppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -485,6 +495,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             erIkkeOppfylt = true,
             erKvalitetssikret = false,
             erIKvalitetssikring = true,
+            vurdertMaskinelt = false
         )
 
         internal abstract class IkkeOppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
@@ -494,6 +505,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 erIkkeOppfylt = true,
                 erKvalitetssikret = true,
                 erIKvalitetssikring = true,
+                vurdertMaskinelt = false
             )
 
         internal abstract class IkkeRelevant<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
@@ -503,6 +515,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             //IkkeRelevant skal ikke hindre saken i å bli kvalitetssikret.
             erKvalitetssikret = true,
             erIKvalitetssikring = true,
+            vurdertMaskinelt = false
         )
     }
 

@@ -79,6 +79,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_4_ledd2_ledd3 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -112,6 +113,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_4_ledd2_ledd3 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -145,6 +147,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_4_ledd2_ledd3 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -178,6 +181,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_4_ledd2_ledd3 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -200,6 +204,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_4_ledd2_ledd3_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_4_ledd2_ledd3 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -222,6 +227,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_RELEVANT,
+            vurdertMaskinelt = vurdertMaskinelt,
         )
     }
 

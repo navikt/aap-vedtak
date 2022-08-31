@@ -33,6 +33,7 @@ private fun Vilkårsvurdering.toDto() = DtoVilkårsvurdering(
     ledd = ledd,
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
     løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() },
     løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() },
     løsning_11_2_maskinell = løsning_11_2_maskinell?.map { it.toDto() },
@@ -318,6 +319,7 @@ internal fun DtoSøker.toJson() = SøkereKafkaDto(
                             ledd = vilkår.ledd,
                             tilstand = vilkår.tilstand,
                             utfall = vilkår.utfall.name,
+                            vurdertMaskinelt = vilkår.vurdertMaskinelt,
                             løsning_medlemskap_yrkesskade_maskinell = vilkår.løsning_medlemskap_yrkesskade_maskinell?.map {
                                 LøsningMaskinellMedlemskapYrkesskade(
                                     løsningId = it.løsningId,

@@ -78,6 +78,7 @@ data class DtoVilkårsvurdering(
     val ledd: List<String>,
     val tilstand: String,
     val utfall: Utfall,
+    val vurdertMaskinelt: Boolean,
     val løsning_medlemskap_yrkesskade_maskinell: List<DtoLøsningMaskinellMedlemskapYrkesskade>? = null,
     val løsning_medlemskap_yrkesskade_manuell: List<DtoLøsningManuellMedlemskapYrkesskade>? = null,
     val løsning_11_2_maskinell: List<DtoLøsningMaskinellParagraf_11_2>? = null,

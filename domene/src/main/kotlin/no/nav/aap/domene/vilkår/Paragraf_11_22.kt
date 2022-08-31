@@ -73,6 +73,7 @@ internal class Paragraf_11_22 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_22_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -105,6 +106,7 @@ internal class Paragraf_11_22 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_22_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -126,6 +128,7 @@ internal class Paragraf_11_22 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_22_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -156,6 +159,7 @@ internal class Paragraf_11_22 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_22_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -175,6 +179,7 @@ internal class Paragraf_11_22 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_22_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )

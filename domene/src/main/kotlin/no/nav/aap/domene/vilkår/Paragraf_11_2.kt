@@ -68,7 +68,8 @@ internal class Paragraf_11_2 private constructor(
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT
+            utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
         )
     }
 
@@ -92,6 +93,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()
@@ -129,6 +131,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
         )
 
@@ -147,6 +150,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()
         )
@@ -182,6 +186,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
         )
 
@@ -200,6 +205,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()
         )
@@ -234,6 +240,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()
@@ -255,6 +262,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()
@@ -291,6 +299,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()
@@ -312,6 +321,7 @@ internal class Paragraf_11_2 private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
             løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
             kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto()

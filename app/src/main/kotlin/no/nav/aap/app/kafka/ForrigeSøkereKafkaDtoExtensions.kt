@@ -35,6 +35,7 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     ledd = ledd,
     tilstand = tilstand,
     utfall = utfall,
+    vurdertMaskinelt = "MASKINELT" in tilstand,
     løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() },
     løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() },
     løsning_11_2_maskinell = løsning_11_2_maskinell?.map { it.toDto() },

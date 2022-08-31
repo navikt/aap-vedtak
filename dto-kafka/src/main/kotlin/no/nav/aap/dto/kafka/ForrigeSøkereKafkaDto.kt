@@ -10,7 +10,7 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 6,
+    val version: Int = 7,
 ) {
 
     data class Sak(
@@ -49,37 +49,60 @@ data class ForrigeSøkereKafkaDto(
         val løsning_11_19_manuell: List<LøsningParagraf_11_19>? = null,
         val løsning_11_22_manuell: List<LøsningParagraf_11_22>? = null,
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>? = null,
+        val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskade>? = null,
+        val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2>? = null,
+        val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3>? = null,
+        val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>? = null,
+        val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5>? = null,
+        val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5Yrkesskade>? = null,
+        val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6>? = null,
+        val kvalitetssikringer_11_12_ledd1: List<KvalitetssikringParagraf_11_12FørsteLedd>? = null,
+        val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19>? = null,
+        val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22>? = null,
+        val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29>? = null,
     )
 
-    data class LøsningMaskinellMedlemskapYrkesskade(val erMedlem: String)
+    data class LøsningMaskinellMedlemskapYrkesskade(
+        val løsningId: UUID,
+        val erMedlem: String
+    )
 
     data class LøsningManuellMedlemskapYrkesskade(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erMedlem: String
     )
 
-    data class LøsningMaskinellParagraf_11_2(val erMedlem: String)
+    data class LøsningMaskinellParagraf_11_2(
+        val løsningId: UUID,
+        val tidspunktForVurdering: LocalDateTime,
+        val erMedlem: String
+    )
 
     data class LøsningManuellParagraf_11_2(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erMedlem: String
     )
 
     data class LøsningParagraf_11_3(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
     )
 
     data class LøsningParagraf_11_4_ledd2_ledd3(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
     )
 
     data class LøsningParagraf_11_5(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val kravOmNedsattArbeidsevneErOppfylt: Boolean,
@@ -87,6 +110,7 @@ data class ForrigeSøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_5_yrkesskade(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
@@ -94,6 +118,7 @@ data class ForrigeSøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_6(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val harBehovForBehandling: Boolean,
@@ -102,21 +127,24 @@ data class ForrigeSøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_12_ledd1(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val bestemmesAv: String,
         val unntak: String,
         val unntaksbegrunnelse: String,
-        val manueltSattVirkningsdato: LocalDate
+        val manueltSattVirkningsdato: LocalDate?,
     )
 
     data class LøsningParagraf_11_19(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val beregningsdato: LocalDate
     )
 
     data class LøsningParagraf_11_22(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean,
@@ -126,9 +154,109 @@ data class ForrigeSøkereKafkaDto(
     )
 
     data class LøsningParagraf_11_29(
+        val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
+    )
+
+    data class KvalitetssikringMedlemskapYrkesskade(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_2(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_3(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_5(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_5Yrkesskade(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_6(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_12FørsteLedd(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_22(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_19(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
+    )
+
+    data class KvalitetssikringParagraf_11_29(
+        val kvalitetssikringId: UUID,
+        val løsningId: UUID,
+        val kvalitetssikretAv: String,
+        val tidspunktForKvalitetssikring: LocalDateTime,
+        val erGodkjent: Boolean,
+        val begrunnelse: String
     )
 
     data class Vedtak(

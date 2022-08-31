@@ -69,6 +69,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -108,6 +109,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
@@ -136,6 +138,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
