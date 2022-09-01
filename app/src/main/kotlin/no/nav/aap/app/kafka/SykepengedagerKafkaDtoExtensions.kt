@@ -9,5 +9,5 @@ internal fun SykepengedagerKafkaDto.Response.håndter(søker: Søker) = toDto().
 private fun SykepengedagerKafkaDto.Response.toDto() = DtoSykepengedager(
     gjenståendeSykedager = gjenståendeSykedager,
     foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
-    kilde = kilde
+    kilde = kilde.name
 )
