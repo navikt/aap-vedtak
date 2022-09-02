@@ -17,28 +17,28 @@ enum class Utfall {
     OPPFYLT, IKKE_OPPFYLT, IKKE_VURDERT, IKKE_RELEVANT
 }
 
-data class DtoSøker(
+data class SøkerModellApi(
     val personident: String,
     val fødselsdato: LocalDate,
-    val saker: List<DtoSak>
+    val saker: List<SakModellApi>
 )
 
-data class DtoSak(
+data class SakModellApi(
     val saksid: UUID,
     val tilstand: String,
-    val sakstyper: List<DtoSakstype>,
+    val sakstyper: List<SakstypeModellApi>,
     val vurderingsdato: LocalDate,
     val søknadstidspunkt: LocalDateTime,
-    val vedtak: DtoVedtak?
+    val vedtak: VedtakModellApi?
 )
 
-data class DtoSakstype(
+data class SakstypeModellApi(
     val type: String,
     val aktiv: Boolean,
-    val vilkårsvurderinger: List<DtoVilkårsvurdering>
+    val vilkårsvurderinger: List<VilkårsvurderingModellApi>
 )
 
-data class DtoIverksettelseAvVedtak(
+data class IverksettelseAvVedtakModellApi(
     val iverksattAv: String,
 ) {
     fun håndter(søker: Søker): List<Behov> {
@@ -52,7 +52,7 @@ data class DtoIverksettelseAvVedtak(
     )
 }
 
-data class DtoSykepengedager(
+data class SykepengedagerModellApi(
     val gjenståendeSykedager: Int,
     val foreløpigBeregnetSluttPåSykepenger: LocalDate,
     val kilde: String,
@@ -71,7 +71,7 @@ data class DtoSykepengedager(
     )
 }
 
-data class DtoVilkårsvurdering(
+data class VilkårsvurderingModellApi(
     val vilkårsvurderingsid: UUID,
     val vurdertAv: String?,
     val kvalitetssikretAv: String?,
@@ -80,33 +80,33 @@ data class DtoVilkårsvurdering(
     val tilstand: String,
     val utfall: Utfall,
     val vurdertMaskinelt: Boolean,
-    val løsning_medlemskap_yrkesskade_maskinell: List<DtoLøsningMaskinellMedlemskapYrkesskade>? = null,
-    val løsning_medlemskap_yrkesskade_manuell: List<DtoLøsningManuellMedlemskapYrkesskade>? = null,
-    val løsning_11_2_maskinell: List<DtoLøsningMaskinellParagraf_11_2>? = null,
-    val løsning_11_2_manuell: List<DtoLøsningParagraf_11_2>? = null,
-    val løsning_11_3_manuell: List<DtoLøsningParagraf_11_3>? = null,
-    val løsning_11_4_ledd2_ledd3_manuell: List<DtoLøsningParagraf_11_4AndreOgTredjeLedd>? = null,
-    val løsning_11_5_manuell: List<DtoLøsningParagraf_11_5>? = null,
-    val løsning_11_5_yrkesskade_manuell: List<DtoLøsningParagraf_11_5Yrkesskade>? = null,
-    val løsning_11_6_manuell: List<DtoLøsningParagraf_11_6>? = null,
-    val løsning_11_12_ledd1_manuell: List<DtoLøsningParagraf_11_12FørsteLedd>? = null,
-    val løsning_11_19_manuell: List<DtoLøsningParagraf_11_19>? = null,
-    val løsning_11_22_manuell: List<DtoLøsningParagraf_11_22>? = null,
-    val løsning_11_29_manuell: List<DtoLøsningParagraf_11_29>? = null,
-    val kvalitetssikringer_medlemskap_yrkesskade: List<DtoKvalitetssikringMedlemskapYrkesskade>? = null,
-    val kvalitetssikringer_11_2: List<DtoKvalitetssikringParagraf_11_2>? = null,
-    val kvalitetssikringer_11_3: List<DtoKvalitetssikringParagraf_11_3>? = null,
-    val kvalitetssikringer_11_4_ledd2_ledd3: List<DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd>? = null,
-    val kvalitetssikringer_11_5: List<DtoKvalitetssikringParagraf_11_5>? = null,
-    val kvalitetssikringer_11_5_yrkesskade: List<DtoKvalitetssikringParagraf_11_5Yrkesskade>? = null,
-    val kvalitetssikringer_11_6: List<DtoKvalitetssikringParagraf_11_6>? = null,
-    val kvalitetssikringer_11_12_ledd1: List<DtoKvalitetssikringParagraf_11_12FørsteLedd>? = null,
-    val kvalitetssikringer_11_19: List<DtoKvalitetssikringParagraf_11_19>? = null,
-    val kvalitetssikringer_11_22: List<DtoKvalitetssikringParagraf_11_22>? = null,
-    val kvalitetssikringer_11_29: List<DtoKvalitetssikringParagraf_11_29>? = null,
+    val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskadeModellApi>? = null,
+    val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskadeModellApi>? = null,
+    val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2ModellApi>? = null,
+    val løsning_11_2_manuell: List<LøsningParagraf_11_2ModellApi>? = null,
+    val løsning_11_3_manuell: List<LøsningParagraf_11_3ModellApi>? = null,
+    val løsning_11_4_ledd2_ledd3_manuell: List<LøsningParagraf_11_4AndreOgTredjeLeddModellApi>? = null,
+    val løsning_11_5_manuell: List<LøsningParagraf_11_5ModellApi>? = null,
+    val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5YrkesskadeModellApi>? = null,
+    val løsning_11_6_manuell: List<LøsningParagraf_11_6ModellApi>? = null,
+    val løsning_11_12_ledd1_manuell: List<LøsningParagraf_11_12FørsteLeddModellApi>? = null,
+    val løsning_11_19_manuell: List<LøsningParagraf_11_19ModellApi>? = null,
+    val løsning_11_22_manuell: List<LøsningParagraf_11_22ModellApi>? = null,
+    val løsning_11_29_manuell: List<LøsningParagraf_11_29ModellApi>? = null,
+    val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskadeModellApi>? = null,
+    val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2ModellApi>? = null,
+    val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3ModellApi>? = null,
+    val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi>? = null,
+    val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5ModellApi>? = null,
+    val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5YrkesskadeModellApi>? = null,
+    val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6ModellApi>? = null,
+    val kvalitetssikringer_11_12_ledd1: List<KvalitetssikringParagraf_11_12FørsteLeddModellApi>? = null,
+    val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19ModellApi>? = null,
+    val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22ModellApi>? = null,
+    val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29ModellApi>? = null,
 )
 
-data class DtoLøsningMaskinellMedlemskapYrkesskade(
+data class LøsningMaskinellMedlemskapYrkesskadeModellApi(
     val løsningId: UUID,
     val erMedlem: String
 ) {
@@ -119,7 +119,7 @@ data class DtoLøsningMaskinellMedlemskapYrkesskade(
     private fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(løsningId, enumValueOf(erMedlem.uppercase()))
 }
 
-data class DtoLøsningManuellMedlemskapYrkesskade(
+data class LøsningManuellMedlemskapYrkesskadeModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -140,7 +140,7 @@ data class DtoLøsningManuellMedlemskapYrkesskade(
         )
 }
 
-data class DtoKvalitetssikringMedlemskapYrkesskade(
+data class KvalitetssikringMedlemskapYrkesskadeModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -165,7 +165,7 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
     )
 }
 
-data class DtoLøsningParagraf_11_2(
+data class LøsningParagraf_11_2ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -198,7 +198,7 @@ data class DtoLøsningParagraf_11_2(
     )
 }
 
-data class DtoKvalitetssikringParagraf_11_2(
+data class KvalitetssikringParagraf_11_2ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -238,7 +238,7 @@ data class DtoKvalitetssikringParagraf_11_2(
     )
 }
 
-data class DtoLøsningMaskinellParagraf_11_2(
+data class LøsningMaskinellParagraf_11_2ModellApi(
     val løsningId: UUID,
     val tidspunktForVurdering: LocalDateTime,
     val erMedlem: String
@@ -262,7 +262,7 @@ data class DtoLøsningMaskinellParagraf_11_2(
         LøsningMaskinellParagraf_11_2(løsningId, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
 }
 
-data class DtoLøsningParagraf_11_3(
+data class LøsningParagraf_11_3ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -289,7 +289,7 @@ data class DtoLøsningParagraf_11_3(
     private fun toLøsning() = LøsningParagraf_11_3(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class DtoKvalitetssikringParagraf_11_3(
+data class KvalitetssikringParagraf_11_3ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -329,7 +329,7 @@ data class DtoKvalitetssikringParagraf_11_3(
     )
 }
 
-data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+data class LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -357,7 +357,7 @@ data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
         LøsningParagraf_11_4AndreOgTredjeLedd(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+data class KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -397,7 +397,7 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     )
 }
 
-data class DtoLøsningParagraf_11_5(
+data class LøsningParagraf_11_5ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -435,7 +435,7 @@ data class DtoLøsningParagraf_11_5(
     )
 }
 
-data class DtoKvalitetssikringParagraf_11_5(
+data class KvalitetssikringParagraf_11_5ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -475,7 +475,7 @@ data class DtoKvalitetssikringParagraf_11_5(
     )
 }
 
-data class DtoLøsningParagraf_11_5Yrkesskade(
+data class LøsningParagraf_11_5YrkesskadeModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -497,7 +497,7 @@ data class DtoLøsningParagraf_11_5Yrkesskade(
     )
 }
 
-data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
+data class KvalitetssikringParagraf_11_5YrkesskadeModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -522,7 +522,7 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
     )
 }
 
-data class DtoLøsningParagraf_11_6(
+data class LøsningParagraf_11_6ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -562,7 +562,7 @@ data class DtoLøsningParagraf_11_6(
     )
 }
 
-data class DtoKvalitetssikringParagraf_11_6(
+data class KvalitetssikringParagraf_11_6ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -602,7 +602,7 @@ data class DtoKvalitetssikringParagraf_11_6(
     )
 }
 
-data class DtoLøsningParagraf_11_12FørsteLedd(
+data class LøsningParagraf_11_12FørsteLeddModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -654,7 +654,7 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
     )
 }
 
-data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
+data class KvalitetssikringParagraf_11_12FørsteLeddModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -694,7 +694,7 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
     )
 }
 
-data class DtoLøsningParagraf_11_22(
+data class LøsningParagraf_11_22ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -720,7 +720,7 @@ data class DtoLøsningParagraf_11_22(
     )
 }
 
-data class DtoKvalitetssikringParagraf_11_22(
+data class KvalitetssikringParagraf_11_22ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -745,7 +745,7 @@ data class DtoKvalitetssikringParagraf_11_22(
     )
 }
 
-data class DtoLøsningParagraf_11_29(
+data class LøsningParagraf_11_29ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -772,7 +772,7 @@ data class DtoLøsningParagraf_11_29(
     private fun toLøsning() = LøsningParagraf_11_29(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class DtoKvalitetssikringParagraf_11_29(
+data class KvalitetssikringParagraf_11_29ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -812,12 +812,7 @@ data class DtoKvalitetssikringParagraf_11_29(
     )
 }
 
-data class DtoVurderingAvBeregningsdato(
-    val tilstand: String,
-    val løsningVurderingAvBeregningsdato: List<DtoLøsningParagraf_11_19>?
-)
-
-data class DtoLøsningParagraf_11_19(
+data class LøsningParagraf_11_19ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -844,7 +839,7 @@ data class DtoLøsningParagraf_11_19(
     private fun toLøsning() = LøsningParagraf_11_19(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
 }
 
-data class DtoKvalitetssikringParagraf_11_19(
+data class KvalitetssikringParagraf_11_19ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -884,29 +879,29 @@ data class DtoKvalitetssikringParagraf_11_19(
     )
 }
 
-data class DtoVedtak(
+data class VedtakModellApi(
     val vedtaksid: UUID,
     val innvilget: Boolean,
-    val inntektsgrunnlag: DtoInntektsgrunnlag,
+    val inntektsgrunnlag: InntektsgrunnlagModellApi,
     val vedtaksdato: LocalDate,
     val virkningsdato: LocalDate
 )
 
-data class DtoInntektsgrunnlag(
+data class InntektsgrunnlagModellApi(
     val beregningsdato: LocalDate,
-    val inntekterSiste3Kalenderår: List<DtoInntekterForBeregning>,
-    val yrkesskade: DtoYrkesskade?,
+    val inntekterSiste3Kalenderår: List<InntekterForBeregningModellApi>,
+    val yrkesskade: YrkesskadeModellApi?,
     val fødselsdato: LocalDate,
     val sisteKalenderår: Year,
     val grunnlagsfaktor: Double
 )
 
-data class DtoInntekterForBeregning(
-    val inntekter: List<DtoInntekt>,
-    val inntektsgrunnlagForÅr: DtoInntektsgrunnlagForÅr
+data class InntekterForBeregningModellApi(
+    val inntekter: List<InntektModellApi>,
+    val inntektsgrunnlagForÅr: InntektsgrunnlagForÅrModellApi
 )
 
-data class DtoInntektsgrunnlagForÅr(
+data class InntektsgrunnlagForÅrModellApi(
     val år: Year,
     val beløpFørJustering: Double,
     val beløpJustertFor6G: Double,
@@ -914,19 +909,19 @@ data class DtoInntektsgrunnlagForÅr(
     val grunnlagsfaktor: Double
 )
 
-data class DtoYrkesskade(
+data class YrkesskadeModellApi(
     val gradAvNedsattArbeidsevneKnyttetTilYrkesskade: Double,
-    val inntektsgrunnlag: DtoInntektsgrunnlagForÅr
+    val inntektsgrunnlag: InntektsgrunnlagForÅrModellApi
 )
 
-data class DtoInntekt(
+data class InntektModellApi(
     val arbeidsgiver: String,
     val inntekstmåned: YearMonth,
     val beløp: Double
 )
 
-data class DtoInntekter(
-    val inntekter: List<DtoInntekt>
+data class InntekterModellApi(
+    val inntekter: List<InntektModellApi>
 ) {
     fun håndter(søker: Søker) {
         søker.håndterLøsning(LøsningInntekter(inntekter.map {

@@ -7,8 +7,8 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoSøker
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.SøkerModellApi
+import no.nav.aap.dto.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.januar
@@ -371,12 +371,12 @@ internal class SøkerComponentTest {
         val fødselsdato = Fødselsdato(17 juli 1995)
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
-        var dtoSøker: DtoSøker = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
+        var søkerModellApi: SøkerModellApi = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
 
         fun medSøker(block: Søker.() -> Unit) {
-            val søker = Søker.gjenopprett(dtoSøker)
+            val søker = Søker.gjenopprett(søkerModellApi)
             block(søker)
-            dtoSøker = søker.toDto()
+            søkerModellApi = søker.toDto()
         }
 
         medSøker {
@@ -469,8 +469,8 @@ internal class SøkerComponentTest {
         }
         medSøker { }//Map frem og tilbake enda en gang for å sjekke at vedtak også blir mappet korrekt
 
-        assertEquals("AVVENTER_KVALITETSSIKRING", dtoSøker.saker.single().tilstand)
-        assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
+        assertEquals("AVVENTER_KVALITETSSIKRING", søkerModellApi.saker.single().tilstand)
+        assertEquals(5.078089, søkerModellApi.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
     }
 
     @Test
@@ -507,7 +507,7 @@ internal class SøkerComponentTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<DtoVilkårsvurdering>,
+        vilkårsvurderinger: List<VilkårsvurderingModellApi>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf
     ) {
@@ -515,7 +515,7 @@ internal class SøkerComponentTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<DtoVilkårsvurdering>,
+        vilkårsvurderinger: List<VilkårsvurderingModellApi>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: Vilkårsvurdering.Ledd
@@ -524,7 +524,7 @@ internal class SøkerComponentTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<DtoVilkårsvurdering>,
+        vilkårsvurderinger: List<VilkårsvurderingModellApi>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
@@ -532,10 +532,10 @@ internal class SøkerComponentTest {
         assertEquals(tilstand, vilkårsvurderinger.single(paragraf, ledd).tilstand)
     }
 
-    private fun List<DtoVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
+    private fun List<VilkårsvurderingModellApi>.single(paragraf: Vilkårsvurdering.Paragraf) =
         single { it.paragraf == paragraf.name }
 
-    private fun List<DtoVilkårsvurdering>.single(
+    private fun List<VilkårsvurderingModellApi>.single(
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
     ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }

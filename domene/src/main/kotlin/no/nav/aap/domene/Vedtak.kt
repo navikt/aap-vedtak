@@ -1,7 +1,7 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
-import no.nav.aap.dto.DtoVedtak
+import no.nav.aap.dto.VedtakModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -12,7 +12,7 @@ internal class Vedtak(
     private val vedtaksdato: LocalDate,
     private val virkningsdato: LocalDate
 ) {
-    internal fun toDto() = DtoVedtak(
+    internal fun toDto() = VedtakModellApi(
         vedtaksid = vedtaksid,
         innvilget = innvilget,
         inntektsgrunnlag = inntektsgrunnlag.toDto(),
@@ -21,12 +21,12 @@ internal class Vedtak(
     )
 
     internal companion object {
-        internal fun gjenopprett(dtoVedtak: DtoVedtak) = Vedtak(
-            vedtaksid = dtoVedtak.vedtaksid,
-            innvilget = dtoVedtak.innvilget,
-            inntektsgrunnlag = Inntektsgrunnlag.gjenopprett(dtoVedtak.inntektsgrunnlag),
-            vedtaksdato = dtoVedtak.vedtaksdato,
-            virkningsdato = dtoVedtak.virkningsdato
+        internal fun gjenopprett(vedtakModellApi: VedtakModellApi) = Vedtak(
+            vedtaksid = vedtakModellApi.vedtaksid,
+            innvilget = vedtakModellApi.innvilget,
+            inntektsgrunnlag = Inntektsgrunnlag.gjenopprett(vedtakModellApi.inntektsgrunnlag),
+            vedtaksdato = vedtakModellApi.vedtaksdato,
+            virkningsdato = vedtakModellApi.virkningsdato
         )
     }
 

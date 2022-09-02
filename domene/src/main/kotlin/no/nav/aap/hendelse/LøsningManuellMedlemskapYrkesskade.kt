@@ -1,7 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoKvalitetssikringMedlemskapYrkesskade
-import no.nav.aap.dto.DtoLøsningManuellMedlemskapYrkesskade
+import no.nav.aap.dto.KvalitetssikringMedlemskapYrkesskadeModellApi
+import no.nav.aap.dto.LøsningManuellMedlemskapYrkesskadeModellApi
 import java.time.LocalDateTime
 import java.util.*
 
@@ -23,7 +23,7 @@ internal class LøsningManuellMedlemskapYrkesskade(
     internal fun vurdertAv() = vurdertAv
     internal fun erMedlem() = erMedlem == ErMedlem.JA
     internal fun toDto() =
-        DtoLøsningManuellMedlemskapYrkesskade(løsningId, vurdertAv, tidspunktForVurdering, erMedlem.name)
+        LøsningManuellMedlemskapYrkesskadeModellApi(løsningId, vurdertAv, tidspunktForVurdering, erMedlem.name)
 }
 
 class KvalitetssikringMedlemskapYrkesskade(
@@ -42,7 +42,7 @@ class KvalitetssikringMedlemskapYrkesskade(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringMedlemskapYrkesskade(
+    internal fun toDto() = KvalitetssikringMedlemskapYrkesskadeModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

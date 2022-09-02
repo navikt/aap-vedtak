@@ -4,13 +4,13 @@ import no.nav.aap.dto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto.*
 
-internal fun SøkereKafkaDto.toDto() = DtoSøker(
+internal fun SøkereKafkaDto.toDto() = SøkerModellApi(
     personident = personident,
     fødselsdato = fødselsdato,
     saker = saker.map(Sak::toDto),
 )
 
-private fun Sak.toDto() = DtoSak(
+private fun Sak.toDto() = SakModellApi(
     saksid = saksid,
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
@@ -19,13 +19,13 @@ private fun Sak.toDto() = DtoSak(
     vedtak = vedtak?.toDto()
 )
 
-private fun Sakstype.toDto() = DtoSakstype(
+private fun Sakstype.toDto() = SakstypeModellApi(
     type = type,
     aktiv = aktiv,
     vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto)
 )
 
-private fun Vilkårsvurdering.toDto() = DtoVilkårsvurdering(
+private fun Vilkårsvurdering.toDto() = VilkårsvurderingModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = godkjentAv,
@@ -60,46 +60,46 @@ private fun Vilkårsvurdering.toDto() = DtoVilkårsvurdering(
     kvalitetssikringer_11_29 = kvalitetssikringer_11_29?.map { it.toDto() },
 )
 
-private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = DtoLøsningMaskinellMedlemskapYrkesskade(
+private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = LøsningMaskinellMedlemskapYrkesskadeModellApi(
     løsningId = løsningId,
     erMedlem = erMedlem
 )
 
-private fun LøsningManuellMedlemskapYrkesskade.toDto() = DtoLøsningManuellMedlemskapYrkesskade(
+private fun LøsningManuellMedlemskapYrkesskade.toDto() = LøsningManuellMedlemskapYrkesskadeModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningMaskinellParagraf_11_2.toDto() = DtoLøsningMaskinellParagraf_11_2(
+private fun LøsningMaskinellParagraf_11_2.toDto() = LøsningMaskinellParagraf_11_2ModellApi(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningManuellParagraf_11_2.toDto() = DtoLøsningParagraf_11_2(
+private fun LøsningManuellParagraf_11_2.toDto() = LøsningParagraf_11_2ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningParagraf_11_3.toDto() = DtoLøsningParagraf_11_3(
-    løsningId = løsningId,
-    vurdertAv = vurdertAv,
-    tidspunktForVurdering = tidspunktForVurdering,
-    erOppfylt = erOppfylt
-)
-
-private fun LøsningParagraf_11_4_ledd2_ledd3.toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+private fun LøsningParagraf_11_3.toDto() = LøsningParagraf_11_3ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun LøsningParagraf_11_5.toDto() = DtoLøsningParagraf_11_5(
+private fun LøsningParagraf_11_4_ledd2_ledd3.toDto() = LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
+    løsningId = løsningId,
+    vurdertAv = vurdertAv,
+    tidspunktForVurdering = tidspunktForVurdering,
+    erOppfylt = erOppfylt
+)
+
+private fun LøsningParagraf_11_5.toDto() = LøsningParagraf_11_5ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -107,7 +107,7 @@ private fun LøsningParagraf_11_5.toDto() = DtoLøsningParagraf_11_5(
     nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
 )
 
-private fun LøsningParagraf_11_5_yrkesskade.toDto() = DtoLøsningParagraf_11_5Yrkesskade(
+private fun LøsningParagraf_11_5_yrkesskade.toDto() = LøsningParagraf_11_5YrkesskadeModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -115,7 +115,7 @@ private fun LøsningParagraf_11_5_yrkesskade.toDto() = DtoLøsningParagraf_11_5Y
     arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent,
 )
 
-private fun LøsningParagraf_11_6.toDto() = DtoLøsningParagraf_11_6(
+private fun LøsningParagraf_11_6.toDto() = LøsningParagraf_11_6ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -124,7 +124,7 @@ private fun LøsningParagraf_11_6.toDto() = DtoLøsningParagraf_11_6(
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun LøsningParagraf_11_12_ledd1.toDto() = DtoLøsningParagraf_11_12FørsteLedd(
+private fun LøsningParagraf_11_12_ledd1.toDto() = LøsningParagraf_11_12FørsteLeddModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -134,14 +134,14 @@ private fun LøsningParagraf_11_12_ledd1.toDto() = DtoLøsningParagraf_11_12Før
     manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
-private fun LøsningParagraf_11_19.toDto() = DtoLøsningParagraf_11_19(
+private fun LøsningParagraf_11_19.toDto() = LøsningParagraf_11_19ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     beregningsdato = beregningsdato
 )
 
-private fun LøsningParagraf_11_22.toDto() = DtoLøsningParagraf_11_22(
+private fun LøsningParagraf_11_22.toDto() = LøsningParagraf_11_22ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -151,14 +151,14 @@ private fun LøsningParagraf_11_22.toDto() = DtoLøsningParagraf_11_22(
     antattÅrligArbeidsinntekt = antattÅrligArbeidsinntekt,
 )
 
-private fun LøsningParagraf_11_29.toDto() = DtoLøsningParagraf_11_29(
+private fun LøsningParagraf_11_29.toDto() = LøsningParagraf_11_29ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun KvalitetssikringMedlemskapYrkesskade.toDto() = DtoKvalitetssikringMedlemskapYrkesskade(
+private fun KvalitetssikringMedlemskapYrkesskade.toDto() = KvalitetssikringMedlemskapYrkesskadeModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -167,7 +167,7 @@ private fun KvalitetssikringMedlemskapYrkesskade.toDto() = DtoKvalitetssikringMe
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_2.toDto() = DtoKvalitetssikringParagraf_11_2(
+private fun KvalitetssikringParagraf_11_2.toDto() = KvalitetssikringParagraf_11_2ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -176,7 +176,7 @@ private fun KvalitetssikringParagraf_11_2.toDto() = DtoKvalitetssikringParagraf_
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_3.toDto() = DtoKvalitetssikringParagraf_11_3(
+private fun KvalitetssikringParagraf_11_3.toDto() = KvalitetssikringParagraf_11_3ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -185,7 +185,7 @@ private fun KvalitetssikringParagraf_11_3.toDto() = DtoKvalitetssikringParagraf_
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -194,7 +194,7 @@ private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() = DtoKvalitet
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_5.toDto() = DtoKvalitetssikringParagraf_11_5(
+private fun KvalitetssikringParagraf_11_5.toDto() = KvalitetssikringParagraf_11_5ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -203,7 +203,7 @@ private fun KvalitetssikringParagraf_11_5.toDto() = DtoKvalitetssikringParagraf_
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = DtoKvalitetssikringParagraf_11_5Yrkesskade(
+private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = KvalitetssikringParagraf_11_5YrkesskadeModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -212,7 +212,7 @@ private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = DtoKvalitetssikrin
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_6.toDto() = DtoKvalitetssikringParagraf_11_6(
+private fun KvalitetssikringParagraf_11_6.toDto() = KvalitetssikringParagraf_11_6ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -221,7 +221,7 @@ private fun KvalitetssikringParagraf_11_6.toDto() = DtoKvalitetssikringParagraf_
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_12FørsteLedd.toDto() = DtoKvalitetssikringParagraf_11_12FørsteLedd(
+private fun KvalitetssikringParagraf_11_12FørsteLedd.toDto() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -230,7 +230,7 @@ private fun KvalitetssikringParagraf_11_12FørsteLedd.toDto() = DtoKvalitetssikr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_19.toDto() = DtoKvalitetssikringParagraf_11_19(
+private fun KvalitetssikringParagraf_11_19.toDto() = KvalitetssikringParagraf_11_19ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -239,7 +239,7 @@ private fun KvalitetssikringParagraf_11_19.toDto() = DtoKvalitetssikringParagraf
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_22.toDto() = DtoKvalitetssikringParagraf_11_22(
+private fun KvalitetssikringParagraf_11_22.toDto() = KvalitetssikringParagraf_11_22ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -248,7 +248,7 @@ private fun KvalitetssikringParagraf_11_22.toDto() = DtoKvalitetssikringParagraf
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_29.toDto() = DtoKvalitetssikringParagraf_11_29(
+private fun KvalitetssikringParagraf_11_29.toDto() = KvalitetssikringParagraf_11_29ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -258,7 +258,7 @@ private fun KvalitetssikringParagraf_11_29.toDto() = DtoKvalitetssikringParagraf
 )
 
 
-private fun Vedtak.toDto() = DtoVedtak(
+private fun Vedtak.toDto() = VedtakModellApi(
     vedtaksid = vedtaksid,
     innvilget = innvilget,
     inntektsgrunnlag = inntektsgrunnlag.toDto(),
@@ -266,7 +266,7 @@ private fun Vedtak.toDto() = DtoVedtak(
     virkningsdato = virkningsdato,
 )
 
-private fun Inntektsgrunnlag.toDto() = DtoInntektsgrunnlag(
+private fun Inntektsgrunnlag.toDto() = InntektsgrunnlagModellApi(
     beregningsdato = beregningsdato,
     inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.map { it.toDto() },
     yrkesskade = yrkesskade?.toDto(),
@@ -275,18 +275,18 @@ private fun Inntektsgrunnlag.toDto() = DtoInntektsgrunnlag(
     grunnlagsfaktor = grunnlagsfaktor,
 )
 
-private fun InntekterForBeregning.toDto() = DtoInntekterForBeregning(
+private fun InntekterForBeregning.toDto() = InntekterForBeregningModellApi(
     inntekter = inntekter.map { it.toDto() },
     inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toDto(),
 )
 
-private fun Inntekt.toDto() = DtoInntekt(
+private fun Inntekt.toDto() = InntektModellApi(
     arbeidsgiver = arbeidsgiver,
     inntekstmåned = inntekstmåned,
     beløp = beløp,
 )
 
-private fun InntektsgrunnlagForÅr.toDto() = DtoInntektsgrunnlagForÅr(
+private fun InntektsgrunnlagForÅr.toDto() = InntektsgrunnlagForÅrModellApi(
     år = år,
     beløpFørJustering = beløpFørJustering,
     beløpJustertFor6G = beløpJustertFor6G,
@@ -294,12 +294,12 @@ private fun InntektsgrunnlagForÅr.toDto() = DtoInntektsgrunnlagForÅr(
     grunnlagsfaktor = grunnlagsfaktor,
 )
 
-private fun Yrkesskade.toDto() = DtoYrkesskade(
+private fun Yrkesskade.toDto() = YrkesskadeModellApi(
     gradAvNedsattArbeidsevneKnyttetTilYrkesskade = gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
     inntektsgrunnlag = inntektsgrunnlag.toDto(),
 )
 
-internal fun DtoSøker.toJson() = SøkereKafkaDto(
+internal fun SøkerModellApi.toJson() = SøkereKafkaDto(
     personident = personident,
     fødselsdato = fødselsdato,
     saker = saker.map { sak ->

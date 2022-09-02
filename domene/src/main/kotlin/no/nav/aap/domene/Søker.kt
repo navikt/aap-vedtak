@@ -4,7 +4,7 @@ import no.nav.aap.domene.Sak.Companion.toDto
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoSøker
+import no.nav.aap.dto.SøkerModellApi
 import no.nav.aap.hendelse.*
 
 class Søker private constructor(
@@ -40,14 +40,14 @@ class Søker private constructor(
         saker.forEach { it.håndterIverksettelse(iverksettelseAvVedtak) }
     }
 
-    fun toDto() = DtoSøker(
+    fun toDto() = SøkerModellApi(
         personident = personident.toDto(),
         fødselsdato = fødselsdato.toDto(),
         saker = saker.toDto()
     )
 
     companion object {
-        fun gjenopprett(søker: DtoSøker): Søker = Søker(
+        fun gjenopprett(søker: SøkerModellApi): Søker = Søker(
             personident = Personident(søker.personident),
             fødselsdato = Fødselsdato(søker.fødselsdato),
             saker = søker.saker.map(Sak::gjenopprett).toMutableList(),

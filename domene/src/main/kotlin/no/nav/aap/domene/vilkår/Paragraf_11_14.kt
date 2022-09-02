@@ -1,7 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.VilkårsvurderingModellApi
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
@@ -40,7 +40,7 @@ internal class Paragraf_11_14 private constructor(
             vilkårsvurdering.vurderErStudent(søknad, søknad.erStudent())
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_14): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = null,
             kvalitetssikretAv = null,
@@ -53,7 +53,7 @@ internal class Paragraf_11_14 private constructor(
     }
 
     object Oppfylt : Tilstand.OppfyltMaskinelt<Paragraf_11_14>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_14): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
             kvalitetssikretAv = null,
@@ -66,7 +66,7 @@ internal class Paragraf_11_14 private constructor(
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltMaskinelt<Paragraf_11_14>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_14): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
             kvalitetssikretAv = null,

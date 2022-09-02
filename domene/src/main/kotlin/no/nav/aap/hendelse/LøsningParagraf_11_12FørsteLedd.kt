@@ -1,8 +1,8 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_12FørsteLedd
-import no.nav.aap.dto.DtoLøsningParagraf_11_12FørsteLedd
+import no.nav.aap.dto.KvalitetssikringParagraf_11_12FørsteLeddModellApi
+import no.nav.aap.dto.LøsningParagraf_11_12FørsteLeddModellApi
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -46,7 +46,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
     internal fun bestemmesAv() = bestemmesAv
     internal fun virkningsdato() = manueltSattVirkningsdato
 
-    private fun toDto() = DtoLøsningParagraf_11_12FørsteLedd(
+    private fun toDto() = LøsningParagraf_11_12FørsteLeddModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -73,7 +73,7 @@ class KvalitetssikringParagraf_11_12FørsteLedd(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_12FørsteLedd(
+    internal fun toDto() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

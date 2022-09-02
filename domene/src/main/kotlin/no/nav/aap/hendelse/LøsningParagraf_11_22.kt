@@ -4,8 +4,8 @@ import no.nav.aap.domene.beregning.Beløp
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr
 import no.nav.aap.domene.beregning.Yrkesskade
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_22
-import no.nav.aap.dto.DtoLøsningParagraf_11_22
+import no.nav.aap.dto.KvalitetssikringParagraf_11_22ModellApi
+import no.nav.aap.dto.LøsningParagraf_11_22ModellApi
 import java.time.LocalDateTime
 import java.time.Year
 import java.util.*
@@ -41,7 +41,7 @@ internal class LøsningParagraf_11_22(
 
     internal fun erOppfylt() = erOppfylt
 
-    internal fun toDto() = DtoLøsningParagraf_11_22(
+    internal fun toDto() = LøsningParagraf_11_22ModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -67,7 +67,7 @@ class KvalitetssikringParagraf_11_22(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_22(
+    internal fun toDto() = KvalitetssikringParagraf_11_22ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

@@ -1,8 +1,8 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.domene.vilkår.Paragraf_11_5
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_5
-import no.nav.aap.dto.DtoLøsningParagraf_11_5
+import no.nav.aap.dto.KvalitetssikringParagraf_11_5ModellApi
+import no.nav.aap.dto.LøsningParagraf_11_5ModellApi
 import java.time.LocalDateTime
 import java.util.*
 
@@ -19,7 +19,7 @@ internal class LøsningParagraf_11_5(
 
         internal fun erOppfylt() = kravOmNedsattArbeidsevneErOppfylt && nedsettelseSkyldesSykdomEllerSkade
 
-        internal fun toDto(løsningId: UUID, vurdertAv: String, tidspunktForVurdering: LocalDateTime) = DtoLøsningParagraf_11_5(
+        internal fun toDto(løsningId: UUID, vurdertAv: String, tidspunktForVurdering: LocalDateTime) = LøsningParagraf_11_5ModellApi(
             løsningId = løsningId,
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
@@ -56,7 +56,7 @@ class KvalitetssikringParagraf_11_5(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_5(
+    internal fun toDto() = KvalitetssikringParagraf_11_5ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoLøsningMaskinellParagraf_11_2
+import no.nav.aap.dto.LøsningMaskinellParagraf_11_2ModellApi
 import java.time.LocalDateTime
 import java.util.*
 
@@ -19,5 +19,5 @@ class LøsningMaskinellParagraf_11_2(
 
     internal fun erMedlem() = erMedlem == ErMedlem.JA
     internal fun erIkkeMedlem() = erMedlem == ErMedlem.NEI
-    internal fun toDto() = DtoLøsningMaskinellParagraf_11_2(løsningId, tidspunktForVurdering, erMedlem.name)
+    internal fun toDto() = LøsningMaskinellParagraf_11_2ModellApi(løsningId, tidspunktForVurdering, erMedlem.name)
 }

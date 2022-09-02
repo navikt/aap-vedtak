@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoLøsningMaskinellMedlemskapYrkesskade
+import no.nav.aap.dto.LøsningMaskinellMedlemskapYrkesskadeModellApi
 import java.util.*
 
 internal class LøsningMaskinellMedlemskapYrkesskade(
@@ -18,5 +18,5 @@ internal class LøsningMaskinellMedlemskapYrkesskade(
 
     internal fun erMedlem() = erMedlem == ErMedlem.JA
     internal fun erIkkeMedlem() = erMedlem == ErMedlem.NEI
-    internal fun toDto() = DtoLøsningMaskinellMedlemskapYrkesskade(løsningId, erMedlem.name)
+    internal fun toDto() = LøsningMaskinellMedlemskapYrkesskadeModellApi(løsningId, erMedlem.name)
 }

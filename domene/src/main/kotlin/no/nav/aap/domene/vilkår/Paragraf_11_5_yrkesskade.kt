@@ -3,7 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_5_yrkesskade.SøknadMottatt
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.VilkårsvurderingModellApi
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade
@@ -42,7 +42,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             vilkårsvurdering.tilstand(SøknadMottatt, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
@@ -63,7 +63,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = null,
             kvalitetssikretAv = null,
@@ -78,10 +78,10 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
@@ -97,7 +97,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = null,
@@ -112,15 +112,15 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5_yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
@@ -135,10 +135,10 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
@@ -154,7 +154,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = null,
@@ -169,15 +169,15 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5_yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): DtoVilkårsvurdering = DtoVilkårsvurdering(
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
@@ -192,14 +192,14 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
-    private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+    private fun settManuellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {
         val dtoLøsninger = vilkårsvurdering.løsning_11_5_yrkesskade_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
             LøsningParagraf_11_5Yrkesskade(
@@ -213,7 +213,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         })
     }
 
-    private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
+    private fun settKvalitetssikring(vilkårsvurdering: VilkårsvurderingModellApi) {
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_5_yrkesskade ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_5Yrkesskade(

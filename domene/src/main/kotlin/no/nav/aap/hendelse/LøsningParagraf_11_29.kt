@@ -1,7 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_29
-import no.nav.aap.dto.DtoLøsningParagraf_11_29
+import no.nav.aap.dto.KvalitetssikringParagraf_11_29ModellApi
+import no.nav.aap.dto.LøsningParagraf_11_29ModellApi
 import java.time.LocalDateTime
 import java.util.*
 
@@ -18,7 +18,7 @@ internal class LøsningParagraf_11_29(
     internal fun vurdertAv() = vurdertAv
     internal fun erManueltOppfylt() = erOppfylt
 
-    private fun toDto() = DtoLøsningParagraf_11_29(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
+    private fun toDto() = LøsningParagraf_11_29ModellApi(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
 class KvalitetssikringParagraf_11_29(
@@ -36,7 +36,7 @@ class KvalitetssikringParagraf_11_29(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_29(
+    internal fun toDto() = KvalitetssikringParagraf_11_29ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

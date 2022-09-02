@@ -4,7 +4,7 @@ import no.nav.aap.domene.Sakstype.Companion.toDto
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoSak
+import no.nav.aap.dto.SakModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
@@ -101,7 +101,7 @@ internal class Sak private constructor(
             log.info("Forventet ikke iverksettelse i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun toDto(sak: Sak) = DtoSak(
+        open fun toDto(sak: Sak) = SakModellApi(
             saksid = sak.saksid,
             tilstand = tilstandsnavn.name,
             sakstyper = sak.sakstyper.toDto(),
@@ -110,9 +110,9 @@ internal class Sak private constructor(
             vedtak = null
         )
 
-        open fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
-            sak.søknadstidspunkt = dtoSak.søknadstidspunkt
-            sak.vurderingsdato = dtoSak.vurderingsdato
+        open fun gjenopprettTilstand(sak: Sak, sakModellApi: SakModellApi) {
+            sak.søknadstidspunkt = sakModellApi.søknadstidspunkt
+            sak.vurderingsdato = sakModellApi.vurderingsdato
         }
 
         object Start : Tilstand(Tilstandsnavn.START) {
@@ -211,7 +211,7 @@ internal class Sak private constructor(
                 vurderNesteTilstand(sak, kvalitetssikring)
             }
 
-            override fun toDto(sak: Sak) = DtoSak(
+            override fun toDto(sak: Sak) = SakModellApi(
                 saksid = sak.saksid,
                 tilstand = tilstandsnavn.name,
                 sakstyper = sak.sakstyper.toDto(),
@@ -220,10 +220,10 @@ internal class Sak private constructor(
                 vedtak = sak.vedtak.toDto()
             )
 
-            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
-                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
-                sak.vurderingsdato = dtoSak.vurderingsdato
-                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+            override fun gjenopprettTilstand(sak: Sak, sakModellApi: SakModellApi) {
+                sak.søknadstidspunkt = sakModellApi.søknadstidspunkt
+                sak.vurderingsdato = sakModellApi.vurderingsdato
+                val dtoVedtak = requireNotNull(sakModellApi.vedtak)
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
 
@@ -244,7 +244,7 @@ internal class Sak private constructor(
                 vurderNesteTilstand(sak, iverksettelseAvVedtak)
             }
 
-            override fun toDto(sak: Sak) = DtoSak(
+            override fun toDto(sak: Sak) = SakModellApi(
                 saksid = sak.saksid,
                 tilstand = tilstandsnavn.name,
                 sakstyper = sak.sakstyper.toDto(),
@@ -253,10 +253,10 @@ internal class Sak private constructor(
                 vedtak = sak.vedtak.toDto()
             )
 
-            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
-                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
-                sak.vurderingsdato = dtoSak.vurderingsdato
-                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+            override fun gjenopprettTilstand(sak: Sak, sakModellApi: SakModellApi) {
+                sak.søknadstidspunkt = sakModellApi.søknadstidspunkt
+                sak.vurderingsdato = sakModellApi.vurderingsdato
+                val dtoVedtak = requireNotNull(sakModellApi.vedtak)
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
 
@@ -278,7 +278,7 @@ internal class Sak private constructor(
                 }
             }
 
-            override fun toDto(sak: Sak) = DtoSak(
+            override fun toDto(sak: Sak) = SakModellApi(
                 saksid = sak.saksid,
                 tilstand = tilstandsnavn.name,
                 sakstyper = sak.sakstyper.toDto(),
@@ -287,10 +287,10 @@ internal class Sak private constructor(
                 vedtak = sak.vedtak.toDto()
             )
 
-            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
-                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
-                sak.vurderingsdato = dtoSak.vurderingsdato
-                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+            override fun gjenopprettTilstand(sak: Sak, sakModellApi: SakModellApi) {
+                sak.søknadstidspunkt = sakModellApi.søknadstidspunkt
+                sak.vurderingsdato = sakModellApi.vurderingsdato
+                val dtoVedtak = requireNotNull(sakModellApi.vedtak)
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
         }
@@ -300,7 +300,7 @@ internal class Sak private constructor(
                 hendelse.opprettBehov(BehovIverksettVedtak(sak.vedtak))
             }
 
-            override fun toDto(sak: Sak) = DtoSak(
+            override fun toDto(sak: Sak) = SakModellApi(
                 saksid = sak.saksid,
                 tilstand = tilstandsnavn.name,
                 sakstyper = sak.sakstyper.toDto(),
@@ -309,10 +309,10 @@ internal class Sak private constructor(
                 vedtak = sak.vedtak.toDto()
             )
 
-            override fun gjenopprettTilstand(sak: Sak, dtoSak: DtoSak) {
-                sak.søknadstidspunkt = dtoSak.søknadstidspunkt
-                sak.vurderingsdato = dtoSak.vurderingsdato
-                val dtoVedtak = requireNotNull(dtoSak.vedtak)
+            override fun gjenopprettTilstand(sak: Sak, sakModellApi: SakModellApi) {
+                sak.søknadstidspunkt = sakModellApi.søknadstidspunkt
+                sak.vurderingsdato = sakModellApi.vurderingsdato
+                val dtoVedtak = requireNotNull(sakModellApi.vedtak)
                 sak.vedtak = Vedtak.gjenopprett(dtoVedtak)
             }
         }
@@ -329,9 +329,9 @@ internal class Sak private constructor(
 
         internal fun Iterable<Sak>.toDto() = map { sak -> sak.toDto() }
 
-        internal fun gjenopprett(dtoSak: DtoSak): Sak = Sak(
-            saksid = dtoSak.saksid,
-            tilstand = when (Tilstand.Tilstandsnavn.valueOf(dtoSak.tilstand)) {
+        internal fun gjenopprett(sakModellApi: SakModellApi): Sak = Sak(
+            saksid = sakModellApi.saksid,
+            tilstand = when (Tilstand.Tilstandsnavn.valueOf(sakModellApi.tilstand)) {
                 Tilstand.Tilstandsnavn.START -> Tilstand.Start
                 Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> Tilstand.BeregnInntekt
@@ -341,10 +341,10 @@ internal class Sak private constructor(
                 Tilstand.Tilstandsnavn.VEDTAK_IVERKSATT -> Tilstand.VedtakIverksatt
                 Tilstand.Tilstandsnavn.IKKE_OPPFYLT -> Tilstand.IkkeOppfylt
             },
-            sakstyper = dtoSak.sakstyper.map(Sakstype::gjenopprett).toMutableList(),
+            sakstyper = sakModellApi.sakstyper.map(Sakstype::gjenopprett).toMutableList(),
             inntektshistorikk = Inntektshistorikk()
         ).apply {
-            this.tilstand.gjenopprettTilstand(this, dtoSak)
+            this.tilstand.gjenopprettTilstand(this, sakModellApi)
         }
     }
 }

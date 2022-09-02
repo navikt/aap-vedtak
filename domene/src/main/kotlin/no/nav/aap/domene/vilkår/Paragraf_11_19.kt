@@ -3,7 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_19.SøknadMottatt
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.VilkårsvurderingModellApi
 import no.nav.aap.dto.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19.Companion.toDto
@@ -42,7 +42,7 @@ internal class Paragraf_11_19 private constructor(
             vilkårsvurdering.tilstand(SøknadMottatt, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_19): DtoVilkårsvurdering {
+        override fun toDto(vilkårsvurdering: Paragraf_11_19): VilkårsvurderingModellApi {
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
         }
     }
@@ -57,7 +57,7 @@ internal class Paragraf_11_19 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19) =
-            DtoVilkårsvurdering(
+            VilkårsvurderingModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
                 kvalitetssikretAv = null,
@@ -92,7 +92,7 @@ internal class Paragraf_11_19 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19) =
-            DtoVilkårsvurdering(
+            VilkårsvurderingModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
                 kvalitetssikretAv = null,
@@ -107,10 +107,10 @@ internal class Paragraf_11_19 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_19,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
@@ -124,7 +124,7 @@ internal class Paragraf_11_19 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19) =
-            DtoVilkårsvurdering(
+            VilkårsvurderingModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
                 kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
@@ -139,14 +139,14 @@ internal class Paragraf_11_19 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_19,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(dtoVilkårsvurdering)
-            vilkårsvurdering.settKvalitetssikring(dtoVilkårsvurdering)
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
-    private fun settManuellLøsning(vilkårsvurdering: DtoVilkårsvurdering) {
+    private fun settManuellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {
         val dtoLøsninger = vilkårsvurdering.løsning_11_19_manuell ?: emptyList()
         løsninger.addAll(dtoLøsninger.map {
             LøsningParagraf_11_19(
@@ -158,7 +158,7 @@ internal class Paragraf_11_19 private constructor(
         })
     }
 
-    private fun settKvalitetssikring(vilkårsvurdering: DtoVilkårsvurdering) {
+    private fun settKvalitetssikring(vilkårsvurdering: VilkårsvurderingModellApi) {
         val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_19 ?: emptyList()
         kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
             KvalitetssikringParagraf_11_19(

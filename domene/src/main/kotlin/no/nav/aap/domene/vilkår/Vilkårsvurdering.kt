@@ -1,7 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -220,7 +220,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     }
 
 
-    protected fun toDto(): DtoVilkårsvurdering = callWithReceiver {
+    protected fun toDto(): VilkårsvurderingModellApi = callWithReceiver {
         tilstand.toDto(this)
     }
 
@@ -254,11 +254,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun gjenopprettTilstand(
             vilkårsvurdering: PARAGRAF,
-            dtoVilkårsvurdering: DtoVilkårsvurdering
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
         }
 
-        internal abstract fun toDto(vilkårsvurdering: PARAGRAF): DtoVilkårsvurdering
+        internal abstract fun toDto(vilkårsvurdering: PARAGRAF): VilkårsvurderingModellApi
 
         internal fun erOppfylt() = erOppfylt
         internal fun erIkkeOppfylt() = erIkkeOppfylt
@@ -568,73 +568,73 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
 
-        internal fun gjenopprett(dtoVilkårsvurdering: DtoVilkårsvurdering) =
-            when (enumValueOf<Paragraf>(dtoVilkårsvurdering.paragraf)) {
+        internal fun gjenopprett(vilkårsvurderingModellApi: VilkårsvurderingModellApi) =
+            when (enumValueOf<Paragraf>(vilkårsvurderingModellApi.paragraf)) {
                 Paragraf.MEDLEMSKAP_YRKESSKADE ->
-                    gjenopprett(dtoVilkårsvurdering, MedlemskapYrkesskade.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, MedlemskapYrkesskade.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_2 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_2.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_2.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_3 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_3.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_3.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_4 -> {
-                    dtoVilkårsvurdering.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
+                    vilkårsvurderingModellApi.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) ->
-                                gjenopprett(dtoVilkårsvurdering, Paragraf_11_4FørsteLedd.Companion::gjenopprett)
+                                gjenopprett(vilkårsvurderingModellApi, Paragraf_11_4FørsteLedd.Companion::gjenopprett)
 
                             listOf(Ledd.LEDD_2, Ledd.LEDD_3) ->
-                                gjenopprett(dtoVilkårsvurdering, Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett)
+                                gjenopprett(vilkårsvurderingModellApi, Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett)
 
-                            else -> null.also { log.warn("Paragraf ${dtoVilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                            else -> null.also { log.warn("Paragraf ${vilkårsvurderingModellApi.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
 
                 Paragraf.PARAGRAF_11_5 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_5.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_5.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_5_YRKESSKADE ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_5_yrkesskade.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_5_yrkesskade.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_6 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_6.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_6.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_12 -> {
-                    dtoVilkårsvurdering.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
+                    vilkårsvurderingModellApi.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) ->
-                                gjenopprett(dtoVilkårsvurdering, Paragraf_11_12FørsteLedd.Companion::gjenopprett)
+                                gjenopprett(vilkårsvurderingModellApi, Paragraf_11_12FørsteLedd.Companion::gjenopprett)
 
-                            else -> null.also { log.warn("Paragraf ${dtoVilkårsvurdering.paragraf} Ledd $ledd not implemented") }
+                            else -> null.also { log.warn("Paragraf ${vilkårsvurderingModellApi.paragraf} Ledd $ledd not implemented") }
                         }
                     }
                 }
 
                 Paragraf.PARAGRAF_11_14 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_14.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_14.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_19 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_19.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_19.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_22 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_22.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_22.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_29 ->
-                    gjenopprett(dtoVilkårsvurdering, Paragraf_11_29.Companion::gjenopprett)
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_29.Companion::gjenopprett)
             }
 
         private inline fun <PARAGRAF : Vilkårsvurdering<PARAGRAF>> gjenopprett(
-            dtoVilkårsvurdering: DtoVilkårsvurdering,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi,
             gjenopprettParagraf: (UUID, Tilstand.Tilstandsnavn) -> PARAGRAF
         ): PARAGRAF {
             val paragraf = gjenopprettParagraf(
-                dtoVilkårsvurdering.vilkårsvurderingsid,
-                enumValueOf(dtoVilkårsvurdering.tilstand)
+                vilkårsvurderingModellApi.vilkårsvurderingsid,
+                enumValueOf(vilkårsvurderingModellApi.tilstand)
             )
-            paragraf.tilstand.gjenopprettTilstand(paragraf, dtoVilkårsvurdering)
+            paragraf.tilstand.gjenopprettTilstand(paragraf, vilkårsvurderingModellApi)
             return paragraf
         }
     }

@@ -8,7 +8,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeIKvalitetssikring
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.dto.DtoSakstype
+import no.nav.aap.dto.SakstypeModellApi
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_22
@@ -267,7 +267,7 @@ internal abstract class Sakstype private constructor(
         }
     }
 
-    private fun toDto() = DtoSakstype(
+    private fun toDto() = SakstypeModellApi(
         type = type.name,
         aktiv = aktiv,
         vilkårsvurderinger = vilkårsvurderinger.toDto()
@@ -276,10 +276,10 @@ internal abstract class Sakstype private constructor(
     internal companion object {
         internal fun Iterable<Sakstype>.toDto() = map(Sakstype::toDto)
 
-        internal fun gjenopprett(dtoSakstype: DtoSakstype): Sakstype {
+        internal fun gjenopprett(sakstypeModellApi: SakstypeModellApi): Sakstype {
             val vilkårsvurderinger =
-                dtoSakstype.vilkårsvurderinger.mapNotNull(Vilkårsvurdering.Companion::gjenopprett).toMutableList()
-            return when (enumValueOf<Type>(dtoSakstype.type)) {
+                sakstypeModellApi.vilkårsvurderinger.mapNotNull(Vilkårsvurdering.Companion::gjenopprett).toMutableList()
+            return when (enumValueOf<Type>(sakstypeModellApi.type)) {
                 Type.STANDARD -> Standard.gjenopprettStandard(vilkårsvurderinger)
                 Type.YRKESSKADE -> Yrkesskade.gjenopprettYrkesskade(vilkårsvurderinger)
                 Type.STUDENT -> Student.gjenopprettStudent(vilkårsvurderinger)

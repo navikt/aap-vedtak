@@ -13,23 +13,23 @@ internal fun Løsning_11_12_ledd1_manuell.håndter(søker: Søker) = toDto().hå
 internal fun Løsning_11_19_manuell.håndter(søker: Søker) = toDto().håndter(søker)
 internal fun Løsning_11_29_manuell.håndter(søker: Søker) = toDto().håndter(søker)
 
-private fun Løsning_11_2_manuell.toDto() = DtoLøsningParagraf_11_2(vurdertAv, tidspunktForVurdering, erMedlem)
-private fun Løsning_11_3_manuell.toDto() = DtoLøsningParagraf_11_3(vurdertAv, tidspunktForVurdering, erOppfylt)
+private fun Løsning_11_2_manuell.toDto() = LøsningParagraf_11_2ModellApi(vurdertAv, tidspunktForVurdering, erMedlem)
+private fun Løsning_11_3_manuell.toDto() = LøsningParagraf_11_3ModellApi(vurdertAv, tidspunktForVurdering, erOppfylt)
 
-private fun Løsning_11_4_ledd2_ledd3_manuell.toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+private fun Løsning_11_4_ledd2_ledd3_manuell.toDto() = LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt,
 )
 
-private fun Løsning_11_5_manuell.toDto() = DtoLøsningParagraf_11_5(
+private fun Løsning_11_5_manuell.toDto() = LøsningParagraf_11_5ModellApi(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
     nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade
 )
 
-private fun Løsning_11_6_manuell.toDto() = DtoLøsningParagraf_11_6(
+private fun Løsning_11_6_manuell.toDto() = LøsningParagraf_11_6ModellApi(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
@@ -37,7 +37,7 @@ private fun Løsning_11_6_manuell.toDto() = DtoLøsningParagraf_11_6(
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun Løsning_11_12_ledd1_manuell.toDto() = DtoLøsningParagraf_11_12FørsteLedd(
+private fun Løsning_11_12_ledd1_manuell.toDto() = LøsningParagraf_11_12FørsteLeddModellApi(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     bestemmesAv = bestemmesAv,
@@ -46,6 +46,6 @@ private fun Løsning_11_12_ledd1_manuell.toDto() = DtoLøsningParagraf_11_12Før
     manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
-private fun Løsning_11_19_manuell.toDto() = DtoLøsningParagraf_11_19(vurdertAv, tidspunktForVurdering, beregningsdato)
-private fun Løsning_11_29_manuell.toDto() = DtoLøsningParagraf_11_29(vurdertAv, tidspunktForVurdering, erOppfylt)
+private fun Løsning_11_19_manuell.toDto() = LøsningParagraf_11_19ModellApi(vurdertAv, tidspunktForVurdering, beregningsdato)
+private fun Løsning_11_29_manuell.toDto() = LøsningParagraf_11_29ModellApi(vurdertAv, tidspunktForVurdering, erOppfylt)
 

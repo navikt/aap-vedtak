@@ -1,8 +1,8 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_19
-import no.nav.aap.dto.DtoLøsningParagraf_11_19
+import no.nav.aap.dto.KvalitetssikringParagraf_11_19ModellApi
+import no.nav.aap.dto.LøsningParagraf_11_19ModellApi
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -19,7 +19,7 @@ internal class LøsningParagraf_11_19(
 
     internal companion object {
         internal fun Iterable<LøsningParagraf_11_19>.toDto() = map(LøsningParagraf_11_19::toDto)
-        internal fun gjenopprett(dtoLøsningParagraf1119: DtoLøsningParagraf_11_19) =
+        internal fun gjenopprett(dtoLøsningParagraf1119: LøsningParagraf_11_19ModellApi) =
             LøsningParagraf_11_19(
                 løsningId = dtoLøsningParagraf1119.løsningId,
                 vurdertAv = dtoLøsningParagraf1119.vurdertAv,
@@ -28,7 +28,7 @@ internal class LøsningParagraf_11_19(
             )
     }
     internal fun vurdertAv() = vurdertAv
-    private fun toDto() = DtoLøsningParagraf_11_19(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
+    private fun toDto() = LøsningParagraf_11_19ModellApi(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
 }
 
 class KvalitetssikringParagraf_11_19(
@@ -46,7 +46,7 @@ class KvalitetssikringParagraf_11_19(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_19(
+    internal fun toDto() = KvalitetssikringParagraf_11_19ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

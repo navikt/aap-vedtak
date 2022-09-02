@@ -1,6 +1,6 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.dto.DtoVedtak
+import no.nav.aap.dto.VedtakModellApi
 import no.nav.aap.dto.kafka.InntekterKafkaDto
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.dto.kafka.MedlemKafkaDto
@@ -60,7 +60,7 @@ private sealed class Sjekk : Lytter {
     }
 
     class ErIverksettVedtak : Sjekk() {
-        override fun behovIverksettVedtak(dtoVedtak: DtoVedtak) {
+        override fun behovIverksettVedtak(vedtakModellApi: VedtakModellApi) {
             er = true
         }
     }
@@ -116,13 +116,13 @@ private class ToIverksettVedtakKafkaDto : Lytter, BehovExtractor<IverksettVedtak
     private lateinit var virkningsdato: LocalDate
     private lateinit var fødselsdato: LocalDate
 
-    override fun behovIverksettVedtak(dtoVedtak: DtoVedtak) {
-        this.vedtaksid = dtoVedtak.vedtaksid
-        this.innvilget = Innvilget(dtoVedtak.innvilget)
-        this.grunnlagsfaktor = Grunnlagsfaktor(dtoVedtak.inntektsgrunnlag.grunnlagsfaktor)
-        this.vedtaksdato = dtoVedtak.vedtaksdato
-        this.virkningsdato = dtoVedtak.virkningsdato
-        this.fødselsdato = dtoVedtak.inntektsgrunnlag.fødselsdato
+    override fun behovIverksettVedtak(vedtakModellApi: VedtakModellApi) {
+        this.vedtaksid = vedtakModellApi.vedtaksid
+        this.innvilget = Innvilget(vedtakModellApi.innvilget)
+        this.grunnlagsfaktor = Grunnlagsfaktor(vedtakModellApi.inntektsgrunnlag.grunnlagsfaktor)
+        this.vedtaksdato = vedtakModellApi.vedtaksdato
+        this.virkningsdato = vedtakModellApi.virkningsdato
+        this.fødselsdato = vedtakModellApi.inntektsgrunnlag.fødselsdato
     }
 
     override fun toJson(): IverksettVedtakKafkaDto = IverksettVedtakKafkaDto(

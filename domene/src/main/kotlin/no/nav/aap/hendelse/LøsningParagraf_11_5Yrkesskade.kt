@@ -1,7 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_5Yrkesskade
-import no.nav.aap.dto.DtoLøsningParagraf_11_5Yrkesskade
+import no.nav.aap.dto.KvalitetssikringParagraf_11_5YrkesskadeModellApi
+import no.nav.aap.dto.LøsningParagraf_11_5YrkesskadeModellApi
 import java.time.LocalDateTime
 import java.util.*
 
@@ -20,7 +20,7 @@ internal class LøsningParagraf_11_5Yrkesskade(
     internal fun vurdertAv() = vurdertAv
     internal fun erNedsattMedMinst30Prosent() = arbeidsevneErNedsattMedMinst30Prosent
 
-    private fun toDto() = DtoLøsningParagraf_11_5Yrkesskade(
+    private fun toDto() = LøsningParagraf_11_5YrkesskadeModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -45,7 +45,7 @@ class KvalitetssikringParagraf_11_5Yrkesskade(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_5Yrkesskade(
+    internal fun toDto() = KvalitetssikringParagraf_11_5YrkesskadeModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

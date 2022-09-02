@@ -10,9 +10,9 @@ import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregni
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import no.nav.aap.domene.entitet.Grunnlagsfaktor.Companion.summer
-import no.nav.aap.dto.DtoInntekterForBeregning
-import no.nav.aap.dto.DtoInntektsgrunnlag
-import no.nav.aap.dto.DtoInntektsgrunnlagForÅr
+import no.nav.aap.dto.InntekterForBeregningModellApi
+import no.nav.aap.dto.InntektsgrunnlagModellApi
+import no.nav.aap.dto.InntektsgrunnlagForÅrModellApi
 import java.time.LocalDate
 import java.time.Year
 
@@ -29,7 +29,7 @@ internal class Inntektsgrunnlag private constructor(
     internal fun grunnlagForDag(dato: LocalDate) =
         Grunnbeløp.justerInntekt(dato, fødselsdato.justerGrunnlagsfaktorForAlder(dato, grunnlagsfaktor))
 
-    internal fun toDto() = DtoInntektsgrunnlag(
+    internal fun toDto() = InntektsgrunnlagModellApi(
         beregningsdato = beregningsdato,
         inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.toDto(),
         yrkesskade = yrkesskade?.toDto(),
@@ -56,15 +56,15 @@ internal class Inntektsgrunnlag private constructor(
             )
         }
 
-        internal fun gjenopprett(dtoInntektsgrunnlag: DtoInntektsgrunnlag) = Inntektsgrunnlag(
-            beregningsdato = dtoInntektsgrunnlag.beregningsdato,
-            inntekterSiste3Kalenderår = InntekterForBeregning.gjenopprett(dtoInntektsgrunnlag.inntekterSiste3Kalenderår),
-            yrkesskade = dtoInntektsgrunnlag.yrkesskade?.let(
+        internal fun gjenopprett(inntektsgrunnlagModellApi: InntektsgrunnlagModellApi) = Inntektsgrunnlag(
+            beregningsdato = inntektsgrunnlagModellApi.beregningsdato,
+            inntekterSiste3Kalenderår = InntekterForBeregning.gjenopprett(inntektsgrunnlagModellApi.inntekterSiste3Kalenderår),
+            yrkesskade = inntektsgrunnlagModellApi.yrkesskade?.let(
                 Yrkesskade.Companion::gjenopprett
             ),
-            fødselsdato = Fødselsdato(dtoInntektsgrunnlag.fødselsdato),
-            sisteKalenderår = dtoInntektsgrunnlag.sisteKalenderår,
-            grunnlagsfaktor = Grunnlagsfaktor(dtoInntektsgrunnlag.grunnlagsfaktor)
+            fødselsdato = Fødselsdato(inntektsgrunnlagModellApi.fødselsdato),
+            sisteKalenderår = inntektsgrunnlagModellApi.sisteKalenderår,
+            grunnlagsfaktor = Grunnlagsfaktor(inntektsgrunnlagModellApi.grunnlagsfaktor)
         )
     }
 
@@ -114,8 +114,8 @@ internal class InntekterForBeregning private constructor(
 
         internal fun Iterable<InntekterForBeregning>.toDto() = map(InntekterForBeregning::toDto)
 
-        internal fun gjenopprett(dtoInntekterForBeregning: Iterable<DtoInntekterForBeregning>) =
-            dtoInntekterForBeregning.map {
+        internal fun gjenopprett(inntekterForBeregningModellApi: Iterable<InntekterForBeregningModellApi>) =
+            inntekterForBeregningModellApi.map {
                 InntekterForBeregning(
                     inntekter = Inntekt.gjenopprett(it.inntekter),
                     inntektsgrunnlagForÅr = InntektsgrunnlagForÅr.gjenopprett(it.inntektsgrunnlagForÅr)
@@ -123,7 +123,7 @@ internal class InntekterForBeregning private constructor(
             }
     }
 
-    internal fun toDto() = DtoInntekterForBeregning(
+    internal fun toDto() = InntekterForBeregningModellApi(
         inntekter = inntekter.toDto(),
         inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toDto()
     )
@@ -182,7 +182,7 @@ internal class InntektsgrunnlagForÅr private constructor(
         private fun Iterable<InntektsgrunnlagForÅr>.finnSisteKalenderår(sisteKalenderår: Year): List<InntektsgrunnlagForÅr> =
             singleOrNull { it.år == sisteKalenderår }?.let { listOf(it) } ?: emptyList()
 
-        internal fun gjenopprett(inntekterSiste3Kalenderår: Iterable<DtoInntektsgrunnlagForÅr>) =
+        internal fun gjenopprett(inntekterSiste3Kalenderår: Iterable<InntektsgrunnlagForÅrModellApi>) =
             inntekterSiste3Kalenderår.map {
                 InntektsgrunnlagForÅr(
                     år = it.år,
@@ -193,7 +193,7 @@ internal class InntektsgrunnlagForÅr private constructor(
                 )
             }
 
-        internal fun gjenopprett(inntektsgrunnlagForYrkesskade: DtoInntektsgrunnlagForÅr) =
+        internal fun gjenopprett(inntektsgrunnlagForYrkesskade: InntektsgrunnlagForÅrModellApi) =
             InntektsgrunnlagForÅr(
                 år = inntektsgrunnlagForYrkesskade.år,
                 beløpFørJustering = inntektsgrunnlagForYrkesskade.beløpFørJustering.beløp,
@@ -219,7 +219,7 @@ internal class InntektsgrunnlagForÅr private constructor(
 
     internal fun grunnlagsfaktor() = grunnlagsfaktor
 
-    internal fun toDto() = DtoInntektsgrunnlagForÅr(
+    internal fun toDto() = InntektsgrunnlagForÅrModellApi(
         år = år,
         beløpFørJustering = beløpFørJustering.toDto(),
         beløpJustertFor6G = beløpJustertFor6G.toDto(),

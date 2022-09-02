@@ -1,7 +1,7 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
-import no.nav.aap.dto.DtoYrkesskade
+import no.nav.aap.dto.YrkesskadeModellApi
 
 internal class Yrkesskade(
     private val andelNedsattArbeidsevne: Double,
@@ -21,15 +21,15 @@ internal class Yrkesskade(
             }
         }
 
-    internal fun toDto() = DtoYrkesskade(
+    internal fun toDto() = YrkesskadeModellApi(
         gradAvNedsattArbeidsevneKnyttetTilYrkesskade = andelNedsattArbeidsevne,
         inntektsgrunnlag = inntektsgrunnlag.toDto()
     )
 
     internal companion object{
-        internal fun gjenopprett(dtoYrkesskade: DtoYrkesskade) = Yrkesskade(
-            andelNedsattArbeidsevne = dtoYrkesskade.gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
-            inntektsgrunnlag = InntektsgrunnlagForÅr.gjenopprett(dtoYrkesskade.inntektsgrunnlag)
+        internal fun gjenopprett(yrkesskadeModellApi: YrkesskadeModellApi) = Yrkesskade(
+            andelNedsattArbeidsevne = yrkesskadeModellApi.gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
+            inntektsgrunnlag = InntektsgrunnlagForÅr.gjenopprett(yrkesskadeModellApi.inntektsgrunnlag)
         )
     }
 }

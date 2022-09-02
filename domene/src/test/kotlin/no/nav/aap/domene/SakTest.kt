@@ -7,7 +7,7 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.DtoVilkårsvurdering
+import no.nav.aap.dto.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
 import no.nav.aap.januar
@@ -1186,7 +1186,7 @@ internal class SakTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<DtoVilkårsvurdering>,
+        vilkårsvurderinger: List<VilkårsvurderingModellApi>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf
     ) {
@@ -1194,7 +1194,7 @@ internal class SakTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<DtoVilkårsvurdering>,
+        vilkårsvurderinger: List<VilkårsvurderingModellApi>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: Vilkårsvurdering.Ledd
@@ -1203,7 +1203,7 @@ internal class SakTest {
     }
 
     private fun assertTilstand(
-        vilkårsvurderinger: List<DtoVilkårsvurdering>,
+        vilkårsvurderinger: List<VilkårsvurderingModellApi>,
         tilstand: String,
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
@@ -1211,10 +1211,10 @@ internal class SakTest {
         assertEquals(tilstand, vilkårsvurderinger.single(paragraf, ledd).tilstand)
     }
 
-    private fun List<DtoVilkårsvurdering>.single(paragraf: Vilkårsvurdering.Paragraf) =
+    private fun List<VilkårsvurderingModellApi>.single(paragraf: Vilkårsvurdering.Paragraf) =
         single { it.paragraf == paragraf.name }
 
-    private fun List<DtoVilkårsvurdering>.single(
+    private fun List<VilkårsvurderingModellApi>.single(
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
     ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }

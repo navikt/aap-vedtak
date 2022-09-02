@@ -1,7 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd
-import no.nav.aap.dto.DtoLøsningParagraf_11_4AndreOgTredjeLedd
+import no.nav.aap.dto.KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi
+import no.nav.aap.dto.LøsningParagraf_11_4AndreOgTredjeLeddModellApi
 import java.time.LocalDateTime
 import java.util.*
 
@@ -20,7 +20,7 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
     internal fun vurdertAv() = vurdertAv
     internal fun erManueltOppfylt() = erOppfylt
 
-    private fun toDto() = DtoLøsningParagraf_11_4AndreOgTredjeLedd(
+    private fun toDto() = LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -44,7 +44,7 @@ class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+    internal fun toDto() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
