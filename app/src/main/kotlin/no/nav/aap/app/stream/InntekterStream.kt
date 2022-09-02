@@ -1,7 +1,7 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.toDto
+import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.app.kafka.toJson
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.kafka.InntekterKafkaDto
@@ -18,9 +18,9 @@ internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafka
 }
 
 private val håndterInntekter = { inntekterKafkaDto: InntekterKafkaDto, søkereKafkaDto: SøkereKafkaDto ->
-    val søker = Søker.gjenopprett(søkereKafkaDto.toDto())
+    val søker = Søker.gjenopprett(søkereKafkaDto.toModellApi())
 
-    inntekterKafkaDto.toDto().håndter(søker)
+    inntekterKafkaDto.toModellApi().håndter(søker)
 
     søker.toDto().toJson()
 }

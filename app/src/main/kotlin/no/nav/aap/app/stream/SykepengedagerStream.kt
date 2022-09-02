@@ -30,7 +30,7 @@ private fun håndter(
     sykepengedagerKafkaDto: SykepengedagerKafkaDto,
     søkereKafkaDto: SøkereKafkaDto
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val søker = Søker.gjenopprett(søkereKafkaDto.toDto())
+    val søker = Søker.gjenopprett(søkereKafkaDto.toModellApi())
 
     val response = requireNotNull(sykepengedagerKafkaDto.response) { "response==null skal være filtrert vekk her." }
     val dtoBehov = response.håndter(søker)

@@ -3,7 +3,7 @@ package no.nav.aap.app
 import io.ktor.server.testing.*
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.toDto
+import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.kafka.streams.test.readAndAssert
@@ -112,7 +112,7 @@ internal class ApiTest {
 
             val søker = stateStore[fnr]
             assertNotNull(søker)
-            val actual = søker.toDto()
+            val actual = søker.toModellApi()
 
             fun løsningsid2(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_2_maskinell!![0].løsningId

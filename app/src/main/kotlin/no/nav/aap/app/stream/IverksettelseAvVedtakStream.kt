@@ -30,7 +30,7 @@ private fun håndter(
     iverksettelseAvVedtakKafkaDto: IverksettelseAvVedtakKafkaDto,
     søkereKafkaDto: SøkereKafkaDto
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val søker = Søker.gjenopprett(søkereKafkaDto.toDto())
+    val søker = Søker.gjenopprett(søkereKafkaDto.toModellApi())
 
     val dtoBehov = iverksettelseAvVedtakKafkaDto.håndter(søker)
 

@@ -1,20 +1,19 @@
 package no.nav.aap.app.kafka
 
 import no.nav.aap.domene.Søker
-import no.nav.aap.dto.*
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.modellapi.*
 
-internal fun Kvalitetssikring_11_2.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_3.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_4_ledd2_ledd3.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_5.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_6.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_12_ledd1.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_19.håndter(søker: Søker) = toDto().håndter(søker)
-internal fun Kvalitetssikring_11_29.håndter(søker: Søker) = toDto().håndter(søker)
+internal fun Kvalitetssikring_11_2.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_3.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_4_ledd2_ledd3.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_5.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_6.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_12_ledd1.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_19.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_11_29.håndter(søker: Søker) = toModellApi().håndter(søker)
 
-private fun Kvalitetssikring_11_2.toDto() = KvalitetssikringParagraf_11_2ModellApi(
+private fun Kvalitetssikring_11_2.toModellApi() = KvalitetssikringParagraf_11_2ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -22,7 +21,7 @@ private fun Kvalitetssikring_11_2.toDto() = KvalitetssikringParagraf_11_2ModellA
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_3.toDto() = KvalitetssikringParagraf_11_3ModellApi(
+private fun Kvalitetssikring_11_3.toModellApi() = KvalitetssikringParagraf_11_3ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -30,7 +29,7 @@ private fun Kvalitetssikring_11_3.toDto() = KvalitetssikringParagraf_11_3ModellA
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_4_ledd2_ledd3.toDto() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
+private fun Kvalitetssikring_11_4_ledd2_ledd3.toModellApi() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -38,7 +37,7 @@ private fun Kvalitetssikring_11_4_ledd2_ledd3.toDto() = KvalitetssikringParagraf
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_5.toDto() = KvalitetssikringParagraf_11_5ModellApi(
+private fun Kvalitetssikring_11_5.toModellApi() = KvalitetssikringParagraf_11_5ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -46,7 +45,7 @@ private fun Kvalitetssikring_11_5.toDto() = KvalitetssikringParagraf_11_5ModellA
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_6.toDto() = KvalitetssikringParagraf_11_6ModellApi(
+private fun Kvalitetssikring_11_6.toModellApi() = KvalitetssikringParagraf_11_6ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -54,7 +53,7 @@ private fun Kvalitetssikring_11_6.toDto() = KvalitetssikringParagraf_11_6ModellA
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_12_ledd1.toDto() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
+private fun Kvalitetssikring_11_12_ledd1.toModellApi() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -62,7 +61,7 @@ private fun Kvalitetssikring_11_12_ledd1.toDto() = KvalitetssikringParagraf_11_1
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_19.toDto() = KvalitetssikringParagraf_11_19ModellApi(
+private fun Kvalitetssikring_11_19.toModellApi() = KvalitetssikringParagraf_11_19ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
@@ -70,7 +69,7 @@ private fun Kvalitetssikring_11_19.toDto() = KvalitetssikringParagraf_11_19Model
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_29.toDto() = KvalitetssikringParagraf_11_29ModellApi(
+private fun Kvalitetssikring_11_29.toModellApi() = KvalitetssikringParagraf_11_29ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
