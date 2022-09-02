@@ -1,7 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.KvalitetssikringParagraf_11_2ModellApi
-import no.nav.aap.dto.LøsningParagraf_11_2ModellApi
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_2ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_2ModellApi
 import java.time.LocalDateTime
 import java.util.UUID
 

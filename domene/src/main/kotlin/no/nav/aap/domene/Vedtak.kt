@@ -1,7 +1,7 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
-import no.nav.aap.dto.VedtakModellApi
+import no.nav.aap.modellapi.VedtakModellApi
 import java.time.LocalDate
 import java.util.*
 

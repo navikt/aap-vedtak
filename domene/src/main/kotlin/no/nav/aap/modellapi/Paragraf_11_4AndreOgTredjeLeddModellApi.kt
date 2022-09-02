@@ -1,30 +1,29 @@
-package no.nav.aap.dto
+package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.Behov
-import no.nav.aap.hendelse.KvalitetssikringParagraf_11_2
-import no.nav.aap.hendelse.LøsningManuellParagraf_11_2
-import no.nav.aap.hendelse.LøsningMaskinellParagraf_11_2
+import no.nav.aap.hendelse.KvalitetssikringParagraf_11_4AndreOgTredjeLedd
+import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd
 import java.time.LocalDateTime
 import java.util.*
 
-data class LøsningParagraf_11_2ModellApi(
+data class LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
-    val erMedlem: String
+    val erOppfylt: Boolean
 ) {
 
     constructor(
         vurdertAv: String,
         tidspunktForVurdering: LocalDateTime,
-        erMedlem: String
+        erOppfylt: Boolean
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
-        erMedlem = erMedlem
+        erOppfylt = erOppfylt
     )
 
     fun håndter(søker: Søker): List<Behov> {
@@ -33,16 +32,11 @@ data class LøsningParagraf_11_2ModellApi(
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningManuellParagraf_11_2(
-        løsningId = løsningId,
-        vurdertAv = vurdertAv,
-        tidspunktForVurdering = tidspunktForVurdering,
-        erMedlem = if (erMedlem.lowercase() in listOf("true", "ja"))
-            LøsningManuellParagraf_11_2.ErMedlem.JA else LøsningManuellParagraf_11_2.ErMedlem.NEI
-    )
+    private fun toLøsning() =
+        LøsningParagraf_11_4AndreOgTredjeLedd(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class KvalitetssikringParagraf_11_2ModellApi(
+data class KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -72,7 +66,7 @@ data class KvalitetssikringParagraf_11_2ModellApi(
         return kvalitetssikring.behov()
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
@@ -80,28 +74,4 @@ data class KvalitetssikringParagraf_11_2ModellApi(
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
-}
-
-data class LøsningMaskinellParagraf_11_2ModellApi(
-    val løsningId: UUID,
-    val tidspunktForVurdering: LocalDateTime,
-    val erMedlem: String
-) {
-
-    constructor(
-        erMedlem: String
-    ) : this(
-        løsningId = UUID.randomUUID(),
-        tidspunktForVurdering = LocalDateTime.now(),
-        erMedlem = erMedlem
-    )
-
-    fun håndter(søker: Søker): List<Behov> {
-        val løsning = toLøsning()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
-    }
-
-    private fun toLøsning() =
-        LøsningMaskinellParagraf_11_2(løsningId, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
 }

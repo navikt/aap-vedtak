@@ -1,7 +1,7 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.dto.InntektModellApi
-import no.nav.aap.dto.InntekterModellApi
+import no.nav.aap.modellapi.InntektModellApi
+import no.nav.aap.modellapi.InntekterModellApi
 import no.nav.aap.dto.kafka.InntekterKafkaDto
 
 internal fun InntekterKafkaDto.Response.Inntekt.toDto(): InntektModellApi =

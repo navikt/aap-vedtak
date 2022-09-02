@@ -1,4 +1,4 @@
-package no.nav.aap.dto
+package no.nav.aap.modellapi
 
 data class SakstypeModellApi(
     val type: String,

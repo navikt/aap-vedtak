@@ -8,7 +8,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeIKvalitetssikring
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.dto.SakstypeModellApi
+import no.nav.aap.modellapi.SakstypeModellApi
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_22

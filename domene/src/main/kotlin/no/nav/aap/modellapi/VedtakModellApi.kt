@@ -1,4 +1,4 @@
-package no.nav.aap.dto
+package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.beregning.Arbeidsgiver

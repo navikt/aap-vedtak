@@ -1,7 +1,7 @@
 package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
-import no.nav.aap.dto.YrkesskadeModellApi
+import no.nav.aap.modellapi.YrkesskadeModellApi
 
 internal class Yrkesskade(
     private val andelNedsattArbeidsevne: Double,

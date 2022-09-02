@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.LøsningMaskinellParagraf_11_2ModellApi
+import no.nav.aap.modellapi.LøsningMaskinellParagraf_11_2ModellApi
 import java.time.LocalDateTime
 import java.util.*
 

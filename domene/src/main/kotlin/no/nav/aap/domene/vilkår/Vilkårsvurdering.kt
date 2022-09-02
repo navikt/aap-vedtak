@@ -1,7 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.dto.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate

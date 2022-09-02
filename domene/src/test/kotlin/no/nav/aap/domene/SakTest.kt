@@ -7,7 +7,7 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
 import no.nav.aap.januar

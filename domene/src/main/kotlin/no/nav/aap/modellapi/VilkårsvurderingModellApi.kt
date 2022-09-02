@@ -1,4 +1,4 @@
-package no.nav.aap.dto
+package no.nav.aap.modellapi
 
 import java.util.*
 

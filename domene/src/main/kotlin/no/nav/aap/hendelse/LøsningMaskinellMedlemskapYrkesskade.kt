@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.LøsningMaskinellMedlemskapYrkesskadeModellApi
+import no.nav.aap.modellapi.LøsningMaskinellMedlemskapYrkesskadeModellApi
 import java.util.*
 
 internal class LøsningMaskinellMedlemskapYrkesskade(

@@ -2,7 +2,7 @@ package no.nav.aap.domene.beregning
 
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Beløp.Companion.summerBeløp
-import no.nav.aap.dto.InntektModellApi
+import no.nav.aap.modellapi.InntektModellApi
 import java.time.Year
 import java.time.YearMonth
 

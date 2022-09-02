@@ -3,6 +3,7 @@ package no.nav.aap.app.kafka
 import no.nav.aap.dto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto.*
+import no.nav.aap.modellapi.*
 
 internal fun SøkereKafkaDto.toDto() = SøkerModellApi(
     personident = personident,

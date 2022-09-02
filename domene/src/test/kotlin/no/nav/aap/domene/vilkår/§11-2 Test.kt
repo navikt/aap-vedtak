@@ -3,7 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.dto.Utfall
+import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

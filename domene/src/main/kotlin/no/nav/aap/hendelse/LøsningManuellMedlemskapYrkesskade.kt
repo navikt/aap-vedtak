@@ -1,7 +1,7 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.KvalitetssikringMedlemskapYrkesskadeModellApi
-import no.nav.aap.dto.LøsningManuellMedlemskapYrkesskadeModellApi
+import no.nav.aap.modellapi.KvalitetssikringMedlemskapYrkesskadeModellApi
+import no.nav.aap.modellapi.LøsningManuellMedlemskapYrkesskadeModellApi
 import java.time.LocalDateTime
 import java.util.*
 

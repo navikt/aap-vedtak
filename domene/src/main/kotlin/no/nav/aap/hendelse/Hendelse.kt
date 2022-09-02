@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.dto.VedtakModellApi
+import no.nav.aap.modellapi.VedtakModellApi
 import java.time.Year
 
 open class Hendelse {

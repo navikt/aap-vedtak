@@ -1,6 +1,6 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.dto.VedtakModellApi
+import no.nav.aap.modellapi.VedtakModellApi
 import no.nav.aap.dto.kafka.InntekterKafkaDto
 import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.dto.kafka.MedlemKafkaDto

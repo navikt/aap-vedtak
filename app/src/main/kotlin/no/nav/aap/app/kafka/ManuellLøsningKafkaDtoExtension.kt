@@ -3,6 +3,7 @@ package no.nav.aap.app.kafka
 import no.nav.aap.domene.Søker
 import no.nav.aap.dto.*
 import no.nav.aap.dto.kafka.*
+import no.nav.aap.modellapi.*
 
 internal fun Løsning_11_2_manuell.håndter(søker: Søker) = toDto().håndter(søker)
 internal fun Løsning_11_3_manuell.håndter(søker: Søker) = toDto().håndter(søker)

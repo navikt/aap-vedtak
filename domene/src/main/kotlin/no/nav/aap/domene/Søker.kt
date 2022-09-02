@@ -4,7 +4,7 @@ import no.nav.aap.domene.Sak.Companion.toDto
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.SøkerModellApi
+import no.nav.aap.modellapi.SøkerModellApi
 import no.nav.aap.hendelse.*
 
 class Søker private constructor(

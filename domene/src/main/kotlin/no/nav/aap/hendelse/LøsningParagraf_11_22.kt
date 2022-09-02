@@ -4,8 +4,8 @@ import no.nav.aap.domene.beregning.Beløp
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr
 import no.nav.aap.domene.beregning.Yrkesskade
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.KvalitetssikringParagraf_11_22ModellApi
-import no.nav.aap.dto.LøsningParagraf_11_22ModellApi
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_22ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_22ModellApi
 import java.time.LocalDateTime
 import java.time.Year
 import java.util.*

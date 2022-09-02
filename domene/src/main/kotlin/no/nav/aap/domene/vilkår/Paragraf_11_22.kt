@@ -4,8 +4,8 @@ import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_22.SøknadMottatt
-import no.nav.aap.dto.VilkårsvurderingModellApi
-import no.nav.aap.dto.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_22
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_22.Companion.toDto

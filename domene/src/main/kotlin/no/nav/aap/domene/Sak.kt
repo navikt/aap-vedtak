@@ -4,7 +4,7 @@ import no.nav.aap.domene.Sakstype.Companion.toDto
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.dto.SakModellApi
+import no.nav.aap.modellapi.SakModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak

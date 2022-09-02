@@ -1,35 +1,29 @@
-package no.nav.aap.dto
+package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.Behov
-import no.nav.aap.hendelse.KvalitetssikringParagraf_11_6
-import no.nav.aap.hendelse.LøsningParagraf_11_6
+import no.nav.aap.hendelse.KvalitetssikringParagraf_11_29
+import no.nav.aap.hendelse.LøsningParagraf_11_29
 import java.time.LocalDateTime
 import java.util.*
 
-data class LøsningParagraf_11_6ModellApi(
+data class LøsningParagraf_11_29ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
-    val harBehovForBehandling: Boolean,
-    val harBehovForTiltak: Boolean,
-    val harMulighetForÅKommeIArbeid: Boolean
+    val erOppfylt: Boolean
 ) {
 
     constructor(
         vurdertAv: String,
         tidspunktForVurdering: LocalDateTime,
-        harBehovForBehandling: Boolean,
-        harBehovForTiltak: Boolean,
-        harMulighetForÅKommeIArbeid: Boolean
+        erOppfylt: Boolean
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
-        harBehovForBehandling = harBehovForBehandling,
-        harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        erOppfylt = erOppfylt
     )
 
     fun håndter(søker: Søker): List<Behov> {
@@ -38,17 +32,10 @@ data class LøsningParagraf_11_6ModellApi(
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_6(
-        løsningId = løsningId,
-        vurdertAv = vurdertAv,
-        tidspunktForVurdering = tidspunktForVurdering,
-        harBehovForBehandling = harBehovForBehandling,
-        harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
-    )
+    private fun toLøsning() = LøsningParagraf_11_29(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-data class KvalitetssikringParagraf_11_6ModellApi(
+data class KvalitetssikringParagraf_11_29ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -78,7 +65,7 @@ data class KvalitetssikringParagraf_11_6ModellApi(
         return kvalitetssikring.behov()
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_29(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

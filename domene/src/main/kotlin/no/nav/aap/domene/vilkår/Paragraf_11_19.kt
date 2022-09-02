@@ -3,8 +3,8 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_19.SøknadMottatt
-import no.nav.aap.dto.VilkårsvurderingModellApi
-import no.nav.aap.dto.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19.Companion.toDto
 import no.nav.aap.hendelse.LøsningParagraf_11_19

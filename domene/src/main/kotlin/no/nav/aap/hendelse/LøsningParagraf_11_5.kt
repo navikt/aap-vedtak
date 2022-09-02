@@ -1,8 +1,8 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.domene.vilkår.Paragraf_11_5
-import no.nav.aap.dto.KvalitetssikringParagraf_11_5ModellApi
-import no.nav.aap.dto.LøsningParagraf_11_5ModellApi
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_5ModellApi
 import java.time.LocalDateTime
 import java.util.*
 

@@ -10,9 +10,9 @@ import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr.Companion.totalBeregni
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Grunnlagsfaktor
 import no.nav.aap.domene.entitet.Grunnlagsfaktor.Companion.summer
-import no.nav.aap.dto.InntekterForBeregningModellApi
-import no.nav.aap.dto.InntektsgrunnlagModellApi
-import no.nav.aap.dto.InntektsgrunnlagForÅrModellApi
+import no.nav.aap.modellapi.InntekterForBeregningModellApi
+import no.nav.aap.modellapi.InntektsgrunnlagModellApi
+import no.nav.aap.modellapi.InntektsgrunnlagForÅrModellApi
 import java.time.LocalDate
 import java.time.Year
 
