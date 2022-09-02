@@ -96,7 +96,13 @@ internal class Paragraf_11_22 private constructor(
             }
         }
 
-        override fun yrkesskade(paragraf1122: Paragraf_11_22) = paragraf1122.løsninger.last().yrkesskade() // TODO
+        override fun accept(vilkårsvurdering: Paragraf_11_22, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_11_22(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_11_22(vilkårsvurdering)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
@@ -118,7 +124,13 @@ internal class Paragraf_11_22 private constructor(
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_22>() {
-        override fun yrkesskade(paragraf1122: Paragraf_11_22) = paragraf1122.løsninger.last().yrkesskade() // TODO
+        override fun accept(vilkårsvurdering: Paragraf_11_22, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_11_22(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_11_22(vilkårsvurdering)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_22): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,

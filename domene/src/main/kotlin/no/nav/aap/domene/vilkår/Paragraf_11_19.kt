@@ -65,7 +65,7 @@ internal class Paragraf_11_19 private constructor(
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
+                vurdertMaskinelt = vurdertMaskinelt,
                 løsning_11_19_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_11_19 = vilkårsvurdering.kvalitetssikringer.toDto(),
             )
@@ -83,8 +83,13 @@ internal class Paragraf_11_19 private constructor(
             }
         }
 
-        override fun beregningsdato(vilkårsvurdering: Paragraf_11_19): LocalDate =
-            vilkårsvurdering.løsninger.last().beregningsdato
+        override fun accept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_11_19(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_11_19(vilkårsvurdering)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19) =
             DtoVilkårsvurdering(
@@ -95,7 +100,7 @@ internal class Paragraf_11_19 private constructor(
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
+                vurdertMaskinelt = vurdertMaskinelt,
                 løsning_11_19_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_11_19 = vilkårsvurdering.kvalitetssikringer.toDto(),
             )
@@ -110,8 +115,13 @@ internal class Paragraf_11_19 private constructor(
     }
 
     internal object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_19>() {
-        override fun beregningsdato(vilkårsvurdering: Paragraf_11_19): LocalDate =
-            vilkårsvurdering.løsninger.last().beregningsdato
+        override fun accept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_11_19(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_11_19(vilkårsvurdering)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19) =
             DtoVilkårsvurdering(
@@ -122,7 +132,7 @@ internal class Paragraf_11_19 private constructor(
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
+                vurdertMaskinelt = vurdertMaskinelt,
                 løsning_11_19_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_11_19 = vilkårsvurdering.kvalitetssikringer.toDto(),
             )

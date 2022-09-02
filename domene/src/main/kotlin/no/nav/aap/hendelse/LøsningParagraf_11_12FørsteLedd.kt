@@ -1,5 +1,6 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_12FørsteLedd
 import no.nav.aap.dto.DtoLøsningParagraf_11_12FørsteLedd
 import java.time.LocalDate
@@ -28,6 +29,19 @@ internal class LøsningParagraf_11_12FørsteLedd(
         etterSisteLoenn,
     }
 
+    internal fun accept(visitor: Vilkårsvurdering.VilkårsvurderingVisitor) {
+        visitor.visitLøsningParagraf_11_12FørsteLedd(
+            this,
+            løsningId,
+            vurdertAv,
+            tidspunktForVurdering,
+            bestemmesAv,
+            unntak,
+            unntaksbegrunnelse,
+            manueltSattVirkningsdato
+        )
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun bestemmesAv() = bestemmesAv
     internal fun virkningsdato() = manueltSattVirkningsdato
@@ -44,8 +58,8 @@ internal class LøsningParagraf_11_12FørsteLedd(
 }
 
 class KvalitetssikringParagraf_11_12FørsteLedd(
-    private val kvalitetssikringId: UUID, 
-    private val løsningId: UUID, 
+    private val kvalitetssikringId: UUID,
+    private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,

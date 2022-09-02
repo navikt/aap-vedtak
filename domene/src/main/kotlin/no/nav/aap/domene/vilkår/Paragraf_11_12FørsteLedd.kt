@@ -95,11 +95,13 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             }
         }
 
-        override fun virkningsdato(vilkårsvurdering: Paragraf_11_12FørsteLedd): Pair<LøsningParagraf_11_12FørsteLedd.BestemmesAv, LocalDate?> =
-            when (val bestemmesAv = vilkårsvurdering.løsninger.last().bestemmesAv()) {
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger -> bestemmesAv to null
-                else -> bestemmesAv to vilkårsvurdering.løsninger.last().virkningsdato()
-            }
+        override fun accept(vilkårsvurdering: Paragraf_11_12FørsteLedd, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
@@ -124,11 +126,13 @@ internal class Paragraf_11_12FørsteLedd private constructor(
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_12FørsteLedd>() {
-        override fun virkningsdato(vilkårsvurdering: Paragraf_11_12FørsteLedd): Pair<LøsningParagraf_11_12FørsteLedd.BestemmesAv, LocalDate?> =
-            when (val bestemmesAv = vilkårsvurdering.løsninger.last().bestemmesAv()) {
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger -> bestemmesAv to null
-                else -> bestemmesAv to vilkårsvurdering.løsninger.last().virkningsdato()
-            }
+        override fun accept(vilkårsvurdering: Paragraf_11_12FørsteLedd, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): DtoVilkårsvurdering = DtoVilkårsvurdering(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,

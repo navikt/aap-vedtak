@@ -1,11 +1,11 @@
 package no.nav.aap.domene.vilkår
 
-import no.nav.aap.domene.beregning.Yrkesskade
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.dto.DtoVilkårsvurdering
 import no.nav.aap.hendelse.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
@@ -44,6 +44,58 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         operator fun plus(other: Ledd) = listOf(this, other)
     }
 
+    internal fun accept(visitor: VilkårsvurderingVisitor) = callWithReceiver {
+        tilstand.accept(this, visitor)
+    }
+
+    internal interface VilkårsvurderingVisitor {
+        fun preVisitParagraf_11_12FørsteLedd(vilkårsvurdering: Paragraf_11_12FørsteLedd) {}
+        fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
+        fun visitLøsningParagraf_11_12FørsteLedd(
+            løsning: LøsningParagraf_11_12FørsteLedd,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime,
+            bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv,
+            unntak: String,
+            unntaksbegrunnelse: String,
+            manueltSattVirkningsdato: LocalDate?
+        ) {
+        }
+
+        fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
+        fun postVisitParagraf_11_12FørsteLedd(vilkårsvurdering: Paragraf_11_12FørsteLedd) {}
+
+        fun preVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
+        fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
+
+        fun visitLøsningParagraf_11_19(
+            løsning: LøsningParagraf_11_19,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime,
+            beregningsdato: LocalDate
+        ) {
+        }
+
+        fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
+        fun postVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
+
+        fun preVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
+        fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
+
+        fun visitLøsningParagraf_11_22(
+            løsning: LøsningParagraf_11_22,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime,
+        ) {
+        }
+
+        fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
+        fun postVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
+    }
+
     protected open fun onEntry(hendelse: Hendelse) = callWithReceiver {
         tilstand.onEntry(this, hendelse)
     }
@@ -63,10 +115,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     internal fun erKvalitetssikret(): Boolean = tilstand.erKvalitetssikret()
     internal fun erIKvalitetssikring(): Boolean = tilstand.erIKvalitetssikring()
 
-    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) =
-        callWithReceiver {
-            tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
-        }
+    internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) = callWithReceiver {
+        tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
+    }
 
     protected abstract fun <T> callWithReceiver(block: PARAGRAF.() -> T): T
 
@@ -173,14 +224,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.toDto(this)
     }
 
-    //FIXME: Noe skurr med denne her
-    internal fun yrkesskade() = callWithReceiver {
-        tilstand.yrkesskade(this)
-    }
-
-    internal fun beregningsdato() = callWithReceiver { tilstand.beregningsdato(this) }
-    internal fun virkningsdato() = callWithReceiver { tilstand.virkningsdato(this) }
-
     internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
         protected val tilstandsnavn: Tilstandsnavn,
         private val erOppfylt: Boolean,
@@ -203,6 +246,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
             IKKE_RELEVANT,
         }
+
+        internal open fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {}
 
         internal open fun onEntry(vilkårsvurdering: PARAGRAF, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: PARAGRAF, hendelse: Hendelse) {}
@@ -396,14 +441,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         ) {
             log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
-
-        //FIXME: Noe skurr med denne også
-        internal open fun yrkesskade(paragraf1122: PARAGRAF): Yrkesskade {
-            error("Kun for 11-22") //FIXME
-        }
-
-        internal open fun beregningsdato(vilkårsvurdering: PARAGRAF): LocalDate? = null //TODO("Kun for 11-19")
-        internal open fun virkningsdato(vilkårsvurdering: PARAGRAF): Pair<LøsningParagraf_11_12FørsteLedd.BestemmesAv, LocalDate?>? = null //TODO("Kun for 11-12")
 
         internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,

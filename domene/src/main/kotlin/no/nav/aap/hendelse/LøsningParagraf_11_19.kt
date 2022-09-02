@@ -1,5 +1,6 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_19
 import no.nav.aap.dto.DtoLøsningParagraf_11_19
 import java.time.LocalDate
@@ -12,6 +13,10 @@ internal class LøsningParagraf_11_19(
     private val tidspunktForVurdering: LocalDateTime,
     internal val beregningsdato: LocalDate
 ) : Hendelse() {
+    internal fun accept(visitor: Vilkårsvurdering.VilkårsvurderingVisitor) {
+        visitor.visitLøsningParagraf_11_19(this, løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
+    }
+
     internal companion object {
         internal fun Iterable<LøsningParagraf_11_19>.toDto() = map(LøsningParagraf_11_19::toDto)
         internal fun gjenopprett(dtoLøsningParagraf1119: DtoLøsningParagraf_11_19) =
@@ -22,7 +27,6 @@ internal class LøsningParagraf_11_19(
                 beregningsdato = dtoLøsningParagraf1119.beregningsdato
             )
     }
-
     internal fun vurdertAv() = vurdertAv
     private fun toDto() = DtoLøsningParagraf_11_19(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
 }

@@ -3,6 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.beregning.Beløp
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr
 import no.nav.aap.domene.beregning.Yrkesskade
+import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.dto.DtoKvalitetssikringParagraf_11_22
 import no.nav.aap.dto.DtoLøsningParagraf_11_22
 import java.time.LocalDateTime
@@ -20,6 +21,15 @@ internal class LøsningParagraf_11_22(
 ) : Hendelse() {
     internal companion object {
         internal fun Iterable<LøsningParagraf_11_22>.toDto() = map(LøsningParagraf_11_22::toDto)
+    }
+
+    internal fun accept(visitor: Vilkårsvurdering.VilkårsvurderingVisitor) {
+        visitor.visitLøsningParagraf_11_22(
+            løsning = this,
+            løsningId = løsningId,
+            vurdertAv = vurdertAv,
+            tidspunktForVurdering = tidspunktForVurdering
+        )
     }
 
     internal fun vurdertAv() = vurdertAv
@@ -43,8 +53,8 @@ internal class LøsningParagraf_11_22(
 }
 
 class KvalitetssikringParagraf_11_22(
-    private val kvalitetssikringId: UUID, 
-    private val løsningId: UUID, 
+    private val kvalitetssikringId: UUID,
+    private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,

@@ -1,6 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.august
+import no.nav.aap.domene.Sakstype
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
@@ -32,9 +33,16 @@ internal class `§11-19 Test` {
         val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
         vilkår.håndterSøknad(søknad, Fødselsdato(1 januar 1980), 1 januar 2022)
 
-        vilkår.håndterLøsning(LøsningParagraf_11_19(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), 15 august 2018))
+        vilkår.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                beregningsdato = 15 august 2018
+            )
+        )
 
-        assertEquals(15 august 2018, vilkår.beregningsdato())
+        assertEquals(15 august 2018, BeregningsdatoVisitor().apply { vilkår.accept(this) }.beregningsdato)
     }
 
     @Test
@@ -43,7 +51,7 @@ internal class `§11-19 Test` {
         val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
         vilkår.håndterSøknad(søknad, Fødselsdato(1 januar 1980), 1 januar 2022)
 
-        assertNull(vilkår.beregningsdato())
+        assertNull(BeregningsdatoVisitor().apply { vilkår.accept(this) }.beregningsdato)
     }
 
     @Test
@@ -55,9 +63,17 @@ internal class `§11-19 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        vilkår.håndterLøsning(LøsningParagraf_11_19(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), 15 august 2018))
+        vilkår.håndterLøsning(
+            LøsningParagraf_11_19(
+                UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                15 august 2018
+            )
+        )
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_19(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_19(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -74,9 +90,17 @@ internal class `§11-19 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        vilkår.håndterLøsning(LøsningParagraf_11_19(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), 15 august 2018))
+        vilkår.håndterLøsning(
+            LøsningParagraf_11_19(
+                UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                15 august 2018
+            )
+        )
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_19(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_19(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -98,5 +122,19 @@ internal class `§11-19 Test` {
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_19) {
         assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
+    }
+
+    private class BeregningsdatoVisitor : Sakstype.SakstypeVisitor {
+        var beregningsdato: LocalDate? = null
+
+        override fun visitLøsningParagraf_11_19(
+            løsning: LøsningParagraf_11_19,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime,
+            beregningsdato: LocalDate
+        ) {
+            this.beregningsdato = beregningsdato
+        }
     }
 }

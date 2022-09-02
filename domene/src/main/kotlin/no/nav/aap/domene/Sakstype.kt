@@ -11,7 +11,9 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.DtoSakstype
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
+import no.nav.aap.domene.beregning.Yrkesskade as YrkesskadeBeregning
 
 internal abstract class Sakstype private constructor(
     protected val type: Type,
@@ -136,8 +138,79 @@ internal abstract class Sakstype private constructor(
     internal fun erAlleKvalitetssikret() = vilkårsvurderinger.erAlleKvalitetssikret()
     internal fun erNoenIkkeIKvalitetssikring() = vilkårsvurderinger.erNoenIkkeIKvalitetssikring()
 
-    internal fun beregningsdato() = vilkårsvurderinger.firstNotNullOf { it.beregningsdato() }
-    internal fun virkningsdato() = vilkårsvurderinger.firstNotNullOf { it.virkningsdato() }
+    internal fun beregningsdato() = BeregningsdatoVisitor(this).beregningsdato
+    internal fun virkningsdato() = VirkningsdatoVisitor(this).let { it.bestemmesAv to it.virkningsdato }
+
+    internal open fun accept(visitor: SakstypeVisitor) {}
+
+    internal interface SakstypeVisitor : Vilkårsvurdering.VilkårsvurderingVisitor {
+        fun preVisitStandard(sakstype: Standard) {}
+        fun postVisitStandard(sakstype: Standard) {}
+
+        fun preVisitYrkesskade(sakstype: Yrkesskade) {}
+        fun postVisitYrkesskade(sakstype: Yrkesskade) {}
+
+        fun preVisitStudent(sakstype: Student) {}
+        fun postVisitStudent(sakstype: Student) {}
+    }
+
+    private class BeregningsdatoVisitor(sakstype: Sakstype) : SakstypeVisitor {
+        lateinit var beregningsdato: LocalDate
+
+        init {
+            sakstype.accept(this)
+        }
+
+        override fun visitLøsningParagraf_11_19(
+            løsning: LøsningParagraf_11_19,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime,
+            beregningsdato: LocalDate
+        ) {
+            this.beregningsdato = beregningsdato
+        }
+    }
+
+    private class VirkningsdatoVisitor(sakstype: Sakstype) : SakstypeVisitor {
+        lateinit var bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv
+        var virkningsdato: LocalDate? = null
+
+        init {
+            sakstype.accept(this)
+        }
+
+        override fun visitLøsningParagraf_11_12FørsteLedd(
+            løsning: LøsningParagraf_11_12FørsteLedd,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime,
+            bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv,
+            unntak: String,
+            unntaksbegrunnelse: String,
+            manueltSattVirkningsdato: LocalDate?
+        ) {
+            this.bestemmesAv = bestemmesAv
+            this.virkningsdato = manueltSattVirkningsdato
+        }
+    }
+
+    private class YrkesskadeVisitor(sakstype: Sakstype) : SakstypeVisitor {
+        lateinit var yrkesskade: YrkesskadeBeregning
+
+        init {
+            sakstype.accept(this)
+        }
+
+        override fun visitLøsningParagraf_11_22(
+            løsning: LøsningParagraf_11_22,
+            løsningId: UUID,
+            vurdertAv: String,
+            tidspunktForVurdering: LocalDateTime
+        ) {
+
+        }
+    }
 
     internal class Standard private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering<*>>
@@ -146,6 +219,12 @@ internal abstract class Sakstype private constructor(
         aktiv = true,
         vilkårsvurderinger = vilkårsvurderinger
     ) {
+
+        override fun accept(visitor: SakstypeVisitor) {
+            visitor.preVisitStandard(this)
+            vilkårsvurderinger.forEach { it.accept(visitor) }
+            visitor.postVisitStandard(this)
+        }
 
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
@@ -184,7 +263,6 @@ internal abstract class Sakstype private constructor(
     }
 
     internal class Yrkesskade private constructor(
-        private val paragraf1122: Paragraf_11_22,
         vilkårsvurderinger: List<Vilkårsvurdering<*>>
     ) : Sakstype(
         type = Type.YRKESSKADE,
@@ -192,12 +270,18 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger = vilkårsvurderinger
     ) {
 
+        override fun accept(visitor: SakstypeVisitor) {
+            visitor.preVisitYrkesskade(this)
+            vilkårsvurderinger.forEach { it.accept(visitor) }
+            visitor.postVisitYrkesskade(this)
+        }
+
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
         ): Vedtak {
-            val inntektsgrunnlag =
-                inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, paragraf1122.yrkesskade())
+            val yrkesskade = YrkesskadeVisitor(this).yrkesskade
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, yrkesskade)
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
@@ -209,7 +293,6 @@ internal abstract class Sakstype private constructor(
 
         internal companion object {
             internal fun opprettYrkesskade(): Yrkesskade {
-                val paragraf1122 = Paragraf_11_22()
                 val vilkårsvurderinger = listOf(
                     MedlemskapYrkesskade(),
                     Paragraf_11_3(),
@@ -218,16 +301,16 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_5_yrkesskade(),
                     Paragraf_11_6(),
                     Paragraf_11_12FørsteLedd(),
-                    paragraf1122,
+                    Paragraf_11_22(),
                     Paragraf_11_19(),
                     Paragraf_11_29(),
                 )
 
-                return Yrkesskade(paragraf1122, vilkårsvurderinger)
+                return Yrkesskade(vilkårsvurderinger)
             }
 
             internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
-                Yrkesskade(vilkårsvurderinger.filterIsInstance<Paragraf_11_22>().first(), vilkårsvurderinger)
+                Yrkesskade(vilkårsvurderinger)
         }
     }
 
@@ -238,6 +321,12 @@ internal abstract class Sakstype private constructor(
         aktiv = true,
         vilkårsvurderinger = vilkårsvurderinger
     ) {
+
+        override fun accept(visitor: SakstypeVisitor) {
+            visitor.preVisitStudent(this)
+            vilkårsvurderinger.forEach { it.accept(visitor) }
+            visitor.postVisitStudent(this)
+        }
 
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
