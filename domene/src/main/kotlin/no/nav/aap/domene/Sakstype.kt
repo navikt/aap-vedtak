@@ -9,7 +9,10 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeIKvalitet
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.dto.DtoSakstype
-import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
+import no.nav.aap.hendelse.LøsningParagraf_11_19
+import no.nav.aap.hendelse.LøsningParagraf_11_22
+import no.nav.aap.hendelse.Søknad
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -31,100 +34,8 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
     }
 
-    internal fun håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningManuellParagraf_11_2) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_3) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_4AndreOgTredjeLedd) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_6) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_19) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_22) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_29) {
-        vilkårsvurderinger.forEach { it.håndterLøsning(løsning) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringMedlemskapYrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_22) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
-    }
-
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
-        vilkårsvurderinger.forEach { it.håndterKvalitetssikring(kvalitetssikring) }
+    internal fun <T> håndter(løsning: T, håndter: Vilkårsvurdering<*>.(T) -> Unit) {
+        vilkårsvurderinger.forEach { it.håndter(løsning) }
     }
 
     abstract fun opprettVedtak(

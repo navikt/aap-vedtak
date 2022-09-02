@@ -539,4 +539,72 @@ internal class SøkerComponentTest {
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
     ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }
+
+    private fun Søker.håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_3) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_5) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_6) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_29) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_19) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_22) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
 }

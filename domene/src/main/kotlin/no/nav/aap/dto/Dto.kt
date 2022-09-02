@@ -5,6 +5,7 @@ import no.nav.aap.domene.beregning.Arbeidsgiver
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.*
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -111,7 +112,7 @@ data class DtoLøsningMaskinellMedlemskapYrkesskade(
 ) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -126,7 +127,7 @@ data class DtoLøsningManuellMedlemskapYrkesskade(
 ) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -150,7 +151,7 @@ data class DtoKvalitetssikringMedlemskapYrkesskade(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -184,7 +185,7 @@ data class DtoLøsningParagraf_11_2(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -223,7 +224,7 @@ data class DtoKvalitetssikringParagraf_11_2(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -253,7 +254,7 @@ data class DtoLøsningMaskinellParagraf_11_2(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -281,7 +282,7 @@ data class DtoLøsningParagraf_11_3(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -314,7 +315,7 @@ data class DtoKvalitetssikringParagraf_11_3(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -348,7 +349,7 @@ data class DtoLøsningParagraf_11_4AndreOgTredjeLedd(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -382,7 +383,7 @@ data class DtoKvalitetssikringParagraf_11_4AndreOgTredjeLedd(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -419,7 +420,7 @@ data class DtoLøsningParagraf_11_5(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -460,7 +461,7 @@ data class DtoKvalitetssikringParagraf_11_5(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -483,7 +484,7 @@ data class DtoLøsningParagraf_11_5Yrkesskade(
 ) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -507,7 +508,7 @@ data class DtoKvalitetssikringParagraf_11_5Yrkesskade(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -547,7 +548,7 @@ data class DtoLøsningParagraf_11_6(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -587,7 +588,7 @@ data class DtoKvalitetssikringParagraf_11_6(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -630,7 +631,7 @@ data class DtoLøsningParagraf_11_12FørsteLedd(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -679,7 +680,7 @@ data class DtoKvalitetssikringParagraf_11_12FørsteLedd(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -704,7 +705,7 @@ data class DtoLøsningParagraf_11_22(
 ) {
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -730,7 +731,7 @@ data class DtoKvalitetssikringParagraf_11_22(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -764,7 +765,7 @@ data class DtoLøsningParagraf_11_29(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -797,7 +798,7 @@ data class DtoKvalitetssikringParagraf_11_29(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 
@@ -836,7 +837,7 @@ data class DtoLøsningParagraf_11_19(
 
     fun håndter(søker: Søker): List<Behov> {
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
         return løsning.behov()
     }
 
@@ -869,7 +870,7 @@ data class DtoKvalitetssikringParagraf_11_19(
 
     fun håndter(søker: Søker): List<Behov> {
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring)
+        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
         return kvalitetssikring.behov()
     }
 

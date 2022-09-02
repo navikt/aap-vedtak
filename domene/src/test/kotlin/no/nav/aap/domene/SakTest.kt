@@ -73,13 +73,23 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -120,10 +130,24 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -158,12 +182,22 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningMaskinellMedlemskapYrkesskade(
-            UUID.randomUUID(),
-            LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA))
+        sak.håndterLøsning(
+            LøsningMaskinellMedlemskapYrkesskade(
+                UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -215,10 +249,24 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -275,13 +323,23 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -322,10 +380,24 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         sak.håndterLøsning(
@@ -340,22 +412,76 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_2(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_2(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_3(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_3(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_5(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "fatter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "fatter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_6(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_6(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_12FørsteLedd(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_19(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_19(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
 
@@ -402,13 +528,23 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -449,10 +585,24 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         sak.håndterLøsning(
@@ -467,22 +617,76 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_2(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_2(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_3(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_3(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_5(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "fatter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "fatter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_6(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_6(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_12FørsteLedd(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_19(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_19(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
 
@@ -542,13 +746,23 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -589,10 +803,24 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         sak.håndterLøsning(
@@ -607,29 +835,99 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_2(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_2(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_3(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), false, "NEI"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_3(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                false,
+                "NEI"
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_5(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "fatter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "fatter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_6(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_6(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_12FørsteLedd(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_19(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_19(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_29(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_29(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         // Behandle underkjent løsning på nytt
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         sak.håndterLøsning(
@@ -644,7 +942,16 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_3(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_3(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("VEDTAK_FATTET", sak)
 
         val saker = listOf(sak).toDto()
@@ -679,13 +986,23 @@ internal class SakTest {
         sak.håndterSøknad(søknad, fødselsdato)
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningMaskinellParagraf_11_2(
-            UUID.randomUUID(),
-            LocalDateTime.now(),
-            LøsningMaskinellParagraf_11_2.ErMedlem.JA))
+        sak.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_3(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
@@ -726,10 +1043,24 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_29(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), true))
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningParagraf_11_19(løsningId = UUID.randomUUID(),"saksbehandler", LocalDateTime.now(), 13 september 2021))
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
         assertTilstand("BEREGN_INNTEKT", sak)
 
         sak.håndterLøsning(
@@ -744,31 +1075,96 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_2(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_2(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_3(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_3(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_5(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "fatter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "fatter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_6(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_6(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_12FørsteLedd(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_12FørsteLedd(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_19(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_19(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        sak.håndterKvalitetssikring(KvalitetssikringParagraf_11_29(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "beslutter", LocalDateTime.now(), true, "JA"))
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_29(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
 
         assertTilstand("VEDTAK_FATTET", sak)
 
-        sak.håndterIverksettelse(IverksettelseAvVedtak(
+        sak.håndterIverksettelse(
+            IverksettelseAvVedtak(
                 iverksattAv = "saksbehandler@nav.no"
-        ))
+            )
+        )
 
         assertTilstand("VENTER_SYKEPENGER", sak)
 
@@ -822,4 +1218,72 @@ internal class SakTest {
         paragraf: Vilkårsvurdering.Paragraf,
         ledd: List<Vilkårsvurdering.Ledd>
     ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }
+
+    private fun Sak.håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_3) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_5) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_6) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_29) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_19) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_22) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
+
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+    }
 }
