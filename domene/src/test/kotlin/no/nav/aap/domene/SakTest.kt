@@ -7,18 +7,18 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
 import no.nav.aap.januar
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
 import java.util.*
-import kotlin.test.assertTrue
 
 internal class SakTest {
     @Test

@@ -8,11 +8,11 @@ import no.nav.aap.hendelse.LøsningParagraf_11_29
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
-import kotlin.test.assertEquals
 
 internal class `§11-29 Test` {
 

@@ -9,12 +9,12 @@ import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
 import java.util.*
-import kotlin.test.assertEquals
 
 internal class `§11-22 Test` {
 
