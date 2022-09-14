@@ -17,7 +17,7 @@ jobs:
           java-version: 18
           distribution: 'temurin'
 
-      - uses: gradle/gradle-build-action@v2.2.4
+      - uses: gradle/gradle-build-action@v2.3.0
         with:
           arguments: test --continue --no-daemon --configuration-cache
 
