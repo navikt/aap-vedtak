@@ -4,10 +4,14 @@ import no.nav.aap.domene.Sakstype.Companion.toDto
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.modellapi.SakModellApi
+import no.nav.aap.domene.visitor.BeregningsdatoVisitor
+import no.nav.aap.domene.visitor.KvalitetssikretVisitor
+import no.nav.aap.domene.visitor.OppfyltVisitor
+import no.nav.aap.domene.visitor.VirkningsdatoVisitor
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
+import no.nav.aap.modellapi.SakModellApi
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -142,7 +146,7 @@ internal class Sak private constructor(
 
             private fun vurderNestetilstand(sak: Sak, søknad: Søknad) {
                 when {
-                    sak.sakstype.erNoenIkkeOppfylt() -> sak.tilstand(IkkeOppfylt, søknad)
+                    OppfyltVisitor(sak.sakstype).erIkkeOppfylt -> sak.tilstand(IkkeOppfylt, søknad)
                     else -> sak.tilstand(SøknadMottatt, søknad)
                 }
             }
@@ -159,11 +163,12 @@ internal class Sak private constructor(
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
+                val visitor = OppfyltVisitor(sak.sakstype)
                 when {
-                    sak.sakstype.erAlleOppfylt() ->
+                    visitor.erOppfylt ->
                         sak.tilstand(BeregnInntekt, hendelse)
 
-                    sak.sakstype.erNoenIkkeOppfylt() ->
+                    visitor.erIkkeOppfylt ->
                         sak.tilstand(IkkeOppfylt, hendelse)
                 }
             }
@@ -180,10 +185,11 @@ internal class Sak private constructor(
         object BeregnInntekt : Tilstand(Tilstandsnavn.BEREGN_INNTEKT) {
 
             override fun onEntry(sak: Sak, hendelse: Hendelse) {
+                val beregningsdato = BeregningsdatoVisitor(sak.sakstype).beregningsdato
                 hendelse.opprettBehov(
                     BehovInntekter(
-                        fom = Year.from(sak.sakstype.beregningsdato()).minusYears(3),
-                        tom = Year.from(sak.sakstype.beregningsdato()).minusYears(1)
+                        fom = Year.from(beregningsdato).minusYears(3),
+                        tom = Year.from(beregningsdato).minusYears(1)
                     )
                 )
             }
@@ -228,11 +234,12 @@ internal class Sak private constructor(
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
+                val visitor = KvalitetssikretVisitor(sak.sakstype)
                 when {
-                    sak.sakstype.erAlleKvalitetssikret() ->
+                    visitor.erKvalitetssikret ->
                         sak.tilstand(VedtakFattet, hendelse)
 
-                    sak.sakstype.erNoenIkkeIKvalitetssikring() ->
+                    visitor.erIKvalitetssikring.not() ->
                         sak.tilstand(SøknadMottatt, hendelse)
                 }
             }
@@ -261,8 +268,8 @@ internal class Sak private constructor(
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
-                val virkningsdato = sak.sakstype.virkningsdato()
-                when (virkningsdato.first) {
+                val visitor = VirkningsdatoVisitor(sak.sakstype)
+                when (visitor.bestemmesAv) {
                     LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger ->
                         sak.tilstand(VenterSykepenger, hendelse)
 

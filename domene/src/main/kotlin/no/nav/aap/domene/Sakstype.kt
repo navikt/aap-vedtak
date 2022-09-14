@@ -4,14 +4,13 @@ import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.domene.visitor.*
-import no.nav.aap.hendelse.LøsningParagraf_11_22
+import no.nav.aap.domene.visitor.BeregningsdatoVisitor
+import no.nav.aap.domene.visitor.SakstypeVisitor
+import no.nav.aap.domene.visitor.YrkesskadeVisitor
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.SakstypeModellApi
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
-import no.nav.aap.domene.beregning.Yrkesskade as YrkesskadeBeregning
 
 internal abstract class Sakstype private constructor(
     protected val type: Type,
@@ -38,33 +37,7 @@ internal abstract class Sakstype private constructor(
         fødselsdato: Fødselsdato,
     ): Vedtak
 
-    internal fun erAlleOppfylt() = OppfyltVisitor(this).erOppfylt
-    internal fun erNoenIkkeOppfylt() = OppfyltVisitor(this).erIkkeOppfylt
-
-    internal fun erAlleKvalitetssikret() = KvalitetssikretVisitor(this).erKvalitetssikret
-    internal fun erNoenIkkeIKvalitetssikring() = KvalitetssikretVisitor(this).erIKvalitetssikring.not()
-
-    internal fun beregningsdato() = BeregningsdatoVisitor(this).beregningsdato
-    internal fun virkningsdato() = VirkningsdatoVisitor(this).let { it.bestemmesAv to it.virkningsdato }
-
     internal abstract fun accept(visitor: SakstypeVisitor)
-
-    private class YrkesskadeVisitor(sakstype: Sakstype) : SakstypeVisitor {
-        lateinit var yrkesskade: YrkesskadeBeregning
-
-        init {
-            sakstype.accept(this)
-        }
-
-        override fun visitLøsningParagraf_11_22(
-            løsning: LøsningParagraf_11_22,
-            løsningId: UUID,
-            vurdertAv: String,
-            tidspunktForVurdering: LocalDateTime
-        ) {
-
-        }
-    }
 
     internal class Standard private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering<*>>
@@ -84,7 +57,11 @@ internal abstract class Sakstype private constructor(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
         ): Vedtak {
-            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, null)
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
+                beregningsdato = BeregningsdatoVisitor(this).beregningsdato,
+                fødselsdato = fødselsdato,
+                yrkesskade = null
+            )
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
@@ -135,7 +112,11 @@ internal abstract class Sakstype private constructor(
             fødselsdato: Fødselsdato,
         ): Vedtak {
             val yrkesskade = YrkesskadeVisitor(this).yrkesskade
-            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, yrkesskade)
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
+                beregningsdato = BeregningsdatoVisitor(this).beregningsdato,
+                fødselsdato = fødselsdato,
+                yrkesskade = yrkesskade
+            )
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
@@ -186,7 +167,11 @@ internal abstract class Sakstype private constructor(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
         ): Vedtak {
-            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(beregningsdato(), fødselsdato, null)
+            val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
+                beregningsdato = BeregningsdatoVisitor(this).beregningsdato,
+                fødselsdato = fødselsdato,
+                yrkesskade = null
+            )
             return Vedtak(
                 vedtaksid = UUID.randomUUID(),
                 innvilget = true,
