@@ -1,9 +1,10 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -44,16 +45,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             vilkårsvurdering.vurderAldersvilkår(søknad, fødselsdato, vurderingsdato)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
+            UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
     object Oppfylt : Tilstand.OppfyltMaskineltKvalitetssikret<Paragraf_11_4FørsteLedd>() {
@@ -66,16 +59,17 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             log.info("Vilkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<Paragraf_11_4FørsteLedd>() {
@@ -88,16 +82,17 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             log.info("Vilkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     internal companion object {
@@ -112,6 +107,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             //TODO: Skal bare bruke IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfylt
+
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_4FørsteLedd")
         }
     }

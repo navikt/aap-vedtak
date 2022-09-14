@@ -1,12 +1,14 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.*
+import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -24,13 +26,14 @@ internal class MedlemskapYrkesskadeTest {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
+        val løsning =
+            LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(løsning)
+
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
-
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT, vilkår)
     }
 
     @Test
@@ -45,13 +48,14 @@ internal class MedlemskapYrkesskadeTest {
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
-        val løsning = LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
+        val løsning =
+            LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
         vilkår.håndterLøsning(løsning)
+
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT, vilkår)
     }
 
     @Test
@@ -67,13 +71,16 @@ internal class MedlemskapYrkesskadeTest {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
+
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-
-        assertFalse(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
     }
 
     @Test
@@ -88,7 +95,10 @@ internal class MedlemskapYrkesskadeTest {
         assertHarBehov(søknad)
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -101,11 +111,11 @@ internal class MedlemskapYrkesskadeTest {
                 LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
             )
         vilkår.håndterLøsning(manuellLøsning)
+
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.OPPFYLT, vilkår)
-
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
@@ -120,7 +130,10 @@ internal class MedlemskapYrkesskadeTest {
         assertHarBehov(søknad)
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
         assertHarIkkeBehov(maskinellLøsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -132,19 +145,18 @@ internal class MedlemskapYrkesskadeTest {
             LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
         )
         vilkår.håndterLøsning(manuellLøsning)
+
         assertHarIkkeBehov(manuellLøsning)
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
-    fun `Hvis søknad ikke er håndtert, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
+    fun `Hvis søknad ikke er håndtert, kan ikke vilkåret serialiseres`() {
         val vilkår = MedlemskapYrkesskade()
 
-        assertFalse(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertThrows<UlovligTilstandException> { listOf(vilkår).toDto() }
     }
 
     @Test
@@ -156,11 +168,11 @@ internal class MedlemskapYrkesskadeTest {
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-
-        assertFalse(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.SØKNAD_MOTTATT, vilkår)
     }
 
     @Test
@@ -173,10 +185,20 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(
+            løsningId = UUID.randomUUID(),
+            LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA
+        )
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            kvalitetssikringId = UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            true,
+            "JA"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -194,10 +216,20 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(
+            løsningId = UUID.randomUUID(),
+            LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI
+        )
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            kvalitetssikringId = UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            true,
+            "JA"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -216,14 +248,29 @@ internal class MedlemskapYrkesskadeTest {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning =
-            LøsningManuellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),"Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
+            LøsningManuellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                "Y",
+                LocalDateTime.now(),
+                LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
+            )
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            kvalitetssikringId = UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            true,
+            "JA"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -242,7 +289,10 @@ internal class MedlemskapYrkesskadeTest {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(løsningId = UUID.randomUUID(),LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
@@ -253,7 +303,14 @@ internal class MedlemskapYrkesskadeTest {
         )
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(kvalitetssikringId = UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            kvalitetssikringId = UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            true,
+            "JA"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -271,10 +328,18 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            false,
+            "NEI"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -292,10 +357,18 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.NEI)
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            false,
+            "NEI"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -314,14 +387,29 @@ internal class MedlemskapYrkesskadeTest {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning =
-            LøsningManuellMedlemskapYrkesskade(UUID.randomUUID(), "Y", LocalDateTime.now(), LøsningManuellMedlemskapYrkesskade.ErMedlem.JA)
+            LøsningManuellMedlemskapYrkesskade(
+                UUID.randomUUID(),
+                "Y",
+                LocalDateTime.now(),
+                LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
+            )
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            false,
+            "NEI"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -340,7 +428,10 @@ internal class MedlemskapYrkesskadeTest {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(UUID.randomUUID(), LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART)
+            LøsningMaskinellMedlemskapYrkesskade(
+                UUID.randomUUID(),
+                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
         vilkår.håndterLøsning(maskinellLøsning)
 
         val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
@@ -351,7 +442,14 @@ internal class MedlemskapYrkesskadeTest {
         )
         vilkår.håndterLøsning(manuellLøsning)
 
-        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            UUID.randomUUID(),
+            UUID.randomUUID(),
+            "X",
+            LocalDateTime.now(),
+            false,
+            "NEI"
+        )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

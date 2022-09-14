@@ -1,11 +1,15 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import no.nav.aap.modellapi.Utfall
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 
 internal class `§11-4 første ledd Test` {
@@ -18,8 +22,9 @@ internal class `§11-4 første ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
     @Test
@@ -31,8 +36,9 @@ internal class `§11-4 første ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
     @Test
@@ -44,8 +50,9 @@ internal class `§11-4 første ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
     @Test
@@ -57,15 +64,30 @@ internal class `§11-4 første ledd Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
     @Test
     fun `Hvis søknad ikke er håndtert, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        assertFalse(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertThrows<UlovligTilstandException> { listOf(vilkår).toDto() }
+    }
+
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_4FørsteLedd) {
+        assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
+    }
+
+    private fun assertTilstand(
+        tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
+        vilkårsvurdering: Paragraf_11_4FørsteLedd
+    ) {
+        assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
+    }
+
+    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_4FørsteLedd) {
+        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

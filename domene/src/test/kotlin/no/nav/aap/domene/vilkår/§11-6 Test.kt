@@ -3,11 +3,12 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_6
 import no.nav.aap.hendelse.LøsningParagraf_11_6
 import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions.*
+import no.nav.aap.modellapi.Utfall
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -34,8 +35,9 @@ internal class `§11-6 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
@@ -57,8 +59,9 @@ internal class `§11-6 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
@@ -80,8 +83,9 @@ internal class `§11-6 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
@@ -103,8 +107,9 @@ internal class `§11-6 Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
     }
 
     @Test

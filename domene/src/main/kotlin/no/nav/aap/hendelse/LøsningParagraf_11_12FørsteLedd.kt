@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.domene.vilkår.Vilkårsvurdering
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_12FørsteLeddModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_12FørsteLeddModellApi
 import java.time.LocalDate
@@ -29,7 +29,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
         etterSisteLoenn,
     }
 
-    internal fun accept(visitor: Vilkårsvurdering.VilkårsvurderingVisitor) {
+    internal fun accept(visitor: VilkårsvurderingVisitor) {
         visitor.visitLøsningParagraf_11_12FørsteLedd(
             this,
             løsningId,

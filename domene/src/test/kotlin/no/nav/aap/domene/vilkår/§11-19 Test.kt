@@ -1,15 +1,15 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.august
-import no.nav.aap.domene.Sakstype
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.Utfall
+import no.nav.aap.domene.visitor.SakstypeVisitor
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.januar
+import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
@@ -124,7 +124,7 @@ internal class `§11-19 Test` {
         assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 
-    private class BeregningsdatoVisitor : Sakstype.SakstypeVisitor {
+    private class BeregningsdatoVisitor : SakstypeVisitor {
         var beregningsdato: LocalDate? = null
 
         override fun visitLøsningParagraf_11_19(

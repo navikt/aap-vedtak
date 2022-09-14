@@ -1,11 +1,11 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
-import java.time.LocalDateTime
 import java.util.*
 
 internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
@@ -48,54 +48,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.accept(this, visitor)
     }
 
-    internal interface VilkårsvurderingVisitor {
-        fun preVisitParagraf_11_12FørsteLedd(vilkårsvurdering: Paragraf_11_12FørsteLedd) {}
-        fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
-        fun visitLøsningParagraf_11_12FørsteLedd(
-            løsning: LøsningParagraf_11_12FørsteLedd,
-            løsningId: UUID,
-            vurdertAv: String,
-            tidspunktForVurdering: LocalDateTime,
-            bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv,
-            unntak: String,
-            unntaksbegrunnelse: String,
-            manueltSattVirkningsdato: LocalDate?
-        ) {
-        }
-
-        fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
-        fun postVisitParagraf_11_12FørsteLedd(vilkårsvurdering: Paragraf_11_12FørsteLedd) {}
-
-        fun preVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
-        fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
-
-        fun visitLøsningParagraf_11_19(
-            løsning: LøsningParagraf_11_19,
-            løsningId: UUID,
-            vurdertAv: String,
-            tidspunktForVurdering: LocalDateTime,
-            beregningsdato: LocalDate
-        ) {
-        }
-
-        fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
-        fun postVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
-
-        fun preVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
-        fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
-
-        fun visitLøsningParagraf_11_22(
-            løsning: LøsningParagraf_11_22,
-            løsningId: UUID,
-            vurdertAv: String,
-            tidspunktForVurdering: LocalDateTime,
-        ) {
-        }
-
-        fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
-        fun postVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
-    }
-
     protected open fun onEntry(hendelse: Hendelse) = callWithReceiver {
         tilstand.onEntry(this, hendelse)
     }
@@ -109,11 +61,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         this.tilstand = nyTilstand
         onEntry(hendelse)
     }
-
-    internal fun erOppfylt(): Boolean = tilstand.erOppfylt()
-    internal fun erIkkeOppfylt(): Boolean = tilstand.erIkkeOppfylt()
-    internal fun erKvalitetssikret(): Boolean = tilstand.erKvalitetssikret()
-    internal fun erIKvalitetssikring(): Boolean = tilstand.erIKvalitetssikring()
 
     internal fun håndterSøknad(søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) = callWithReceiver {
         tilstand.håndterSøknad(this, søknad, fødselsdato, vurderingsdato)
@@ -226,10 +173,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
         protected val tilstandsnavn: Tilstandsnavn,
-        private val erOppfylt: Boolean,
-        private val erIkkeOppfylt: Boolean,
-        private val erKvalitetssikret: Boolean,
-        private val erIKvalitetssikring: Boolean,
         protected val vurdertMaskinelt: Boolean
     ) {
         enum class Tilstandsnavn {
@@ -247,7 +190,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             IKKE_RELEVANT,
         }
 
-        internal open fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {}
+        internal abstract fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor)
+        protected open fun subAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {}
 
         internal open fun onEntry(vilkårsvurdering: PARAGRAF, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: PARAGRAF, hendelse: Hendelse) {}
@@ -259,11 +203,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         }
 
         internal abstract fun toDto(vilkårsvurdering: PARAGRAF): VilkårsvurderingModellApi
-
-        internal fun erOppfylt() = erOppfylt
-        internal fun erIkkeOppfylt() = erIkkeOppfylt
-        internal fun erKvalitetssikret() = erKvalitetssikret
-        internal fun erIKvalitetssikring() = erIKvalitetssikring
 
         internal open fun håndterSøknad(
             vilkårsvurdering: PARAGRAF,
@@ -444,127 +383,132 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
-            erOppfylt = false,
-            erIkkeOppfylt = false,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = false,
             vurdertMaskinelt = false
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitIkkeVurdert()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class SøknadMottatt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
-            erOppfylt = false,
-            erIkkeOppfylt = false,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = false,
             vurdertMaskinelt = false
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitSøknadMottatt()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class ManuellVurderingTrengs<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS,
-            erOppfylt = false,
-            erIkkeOppfylt = false,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = false,
             vurdertMaskinelt = false
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitManuellVurderingTrengs()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class OppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT,
-            erOppfylt = true,
-            erIkkeOppfylt = false,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = true,
             vurdertMaskinelt = true
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitOppfyltMaskinelt()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class OppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET,
-                erOppfylt = true,
-                erIkkeOppfylt = false,
-                erKvalitetssikret = true,
-                erIKvalitetssikring = true,
                 vurdertMaskinelt = true
-            )
+            ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitOppfyltMaskineltKvalitetssikret()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class IkkeOppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
-            erOppfylt = false,
-            erIkkeOppfylt = true,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = true,
             vurdertMaskinelt = true
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitIkkeOppfyltMaskinelt()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
-                erOppfylt = false,
-                erIkkeOppfylt = true,
-                erKvalitetssikret = true,
-                erIKvalitetssikring = true,
                 vurdertMaskinelt = true
-            )
+            ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitIkkeOppfyltMaskineltKvalitetssikret()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class OppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT,
-            erOppfylt = true,
-            erIkkeOppfylt = false,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = true,
             vurdertMaskinelt = false
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitOppfyltManuelt()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class OppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET,
-                erOppfylt = true,
-                erIkkeOppfylt = false,
-                erKvalitetssikret = true,
-                erIKvalitetssikring = true,
                 vurdertMaskinelt = false
-            )
+            ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitOppfyltManueltKvalitetssikret()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class IkkeOppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
-            erOppfylt = false,
-            erIkkeOppfylt = true,
-            erKvalitetssikret = false,
-            erIKvalitetssikring = true,
             vurdertMaskinelt = false
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitIkkeOppfyltManuelt()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class IkkeOppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
-                erOppfylt = false,
-                erIkkeOppfylt = true,
-                erKvalitetssikret = true,
-                erIKvalitetssikring = true,
                 vurdertMaskinelt = false
-            )
+            ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitIkkeOppfyltManueltKvalitetssikret()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
 
         internal abstract class IkkeRelevant<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
             tilstandsnavn = Tilstandsnavn.IKKE_RELEVANT,
-            erOppfylt = true,
-            erIkkeOppfylt = false,
-            //IkkeRelevant skal ikke hindre saken i å bli kvalitetssikret.
-            erKvalitetssikret = true,
-            erIKvalitetssikring = true,
             vurdertMaskinelt = false
-        )
+        ) {
+            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+                visitor.visitIkkeRelevant()
+                subAccept(vilkårsvurdering, visitor)
+            }
+        }
     }
 
 
     internal companion object {
         private val log = LoggerFactory.getLogger("Vilkårsvurdering")
-
-        internal fun Iterable<Vilkårsvurdering<*>>.erAlleOppfylt() = all { it.erOppfylt() }
-        internal fun Iterable<Vilkårsvurdering<*>>.erNoenIkkeOppfylt() = any { it.erIkkeOppfylt() }
-        internal fun Iterable<Vilkårsvurdering<*>>.erAlleKvalitetssikret() = all { it.erKvalitetssikret() }
-        internal fun Iterable<Vilkårsvurdering<*>>.erNoenIkkeIKvalitetssikring() =
-            none() || any { !it.erIKvalitetssikring() }
 
         internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
 
@@ -586,7 +530,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                                 gjenopprett(vilkårsvurderingModellApi, Paragraf_11_4FørsteLedd.Companion::gjenopprett)
 
                             listOf(Ledd.LEDD_2, Ledd.LEDD_3) ->
-                                gjenopprett(vilkårsvurderingModellApi, Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett)
+                                gjenopprett(
+                                    vilkårsvurderingModellApi,
+                                    Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett
+                                )
 
                             else -> null.also { log.warn("Paragraf ${vilkårsvurderingModellApi.paragraf} Ledd $ledd not implemented") }
                         }

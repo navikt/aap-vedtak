@@ -3,13 +3,14 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_12FørsteLedd
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
-import org.junit.jupiter.api.Assertions.*
+import no.nav.aap.modellapi.Utfall
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -37,8 +38,9 @@ internal class `§11-12 første ledd Test` {
         )
         vilkår.håndterLøsning(løsning)
 
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test

@@ -1,14 +1,17 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5
 import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
-import org.junit.jupiter.api.Assertions.*
+import no.nav.aap.modellapi.Utfall
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -34,12 +37,13 @@ internal class `§11-5 Test` {
         )
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.SøknadMottatt, vilkår)
 
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
-    fun `Hvis søkers arbeidsevne er nedsatt med 49 prosent, er vilkår ikke oppfylt`() {
+    fun `Hvis søkers arbeidsevne ikke er nedsatt med 50 prosent, er vilkår ikke oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -58,16 +62,16 @@ internal class `§11-5 Test` {
         )
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.SøknadMottatt, vilkår)
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
     fun `Hvis søknad ikke er håndtert, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
         val vilkår = Paragraf_11_5()
 
-        assertFalse(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertThrows<UlovligTilstandException> { listOf(vilkår).toDto() }
     }
 
     @Test
@@ -79,8 +83,9 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        assertFalse(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.SØKNAD_MOTTATT, vilkår)
     }
 
     @Test

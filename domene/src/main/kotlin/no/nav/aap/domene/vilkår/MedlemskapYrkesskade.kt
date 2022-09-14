@@ -3,13 +3,13 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.MedlemskapYrkesskade.*
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.KvalitetssikringMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.LøsningManuellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.behov.Behov_11_2
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -63,16 +63,17 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = null,
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_VURDERT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<MedlemskapYrkesskade>() {
@@ -87,19 +88,20 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = null,
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_VURDERT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -127,19 +129,20 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -152,19 +155,20 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     object OppfyltMaskineltKvalitetssikret : Tilstand.OppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -192,19 +196,20 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -217,19 +222,20 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     object IkkeOppfyltMaskineltKvalitetssikret : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = "maskinell saksbehandling",
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -257,19 +263,20 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -282,19 +289,20 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     object OppfyltManueltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -322,19 +330,20 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -347,19 +356,20 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     object IkkeOppfyltManueltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.manuelleLøsninger.last().vurdertAv(),
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
+                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
+                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
@@ -373,7 +383,12 @@ internal class MedlemskapYrkesskade private constructor(
 
     private fun settMaskinellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {
         val dtoMaskinell = requireNotNull(vilkårsvurdering.løsning_medlemskap_yrkesskade_maskinell)
-        maskinelleLøsninger.addAll(dtoMaskinell.map { LøsningMaskinellMedlemskapYrkesskade(it.løsningId, enumValueOf(it.erMedlem)) })
+        maskinelleLøsninger.addAll(dtoMaskinell.map {
+            LøsningMaskinellMedlemskapYrkesskade(
+                it.løsningId,
+                enumValueOf(it.erMedlem)
+            )
+        })
     }
 
     private fun settManuellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {

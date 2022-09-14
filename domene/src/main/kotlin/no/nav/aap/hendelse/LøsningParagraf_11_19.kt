@@ -1,6 +1,6 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.domene.vilkår.Vilkårsvurdering
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_19ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_19ModellApi
 import java.time.LocalDate
@@ -13,7 +13,7 @@ internal class LøsningParagraf_11_19(
     private val tidspunktForVurdering: LocalDateTime,
     internal val beregningsdato: LocalDate
 ) : Hendelse() {
-    internal fun accept(visitor: Vilkårsvurdering.VilkårsvurderingVisitor) {
+    internal fun accept(visitor: VilkårsvurderingVisitor) {
         visitor.visitLøsningParagraf_11_19(this, løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
     }
 
@@ -27,13 +27,14 @@ internal class LøsningParagraf_11_19(
                 beregningsdato = dtoLøsningParagraf1119.beregningsdato
             )
     }
+
     internal fun vurdertAv() = vurdertAv
     private fun toDto() = LøsningParagraf_11_19ModellApi(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
 }
 
 class KvalitetssikringParagraf_11_19(
-    private val kvalitetssikringId: UUID, 
-    private val løsningId: UUID, 
+    private val kvalitetssikringId: UUID,
+    private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
@@ -55,4 +56,3 @@ class KvalitetssikringParagraf_11_19(
         begrunnelse = begrunnelse
     )
 }
-

@@ -4,13 +4,11 @@ import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_22
 import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -32,8 +30,9 @@ internal class `§11-22 Test` {
         val løsning = LøsningParagraf_11_22(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
-        assertTrue(vilkår.erOppfylt())
-        assertFalse(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
@@ -49,8 +48,9 @@ internal class `§11-22 Test` {
             LøsningParagraf_11_22(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false, 50, Year.of(2019), 400000.beløp)
         vilkår.håndterLøsning(løsning)
 
-        assertFalse(vilkår.erOppfylt())
-        assertTrue(vilkår.erIkkeOppfylt())
+        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
     }
 
     @Test

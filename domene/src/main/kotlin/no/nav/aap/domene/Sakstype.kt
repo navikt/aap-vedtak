@@ -3,16 +3,11 @@ package no.nav.aap.domene
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleKvalitetssikret
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erAlleOppfylt
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeIKvalitetssikring
-import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.erNoenIkkeOppfylt
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.SakstypeModellApi
-import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
-import no.nav.aap.hendelse.LøsningParagraf_11_19
+import no.nav.aap.domene.visitor.*
 import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.modellapi.SakstypeModellApi
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -43,68 +38,16 @@ internal abstract class Sakstype private constructor(
         fødselsdato: Fødselsdato,
     ): Vedtak
 
-    internal fun erAlleOppfylt() = vilkårsvurderinger.erAlleOppfylt()
-    internal fun erNoenIkkeOppfylt() = vilkårsvurderinger.erNoenIkkeOppfylt()
+    internal fun erAlleOppfylt() = OppfyltVisitor(this).erOppfylt
+    internal fun erNoenIkkeOppfylt() = OppfyltVisitor(this).erIkkeOppfylt
 
-    internal fun erAlleKvalitetssikret() = vilkårsvurderinger.erAlleKvalitetssikret()
-    internal fun erNoenIkkeIKvalitetssikring() = vilkårsvurderinger.erNoenIkkeIKvalitetssikring()
+    internal fun erAlleKvalitetssikret() = KvalitetssikretVisitor(this).erKvalitetssikret
+    internal fun erNoenIkkeIKvalitetssikring() = KvalitetssikretVisitor(this).erIKvalitetssikring.not()
 
     internal fun beregningsdato() = BeregningsdatoVisitor(this).beregningsdato
     internal fun virkningsdato() = VirkningsdatoVisitor(this).let { it.bestemmesAv to it.virkningsdato }
 
-    internal open fun accept(visitor: SakstypeVisitor) {}
-
-    internal interface SakstypeVisitor : Vilkårsvurdering.VilkårsvurderingVisitor {
-        fun preVisitStandard(sakstype: Standard) {}
-        fun postVisitStandard(sakstype: Standard) {}
-
-        fun preVisitYrkesskade(sakstype: Yrkesskade) {}
-        fun postVisitYrkesskade(sakstype: Yrkesskade) {}
-
-        fun preVisitStudent(sakstype: Student) {}
-        fun postVisitStudent(sakstype: Student) {}
-    }
-
-    private class BeregningsdatoVisitor(sakstype: Sakstype) : SakstypeVisitor {
-        lateinit var beregningsdato: LocalDate
-
-        init {
-            sakstype.accept(this)
-        }
-
-        override fun visitLøsningParagraf_11_19(
-            løsning: LøsningParagraf_11_19,
-            løsningId: UUID,
-            vurdertAv: String,
-            tidspunktForVurdering: LocalDateTime,
-            beregningsdato: LocalDate
-        ) {
-            this.beregningsdato = beregningsdato
-        }
-    }
-
-    private class VirkningsdatoVisitor(sakstype: Sakstype) : SakstypeVisitor {
-        lateinit var bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv
-        var virkningsdato: LocalDate? = null
-
-        init {
-            sakstype.accept(this)
-        }
-
-        override fun visitLøsningParagraf_11_12FørsteLedd(
-            løsning: LøsningParagraf_11_12FørsteLedd,
-            løsningId: UUID,
-            vurdertAv: String,
-            tidspunktForVurdering: LocalDateTime,
-            bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv,
-            unntak: String,
-            unntaksbegrunnelse: String,
-            manueltSattVirkningsdato: LocalDate?
-        ) {
-            this.bestemmesAv = bestemmesAv
-            this.virkningsdato = manueltSattVirkningsdato
-        }
-    }
+    internal abstract fun accept(visitor: SakstypeVisitor)
 
     private class YrkesskadeVisitor(sakstype: Sakstype) : SakstypeVisitor {
         lateinit var yrkesskade: YrkesskadeBeregning

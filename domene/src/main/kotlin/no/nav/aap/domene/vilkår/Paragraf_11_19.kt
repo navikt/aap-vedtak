@@ -3,14 +3,15 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_19.SøknadMottatt
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19.Companion.toDto
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_19.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_19
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -83,7 +84,7 @@ internal class Paragraf_11_19 private constructor(
             }
         }
 
-        override fun accept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
+        override fun subAccept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_19(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -115,7 +116,7 @@ internal class Paragraf_11_19 private constructor(
     }
 
     internal object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_19>() {
-        override fun accept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
+        override fun subAccept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_19(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)

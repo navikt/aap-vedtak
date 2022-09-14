@@ -4,8 +4,7 @@ import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_22.SøknadMottatt
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_22
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_22.Companion.toDto
@@ -13,6 +12,8 @@ import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.LøsningParagraf_11_22.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_22
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -78,7 +79,10 @@ internal class Paragraf_11_22 private constructor(
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_22, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_22,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -96,7 +100,7 @@ internal class Paragraf_11_22 private constructor(
             }
         }
 
-        override fun accept(vilkårsvurdering: Paragraf_11_22, visitor: VilkårsvurderingVisitor) {
+        override fun subAccept(vilkårsvurdering: Paragraf_11_22, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_22(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -117,14 +121,17 @@ internal class Paragraf_11_22 private constructor(
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_22, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_22,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_22>() {
-        override fun accept(vilkårsvurdering: Paragraf_11_22, visitor: VilkårsvurderingVisitor) {
+        override fun subAccept(vilkårsvurdering: Paragraf_11_22, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_22(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -145,7 +152,10 @@ internal class Paragraf_11_22 private constructor(
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_22, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_22,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -176,7 +186,10 @@ internal class Paragraf_11_22 private constructor(
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_22, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_22,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -196,7 +209,10 @@ internal class Paragraf_11_22 private constructor(
             kvalitetssikringer_11_22 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_22, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_22,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }

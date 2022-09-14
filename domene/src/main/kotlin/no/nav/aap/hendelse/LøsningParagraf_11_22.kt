@@ -3,7 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.beregning.Beløp
 import no.nav.aap.domene.beregning.InntektsgrunnlagForÅr
 import no.nav.aap.domene.beregning.Yrkesskade
-import no.nav.aap.domene.vilkår.Vilkårsvurdering
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_22ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_22ModellApi
 import java.time.LocalDateTime
@@ -23,7 +23,7 @@ internal class LøsningParagraf_11_22(
         internal fun Iterable<LøsningParagraf_11_22>.toDto() = map(LøsningParagraf_11_22::toDto)
     }
 
-    internal fun accept(visitor: Vilkårsvurdering.VilkårsvurderingVisitor) {
+    internal fun accept(visitor: VilkårsvurderingVisitor) {
         visitor.visitLøsningParagraf_11_22(
             løsning = this,
             løsningId = løsningId,

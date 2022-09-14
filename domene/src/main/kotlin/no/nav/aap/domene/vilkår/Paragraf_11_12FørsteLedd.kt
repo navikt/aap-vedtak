@@ -3,8 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_12FørsteLedd.SøknadMottatt
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd.Companion.toDto
@@ -13,6 +12,8 @@ import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_12FørsteLedd
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -61,18 +62,19 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             vilkårsvurdering.tilstand(Oppfylt, løsning)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = null,
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_VURDERT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_12FørsteLedd,
@@ -95,7 +97,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             }
         }
 
-        override fun accept(vilkårsvurdering: Paragraf_11_12FørsteLedd, visitor: VilkårsvurderingVisitor) {
+        override fun subAccept(vilkårsvurdering: Paragraf_11_12FørsteLedd, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -103,18 +105,19 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             visitor.postVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_12FørsteLedd,
@@ -126,7 +129,7 @@ internal class Paragraf_11_12FørsteLedd private constructor(
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_12FørsteLedd>() {
-        override fun accept(vilkårsvurdering: Paragraf_11_12FørsteLedd, visitor: VilkårsvurderingVisitor) {
+        override fun subAccept(vilkårsvurdering: Paragraf_11_12FørsteLedd, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -134,18 +137,19 @@ internal class Paragraf_11_12FørsteLedd private constructor(
             visitor.postVisitParagraf_11_12FørsteLedd(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_12FørsteLedd): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_12_ledd1_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_12_ledd1 = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_12FørsteLedd,
