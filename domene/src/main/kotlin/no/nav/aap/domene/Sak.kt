@@ -239,7 +239,7 @@ internal class Sak private constructor(
                     visitor.erKvalitetssikret ->
                         sak.tilstand(VedtakFattet, hendelse)
 
-                    visitor.erIKvalitetssikring.not() ->
+                    visitor.erIkkeIKvalitetssikring ->
                         sak.tilstand(SøknadMottatt, hendelse)
                 }
             }

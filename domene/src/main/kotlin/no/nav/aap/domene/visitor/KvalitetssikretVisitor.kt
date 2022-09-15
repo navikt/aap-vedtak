@@ -7,10 +7,11 @@ internal class KvalitetssikretVisitor(sakstype: Sakstype) : SakstypeVisitor {
         private set(value) {
             field = field && value
         }
-    internal var erIKvalitetssikring = true
+    private var erIKvalitetssikring = true
         private set(value) {
             field = field && value
         }
+    internal val erIkkeIKvalitetssikring: Boolean get() = !erIKvalitetssikring
 
     init {
         sakstype.accept(this)
