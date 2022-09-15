@@ -9,7 +9,7 @@ internal class KvalitetssikretVisitor : SakstypeVisitor {
         private set(value) {
             field = field && value
         }
-    internal val erIkkeIKvalitetssikring: Boolean get() = !erIKvalitetssikring
+    internal val erIkkeIKvalitetssikring get() = !erIKvalitetssikring
 
     override fun visitIkkeVurdert() {
         erKvalitetssikret = false
