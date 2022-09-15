@@ -146,7 +146,7 @@ internal class Sak private constructor(
 
             private fun vurderNestetilstand(sak: Sak, søknad: Søknad) {
                 when {
-                    OppfyltVisitor(sak.sakstype).erIkkeOppfylt -> sak.tilstand(IkkeOppfylt, søknad)
+                    OppfyltVisitor().apply(sak.sakstype::accept).erIkkeOppfylt -> sak.tilstand(IkkeOppfylt, søknad)
                     else -> sak.tilstand(SøknadMottatt, søknad)
                 }
             }
@@ -163,7 +163,7 @@ internal class Sak private constructor(
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
-                val visitor = OppfyltVisitor(sak.sakstype)
+                val visitor = OppfyltVisitor().apply(sak.sakstype::accept)
                 when {
                     visitor.erOppfylt ->
                         sak.tilstand(BeregnInntekt, hendelse)
@@ -185,7 +185,7 @@ internal class Sak private constructor(
         object BeregnInntekt : Tilstand(Tilstandsnavn.BEREGN_INNTEKT) {
 
             override fun onEntry(sak: Sak, hendelse: Hendelse) {
-                val beregningsdato = BeregningsdatoVisitor(sak.sakstype).beregningsdato
+                val beregningsdato = BeregningsdatoVisitor().apply(sak.sakstype::accept).beregningsdato
                 hendelse.opprettBehov(
                     BehovInntekter(
                         fom = Year.from(beregningsdato).minusYears(3),
@@ -234,7 +234,7 @@ internal class Sak private constructor(
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
-                val visitor = KvalitetssikretVisitor(sak.sakstype)
+                val visitor = KvalitetssikretVisitor().apply(sak.sakstype::accept)
                 when {
                     visitor.erKvalitetssikret ->
                         sak.tilstand(VedtakFattet, hendelse)
@@ -268,7 +268,7 @@ internal class Sak private constructor(
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
-                val visitor = VirkningsdatoVisitor(sak.sakstype)
+                val visitor = VirkningsdatoVisitor().apply(sak.sakstype::accept)
                 when (visitor.bestemmesAv) {
                     LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger ->
                         sak.tilstand(VenterSykepenger, hendelse)

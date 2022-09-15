@@ -1,8 +1,6 @@
 package no.nav.aap.domene.visitor
 
-import no.nav.aap.domene.Sakstype
-
-internal class OppfyltVisitor(sakstype: Sakstype) : SakstypeVisitor {
+internal class OppfyltVisitor : SakstypeVisitor {
     internal var erOppfylt = true
         private set(value) {
             field = field && value
@@ -11,10 +9,6 @@ internal class OppfyltVisitor(sakstype: Sakstype) : SakstypeVisitor {
         private set(value) {
             field = field || value
         }
-
-    init {
-        sakstype.accept(this)
-    }
 
     override fun visitIkkeVurdert() {
         erOppfylt = false

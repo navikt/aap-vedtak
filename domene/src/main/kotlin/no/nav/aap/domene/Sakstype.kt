@@ -58,7 +58,7 @@ internal abstract class Sakstype private constructor(
             fødselsdato: Fødselsdato,
         ): Vedtak {
             val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
-                beregningsdato = BeregningsdatoVisitor(this).beregningsdato,
+                beregningsdato = BeregningsdatoVisitor().apply(::accept).beregningsdato,
                 fødselsdato = fødselsdato,
                 yrkesskade = null
             )
@@ -111,9 +111,9 @@ internal abstract class Sakstype private constructor(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
         ): Vedtak {
-            val yrkesskade = YrkesskadeVisitor(this).yrkesskade
+            val yrkesskade = YrkesskadeVisitor().apply(::accept).yrkesskade
             val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
-                beregningsdato = BeregningsdatoVisitor(this).beregningsdato,
+                beregningsdato = BeregningsdatoVisitor().apply(::accept).beregningsdato,
                 fødselsdato = fødselsdato,
                 yrkesskade = yrkesskade
             )
@@ -168,7 +168,7 @@ internal abstract class Sakstype private constructor(
             fødselsdato: Fødselsdato,
         ): Vedtak {
             val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
-                beregningsdato = BeregningsdatoVisitor(this).beregningsdato,
+                beregningsdato = BeregningsdatoVisitor().apply(::accept).beregningsdato,
                 fødselsdato = fødselsdato,
                 yrkesskade = null
             )

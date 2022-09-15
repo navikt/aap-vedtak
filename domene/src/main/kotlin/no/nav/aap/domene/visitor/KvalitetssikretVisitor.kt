@@ -1,8 +1,6 @@
 package no.nav.aap.domene.visitor
 
-import no.nav.aap.domene.Sakstype
-
-internal class KvalitetssikretVisitor(sakstype: Sakstype) : SakstypeVisitor {
+internal class KvalitetssikretVisitor : SakstypeVisitor {
     internal var erKvalitetssikret = true
         private set(value) {
             field = field && value
@@ -12,10 +10,6 @@ internal class KvalitetssikretVisitor(sakstype: Sakstype) : SakstypeVisitor {
             field = field && value
         }
     internal val erIkkeIKvalitetssikring: Boolean get() = !erIKvalitetssikring
-
-    init {
-        sakstype.accept(this)
-    }
 
     override fun visitIkkeVurdert() {
         erKvalitetssikret = false
