@@ -13,8 +13,8 @@ internal class YrkesskadeVisitor : SakstypeVisitor {
         løsning: LøsningParagraf_11_22,
         løsningId: UUID,
         vurdertAv: String,
-        tidspunktForVurdering: LocalDateTime
+        tidspunktForVurdering: LocalDateTime,
     ) {
-
+        this.yrkesskade = løsning.yrkesskade()
     }
 }
