@@ -4,11 +4,11 @@ import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
+import no.nav.aap.modellapi.SakstypeModellApi
 import no.nav.aap.domene.visitor.BeregningsdatoVisitor
 import no.nav.aap.domene.visitor.SakstypeVisitor
 import no.nav.aap.domene.visitor.YrkesskadeVisitor
 import no.nav.aap.hendelse.Søknad
-import no.nav.aap.modellapi.SakstypeModellApi
 import java.time.LocalDate
 import java.util.*
 

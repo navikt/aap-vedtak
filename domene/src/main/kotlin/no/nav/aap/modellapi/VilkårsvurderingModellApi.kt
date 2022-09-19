@@ -23,6 +23,7 @@ data class VilkårsvurderingModellApi(
     val løsning_11_12_ledd1_manuell: List<LøsningParagraf_11_12FørsteLeddModellApi>? = null,
     val løsning_11_19_manuell: List<LøsningParagraf_11_19ModellApi>? = null,
     val løsning_11_22_manuell: List<LøsningParagraf_11_22ModellApi>? = null,
+    val løsning_11_27_manuell: List<LøsningParagraf_11_27_FørsteLedd_ModellApi>? = null,
     val løsning_11_29_manuell: List<LøsningParagraf_11_29ModellApi>? = null,
     val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskadeModellApi>? = null,
     val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2ModellApi>? = null,
@@ -34,5 +35,6 @@ data class VilkårsvurderingModellApi(
     val kvalitetssikringer_11_12_ledd1: List<KvalitetssikringParagraf_11_12FørsteLeddModellApi>? = null,
     val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19ModellApi>? = null,
     val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22ModellApi>? = null,
+    val kvalitetssikringer_11_27: List<KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi>? = null,
     val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29ModellApi>? = null,
 )

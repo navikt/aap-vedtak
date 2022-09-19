@@ -30,6 +30,7 @@ interface Lytter {
     fun behov_11_12FørsteLedd(ident: String) {}
     fun behov_11_19(ident: String) {}
     fun behov_11_22(ident: String) {}
+    fun behov_11_27(ident: String) {}
     fun behov_11_29(ident: String) {}
     fun behovInntekter(ident: String, fom: Year, tom: Year) {}
     fun behovIverksettVedtak(vedtakModellApi: VedtakModellApi) {}
@@ -86,15 +87,21 @@ interface DtoBehov {
         }
     }
 
+    class DtoBehov_11_19(private val ident: String) : DtoBehov {
+        override fun accept(visitor: Lytter) {
+            visitor.behov_11_19(ident)
+        }
+    }
+
     class DtoBehov_11_22(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
             visitor.behov_11_22(ident)
         }
     }
 
-    class DtoBehov_11_19(private val ident: String) : DtoBehov {
+    class DtoBehov_11_27(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
-            visitor.behov_11_19(ident)
+            visitor.behov_11_27(ident)
         }
     }
 

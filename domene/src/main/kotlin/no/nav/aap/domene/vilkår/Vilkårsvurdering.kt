@@ -33,7 +33,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         PARAGRAF_11_14,
         PARAGRAF_11_19,
         PARAGRAF_11_22,
-        PARAGRAF_11_29
+        PARAGRAF_11_27,
+        PARAGRAF_11_29,
     }
 
     internal enum class Ledd {
@@ -159,6 +160,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     }
 
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_22) = callWithReceiver {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
+
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_27_FørsteLedd) = callWithReceiver {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
 
@@ -299,6 +304,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
+            løsning: LøsningParagraf_11_27_FørsteLedd
+        ) {
+            log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
+        internal open fun håndterLøsning(
+            vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_29
         ) {
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
@@ -370,6 +382,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_22
+        ) {
+            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+        }
+
+        internal open fun håndterKvalitetssikring(
+            vilkårsvurdering: PARAGRAF,
+            kvalitetssikring: KvalitetssikringParagraf_11_27_FørsteLedd
         ) {
             log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
@@ -568,6 +587,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
                 Paragraf.PARAGRAF_11_22 ->
                     gjenopprett(vilkårsvurderingModellApi, Paragraf_11_22.Companion::gjenopprett)
+
+                Paragraf.PARAGRAF_11_27 ->
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_27_FørsteLedd.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_29 ->
                     gjenopprett(vilkårsvurderingModellApi, Paragraf_11_29.Companion::gjenopprett)

@@ -4,9 +4,11 @@ import no.nav.aap.domene.Sakstype
 import no.nav.aap.domene.vilkår.Paragraf_11_12FørsteLedd
 import no.nav.aap.domene.vilkår.Paragraf_11_19
 import no.nav.aap.domene.vilkår.Paragraf_11_22
+import no.nav.aap.domene.vilkår.Paragraf_11_27_FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_22
+import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -81,4 +83,18 @@ internal interface VilkårsvurderingVisitor {
 
     fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
     fun postVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
+
+    fun preVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27_FørsteLedd) {}
+    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {}
+
+    fun visitLøsningParagraf_11_27(løsning: LøsningParagraf_11_27_FørsteLedd,
+                                   løsningId: UUID, svangerskapspenger:
+                                   LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger
+    ) {
+    }
+
+    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {}
+    fun postVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27_FørsteLedd) {}
+
+
 }
