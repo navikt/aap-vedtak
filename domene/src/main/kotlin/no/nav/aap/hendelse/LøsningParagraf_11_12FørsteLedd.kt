@@ -1,13 +1,13 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
-import no.nav.aap.modellapi.KvalitetssikringParagraf_11_12FørsteLeddModellApi
-import no.nav.aap.modellapi.LøsningParagraf_11_12FørsteLeddModellApi
+import no.nav.aap.modellapi.KvalitetssikringParagraf_22_13ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_22_13ModellApi
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
-internal class LøsningParagraf_11_12FørsteLedd(
+internal class LøsningParagraf_22_13(
     private val løsningId: UUID,
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
@@ -17,7 +17,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
     private val manueltSattVirkningsdato: LocalDate?,
 ) : Hendelse() {
     internal companion object {
-        internal fun Iterable<LøsningParagraf_11_12FørsteLedd>.toDto() = map(LøsningParagraf_11_12FørsteLedd::toDto)
+        internal fun Iterable<LøsningParagraf_22_13>.toDto() = map(LøsningParagraf_22_13::toDto)
     }
 
     internal enum class BestemmesAv {
@@ -30,7 +30,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
     }
 
     internal fun accept(visitor: VilkårsvurderingVisitor) {
-        visitor.visitLøsningParagraf_11_12FørsteLedd(
+        visitor.visitLøsningParagraf_22_13(
             this,
             løsningId,
             vurdertAv,
@@ -46,7 +46,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
     internal fun bestemmesAv() = bestemmesAv
     internal fun virkningsdato() = manueltSattVirkningsdato
 
-    private fun toDto() = LøsningParagraf_11_12FørsteLeddModellApi(
+    private fun toDto() = LøsningParagraf_22_13ModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -57,7 +57,7 @@ internal class LøsningParagraf_11_12FørsteLedd(
     )
 }
 
-class KvalitetssikringParagraf_11_12FørsteLedd(
+class KvalitetssikringParagraf_22_13(
     private val kvalitetssikringId: UUID,
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,
@@ -67,13 +67,13 @@ class KvalitetssikringParagraf_11_12FørsteLedd(
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<KvalitetssikringParagraf_11_12FørsteLedd>.toDto() =
-            map(KvalitetssikringParagraf_11_12FørsteLedd::toDto)
+        internal fun Iterable<KvalitetssikringParagraf_22_13>.toDto() =
+            map(KvalitetssikringParagraf_22_13::toDto)
     }
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
+    internal fun toDto() = KvalitetssikringParagraf_22_13ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

@@ -43,7 +43,7 @@ private fun Vilkårsvurdering.toModellApi() = VilkårsvurderingModellApi(
     løsning_11_5_manuell = løsning_11_5_manuell?.map { it.toModellApi() },
     løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.map { it.toModellApi() },
     løsning_11_6_manuell = løsning_11_6_manuell?.map { it.toModellApi() },
-    løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.map { it.toModellApi() },
+    løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toModellApi() },
     løsning_11_19_manuell = løsning_11_19_manuell?.map { it.toModellApi() },
     løsning_11_22_manuell = løsning_11_22_manuell?.map { it.toModellApi() },
     løsning_11_29_manuell = løsning_11_29_manuell?.map { it.toModellApi() },
@@ -54,7 +54,7 @@ private fun Vilkårsvurdering.toModellApi() = VilkårsvurderingModellApi(
     kvalitetssikringer_11_5 = kvalitetssikringer_11_5?.map { it.toModellApi() },
     kvalitetssikringer_11_5_yrkesskade = kvalitetssikringer_11_5_yrkesskade?.map { it.toModellApi() },
     kvalitetssikringer_11_6 = kvalitetssikringer_11_6?.map { it.toModellApi() },
-    kvalitetssikringer_11_12_ledd1 = kvalitetssikringer_11_12_ledd1?.map { it.toModellApi() },
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13?.map { it.toModellApi() },
     kvalitetssikringer_11_19 = kvalitetssikringer_11_19?.map { it.toModellApi() },
     kvalitetssikringer_11_22 = kvalitetssikringer_11_22?.map { it.toModellApi() },
     kvalitetssikringer_11_29 = kvalitetssikringer_11_29?.map { it.toModellApi() },
@@ -124,7 +124,7 @@ private fun LøsningParagraf_11_6.toModellApi() = LøsningParagraf_11_6ModellApi
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun LøsningParagraf_11_12_ledd1.toModellApi() = LøsningParagraf_11_12FørsteLeddModellApi(
+private fun LøsningParagraf_22_13.toModellApi() = LøsningParagraf_22_13ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -221,7 +221,7 @@ private fun KvalitetssikringParagraf_11_6.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_12FørsteLedd.toModellApi() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
+private fun KvalitetssikringParagraf_22_13.toModellApi() = KvalitetssikringParagraf_22_13ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -393,8 +393,8 @@ internal fun SøkerModellApi.toJson() = SøkereKafkaDto(
                                     harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
                                 )
                             },
-                            løsning_11_12_ledd1_manuell = vilkår.løsning_11_12_ledd1_manuell?.map {
-                                LøsningParagraf_11_12_ledd1(
+                            løsning_22_13_manuell = vilkår.løsning_22_13_manuell?.map {
+                                LøsningParagraf_22_13(
                                     løsningId = it.løsningId,
                                     vurdertAv = it.vurdertAv,
                                     tidspunktForVurdering = it.tidspunktForVurdering,
@@ -501,8 +501,8 @@ internal fun SøkerModellApi.toJson() = SøkereKafkaDto(
                                     begrunnelse = it.begrunnelse
                                 )
                             },
-                            kvalitetssikringer_11_12_ledd1 = vilkår.kvalitetssikringer_11_12_ledd1?.map {
-                                KvalitetssikringParagraf_11_12FørsteLedd(
+                            kvalitetssikringer_22_13 = vilkår.kvalitetssikringer_22_13?.map {
+                                KvalitetssikringParagraf_22_13(
                                     kvalitetssikringId = it.kvalitetssikringId,
                                     løsningId = it.løsningId,
                                     kvalitetssikretAv = it.kvalitetssikretAv,

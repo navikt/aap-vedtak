@@ -29,7 +29,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         PARAGRAF_11_5,
         PARAGRAF_11_5_YRKESSKADE,
         PARAGRAF_11_6,
-        PARAGRAF_11_12,
+        PARAGRAF_22_13,
         PARAGRAF_11_14,
         PARAGRAF_11_19,
         PARAGRAF_11_22,
@@ -105,7 +105,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterLøsning(this, løsning)
     }
 
-    internal fun håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) = callWithReceiver {
+    internal fun håndterLøsning(løsning: LøsningParagraf_22_13) = callWithReceiver {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -150,7 +150,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
 
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) =
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_22_13) =
         callWithReceiver {
             tilstand.håndterKvalitetssikring(this, kvalitetssikring)
         }
@@ -283,7 +283,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
-            løsning: LøsningParagraf_11_12FørsteLedd
+            løsning: LøsningParagraf_22_13
         ) {
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
         }
@@ -367,7 +367,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
-            kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd
+            kvalitetssikring: KvalitetssikringParagraf_22_13
         ) {
             log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
@@ -568,11 +568,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 Paragraf.PARAGRAF_11_6 ->
                     gjenopprett(vilkårsvurderingModellApi, Paragraf_11_6.Companion::gjenopprett)
 
-                Paragraf.PARAGRAF_11_12 -> {
+                Paragraf.PARAGRAF_22_13 -> {
                     vilkårsvurderingModellApi.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
                         when (ledd) {
                             listOf(Ledd.LEDD_1) ->
-                                gjenopprett(vilkårsvurderingModellApi, Paragraf_11_12FørsteLedd.Companion::gjenopprett)
+                                gjenopprett(vilkårsvurderingModellApi, Paragraf_22_13.Companion::gjenopprett)
 
                             else -> null.also { log.warn("Paragraf ${vilkårsvurderingModellApi.paragraf} Ledd $ledd not implemented") }
                         }

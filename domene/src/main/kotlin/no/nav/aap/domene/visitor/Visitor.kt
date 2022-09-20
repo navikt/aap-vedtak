@@ -1,11 +1,11 @@
 package no.nav.aap.domene.visitor
 
 import no.nav.aap.domene.Sakstype
-import no.nav.aap.domene.vilkår.Paragraf_11_12FørsteLedd
+import no.nav.aap.domene.vilkår.Paragraf_22_13
 import no.nav.aap.domene.vilkår.Paragraf_11_19
 import no.nav.aap.domene.vilkår.Paragraf_11_22
 import no.nav.aap.domene.vilkår.Paragraf_11_27_FørsteLedd
-import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
+import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
@@ -38,22 +38,22 @@ internal interface VilkårsvurderingVisitor {
     fun visitIkkeOppfyltManueltKvalitetssikret() {}
     fun visitIkkeRelevant() {}
 
-    fun preVisitParagraf_11_12FørsteLedd(vilkårsvurdering: Paragraf_11_12FørsteLedd) {}
-    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
-    fun visitLøsningParagraf_11_12FørsteLedd(
-        løsning: LøsningParagraf_11_12FørsteLedd,
+    fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
+    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
+    fun visitLøsningParagraf_22_13(
+        løsning: LøsningParagraf_22_13,
         løsningId: UUID,
         vurdertAv: String,
         tidspunktForVurdering: LocalDateTime,
-        bestemmesAv: LøsningParagraf_11_12FørsteLedd.BestemmesAv,
+        bestemmesAv: LøsningParagraf_22_13.BestemmesAv,
         unntak: String,
         unntaksbegrunnelse: String,
         manueltSattVirkningsdato: LocalDate?
     ) {
     }
 
-    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {}
-    fun postVisitParagraf_11_12FørsteLedd(vilkårsvurdering: Paragraf_11_12FørsteLedd) {}
+    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
+    fun postVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
 
     fun preVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
     fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}

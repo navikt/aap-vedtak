@@ -3,10 +3,10 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd
-import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
+import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
+import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.Søknad
-import no.nav.aap.hendelse.behov.Behov_11_12FørsteLedd
+import no.nav.aap.hendelse.behov.Behov_22_13
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -16,22 +16,22 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
-internal class `§11-12 første ledd Test` {
+internal class `§22-13 Test` {
 
     @Test
-    fun `Hvis saksbehandler manuelt har oppfylt 11-12, settes vilkår til oppfylt`() {
+    fun `Hvis saksbehandler manuelt har oppfylt 22-13, settes vilkår til oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_12FørsteLedd()
+        val vilkår = Paragraf_22_13()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_12FørsteLedd(
+        val løsning = LøsningParagraf_22_13(
             UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
             "INGEN",
             "",
             LocalDate.now()
@@ -48,22 +48,22 @@ internal class `§11-12 første ledd Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_12FørsteLedd()
+        val vilkår = Paragraf_22_13()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_12FørsteLedd(
+        val løsning = LøsningParagraf_22_13(
             UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
             "INGEN",
             "",
             LocalDate.now()
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_12FørsteLedd(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring = KvalitetssikringParagraf_22_13(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -76,22 +76,22 @@ internal class `§11-12 første ledd Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_12FørsteLedd()
+        val vilkår = Paragraf_22_13()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
-        val løsning = LøsningParagraf_11_12FørsteLedd(
+        val løsning = LøsningParagraf_22_13(
             UUID.randomUUID(),
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
             "INGEN",
             "",
             LocalDate.now()
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_12FørsteLedd(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring = KvalitetssikringParagraf_22_13(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -104,7 +104,7 @@ internal class `§11-12 første ledd Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_12FørsteLedd()
+        val vilkår = Paragraf_22_13()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -112,25 +112,25 @@ internal class `§11-12 første ledd Test` {
         val behov = søknad.behov()
         assertEquals(2, behov.size)
         assertEquals(1, behov.filterIsInstance<Behov_8_48AndreLedd>().size)
-        assertEquals(1, behov.filterIsInstance<Behov_11_12FørsteLedd>().size)
+        assertEquals(1, behov.filterIsInstance<Behov_22_13>().size)
     }
 
-    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_12FørsteLedd) {
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_22_13) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 
     private fun assertTilstand(
         tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
-        vilkårsvurdering: Paragraf_11_12FørsteLedd
+        vilkårsvurdering: Paragraf_22_13
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
     }
 
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_12FørsteLedd) {
+    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_22_13) {
         assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_12FørsteLedd) {
+    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_22_13) {
         assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

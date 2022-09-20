@@ -43,7 +43,7 @@ data class Kvalitetssikring_11_6(
     val begrunnelse: String
 )
 
-data class Kvalitetssikring_11_12_ledd1(
+data class Kvalitetssikring_22_13(
     val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,

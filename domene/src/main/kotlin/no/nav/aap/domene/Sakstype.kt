@@ -80,7 +80,7 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_4AndreOgTredjeLedd(),
                     Paragraf_11_5(),
                     Paragraf_11_6(),
-                    Paragraf_11_12FørsteLedd(),
+                    Paragraf_22_13(),
                     Paragraf_11_19(),
                     Paragraf_11_29(),
                 )
@@ -135,7 +135,7 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_4AndreOgTredjeLedd(),
                     Paragraf_11_5_yrkesskade(),
                     Paragraf_11_6(),
-                    Paragraf_11_12FørsteLedd(),
+                    Paragraf_22_13(),
                     Paragraf_11_22(),
                     Paragraf_11_19(),
                     Paragraf_11_29(),

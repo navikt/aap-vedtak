@@ -16,7 +16,7 @@ internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, Søker
     stream(søkere, Topics.manuell_11_4, "manuell-11-4", Løsning_11_4_ledd2_ledd3_manuell::håndter)
     stream(søkere, Topics.manuell_11_5, "manuell-11-5", Løsning_11_5_manuell::håndter)
     stream(søkere, Topics.manuell_11_6, "manuell-11-6", Løsning_11_6_manuell::håndter)
-    stream(søkere, Topics.manuell_11_12, "manuell-11-12", Løsning_11_12_ledd1_manuell::håndter)
+    stream(søkere, Topics.manuell_22_13, "manuell-11-12", Løsning_22_13_manuell::håndter)
     stream(søkere, Topics.manuell_11_19, "manuell-11-19", Løsning_11_19_manuell::håndter)
     stream(søkere, Topics.manuell_11_29, "manuell-11-29", Løsning_11_29_manuell::håndter)
 }
@@ -27,7 +27,7 @@ internal fun StreamsBuilder.manuellKvalitetssikringStream(søkere: KTable<String
     stream(søkere, Topics.kvalitetssikring_11_4, "kvalitetssikring-11-4", Kvalitetssikring_11_4_ledd2_ledd3::håndter)
     stream(søkere, Topics.kvalitetssikring_11_5, "kvalitetssikring-11-5", Kvalitetssikring_11_5::håndter)
     stream(søkere, Topics.kvalitetssikring_11_6, "kvalitetssikring-11-6", Kvalitetssikring_11_6::håndter)
-    stream(søkere, Topics.kvalitetssikring_11_12, "kvalitetssikring-11-12", Kvalitetssikring_11_12_ledd1::håndter)
+    stream(søkere, Topics.kvalitetssikring_22_13, "kvalitetssikring-11-12", Kvalitetssikring_22_13::håndter)
     stream(søkere, Topics.kvalitetssikring_11_19, "kvalitetssikring-11-19", Kvalitetssikring_11_19::håndter)
     stream(søkere, Topics.kvalitetssikring_11_29, "kvalitetssikring-11-29", Kvalitetssikring_11_29::håndter)
 }

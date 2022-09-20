@@ -25,14 +25,14 @@ internal class ApiTest {
             val manuell_11_3_Topic = mocks.kafka.inputTopic(Topics.manuell_11_3)
             val manuell_11_5_Topic = mocks.kafka.inputTopic(Topics.manuell_11_5)
             val manuell_11_6_Topic = mocks.kafka.inputTopic(Topics.manuell_11_6)
-            val manuell_11_12_Topic = mocks.kafka.inputTopic(Topics.manuell_11_12)
+            val manuell_22_13_Topic = mocks.kafka.inputTopic(Topics.manuell_22_13)
             val manuell_11_19_Topic = mocks.kafka.inputTopic(Topics.manuell_11_19)
             val manuell_11_29_Topic = mocks.kafka.inputTopic(Topics.manuell_11_29)
             val kvalitetssikring_11_2_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_2)
             val kvalitetssikring_11_3_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_3)
             val kvalitetssikring_11_5_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_5)
             val kvalitetssikring_11_6_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_6)
-            val kvalitetssikring_11_12_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_12)
+            val kvalitetssikring_22_13_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_22_13)
             val kvalitetssikring_11_19_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_19)
             val kvalitetssikring_11_29_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_29)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
@@ -80,8 +80,8 @@ internal class ApiTest {
                     harMulighetForÅKommeIArbeid = true
                 )
             }
-            manuell_11_12_Topic.produce(fnr) {
-                Løsning_11_12_ledd1_manuell(
+            manuell_22_13_Topic.produce(fnr) {
+                Løsning_22_13_manuell(
                     vurdertAv = "saksbehandler",
                     tidspunktForVurdering = tidspunktForVurdering,
                     bestemmesAv = "soknadstidspunkt",
@@ -127,7 +127,7 @@ internal class ApiTest {
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_6_manuell!![0].løsningId
 
             fun løsningsid12(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_12_ledd1_manuell!![0].løsningId
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_22_13_manuell!![0].løsningId
 
             fun løsningsid19(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_19_manuell!![0].løsningId
@@ -175,8 +175,8 @@ internal class ApiTest {
                 )
             }
 
-            kvalitetssikring_11_12_Topic.produce(fnr) {
-                Kvalitetssikring_11_12_ledd1(
+            kvalitetssikring_22_13_Topic.produce(fnr) {
+                Kvalitetssikring_22_13(
                     løsningId = løsningsid12(6),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),

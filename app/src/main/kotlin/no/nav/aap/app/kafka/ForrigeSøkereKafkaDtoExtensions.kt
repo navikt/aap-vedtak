@@ -35,7 +35,7 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     ledd = ledd,
     tilstand = tilstand,
     utfall = utfall,
-    vurdertMaskinelt = "MASKINELT" in tilstand,
+    vurdertMaskinelt = vurdertMaskinelt,
     løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() },
     løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() },
     løsning_11_2_maskinell = løsning_11_2_maskinell?.map { it.toDto() },
@@ -45,10 +45,10 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     løsning_11_5_manuell = løsning_11_5_manuell?.map { it.toDto() },
     løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.map { it.toDto() },
     løsning_11_6_manuell = løsning_11_6_manuell?.map { it.toDto() },
-    løsning_11_12_ledd1_manuell = løsning_11_12_ledd1_manuell?.map { it.toDto() },
     løsning_11_19_manuell = løsning_11_19_manuell?.map { it.toDto() },
     løsning_11_22_manuell = løsning_11_22_manuell?.map { it.toDto() },
     løsning_11_29_manuell = løsning_11_29_manuell?.map { it.toDto() },
+    løsning_22_13_manuell = løsning_11_12_ledd1_manuell?.map { it.toDto() },
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
@@ -115,7 +115,7 @@ private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun LøsningParagraf_11_12_ledd1.toDto() = SøkereKafkaDto.LøsningParagraf_11_12_ledd1(
+private fun LøsningParagraf_11_12_ledd1.toDto() = SøkereKafkaDto.LøsningParagraf_22_13(
     løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,

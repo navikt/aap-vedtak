@@ -159,7 +159,7 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -191,7 +191,7 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -235,7 +235,7 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -275,7 +275,7 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -324,11 +324,11 @@ internal class SøkerComponentTest {
             )
         )
         søker.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                 "INGEN",
                 "",
                 LocalDate.now()
@@ -425,11 +425,11 @@ internal class SøkerComponentTest {
         }
         medSøker {
             håndterLøsning(
-                LøsningParagraf_11_12FørsteLedd(
+                LøsningParagraf_22_13(
                     løsningId = UUID.randomUUID(),
                     "saksbehandler",
                     LocalDateTime.now(),
-                    LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                    LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                     "INGEN",
                     "",
                     LocalDate.now()
@@ -556,7 +556,7 @@ internal class SøkerComponentTest {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
-    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_22_13) {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
@@ -596,7 +596,7 @@ internal class SøkerComponentTest {
         håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
     }
 
-    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+    private fun Søker.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_22_13) {
         håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
     }
 

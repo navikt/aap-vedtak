@@ -27,7 +27,7 @@ interface Lytter {
     fun behov_11_4AndreOgTredjeLedd(ident: String) {}
     fun behov_11_5(ident: String) {}
     fun behov_11_6(ident: String) {}
-    fun behov_11_12FørsteLedd(ident: String) {}
+    fun behov_22_13(ident: String) {}
     fun behov_11_19(ident: String) {}
     fun behov_11_22(ident: String) {}
     fun behov_11_27(ident: String) {}
@@ -81,9 +81,9 @@ interface DtoBehov {
         }
     }
 
-    class DtoBehov_11_12FørsteLedd(private val ident: String) : DtoBehov {
+    class DtoBehov_22_13(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
-            visitor.behov_11_12FørsteLedd(ident)
+            visitor.behov_22_13(ident)
         }
     }
 

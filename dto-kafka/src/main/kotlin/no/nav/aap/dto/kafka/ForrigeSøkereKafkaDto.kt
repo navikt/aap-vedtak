@@ -10,7 +10,7 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 7,
+    val version: Int = 8,
 ) {
 
     data class Sak(
@@ -36,6 +36,7 @@ data class ForrigeSøkereKafkaDto(
         val ledd: List<String>,
         val tilstand: String,
         val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskade>? = null,
         val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskade>? = null,
         val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2>? = null,

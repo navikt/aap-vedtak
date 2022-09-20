@@ -3,13 +3,13 @@ package no.nav.aap.modellapi
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.Behov
-import no.nav.aap.hendelse.KvalitetssikringParagraf_11_12FørsteLedd
-import no.nav.aap.hendelse.LøsningParagraf_11_12FørsteLedd
+import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
+import no.nav.aap.hendelse.LøsningParagraf_22_13
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
-data class LøsningParagraf_11_12FørsteLeddModellApi(
+data class LøsningParagraf_22_13ModellApi(
     val løsningId: UUID,
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
@@ -42,17 +42,17 @@ data class LøsningParagraf_11_12FørsteLeddModellApi(
         return løsning.behov()
     }
 
-    private fun toLøsning() = LøsningParagraf_11_12FørsteLedd(
+    private fun toLøsning() = LøsningParagraf_22_13(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         bestemmesAv = when {
-            bestemmesAv == "soknadstidspunkt" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt
-            bestemmesAv == "maksdatoSykepenger" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger
-            bestemmesAv == "ermiraSays" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.ermiraSays
-            bestemmesAv == "unntaksvurdering" && unntak == "forhindret" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.unntaksvurderingForhindret
-            bestemmesAv == "unntaksvurdering" && unntak == "mangelfull" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.unntaksvurderingMangelfull
-            bestemmesAv == "etterSisteLoenn" -> LøsningParagraf_11_12FørsteLedd.BestemmesAv.etterSisteLoenn
+            bestemmesAv == "soknadstidspunkt" -> LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt
+            bestemmesAv == "maksdatoSykepenger" -> LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger
+            bestemmesAv == "ermiraSays" -> LøsningParagraf_22_13.BestemmesAv.ermiraSays
+            bestemmesAv == "unntaksvurdering" && unntak == "forhindret" -> LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret
+            bestemmesAv == "unntaksvurdering" && unntak == "mangelfull" -> LøsningParagraf_22_13.BestemmesAv.unntaksvurderingMangelfull
+            bestemmesAv == "etterSisteLoenn" -> LøsningParagraf_22_13.BestemmesAv.etterSisteLoenn
             else -> error("Ukjent bestemmesAv: $bestemmesAv og unntak: $unntak")
         },
         unntak = unntak,
@@ -61,7 +61,7 @@ data class LøsningParagraf_11_12FørsteLeddModellApi(
     )
 }
 
-data class KvalitetssikringParagraf_11_12FørsteLeddModellApi(
+data class KvalitetssikringParagraf_22_13ModellApi(
     val kvalitetssikringId: UUID,
     val løsningId: UUID,
     val kvalitetssikretAv: String,
@@ -91,7 +91,7 @@ data class KvalitetssikringParagraf_11_12FørsteLeddModellApi(
         return kvalitetssikring.behov()
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_12FørsteLedd(
+    private fun toKvalitetssikring() = KvalitetssikringParagraf_22_13(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

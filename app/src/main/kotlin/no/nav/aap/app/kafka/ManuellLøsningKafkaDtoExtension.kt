@@ -9,7 +9,7 @@ internal fun Løsning_11_3_manuell.håndter(søker: Søker) = toModellApi().hån
 internal fun Løsning_11_4_ledd2_ledd3_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Løsning_11_5_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Løsning_11_6_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
-internal fun Løsning_11_12_ledd1_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Løsning_22_13_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Løsning_11_19_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Løsning_11_29_manuell.håndter(søker: Søker) = toModellApi().håndter(søker)
 
@@ -37,7 +37,7 @@ private fun Løsning_11_6_manuell.toModellApi() = LøsningParagraf_11_6ModellApi
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun Løsning_11_12_ledd1_manuell.toModellApi() = LøsningParagraf_11_12FørsteLeddModellApi(
+private fun Løsning_22_13_manuell.toModellApi() = LøsningParagraf_22_13ModellApi(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     bestemmesAv = bestemmesAv,

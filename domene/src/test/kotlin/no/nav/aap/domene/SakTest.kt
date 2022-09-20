@@ -118,11 +118,11 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                 "INGEN",
                 "",
                 LocalDate.now()
@@ -168,7 +168,7 @@ internal class SakTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -224,11 +224,11 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                 "INGEN",
                 "",
                 LocalDate.now()
@@ -286,7 +286,7 @@ internal class SakTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5_YRKESSKADE)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_22)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
@@ -368,11 +368,11 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                 "INGEN",
                 "",
                 LocalDate.now()
@@ -461,7 +461,7 @@ internal class SakTest {
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_12FørsteLedd(
+            KvalitetssikringParagraf_22_13(
                 kvalitetssikringId = UUID.randomUUID(),
                 UUID.randomUUID(),
                 "beslutter",
@@ -514,7 +514,7 @@ internal class SakTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -573,11 +573,11 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                 "INGEN",
                 "",
                 LocalDate.now()
@@ -666,7 +666,7 @@ internal class SakTest {
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_12FørsteLedd(
+            KvalitetssikringParagraf_22_13(
                 kvalitetssikringId = UUID.randomUUID(),
                 UUID.randomUUID(),
                 "beslutter",
@@ -725,7 +725,7 @@ internal class SakTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
 
         val vedtak = saker[0].vedtak!!
@@ -791,11 +791,11 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_11_12FørsteLedd.BestemmesAv.soknadstidspunkt,
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
                 "INGEN",
                 "",
                 LocalDate.now()
@@ -884,7 +884,7 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_12FørsteLedd(
+            KvalitetssikringParagraf_22_13(
                 kvalitetssikringId = UUID.randomUUID(),
                 UUID.randomUUID(),
                 "beslutter",
@@ -972,7 +972,7 @@ internal class SakTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_12)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -1031,11 +1031,11 @@ internal class SakTest {
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
-            LøsningParagraf_11_12FørsteLedd(
+            LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
                 vurdertAv = "saksbehandler",
                 tidspunktForVurdering = LocalDateTime.now(),
-                bestemmesAv = LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger,
+                bestemmesAv = LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger,
                 unntak = "INGEN",
                 unntaksbegrunnelse = "",
                 manueltSattVirkningsdato = null
@@ -1124,7 +1124,7 @@ internal class SakTest {
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_12FørsteLedd(
+            KvalitetssikringParagraf_22_13(
                 kvalitetssikringId = UUID.randomUUID(),
                 UUID.randomUUID(),
                 "beslutter",
@@ -1235,7 +1235,7 @@ internal class SakTest {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
-    private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_12FørsteLedd) {
+    private fun Sak.håndterLøsning(løsning: LøsningParagraf_22_13) {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
@@ -1275,7 +1275,7 @@ internal class SakTest {
         håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
     }
 
-    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_12FørsteLedd) {
+    private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_22_13) {
         håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
     }
 

@@ -270,7 +270,7 @@ internal class Sak private constructor(
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 val visitor = VirkningsdatoVisitor().apply(sak.sakstype::accept)
                 when (visitor.bestemmesAv) {
-                    LøsningParagraf_11_12FørsteLedd.BestemmesAv.maksdatoSykepenger ->
+                    LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger ->
                         sak.tilstand(VenterSykepenger, hendelse)
 
                     else -> sak.tilstand(VedtakIverksatt, hendelse)

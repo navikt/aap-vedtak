@@ -9,7 +9,7 @@ internal fun Kvalitetssikring_11_3.håndter(søker: Søker) = toModellApi().hån
 internal fun Kvalitetssikring_11_4_ledd2_ledd3.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Kvalitetssikring_11_5.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Kvalitetssikring_11_6.håndter(søker: Søker) = toModellApi().håndter(søker)
-internal fun Kvalitetssikring_11_12_ledd1.håndter(søker: Søker) = toModellApi().håndter(søker)
+internal fun Kvalitetssikring_22_13.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Kvalitetssikring_11_19.håndter(søker: Søker) = toModellApi().håndter(søker)
 internal fun Kvalitetssikring_11_29.håndter(søker: Søker) = toModellApi().håndter(søker)
 
@@ -53,7 +53,7 @@ private fun Kvalitetssikring_11_6.toModellApi() = KvalitetssikringParagraf_11_6M
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_12_ledd1.toModellApi() = KvalitetssikringParagraf_11_12FørsteLeddModellApi(
+private fun Kvalitetssikring_22_13.toModellApi() = KvalitetssikringParagraf_22_13ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,

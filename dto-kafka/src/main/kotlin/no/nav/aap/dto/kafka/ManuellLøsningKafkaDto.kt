@@ -36,7 +36,7 @@ data class Løsning_11_6_manuell(
     val harMulighetForÅKommeIArbeid: Boolean
 )
 
-data class Løsning_11_12_ledd1_manuell(
+data class Løsning_22_13_manuell(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val bestemmesAv: String,
