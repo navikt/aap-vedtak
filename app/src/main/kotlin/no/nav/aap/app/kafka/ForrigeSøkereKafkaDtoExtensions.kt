@@ -31,7 +31,7 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     godkjentAv = godkjentAv,
-    paragraf = paragraf,
+    paragraf = if (paragraf == "PARAGRAF_11_12") "PARAGRAF_22_13" else paragraf,
     ledd = ledd,
     tilstand = tilstand,
     utfall = utfall,
