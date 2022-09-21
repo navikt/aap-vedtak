@@ -23,7 +23,7 @@ internal class LøsningParagraf_11_27_FørsteLedd(
         )
     }
 
-    internal fun erOppfylt() = true // TODO: Sjekk på om bruker har en annen ytelse
+    internal fun erOppfylt() = svangerskapspenger.erIkkeFullYtelse()
 
     internal fun toDto() = LøsningParagraf_11_27_FørsteLedd_ModellApi(
         løsningId = løsningId,
@@ -35,6 +35,9 @@ internal class LøsningParagraf_11_27_FørsteLedd(
         private val grad: Double,
         private val vedtaksdato: LocalDate
     ) {
+
+        internal fun erIkkeFullYtelse() = grad < 100.0
+
         internal fun toModellApi() = SvangerskapspengerModellApi(
             fom = periode.fom(),
             tom = periode.tom(),
