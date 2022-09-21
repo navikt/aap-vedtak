@@ -57,12 +57,33 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
         ) {
             vilkårsvurdering.løsninger.add(løsning)
 
-            if (løsning.erOppfylt()) {
-                vilkårsvurdering.tilstand(Oppfylt, løsning)
+            if (løsning.harEnFullYtelse()) {
+                vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
             } else {
-                vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
+                vilkårsvurdering.tilstand(IkkeRelevant, løsning)
             }
         }
+
+        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = null,
+            kvalitetssikretAv = null,
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.IKKE_VURDERT,
+            vurdertMaskinelt = vurdertMaskinelt,
+            løsning_11_27_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_27 = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_27_FørsteLedd, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+        }
+    }
+
+    object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_11_27_FørsteLedd>() {
 
         override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
@@ -190,6 +211,26 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
+            vurdertMaskinelt = vurdertMaskinelt,
+            løsning_11_27_manuell = vilkårsvurdering.løsninger.toDto(),
+            kvalitetssikringer_11_27 = vilkårsvurdering.kvalitetssikringer.toDto(),
+        )
+
+        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_27_FørsteLedd, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+        }
+    }
+
+    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_11_27_FørsteLedd>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+            vurdertAv = "maskinell saksbehandling",
+            kvalitetssikretAv = null,
+            paragraf = vilkårsvurdering.paragraf.name,
+            ledd = vilkårsvurdering.ledd.map(Ledd::name),
+            tilstand = tilstandsnavn.name,
+            utfall = Utfall.IKKE_RELEVANT,
             vurdertMaskinelt = vurdertMaskinelt,
             løsning_11_27_manuell = vilkårsvurdering.løsninger.toDto(),
             kvalitetssikringer_11_27 = vilkårsvurdering.kvalitetssikringer.toDto(),

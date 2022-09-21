@@ -40,7 +40,7 @@ data class SvangerskapspengerModellApi(
     val vedtaksdato: LocalDate?
 ) {
     internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger (
-        periode = fom?.let { Periode(fom, tom!!) }, // TODO Ugly?
+        periode = if (fom != null && tom != null) Periode(fom, tom) else null,
         grad = grad,
         vedtaksdato = vedtaksdato
     )
