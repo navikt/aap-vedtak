@@ -1,10 +1,7 @@
 package no.nav.aap.app.kafka
 
+import no.nav.aap.dto.kafka.*
 import no.nav.aap.modellapi.VedtakModellApi
-import no.nav.aap.dto.kafka.InntekterKafkaDto
-import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
-import no.nav.aap.dto.kafka.MedlemKafkaDto
-import no.nav.aap.dto.kafka.SykepengedagerKafkaDto
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Behov
@@ -23,6 +20,7 @@ internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
         .sendBehov(name) {
             branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToMedlemKafkaDto)
             branch(Topics.inntekter, "$name-inntekter", DtoBehovWrapper::erInntekter, ::ToInntekterKafkaDto)
+            branch(Topics.andreFolketrygdsytelser, "$name-andre-folketrygdytelser", DtoBehovWrapper::erAnderFolketrygdytelser, ::ToAndreFolketrygdytelserKafkaDto)
             branch(Topics.vedtak, "$name-vedtak", DtoBehovWrapper::erIverksettVedtak, ::ToIverksettVedtakKafkaDto)
             branch(Topics.sykepengedager, "$name-sykepengedager", DtoBehovWrapper::erSykepengedager, ::ToSykepengedagerKafkaDto)
         }
@@ -34,6 +32,7 @@ private class DtoBehovWrapper(private val dtoBehov: DtoBehov) : Behov<Lytter> {
     fun erMedlem() = Sjekk.ErMedlem().apply(this::accept).er()
     fun erSykepengedager() = Sjekk.ErSykepengedager().apply(this::accept).er()
     fun erInntekter() = Sjekk.ErInntekter().apply(this::accept).er()
+    fun erAnderFolketrygdytelser() = Sjekk.ErAndreFolketrygdytelser().apply(this::accept).er()
     fun erIverksettVedtak() = Sjekk.ErIverksettVedtak().apply(this::accept).er()
 }
 
@@ -55,6 +54,12 @@ private sealed class Sjekk : Lytter {
 
     class ErInntekter : Sjekk() {
         override fun behovInntekter(ident: String, fom: Year, tom: Year) {
+            er = true
+        }
+    }
+
+    class ErAndreFolketrygdytelser : Sjekk() {
+        override fun behov_11_27(ident: String) {
             er = true
         }
     }
@@ -106,6 +111,10 @@ private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {
         request = InntekterKafkaDto.Request(fom, tom),
         response = null,
     )
+}
+
+private class ToAndreFolketrygdytelserKafkaDto : Lytter, BehovExtractor<AndreFolketrygdytelserKafkaDto> {
+    override fun toJson() = AndreFolketrygdytelserKafkaDto(response = null)
 }
 
 private class ToIverksettVedtakKafkaDto : Lytter, BehovExtractor<IverksettVedtakKafkaDto> {

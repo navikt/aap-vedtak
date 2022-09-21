@@ -117,6 +117,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterLøsning(this, løsning)
     }
 
+    internal fun håndterLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) = callWithReceiver {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
     internal fun håndterLøsning(løsning: LøsningParagraf_11_29) = callWithReceiver {
         tilstand.håndterLøsning(this, løsning)
     }

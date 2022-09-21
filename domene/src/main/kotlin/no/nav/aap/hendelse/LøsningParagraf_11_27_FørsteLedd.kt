@@ -31,16 +31,16 @@ internal class LøsningParagraf_11_27_FørsteLedd(
     )
 
     internal class Svangerskapspenger(
-        private val periode: Periode,
-        private val grad: Double,
-        private val vedtaksdato: LocalDate
+        private val periode: Periode?,
+        private val grad: Double?,
+        private val vedtaksdato: LocalDate?
     ) {
 
-        internal fun erIkkeFullYtelse() = grad < 100.0
+        internal fun erIkkeFullYtelse() = grad != null && grad < 100.0
 
         internal fun toModellApi() = SvangerskapspengerModellApi(
-            fom = periode.fom(),
-            tom = periode.tom(),
+            fom = periode?.fom(),
+            tom = periode?.tom(),
             grad = grad,
             vedtaksdato = vedtaksdato
         )

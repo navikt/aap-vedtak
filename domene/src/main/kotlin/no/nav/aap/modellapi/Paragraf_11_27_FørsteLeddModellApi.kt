@@ -13,16 +13,34 @@ import java.util.UUID
 data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
     val løsningId: UUID,
     val svangerskapspenger: SvangerskapspengerModellApi
-)
+) {
+    constructor(
+        svangerskapspenger: SvangerskapspengerModellApi
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        svangerskapspenger = svangerskapspenger
+    )
+
+    fun håndter(søker: Søker): List<Behov> {
+        val løsning = gjenopprett()
+        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return løsning.behov()
+    }
+
+    internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd(
+        løsningId = løsningId,
+        svangerskapspenger = svangerskapspenger.gjenopprett()
+    )
+}
 
 data class SvangerskapspengerModellApi(
-    val fom: LocalDate,
-    val tom: LocalDate,
-    val grad: Double,
-    val vedtaksdato: LocalDate
+    val fom: LocalDate?,
+    val tom: LocalDate?,
+    val grad: Double?,
+    val vedtaksdato: LocalDate?
 ) {
     internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger (
-        periode = Periode(fom, tom),
+        periode = fom?.let { Periode(fom, tom!!) }, // TODO Ugly?
         grad = grad,
         vedtaksdato = vedtaksdato
     )

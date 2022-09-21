@@ -27,11 +27,11 @@ interface Lytter {
     fun behov_11_4AndreOgTredjeLedd(ident: String) {}
     fun behov_11_5(ident: String) {}
     fun behov_11_6(ident: String) {}
-    fun behov_22_13(ident: String) {}
     fun behov_11_19(ident: String) {}
     fun behov_11_22(ident: String) {}
     fun behov_11_27(ident: String) {}
     fun behov_11_29(ident: String) {}
+    fun behov_22_13(ident: String) {}
     fun behovInntekter(ident: String, fom: Year, tom: Year) {}
     fun behovIverksettVedtak(vedtakModellApi: VedtakModellApi) {}
 }
@@ -81,12 +81,6 @@ interface DtoBehov {
         }
     }
 
-    class DtoBehov_22_13(private val ident: String) : DtoBehov {
-        override fun accept(visitor: Lytter) {
-            visitor.behov_22_13(ident)
-        }
-    }
-
     class DtoBehov_11_19(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
             visitor.behov_11_19(ident)
@@ -108,6 +102,12 @@ interface DtoBehov {
     class DtoBehov_11_29(private val ident: String) : DtoBehov {
         override fun accept(visitor: Lytter) {
             visitor.behov_11_29(ident)
+        }
+    }
+
+    class DtoBehov_22_13(private val ident: String) : DtoBehov {
+        override fun accept(visitor: Lytter) {
+            visitor.behov_22_13(ident)
         }
     }
 

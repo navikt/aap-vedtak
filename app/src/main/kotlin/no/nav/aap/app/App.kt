@@ -72,6 +72,7 @@ internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, 
     streams.søknadStream(søkerKTable)
     streams.medlemStream(søkerKTable)
     streams.inntekterStream(søkerKTable)
+    streams.andreFolketrygdytelserStream(søkerKTable)
     streams.iverksettelseAvVedtakStream(søkerKTable)
     streams.sykepengedagerStream(søkerKTable)
     streams.manuellLøsningStream(søkerKTable)

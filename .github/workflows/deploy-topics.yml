@@ -36,6 +36,7 @@ jobs:
           - topic-kvalitetssikring-11-29.yml
           - topic-kvalitetssikring-22-13.yml
           - topic-inntekter.yml
+          - topic-andre-folketrygdytelser.yml
           - topic-iverksettelse-av-vedtak.yml
           - topic-vedtak.yml
         cluster:
