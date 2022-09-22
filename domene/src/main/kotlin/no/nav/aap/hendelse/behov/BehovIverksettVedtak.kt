@@ -20,12 +20,7 @@ internal class BehovIverksettVedtak(
         return true
     }
 
-    override fun hashCode(): Int {
-        return vedtak.hashCode()
-    }
+    override fun hashCode() = vedtak.hashCode()
 
-    override fun toString(): String {
-        return vedtak.toString()
-    }
-
+    override fun toString() = vedtak.toString()
 }

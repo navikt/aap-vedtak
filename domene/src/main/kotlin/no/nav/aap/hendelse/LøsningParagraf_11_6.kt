@@ -32,7 +32,7 @@ internal class LøsningParagraf_11_6(
     )
 }
 
-class KvalitetssikringParagraf_11_6(
+internal class KvalitetssikringParagraf_11_6(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID, 
     private val kvalitetssikretAv: String,

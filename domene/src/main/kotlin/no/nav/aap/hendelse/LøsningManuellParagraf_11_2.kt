@@ -3,15 +3,15 @@ package no.nav.aap.hendelse
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_2ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_2ModellApi
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
-class LøsningManuellParagraf_11_2(
+internal class LøsningManuellParagraf_11_2(
     private val løsningId: UUID,
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
     private val erMedlem: ErMedlem
 ) : Hendelse() {
-    enum class ErMedlem {
+    internal enum class ErMedlem {
         JA, NEI
     }
 
@@ -25,7 +25,7 @@ class LøsningManuellParagraf_11_2(
         LøsningParagraf_11_2ModellApi(løsningId, vurdertAv, tidspunktForVurdering, erMedlem.name)
 }
 
-class KvalitetssikringParagraf_11_2(
+internal class KvalitetssikringParagraf_11_2(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,

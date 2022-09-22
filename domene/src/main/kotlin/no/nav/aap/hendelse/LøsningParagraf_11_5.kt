@@ -12,7 +12,7 @@ internal class LøsningParagraf_11_5(
     private val tidspunktForVurdering: LocalDateTime,
     private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad
 ) : Hendelse() {
-    class NedsattArbeidsevnegrad(
+    internal class NedsattArbeidsevnegrad(
         private val kravOmNedsattArbeidsevneErOppfylt: Boolean,
         private val nedsettelseSkyldesSykdomEllerSkade: Boolean,
     ) {
@@ -41,7 +41,7 @@ internal class LøsningParagraf_11_5(
     internal fun toDto() = nedsattArbeidsevnegrad.toDto(løsningId, vurdertAv, tidspunktForVurdering)
 }
 
-class KvalitetssikringParagraf_11_5(
+internal class KvalitetssikringParagraf_11_5(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID, 
     private val kvalitetssikretAv: String,

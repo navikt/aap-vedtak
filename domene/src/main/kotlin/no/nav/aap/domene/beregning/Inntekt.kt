@@ -6,7 +6,7 @@ import no.nav.aap.modellapi.InntektModellApi
 import java.time.Year
 import java.time.YearMonth
 
-class Inntekt(
+internal class Inntekt(
     private val arbeidsgiver: Arbeidsgiver,
     private val inntekstmåned: YearMonth,
     private val beløp: Beløp

@@ -2,10 +2,8 @@ package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.hendelse.Behov
-import no.nav.aap.hendelse.KvalitetssikringParagraf_11_2
-import no.nav.aap.hendelse.LøsningManuellParagraf_11_2
-import no.nav.aap.hendelse.LøsningMaskinellParagraf_11_2
+import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.Behov.Companion.toDto
 import java.time.LocalDateTime
 import java.util.*
 
@@ -27,11 +25,11 @@ data class LøsningParagraf_11_2ModellApi(
         erMedlem = erMedlem
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return modellSøker.toDto() to løsning.behov()
+        return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
     private fun toLøsning() = LøsningManuellParagraf_11_2(
@@ -67,11 +65,11 @@ data class KvalitetssikringParagraf_11_2ModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
         val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
         modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return modellSøker.toDto() to kvalitetssikring.behov()
+        return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_2(
@@ -98,11 +96,11 @@ data class LøsningMaskinellParagraf_11_2ModellApi(
         erMedlem = erMedlem
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return modellSøker.toDto() to løsning.behov()
+        return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
     private fun toLøsning() =

@@ -4,7 +4,8 @@ import no.nav.aap.domene.Søker
 import no.nav.aap.domene.beregning.Arbeidsgiver
 import no.nav.aap.domene.beregning.Beløp.Companion.beløp
 import no.nav.aap.domene.beregning.Inntekt
-import no.nav.aap.hendelse.Behov
+import no.nav.aap.hendelse.Behov.Companion.toDto
+import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.LøsningInntekter
 import java.time.LocalDate
 import java.time.Year
@@ -56,11 +57,11 @@ data class InntekterModellApi(
     val inntekter: List<InntektModellApi>
 ) {
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning)
-        return modellSøker.toDto() to løsning.behov()
+        return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
     private fun toLøsning() = LøsningInntekter(inntekter.map {

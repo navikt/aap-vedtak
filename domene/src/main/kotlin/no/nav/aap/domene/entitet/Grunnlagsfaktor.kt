@@ -36,7 +36,5 @@ internal class Grunnlagsfaktor(verdi: Number) : Comparable<Grunnlagsfaktor> {
 
     override fun hashCode() = verdi.hashCode()
 
-    override fun toString(): String {
-        return verdi.toString()
-    }
+    override fun toString() = verdi.toString()
 }

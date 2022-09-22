@@ -32,7 +32,7 @@ internal class LøsningParagraf_11_19(
     private fun toDto() = LøsningParagraf_11_19ModellApi(løsningId, vurdertAv, tidspunktForVurdering, beregningsdato)
 }
 
-class KvalitetssikringParagraf_11_19(
+internal class KvalitetssikringParagraf_11_19(
     private val kvalitetssikringId: UUID,
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,

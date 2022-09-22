@@ -22,7 +22,7 @@ internal class LøsningParagraf_11_3(
     internal fun toDto() = LøsningParagraf_11_3ModellApi(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
-class KvalitetssikringParagraf_11_3(
+internal class KvalitetssikringParagraf_11_3(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID, 
     private val kvalitetssikretAv: String,

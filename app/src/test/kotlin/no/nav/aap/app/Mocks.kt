@@ -3,7 +3,7 @@ package no.nav.aap.app
 import no.nav.aap.kafka.streams.test.KafkaStreamsMock
 import org.apache.kafka.streams.TestInputTopic
 
-class Mocks : AutoCloseable {
+internal class Mocks : AutoCloseable {
     val kafka = KafkaStreamsMock()
 
     override fun close() {}

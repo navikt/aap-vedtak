@@ -31,5 +31,5 @@ private fun håndter(
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker, dtoBehov) = iverksettelseAvVedtakKafkaDto.håndter(søker)
-    return endretSøker.toJson() to dtoBehov.map { it.toDto(søkereKafkaDto.personident) }
+    return endretSøker.toJson() to dtoBehov
 }

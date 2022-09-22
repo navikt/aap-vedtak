@@ -3,7 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.modellapi.VedtakModellApi
 import java.time.Year
 
-open class Hendelse {
+internal open class Hendelse {
     private val behov = mutableListOf<Behov>()
 
     internal fun kansellerAlleBehov() = behov.clear()
@@ -12,11 +12,15 @@ open class Hendelse {
         this.behov.add(behov)
     }
 
-    fun behov(): List<Behov> = behov.toList()
+    internal fun behov(): List<Behov> = behov.toList()
 }
 
-interface Behov {
+internal interface Behov {
     fun toDto(ident: String): DtoBehov
+
+    companion object {
+        internal fun Iterable<Behov>.toDto(ident: String) = map { it.toDto(ident) }
+    }
 }
 
 interface Lytter {

@@ -11,7 +11,7 @@ internal class LøsningManuellMedlemskapYrkesskade(
     private val tidspunktForVurdering: LocalDateTime,
     private val erMedlem: ErMedlem
 ) : Hendelse() {
-    enum class ErMedlem {
+    internal enum class ErMedlem {
         JA, NEI
     }
 
@@ -26,7 +26,7 @@ internal class LøsningManuellMedlemskapYrkesskade(
         LøsningManuellMedlemskapYrkesskadeModellApi(løsningId, vurdertAv, tidspunktForVurdering, erMedlem.name)
 }
 
-class KvalitetssikringMedlemskapYrkesskade(
+internal class KvalitetssikringMedlemskapYrkesskade(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,

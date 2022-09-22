@@ -32,5 +32,5 @@ private fun håndter(
     val søker = søkereKafkaDto.toModellApi()
     val response = requireNotNull(sykepengedagerKafkaDto.response) { "response==null skal være filtrert vekk her." }
     val (endretSøker, dtoBehov) = response.håndter(søker)
-    return endretSøker.toJson() to dtoBehov.map { it.toDto(søkereKafkaDto.personident) }
+    return endretSøker.toJson() to dtoBehov
 }

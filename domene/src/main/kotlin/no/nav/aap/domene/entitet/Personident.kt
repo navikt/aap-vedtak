@@ -1,6 +1,6 @@
 package no.nav.aap.domene.entitet
 
-class Personident(
+internal class Personident(
     private val ident: String
 ) {
     internal fun toDto() = ident
@@ -16,7 +16,5 @@ class Personident(
         return true
     }
 
-    override fun hashCode(): Int {
-        return ident.hashCode()
-    }
+    override fun hashCode() = ident.hashCode()
 }

@@ -1,10 +1,10 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.entitet.Periode
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.*
-import no.nav.aap.hendelse.entitet.Periode
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

@@ -4,7 +4,7 @@ import no.nav.aap.hendelse.Behov
 import no.nav.aap.hendelse.DtoBehov
 import java.time.Year
 
-class BehovInntekter(
+internal class BehovInntekter(
     private val fom: Year,
     private val tom: Year
 ) : Behov {

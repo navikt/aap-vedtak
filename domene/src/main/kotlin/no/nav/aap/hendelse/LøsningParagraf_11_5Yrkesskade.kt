@@ -29,7 +29,7 @@ internal class LøsningParagraf_11_5Yrkesskade(
     )
 }
 
-class KvalitetssikringParagraf_11_5Yrkesskade(
+internal class KvalitetssikringParagraf_11_5Yrkesskade(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID, 
     private val kvalitetssikretAv: String,

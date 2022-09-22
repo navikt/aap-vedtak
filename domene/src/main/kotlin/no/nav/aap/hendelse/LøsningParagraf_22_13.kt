@@ -76,7 +76,7 @@ internal class LøsningParagraf_22_13(
     )
 }
 
-class KvalitetssikringParagraf_22_13(
+internal class KvalitetssikringParagraf_22_13(
     private val kvalitetssikringId: UUID,
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,
@@ -101,4 +101,3 @@ class KvalitetssikringParagraf_22_13(
         begrunnelse = begrunnelse
     )
 }
-

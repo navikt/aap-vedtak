@@ -28,7 +28,7 @@ internal class LøsningParagraf_11_4AndreOgTredjeLedd(
     )
 }
 
-class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
+internal class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
     private val kvalitetssikringId: UUID, 
     private val løsningId: UUID, 
     private val kvalitetssikretAv: String,

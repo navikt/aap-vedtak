@@ -1,6 +1,5 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.domene.vilkår.Paragraf_8_48
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.SykepengedagerModellApi
 import java.time.LocalDate
@@ -13,7 +12,7 @@ internal class LøsningSykepengedager(
         internal fun Iterable<LøsningSykepengedager>.toDto() = map(LøsningSykepengedager::toDto)
     }
 
-    enum class Kilde {
+    internal enum class Kilde {
         SPLEIS, INFOTRYGD,
     }
 
@@ -23,7 +22,7 @@ internal class LøsningSykepengedager(
 
     internal fun toDto() = sykepengedager.toDto()
 
-    fun accept(visitor: VilkårsvurderingVisitor) {
+    internal fun accept(visitor: VilkårsvurderingVisitor) {
 
     }
 
@@ -42,9 +41,9 @@ internal class LøsningSykepengedager(
 
             override fun toDto() = SykepengedagerModellApi(
                 sykepengedager = SykepengedagerModellApi.Sykepengedager(
-                gjenståendeSykedager = gjenståendeSykedager,
-                foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
-                kilde = kilde.name
+                    gjenståendeSykedager = gjenståendeSykedager,
+                    foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
+                    kilde = kilde.name
                 )
             )
 

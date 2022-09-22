@@ -11,7 +11,7 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
-class `§8-48 Test` {
+internal class `§8-48 Test` {
 
     @Test
     fun `Dersom løsning ikke inneholder sykepengedager, settes paragraf til ikke relevant`() {

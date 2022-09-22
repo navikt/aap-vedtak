@@ -7,7 +7,7 @@ internal class LøsningMaskinellMedlemskapYrkesskade(
     private val løsningId: UUID,
     private val erMedlem: ErMedlem
 ) : Hendelse() {
-    enum class ErMedlem {
+    internal enum class ErMedlem {
         JA, NEI, UAVKLART
     }
 

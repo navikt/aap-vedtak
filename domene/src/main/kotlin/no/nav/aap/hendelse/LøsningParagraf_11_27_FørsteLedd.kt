@@ -1,8 +1,10 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.entitet.Periode
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
-import no.nav.aap.hendelse.entitet.Periode
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_27_FørsteLedd_ModellApi
+import no.nav.aap.modellapi.SvangerskapspengerModellApi
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*

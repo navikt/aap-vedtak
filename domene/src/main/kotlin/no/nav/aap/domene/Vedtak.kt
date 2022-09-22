@@ -54,8 +54,6 @@ internal class Vedtak(
         return result
     }
 
-    override fun toString(): String {
-        return "Vedtak(vedtaksid=$vedtaksid, innvilget=$innvilget, inntektsgrunnlag=$inntektsgrunnlag, vedtaksdato=$vedtaksdato, virkningsdato=$virkningsdato)"
-    }
-
+    override fun toString() =
+        "Vedtak(vedtaksid=$vedtaksid, innvilget=$innvilget, inntektsgrunnlag=$inntektsgrunnlag, vedtaksdato=$vedtaksdato, virkningsdato=$virkningsdato)"
 }

@@ -4,12 +4,12 @@ import no.nav.aap.modellapi.LøsningMaskinellParagraf_11_2ModellApi
 import java.time.LocalDateTime
 import java.util.*
 
-class LøsningMaskinellParagraf_11_2(
+internal class LøsningMaskinellParagraf_11_2(
     private val løsningId: UUID,
     private val tidspunktForVurdering: LocalDateTime,
     private val erMedlem: ErMedlem
 ) : Hendelse() {
-    enum class ErMedlem {
+    internal enum class ErMedlem {
         JA, NEI, UAVKLART
     }
 

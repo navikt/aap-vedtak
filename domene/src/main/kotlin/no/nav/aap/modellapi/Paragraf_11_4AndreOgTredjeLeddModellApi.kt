@@ -2,7 +2,8 @@ package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.hendelse.Behov
+import no.nav.aap.hendelse.Behov.Companion.toDto
+import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_4AndreOgTredjeLedd
 import java.time.LocalDateTime
@@ -26,11 +27,11 @@ data class LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
         erOppfylt = erOppfylt
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return modellSøker.toDto() to løsning.behov()
+        return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
     private fun toLøsning() =
@@ -61,11 +62,11 @@ data class KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
         val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
         modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return modellSøker.toDto() to kvalitetssikring.behov()
+        return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_4AndreOgTredjeLedd(

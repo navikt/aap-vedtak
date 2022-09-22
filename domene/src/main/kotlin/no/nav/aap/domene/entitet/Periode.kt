@@ -1,4 +1,4 @@
-package no.nav.aap.hendelse.entitet
+package no.nav.aap.domene.entitet
 
 import java.time.LocalDate
 

@@ -1,6 +1,6 @@
 package no.nav.aap.domene.beregning
 
-class Arbeidsgiver(private val ident: String){
+internal class Arbeidsgiver(private val ident: String){
     internal fun toDto() = ident
 
     override fun equals(other: Any?): Boolean {
