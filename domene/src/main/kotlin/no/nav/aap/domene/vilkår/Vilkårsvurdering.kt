@@ -23,18 +23,19 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal enum class Paragraf {
         MEDLEMSKAP_YRKESSKADE,
+        PARAGRAF_8_48,
         PARAGRAF_11_2,
         PARAGRAF_11_3,
         PARAGRAF_11_4,
         PARAGRAF_11_5,
         PARAGRAF_11_5_YRKESSKADE,
         PARAGRAF_11_6,
-        PARAGRAF_22_13,
         PARAGRAF_11_14,
         PARAGRAF_11_19,
         PARAGRAF_11_22,
         PARAGRAF_11_27,
         PARAGRAF_11_29,
+        PARAGRAF_22_13,
     }
 
     internal enum class Ledd {
@@ -82,6 +83,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     }
 
     internal fun håndterLøsning(løsning: LøsningManuellMedlemskapYrkesskade) = callWithReceiver {
+        tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterLøsning(løsning: LøsningSykepengedager) = callWithReceiver {
         tilstand.håndterLøsning(this, løsning)
     }
 
@@ -246,6 +251,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningManuellMedlemskapYrkesskade
+        ) {
+            log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
+        internal open fun håndterLøsning(
+            vilkårsvurdering: PARAGRAF,
+            løsning: LøsningSykepengedager
         ) {
             log.info("Oppgave skal ikke håndteres i tilstand $tilstandsnavn")
         }
@@ -539,6 +551,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             when (enumValueOf<Paragraf>(vilkårsvurderingModellApi.paragraf)) {
                 Paragraf.MEDLEMSKAP_YRKESSKADE ->
                     gjenopprett(vilkårsvurderingModellApi, MedlemskapYrkesskade.Companion::gjenopprett)
+
+                Paragraf.PARAGRAF_8_48 ->
+                    gjenopprett(vilkårsvurderingModellApi, Paragraf_8_48.Companion::gjenopprett)
 
                 Paragraf.PARAGRAF_11_2 ->
                     gjenopprett(vilkårsvurderingModellApi, Paragraf_11_2.Companion::gjenopprett)

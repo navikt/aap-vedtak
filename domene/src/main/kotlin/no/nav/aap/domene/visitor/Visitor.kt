@@ -1,14 +1,16 @@
 package no.nav.aap.domene.visitor
 
 import no.nav.aap.domene.Sakstype
-import no.nav.aap.domene.vilkår.Paragraf_22_13
+import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Paragraf_11_19
 import no.nav.aap.domene.vilkår.Paragraf_11_22
 import no.nav.aap.domene.vilkår.Paragraf_11_27_FørsteLedd
-import no.nav.aap.hendelse.LøsningParagraf_22_13
+import no.nav.aap.domene.vilkår.Paragraf_22_13
+import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.LøsningParagraf_11_19
 import no.nav.aap.hendelse.LøsningParagraf_11_22
 import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
+import no.nav.aap.hendelse.LøsningParagraf_22_13
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -37,6 +39,17 @@ internal interface VilkårsvurderingVisitor {
     fun visitIkkeOppfyltManuelt() {}
     fun visitIkkeOppfyltManueltKvalitetssikret() {}
     fun visitIkkeRelevant() {}
+
+    fun preVisitParagraf_8_48(vilkårsvurdering: Paragraf_8_48) {}
+    fun preVisitGjeldendeLøsning(løsning: LøsningSykepengedager) {}
+
+    fun visitLøsningParagraf_11_27(løsning: LøsningSykepengedager,
+                                   løsningId: UUID
+    ) {
+    }
+
+    fun postVisitGjeldendeLøsning(løsning: LøsningSykepengedager) {}
+    fun postVisitParagraf_8_48(vilkårsvurdering: Paragraf_8_48) {}
 
     fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
     fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}

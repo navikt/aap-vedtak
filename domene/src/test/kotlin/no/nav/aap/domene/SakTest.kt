@@ -1169,13 +1169,12 @@ internal class SakTest {
         assertTilstand("VENTER_SYKEPENGER", sak)
 
         sak.håndterLøsning(
-            LøsningSykepengedager(
-                personident = personident,
+            LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 0,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
                 kilde = LøsningSykepengedager.Kilde.SPLEIS,
             )
-        )
+        ))
 
         assertTilstand("VEDTAK_IVERKSATT", sak)
     }

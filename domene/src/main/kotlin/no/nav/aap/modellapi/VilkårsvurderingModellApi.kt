@@ -1,5 +1,6 @@
 package no.nav.aap.modellapi
 
+import no.nav.aap.hendelse.LøsningSykepengedager
 import java.util.*
 
 data class VilkårsvurderingModellApi(
@@ -13,6 +14,7 @@ data class VilkårsvurderingModellApi(
     val vurdertMaskinelt: Boolean,
     val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskadeModellApi>? = null,
     val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskadeModellApi>? = null,
+    val løsningSykepengedager: List<SykepengedagerModellApi>? = null,
     val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2ModellApi>? = null,
     val løsning_11_2_manuell: List<LøsningParagraf_11_2ModellApi>? = null,
     val løsning_11_3_manuell: List<LøsningParagraf_11_3ModellApi>? = null,
@@ -26,15 +28,16 @@ data class VilkårsvurderingModellApi(
     val løsning_11_27_manuell: List<LøsningParagraf_11_27_FørsteLedd_ModellApi>? = null,
     val løsning_11_29_manuell: List<LøsningParagraf_11_29ModellApi>? = null,
     val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskadeModellApi>? = null,
+    val kvalitetssikringer_8_48: List<KvalitetssikringParagraf_22_13ModellApi>? = null,
     val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2ModellApi>? = null,
     val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3ModellApi>? = null,
     val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi>? = null,
     val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5ModellApi>? = null,
     val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5YrkesskadeModellApi>? = null,
     val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6ModellApi>? = null,
-    val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13ModellApi>? = null,
     val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19ModellApi>? = null,
     val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22ModellApi>? = null,
-    val kvalitetssikringer_11_27: List<KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi>? = null,
+    val kvalitetssikringer_11_27: List<KvalitetssikringParagraf_22_13ModellApi>? = null,
     val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29ModellApi>? = null,
+    val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13ModellApi>? = null,
 )
