@@ -23,11 +23,30 @@ internal class LøsningParagraf_22_13(
     internal enum class BestemmesAv {
         soknadstidspunkt,
         maksdatoSykepenger,
+        dagpenger,
+        omsorgspenger,
+        pleiepenger,
+        opplæringspenger,
+        foreldrepenger,
+        svangerskapspenger,
         ermiraSays,
         unntaksvurderingForhindret,
         unntaksvurderingMangelfull,
         etterSisteLoenn,
     }
+
+    internal fun bestemmesAv8_48() = bestemmesAv == BestemmesAv.maksdatoSykepenger
+    internal fun bestemmesAv11_27() = bestemmesAv in arrayOf(
+        BestemmesAv.dagpenger,
+        BestemmesAv.omsorgspenger,
+        BestemmesAv.pleiepenger,
+        BestemmesAv.opplæringspenger,
+        BestemmesAv.foreldrepenger,
+        BestemmesAv.svangerskapspenger,
+    )
+
+    internal fun bestemmesAv22_13() = !bestemmesAv8_48() && !bestemmesAv11_27()
+
 
     internal fun accept(visitor: VilkårsvurderingVisitor) {
         visitor.visitLøsningParagraf_22_13(

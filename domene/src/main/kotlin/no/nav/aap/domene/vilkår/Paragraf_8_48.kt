@@ -2,16 +2,15 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.entitet.Personident
+import no.nav.aap.domene.vilkår.Paragraf_8_48.*
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
-import no.nav.aap.hendelse.KvalitetssikringParagraf_11_27_FørsteLedd
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13.Companion.toDto
 import no.nav.aap.hendelse.LøsningSykepengedager.Companion.toDto
 import no.nav.aap.hendelse.behov.Behov_11_27
 import no.nav.aap.modellapi.SykepengedagerModellApi
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -78,13 +77,24 @@ internal class Paragraf_8_48 private constructor(
             kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_8_48,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_8_48>() {
+
+        override fun håndterLøsning(vilkårsvurdering: Paragraf_8_48, løsning: LøsningParagraf_22_13) {
+            vilkårsvurdering.løsninger22_13.add(løsning)
+            if (løsning.bestemmesAv8_48())
+                vilkårsvurdering.tilstand(Oppfylt, løsning)
+            else
+                vilkårsvurdering.tilstand(IkkeRelevant, løsning)
+        }
 
         override fun toDto(vilkårsvurdering: Paragraf_8_48): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
@@ -99,7 +109,10 @@ internal class Paragraf_8_48 private constructor(
             kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_8_48,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -117,7 +130,7 @@ internal class Paragraf_8_48 private constructor(
             }
         }
 
-        override fun subAccept(vilkårsvurdering: Paragraf_8_48, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_8_48, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_8_48(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsningSykepengedager.last())
             vilkårsvurdering.løsningSykepengedager.last().accept(visitor)
@@ -138,14 +151,17 @@ internal class Paragraf_8_48 private constructor(
             kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_8_48,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_8_48>() {
-        override fun subAccept(vilkårsvurdering: Paragraf_8_48, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_8_48, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_8_48(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsningSykepengedager.last())
             vilkårsvurdering.løsningSykepengedager.last().accept(visitor)
@@ -166,58 +182,10 @@ internal class Paragraf_8_48 private constructor(
             kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
-        }
-    }
-
-    object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_8_48>() {
-        override fun håndterKvalitetssikring(
+        override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_8_48,
-            kvalitetssikring: KvalitetssikringParagraf_22_13
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
-            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
-            when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(IkkeOppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
-            }
-        }
-
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsningSykepengedager = vilkårsvurdering.løsningSykepengedager.toDto(),
-            kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
-
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
-        }
-    }
-
-    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_8_48>() {
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsningSykepengedager = vilkårsvurdering.løsningSykepengedager.toDto(),
-            kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
-
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -226,7 +194,7 @@ internal class Paragraf_8_48 private constructor(
     object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_8_48>() {
         override fun toDto(vilkårsvurdering: Paragraf_8_48): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
+            vurdertAv = null,
             kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -237,7 +205,10 @@ internal class Paragraf_8_48 private constructor(
             kvalitetssikringer_8_48 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_8_48, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_8_48,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -271,9 +242,7 @@ internal class Paragraf_8_48 private constructor(
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfylt
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltKvalitetssikret
-            else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_27")
+            else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_8_48")
         }
     }
 }

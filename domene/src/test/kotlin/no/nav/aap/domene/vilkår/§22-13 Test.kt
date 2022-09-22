@@ -3,14 +3,14 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
+import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_22_13
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.Utfall
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -100,7 +100,33 @@ internal class `§22-13 Test` {
     }
 
     @Test
-    fun `Hvis vilkår opprettes vil behov om sykependedager og varighet opprettes`() {
+    fun `Dersom paragrafen er i søknad mottatt og virkningsdato skal settes etter maksdato på sykepenger, settes paragraf til ikke relevant`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_22_13()
+
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsning = LøsningParagraf_22_13(
+            løsningId = UUID.randomUUID(),
+            vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
+            bestemmesAv = LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger,
+            unntak = "INGEN",
+            unntaksbegrunnelse = "",
+            manueltSattVirkningsdato = LocalDate.now()
+        )
+        vilkår.håndterLøsning(løsning)
+
+        assertHarIkkeBehov(løsning)
+        assertUtfall(Utfall.IKKE_RELEVANT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_RELEVANT, vilkår)
+    }
+
+    @Test
+    fun `Hvis vilkår opprettes vil behov om sykepengedager og varighet opprettes`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -113,6 +139,10 @@ internal class `§22-13 Test` {
         assertEquals(2, behov.size)
         assertEquals(1, behov.filterIsInstance<Behov_8_48AndreLedd>().size)
         assertEquals(1, behov.filterIsInstance<Behov_22_13>().size)
+    }
+
+    private fun assertHarIkkeBehov(hendelse: Hendelse) {
+        assertTrue(hendelse.behov().isEmpty())
     }
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_22_13) {

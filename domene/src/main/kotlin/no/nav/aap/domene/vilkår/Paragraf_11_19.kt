@@ -84,7 +84,7 @@ internal class Paragraf_11_19 private constructor(
             }
         }
 
-        override fun subAccept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_19(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -116,7 +116,7 @@ internal class Paragraf_11_19 private constructor(
     }
 
     internal object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_19>() {
-        override fun subAccept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_11_19, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_19(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)

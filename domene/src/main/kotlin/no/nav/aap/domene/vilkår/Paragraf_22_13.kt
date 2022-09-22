@@ -2,6 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.vilkår.Paragraf_22_13.IkkeRelevant
 import no.nav.aap.domene.vilkår.Paragraf_22_13.SøknadMottatt
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.Hendelse
@@ -59,7 +60,10 @@ internal class Paragraf_22_13 private constructor(
             løsning: LøsningParagraf_22_13
         ) {
             vilkårsvurdering.løsninger.add(løsning)
-            vilkårsvurdering.tilstand(Oppfylt, løsning)
+            if (løsning.bestemmesAv22_13())
+                vilkårsvurdering.tilstand(Oppfylt, løsning)
+            else
+                vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
@@ -97,7 +101,7 @@ internal class Paragraf_22_13 private constructor(
             }
         }
 
-        override fun subAccept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -129,7 +133,7 @@ internal class Paragraf_22_13 private constructor(
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_22_13>() {
-        override fun subAccept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -146,6 +150,38 @@ internal class Paragraf_22_13 private constructor(
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
+
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_22_13,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
+            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
+            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+        }
+    }
+
+    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_22_13>() {
+        override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
+            visitor.preVisitParagraf_22_13(vilkårsvurdering)
+            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            vilkårsvurdering.løsninger.last().accept(visitor)
+            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.postVisitParagraf_22_13(vilkårsvurdering)
+        }
+
+        override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
+            VilkårsvurderingModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = null,
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_RELEVANT,
                 vurdertMaskinelt = vurdertMaskinelt,
                 løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),

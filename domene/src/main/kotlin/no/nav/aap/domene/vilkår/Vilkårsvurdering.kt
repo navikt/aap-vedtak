@@ -47,7 +47,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     }
 
     internal fun accept(visitor: VilkårsvurderingVisitor) = callWithReceiver {
-        tilstand.accept(this, visitor)
+        tilstand.preAccept(this, visitor)
     }
 
     protected open fun onEntry(hendelse: Hendelse) = callWithReceiver {
@@ -204,8 +204,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             IKKE_RELEVANT,
         }
 
-        internal abstract fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor)
-        protected open fun subAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {}
+        internal abstract fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor)
+        protected open fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {}
 
         internal open fun onEntry(vilkårsvurdering: PARAGRAF, hendelse: Hendelse) {}
         internal open fun onExit(vilkårsvurdering: PARAGRAF, hendelse: Hendelse) {}
@@ -420,9 +420,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
             vurdertMaskinelt = false
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeVurdert()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -430,9 +430,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
             vurdertMaskinelt = false
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitSøknadMottatt()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -440,9 +440,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS,
             vurdertMaskinelt = false
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitManuellVurderingTrengs()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -450,9 +450,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT,
             vurdertMaskinelt = true
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitOppfyltMaskinelt()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -461,9 +461,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET,
                 vurdertMaskinelt = true
             ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitOppfyltMaskineltKvalitetssikret()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -471,9 +471,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             vurdertMaskinelt = true
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeOppfyltMaskinelt()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -482,9 +482,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
                 vurdertMaskinelt = true
             ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeOppfyltMaskineltKvalitetssikret()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -492,9 +492,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT,
             vurdertMaskinelt = false
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitOppfyltManuelt()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -503,9 +503,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET,
                 vurdertMaskinelt = false
             ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitOppfyltManueltKvalitetssikret()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -513,9 +513,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
             vurdertMaskinelt = false
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeOppfyltManuelt()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -524,9 +524,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
                 vurdertMaskinelt = false
             ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeOppfyltManueltKvalitetssikret()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
 
@@ -534,9 +534,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             tilstandsnavn = Tilstandsnavn.IKKE_RELEVANT,
             vurdertMaskinelt = false
         ) {
-            final override fun accept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
+            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeRelevant()
-                subAccept(vilkårsvurdering, visitor)
+                accept(vilkårsvurdering, visitor)
             }
         }
     }
