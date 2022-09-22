@@ -13,10 +13,12 @@ data class LøsningMaskinellMedlemskapYrkesskadeModellApi(
     val løsningId: UUID,
     val erMedlem: String
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     private fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(løsningId, enumValueOf(erMedlem.uppercase()))
@@ -28,10 +30,12 @@ data class LøsningManuellMedlemskapYrkesskadeModellApi(
     val tidspunktForVurdering: LocalDateTime,
     val erMedlem: String
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     private fun toLøsning() =
@@ -52,10 +56,11 @@ data class KvalitetssikringMedlemskapYrkesskadeModellApi(
     val begrunnelse: String
 ) {
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return kvalitetssikring.behov()
+        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        return modellSøker.toDto() to kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(

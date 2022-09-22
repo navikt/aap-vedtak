@@ -32,10 +32,11 @@ data class LøsningParagraf_11_6ModellApi(
         harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     private fun toLøsning() = LøsningParagraf_11_6(
@@ -72,10 +73,11 @@ data class KvalitetssikringParagraf_11_6ModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return kvalitetssikring.behov()
+        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        return modellSøker.toDto() to kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_6(

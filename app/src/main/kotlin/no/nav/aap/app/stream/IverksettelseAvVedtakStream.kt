@@ -1,7 +1,6 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.*
-import no.nav.aap.domene.Søker
 import no.nav.aap.dto.kafka.IverksettelseAvVedtakKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.hendelse.DtoBehov
@@ -30,9 +29,7 @@ private fun håndter(
     iverksettelseAvVedtakKafkaDto: IverksettelseAvVedtakKafkaDto,
     søkereKafkaDto: SøkereKafkaDto
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val søker = Søker.gjenopprett(søkereKafkaDto.toModellApi())
-
-    val dtoBehov = iverksettelseAvVedtakKafkaDto.håndter(søker)
-
-    return søker.toDto().toJson() to dtoBehov.map { it.toDto(søkereKafkaDto.personident) }
+    val søker = søkereKafkaDto.toModellApi()
+    val (endretSøker, dtoBehov) = iverksettelseAvVedtakKafkaDto.håndter(søker)
+    return endretSøker.toJson() to dtoBehov.map { it.toDto(søkereKafkaDto.personident) }
 }

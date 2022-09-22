@@ -1,9 +1,8 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.app.kafka.toJson
-import no.nav.aap.domene.Søker
+import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.dto.kafka.MedlemKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.kafka.streams.extension.*
@@ -19,10 +18,7 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto
 }
 
 private val håndterMedlem = { medlemKafkaDto: MedlemKafkaDto, søkereKafkaDto: SøkereKafkaDto ->
-    val søker = Søker.gjenopprett(søkereKafkaDto.toModellApi()).apply {
-        val medlem = medlemKafkaDto.toModellApi()
-        medlem.håndter(this)
-    }
-
-    søker.toDto().toJson()
+    val søker = søkereKafkaDto.toModellApi()
+    val (endretSøker) = medlemKafkaDto.toModellApi().håndter(søker)
+    endretSøker.toJson()
 }

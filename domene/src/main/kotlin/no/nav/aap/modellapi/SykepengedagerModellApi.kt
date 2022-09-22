@@ -14,10 +14,12 @@ data class SykepengedagerModellApi(
         val kilde: String,
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     internal fun toLøsning(): LøsningSykepengedager {

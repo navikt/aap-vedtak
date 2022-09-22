@@ -8,7 +8,7 @@ import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
 import no.nav.aap.hendelse.entitet.Periode
 import java.time.LocalDate
 import java.time.LocalDateTime
-import java.util.UUID
+import java.util.*
 
 data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
     val løsningId: UUID,
@@ -21,10 +21,11 @@ data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
         svangerskapspenger = svangerskapspenger
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = gjenopprett()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd(
@@ -69,10 +70,11 @@ data class KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return kvalitetssikring.behov()
+        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        return modellSøker.toDto() to kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_27_FørsteLedd(

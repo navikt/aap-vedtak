@@ -7,10 +7,11 @@ import no.nav.aap.hendelse.IverksettelseAvVedtak
 data class IverksettelseAvVedtakModellApi(
     val iverksattAv: String,
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterIverksettelse(løsning)
-        return løsning.behov()
+        modellSøker.håndterIverksettelse(løsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     private fun toLøsning() = IverksettelseAvVedtak(

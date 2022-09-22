@@ -3,12 +3,10 @@ package no.nav.aap.app.stream
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.kafka.toJson
-import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøknadKafkaDto
-import no.nav.aap.hendelse.Søknad
 import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.modellapi.SøknadModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 import org.slf4j.LoggerFactory
@@ -38,9 +36,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
 }
 
 private val opprettSøker = { ident: String, jsonSøknad: SøknadKafkaDto ->
-    val søknad = Søknad(Personident(ident), Fødselsdato(jsonSøknad.fødselsdato))
-    val søker = søknad.opprettSøker()
-    søker.håndterSøknad(søknad)
-
-    søker.toDto().toJson() to søknad.behov().map { it.toDto(ident) }
+    val søknad = SøknadModellApi(ident, jsonSøknad.fødselsdato)
+    val (endretSøker, dtoBehov) = søknad.håndter()
+    endretSøker.toJson() to dtoBehov.map { it.toDto(ident) }
 }

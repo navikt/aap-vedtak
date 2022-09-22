@@ -3,8 +3,6 @@ package no.nav.aap.modellapi
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.*
-import no.nav.aap.hendelse.LøsningParagraf_11_5
-import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
 import java.time.LocalDateTime
 import java.util.*
 
@@ -29,10 +27,11 @@ data class LøsningParagraf_11_5ModellApi(
         nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     private fun toLøsning() = LøsningParagraf_11_5(
@@ -70,10 +69,11 @@ data class KvalitetssikringParagraf_11_5ModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return kvalitetssikring.behov()
+        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        return modellSøker.toDto() to kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
@@ -93,10 +93,12 @@ data class LøsningParagraf_11_5YrkesskadeModellApi(
     val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
     val arbeidsevneErNedsattMedMinst30Prosent: Boolean
 ) {
-    fun håndter(søker: Søker): List<Behov> {
+
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        søker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
-        return løsning.behov()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        return modellSøker.toDto() to løsning.behov()
     }
 
     private fun toLøsning() = LøsningParagraf_11_5Yrkesskade(
@@ -117,10 +119,11 @@ data class KvalitetssikringParagraf_11_5YrkesskadeModellApi(
     val begrunnelse: String
 ) {
 
-    fun håndter(søker: Søker): List<Behov> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<Behov>> {
+        val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
-        søker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
-        return kvalitetssikring.behov()
+        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        return modellSøker.toDto() to kvalitetssikring.behov()
     }
 
     private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(

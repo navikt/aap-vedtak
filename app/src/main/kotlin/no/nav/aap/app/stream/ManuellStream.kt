@@ -1,12 +1,12 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.*
-import no.nav.aap.domene.Søker
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.hendelse.Behov
 import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.Topic
 import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.modellapi.SøkerModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
@@ -36,7 +36,7 @@ private fun <T> StreamsBuilder.stream(
     søkere: KTable<String, SøkereKafkaDto>,
     topic: Topic<T & Any>,
     kafkaNameFilter: String,
-    håndter: (T & Any).(Søker) -> List<Behov>,
+    håndter: (T & Any).(SøkerModellApi) -> Pair<SøkerModellApi, List<Behov>>,
 ) {
     val søkerOgBehov =
         consume(topic)
@@ -56,11 +56,9 @@ private fun <T> StreamsBuilder.stream(
 private fun <T> håndter(
     manuellKafkaDto: T,
     søkereKafkaDto: SøkereKafkaDto,
-    håndter: T.(Søker) -> List<Behov>,
+    håndter: T.(SøkerModellApi) -> Pair<SøkerModellApi, List<Behov>>,
 ): Pair<SøkereKafkaDto, List<DtoBehov>> {
-    val søker = Søker.gjenopprett(søkereKafkaDto.toModellApi())
-
-    val dtoBehov = manuellKafkaDto.håndter(søker)
-
-    return søker.toDto().toJson() to dtoBehov.map { it.toDto(søkereKafkaDto.personident) }
+    val søker = søkereKafkaDto.toModellApi()
+    val (endretSøker, dtoBehov) = manuellKafkaDto.håndter(søker)
+    return endretSøker.toJson() to dtoBehov.map { it.toDto(søkereKafkaDto.personident) }
 }
