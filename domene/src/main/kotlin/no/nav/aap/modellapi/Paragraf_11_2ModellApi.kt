@@ -3,7 +3,7 @@ package no.nav.aap.modellapi
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.*
-import no.nav.aap.hendelse.Behov.Companion.toDto
+import no.nav.aap.hendelse.behov.Behov.Companion.toDto
 import java.time.LocalDateTime
 import java.util.*
 
@@ -25,7 +25,7 @@ data class LøsningParagraf_11_2ModellApi(
         erMedlem = erMedlem
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
@@ -65,7 +65,7 @@ data class KvalitetssikringParagraf_11_2ModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
         modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
@@ -96,7 +96,7 @@ data class LøsningMaskinellParagraf_11_2ModellApi(
         erMedlem = erMedlem
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)

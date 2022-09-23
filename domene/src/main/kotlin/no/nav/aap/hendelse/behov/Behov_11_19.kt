@@ -1,8 +1,7 @@
 package no.nav.aap.hendelse.behov
 
-import no.nav.aap.hendelse.Behov
-import no.nav.aap.hendelse.DtoBehov
+import no.nav.aap.modellapi.BehovModellApi
 
 internal class Behov_11_19 : Behov {
-    override fun toDto(ident: String) = DtoBehov.DtoBehov_11_19(ident)
+    override fun toDto(ident: String) = BehovModellApi.Behov_11_19_ModellApi(ident)
 }

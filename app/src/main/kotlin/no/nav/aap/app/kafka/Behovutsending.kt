@@ -1,33 +1,34 @@
 package no.nav.aap.app.kafka
 
 import no.nav.aap.dto.kafka.*
-import no.nav.aap.modellapi.VedtakModellApi
-import no.nav.aap.hendelse.DtoBehov
-import no.nav.aap.hendelse.Lytter
 import no.nav.aap.kafka.streams.Behov
 import no.nav.aap.kafka.streams.BehovExtractor
 import no.nav.aap.kafka.streams.branch
 import no.nav.aap.kafka.streams.extension.mapValues
 import no.nav.aap.kafka.streams.sendBehov
+import no.nav.aap.modellapi.BehovModellApi
+import no.nav.aap.modellapi.LytterModellApi
+import no.nav.aap.modellapi.VedtakModellApi
 import org.apache.kafka.streams.kstream.KStream
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
-internal fun KStream<String, DtoBehov>.sendBehov(name: String) {
-    mapValues("$name-wrap-behov") { value -> DtoBehovWrapper(value) }
+internal fun KStream<String, BehovModellApi>.sendBehov(name: String) {
+    this
+        .mapValues("$name-wrap-behov", ::BehovModellApiWrapper)
         .sendBehov(name) {
-            branch(Topics.medlem, "$name-medlem", DtoBehovWrapper::erMedlem, ::ToMedlemKafkaDto)
-            branch(Topics.inntekter, "$name-inntekter", DtoBehovWrapper::erInntekter, ::ToInntekterKafkaDto)
-            branch(Topics.andreFolketrygdsytelser, "$name-andre-folketrygdytelser", DtoBehovWrapper::erAnderFolketrygdytelser, ::ToAndreFolketrygdytelserKafkaDto)
-            branch(Topics.vedtak, "$name-vedtak", DtoBehovWrapper::erIverksettVedtak, ::ToIverksettVedtakKafkaDto)
-            branch(Topics.sykepengedager, "$name-sykepengedager", DtoBehovWrapper::erSykepengedager, ::ToSykepengedagerKafkaDto)
+            branch(Topics.medlem, "$name-medlem", BehovModellApiWrapper::erMedlem, ::ToMedlemKafkaDto)
+            branch(Topics.inntekter, "$name-inntekter", BehovModellApiWrapper::erInntekter, ::ToInntekterKafkaDto)
+            branch(Topics.andreFolketrygdsytelser, "$name-andre-folketrygdytelser", BehovModellApiWrapper::erAnderFolketrygdytelser, ::ToAndreFolketrygdytelserKafkaDto)
+            branch(Topics.vedtak, "$name-vedtak", BehovModellApiWrapper::erIverksettVedtak, ::ToIverksettVedtakKafkaDto)
+            branch(Topics.sykepengedager, "$name-sykepengedager", BehovModellApiWrapper::erSykepengedager, ::ToSykepengedagerKafkaDto)
         }
 }
 
-private class DtoBehovWrapper(private val dtoBehov: DtoBehov) : Behov<Lytter> {
-    override fun accept(visitor: Lytter) = dtoBehov.accept(visitor)
+private class BehovModellApiWrapper(private val behovModellApi: BehovModellApi) : Behov<LytterModellApi> {
+    override fun accept(visitor: LytterModellApi) = behovModellApi.accept(visitor)
 
     fun erMedlem() = Sjekk.ErMedlem().apply(this::accept).er()
     fun erSykepengedager() = Sjekk.ErSykepengedager().apply(this::accept).er()
@@ -36,7 +37,7 @@ private class DtoBehovWrapper(private val dtoBehov: DtoBehov) : Behov<Lytter> {
     fun erIverksettVedtak() = Sjekk.ErIverksettVedtak().apply(this::accept).er()
 }
 
-private sealed class Sjekk : Lytter {
+private sealed class Sjekk : LytterModellApi {
     protected var er = false
     fun er() = er
 
@@ -71,7 +72,7 @@ private sealed class Sjekk : Lytter {
     }
 }
 
-private class ToMedlemKafkaDto : Lytter, BehovExtractor<MedlemKafkaDto> {
+private class ToMedlemKafkaDto : LytterModellApi, BehovExtractor<MedlemKafkaDto> {
     private lateinit var ident: String
 
     override fun medlem(ident: String) {
@@ -91,11 +92,11 @@ private class ToMedlemKafkaDto : Lytter, BehovExtractor<MedlemKafkaDto> {
         )
 }
 
-private class ToSykepengedagerKafkaDto : Lytter, BehovExtractor<SykepengedagerKafkaDto> {
+private class ToSykepengedagerKafkaDto : LytterModellApi, BehovExtractor<SykepengedagerKafkaDto> {
     override fun toJson(): SykepengedagerKafkaDto = SykepengedagerKafkaDto(response = null)
 }
 
-private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {
+private class ToInntekterKafkaDto : LytterModellApi, BehovExtractor<InntekterKafkaDto> {
     private lateinit var ident: String
     private lateinit var fom: YearMonth
     private lateinit var tom: YearMonth
@@ -113,11 +114,11 @@ private class ToInntekterKafkaDto : Lytter, BehovExtractor<InntekterKafkaDto> {
     )
 }
 
-private class ToAndreFolketrygdytelserKafkaDto : Lytter, BehovExtractor<AndreFolketrygdytelserKafkaDto> {
+private class ToAndreFolketrygdytelserKafkaDto : LytterModellApi, BehovExtractor<AndreFolketrygdytelserKafkaDto> {
     override fun toJson() = AndreFolketrygdytelserKafkaDto(response = null)
 }
 
-private class ToIverksettVedtakKafkaDto : Lytter, BehovExtractor<IverksettVedtakKafkaDto> {
+private class ToIverksettVedtakKafkaDto : LytterModellApi, BehovExtractor<IverksettVedtakKafkaDto> {
     private lateinit var vedtaksid: UUID
     private lateinit var innvilget: Innvilget
     private lateinit var grunnlagsfaktor: Grunnlagsfaktor

@@ -2,10 +2,9 @@ package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.hendelse.Behov.Companion.toDto
-import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_22_13
+import no.nav.aap.hendelse.behov.Behov.Companion.toDto
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -37,7 +36,7 @@ data class LøsningParagraf_22_13ModellApi(
         manueltSattVirkningsdato = manueltSattVirkningsdato
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
@@ -87,7 +86,7 @@ data class KvalitetssikringParagraf_22_13ModellApi(
         begrunnelse = begrunnelse
     )
 
-    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<DtoBehov>> {
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
         modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)

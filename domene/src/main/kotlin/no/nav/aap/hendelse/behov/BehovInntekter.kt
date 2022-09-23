@@ -1,12 +1,11 @@
 package no.nav.aap.hendelse.behov
 
-import no.nav.aap.hendelse.Behov
-import no.nav.aap.hendelse.DtoBehov
+import no.nav.aap.modellapi.BehovModellApi
 import java.time.Year
 
 internal class BehovInntekter(
     private val fom: Year,
     private val tom: Year
 ) : Behov {
-    override fun toDto(ident: String) = DtoBehov.DtoInntekter(ident, fom, tom)
+    override fun toDto(ident: String) = BehovModellApi.BehovInntekterModellApi(ident, fom, tom)
 }

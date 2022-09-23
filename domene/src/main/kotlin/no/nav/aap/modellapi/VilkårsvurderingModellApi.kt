@@ -1,6 +1,5 @@
 package no.nav.aap.modellapi
 
-import no.nav.aap.hendelse.LøsningSykepengedager
 import java.util.*
 
 data class VilkårsvurderingModellApi(

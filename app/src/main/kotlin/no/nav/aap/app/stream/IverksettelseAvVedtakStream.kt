@@ -3,8 +3,8 @@ package no.nav.aap.app.stream
 import no.nav.aap.app.kafka.*
 import no.nav.aap.dto.kafka.IverksettelseAvVedtakKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto
-import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.modellapi.BehovModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
@@ -28,7 +28,7 @@ internal fun StreamsBuilder.iverksettelseAvVedtakStream(søkere: KTable<String, 
 private fun håndter(
     iverksettelseAvVedtakKafkaDto: IverksettelseAvVedtakKafkaDto,
     søkereKafkaDto: SøkereKafkaDto
-): Pair<SøkereKafkaDto, List<DtoBehov>> {
+): Pair<SøkereKafkaDto, List<BehovModellApi>> {
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker, dtoBehov) = iverksettelseAvVedtakKafkaDto.håndter(søker)
     return endretSøker.toJson() to dtoBehov

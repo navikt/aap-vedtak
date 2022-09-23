@@ -2,9 +2,8 @@ package no.nav.aap.modellapi
 
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
-import no.nav.aap.hendelse.Behov.Companion.toDto
-import no.nav.aap.hendelse.DtoBehov
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.behov.Behov.Companion.toDto
 import java.time.LocalDate
 
 data class SøknadModellApi(
@@ -13,7 +12,7 @@ data class SøknadModellApi(
     val erStudent: Boolean = false,
     val harTidligereYrkesskade: String = "NEI",
 ) {
-    fun håndter(): Pair<SøkerModellApi, List<DtoBehov>> {
+    fun håndter(): Pair<SøkerModellApi, List<BehovModellApi>> {
         val søknad = Søknad(
             personident = Personident(personident),
             fødselsdato = Fødselsdato(fødselsdato),
