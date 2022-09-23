@@ -1,10 +1,10 @@
 package no.nav.aap.domene.visitor
 
 import no.nav.aap.hendelse.LøsningParagraf_22_13
+import no.nav.aap.hendelse.LøsningSykepengedager
 import no.nav.aap.oktober
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.util.*
@@ -25,12 +25,18 @@ internal class VirkningsdatoVisitorTest {
         ).accept(visitor)
 
         assertEquals(LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt, visitor.bestemmesAv)
-        assertNull(visitor.virkningsdato)
     }
 
     @Test
     fun `Henter at maksdato skal bestemme virkningsdato fra løsning`() {
         val visitor = VirkningsdatoVisitor()
+        LøsningSykepengedager(
+            LøsningSykepengedager.Sykepengedager.Har(
+                gjenståendeSykedager = 0,
+                foreløpigBeregnetSluttPåSykepenger = 23 september 2022,
+                kilde = LøsningSykepengedager.Kilde.SPLEIS,
+            )
+        ).accept(visitor)
         LøsningParagraf_22_13(
             løsningId = UUID.randomUUID(),
             vurdertAv = "X",
@@ -42,7 +48,7 @@ internal class VirkningsdatoVisitorTest {
         ).accept(visitor)
 
         assertEquals(LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger, visitor.bestemmesAv)
-        assertNull(visitor.virkningsdato)
+        assertEquals(24 september 2022, visitor.virkningsdato)
     }
 
     @Test

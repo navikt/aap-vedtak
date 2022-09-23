@@ -249,8 +249,10 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
+            Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
+            Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_27")
         }
     }

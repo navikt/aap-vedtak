@@ -4,6 +4,7 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -12,6 +13,21 @@ import java.time.LocalDateTime
 import java.util.*
 
 internal class `§8-48 Test` {
+
+    @Test
+    fun `Hvis vilkår opprettes vil behov om sykepengedager opprettes`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_8_48()
+
+        val søknad = Søknad(personident, fødselsdato)
+        vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
+
+        val behov = søknad.behov()
+        assertEquals(1, behov.size)
+        assertEquals(1, behov.filterIsInstance<Behov_8_48AndreLedd>().size)
+    }
 
     @Test
     fun `Dersom løsning ikke inneholder sykepengedager, settes paragraf til ikke relevant`() {
@@ -26,7 +42,7 @@ internal class `§8-48 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningSykepengedager(
-            sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke()
+            sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
         )
         vilkår.håndterLøsning(løsning)
 

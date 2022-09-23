@@ -40,6 +40,8 @@ internal class LøsningParagraf_11_27_FørsteLedd(
 
         internal fun erFullYtelse() = grad == 100.0
 
+        internal fun virkningsdato() = periode?.tom()?.plusDays(1)
+
         internal fun toModellApi() = SvangerskapspengerModellApi(
             fom = periode?.fom(),
             tom = periode?.tom(),

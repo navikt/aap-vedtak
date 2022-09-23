@@ -2,15 +2,7 @@ package no.nav.aap.domene.visitor
 
 import no.nav.aap.domene.Sakstype
 import no.nav.aap.domene.vilkår.*
-import no.nav.aap.domene.vilkår.Paragraf_11_19
-import no.nav.aap.domene.vilkår.Paragraf_11_22
-import no.nav.aap.domene.vilkår.Paragraf_11_27_FørsteLedd
-import no.nav.aap.domene.vilkår.Paragraf_22_13
 import no.nav.aap.hendelse.*
-import no.nav.aap.hendelse.LøsningParagraf_11_19
-import no.nav.aap.hendelse.LøsningParagraf_11_22
-import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
-import no.nav.aap.hendelse.LøsningParagraf_22_13
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -42,31 +34,10 @@ internal interface VilkårsvurderingVisitor {
 
     fun preVisitParagraf_8_48(vilkårsvurdering: Paragraf_8_48) {}
     fun preVisitGjeldendeLøsning(løsning: LøsningSykepengedager) {}
-
-    fun visitLøsningParagraf_11_27(løsning: LøsningSykepengedager,
-                                   løsningId: UUID
-    ) {
-    }
-
+    fun visitLøsningParagraf_8_48Har(løsning: LøsningSykepengedager, løsningId: UUID, virkningsdato: LocalDate) {}
+    fun visitLøsningParagraf_8_48HarIkke(løsning: LøsningSykepengedager, løsningId: UUID) {}
     fun postVisitGjeldendeLøsning(løsning: LøsningSykepengedager) {}
     fun postVisitParagraf_8_48(vilkårsvurdering: Paragraf_8_48) {}
-
-    fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
-    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
-    fun visitLøsningParagraf_22_13(
-        løsning: LøsningParagraf_22_13,
-        løsningId: UUID,
-        vurdertAv: String,
-        tidspunktForVurdering: LocalDateTime,
-        bestemmesAv: LøsningParagraf_22_13.BestemmesAv,
-        unntak: String,
-        unntaksbegrunnelse: String,
-        manueltSattVirkningsdato: LocalDate?
-    ) {
-    }
-
-    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
-    fun postVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
 
     fun preVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
     fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
@@ -99,15 +70,30 @@ internal interface VilkårsvurderingVisitor {
 
     fun preVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27_FørsteLedd) {}
     fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {}
-
-    fun visitLøsningParagraf_11_27(løsning: LøsningParagraf_11_27_FørsteLedd,
-                                   løsningId: UUID, svangerskapspenger:
-                                   LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger
+    fun visitLøsningParagraf_11_27(
+        løsning: LøsningParagraf_11_27_FørsteLedd,
+        løsningId: UUID,
+        svangerskapspenger: LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger
     ) {
     }
 
     fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {}
     fun postVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27_FørsteLedd) {}
 
+    fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
+    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
+    fun visitLøsningParagraf_22_13(
+        løsning: LøsningParagraf_22_13,
+        løsningId: UUID,
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        bestemmesAv: LøsningParagraf_22_13.BestemmesAv,
+        unntak: String,
+        unntaksbegrunnelse: String,
+        manueltSattVirkningsdato: LocalDate?
+    ) {
+    }
 
+    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
+    fun postVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
 }

@@ -4,11 +4,11 @@ import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
-import no.nav.aap.modellapi.SakstypeModellApi
 import no.nav.aap.domene.visitor.BeregningsdatoVisitor
 import no.nav.aap.domene.visitor.SakstypeVisitor
 import no.nav.aap.domene.visitor.YrkesskadeVisitor
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.modellapi.SakstypeModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -32,12 +32,13 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndter(løsning) }
     }
 
+    internal abstract fun accept(visitor: SakstypeVisitor)
+
     abstract fun opprettVedtak(
         inntektshistorikk: Inntektshistorikk,
         fødselsdato: Fødselsdato,
+        virkningsdato: LocalDate,
     ): Vedtak
-
-    internal abstract fun accept(visitor: SakstypeVisitor)
 
     internal class Standard private constructor(
         vilkårsvurderinger: List<Vilkårsvurdering<*>>
@@ -56,6 +57,7 @@ internal abstract class Sakstype private constructor(
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
+            virkningsdato: LocalDate,
         ): Vedtak {
             val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
                 beregningsdato = BeregningsdatoVisitor().apply(::accept).beregningsdato,
@@ -67,22 +69,24 @@ internal abstract class Sakstype private constructor(
                 innvilget = true,
                 inntektsgrunnlag = inntektsgrunnlag,
                 vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now()
+                virkningsdato = virkningsdato,
             )
         }
 
         internal companion object {
             internal fun opprettStandard(): Standard {
                 val vilkårsvurderinger = listOf(
+                    Paragraf_8_48(),
                     Paragraf_11_2(),
                     Paragraf_11_3(),
                     Paragraf_11_4FørsteLedd(),
                     Paragraf_11_4AndreOgTredjeLedd(),
                     Paragraf_11_5(),
                     Paragraf_11_6(),
-                    Paragraf_22_13(),
                     Paragraf_11_19(),
+                    Paragraf_11_27_FørsteLedd(),
                     Paragraf_11_29(),
+                    Paragraf_22_13(),
                 )
 
                 return Standard(vilkårsvurderinger)
@@ -110,6 +114,7 @@ internal abstract class Sakstype private constructor(
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
+            virkningsdato: LocalDate,
         ): Vedtak {
             val yrkesskade = YrkesskadeVisitor().apply(::accept).yrkesskade
             val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
@@ -122,7 +127,7 @@ internal abstract class Sakstype private constructor(
                 innvilget = true,
                 inntektsgrunnlag = inntektsgrunnlag,
                 vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now()
+                virkningsdato = virkningsdato
             )
         }
 
@@ -166,6 +171,7 @@ internal abstract class Sakstype private constructor(
         override fun opprettVedtak(
             inntektshistorikk: Inntektshistorikk,
             fødselsdato: Fødselsdato,
+            virkningsdato: LocalDate,
         ): Vedtak {
             val inntektsgrunnlag = inntektshistorikk.finnInntektsgrunnlag(
                 beregningsdato = BeregningsdatoVisitor().apply(::accept).beregningsdato,
@@ -177,7 +183,7 @@ internal abstract class Sakstype private constructor(
                 innvilget = true,
                 inntektsgrunnlag = inntektsgrunnlag,
                 vedtaksdato = LocalDate.now(),
-                virkningsdato = LocalDate.now()
+                virkningsdato = virkningsdato
             )
         }
 

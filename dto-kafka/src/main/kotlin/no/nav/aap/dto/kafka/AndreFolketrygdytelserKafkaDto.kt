@@ -9,10 +9,10 @@ data class AndreFolketrygdytelserKafkaDto(
         val svangerskapspenger: Svangerskapspenger
     ) {
         data class Svangerskapspenger(
-            val fom: LocalDate,
-            val tom: LocalDate,
-            val grad: Double,
-            val vedtaksdato: LocalDate
+            val fom: LocalDate?,
+            val tom: LocalDate?,
+            val grad: Double?,
+            val vedtaksdato: LocalDate?
         )
     }
 }

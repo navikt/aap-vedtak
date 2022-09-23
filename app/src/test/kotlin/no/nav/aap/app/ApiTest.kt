@@ -7,8 +7,7 @@ import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.kafka.streams.test.readAndAssert
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
 import java.time.LocalDate
@@ -25,19 +24,22 @@ internal class ApiTest {
             val manuell_11_3_Topic = mocks.kafka.inputTopic(Topics.manuell_11_3)
             val manuell_11_5_Topic = mocks.kafka.inputTopic(Topics.manuell_11_5)
             val manuell_11_6_Topic = mocks.kafka.inputTopic(Topics.manuell_11_6)
-            val manuell_22_13_Topic = mocks.kafka.inputTopic(Topics.manuell_22_13)
             val manuell_11_19_Topic = mocks.kafka.inputTopic(Topics.manuell_11_19)
             val manuell_11_29_Topic = mocks.kafka.inputTopic(Topics.manuell_11_29)
+            val manuell_22_13_Topic = mocks.kafka.inputTopic(Topics.manuell_22_13)
             val kvalitetssikring_11_2_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_2)
             val kvalitetssikring_11_3_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_3)
             val kvalitetssikring_11_5_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_5)
             val kvalitetssikring_11_6_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_6)
-            val kvalitetssikring_22_13_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_22_13)
             val kvalitetssikring_11_19_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_19)
             val kvalitetssikring_11_29_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_29)
+            val kvalitetssikring_22_13_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_22_13)
+            val andreFolketrygdsytelserTopic = mocks.kafka.inputTopic(Topics.andreFolketrygdsytelser)
+            val andreFolketrygdsytelserOutputTopic = mocks.kafka.outputTopic(Topics.andreFolketrygdsytelser)
             val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
             val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
-            val sykependedagerOutputTopic = mocks.kafka.outputTopic(Topics.sykepengedager)
+            val sykepengedagerTopic = mocks.kafka.inputTopic(Topics.sykepengedager)
+            val sykepengedagerOutputTopic = mocks.kafka.outputTopic(Topics.sykepengedager)
             val iverksettelseAvVedtakTopic = mocks.kafka.inputTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = mocks.kafka.outputTopic(Topics.vedtak)
             val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
@@ -48,14 +50,35 @@ internal class ApiTest {
                 SøknadKafkaDto(fødselsdato = LocalDate.now().minusYears(40))
             }
 
-            sykependedagerOutputTopic.readAndAssert().hasValuesForPredicate("123") { it.response == null }
-
             val medlemRequest = medlemOutputTopic.readValue()
             medlemTopic.produce(fnr) {
                 medlemRequest.copy(
                     response = MedlemKafkaDto.Response(
                         erMedlem = MedlemKafkaDto.ErMedlem.JA,
                         begrunnelse = null
+                    )
+                )
+            }
+
+            val sykepengedagerRequest = sykepengedagerOutputTopic.readValue()
+            sykepengedagerTopic.produce(fnr) {
+                sykepengedagerRequest.copy(
+                    response = SykepengedagerKafkaDto.Response(
+                        sykepengedager = null
+                    )
+                )
+            }
+
+            val andreFolketrygdytelserRequest = andreFolketrygdsytelserOutputTopic.readValue()
+            andreFolketrygdsytelserTopic.produce(fnr) {
+                andreFolketrygdytelserRequest.copy(
+                    response = AndreFolketrygdytelserKafkaDto.Response(
+                        svangerskapspenger = AndreFolketrygdytelserKafkaDto.Response.Svangerskapspenger(
+                            fom = null,
+                            tom = null,
+                            grad = null,
+                            vedtaksdato = null,
+                        )
                     )
                 )
             }
@@ -126,18 +149,18 @@ internal class ApiTest {
             fun løsningsid6(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_6_manuell!![0].løsningId
 
-            fun løsningsid12(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_22_13_manuell!![0].løsningId
-
             fun løsningsid19(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_19_manuell!![0].løsningId
 
             fun løsningsid29(index: Int) =
                 actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_29_manuell!![0].løsningId
 
+            fun løsningsid2213(index: Int) =
+                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_22_13_manuell!![0].løsningId
+
             kvalitetssikring_11_2_Topic.produce(fnr) {
                 Kvalitetssikring_11_2(
-                    løsningId = løsningsid2(0),
+                    løsningId = løsningsid2(1),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
                     erGodkjent = true,
@@ -147,7 +170,7 @@ internal class ApiTest {
 
             kvalitetssikring_11_3_Topic.produce(fnr) {
                 Kvalitetssikring_11_3(
-                    løsningId = løsningsid3(1),
+                    løsningId = løsningsid3(2),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
                     erGodkjent = true,
@@ -157,7 +180,7 @@ internal class ApiTest {
 
             kvalitetssikring_11_5_Topic.produce(fnr) {
                 Kvalitetssikring_11_5(
-                    løsningId = løsningsid5(4),
+                    løsningId = løsningsid5(5),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
                     erGodkjent = true,
@@ -167,17 +190,7 @@ internal class ApiTest {
 
             kvalitetssikring_11_6_Topic.produce(fnr) {
                 Kvalitetssikring_11_6(
-                    løsningId = løsningsid6(5),
-                    kvalitetssikretAv = "X",
-                    tidspunktForKvalitetssikring = LocalDateTime.now(),
-                    erGodkjent = true,
-                    begrunnelse = ""
-                )
-            }
-
-            kvalitetssikring_22_13_Topic.produce(fnr) {
-                Kvalitetssikring_22_13(
-                    løsningId = løsningsid12(6),
+                    løsningId = løsningsid6(6),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
                     erGodkjent = true,
@@ -197,7 +210,17 @@ internal class ApiTest {
 
             kvalitetssikring_11_29_Topic.produce(fnr) {
                 Kvalitetssikring_11_29(
-                    løsningId = løsningsid29(8),
+                    løsningId = løsningsid29(9),
+                    kvalitetssikretAv = "X",
+                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+                    erGodkjent = true,
+                    begrunnelse = ""
+                )
+            }
+
+            kvalitetssikring_22_13_Topic.produce(fnr) {
+                Kvalitetssikring_22_13(
+                    løsningId = løsningsid2213(10),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
                     erGodkjent = true,
@@ -214,7 +237,7 @@ internal class ApiTest {
             iverksettVedtakTopic.readAndAssert()
                 .hasNumberOfRecords(1)
                 .hasKey(fnr)
-                .hasLastValueMatching { it?.innvilget }
+                .hasLastValueMatching { assertTrue(it?.innvilget ?: false) }
         }
     }
 

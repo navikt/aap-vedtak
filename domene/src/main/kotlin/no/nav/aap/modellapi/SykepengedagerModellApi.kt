@@ -23,7 +23,7 @@ data class SykepengedagerModellApi(
 
     internal fun toLøsning(): LøsningSykepengedager {
         return if (sykepengedager == null) {
-            LøsningSykepengedager(sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke())
+            LøsningSykepengedager(sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke)
         } else {
             LøsningSykepengedager(
                 sykepengedager = LøsningSykepengedager.Sykepengedager.Har(

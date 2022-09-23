@@ -8,7 +8,6 @@ import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_22_13
-import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -126,7 +125,7 @@ internal class `§22-13 Test` {
     }
 
     @Test
-    fun `Hvis vilkår opprettes vil behov om sykepengedager og varighet opprettes`() {
+    fun `Hvis vilkår opprettes vil behov om varighet opprettes`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -136,8 +135,7 @@ internal class `§22-13 Test` {
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val behov = søknad.behov()
-        assertEquals(2, behov.size)
-        assertEquals(1, behov.filterIsInstance<Behov_8_48AndreLedd>().size)
+        assertEquals(1, behov.size)
         assertEquals(1, behov.filterIsInstance<Behov_22_13>().size)
     }
 

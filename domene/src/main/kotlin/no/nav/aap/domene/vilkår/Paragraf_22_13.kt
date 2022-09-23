@@ -12,7 +12,6 @@ import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_22_13.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_22_13
-import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.Utfall
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
@@ -52,7 +51,6 @@ internal class Paragraf_22_13 private constructor(
     object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_22_13>() {
         override fun onEntry(vilkårsvurdering: Paragraf_22_13, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_22_13())
-            hendelse.opprettBehov(Behov_8_48AndreLedd())
         }
 
         override fun håndterLøsning(

@@ -3,6 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.SykepengedagerModellApi
 import java.time.LocalDate
+import java.util.*
 
 internal class LøsningSykepengedager(
     private val sykepengedager: Sykepengedager
@@ -17,20 +18,22 @@ internal class LøsningSykepengedager(
     }
 
     internal fun gjenståendeSykedager() = sykepengedager.gjenståendeSykedager()
-
     internal fun erRelevantFor8_48() = sykepengedager.erRelevantFor8_48()
 
-    internal fun toDto() = sykepengedager.toDto()
-
     internal fun accept(visitor: VilkårsvurderingVisitor) {
-
+        sykepengedager.accept(this, visitor)
     }
+
+    internal fun toDto() = sykepengedager.toDto()
 
     internal sealed class Sykepengedager {
 
         internal abstract fun gjenståendeSykedager(): Int
-        internal abstract fun toDto(): SykepengedagerModellApi
         internal abstract fun erRelevantFor8_48(): Boolean
+
+        internal abstract fun accept(løsning: LøsningSykepengedager, visitor: VilkårsvurderingVisitor)
+
+        internal abstract fun toDto(): SykepengedagerModellApi
 
         internal class Har(
             private val gjenståendeSykedager: Int,
@@ -38,6 +41,14 @@ internal class LøsningSykepengedager(
             private val kilde: Kilde,
         ) : Sykepengedager() {
             override fun gjenståendeSykedager() = gjenståendeSykedager
+            override fun erRelevantFor8_48() = true
+
+            private fun virkningsdato() = foreløpigBeregnetSluttPåSykepenger.plusDays(1)
+
+            override fun accept(løsning: LøsningSykepengedager, visitor: VilkårsvurderingVisitor) {
+                //FIXME: løsningId
+                visitor.visitLøsningParagraf_8_48Har(løsning, UUID.randomUUID(), virkningsdato())
+            }
 
             override fun toDto() = SykepengedagerModellApi(
                 sykepengedager = SykepengedagerModellApi.Sykepengedager(
@@ -46,16 +57,18 @@ internal class LøsningSykepengedager(
                     kilde = kilde.name
                 )
             )
-
-            override fun erRelevantFor8_48() = true
         }
 
-        internal class HarIkke : Sykepengedager() {
+        internal object HarIkke : Sykepengedager() {
             override fun gjenståendeSykedager() = 260 // Du har ikke brukt noen sykepengedager
+            override fun erRelevantFor8_48(): Boolean = false
+
+            override fun accept(løsning: LøsningSykepengedager, visitor: VilkårsvurderingVisitor) {
+                //FIXME: løsningId
+                visitor.visitLøsningParagraf_8_48HarIkke(løsning, UUID.randomUUID())
+            }
 
             override fun toDto() = SykepengedagerModellApi(null)
-
-            override fun erRelevantFor8_48(): Boolean = false
         }
     }
 }

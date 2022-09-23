@@ -7,12 +7,12 @@ import no.nav.aap.domene.beregning.Inntekt
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
-import no.nav.aap.modellapi.SøkerModellApi
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.januar
 import no.nav.aap.juli
+import no.nav.aap.modellapi.SøkerModellApi
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -75,7 +75,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
@@ -121,7 +121,7 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
@@ -142,7 +142,8 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -159,8 +160,9 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -174,7 +176,8 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -191,8 +194,9 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -218,7 +222,8 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -235,8 +240,9 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -258,7 +264,8 @@ internal class SøkerComponentTest {
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertEquals(9, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
@@ -275,8 +282,9 @@ internal class SøkerComponentTest {
         )
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -292,6 +300,17 @@ internal class SøkerComponentTest {
                 UUID.randomUUID(),
                 LocalDateTime.now(),
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
+        søker.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        søker.håndterLøsning(
+            LøsningParagraf_11_27_FørsteLedd(
+                løsningId = UUID.randomUUID(),
+                svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
+                    periode = null,
+                    grad = null,
+                    vedtaksdato = null,
+                ),
             )
         )
         søker.håndterLøsning(
@@ -385,6 +404,21 @@ internal class SøkerComponentTest {
                     UUID.randomUUID(),
                     LocalDateTime.now(),
                     LøsningMaskinellParagraf_11_2.ErMedlem.JA
+                )
+            )
+        }
+        medSøker {
+            håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        }
+        medSøker {
+            håndterLøsning(
+                LøsningParagraf_11_27_FørsteLedd(
+                    løsningId = UUID.randomUUID(),
+                    svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
+                        periode = null,
+                        grad = null,
+                        vedtaksdato = null,
+                    ),
                 )
             )
         }
@@ -556,7 +590,11 @@ internal class SøkerComponentTest {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
-    private fun Søker.håndterLøsning(løsning: LøsningParagraf_22_13) {
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_19) {
+        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
@@ -564,7 +602,7 @@ internal class SøkerComponentTest {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 
-    private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_19) {
+    private fun Søker.håndterLøsning(løsning: LøsningParagraf_22_13) {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
     }
 

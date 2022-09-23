@@ -7,7 +7,7 @@ import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13.Companion.toDto
 import no.nav.aap.hendelse.LøsningSykepengedager.Companion.toDto
-import no.nav.aap.hendelse.behov.Behov_11_27
+import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.SykepengedagerModellApi
 import no.nav.aap.modellapi.Utfall
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
@@ -48,7 +48,7 @@ internal class Paragraf_8_48 private constructor(
 
     object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_8_48>() {
         override fun onEntry(vilkårsvurdering: Paragraf_8_48, hendelse: Hendelse) {
-            hendelse.opprettBehov(Behov_11_27())
+            hendelse.opprettBehov(Behov_8_48AndreLedd())
         }
 
         override fun håndterLøsning(
@@ -240,8 +240,10 @@ internal class Paragraf_8_48 private constructor(
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
+            Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
+            Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_8_48")
         }
     }
