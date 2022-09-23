@@ -1,7 +1,7 @@
 package no.nav.aap.modellapi
 
 import no.nav.aap.domene.Søker
-import no.nav.aap.domene.entitet.Periode
+import no.nav.aap.domene.entitet.Periode.Companion.til
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_27_FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
@@ -41,7 +41,7 @@ data class SvangerskapspengerModellApi(
     val vedtaksdato: LocalDate?
 ) {
     internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger (
-        periode = if (fom != null && tom != null) Periode(fom, tom) else null,
+        periode = if (fom != null && tom != null) fom til tom else null,
         grad = grad,
         vedtaksdato = vedtaksdato
     )

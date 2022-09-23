@@ -1,7 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.entitet.Periode
+import no.nav.aap.domene.entitet.Periode.Companion.til
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
@@ -43,7 +43,7 @@ internal class VirkningsdatoTest {
         val løsning11_27 = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår11_27.håndterLøsning(løsning11_27)
@@ -100,7 +100,7 @@ internal class VirkningsdatoTest {
         val løsning11_27 = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår11_27.håndterLøsning(løsning11_27)
@@ -157,7 +157,7 @@ internal class VirkningsdatoTest {
         val løsning11_27 = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår11_27.håndterLøsning(løsning11_27)

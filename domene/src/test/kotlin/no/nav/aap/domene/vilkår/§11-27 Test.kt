@@ -1,7 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.entitet.Periode
+import no.nav.aap.domene.entitet.Periode.Companion.til
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.*
@@ -55,7 +55,7 @@ internal class `§11-27 Test` {
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 66.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 66.0, LocalDate.now()
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -81,7 +81,7 @@ internal class `§11-27 Test` {
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -107,7 +107,7 @@ internal class `§11-27 Test` {
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -144,7 +144,7 @@ internal class `§11-27 Test` {
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -191,7 +191,7 @@ internal class `§11-27 Test` {
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
-                Periode(LocalDate.now(), LocalDate.now()), 100.0, LocalDate.now()
+                LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
         )
         vilkår.håndterLøsning(løsning)
