@@ -10,7 +10,7 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 8,
+    val version: Int = 9,
 ) {
 
     data class Sak(
@@ -46,7 +46,7 @@ data class ForrigeSøkereKafkaDto(
         val løsning_11_5_manuell: List<LøsningParagraf_11_5>? = null,
         val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5_yrkesskade>? = null,
         val løsning_11_6_manuell: List<LøsningParagraf_11_6>? = null,
-        val løsning_11_12_ledd1_manuell: List<LøsningParagraf_11_12_ledd1>? = null,
+        val løsning_22_13_manuell: List<LøsningParagraf_22_13>? = null,
         val løsning_11_19_manuell: List<LøsningParagraf_11_19>? = null,
         val løsning_11_22_manuell: List<LøsningParagraf_11_22>? = null,
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>? = null,
@@ -57,7 +57,7 @@ data class ForrigeSøkereKafkaDto(
         val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5>? = null,
         val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5Yrkesskade>? = null,
         val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6>? = null,
-        val kvalitetssikringer_11_12_ledd1: List<KvalitetssikringParagraf_11_12FørsteLedd>? = null,
+        val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>? = null,
         val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19>? = null,
         val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22>? = null,
         val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29>? = null,
@@ -127,7 +127,7 @@ data class ForrigeSøkereKafkaDto(
         val harMulighetForÅKommeIArbeid: Boolean
     )
 
-    data class LøsningParagraf_11_12_ledd1(
+    data class LøsningParagraf_22_13(
         val løsningId: UUID,
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
@@ -224,7 +224,7 @@ data class ForrigeSøkereKafkaDto(
         val begrunnelse: String
     )
 
-    data class KvalitetssikringParagraf_11_12FørsteLedd(
+    data class KvalitetssikringParagraf_22_13(
         val kvalitetssikringId: UUID,
         val løsningId: UUID,
         val kvalitetssikretAv: String,

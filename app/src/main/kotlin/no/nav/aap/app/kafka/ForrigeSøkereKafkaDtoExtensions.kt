@@ -48,7 +48,7 @@ private fun Vilkårsvurdering.toDto() = SøkereKafkaDto.Vilkårsvurdering(
     løsning_11_19_manuell = løsning_11_19_manuell?.map { it.toDto() },
     løsning_11_22_manuell = løsning_11_22_manuell?.map { it.toDto() },
     løsning_11_29_manuell = løsning_11_29_manuell?.map { it.toDto() },
-    løsning_22_13_manuell = løsning_11_12_ledd1_manuell?.map { it.toDto() },
+    løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toDto() },
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
@@ -115,7 +115,7 @@ private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
-private fun LøsningParagraf_11_12_ledd1.toDto() = SøkereKafkaDto.LøsningParagraf_22_13(
+private fun LøsningParagraf_22_13.toDto() = SøkereKafkaDto.LøsningParagraf_22_13(
     løsningId = UUID.randomUUID(),
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
