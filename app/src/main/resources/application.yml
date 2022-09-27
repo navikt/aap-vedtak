@@ -9,3 +9,4 @@ kafka:
     url: ${KAFKA_SCHEMA_REGISTRY}
     user: ${KAFKA_SCHEMA_REGISTRY_USER}
     password: ${KAFKA_SCHEMA_REGISTRY_PASSWORD}
+  commitIntervalInMillis: 0
