@@ -63,7 +63,8 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, SøkereKafkaDto>): Topology {
     val streams = StreamsBuilder()
     val søkerKTable = streams
-        .consume(Topics.søkere)
+        // Setter timestamp for søkere tilbake ett år for å tvinge topologien å oppdatere tabellen før neste hendelse leses
+        .consume(Topics.søkere, { record, _ -> record.timestamp() - 365L * 24L * 3600L * 1000L })
         .produce(Tables.søkere)
 
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
