@@ -20,7 +20,7 @@ internal class LøsningParagraf_11_6(
 
     internal fun vurdertAv() = vurdertAv
     internal fun erManueltOppfylt(): Boolean =
-        harBehovForBehandling && harBehovForTiltak && harMulighetForÅKommeIArbeid
+        harBehovForBehandling || harBehovForTiltak || harMulighetForÅKommeIArbeid
 
     internal fun toDto() = LøsningParagraf_11_6ModellApi(
         løsningId = løsningId,

@@ -41,7 +41,7 @@ internal class `§11-6 Test` {
     }
 
     @Test
-    fun `Hvis bruker ikke har behov for behandling, settes vilkår til ikke oppfylt`() {
+    fun `Hvis bruker ikke oppfyller noen av vilkårene, settes vilkår til ikke oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -54,8 +54,8 @@ internal class `§11-6 Test` {
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
-            harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harBehovForTiltak = false,
+            harMulighetForÅKommeIArbeid = false
         )
         vilkår.håndterLøsning(løsning)
 
@@ -65,7 +65,7 @@ internal class `§11-6 Test` {
     }
 
     @Test
-    fun `Hvis bruker ikke har behov for tiltak, settes vilkår til ikke oppfylt`() {
+    fun `Hvis bruker har behov for behandling, settes vilkår til oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -79,17 +79,17 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = false,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = false
         )
         vilkår.håndterLøsning(løsning)
 
-        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertUtfall(Utfall.OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
-    fun `Hvis bruker ikke har mulighet til å komme i arbeid, settes vilkår til ikke oppfylt`() {
+    fun `Hvis bruker har behov for tiltak, settes vilkår til oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -101,15 +101,39 @@ internal class `§11-6 Test` {
             UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
-            harBehovForBehandling = true,
+            harBehovForBehandling = false,
             harBehovForTiltak = true,
             harMulighetForÅKommeIArbeid = false
         )
         vilkår.håndterLøsning(løsning)
 
-        assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
+        assertUtfall(Utfall.OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
+    }
+
+    @Test
+    fun `Hvis bruker har mulighet til å komme i arbeid, settes vilkår til oppfylt`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_6()
+
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsning = LøsningParagraf_11_6(
+            UUID.randomUUID(),
+            vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = false,
+            harBehovForTiltak = false,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterLøsning(løsning)
+
+        assertUtfall(Utfall.OPPFYLT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
     }
 
     @Test
