@@ -85,7 +85,8 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_6(),
                     Paragraf_11_19(),
                     Paragraf_11_27_FørsteLedd(),
-                    Paragraf_11_29(),
+                    // TODO: Implementere 11-29 ordentlig
+//                    Paragraf_11_29(),
                     Paragraf_22_13(),
                 )
 

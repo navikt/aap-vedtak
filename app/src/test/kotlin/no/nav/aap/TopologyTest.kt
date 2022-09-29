@@ -220,19 +220,19 @@ internal class ApiTest {
                 )
             }
 
-            kvalitetssikring_11_29_Topic.produce(fnr) {
-                Kvalitetssikring_11_29(
-                    løsningId = løsningsid29(9),
-                    kvalitetssikretAv = "X",
-                    tidspunktForKvalitetssikring = LocalDateTime.now(),
-                    erGodkjent = true,
-                    begrunnelse = ""
-                )
-            }
+//            kvalitetssikring_11_29_Topic.produce(fnr) {
+//                Kvalitetssikring_11_29(
+//                    løsningId = løsningsid29(9),
+//                    kvalitetssikretAv = "X",
+//                    tidspunktForKvalitetssikring = LocalDateTime.now(),
+//                    erGodkjent = true,
+//                    begrunnelse = ""
+//                )
+//            }
 
             kvalitetssikring_22_13_Topic.produce(fnr) {
                 Kvalitetssikring_22_13(
-                    løsningId = løsningsid2213(10),
+                    løsningId = løsningsid2213(9),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
                     erGodkjent = true,

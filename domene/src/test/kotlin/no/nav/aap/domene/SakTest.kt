@@ -186,7 +186,7 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+//        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -514,18 +514,18 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
-
-
-        val kvalitetssikringparagraf1129 = KvalitetssikringParagraf_11_29(
-            kvalitetssikringId = UUID.randomUUID(),
-            løsningId = UUID.randomUUID(),
-            kvalitetssikretAv = "beslutter",
-            tidspunktForKvalitetssikring = LocalDateTime.now(),
-            erGodkjent = true,
-            begrunnelse = "JA"
-        )
-        sak.håndterKvalitetssikring(kvalitetssikringparagraf1129)
+//        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+//
+//
+//        val kvalitetssikringparagraf1129 = KvalitetssikringParagraf_11_29(
+//            kvalitetssikringId = UUID.randomUUID(),
+//            løsningId = UUID.randomUUID(),
+//            kvalitetssikretAv = "beslutter",
+//            tidspunktForKvalitetssikring = LocalDateTime.now(),
+//            erGodkjent = true,
+//            begrunnelse = "JA"
+//        )
+//        sak.håndterKvalitetssikring(kvalitetssikringparagraf1129)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val saker = listOf(sak).toDto()
@@ -547,7 +547,7 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+//        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -734,19 +734,19 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
-
-
-        sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_29(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = UUID.randomUUID(),
-                kvalitetssikretAv = "beslutter",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
-            )
-        )
+//        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+//
+//
+//        sak.håndterKvalitetssikring(
+//            KvalitetssikringParagraf_11_29(
+//                kvalitetssikringId = UUID.randomUUID(),
+//                løsningId = UUID.randomUUID(),
+//                kvalitetssikretAv = "beslutter",
+//                tidspunktForKvalitetssikring = LocalDateTime.now(),
+//                erGodkjent = true,
+//                begrunnelse = "JA"
+//            )
+//        )
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -773,7 +773,7 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+//        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
 
         val vedtak = saker[0].vedtak!!
         val behov = iverksettelse.behov()
@@ -1035,7 +1035,7 @@ internal class SakTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+//        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
     @Test
@@ -1230,18 +1230,18 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
-
-        sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_29(
-                kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "beslutter",
-                LocalDateTime.now(),
-                true,
-                "JA"
-            )
-        )
+//        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+//
+//        sak.håndterKvalitetssikring(
+//            KvalitetssikringParagraf_11_29(
+//                kvalitetssikringId = UUID.randomUUID(),
+//                UUID.randomUUID(),
+//                "beslutter",
+//                LocalDateTime.now(),
+//                true,
+//                "JA"
+//            )
+//        )
 
         assertTilstand("VEDTAK_FATTET", sak)
 
@@ -1450,19 +1450,19 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
-
-
-        sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_29(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = UUID.randomUUID(),
-                kvalitetssikretAv = "beslutter",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
-            )
-        )
+//        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+//
+//
+//        sak.håndterKvalitetssikring(
+//            KvalitetssikringParagraf_11_29(
+//                kvalitetssikringId = UUID.randomUUID(),
+//                løsningId = UUID.randomUUID(),
+//                kvalitetssikretAv = "beslutter",
+//                tidspunktForKvalitetssikring = LocalDateTime.now(),
+//                erGodkjent = true,
+//                begrunnelse = "JA"
+//            )
+//        )
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1666,19 +1666,19 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
-
-
-        sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_29(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = UUID.randomUUID(),
-                kvalitetssikretAv = "beslutter",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
-            )
-        )
+//        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+//
+//
+//        sak.håndterKvalitetssikring(
+//            KvalitetssikringParagraf_11_29(
+//                kvalitetssikringId = UUID.randomUUID(),
+//                løsningId = UUID.randomUUID(),
+//                kvalitetssikretAv = "beslutter",
+//                tidspunktForKvalitetssikring = LocalDateTime.now(),
+//                erGodkjent = true,
+//                begrunnelse = "JA"
+//            )
+//        )
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1889,19 +1889,19 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
-
-
-        sak.håndterKvalitetssikring(
-            KvalitetssikringParagraf_11_29(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = UUID.randomUUID(),
-                kvalitetssikretAv = "beslutter",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
-            )
-        )
+//        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+//
+//
+//        sak.håndterKvalitetssikring(
+//            KvalitetssikringParagraf_11_29(
+//                kvalitetssikringId = UUID.randomUUID(),
+//                løsningId = UUID.randomUUID(),
+//                kvalitetssikretAv = "beslutter",
+//                tidspunktForKvalitetssikring = LocalDateTime.now(),
+//                erGodkjent = true,
+//                begrunnelse = "JA"
+//            )
+//        )
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
