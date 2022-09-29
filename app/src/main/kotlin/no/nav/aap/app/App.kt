@@ -53,7 +53,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 
     kafka.connect(
         config = config.kafka.copy(additionalProperties = Properties().apply {
-            this[StreamsConfig.MAX_TASK_IDLE_MS_CONFIG] = -1
+            this[StreamsConfig.MAX_TASK_IDLE_MS_CONFIG] = 10
         }),
         registry = prometheus,
         topology = topology(prometheus, søkerProducer),
