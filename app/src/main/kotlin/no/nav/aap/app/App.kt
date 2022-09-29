@@ -26,7 +26,9 @@ import no.nav.aap.kafka.vanilla.KafkaConfig
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
 import org.apache.kafka.streams.StreamsBuilder
+import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.Topology
+import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
 fun main() {
@@ -50,7 +52,9 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 
     kafka.connect(
-        config = config.kafka,
+        config = config.kafka.copy(additionalProperties = Properties().apply {
+            this[StreamsConfig.MAX_TASK_IDLE_MS_CONFIG] = -1
+        }),
         registry = prometheus,
         topology = topology(prometheus, søkerProducer),
     )
