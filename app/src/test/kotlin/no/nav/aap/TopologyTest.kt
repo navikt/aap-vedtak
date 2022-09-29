@@ -1,15 +1,21 @@
-package no.nav.aap.app
+package no.nav.aap
 
-import io.ktor.server.testing.*
+import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
+import no.nav.aap.app.topology
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
+import no.nav.aap.kafka.streams.KStreamsConfig
+import no.nav.aap.kafka.streams.test.KafkaStreamsMock
 import no.nav.aap.kafka.streams.test.readAndAssert
+import no.nav.aap.kafka.streams.topology.Mermaid
+import org.apache.kafka.clients.producer.MockProducer
+import org.apache.kafka.streams.TestInputTopic
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import uk.org.webcompere.systemstubs.environment.EnvironmentVariables
+import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
 
@@ -17,32 +23,38 @@ internal class ApiTest {
 
     @Test
     fun `søker får innvilget vedtak`() {
-        withTestApp { mocks ->
-            val søknadTopic = mocks.kafka.inputTopic(Topics.søknad)
-            val medlemTopic = mocks.kafka.inputTopic(Topics.medlem)
-            val medlemOutputTopic = mocks.kafka.outputTopic(Topics.medlem)
-            val manuell_11_3_Topic = mocks.kafka.inputTopic(Topics.manuell_11_3)
-            val manuell_11_5_Topic = mocks.kafka.inputTopic(Topics.manuell_11_5)
-            val manuell_11_6_Topic = mocks.kafka.inputTopic(Topics.manuell_11_6)
-            val manuell_11_19_Topic = mocks.kafka.inputTopic(Topics.manuell_11_19)
-            val manuell_11_29_Topic = mocks.kafka.inputTopic(Topics.manuell_11_29)
-            val manuell_22_13_Topic = mocks.kafka.inputTopic(Topics.manuell_22_13)
-            val kvalitetssikring_11_2_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_2)
-            val kvalitetssikring_11_3_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_3)
-            val kvalitetssikring_11_5_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_5)
-            val kvalitetssikring_11_6_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_6)
-            val kvalitetssikring_11_19_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_19)
-            val kvalitetssikring_11_29_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_11_29)
-            val kvalitetssikring_22_13_Topic = mocks.kafka.inputTopic(Topics.kvalitetssikring_22_13)
-            val andreFolketrygdsytelserTopic = mocks.kafka.inputTopic(Topics.andreFolketrygdsytelser)
-            val andreFolketrygdsytelserOutputTopic = mocks.kafka.outputTopic(Topics.andreFolketrygdsytelser)
-            val inntektTopic = mocks.kafka.inputTopic(Topics.inntekter)
-            val inntektOutputTopic = mocks.kafka.outputTopic(Topics.inntekter)
-            val sykepengedagerTopic = mocks.kafka.inputTopic(Topics.sykepengedager)
-            val sykepengedagerOutputTopic = mocks.kafka.outputTopic(Topics.sykepengedager)
-            val iverksettelseAvVedtakTopic = mocks.kafka.inputTopic(Topics.iverksettelseAvVedtak)
-            val iverksettVedtakTopic = mocks.kafka.outputTopic(Topics.vedtak)
-            val stateStore = mocks.kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
+        KafkaStreamsMock().apply {
+            connect(
+                config = KStreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                registry = SimpleMeterRegistry(),
+                topology = topology(SimpleMeterRegistry(), MockProducer())
+            )
+        }.use { kafka ->
+            val søknadTopic = kafka.inputTopic(Topics.søknad)
+            val medlemTopic = kafka.inputTopic(Topics.medlem)
+            val medlemOutputTopic = kafka.outputTopic(Topics.medlem)
+            val manuell_11_3_Topic = kafka.inputTopic(Topics.manuell_11_3)
+            val manuell_11_5_Topic = kafka.inputTopic(Topics.manuell_11_5)
+            val manuell_11_6_Topic = kafka.inputTopic(Topics.manuell_11_6)
+            val manuell_11_19_Topic = kafka.inputTopic(Topics.manuell_11_19)
+            val manuell_11_29_Topic = kafka.inputTopic(Topics.manuell_11_29)
+            val manuell_22_13_Topic = kafka.inputTopic(Topics.manuell_22_13)
+            val kvalitetssikring_11_2_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_2)
+            val kvalitetssikring_11_3_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_3)
+            val kvalitetssikring_11_5_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_5)
+            val kvalitetssikring_11_6_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_6)
+            val kvalitetssikring_11_19_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_19)
+            val kvalitetssikring_11_29_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_29)
+            val kvalitetssikring_22_13_Topic = kafka.inputTopic(Topics.kvalitetssikring_22_13)
+            val andreFolketrygdsytelserTopic = kafka.inputTopic(Topics.andreFolketrygdsytelser)
+            val andreFolketrygdsytelserOutputTopic = kafka.outputTopic(Topics.andreFolketrygdsytelser)
+            val inntektTopic = kafka.inputTopic(Topics.inntekter)
+            val inntektOutputTopic = kafka.outputTopic(Topics.inntekter)
+            val sykepengedagerTopic = kafka.inputTopic(Topics.sykepengedager)
+            val sykepengedagerOutputTopic = kafka.outputTopic(Topics.sykepengedager)
+            val iverksettelseAvVedtakTopic = kafka.inputTopic(Topics.iverksettelseAvVedtak)
+            val iverksettVedtakTopic = kafka.outputTopic(Topics.vedtak)
+            val stateStore = kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
             val fnr = "123"
             val tidspunktForVurdering = LocalDateTime.now()
@@ -252,28 +264,21 @@ internal class ApiTest {
         val forrige = ForrigeSøkereKafkaDto("", LocalDate.now(), emptyList())
         assertEquals(SøkereKafkaDto.VERSION - 1, forrige.version)
     }
-}
 
-private fun withTestApp(test: ApplicationTestBuilder.(mocks: Mocks) -> Unit) = Mocks().use { mocks ->
-    EnvironmentVariables(containerProperties()).execute {
-        testApplication {
-            application {
-                server(mocks.kafka)
-                this@testApplication.test(mocks)
-            }
-        }
+    @Test
+    fun `mermaid topic diagram`() {
+        val topology = topology(SimpleMeterRegistry(), MockProducer())
+        val flowchart = Mermaid.graph("Vedtak", topology)
+        val markdown = markdown(flowchart)
+        File("../doc/topology.md").apply { writeText(markdown) }
+        File("../doc/topology.mermaid").apply { writeText(flowchart) }
     }
 }
 
-private fun containerProperties(): Map<String, String> = mapOf(
-    "KAFKA_STREAMS_APPLICATION_ID" to "vedtak",
-    "KAFKA_BROKERS" to "mock://kafka",
-    "KAFKA_TRUSTSTORE_PATH" to "",
-    "KAFKA_KEYSTORE_PATH" to "",
-    "KAFKA_CREDSTORE_PASSWORD" to "",
-    "KAFKA_CLIENT_ID" to "vedtak",
-    "KAFKA_GROUP_ID" to "vedtak-1",
-    "KAFKA_SCHEMA_REGISTRY" to "mock://schema-registry",
-    "KAFKA_SCHEMA_REGISTRY_USER" to "",
-    "KAFKA_SCHEMA_REGISTRY_PASSWORD" to "",
-)
+inline fun <reified V : Any> TestInputTopic<String, V>.produce(key: String, value: () -> V) = pipeInput(key, value())
+
+private fun markdown(mermaid: String) = """
+```mermaid
+$mermaid
+```
+"""

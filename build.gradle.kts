@@ -21,10 +21,8 @@ subprojects {
         }
 
         withType<Test> {
+            reports.html.required.set(false)
             useJUnitPlatform()
-            testLogging {
-                events("PASSED", "SKIPPED", "FAILED")
-            }
         }
     }
 }

@@ -33,7 +33,4 @@ dependencies {
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4")
 
     testImplementation(kotlin("test"))
-
-    testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("uk.org.webcompere:system-stubs-jupiter:2.0.1")
 }
