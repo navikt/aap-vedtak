@@ -83,5 +83,7 @@ internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, 
     streams.manuellLøsningStream(søkerKTable)
     streams.manuellKvalitetssikringStream(søkerKTable)
 
+    streams.medlemResponseMockStream()
+
     return streams.build()
 }
