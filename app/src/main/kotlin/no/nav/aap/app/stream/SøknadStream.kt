@@ -38,5 +38,5 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
 private val opprettSøker = { ident: String, jsonSøknad: SøknadKafkaDto ->
     val søknad = SøknadModellApi(ident, jsonSøknad.fødselsdato)
     val (endretSøker, dtoBehov) = søknad.håndter()
-    endretSøker.toJson() to dtoBehov
+    endretSøker.toJson(0) to dtoBehov
 }

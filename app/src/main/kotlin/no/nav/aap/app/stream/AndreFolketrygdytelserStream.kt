@@ -24,7 +24,7 @@ private val håndterAndreFolketrygdytelser =
     { andreFolketrygdytelser: AndreFolketrygdytelserKafkaDto, søkereKafkaDto: SøkereKafkaDto ->
         val søker = søkereKafkaDto.toModellApi()
         val (endretSøker) = andreFolketrygdytelser.toModellApi().håndter(søker)
-        endretSøker.toJson()
+        endretSøker.toJson(søkereKafkaDto.sekvensnummer)
     }
 
 internal fun StreamsBuilder.medlemResponseMockStream() = this

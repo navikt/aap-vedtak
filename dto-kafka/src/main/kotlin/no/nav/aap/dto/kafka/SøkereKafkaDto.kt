@@ -1,6 +1,7 @@
 package no.nav.aap.dto.kafka
 
 import no.nav.aap.kafka.serde.json.Migratable
+import no.nav.aap.kafka.streams.concurrency.Bufferable
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.Year
@@ -11,13 +12,15 @@ data class SøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
+    val sekvensnummer: Long = INIT_SEKVENS,
     val version: Int = VERSION, // Denne bumpes ved hver migrering
-) : Migratable {
+) : Migratable, Bufferable<SøkereKafkaDto> {
 
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
         const val VERSION = 10
+        const val INIT_SEKVENS = 0L
     }
 
     data class Sak(
@@ -313,4 +316,6 @@ data class SøkereKafkaDto(
     }
 
     override fun erMigrertAkkuratNå(): Boolean = erMigrertAkkuratNå
+
+    override fun erNyere(other: SøkereKafkaDto): Boolean = sekvensnummer > other.sekvensnummer
 }

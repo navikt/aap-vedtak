@@ -8,6 +8,8 @@ import no.nav.aap.modellapi.BehovModellApi
 import no.nav.aap.modellapi.SøkerModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
+import org.apache.kafka.streams.kstream.Materialized
+import org.apache.kafka.streams.state.Stores
 
 internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, SøkereKafkaDto>) {
     stream(søkere, Topics.manuell_11_2, "manuell-11-2", Løsning_11_2_manuell::håndter)
@@ -44,7 +46,7 @@ private fun <T> StreamsBuilder.stream(
 
     søkerOgBehov
         .firstPairValue("$kafkaNameFilter-hent-ut-soker")
-        .produce(Topics.søkere, "produced-soker-med-$kafkaNameFilter")
+        .produce(Topics.søkere, "produced-soker-med-$kafkaNameFilter", true)
 
     søkerOgBehov
         .secondPairValue("$kafkaNameFilter-hent-ut-behov")
@@ -59,5 +61,5 @@ private fun <T> håndter(
 ): Pair<SøkereKafkaDto, List<BehovModellApi>> {
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker, dtoBehov) = manuellKafkaDto.håndter(søker)
-    return endretSøker.toJson() to dtoBehov
+    return endretSøker.toJson(søkereKafkaDto.sekvensnummer) to dtoBehov
 }

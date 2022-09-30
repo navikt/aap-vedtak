@@ -20,5 +20,5 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto
 private val håndterMedlem = { medlemKafkaDto: MedlemKafkaDto, søkereKafkaDto: SøkereKafkaDto ->
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker) = medlemKafkaDto.toModellApi().håndter(søker)
-    endretSøker.toJson()
+    endretSøker.toJson(søkereKafkaDto.sekvensnummer)
 }

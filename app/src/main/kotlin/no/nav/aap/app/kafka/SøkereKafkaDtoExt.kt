@@ -185,14 +185,15 @@ private fun KvalitetssikringParagraf_11_3.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toModellApi() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
-    kvalitetssikringId = kvalitetssikringId,
-    løsningId = løsningId,
-    kvalitetssikretAv = kvalitetssikretAv,
-    tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-    erGodkjent = erGodkjent,
-    begrunnelse = begrunnelse
-)
+private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toModellApi() =
+    KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
+        kvalitetssikringId = kvalitetssikringId,
+        løsningId = løsningId,
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
 
 private fun KvalitetssikringParagraf_11_5.toModellApi() = KvalitetssikringParagraf_11_5ModellApi(
     kvalitetssikringId = kvalitetssikringId,
@@ -299,9 +300,10 @@ private fun Yrkesskade.toModellApi() = YrkesskadeModellApi(
     inntektsgrunnlag = inntektsgrunnlag.toModellApi(),
 )
 
-internal fun SøkerModellApi.toJson() = SøkereKafkaDto(
+internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto(
     personident = personident,
     fødselsdato = fødselsdato,
+    sekvensnummer = gammelSekvensnummer + 1,
     saker = saker.map { sak ->
         Sak(
             saksid = sak.saksid,

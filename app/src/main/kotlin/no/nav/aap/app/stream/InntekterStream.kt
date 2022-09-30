@@ -22,5 +22,5 @@ internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafka
 private val håndterInntekter = { inntekterKafkaDto: InntekterKafkaDto, søkereKafkaDto: SøkereKafkaDto ->
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker) = inntekterKafkaDto.toModellApi().håndter(søker)
-    endretSøker.toJson()
+    endretSøker.toJson(søkereKafkaDto.sekvensnummer)
 }
