@@ -15,19 +15,32 @@ import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.migrateStateStore
 import no.nav.aap.app.stream.*
+import no.nav.aap.dto.kafka.Løsning
+import no.nav.aap.dto.kafka.Løsning_11_2_manuell
+import no.nav.aap.dto.kafka.Løsning_11_3_manuell
 import no.nav.aap.dto.kafka.SøkereKafkaDto
-import no.nav.aap.kafka.streams.KStreams
-import no.nav.aap.kafka.streams.KStreamsConfig
-import no.nav.aap.kafka.streams.KafkaStreams
+import no.nav.aap.kafka.serde.json.JsonSerde
+import no.nav.aap.kafka.streams.*
 import no.nav.aap.kafka.streams.extension.consume
+import no.nav.aap.kafka.streams.extension.filterNotNull
 import no.nav.aap.kafka.streams.extension.produce
 import no.nav.aap.kafka.streams.store.scheduleMetrics
 import no.nav.aap.kafka.vanilla.KafkaConfig
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
+import org.apache.kafka.common.utils.Bytes
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.StreamsConfig
 import org.apache.kafka.streams.Topology
+import org.apache.kafka.streams.kstream.Aggregator
+import org.apache.kafka.streams.kstream.KTable
+import org.apache.kafka.streams.kstream.Materialized
+import org.apache.kafka.streams.processor.api.ProcessorSupplier
+import org.apache.kafka.streams.state.KeyValueStore
+import org.apache.kafka.streams.state.StoreBuilder
+import org.apache.kafka.streams.state.Stores
+import org.apache.kafka.streams.state.internals.KeyValueStoreBuilder
+import java.time.LocalDate
 import java.util.*
 import kotlin.time.Duration.Companion.minutes
 
@@ -53,7 +66,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 
     kafka.connect(
         config = config.kafka.copy(additionalProperties = Properties().apply {
-            this[StreamsConfig.MAX_TASK_IDLE_MS_CONFIG] = 10
+            this[StreamsConfig.MAX_TASK_IDLE_MS_CONFIG] = 500
         }),
         registry = prometheus,
         topology = topology(prometheus, søkerProducer),
