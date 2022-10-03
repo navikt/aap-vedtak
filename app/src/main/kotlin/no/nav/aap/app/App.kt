@@ -19,7 +19,6 @@ import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.kafka.streams.KStreams
 import no.nav.aap.kafka.streams.KStreamsConfig
 import no.nav.aap.kafka.streams.KafkaStreams
-import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
 import no.nav.aap.kafka.streams.extension.consume
 import no.nav.aap.kafka.streams.extension.produce
 import no.nav.aap.kafka.streams.store.scheduleMetrics
@@ -71,18 +70,16 @@ internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, 
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
     søkerKTable.migrateStateStore(Tables.søkere, søkerProducer)
 
-    val buffer = RaceConditionBuffer<String, SøkereKafkaDto>(logRecordValues = true)
+    streams.søknadStream(søkerKTable)
+    streams.medlemStream(søkerKTable)
+    streams.inntekterStream(søkerKTable)
+    streams.andreFolketrygdytelserStream(søkerKTable)
+    streams.iverksettelseAvVedtakStream(søkerKTable)
+    streams.sykepengedagerStream(søkerKTable)
+    streams.manuellLøsningStream(søkerKTable)
+    streams.manuellKvalitetssikringStream(søkerKTable)
 
-    streams.søknadStream(søkerKTable, buffer)
-    streams.medlemStream(søkerKTable, buffer)
-    streams.inntekterStream(søkerKTable, buffer)
-    streams.andreFolketrygdytelserStream(søkerKTable, buffer)
-    streams.iverksettelseAvVedtakStream(søkerKTable, buffer)
-    streams.sykepengedagerStream(søkerKTable, buffer)
-    streams.manuellLøsningStream(søkerKTable, buffer)
-    streams.manuellKvalitetssikringStream(søkerKTable, buffer)
-
-    streams.medlemResponseMockStream()
+    streams.andreFolketrygdsytelserResponseMockStream()
 
     return streams.build()
 }

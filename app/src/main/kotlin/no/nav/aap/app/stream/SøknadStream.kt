@@ -14,13 +14,10 @@ import org.slf4j.LoggerFactory
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
-internal fun StreamsBuilder.søknadStream(
-    søkere: KTable<String, SøkereKafkaDto>,
-    buffer: RaceConditionBuffer<String, SøkereKafkaDto>
-) {
+internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
-        .leftJoin(Topics.søknad with Topics.søkere, søkere, buffer)
+        .leftJoin(Topics.søknad with Topics.søkere, søkere)
         .filterValues("filter-soknad-ny") { (_, søkereKafkaDto) ->
             if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
 
@@ -31,7 +28,7 @@ internal fun StreamsBuilder.søknadStream(
 
     søkerOgBehov
         .firstPairValue("soknad-hent-ut-soker")
-        .produce(Topics.søkere, buffer, "produced-ny-soker")
+        .produce(Topics.søkere, "produced-ny-soker")
 
     søkerOgBehov
         .secondPairValue("soknad-hent-ut-behov")

@@ -2,11 +2,15 @@ package no.nav.aap.app.kafka
 
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.kafka.serde.json.JsonSerde
+import no.nav.aap.kafka.streams.BufferableTopic
 import no.nav.aap.kafka.streams.Topic
+import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
 
 object Topics {
+    private val buffer = RaceConditionBuffer<String, SøkereKafkaDto>(logRecordValues = true)
+
     val søknad = Topic("aap.soknad-sendt.v1", JsonSerde.jackson<SøknadKafkaDto>())
-    val søkere = Topic("aap.sokere.v1", JsonSerde.jackson(SøkereKafkaDto.VERSION, ForrigeSøkereKafkaDto::toDto))
+    val søkere = BufferableTopic("aap.sokere.v1", JsonSerde.jackson(SøkereKafkaDto.VERSION, ForrigeSøkereKafkaDto::toDto), buffer)
     val medlem = Topic("aap.medlem.v1", JsonSerde.jackson<MedlemKafkaDto>())
     val inntekter = Topic("aap.inntekter.v1", JsonSerde.jackson<InntekterKafkaDto>())
     val andreFolketrygdsytelser = Topic("aap.andre-folketrygdytelser.v1", JsonSerde.jackson<AndreFolketrygdytelserKafkaDto>())
