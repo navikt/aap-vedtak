@@ -1,5 +1,5 @@
-val aapLibVersion = "3.3.7"
-val ktorVersion = "2.1.1"
+val aapLibVersion = "3.4.3"
+val ktorVersion = "2.1.2"
 
 plugins {
     id("io.ktor.plugin")
@@ -13,7 +13,7 @@ application {
 dependencies {
     implementation(project(":domene"))
     implementation(project(":dto-kafka"))
-    implementation("com.github.navikt:aap-sykepengedager:1.0.7")
+    implementation("com.github.navikt:aap-sykepengedager:1.0.9")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
     testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
@@ -26,7 +26,7 @@ dependencies {
 
     implementation("io.micrometer:micrometer-registry-prometheus:1.9.4")
 
-    implementation("ch.qos.logback:logback-classic:1.4.1")
+    implementation("ch.qos.logback:logback-classic:1.4.3")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4")
