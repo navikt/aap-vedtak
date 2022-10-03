@@ -5,6 +5,7 @@ import no.nav.aap.app.kafka.toJson
 import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.dto.kafka.AndreFolketrygdytelserKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto
+import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
 import no.nav.aap.kafka.streams.extension.consume
 import no.nav.aap.kafka.streams.extension.filterNotNullBy
 import no.nav.aap.kafka.streams.extension.join
@@ -13,11 +14,18 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.andreFolketrygdytelserStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.andreFolketrygdytelserStream(
+    søkere: KTable<String, SøkereKafkaDto>,
+    buffer: RaceConditionBuffer<String, SøkereKafkaDto>
+) {
     consume(Topics.andreFolketrygdsytelser)
         .filterNotNullBy("andre-folketrygdytelser-filter-tombstones-og-responses") { ytelser -> ytelser.response }
-        .join(Topics.andreFolketrygdsytelser with Topics.søkere, søkere, håndterAndreFolketrygdytelser)
-        .produce(Topics.søkere, "produced-soker-med-handtert-andre-folketrygdytelser")
+        .join(
+            joined = Topics.andreFolketrygdsytelser with Topics.søkere,
+            table = søkere,
+            buffer = buffer,
+            joiner = håndterAndreFolketrygdytelser)
+        .produce(Topics.søkere, buffer,"produced-soker-med-handtert-andre-folketrygdytelser")
 }
 
 private val håndterAndreFolketrygdytelser =

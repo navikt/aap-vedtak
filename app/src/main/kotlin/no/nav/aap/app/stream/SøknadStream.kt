@@ -5,6 +5,7 @@ import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.kafka.toJson
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøknadKafkaDto
+import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
 import no.nav.aap.kafka.streams.extension.*
 import no.nav.aap.modellapi.SøknadModellApi
 import org.apache.kafka.streams.StreamsBuilder
@@ -13,10 +14,13 @@ import org.slf4j.LoggerFactory
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
-internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.søknadStream(
+    søkere: KTable<String, SøkereKafkaDto>,
+    buffer: RaceConditionBuffer<String, SøkereKafkaDto>
+) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterNotNull("filter-soknad-tombstone")
-        .leftJoin(Topics.søknad with Topics.søkere, søkere)
+        .leftJoin(Topics.søknad with Topics.søkere, søkere, buffer)
         .filterValues("filter-soknad-ny") { (_, søkereKafkaDto) ->
             if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
 
@@ -27,7 +31,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
 
     søkerOgBehov
         .firstPairValue("soknad-hent-ut-soker")
-        .produce(Topics.søkere, "produced-ny-soker")
+        .produce(Topics.søkere, buffer, "produced-ny-soker")
 
     søkerOgBehov
         .secondPairValue("soknad-hent-ut-behov")
