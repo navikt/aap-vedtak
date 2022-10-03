@@ -97,20 +97,20 @@ subgraph Vedtak
 	join-3 --> |produced-soker-med-kvalitetssikring-11-2| aap.sokere.v1
 	aap.kvalitetssikring.11-29.v1 --> join-4
 	soker-state-store-v2 --> join-4
+	join-4 --> |produced-soker-med-kvalitetssikring-11-29| aap.sokere.v1
 	join-4 --> |branch-kvalitetssikring-11-29-andre-folketrygdytelser-produced-behov| aap.andre-folketrygdytelser.v1
 	join-4 --> |branch-kvalitetssikring-11-29-inntekter-produced-behov| aap.inntekter.v1
 	join-4 --> |branch-kvalitetssikring-11-29-medlem-produced-behov| aap.medlem.v1
 	join-4 --> |branch-kvalitetssikring-11-29-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-4 --> |branch-kvalitetssikring-11-29-vedtak-produced-behov| aap.vedtak.v1
-	join-4 --> |produced-soker-med-kvalitetssikring-11-29| aap.sokere.v1
 	aap.kvalitetssikring.11-3.v1 --> join-5
 	soker-state-store-v2 --> join-5
+	join-5 --> |produced-soker-med-kvalitetssikring-11-3| aap.sokere.v1
 	join-5 --> |branch-kvalitetssikring-11-3-inntekter-produced-behov| aap.inntekter.v1
 	join-5 --> |branch-kvalitetssikring-11-3-medlem-produced-behov| aap.medlem.v1
 	join-5 --> |branch-kvalitetssikring-11-3-sykepengedager-produced-behov| aap.sykepengedager.v1
 	join-5 --> |branch-kvalitetssikring-11-3-andre-folketrygdytelser-produced-behov| aap.andre-folketrygdytelser.v1
 	join-5 --> |branch-kvalitetssikring-11-3-vedtak-produced-behov| aap.vedtak.v1
-	join-5 --> |produced-soker-med-kvalitetssikring-11-3| aap.sokere.v1
 	aap.kvalitetssikring.11-4.v1 --> join-6
 	soker-state-store-v2 --> join-6
 	join-6 --> |branch-kvalitetssikring-11-4-andre-folketrygdytelser-produced-behov| aap.andre-folketrygdytelser.v1
@@ -177,12 +177,12 @@ subgraph Vedtak
 	join-13 --> |produced-soker-med-manuell-11-3| aap.sokere.v1
 	aap.manuell.11-4.v1 --> join-14
 	soker-state-store-v2 --> join-14
+	join-14 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
 	join-14 --> |branch-manuell-11-4-medlem-produced-behov| aap.medlem.v1
 	join-14 --> |branch-manuell-11-4-vedtak-produced-behov| aap.vedtak.v1
 	join-14 --> |branch-manuell-11-4-andre-folketrygdytelser-produced-behov| aap.andre-folketrygdytelser.v1
 	join-14 --> |branch-manuell-11-4-inntekter-produced-behov| aap.inntekter.v1
 	join-14 --> |branch-manuell-11-4-sykepengedager-produced-behov| aap.sykepengedager.v1
-	join-14 --> |produced-soker-med-manuell-11-4| aap.sokere.v1
 	aap.manuell.11-5.v1 --> join-15
 	soker-state-store-v2 --> join-15
 	join-15 --> |produced-soker-med-manuell-11-5| aap.sokere.v1
