@@ -1,9 +1,10 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.modellapi.Paragraf_11_14ModellApi
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 import kotlin.properties.Delegates
@@ -40,7 +41,7 @@ internal class Paragraf_11_14 private constructor(
             vilkårsvurdering.vurderErStudent(søknad, søknad.erStudent())
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = null,
             kvalitetssikretAv = null,
@@ -53,7 +54,7 @@ internal class Paragraf_11_14 private constructor(
     }
 
     object Oppfylt : Tilstand.OppfyltMaskinelt<Paragraf_11_14>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
             kvalitetssikretAv = null,
@@ -66,7 +67,7 @@ internal class Paragraf_11_14 private constructor(
     }
 
     object IkkeOppfylt : Tilstand.IkkeOppfyltMaskinelt<Paragraf_11_14>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
             kvalitetssikretAv = null,

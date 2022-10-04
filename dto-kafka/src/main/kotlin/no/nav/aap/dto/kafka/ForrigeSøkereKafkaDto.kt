@@ -10,7 +10,7 @@ data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<Sak>,
-    val version: Int = 9,
+    val version: Int = SøkereKafkaDto.VERSION - 1,
 ) {
 
     data class Sak(

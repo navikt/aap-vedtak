@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.modellapi.Paragraf_11_4FørsteLeddModellApi
 import no.nav.aap.modellapi.Utfall
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import org.slf4j.LoggerFactory
@@ -60,7 +61,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
-            VilkårsvurderingModellApi(
+            Paragraf_11_4FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",
                 kvalitetssikretAv = null,
@@ -83,7 +84,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
-            VilkårsvurderingModellApi(
+            Paragraf_11_4FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",
                 kvalitetssikretAv = null,

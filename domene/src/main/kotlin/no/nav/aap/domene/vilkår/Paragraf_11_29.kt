@@ -3,8 +3,6 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_29.SøknadMottatt
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_29
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_29.Companion.toDto
@@ -12,6 +10,9 @@ import no.nav.aap.hendelse.LøsningParagraf_11_29
 import no.nav.aap.hendelse.LøsningParagraf_11_29.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_29
+import no.nav.aap.modellapi.Paragraf_11_29ModellApi
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -63,7 +64,7 @@ internal class Paragraf_11_29 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = null,
             kvalitetssikretAv = null,
@@ -76,7 +77,11 @@ internal class Paragraf_11_29 private constructor(
             kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_29,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
+            vilkårsvurderingModellApi as Paragraf_11_29ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -94,7 +99,7 @@ internal class Paragraf_11_29 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = null,
@@ -107,14 +112,18 @@ internal class Paragraf_11_29 private constructor(
             kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_29,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
+            vilkårsvurderingModellApi as Paragraf_11_29ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_29>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
@@ -127,7 +136,11 @@ internal class Paragraf_11_29 private constructor(
             kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_29,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
+            vilkårsvurderingModellApi as Paragraf_11_29ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -145,7 +158,7 @@ internal class Paragraf_11_29 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = null,
@@ -158,14 +171,18 @@ internal class Paragraf_11_29 private constructor(
             kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_29,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
+            vilkårsvurderingModellApi as Paragraf_11_29ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_29>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
             kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
@@ -178,15 +195,18 @@ internal class Paragraf_11_29 private constructor(
             kvalitetssikringer_11_29 = vilkårsvurdering.kvalitetssikringer.toDto(),
         )
 
-        override fun gjenopprettTilstand(vilkårsvurdering: Paragraf_11_29, vilkårsvurderingModellApi: VilkårsvurderingModellApi) {
+        override fun gjenopprettTilstand(
+            vilkårsvurdering: Paragraf_11_29,
+            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+        ) {
+            vilkårsvurderingModellApi as Paragraf_11_29ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
-    private fun settManuellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {
-        val dtoLøsninger = vilkårsvurdering.løsning_11_29_manuell ?: emptyList()
-        løsninger.addAll(dtoLøsninger.map {
+    private fun settManuellLøsning(vilkårsvurdering: Paragraf_11_29ModellApi) {
+        løsninger.addAll(vilkårsvurdering.løsning_11_29_manuell.map {
             LøsningParagraf_11_29(
                 løsningId = it.løsningId,
                 vurdertAv = it.vurdertAv,
@@ -196,9 +216,8 @@ internal class Paragraf_11_29 private constructor(
         })
     }
 
-    private fun settKvalitetssikring(vilkårsvurdering: VilkårsvurderingModellApi) {
-        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_29 ?: emptyList()
-        kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
+    private fun settKvalitetssikring(vilkårsvurdering: Paragraf_11_29ModellApi) {
+        kvalitetssikringer.addAll((vilkårsvurdering.kvalitetssikringer_11_29).map {
             KvalitetssikringParagraf_11_29(
                 kvalitetssikringId = it.kvalitetssikringId,
                 kvalitetssikretAv = it.kvalitetssikretAv,

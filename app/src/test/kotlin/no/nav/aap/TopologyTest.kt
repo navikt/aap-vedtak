@@ -11,6 +11,7 @@ import no.nav.aap.kafka.streams.KStreamsConfig
 import no.nav.aap.kafka.streams.test.KafkaStreamsMock
 import no.nav.aap.kafka.streams.test.readAndAssert
 import no.nav.aap.kafka.streams.topology.Mermaid
+import no.nav.aap.modellapi.*
 import org.apache.kafka.clients.producer.MockProducer
 import org.apache.kafka.streams.TestInputTopic
 import org.junit.jupiter.api.Assertions.*
@@ -150,25 +151,25 @@ internal class ApiTest {
             val actual = søker.toModellApi()
 
             fun løsningsid2(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_2_maskinell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_2ModellApi).løsning_11_2_maskinell[0].løsningId
 
             fun løsningsid3(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_3_manuell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_3ModellApi).løsning_11_3_manuell[0].løsningId
 
             fun løsningsid5(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_5_manuell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_5ModellApi).løsning_11_5_manuell[0].løsningId
 
             fun løsningsid6(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_6_manuell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_6ModellApi).løsning_11_6_manuell[0].løsningId
 
             fun løsningsid19(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_19_manuell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_19ModellApi).løsning_11_19_manuell[0].løsningId
 
             fun løsningsid29(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_11_29_manuell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_29ModellApi).løsning_11_29_manuell[0].løsningId
 
             fun løsningsid2213(index: Int) =
-                actual.saker.first().sakstyper.first().vilkårsvurderinger[index].løsning_22_13_manuell!![0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_22_13ModellApi).løsning_22_13_manuell[0].løsningId
 
             kvalitetssikring_11_2_Topic.produce(fnr) {
                 Kvalitetssikring_11_2(

@@ -32,6 +32,8 @@ internal class VirkningsdatoTest {
         vilkår22_13.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val løsning8_48 = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
@@ -42,6 +44,7 @@ internal class VirkningsdatoTest {
 
         val løsning11_27 = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
@@ -89,6 +92,8 @@ internal class VirkningsdatoTest {
         vilkår22_13.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val løsning8_48 = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
@@ -99,6 +104,7 @@ internal class VirkningsdatoTest {
 
         val løsning11_27 = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
@@ -146,6 +152,8 @@ internal class VirkningsdatoTest {
         vilkår22_13.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val løsning8_48 = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
@@ -156,6 +164,7 @@ internal class VirkningsdatoTest {
 
         val løsning11_27 = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )

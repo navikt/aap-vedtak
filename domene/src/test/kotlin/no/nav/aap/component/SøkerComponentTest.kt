@@ -314,10 +314,17 @@ internal class SøkerComponentTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        søker.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        søker.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         søker.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -420,12 +427,19 @@ internal class SøkerComponentTest {
             )
         }
         medSøker {
-            håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+            håndterLøsning(
+                LøsningSykepengedager(
+                    løsningId = UUID.randomUUID(),
+                    tidspunktForVurdering = LocalDateTime.now(),
+                    sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+                )
+            )
         }
         medSøker {
             håndterLøsning(
                 LøsningParagraf_11_27_FørsteLedd(
                     løsningId = UUID.randomUUID(),
+                    tidspunktForVurdering = LocalDateTime.now(),
                     svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                         periode = null,
                         grad = null,

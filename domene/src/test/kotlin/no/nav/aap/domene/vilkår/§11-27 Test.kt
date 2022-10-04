@@ -28,6 +28,7 @@ internal class `§11-27 Test` {
 
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 null, null, null
             )
@@ -54,6 +55,7 @@ internal class `§11-27 Test` {
 
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 66.0, LocalDate.now()
             )
@@ -80,6 +82,7 @@ internal class `§11-27 Test` {
 
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
@@ -106,6 +109,7 @@ internal class `§11-27 Test` {
 
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
@@ -143,6 +147,7 @@ internal class `§11-27 Test` {
 
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
@@ -190,6 +195,7 @@ internal class `§11-27 Test` {
 
         val løsning = LøsningParagraf_11_27_FørsteLedd(
             løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                 LocalDate.now() til LocalDate.now(), 100.0, LocalDate.now()
             )
@@ -225,7 +231,10 @@ internal class `§11-27 Test` {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 
-    private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_27_FørsteLedd) {
+    private fun assertTilstand(
+        tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
+        vilkårsvurdering: Paragraf_11_27_FørsteLedd
+    ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
     }
 

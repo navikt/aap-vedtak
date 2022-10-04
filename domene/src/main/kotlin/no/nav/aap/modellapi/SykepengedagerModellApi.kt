@@ -4,10 +4,22 @@ import no.nav.aap.domene.Søker
 import no.nav.aap.hendelse.LøsningSykepengedager
 import no.nav.aap.hendelse.behov.Behov.Companion.toDto
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.util.*
 
 data class SykepengedagerModellApi(
+    val løsningId: UUID,
+    val tidspunktForVurdering: LocalDateTime,
     val sykepengedager: Sykepengedager?
 ) {
+    constructor(
+        sykepengedager: Sykepengedager?
+    ) : this(
+        løsningId = UUID.randomUUID(),
+        tidspunktForVurdering = LocalDateTime.now(),
+        sykepengedager = sykepengedager
+    )
+
     data class Sykepengedager(
         val gjenståendeSykedager: Int,
         val foreløpigBeregnetSluttPåSykepenger: LocalDate,
@@ -23,9 +35,15 @@ data class SykepengedagerModellApi(
 
     internal fun toLøsning(): LøsningSykepengedager {
         return if (sykepengedager == null) {
-            LøsningSykepengedager(sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke)
+            LøsningSykepengedager(
+                løsningId = løsningId,
+                tidspunktForVurdering = tidspunktForVurdering,
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
         } else {
             LøsningSykepengedager(
+                løsningId = løsningId,
+                tidspunktForVurdering = tidspunktForVurdering,
                 sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                     gjenståendeSykedager = sykepengedager.gjenståendeSykedager,
                     foreløpigBeregnetSluttPåSykepenger = sykepengedager.foreløpigBeregnetSluttPåSykepenger,

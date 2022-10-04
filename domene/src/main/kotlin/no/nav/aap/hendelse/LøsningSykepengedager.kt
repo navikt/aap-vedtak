@@ -3,9 +3,12 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.SykepengedagerModellApi
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 internal class LøsningSykepengedager(
+    private val løsningId: UUID,
+    private val tidspunktForVurdering: LocalDateTime,
     private val sykepengedager: Sykepengedager
 ) : Hendelse() {
 
@@ -24,7 +27,7 @@ internal class LøsningSykepengedager(
         sykepengedager.accept(this, visitor)
     }
 
-    internal fun toDto() = sykepengedager.toDto()
+    internal fun toDto() = sykepengedager.toDto(this)
 
     internal sealed class Sykepengedager {
 
@@ -33,7 +36,7 @@ internal class LøsningSykepengedager(
 
         internal abstract fun accept(løsning: LøsningSykepengedager, visitor: VilkårsvurderingVisitor)
 
-        internal abstract fun toDto(): SykepengedagerModellApi
+        internal abstract fun toDto(løsningSykepengedager: LøsningSykepengedager): SykepengedagerModellApi
 
         internal class Har(
             private val gjenståendeSykedager: Int,
@@ -50,7 +53,9 @@ internal class LøsningSykepengedager(
                 visitor.visitLøsningParagraf_8_48Har(løsning, UUID.randomUUID(), virkningsdato())
             }
 
-            override fun toDto() = SykepengedagerModellApi(
+            override fun toDto(løsningSykepengedager: LøsningSykepengedager) = SykepengedagerModellApi(
+                løsningId = løsningSykepengedager.løsningId,
+                tidspunktForVurdering = løsningSykepengedager.tidspunktForVurdering,
                 sykepengedager = SykepengedagerModellApi.Sykepengedager(
                     gjenståendeSykedager = gjenståendeSykedager,
                     foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
@@ -68,7 +73,11 @@ internal class LøsningSykepengedager(
                 visitor.visitLøsningParagraf_8_48HarIkke(løsning, UUID.randomUUID())
             }
 
-            override fun toDto() = SykepengedagerModellApi(null)
+            override fun toDto(løsningSykepengedager: LøsningSykepengedager) = SykepengedagerModellApi(
+                løsningId = løsningSykepengedager.løsningId,
+                tidspunktForVurdering = løsningSykepengedager.tidspunktForVurdering,
+                sykepengedager = null
+            )
         }
     }
 }

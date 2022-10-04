@@ -12,13 +12,15 @@ import java.util.*
 
 data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
     val løsningId: UUID,
+    val tidspunktForVurdering: LocalDateTime,
     val svangerskapspenger: SvangerskapspengerModellApi
 ) {
     constructor(
         svangerskapspenger: SvangerskapspengerModellApi
     ) : this(
         løsningId = UUID.randomUUID(),
-        svangerskapspenger = svangerskapspenger
+        tidspunktForVurdering = LocalDateTime.now(),
+        svangerskapspenger = svangerskapspenger,
     )
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
@@ -30,6 +32,7 @@ data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
 
     internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd(
         løsningId = løsningId,
+        tidspunktForVurdering = tidspunktForVurdering,
         svangerskapspenger = svangerskapspenger.gjenopprett()
     )
 }
@@ -40,7 +43,7 @@ data class SvangerskapspengerModellApi(
     val grad: Double?,
     val vedtaksdato: LocalDate?
 ) {
-    internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger (
+    internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
         periode = if (fom != null && tom != null) fom til tom else null,
         grad = grad,
         vedtaksdato = vedtaksdato

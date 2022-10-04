@@ -84,12 +84,19 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -349,12 +356,19 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -569,12 +583,19 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -802,12 +823,19 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -1059,7 +1087,9 @@ internal class SakTest {
 
         sak.håndterLøsning(
             LøsningSykepengedager(
-                LøsningSykepengedager.Sykepengedager.Har(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                     gjenståendeSykedager = 0,
                     foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
                     kilde = LøsningSykepengedager.Kilde.SPLEIS,
@@ -1071,6 +1101,7 @@ internal class SakTest {
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -1255,7 +1286,9 @@ internal class SakTest {
 
         sak.håndterLøsning(
             LøsningSykepengedager(
-                LøsningSykepengedager.Sykepengedager.Har(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                     gjenståendeSykedager = 0,
                     foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
                     kilde = LøsningSykepengedager.Kilde.SPLEIS,
@@ -1285,12 +1318,19 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -1501,12 +1541,19 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
-        sak.håndterLøsning(LøsningSykepengedager(LøsningSykepengedager.Sykepengedager.HarIkke))
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = 1 september 2022 til (30 september 2022),
                     grad = 100.0,
@@ -1718,7 +1765,9 @@ internal class SakTest {
 
         sak.håndterLøsning(
             LøsningSykepengedager(
-                LøsningSykepengedager.Sykepengedager.Har(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                     gjenståendeSykedager = 0,
                     foreløpigBeregnetSluttPåSykepenger = 30 september 2022,
                     kilde = LøsningSykepengedager.Kilde.SPLEIS
@@ -1730,6 +1779,7 @@ internal class SakTest {
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
                 svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
                     periode = null,
                     grad = null,
@@ -1911,7 +1961,9 @@ internal class SakTest {
 
         sak.håndterLøsning(
             LøsningSykepengedager(
-                LøsningSykepengedager.Sykepengedager.Har(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                     gjenståendeSykedager = 0,
                     foreløpigBeregnetSluttPåSykepenger = 30 september 2022,
                     kilde = LøsningSykepengedager.Kilde.SPLEIS

@@ -12,6 +12,7 @@ import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_22_13.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_22_13
+import no.nav.aap.modellapi.Paragraf_22_13ModellApi
 import no.nav.aap.modellapi.Utfall
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
@@ -65,7 +66,7 @@ internal class Paragraf_22_13 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
-            VilkårsvurderingModellApi(
+            Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
                 kvalitetssikretAv = null,
@@ -82,6 +83,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -108,7 +110,7 @@ internal class Paragraf_22_13 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
-            VilkårsvurderingModellApi(
+            Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
                 kvalitetssikretAv = null,
@@ -125,6 +127,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -140,7 +143,7 @@ internal class Paragraf_22_13 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
-            VilkårsvurderingModellApi(
+            Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
                 kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
@@ -157,6 +160,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -172,7 +176,7 @@ internal class Paragraf_22_13 private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
-            VilkårsvurderingModellApi(
+            Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
                 kvalitetssikretAv = null,
@@ -189,14 +193,14 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
-    private fun settManuellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {
-        val dtoLøsninger = vilkårsvurdering.løsning_22_13_manuell ?: emptyList()
-        løsninger.addAll(dtoLøsninger.map {
+    private fun settManuellLøsning(vilkårsvurdering: Paragraf_22_13ModellApi) {
+        løsninger.addAll(vilkårsvurdering.løsning_22_13_manuell.map {
             LøsningParagraf_22_13(
                 løsningId = it.løsningId,
                 vurdertAv = it.vurdertAv,
@@ -209,9 +213,8 @@ internal class Paragraf_22_13 private constructor(
         })
     }
 
-    private fun settKvalitetssikring(vilkårsvurdering: VilkårsvurderingModellApi) {
-        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_22_13 ?: emptyList()
-        kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
+    private fun settKvalitetssikring(vilkårsvurdering: Paragraf_22_13ModellApi) {
+        kvalitetssikringer.addAll(vilkårsvurdering.kvalitetssikringer_22_13.map {
             KvalitetssikringParagraf_22_13(
                 kvalitetssikringId = it.kvalitetssikringId,
                 kvalitetssikretAv = it.kvalitetssikretAv,

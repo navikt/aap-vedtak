@@ -43,7 +43,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         LEDD_2,
         LEDD_3;
 
-        operator fun plus(other: Ledd) = listOf(this, other)
+        internal operator fun plus(other: Ledd) = listOf(this, other)
     }
 
     internal fun accept(visitor: VilkårsvurderingVisitor) = callWithReceiver {

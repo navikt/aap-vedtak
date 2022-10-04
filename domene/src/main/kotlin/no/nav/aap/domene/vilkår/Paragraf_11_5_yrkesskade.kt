@@ -3,8 +3,6 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_5_yrkesskade.SøknadMottatt
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
-import no.nav.aap.modellapi.Utfall
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade.Companion.toDto
@@ -12,6 +10,9 @@ import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5_yrkesskade
+import no.nav.aap.modellapi.Paragraf_11_5YrkesskadeModellApi
+import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -63,23 +64,25 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+            Paragraf_11_5YrkesskadeModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = null,
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_VURDERT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -97,46 +100,50 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+            Paragraf_11_5YrkesskadeModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5_yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+            Paragraf_11_5YrkesskadeModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
@@ -154,54 +161,57 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+            Paragraf_11_5YrkesskadeModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+                kvalitetssikretAv = null,
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
     object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5_yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi = VilkårsvurderingModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
-            kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
+        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+            Paragraf_11_5YrkesskadeModellApi(
+                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
+                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
+                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                paragraf = vilkårsvurdering.paragraf.name,
+                ledd = vilkårsvurdering.ledd.map(Ledd::name),
+                tilstand = tilstandsnavn.name,
+                utfall = Utfall.IKKE_OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+                løsning_11_5_yrkesskade_manuell = vilkårsvurdering.løsninger.toDto(),
+                kvalitetssikringer_11_5_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
+            )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5_yrkesskade,
             vilkårsvurderingModellApi: VilkårsvurderingModellApi
         ) {
+            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
             vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
             vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
         }
     }
 
-    private fun settManuellLøsning(vilkårsvurdering: VilkårsvurderingModellApi) {
-        val dtoLøsninger = vilkårsvurdering.løsning_11_5_yrkesskade_manuell ?: emptyList()
-        løsninger.addAll(dtoLøsninger.map {
+    private fun settManuellLøsning(vilkårsvurdering: Paragraf_11_5YrkesskadeModellApi) {
+        løsninger.addAll(vilkårsvurdering.løsning_11_5_yrkesskade_manuell.map {
             LøsningParagraf_11_5Yrkesskade(
                 løsningId = it.løsningId,
                 vurdertAv = it.vurdertAv,
@@ -213,9 +223,8 @@ internal class Paragraf_11_5_yrkesskade private constructor(
         })
     }
 
-    private fun settKvalitetssikring(vilkårsvurdering: VilkårsvurderingModellApi) {
-        val dtoKvalitetssikringer = vilkårsvurdering.kvalitetssikringer_11_5_yrkesskade ?: emptyList()
-        kvalitetssikringer.addAll(dtoKvalitetssikringer.map {
+    private fun settKvalitetssikring(vilkårsvurdering: Paragraf_11_5YrkesskadeModellApi) {
+        kvalitetssikringer.addAll(vilkårsvurdering.kvalitetssikringer_11_5_yrkesskade.map {
             KvalitetssikringParagraf_11_5Yrkesskade(
                 kvalitetssikringId = it.kvalitetssikringId,
                 løsningId = it.løsningId,

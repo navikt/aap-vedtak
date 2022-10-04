@@ -7,6 +7,7 @@ import no.nav.aap.september
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 import java.util.*
 
 internal class VirkningsdatoVisitorTest {
@@ -31,7 +32,9 @@ internal class VirkningsdatoVisitorTest {
     fun `Henter at maksdato skal bestemme virkningsdato fra løsning`() {
         val visitor = VirkningsdatoVisitor()
         LøsningSykepengedager(
-            LøsningSykepengedager.Sykepengedager.Har(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
+            sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 0,
                 foreløpigBeregnetSluttPåSykepenger = 23 september 2022,
                 kilde = LøsningSykepengedager.Kilde.SPLEIS,

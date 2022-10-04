@@ -42,6 +42,8 @@ internal class `§8-48 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
         )
         vilkår.håndterLøsning(løsning)
@@ -65,6 +67,8 @@ internal class `§8-48 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
@@ -92,6 +96,8 @@ internal class `§8-48 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
@@ -130,6 +136,8 @@ internal class `§8-48 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
@@ -178,6 +186,8 @@ internal class `§8-48 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
 
         val løsning = LøsningSykepengedager(
+            løsningId = UUID.randomUUID(),
+            tidspunktForVurdering = LocalDateTime.now(),
             sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
                 gjenståendeSykedager = 10,
                 foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),

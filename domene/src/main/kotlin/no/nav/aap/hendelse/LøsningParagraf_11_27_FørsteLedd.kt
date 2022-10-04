@@ -11,6 +11,7 @@ import java.util.*
 
 internal class LøsningParagraf_11_27_FørsteLedd(
     private val løsningId: UUID,
+    private val tidspunktForVurdering: LocalDateTime,
     private val svangerskapspenger: Svangerskapspenger
 ) : Hendelse() {
     internal companion object {
@@ -29,6 +30,7 @@ internal class LøsningParagraf_11_27_FørsteLedd(
 
     internal fun toDto() = LøsningParagraf_11_27_FørsteLedd_ModellApi(
         løsningId = løsningId,
+        tidspunktForVurdering = tidspunktForVurdering,
         svangerskapspenger = svangerskapspenger.toModellApi()
     )
 
@@ -61,7 +63,8 @@ internal class KvalitetssikringParagraf_11_27_FørsteLedd(
 ) : Hendelse() {
 
     internal companion object {
-        internal fun Iterable<KvalitetssikringParagraf_11_27_FørsteLedd>.toDto() = map(KvalitetssikringParagraf_11_27_FørsteLedd::toDto)
+        internal fun Iterable<KvalitetssikringParagraf_11_27_FørsteLedd>.toDto() =
+            map(KvalitetssikringParagraf_11_27_FørsteLedd::toDto)
     }
 
     internal fun erGodkjent() = erGodkjent
