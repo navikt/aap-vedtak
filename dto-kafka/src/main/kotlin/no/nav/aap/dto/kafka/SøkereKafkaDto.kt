@@ -35,214 +35,217 @@ data class SøkereKafkaDto(
     data class Sakstype(
         val type: String,
         val aktiv: Boolean,
-        val vilkårsvurderinger: List<Vilkårsvurdering>,
+        val medlemskapYrkesskade: MedlemskapYrkesskade?,
+        val paragraf_8_48: Paragraf_8_48?,
+        val paragraf_11_2: Paragraf_11_2?,
+        val paragraf_11_3: Paragraf_11_3?,
+        val paragraf_11_4FørsteLedd: Paragraf_11_4FørsteLedd?,
+        val paragraf_11_4AndreOgTredjeLedd: Paragraf_11_4AndreOgTredjeLedd?,
+        val paragraf_11_5: Paragraf_11_5?,
+        val paragraf_11_5Yrkesskade: Paragraf_11_5Yrkesskade?,
+        val paragraf_11_6: Paragraf_11_6?,
+        val paragraf_11_14: Paragraf_11_14?,
+        val paragraf_11_19: Paragraf_11_19?,
+        val paragraf_11_22: Paragraf_11_22?,
+        val paragraf_11_27FørsteLedd: Paragraf_11_27FørsteLedd?,
+        val paragraf_11_29: Paragraf_11_29?,
+        val paragraf_22_13: Paragraf_22_13?,
     )
 
-    sealed interface Vilkårsvurdering {
-        val vilkårsvurderingsid: UUID
-        val vurdertAv: String?
-        val kvalitetssikretAv: String?
-        val paragraf: String
-        val ledd: List<String>
-        val tilstand: String
-        val utfall: String
-        val vurdertMaskinelt: Boolean
-    }
-
     data class MedlemskapYrkesskade(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskade>,
         val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskade>,
         val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskade>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_8_48(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_8_48_maskinell: List<LøsningMaskinellParagraf_8_48>,
         val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
         val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_2(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2>,
         val løsning_11_2_manuell: List<LøsningManuellParagraf_11_2>,
         val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_3(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_3_manuell: List<LøsningParagraf_11_3>,
         val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_4FørsteLedd(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
-    ) : Vilkårsvurdering
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
+    )
 
     data class Paragraf_11_4AndreOgTredjeLedd(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_4_ledd2_ledd3_manuell: List<LøsningParagraf_11_4AndreOgTredjeLedd>,
         val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_5(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_5_manuell: List<LøsningParagraf_11_5>,
         val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_5Yrkesskade(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5_yrkesskade>,
         val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5Yrkesskade>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_6(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_6_manuell: List<LøsningParagraf_11_6>,
         val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_14(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
-    ) : Vilkårsvurdering
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
+    )
 
     data class Paragraf_11_19(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_19_manuell: List<LøsningParagraf_11_19>,
         val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_22(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_22_manuell: List<LøsningParagraf_11_22>,
         val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_27FørsteLedd(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_27_maskinell: List<LøsningMaskinellParagraf_11_27FørsteLedd>,
         val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
         val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_11_29(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_11_29_manuell: List<LøsningParagraf_11_29>,
         val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29>,
-    ) : Vilkårsvurdering
+    )
 
     data class Paragraf_22_13(
-        override val vilkårsvurderingsid: UUID,
-        override val vurdertAv: String?,
-        override val kvalitetssikretAv: String?,
-        override val paragraf: String,
-        override val ledd: List<String>,
-        override val tilstand: String,
-        override val utfall: String,
-        override val vurdertMaskinelt: Boolean,
+        val vilkårsvurderingsid: UUID,
+        val vurdertAv: String?,
+        val kvalitetssikretAv: String?,
+        val paragraf: String,
+        val ledd: List<String>,
+        val tilstand: String,
+        val utfall: String,
+        val vurdertMaskinelt: Boolean,
         val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
         val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
-    ) : Vilkårsvurdering
+    )
 
     data class LøsningMaskinellMedlemskapYrkesskade(
         val løsningId: UUID,

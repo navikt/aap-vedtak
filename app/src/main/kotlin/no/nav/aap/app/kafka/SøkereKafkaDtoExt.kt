@@ -22,205 +22,218 @@ private fun Sak.toModellApi() = SakModellApi(
 private fun Sakstype.toModellApi() = SakstypeModellApi(
     type = type,
     aktiv = aktiv,
-    vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toModellApi)
+    vilkårsvurderinger = listOfNotNull(
+        paragraf_8_48?.toModellApi(),
+        paragraf_11_2?.toModellApi(),
+        paragraf_11_3?.toModellApi(),
+        paragraf_11_4FørsteLedd?.toModellApi(),
+        paragraf_11_4AndreOgTredjeLedd?.toModellApi(),
+        paragraf_11_5?.toModellApi(),
+        paragraf_11_5Yrkesskade?.toModellApi(),
+        paragraf_11_6?.toModellApi(),
+        paragraf_11_14?.toModellApi(),
+        paragraf_11_19?.toModellApi(),
+        paragraf_11_22?.toModellApi(),
+        paragraf_11_27FørsteLedd?.toModellApi(),
+        paragraf_11_29?.toModellApi(),
+        paragraf_22_13?.toModellApi()
+    )
 )
 
-private fun Vilkårsvurdering.toModellApi() = when (this) {
-    is Paragraf_8_48 -> Paragraf_8_48ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_8_48_maskinell = løsning_8_48_maskinell.map { it.toModellApi() },
-        løsning_22_13_manuell = løsning_22_13_manuell.map { it.toModellApi() },
-        kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map { it.toModellApi() },
-    )
+private fun Paragraf_8_48.toModellApi() = Paragraf_8_48ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_8_48_maskinell = løsning_8_48_maskinell.map { it.toModellApi() },
+    løsning_22_13_manuell = løsning_22_13_manuell.map { it.toModellApi() },
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map { it.toModellApi() },
+)
 
-    is MedlemskapYrkesskade -> MedlemskapYrkesskadeModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell.map { it.toModellApi() },
-        løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell.map { it.toModellApi() },
-        kvalitetssikringer_medlemskap_yrkesskade = kvalitetssikringer_medlemskap_yrkesskade.map { it.toModellApi() },
-    )
+private fun MedlemskapYrkesskade.toModellApi() = MedlemskapYrkesskadeModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell.map { it.toModellApi() },
+    løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell.map { it.toModellApi() },
+    kvalitetssikringer_medlemskap_yrkesskade = kvalitetssikringer_medlemskap_yrkesskade.map { it.toModellApi() },
+)
 
-    is Paragraf_11_2 -> Paragraf_11_2ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_2_maskinell = løsning_11_2_maskinell.map { it.toModellApi() },
-        løsning_11_2_manuell = løsning_11_2_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_2 = kvalitetssikringer_11_2.map { it.toModellApi() },
-    )
+private fun Paragraf_11_2.toModellApi() = Paragraf_11_2ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_2_maskinell = løsning_11_2_maskinell.map { it.toModellApi() },
+    løsning_11_2_manuell = løsning_11_2_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_2 = kvalitetssikringer_11_2.map { it.toModellApi() },
+)
 
-    is Paragraf_11_3 -> Paragraf_11_3ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_3_manuell = løsning_11_3_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_3 = kvalitetssikringer_11_3.map { it.toModellApi() },
-    )
+private fun Paragraf_11_3.toModellApi() = Paragraf_11_3ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_3_manuell = løsning_11_3_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_3 = kvalitetssikringer_11_3.map { it.toModellApi() },
+)
 
-    is Paragraf_11_4FørsteLedd -> Paragraf_11_4FørsteLeddModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-    )
+private fun Paragraf_11_4FørsteLedd.toModellApi() = Paragraf_11_4FørsteLeddModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+)
 
-    is Paragraf_11_4AndreOgTredjeLedd -> Paragraf_11_4AndreOgTredjeLeddModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_4_ledd2_ledd3 = kvalitetssikringer_11_4_ledd2_ledd3.map { it.toModellApi() },
-    )
+private fun Paragraf_11_4AndreOgTredjeLedd.toModellApi() = Paragraf_11_4AndreOgTredjeLeddModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_4_ledd2_ledd3 = kvalitetssikringer_11_4_ledd2_ledd3.map { it.toModellApi() },
+)
 
-    is Paragraf_11_5 -> Paragraf_11_5ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_5_manuell = løsning_11_5_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_5 = kvalitetssikringer_11_5.map { it.toModellApi() },
-    )
+private fun Paragraf_11_5.toModellApi() = Paragraf_11_5ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_5_manuell = løsning_11_5_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_5 = kvalitetssikringer_11_5.map { it.toModellApi() },
+)
 
-    is Paragraf_11_5Yrkesskade -> Paragraf_11_5YrkesskadeModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_5_yrkesskade = kvalitetssikringer_11_5_yrkesskade.map { it.toModellApi() },
-    )
+private fun Paragraf_11_5Yrkesskade.toModellApi() = Paragraf_11_5YrkesskadeModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_5_yrkesskade = kvalitetssikringer_11_5_yrkesskade.map { it.toModellApi() },
+)
 
-    is Paragraf_11_6 -> Paragraf_11_6ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_6_manuell = løsning_11_6_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_6 = kvalitetssikringer_11_6.map { it.toModellApi() },
-    )
+private fun Paragraf_11_6.toModellApi() = Paragraf_11_6ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_6_manuell = løsning_11_6_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_6 = kvalitetssikringer_11_6.map { it.toModellApi() },
+)
 
-    is Paragraf_11_14 -> Paragraf_11_14ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-    )
+private fun Paragraf_11_14.toModellApi() = Paragraf_11_14ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+)
 
-    is Paragraf_11_19 -> Paragraf_11_19ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_19_manuell = løsning_11_19_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_19 = kvalitetssikringer_11_19.map { it.toModellApi() },
-    )
+private fun Paragraf_11_19.toModellApi() = Paragraf_11_19ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_19_manuell = løsning_11_19_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_19 = kvalitetssikringer_11_19.map { it.toModellApi() },
+)
 
-    is Paragraf_11_22 -> Paragraf_11_22ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_22_manuell = løsning_11_22_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_22 = kvalitetssikringer_11_22.map { it.toModellApi() },
-    )
+private fun Paragraf_11_22.toModellApi() = Paragraf_11_22ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_22_manuell = løsning_11_22_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_22 = kvalitetssikringer_11_22.map { it.toModellApi() },
+)
 
-    is Paragraf_11_27FørsteLedd -> Paragraf_11_27FørsteLeddModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_27_maskinell = løsning_11_27_maskinell.map { it.toModellApi() },
-        løsning_22_13_manuell = løsning_22_13_manuell.map { it.toModellApi() },
-        kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map { it.toModellApi() },
-    )
+private fun Paragraf_11_27FørsteLedd.toModellApi() = Paragraf_11_27FørsteLeddModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_27_maskinell = løsning_11_27_maskinell.map { it.toModellApi() },
+    løsning_22_13_manuell = løsning_22_13_manuell.map { it.toModellApi() },
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map { it.toModellApi() },
+)
 
-    is Paragraf_11_29 -> Paragraf_11_29ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_29_manuell = løsning_11_29_manuell.map { it.toModellApi() },
-        kvalitetssikringer_11_29 = kvalitetssikringer_11_29.map { it.toModellApi() },
-    )
+private fun Paragraf_11_29.toModellApi() = Paragraf_11_29ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_29_manuell = løsning_11_29_manuell.map { it.toModellApi() },
+    kvalitetssikringer_11_29 = kvalitetssikringer_11_29.map { it.toModellApi() },
+)
 
-    is Paragraf_22_13 -> Paragraf_22_13ModellApi(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = enumValueOf(utfall),
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_22_13_manuell = løsning_22_13_manuell.map { it.toModellApi() },
-        kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map { it.toModellApi() },
-    )
-}
+private fun Paragraf_22_13.toModellApi() = Paragraf_22_13ModellApi(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = enumValueOf(utfall),
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_22_13_manuell = løsning_22_13_manuell.map { it.toModellApi() },
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map { it.toModellApi() },
+)
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toModellApi() = LøsningMaskinellMedlemskapYrkesskadeModellApi(
     løsningId = løsningId,
@@ -497,9 +510,9 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                 Sakstype(
                     type = sakstype.type,
                     aktiv = sakstype.aktiv,
-                    vilkårsvurderinger = sakstype.vilkårsvurderinger.map { vilkår ->
-                        when (vilkår) {
-                            is MedlemskapYrkesskadeModellApi -> MedlemskapYrkesskade(
+                    medlemskapYrkesskade = sakstype.vilkårsvurderinger.filterIsInstance<MedlemskapYrkesskadeModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            MedlemskapYrkesskade(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -533,8 +546,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_8_48ModellApi -> Paragraf_8_48(
+                        },
+                    paragraf_8_48 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_8_48ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_8_48(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -578,8 +593,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_2ModellApi -> Paragraf_11_2(
+                        },
+                    paragraf_11_2 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_2ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_2(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -614,8 +631,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_3ModellApi -> Paragraf_11_3(
+                        },
+                    paragraf_11_3 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_3ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_3(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -643,8 +662,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_4FørsteLeddModellApi -> Paragraf_11_4FørsteLedd(
+                        },
+                    paragraf_11_4FørsteLedd = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_4FørsteLeddModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_4FørsteLedd(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -654,8 +675,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                 utfall = vilkår.utfall.name,
                                 vurdertMaskinelt = vilkår.vurdertMaskinelt,
                             )
-
-                            is Paragraf_11_4AndreOgTredjeLeddModellApi -> Paragraf_11_4AndreOgTredjeLedd(
+                        },
+                    paragraf_11_4AndreOgTredjeLedd = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_4AndreOgTredjeLeddModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_4AndreOgTredjeLedd(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -683,8 +706,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_5ModellApi -> Paragraf_11_5(
+                        },
+                    paragraf_11_5 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_5ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_5(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -713,8 +738,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_5YrkesskadeModellApi -> Paragraf_11_5Yrkesskade(
+                        },
+                    paragraf_11_5Yrkesskade = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_5YrkesskadeModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_5Yrkesskade(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -743,8 +770,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_6ModellApi -> Paragraf_11_6(
+                        },
+                    paragraf_11_6 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_6ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_6(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -774,8 +803,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_14ModellApi -> Paragraf_11_14(
+                        },
+                    paragraf_11_14 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_14ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_14(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -785,8 +816,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                 utfall = vilkår.utfall.name,
                                 vurdertMaskinelt = vilkår.vurdertMaskinelt,
                             )
-
-                            is Paragraf_11_19ModellApi -> Paragraf_11_19(
+                        },
+                    paragraf_11_19 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_19ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_19(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -814,8 +847,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_22ModellApi -> Paragraf_11_22(
+                        },
+                    paragraf_11_22 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_22ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_22(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -846,8 +881,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_27FørsteLeddModellApi -> Paragraf_11_27FørsteLedd(
+                        },
+                    paragraf_11_27FørsteLedd = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_27FørsteLeddModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_27FørsteLedd(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -892,8 +929,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_11_29ModellApi -> Paragraf_11_29(
+                        },
+                    paragraf_11_29 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_11_29ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_11_29(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -921,8 +960,10 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                     )
                                 },
                             )
-
-                            is Paragraf_22_13ModellApi -> Paragraf_22_13(
+                        },
+                    paragraf_22_13 = sakstype.vilkårsvurderinger.filterIsInstance<Paragraf_22_13ModellApi>()
+                        .singleOrNull()?.let { vilkår ->
+                            Paragraf_22_13(
                                 vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
                                 vurdertAv = vilkår.vurdertAv,
                                 kvalitetssikretAv = vilkår.kvalitetssikretAv,
@@ -954,7 +995,6 @@ internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto
                                 },
                             )
                         }
-                    }
                 )
             },
             vurderingsdato = sak.vurderingsdato,

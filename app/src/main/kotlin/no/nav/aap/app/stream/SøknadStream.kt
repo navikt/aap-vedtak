@@ -5,7 +5,6 @@ import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.kafka.toJson
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøknadKafkaDto
-import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
 import no.nav.aap.kafka.streams.extension.*
 import no.nav.aap.modellapi.SøknadModellApi
 import org.apache.kafka.streams.StreamsBuilder

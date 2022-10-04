@@ -24,8 +24,43 @@ private fun Sak.toDto() = SøkereKafkaDto.Sak(
 private fun Sakstype.toDto() = SøkereKafkaDto.Sakstype(
     type = type,
     aktiv = aktiv,
-    vilkårsvurderinger = vilkårsvurderinger.map(Vilkårsvurdering::toDto)
+    medlemskapYrkesskade = vilkårsvurderinger
+        .singleOrNull(Paragraf.MEDLEMSKAP_YRKESSKADE)?.toMedlemskapYrkesskade(),
+    paragraf_8_48 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_8_48)?.toParagraf_8_48(),
+    paragraf_11_2 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_2)?.toParagraf_11_2(),
+    paragraf_11_3 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_3)?.toParagraf_11_3(),
+    paragraf_11_4FørsteLedd = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_4, Ledd.LEDD_1)?.toParagraf_11_4FørsteLedd(),
+    paragraf_11_4AndreOgTredjeLedd = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_4, Ledd.LEDD_2, Ledd.LEDD_3)?.toParagraf_11_4AndreOgTredjeLedd(),
+    paragraf_11_5 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_5)?.toParagraf_11_5(),
+    paragraf_11_5Yrkesskade = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_5_YRKESSKADE)?.toParagraf_11_5Yrkesskade(),
+    paragraf_11_6 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_6)?.toParagraf_11_6(),
+    paragraf_11_14 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_14)?.toParagraf_11_14(),
+    paragraf_11_19 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_19)?.toParagraf_11_19(),
+    paragraf_11_22 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_22)?.toParagraf_11_22(),
+    paragraf_11_27FørsteLedd = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_27)?.toParagraf_11_27FørsteLedd(),
+    paragraf_11_29 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_11_29)?.toParagraf_11_29(),
+    paragraf_22_13 = vilkårsvurderinger
+        .singleOrNull(Paragraf.PARAGRAF_22_13)?.toParagraf_22_13(),
 )
+
+private fun Iterable<Vilkårsvurdering>.singleOrNull(paragraf: Paragraf) =
+    singleOrNull { it.paragraf == paragraf.name }
+
+private fun Iterable<Vilkårsvurdering>.singleOrNull(paragraf: Paragraf, vararg ledd: Ledd) =
+    singleOrNull { it.paragraf == paragraf.name && it.ledd == ledd.map(Ledd::name) }
 
 private enum class Paragraf {
     MEDLEMSKAP_YRKESSKADE,
@@ -50,220 +85,203 @@ private enum class Ledd {
     LEDD_3;
 }
 
-private fun Vilkårsvurdering.toDto() = when (enumValueOf<Paragraf>(paragraf)) {
-    Paragraf.MEDLEMSKAP_YRKESSKADE -> SøkereKafkaDto.MedlemskapYrkesskade(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() }
-            ?: emptyList(),
-        løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() }
-            ?: emptyList(),
-        kvalitetssikringer_medlemskap_yrkesskade = kvalitetssikringer_medlemskap_yrkesskade?.map { it.toDto() }
-            ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toMedlemskapYrkesskade() = SøkereKafkaDto.MedlemskapYrkesskade(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell?.map { it.toDto() }
+        ?: emptyList(),
+    løsning_medlemskap_yrkesskade_manuell = løsning_medlemskap_yrkesskade_manuell?.map { it.toDto() }
+        ?: emptyList(),
+    kvalitetssikringer_medlemskap_yrkesskade = kvalitetssikringer_medlemskap_yrkesskade?.map { it.toDto() }
+        ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_8_48 -> TODO() //Paragraf_8_48(
-//                                vilkårsvurderingsid = vilkår.vilkårsvurderingsid,
-//                                vurdertAv = vilkår.vurdertAv,
-//                                godkjentAv = vilkår.kvalitetssikretAv,
-//                                paragraf = vilkår.paragraf,
-//                                ledd = vilkår.ledd,
-//                                tilstand = vilkår.tilstand,
-//                                utfall = vilkår.utfall.name,
-//                                vurdertMaskinelt = vilkår.vurdertMaskinelt,
-//                                løsning_medlemskap_yrkesskade_maskinell = vilkår.løsning_medlemskap_yrkesskade_maskinell.map {
-//                                    LøsningMaskinellMedlemskapYrkesskade(
-//                                        løsningId = it.løsningId,
-//                                        erMedlem = it.erMedlem
-//                                    )
-//                                },
-//                                løsning_medlemskap_yrkesskade_manuell = vilkår.løsning_medlemskap_yrkesskade_manuell.map {
-//                                    LøsningManuellMedlemskapYrkesskade(
-//                                        løsningId = it.løsningId,
-//                                        vurdertAv = it.vurdertAv,
-//                                        tidspunktForVurdering = it.tidspunktForVurdering,
-//                                        erMedlem = it.erMedlem
-//                                    )
-//                                },
-//                            )
+private fun Vilkårsvurdering.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_8_48_maskinell = emptyList(),
+    løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_2 -> SøkereKafkaDto.Paragraf_11_2(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_2_maskinell = løsning_11_2_maskinell?.map { it.toDto() } ?: emptyList(),
-        løsning_11_2_manuell = løsning_11_2_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_2 = kvalitetssikringer_11_2?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_2_maskinell = løsning_11_2_maskinell?.map { it.toDto() } ?: emptyList(),
+    løsning_11_2_manuell = løsning_11_2_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_2 = kvalitetssikringer_11_2?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_3 -> SøkereKafkaDto.Paragraf_11_3(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_3_manuell = løsning_11_3_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_3 = kvalitetssikringer_11_3?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_3_manuell = løsning_11_3_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_3 = kvalitetssikringer_11_3?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_4 -> when (ledd.map<String, Ledd>(::enumValueOf)) {
-        listOf(Ledd.LEDD_1) -> SøkereKafkaDto.Paragraf_11_4FørsteLedd(
-            vilkårsvurderingsid = vilkårsvurderingsid,
-            vurdertAv = vurdertAv,
-            kvalitetssikretAv = godkjentAv,
-            paragraf = paragraf,
-            ledd = ledd,
-            tilstand = tilstand,
-            utfall = utfall,
-            vurdertMaskinelt = vurdertMaskinelt,
-        )
+private fun Vilkårsvurdering.toParagraf_11_4FørsteLedd() = SøkereKafkaDto.Paragraf_11_4FørsteLedd(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+)
 
-        else ->
-            SøkereKafkaDto.Paragraf_11_4AndreOgTredjeLedd(
-                vilkårsvurderingsid = vilkårsvurderingsid,
-                vurdertAv = vurdertAv,
-                kvalitetssikretAv = godkjentAv,
-                paragraf = paragraf,
-                ledd = ledd,
-                tilstand = tilstand,
-                utfall = utfall,
-                vurdertMaskinelt = vurdertMaskinelt,
-                løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.map { it.toDto() } ?: emptyList(),
-                kvalitetssikringer_11_4_ledd2_ledd3 = kvalitetssikringer_11_4_ledd2_ledd3?.map { it.toDto() }
-                    ?: emptyList(),
-            )
-    }
+private fun Vilkårsvurdering.toParagraf_11_4AndreOgTredjeLedd() = SøkereKafkaDto.Paragraf_11_4AndreOgTredjeLedd(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_4_ledd2_ledd3_manuell = løsning_11_4_ledd2_ledd3_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_4_ledd2_ledd3 = kvalitetssikringer_11_4_ledd2_ledd3?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_5 -> SøkereKafkaDto.Paragraf_11_5(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_5_manuell = løsning_11_5_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_5 = kvalitetssikringer_11_5?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_5_manuell = løsning_11_5_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_5 = kvalitetssikringer_11_5?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_5_YRKESSKADE -> SøkereKafkaDto.Paragraf_11_5Yrkesskade(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_5_yrkesskade = kvalitetssikringer_11_5_yrkesskade?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_5Yrkesskade() = SøkereKafkaDto.Paragraf_11_5Yrkesskade(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_5_yrkesskade = kvalitetssikringer_11_5_yrkesskade?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_6 -> SøkereKafkaDto.Paragraf_11_6(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_6_manuell = løsning_11_6_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_6 = kvalitetssikringer_11_6?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_6_manuell = løsning_11_6_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_6 = kvalitetssikringer_11_6?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_14 -> SøkereKafkaDto.Paragraf_11_14(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-    )
+private fun Vilkårsvurdering.toParagraf_11_14() = SøkereKafkaDto.Paragraf_11_14(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+)
 
-    Paragraf.PARAGRAF_11_19 -> SøkereKafkaDto.Paragraf_11_19(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_19_manuell = løsning_11_19_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_19 = kvalitetssikringer_11_19?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_19() = SøkereKafkaDto.Paragraf_11_19(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_19_manuell = løsning_11_19_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_19 = kvalitetssikringer_11_19?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_22 -> SøkereKafkaDto.Paragraf_11_22(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_22_manuell = løsning_11_22_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_22 = kvalitetssikringer_11_22?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_22_manuell = løsning_11_22_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_22 = kvalitetssikringer_11_22?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_27 -> SøkereKafkaDto.Paragraf_11_27FørsteLedd(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_27_maskinell = emptyList(),
-        løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_22_13 = kvalitetssikringer_22_13?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_27FørsteLedd() = SøkereKafkaDto.Paragraf_11_27FørsteLedd(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_27_maskinell = emptyList(),
+    løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_11_29 -> SøkereKafkaDto.Paragraf_11_29(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_29_manuell = løsning_11_29_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_11_29 = kvalitetssikringer_11_29?.map { it.toDto() } ?: emptyList(),
-    )
+private fun Vilkårsvurdering.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_29_manuell = løsning_11_29_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_11_29 = kvalitetssikringer_11_29?.map { it.toDto() } ?: emptyList(),
+)
 
-    Paragraf.PARAGRAF_22_13 -> SøkereKafkaDto.Paragraf_22_13(
-        vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = godkjentAv,
-        paragraf = paragraf,
-        ledd = ledd,
-        tilstand = tilstand,
-        utfall = utfall,
-        vurdertMaskinelt = vurdertMaskinelt,
-        løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toDto() } ?: emptyList(),
-        kvalitetssikringer_22_13 = kvalitetssikringer_22_13?.map { it.toDto() } ?: emptyList(),
-    )
-}
+private fun Vilkårsvurdering.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = godkjentAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_22_13_manuell = løsning_22_13_manuell?.map { it.toDto() } ?: emptyList(),
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13?.map { it.toDto() } ?: emptyList(),
+)
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
     løsningId = UUID.randomUUID(),
