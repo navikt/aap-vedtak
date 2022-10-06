@@ -54,6 +54,7 @@ data class LøsningParagraf_22_13ModellApi(
             bestemmesAv == "unntaksvurdering" && unntak == "forhindret" -> LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret
             bestemmesAv == "unntaksvurdering" && unntak == "mangelfull" -> LøsningParagraf_22_13.BestemmesAv.unntaksvurderingMangelfull
             bestemmesAv == "etterSisteLoenn" -> LøsningParagraf_22_13.BestemmesAv.etterSisteLoenn
+            bestemmesAv == "annet" -> LøsningParagraf_22_13.BestemmesAv.annet
             else -> error("Ukjent bestemmesAv: $bestemmesAv og unntak: $unntak")
         },
         unntak = unntak,
