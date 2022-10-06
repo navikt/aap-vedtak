@@ -106,6 +106,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> Oppfylt
             //TODO: Skal bare bruke IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
+            //TODO: Skal bare bruke IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfylt
 
