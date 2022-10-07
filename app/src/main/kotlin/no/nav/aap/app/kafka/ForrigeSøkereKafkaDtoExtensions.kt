@@ -75,7 +75,11 @@ private fun Paragraf_11_2.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "OPPFYLT_MASKINELT" -> "OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        "IKKE_OPPFYLT_MASKINELT" -> "IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_2_maskinell = løsning_11_2_maskinell.map { it.toDto() },
@@ -102,7 +106,11 @@ private fun Paragraf_11_4FørsteLedd.toParagraf_11_4FørsteLedd() = SøkereKafka
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "OPPFYLT_MASKINELT" -> "OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        "IKKE_OPPFYLT_MANUELT", "IKKE_OPPFYLT_MASKINELT" -> "IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
 )

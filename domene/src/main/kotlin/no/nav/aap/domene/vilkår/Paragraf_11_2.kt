@@ -342,11 +342,7 @@ internal class Paragraf_11_2 private constructor(
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
             Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
-            //TODO: Skal bare bruke OPPFYLT_MASKINELT_KVALITETSSIKRET
-            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> OppfyltMaskineltKvalitetssikret
-            //TODO: Skal bare bruke IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfyltMaskineltKvalitetssikret
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> OppfyltManuelt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltManueltKvalitetssikret
