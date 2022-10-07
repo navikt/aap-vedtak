@@ -56,8 +56,8 @@ internal class Paragraf_11_2 private constructor(
         override fun håndterLøsning(vilkårsvurdering: Paragraf_11_2, løsning: LøsningMaskinellParagraf_11_2) {
             vilkårsvurdering.maskinelleLøsninger.add(løsning)
             when {
-                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskinelt, løsning)
-                løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskinelt, løsning)
+                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskineltKvalitetssikret, løsning)
+                løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskineltKvalitetssikret, løsning)
                 else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
             }
         }
@@ -114,52 +114,12 @@ internal class Paragraf_11_2 private constructor(
         }
     }
 
-    private object OppfyltMaskinelt : Tilstand.OppfyltMaskinelt<Paragraf_11_2>() {
-
-        override fun håndterKvalitetssikring(
-            vilkårsvurdering: Paragraf_11_2,
-            kvalitetssikring: KvalitetssikringParagraf_11_2
-        ) {
-            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
-            when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
-                    OppfyltMaskineltKvalitetssikret,
-                    kvalitetssikring
-                )
-
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
-            }
-        }
-
-        override fun toDto(vilkårsvurdering: Paragraf_11_2) = Paragraf_11_2ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_2,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
-        ) {
-            vilkårsvurderingModellApi as Paragraf_11_2ModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-        }
-    }
-
     private object OppfyltMaskineltKvalitetssikret : Tilstand.OppfyltMaskineltKvalitetssikret<Paragraf_11_2>() {
 
         override fun toDto(vilkårsvurdering: Paragraf_11_2) = Paragraf_11_2ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -180,52 +140,12 @@ internal class Paragraf_11_2 private constructor(
         }
     }
 
-    private object IkkeOppfyltMaskinelt : Tilstand.IkkeOppfyltMaskinelt<Paragraf_11_2>() {
-
-        override fun håndterKvalitetssikring(
-            vilkårsvurdering: Paragraf_11_2,
-            kvalitetssikring: KvalitetssikringParagraf_11_2
-        ) {
-            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
-            when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
-                    IkkeOppfyltMaskineltKvalitetssikret,
-                    kvalitetssikring
-                )
-
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
-            }
-        }
-
-        override fun toDto(vilkårsvurdering: Paragraf_11_2) = Paragraf_11_2ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_11_2_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-            løsning_11_2_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-            kvalitetssikringer_11_2 = vilkårsvurdering.kvalitetssikringer.toDto(),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_2,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
-        ) {
-            vilkårsvurderingModellApi as Paragraf_11_2ModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-        }
-    }
-
     private object IkkeOppfyltMaskineltKvalitetssikret : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<Paragraf_11_2>() {
 
         override fun toDto(vilkårsvurdering: Paragraf_11_2) = Paragraf_11_2ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -422,9 +342,11 @@ internal class Paragraf_11_2 private constructor(
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
             Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
             Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
-            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT -> OppfyltMaskinelt
+            //TODO: Skal bare bruke OPPFYLT_MASKINELT_KVALITETSSIKRET
+            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> OppfyltMaskineltKvalitetssikret
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT -> IkkeOppfyltMaskinelt
+            //TODO: Skal bare bruke IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfyltMaskineltKvalitetssikret
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> OppfyltManuelt
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltManueltKvalitetssikret

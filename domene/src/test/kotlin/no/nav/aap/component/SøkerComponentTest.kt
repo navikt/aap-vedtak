@@ -278,7 +278,7 @@ internal class SøkerComponentTest {
 //        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals(10, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,

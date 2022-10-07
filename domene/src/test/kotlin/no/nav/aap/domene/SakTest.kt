@@ -177,7 +177,7 @@ internal class SakTest {
         val saker = listOf(sak).toDto()
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
