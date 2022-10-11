@@ -4,6 +4,7 @@ name: Pull Request
 permissions:
   contents: write
   pull-requests: write
+  checks: write
 
 jobs:
    test:
