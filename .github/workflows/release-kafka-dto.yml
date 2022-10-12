@@ -47,12 +47,11 @@ jobs:
 
       - id: notes
         run: |
-          delimiter=${RANDOM}
+          randomDelimiter=${RANDOM}
           text="$(git --no-pager log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%h %s")"
-          echo "DELIMITER=$delimiter" >> $GITHUB_OUTPUT
-          echo 'CHANGELOG<<$delimiter' >> $GITHUB_OUTPUT
+          echo 'CHANGELOG<<$randomDelimiter' >> $GITHUB_OUTPUT
           echo $text >> $GITHUB_OUTPUT
-          echo '$delimiter' >> $GITHUB_OUTPUT
+          echo '$randomDelimiter' >> $GITHUB_OUTPUT
       - uses: actions/create-release@v1.1.4
         id: create_release
         env:
@@ -61,5 +60,5 @@ jobs:
           tag_name: ${{ steps.tag.outputs.version }}
           release_name: dto-kafka:${{ steps.tag.outputs.version }}
           body: |
-            Changes in this Release (${{ steps.notes.outputs.DELIMITER }})
+            Changes in this Release
             ${{ steps.notes.outputs.CHANGELOG }}
