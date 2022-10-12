@@ -48,7 +48,7 @@ jobs:
       - id: notes
         run: |
           text="$(git --no-pager log $(git describe --tags --abbrev=0)..HEAD --pretty=format:"%h %s")"
-          echo "::set-output name=CHANGELOG::$text"
+          echo "CHANGELOG=$text" >> $GITHUB_OUTPUT
       - uses: actions/create-release@v1.1.4
         id: create_release
         env:
