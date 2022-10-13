@@ -2,7 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.vilkår.Paragraf_11_27_FørsteLedd.*
+import no.nav.aap.domene.vilkår.Paragraf_11_27FørsteLedd.*
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13.Companion.toDto
@@ -15,11 +15,11 @@ import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
-internal class Paragraf_11_27_FørsteLedd private constructor(
+internal class Paragraf_11_27FørsteLedd private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_27_FørsteLedd>
+    tilstand: Tilstand<Paragraf_11_27FørsteLedd>
 ) :
-    Vilkårsvurdering<Paragraf_11_27_FørsteLedd>(
+    Vilkårsvurdering<Paragraf_11_27FørsteLedd>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_27,
         Ledd.LEDD_1,
@@ -31,11 +31,11 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
-    override fun <T> callWithReceiver(block: Paragraf_11_27_FørsteLedd.() -> T) = this.block()
+    override fun <T> callWithReceiver(block: Paragraf_11_27FørsteLedd.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_27_FørsteLedd>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_27FørsteLedd>() {
         override fun håndterSøknad(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
             søknad: Søknad,
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
@@ -43,17 +43,17 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             vilkårsvurdering.tilstand(SøknadMottatt, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_27_FørsteLedd>() {
-        override fun onEntry(vilkårsvurdering: Paragraf_11_27_FørsteLedd, hendelse: Hendelse) {
+    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_27FørsteLedd>() {
+        override fun onEntry(vilkårsvurdering: Paragraf_11_27FørsteLedd, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_27())
         }
 
         override fun håndterLøsning(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
             løsning: LøsningParagraf_11_27_FørsteLedd
         ) {
             vilkårsvurdering.løsninger.add(løsning)
@@ -65,7 +65,7 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
@@ -81,18 +81,17 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
+            modellApi: Paragraf_11_27FørsteLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_27FørsteLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_11_27_FørsteLedd>() {
+    object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_11_27FørsteLedd>() {
 
-        override fun håndterLøsning(vilkårsvurdering: Paragraf_11_27_FørsteLedd, løsning: LøsningParagraf_22_13) {
+        override fun håndterLøsning(vilkårsvurdering: Paragraf_11_27FørsteLedd, løsning: LøsningParagraf_22_13) {
             vilkårsvurdering.løsninger22_13.add(løsning)
             if (løsning.bestemmesAv11_27())
                 vilkårsvurdering.tilstand(Oppfylt, løsning)
@@ -100,7 +99,7 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
@@ -116,18 +115,17 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
+            modellApi: Paragraf_11_27FørsteLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_27FørsteLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_27_FørsteLedd>() {
+    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_27FørsteLedd>() {
         override fun håndterKvalitetssikring(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
             kvalitetssikring: KvalitetssikringParagraf_22_13
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
@@ -137,7 +135,7 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             }
         }
 
-        override fun accept(vilkårsvurdering: Paragraf_11_27_FørsteLedd, visitor: VilkårsvurderingVisitor) {
+        override fun accept(vilkårsvurdering: Paragraf_11_27FørsteLedd, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_27(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -145,7 +143,7 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             visitor.postVisitParagraf_11_27(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",
@@ -161,17 +159,16 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
+            modellApi: Paragraf_11_27FørsteLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_27FørsteLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_27_FørsteLedd>() {
-        override fun accept(vilkårsvurdering: Paragraf_11_27_FørsteLedd, visitor: VilkårsvurderingVisitor) {
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_27FørsteLedd>() {
+        override fun accept(vilkårsvurdering: Paragraf_11_27FørsteLedd, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_27(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
@@ -179,7 +176,7 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             visitor.postVisitParagraf_11_27(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",
@@ -195,17 +192,16 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
+            modellApi: Paragraf_11_27FørsteLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_27FørsteLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_11_27_FørsteLedd>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_27_FørsteLedd): VilkårsvurderingModellApi =
+    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_11_27FørsteLedd>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
@@ -221,12 +217,11 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_27_FørsteLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_27FørsteLedd,
+            modellApi: Paragraf_11_27FørsteLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_27FørsteLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -255,7 +250,7 @@ internal class Paragraf_11_27_FørsteLedd private constructor(
 
     internal companion object {
         internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
-            Paragraf_11_27_FørsteLedd(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
+            Paragraf_11_27FørsteLedd(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

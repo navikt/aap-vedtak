@@ -87,11 +87,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_4AndreOgTredjeLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -122,11 +121,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_4AndreOgTredjeLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -157,11 +155,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_4AndreOgTredjeLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -192,11 +189,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_4AndreOgTredjeLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -216,11 +212,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_4AndreOgTredjeLeddModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 

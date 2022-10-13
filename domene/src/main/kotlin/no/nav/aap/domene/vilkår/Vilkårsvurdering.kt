@@ -3,7 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -143,9 +143,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     }
 
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd) =
-        callWithReceiver {
-            tilstand.håndterKvalitetssikring(this, kvalitetssikring)
-        }
+        callWithReceiver { tilstand.håndterKvalitetssikring(this, kvalitetssikring) }
 
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) = callWithReceiver {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
@@ -159,10 +157,9 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
 
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_22_13) =
-        callWithReceiver {
-            tilstand.håndterKvalitetssikring(this, kvalitetssikring)
-        }
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_22_13) = callWithReceiver {
+        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
+    }
 
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) = callWithReceiver {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
@@ -172,9 +169,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
 
-    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_27_FørsteLedd) = callWithReceiver {
-        tilstand.håndterKvalitetssikring(this, kvalitetssikring)
-    }
+    internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_27_FørsteLedd) =
+        callWithReceiver { tilstand.håndterKvalitetssikring(this, kvalitetssikring) }
 
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) = callWithReceiver {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
@@ -183,6 +179,66 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     protected fun toDto(): VilkårsvurderingModellApi = callWithReceiver {
         tilstand.toDto(this)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: MedlemskapYrkesskadeModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_8_48ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_2ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_3ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_4FørsteLeddModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_5ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_5YrkesskadeModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_6ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_14ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_19ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_22ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_27FørsteLeddModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_11_29ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
+    }
+
+    internal fun gjenopprettTilstand(modellApi: Paragraf_22_13ModellApi) = callWithReceiver {
+        tilstand.gjenopprettTilstand(this, modellApi)
     }
 
     internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
@@ -212,7 +268,91 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun gjenopprettTilstand(
             vilkårsvurdering: PARAGRAF,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_8_48ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_2ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_3ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_4FørsteLeddModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_5ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_5YrkesskadeModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_6ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_14ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_19ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_22ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_27FørsteLeddModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_11_29ModellApi
+        ) {
+        }
+
+        internal open fun gjenopprettTilstand(
+            vilkårsvurdering: PARAGRAF,
+            modellApi: Paragraf_22_13ModellApi
         ) {
         }
 
@@ -544,86 +684,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal companion object {
         private val log = LoggerFactory.getLogger("Vilkårsvurdering")
-
         internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
-
-        internal fun gjenopprett(vilkårsvurderingModellApi: VilkårsvurderingModellApi) =
-            when (enumValueOf<Paragraf>(vilkårsvurderingModellApi.paragraf)) {
-                Paragraf.MEDLEMSKAP_YRKESSKADE ->
-                    gjenopprett(vilkårsvurderingModellApi, MedlemskapYrkesskade.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_8_48 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_8_48.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_2 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_2.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_3 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_3.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_4 -> {
-                    vilkårsvurderingModellApi.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
-                        when (ledd) {
-                            listOf(Ledd.LEDD_1) ->
-                                gjenopprett(vilkårsvurderingModellApi, Paragraf_11_4FørsteLedd.Companion::gjenopprett)
-
-                            listOf(Ledd.LEDD_2, Ledd.LEDD_3) ->
-                                gjenopprett(
-                                    vilkårsvurderingModellApi,
-                                    Paragraf_11_4AndreOgTredjeLedd.Companion::gjenopprett
-                                )
-
-                            else -> null.also { log.warn("Paragraf ${vilkårsvurderingModellApi.paragraf} Ledd $ledd not implemented") }
-                        }
-                    }
-                }
-
-                Paragraf.PARAGRAF_11_5 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_5.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_5_YRKESSKADE ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_5_yrkesskade.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_6 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_6.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_22_13 -> {
-                    vilkårsvurderingModellApi.ledd.map<String, Ledd> { enumValueOf(it) }.let { ledd ->
-                        when (ledd) {
-                            listOf(Ledd.LEDD_1) ->
-                                gjenopprett(vilkårsvurderingModellApi, Paragraf_22_13.Companion::gjenopprett)
-
-                            else -> null.also { log.warn("Paragraf ${vilkårsvurderingModellApi.paragraf} Ledd $ledd not implemented") }
-                        }
-                    }
-                }
-
-                Paragraf.PARAGRAF_11_14 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_14.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_19 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_19.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_22 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_22.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_27 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_27_FørsteLedd.Companion::gjenopprett)
-
-                Paragraf.PARAGRAF_11_29 ->
-                    gjenopprett(vilkårsvurderingModellApi, Paragraf_11_29.Companion::gjenopprett)
-            }
-
-        private inline fun <PARAGRAF : Vilkårsvurdering<PARAGRAF>> gjenopprett(
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi,
-            gjenopprettParagraf: (UUID, Tilstand.Tilstandsnavn) -> PARAGRAF
-        ): PARAGRAF {
-            val paragraf = gjenopprettParagraf(
-                vilkårsvurderingModellApi.vilkårsvurderingsid,
-                enumValueOf(vilkårsvurderingModellApi.tilstand)
-            )
-            paragraf.tilstand.gjenopprettTilstand(paragraf, vilkårsvurderingModellApi)
-            return paragraf
-        }
     }
 }

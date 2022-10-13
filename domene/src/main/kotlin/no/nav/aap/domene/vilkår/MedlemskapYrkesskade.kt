@@ -109,12 +109,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -151,12 +150,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -178,12 +176,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -220,12 +217,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -247,12 +243,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -289,12 +284,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -316,12 +310,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -358,12 +351,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -385,12 +377,11 @@ internal class MedlemskapYrkesskade private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: MedlemskapYrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: MedlemskapYrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as MedlemskapYrkesskadeModellApi
-            vilkårsvurdering.settMaskinellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settMaskinellLøsning(modellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 

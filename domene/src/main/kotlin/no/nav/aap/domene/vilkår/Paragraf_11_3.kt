@@ -70,11 +70,10 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_3,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_3ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_3ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -105,11 +104,10 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_3,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_3ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_3ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -129,11 +127,10 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_3,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_3ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_3ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -164,11 +161,10 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_3,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_3ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_3ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -188,11 +184,10 @@ internal class Paragraf_11_3 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_3,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_11_3ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_3ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 

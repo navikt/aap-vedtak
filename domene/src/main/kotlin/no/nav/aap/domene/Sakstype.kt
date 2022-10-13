@@ -9,6 +9,7 @@ import no.nav.aap.domene.visitor.SakstypeVisitor
 import no.nav.aap.domene.visitor.YrkesskadeVisitor
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.SakstypeModellApi
+import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
@@ -84,7 +85,7 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_5(),
                     Paragraf_11_6(),
                     Paragraf_11_19(),
-                    Paragraf_11_27_FørsteLedd(),
+                    Paragraf_11_27FørsteLedd(),
                     // TODO: Implementere 11-29 ordentlig
 //                    Paragraf_11_29(),
                     Paragraf_22_13(),
@@ -139,7 +140,7 @@ internal abstract class Sakstype private constructor(
                     Paragraf_11_3(),
                     Paragraf_11_4FørsteLedd(),
                     Paragraf_11_4AndreOgTredjeLedd(),
-                    Paragraf_11_5_yrkesskade(),
+                    Paragraf_11_5Yrkesskade(),
                     Paragraf_11_6(),
                     Paragraf_22_13(),
                     Paragraf_11_22(),
@@ -213,7 +214,7 @@ internal abstract class Sakstype private constructor(
 
         internal fun gjenopprett(sakstypeModellApi: SakstypeModellApi): Sakstype {
             val vilkårsvurderinger =
-                sakstypeModellApi.vilkårsvurderinger.mapNotNull(Vilkårsvurdering.Companion::gjenopprett).toMutableList()
+                sakstypeModellApi.vilkårsvurderinger.map(VilkårsvurderingModellApi::gjenopprett).toMutableList()
             return when (enumValueOf<Type>(sakstypeModellApi.type)) {
                 Type.STANDARD -> Standard.gjenopprettStandard(vilkårsvurderinger)
                 Type.YRKESSKADE -> Yrkesskade.gjenopprettYrkesskade(vilkårsvurderinger)

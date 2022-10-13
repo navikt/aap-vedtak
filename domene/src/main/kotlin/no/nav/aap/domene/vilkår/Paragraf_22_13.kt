@@ -81,11 +81,10 @@ internal class Paragraf_22_13 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_22_13,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -125,11 +124,10 @@ internal class Paragraf_22_13 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_22_13,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -158,11 +156,10 @@ internal class Paragraf_22_13 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_22_13,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -191,11 +188,10 @@ internal class Paragraf_22_13 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_22_13,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_22_13ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 

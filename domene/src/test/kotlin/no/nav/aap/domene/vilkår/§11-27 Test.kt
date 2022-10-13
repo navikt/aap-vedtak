@@ -19,7 +19,7 @@ internal class `§11-27 Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_27_FørsteLedd()
+        val vilkår = Paragraf_11_27FørsteLedd()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -46,7 +46,7 @@ internal class `§11-27 Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_27_FørsteLedd()
+        val vilkår = Paragraf_11_27FørsteLedd()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -73,7 +73,7 @@ internal class `§11-27 Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_27_FørsteLedd()
+        val vilkår = Paragraf_11_27FørsteLedd()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -100,7 +100,7 @@ internal class `§11-27 Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_27_FørsteLedd()
+        val vilkår = Paragraf_11_27FørsteLedd()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -138,7 +138,7 @@ internal class `§11-27 Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_27_FørsteLedd()
+        val vilkår = Paragraf_11_27FørsteLedd()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -186,7 +186,7 @@ internal class `§11-27 Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_27_FørsteLedd()
+        val vilkår = Paragraf_11_27FørsteLedd()
 
         val søknad = Søknad(personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -227,22 +227,22 @@ internal class `§11-27 Test` {
         assertTrue(hendelse.behov().isEmpty())
     }
 
-    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_27_FørsteLedd) {
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_27FørsteLedd) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 
     private fun assertTilstand(
         tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
-        vilkårsvurdering: Paragraf_11_27_FørsteLedd
+        vilkårsvurdering: Paragraf_11_27FørsteLedd
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
     }
 
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_27_FørsteLedd) {
+    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_27FørsteLedd) {
         assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_27_FørsteLedd) {
+    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_27FørsteLedd) {
         assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 

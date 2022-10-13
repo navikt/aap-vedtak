@@ -82,11 +82,10 @@ internal class Paragraf_8_48 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_8_48,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_8_48ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_8_48ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -116,11 +115,10 @@ internal class Paragraf_8_48 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_8_48,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_8_48ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_8_48ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -160,11 +158,10 @@ internal class Paragraf_8_48 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_8_48,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_8_48ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_8_48ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -193,11 +190,10 @@ internal class Paragraf_8_48 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_8_48,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_8_48ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_8_48ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -218,11 +214,10 @@ internal class Paragraf_8_48 private constructor(
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_8_48,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            modellApi: Paragraf_8_48ModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_8_48ModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 

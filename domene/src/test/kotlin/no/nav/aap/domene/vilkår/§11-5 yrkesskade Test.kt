@@ -23,7 +23,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -46,7 +46,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -69,7 +69,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -89,7 +89,7 @@ internal class `§11-5 yrkesskade Test` {
 
     @Test
     fun `Hvis søknad ikke er håndtert, er vilkåret hverken oppfylt eller ikke-oppfylt`() {
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         assertThrows<UlovligTilstandException> { listOf(vilkår).toDto() }
     }
@@ -99,7 +99,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -113,7 +113,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -139,7 +139,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -165,7 +165,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -191,7 +191,7 @@ internal class `§11-5 yrkesskade Test` {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
-        val vilkår = Paragraf_11_5_yrkesskade()
+        val vilkår = Paragraf_11_5Yrkesskade()
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
@@ -212,22 +212,22 @@ internal class `§11-5 yrkesskade Test` {
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.SØKNAD_MOTTATT, vilkår)
     }
 
-    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_5_yrkesskade) {
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_5Yrkesskade) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 
     private fun assertTilstand(
         tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
-        vilkårsvurdering: Paragraf_11_5_yrkesskade
+        vilkårsvurdering: Paragraf_11_5Yrkesskade
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
     }
 
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_5_yrkesskade) {
+    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_5Yrkesskade) {
         assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_5_yrkesskade) {
+    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_5Yrkesskade) {
         assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

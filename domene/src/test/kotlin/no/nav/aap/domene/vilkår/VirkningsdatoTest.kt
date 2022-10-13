@@ -23,7 +23,7 @@ internal class VirkningsdatoTest {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
         val vilkår8_48 = Paragraf_8_48()
-        val vilkår11_27 = Paragraf_11_27_FørsteLedd()
+        val vilkår11_27 = Paragraf_11_27FørsteLedd()
         val vilkår22_13 = Paragraf_22_13()
 
         val søknad = Søknad(personident, fødselsdato)
@@ -83,7 +83,7 @@ internal class VirkningsdatoTest {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
         val vilkår8_48 = Paragraf_8_48()
-        val vilkår11_27 = Paragraf_11_27_FørsteLedd()
+        val vilkår11_27 = Paragraf_11_27FørsteLedd()
         val vilkår22_13 = Paragraf_22_13()
 
         val søknad = Søknad(personident, fødselsdato)
@@ -143,7 +143,7 @@ internal class VirkningsdatoTest {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
         val vilkår8_48 = Paragraf_8_48()
-        val vilkår11_27 = Paragraf_11_27_FørsteLedd()
+        val vilkår11_27 = Paragraf_11_27FørsteLedd()
         val vilkår22_13 = Paragraf_22_13()
 
         val søknad = Søknad(personident, fødselsdato)

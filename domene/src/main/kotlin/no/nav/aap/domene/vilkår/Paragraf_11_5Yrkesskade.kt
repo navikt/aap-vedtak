@@ -2,25 +2,25 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.vilkår.Paragraf_11_5_yrkesskade.SøknadMottatt
+import no.nav.aap.domene.vilkår.Paragraf_11_5Yrkesskade.SøknadMottatt
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade.Companion.toDto
 import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade.Companion.toDto
 import no.nav.aap.hendelse.Søknad
-import no.nav.aap.hendelse.behov.Behov_11_5_yrkesskade
+import no.nav.aap.hendelse.behov.Behov_11_5Yrkesskade
 import no.nav.aap.modellapi.Paragraf_11_5YrkesskadeModellApi
 import no.nav.aap.modellapi.Utfall
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
 import java.util.*
 
-internal class Paragraf_11_5_yrkesskade private constructor(
+internal class Paragraf_11_5Yrkesskade private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_5_yrkesskade>
+    tilstand: Tilstand<Paragraf_11_5Yrkesskade>
 ) :
-    Vilkårsvurdering<Paragraf_11_5_yrkesskade>(
+    Vilkårsvurdering<Paragraf_11_5Yrkesskade>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_5_YRKESSKADE,
         Ledd.LEDD_1 + Ledd.LEDD_2,
@@ -31,11 +31,11 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
-    override fun <T> callWithReceiver(block: Paragraf_11_5_yrkesskade.() -> T) = this.block()
+    override fun <T> callWithReceiver(block: Paragraf_11_5Yrkesskade.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_5_yrkesskade>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_5Yrkesskade>() {
         override fun håndterSøknad(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
             søknad: Søknad,
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
@@ -43,17 +43,17 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             vilkårsvurdering.tilstand(SøknadMottatt, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_5_yrkesskade>() {
-        override fun onEntry(vilkårsvurdering: Paragraf_11_5_yrkesskade, hendelse: Hendelse) {
-            hendelse.opprettBehov(Behov_11_5_yrkesskade())
+    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_5Yrkesskade>() {
+        override fun onEntry(vilkårsvurdering: Paragraf_11_5Yrkesskade, hendelse: Hendelse) {
+            hendelse.opprettBehov(Behov_11_5Yrkesskade())
         }
 
         override fun håndterLøsning(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
             løsning: LøsningParagraf_11_5Yrkesskade
         ) {
             vilkårsvurdering.løsninger.add(løsning)
@@ -64,7 +64,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = null,
@@ -79,18 +79,17 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
+            modellApi: Paragraf_11_5YrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_5_yrkesskade>() {
+    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_5Yrkesskade>() {
         override fun håndterKvalitetssikring(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
             kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
@@ -100,7 +99,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -115,17 +114,16 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
+            modellApi: Paragraf_11_5YrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5_yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -140,18 +138,17 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
+            modellApi: Paragraf_11_5YrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_5_yrkesskade>() {
+    object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_5Yrkesskade>() {
         override fun håndterKvalitetssikring(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
             kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade
         ) {
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
@@ -161,7 +158,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -176,17 +173,16 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
+            modellApi: Paragraf_11_5YrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
-    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5_yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5_yrkesskade): VilkårsvurderingModellApi =
+    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
@@ -201,12 +197,11 @@ internal class Paragraf_11_5_yrkesskade private constructor(
             )
 
         override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5_yrkesskade,
-            vilkårsvurderingModellApi: VilkårsvurderingModellApi
+            vilkårsvurdering: Paragraf_11_5Yrkesskade,
+            modellApi: Paragraf_11_5YrkesskadeModellApi
         ) {
-            vilkårsvurderingModellApi as Paragraf_11_5YrkesskadeModellApi
-            vilkårsvurdering.settManuellLøsning(vilkårsvurderingModellApi)
-            vilkårsvurdering.settKvalitetssikring(vilkårsvurderingModellApi)
+            vilkårsvurdering.settManuellLøsning(modellApi)
+            vilkårsvurdering.settKvalitetssikring(modellApi)
         }
     }
 
@@ -238,7 +233,7 @@ internal class Paragraf_11_5_yrkesskade private constructor(
 
     internal companion object {
         internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
-            Paragraf_11_5_yrkesskade(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
+            Paragraf_11_5Yrkesskade(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

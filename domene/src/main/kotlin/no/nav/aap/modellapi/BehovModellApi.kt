@@ -35,7 +35,7 @@ interface BehovModellApi {
         }
     }
 
-    class Behov_11_5_YrkesskadeModellApi(private val ident: String) : BehovModellApi {
+    class Behov_11_5YrkesskadeModellApi(private val ident: String) : BehovModellApi {
         override fun accept(visitor: LytterModellApi) {
             visitor.behov_11_5(ident)
         }
