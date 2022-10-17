@@ -14,6 +14,26 @@ abstract class VilkårsvurderingModellApi {
     abstract val vurdertMaskinelt: Boolean
 
     internal abstract fun gjenopprett(): Vilkårsvurdering<*>
+
+    abstract fun accept(visitor: VilkårsvurderingModellApiVisitor)
+}
+
+interface VilkårsvurderingModellApiVisitor {
+    fun visitMedlemskapYrkesskade(modellApi: MedlemskapYrkesskadeModellApi)
+    fun visitParagraf_8_48(modellApi: Paragraf_8_48ModellApi)
+    fun visitParagraf_11_2(modellApi: Paragraf_11_2ModellApi)
+    fun visitParagraf_11_3(modellApi: Paragraf_11_3ModellApi)
+    fun visitParagraf_11_4FørsteLedd(modellApi: Paragraf_11_4FørsteLeddModellApi)
+    fun visitParagraf_11_4AndreOgTredjeLedd(modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi)
+    fun visitParagraf_11_5(modellApi: Paragraf_11_5ModellApi)
+    fun visitParagraf_11_5Yrkesskade(modellApi: Paragraf_11_5YrkesskadeModellApi)
+    fun visitParagraf_11_6(modellApi: Paragraf_11_6ModellApi)
+    fun visitParagraf_11_14(modellApi: Paragraf_11_14ModellApi)
+    fun visitParagraf_11_19(modellApi: Paragraf_11_19ModellApi)
+    fun visitParagraf_11_22(modellApi: Paragraf_11_22ModellApi)
+    fun visitParagraf_11_27FørsteLedd(modellApi: Paragraf_11_27FørsteLeddModellApi)
+    fun visitParagraf_11_29(modellApi: Paragraf_11_29ModellApi)
+    fun visitParagraf_22_13(modellApi: Paragraf_22_13ModellApi)
 }
 
 data class MedlemskapYrkesskadeModellApi(
@@ -33,6 +53,10 @@ data class MedlemskapYrkesskadeModellApi(
         val medlemskapYrkesskade = MedlemskapYrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         medlemskapYrkesskade.gjenopprettTilstand(this)
         return medlemskapYrkesskade
+    }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitMedlemskapYrkesskade(this)
     }
 }
 
@@ -54,6 +78,10 @@ data class Paragraf_8_48ModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_8_48(this)
+    }
 }
 
 data class Paragraf_11_2ModellApi(
@@ -74,6 +102,10 @@ data class Paragraf_11_2ModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_2(this)
+    }
 }
 
 data class Paragraf_11_3ModellApi(
@@ -93,6 +125,10 @@ data class Paragraf_11_3ModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_3(this)
+    }
 }
 
 data class Paragraf_11_4FørsteLeddModellApi(
@@ -109,6 +145,10 @@ data class Paragraf_11_4FørsteLeddModellApi(
         val paragraf = Paragraf_11_4FørsteLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         paragraf.gjenopprettTilstand(this)
         return paragraf
+    }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_4FørsteLedd(this)
     }
 }
 
@@ -129,6 +169,10 @@ data class Paragraf_11_4AndreOgTredjeLeddModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_4AndreOgTredjeLedd(this)
+    }
 }
 
 data class Paragraf_11_5ModellApi(
@@ -147,6 +191,10 @@ data class Paragraf_11_5ModellApi(
         val paragraf = Paragraf_11_5.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         paragraf.gjenopprettTilstand(this)
         return paragraf
+    }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_5(this)
     }
 }
 
@@ -167,6 +215,10 @@ data class Paragraf_11_5YrkesskadeModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_5Yrkesskade(this)
+    }
 }
 
 data class Paragraf_11_6ModellApi(
@@ -186,6 +238,10 @@ data class Paragraf_11_6ModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_6(this)
+    }
 }
 
 data class Paragraf_11_14ModellApi(
@@ -202,6 +258,10 @@ data class Paragraf_11_14ModellApi(
         val paragraf = Paragraf_11_14.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         paragraf.gjenopprettTilstand(this)
         return paragraf
+    }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_14(this)
     }
 }
 
@@ -222,6 +282,10 @@ data class Paragraf_11_19ModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_19(this)
+    }
 }
 
 data class Paragraf_11_22ModellApi(
@@ -240,6 +304,10 @@ data class Paragraf_11_22ModellApi(
         val paragraf = Paragraf_11_22.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         paragraf.gjenopprettTilstand(this)
         return paragraf
+    }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_22(this)
     }
 }
 
@@ -261,6 +329,10 @@ data class Paragraf_11_27FørsteLeddModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_27FørsteLedd(this)
+    }
 }
 
 data class Paragraf_11_29ModellApi(
@@ -280,6 +352,10 @@ data class Paragraf_11_29ModellApi(
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_11_29(this)
+    }
 }
 
 data class Paragraf_22_13ModellApi(
@@ -298,5 +374,9 @@ data class Paragraf_22_13ModellApi(
         val paragraf = Paragraf_22_13.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         paragraf.gjenopprettTilstand(this)
         return paragraf
+    }
+
+    override fun accept(visitor: VilkårsvurderingModellApiVisitor) {
+        visitor.visitParagraf_22_13(this)
     }
 }

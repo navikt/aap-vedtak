@@ -20,54 +20,107 @@ private fun SakModellApi.toJson() = Sak(
     vedtak = vedtak?.toJson()
 )
 
-private fun SakstypeModellApi.toJson() = Sakstype(
-    type = type,
-    aktiv = aktiv,
-    medlemskapYrkesskade =
-    vilkårsvurderinger.filterIsInstance<MedlemskapYrkesskadeModellApi>().firstOrNull()?.toJson(),
-    paragraf_8_48 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_8_48ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_2 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_2ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_3 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_3ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_4FørsteLedd =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_4FørsteLeddModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_4AndreOgTredjeLedd =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_4AndreOgTredjeLeddModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_5 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_5ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_5Yrkesskade =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_5YrkesskadeModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_6 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_6ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_14 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_14ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_19 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_19ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_22 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_22ModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_27FørsteLedd =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_27FørsteLeddModellApi>().firstOrNull()?.toJson(),
-    paragraf_11_29 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_11_29ModellApi>().firstOrNull()?.toJson(),
-    paragraf_22_13 =
-    vilkårsvurderinger.filterIsInstance<Paragraf_22_13ModellApi>().firstOrNull()?.toJson()
-)
+private fun SakstypeModellApi.toJson(): Sakstype {
+    val visitor = object : VilkårsvurderingModellApiVisitor {
+        var medlemskapYrkesskade: MedlemskapYrkesskade? = null
+        var paragraf_8_48: Paragraf_8_48? = null
+        var paragraf_11_2: Paragraf_11_2? = null
+        var paragraf_11_3: Paragraf_11_3? = null
+        var paragraf_11_4FørsteLedd: Paragraf_11_4FørsteLedd? = null
+        var paragraf_11_4AndreOgTredjeLedd: Paragraf_11_4AndreOgTredjeLedd? = null
+        var paragraf_11_5: Paragraf_11_5? = null
+        var paragraf_11_5Yrkesskade: Paragraf_11_5Yrkesskade? = null
+        var paragraf_11_6: Paragraf_11_6? = null
+        var paragraf_11_14: Paragraf_11_14? = null
+        var paragraf_11_19: Paragraf_11_19? = null
+        var paragraf_11_22: Paragraf_11_22? = null
+        var paragraf_11_27FørsteLedd: Paragraf_11_27FørsteLedd? = null
+        var paragraf_11_29: Paragraf_11_29? = null
+        var paragraf_22_13: Paragraf_22_13? = null
 
-private fun Paragraf_8_48ModellApi.toJson() = Paragraf_8_48(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall.name,
-    vurdertMaskinelt = vurdertMaskinelt,
-    løsning_8_48_maskinell = løsning_8_48_maskinell.map(SykepengedagerModellApi::toJson),
-    løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13ModellApi::toJson),
-    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13ModellApi::toJson),
-)
+        override fun visitMedlemskapYrkesskade(modellApi: MedlemskapYrkesskadeModellApi) {
+            medlemskapYrkesskade = modellApi.toJson()
+        }
+
+        override fun visitParagraf_8_48(modellApi: Paragraf_8_48ModellApi) {
+            paragraf_8_48 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_2(modellApi: Paragraf_11_2ModellApi) {
+            paragraf_11_2 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_3(modellApi: Paragraf_11_3ModellApi) {
+            paragraf_11_3 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_4FørsteLedd(modellApi: Paragraf_11_4FørsteLeddModellApi) {
+            paragraf_11_4FørsteLedd = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_4AndreOgTredjeLedd(modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi) {
+            paragraf_11_4AndreOgTredjeLedd = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_5(modellApi: Paragraf_11_5ModellApi) {
+            paragraf_11_5 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_5Yrkesskade(modellApi: Paragraf_11_5YrkesskadeModellApi) {
+            paragraf_11_5Yrkesskade = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_6(modellApi: Paragraf_11_6ModellApi) {
+            paragraf_11_6 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_14(modellApi: Paragraf_11_14ModellApi) {
+            paragraf_11_14 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_19(modellApi: Paragraf_11_19ModellApi) {
+            paragraf_11_19 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_22(modellApi: Paragraf_11_22ModellApi) {
+            paragraf_11_22 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_27FørsteLedd(modellApi: Paragraf_11_27FørsteLeddModellApi) {
+            paragraf_11_27FørsteLedd = modellApi.toJson()
+        }
+
+        override fun visitParagraf_11_29(modellApi: Paragraf_11_29ModellApi) {
+            paragraf_11_29 = modellApi.toJson()
+        }
+
+        override fun visitParagraf_22_13(modellApi: Paragraf_22_13ModellApi) {
+            paragraf_22_13 = modellApi.toJson()
+        }
+    }
+
+    vilkårsvurderinger.forEach { it.accept(visitor) }
+
+    return Sakstype(
+        type = type,
+        aktiv = aktiv,
+        medlemskapYrkesskade = visitor.medlemskapYrkesskade,
+        paragraf_8_48 = visitor.paragraf_8_48,
+        paragraf_11_2 = visitor.paragraf_11_2,
+        paragraf_11_3 = visitor.paragraf_11_3,
+        paragraf_11_4FørsteLedd = visitor.paragraf_11_4FørsteLedd,
+        paragraf_11_4AndreOgTredjeLedd = visitor.paragraf_11_4AndreOgTredjeLedd,
+        paragraf_11_5 = visitor.paragraf_11_5,
+        paragraf_11_5Yrkesskade = visitor.paragraf_11_5Yrkesskade,
+        paragraf_11_6 = visitor.paragraf_11_6,
+        paragraf_11_14 = visitor.paragraf_11_14,
+        paragraf_11_19 = visitor.paragraf_11_19,
+        paragraf_11_22 = visitor.paragraf_11_22,
+        paragraf_11_27FørsteLedd = visitor.paragraf_11_27FørsteLedd,
+        paragraf_11_29 = visitor.paragraf_11_29,
+        paragraf_22_13 = visitor.paragraf_22_13,
+    )
+}
 
 private fun MedlemskapYrkesskadeModellApi.toJson() = MedlemskapYrkesskade(
     vilkårsvurderingsid = vilkårsvurderingsid,
@@ -84,6 +137,20 @@ private fun MedlemskapYrkesskadeModellApi.toJson() = MedlemskapYrkesskade(
         .map(LøsningManuellMedlemskapYrkesskadeModellApi::toJson),
     kvalitetssikringer_medlemskap_yrkesskade = kvalitetssikringer_medlemskap_yrkesskade
         .map(KvalitetssikringMedlemskapYrkesskadeModellApi::toJson),
+)
+
+private fun Paragraf_8_48ModellApi.toJson() = Paragraf_8_48(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall.name,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_8_48_maskinell = løsning_8_48_maskinell.map(SykepengedagerModellApi::toJson),
+    løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13ModellApi::toJson),
+    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13ModellApi::toJson),
 )
 
 private fun Paragraf_11_2ModellApi.toJson() = Paragraf_11_2(
