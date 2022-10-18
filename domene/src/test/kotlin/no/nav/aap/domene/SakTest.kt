@@ -10,6 +10,7 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
+import no.nav.aap.hendelse.innstilling.InnstillingParagraf_11_6
 import no.nav.aap.januar
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import no.nav.aap.oktober
@@ -129,6 +130,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -235,6 +246,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -401,6 +422,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -628,6 +659,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -868,6 +909,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -1134,6 +1185,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -1363,6 +1424,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -1586,6 +1657,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -1812,6 +1893,16 @@ internal class SakTest {
         )
         assertTilstand("SØKNAD_MOTTATT", sak)
 
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         sak.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -2033,6 +2124,10 @@ internal class SakTest {
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_5) {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Sak.håndterInnstilling(innstilling: InnstillingParagraf_11_6) {
+        håndterLøsning(innstilling, Vilkårsvurdering<*>::håndterInnstilling)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_6) {

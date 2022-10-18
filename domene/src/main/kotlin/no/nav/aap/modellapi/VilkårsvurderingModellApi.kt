@@ -230,6 +230,7 @@ data class Paragraf_11_6ModellApi(
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
+    val innstillinger_11_6: List<InnstillingParagraf_11_6ModellApi>,
     val løsning_11_6_manuell: List<LøsningParagraf_11_6ModellApi>,
     val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6ModellApi>,
 ) : VilkårsvurderingModellApi() {

@@ -162,6 +162,7 @@ private fun Paragraf_11_6.toModellApi() = Paragraf_11_6ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
+    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6::toModellApi),
     løsning_11_6_manuell = løsning_11_6_manuell.map(LøsningParagraf_11_6::toModellApi),
     kvalitetssikringer_11_6 = kvalitetssikringer_11_6.map(KvalitetssikringParagraf_11_6::toModellApi),
 )
@@ -241,6 +242,15 @@ private fun Paragraf_22_13.toModellApi() = Paragraf_22_13ModellApi(
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toModellApi),
     kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toModellApi),
+)
+
+private fun InnstillingParagraf_11_6.toModellApi() = InnstillingParagraf_11_6ModellApi(
+    innstillingId = innstillingId,
+    vurdertAv = vurdertAv,
+    tidspunktForVurdering = tidspunktForVurdering,
+    harBehovForBehandling = harBehovForBehandling,
+    harBehovForTiltak = harBehovForTiltak,
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toModellApi() = LøsningMaskinellMedlemskapYrkesskadeModellApi(

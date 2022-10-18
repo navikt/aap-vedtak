@@ -9,6 +9,10 @@ import no.nav.aap.modellapi.SøkerModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
+internal fun StreamsBuilder.manuellInnstillingStream(søkere: KTable<String, SøkereKafkaDto>) {
+    stream(søkere, Topics.innstilling_11_6, "innstilling-11-6", Innstilling_11_6::håndter)
+}
+
 internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, SøkereKafkaDto>) {
     stream(søkere, Topics.manuell_11_2, "manuell-11-2", Løsning_11_2_manuell::håndter)
     stream(søkere, Topics.manuell_11_3, "manuell-11-3", Løsning_11_3_manuell::håndter)

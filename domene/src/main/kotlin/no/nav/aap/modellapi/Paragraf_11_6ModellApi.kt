@@ -5,8 +5,50 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_6
 import no.nav.aap.hendelse.LøsningParagraf_11_6
 import no.nav.aap.hendelse.behov.Behov.Companion.toDto
+import no.nav.aap.hendelse.innstilling.InnstillingParagraf_11_6
 import java.time.LocalDateTime
 import java.util.*
+
+data class InnstillingParagraf_11_6ModellApi(
+    val innstillingId: UUID,
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val harBehovForBehandling: Boolean,
+    val harBehovForTiltak: Boolean,
+    val harMulighetForÅKommeIArbeid: Boolean
+) {
+
+    constructor(
+        vurdertAv: String,
+        tidspunktForVurdering: LocalDateTime,
+        harBehovForBehandling: Boolean,
+        harBehovForTiltak: Boolean,
+        harMulighetForÅKommeIArbeid: Boolean
+    ) : this(
+        innstillingId = UUID.randomUUID(),
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        harBehovForBehandling = harBehovForBehandling,
+        harBehovForTiltak = harBehovForTiltak,
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    )
+
+    fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
+        val modellSøker = Søker.gjenopprett(søker)
+        val løsning = toInnstilling()
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterInnstilling)
+        return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
+    }
+
+    private fun toInnstilling() = InnstillingParagraf_11_6(
+        innstillingId = innstillingId,
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        harBehovForBehandling = harBehovForBehandling,
+        harBehovForTiltak = harBehovForTiltak,
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    )
+}
 
 data class LøsningParagraf_11_6ModellApi(
     val løsningId: UUID,

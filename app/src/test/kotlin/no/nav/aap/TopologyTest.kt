@@ -34,6 +34,7 @@ internal class ApiTest {
             val søknadTopic = kafka.inputTopic(Topics.søknad)
             val medlemTopic = kafka.inputTopic(Topics.medlem)
             val medlemOutputTopic = kafka.outputTopic(Topics.medlem)
+            val innstilling_11_6_Topic = kafka.inputTopic(Topics.innstilling_11_6)
             val manuell_11_3_Topic = kafka.inputTopic(Topics.manuell_11_3)
             val manuell_11_5_Topic = kafka.inputTopic(Topics.manuell_11_5)
             val manuell_11_6_Topic = kafka.inputTopic(Topics.manuell_11_6)
@@ -105,6 +106,15 @@ internal class ApiTest {
                     tidspunktForVurdering = tidspunktForVurdering,
                     kravOmNedsattArbeidsevneErOppfylt = true,
                     nedsettelseSkyldesSykdomEllerSkade = true
+                )
+            }
+            innstilling_11_6_Topic.produce(fnr) {
+                Innstilling_11_6(
+                    vurdertAv = "veileder",
+                    tidspunktForVurdering = tidspunktForVurdering,
+                    harBehovForBehandling = true,
+                    harBehovForTiltak = true,
+                    harMulighetForÅKommeIArbeid = true
                 )
             }
             manuell_11_6_Topic.produce(fnr) {

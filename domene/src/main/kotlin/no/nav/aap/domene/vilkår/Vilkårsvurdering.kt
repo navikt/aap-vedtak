@@ -3,6 +3,7 @@ package no.nav.aap.domene.vilkår
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
+import no.nav.aap.hendelse.innstilling.InnstillingParagraf_11_6
 import no.nav.aap.modellapi.*
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -104,6 +105,10 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) = callWithReceiver {
         tilstand.håndterLøsning(this, løsning)
+    }
+
+    internal fun håndterInnstilling(innstilling: InnstillingParagraf_11_6) = callWithReceiver {
+        tilstand.håndterInnstilling(this, innstilling)
     }
 
     internal fun håndterLøsning(løsning: LøsningParagraf_11_6) = callWithReceiver {
@@ -365,6 +370,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             vurderingsdato: LocalDate
         ) {
             log.info("Søknad skal ikke håndteres i tilstand $tilstandsnavn")
+        }
+
+        internal open fun håndterInnstilling(
+            vilkårsvurdering: PARAGRAF,
+            løsning: InnstillingParagraf_11_6
+        ) {
+            log.info("Innstilling skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(

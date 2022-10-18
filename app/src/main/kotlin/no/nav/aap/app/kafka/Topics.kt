@@ -18,6 +18,8 @@ object Topics {
     val sykepengedager = Topic("aap.sykepengedager.v1", JsonSerde.jackson<SykepengedagerKafkaDto>())
     val iverksettelseAvVedtak = Topic("aap.iverksettelse-av-vedtak.v1", JsonSerde.jackson<IverksettelseAvVedtakKafkaDto>())
 
+    val innstilling_11_6 = Topic("aap.innstilling.11-6.v1", JsonSerde.jackson<Innstilling_11_6>())
+
     val manuell_11_2 = Topic("aap.manuell.11-2.v1", JsonSerde.jackson<Løsning_11_2_manuell>())
     val manuell_11_3 = Topic("aap.manuell.11-3.v1", JsonSerde.jackson<Løsning_11_3_manuell>())
     val manuell_11_4 = Topic("aap.manuell.11-4.v1", JsonSerde.jackson<Løsning_11_4_ledd2_ledd3_manuell>())

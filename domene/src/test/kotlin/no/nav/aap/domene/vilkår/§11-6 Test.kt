@@ -6,6 +6,7 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_6
 import no.nav.aap.hendelse.LøsningParagraf_11_6
 import no.nav.aap.hendelse.Søknad
+import no.nav.aap.hendelse.innstilling.InnstillingParagraf_11_6
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNull
@@ -17,6 +18,30 @@ import java.util.*
 internal class `§11-6 Test` {
 
     @Test
+    fun `Hvis veileder manuelt har innstilt 11-6, settes vilkår til manuell vurdering trengs`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_6()
+
+        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
+        assertUtfall(Utfall.IKKE_VURDERT, vilkår)
+        assertIkkeKvalitetssikret(vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+    }
+
+    @Test
     fun `Hvis saksbehandler manuelt har oppfylt 11-6, settes vilkår til oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
@@ -25,8 +50,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -49,8 +84,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -73,8 +118,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -97,8 +152,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -121,8 +186,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "saksbehandler",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -145,8 +220,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -156,7 +241,8 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -173,8 +259,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -184,7 +280,8 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -201,8 +298,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
@@ -212,7 +319,8 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -229,8 +337,18 @@ internal class `§11-6 Test` {
 
         vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val innstilling = InnstillingParagraf_11_6(
+            innstillingId = UUID.randomUUID(),
+            vurdertAv = "veileder",
+            tidspunktForVurdering = LocalDateTime.now(),
+            harBehovForBehandling = true,
+            harBehovForTiltak = true,
+            harMulighetForÅKommeIArbeid = true
+        )
+        vilkår.håndterInnstilling(innstilling)
+
         val løsning = LøsningParagraf_11_6(
-            UUID.randomUUID(),
+            løsningId = UUID.randomUUID(),
             vurdertAv = "X",
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
@@ -240,7 +358,8 @@ internal class `§11-6 Test` {
 
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring = KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_6(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

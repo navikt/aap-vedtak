@@ -243,6 +243,7 @@ private fun Paragraf_11_6ModellApi.toJson() = Paragraf_11_6(
     tilstand = tilstand,
     utfall = utfall.name,
     vurdertMaskinelt = vurdertMaskinelt,
+    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6ModellApi::toJson),
     løsning_11_6_manuell = løsning_11_6_manuell.map(LøsningParagraf_11_6ModellApi::toJson),
     kvalitetssikringer_11_6 = kvalitetssikringer_11_6.map(KvalitetssikringParagraf_11_6ModellApi::toJson),
 )
@@ -322,6 +323,15 @@ private fun Paragraf_22_13ModellApi.toJson() = Paragraf_22_13(
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13ModellApi::toJson),
     kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13ModellApi::toJson),
+)
+
+private fun InnstillingParagraf_11_6ModellApi.toJson() = InnstillingParagraf_11_6(
+    innstillingId = innstillingId,
+    vurdertAv = vurdertAv,
+    tidspunktForVurdering = tidspunktForVurdering,
+    harBehovForBehandling = harBehovForBehandling,
+    harBehovForTiltak = harBehovForTiltak,
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskadeModellApi.toJson() = LøsningMaskinellMedlemskapYrkesskade(

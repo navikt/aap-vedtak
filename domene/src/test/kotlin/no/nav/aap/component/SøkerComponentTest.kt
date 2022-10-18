@@ -9,6 +9,7 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
+import no.nav.aap.hendelse.innstilling.InnstillingParagraf_11_6
 import no.nav.aap.januar
 import no.nav.aap.juli
 import no.nav.aap.modellapi.SøkerModellApi
@@ -351,6 +352,16 @@ internal class SøkerComponentTest {
                 )
             )
         )
+        søker.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true
+            )
+        )
         søker.håndterLøsning(
             LøsningParagraf_11_6(
                 løsningId = UUID.randomUUID(),
@@ -468,6 +479,18 @@ internal class SøkerComponentTest {
                         kravOmNedsattArbeidsevneErOppfylt = true,
                         nedsettelseSkyldesSykdomEllerSkade = true
                     )
+                )
+            )
+        }
+        medSøker {
+            håndterInnstilling(
+                InnstillingParagraf_11_6(
+                    innstillingId = UUID.randomUUID(),
+                    vurdertAv = "saksbehandler",
+                    tidspunktForVurdering = LocalDateTime.now(),
+                    harBehovForBehandling = true,
+                    harBehovForTiltak = true,
+                    harMulighetForÅKommeIArbeid = true
                 )
             )
         }
@@ -610,6 +633,10 @@ internal class SøkerComponentTest {
 
     private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_5) {
         håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+    }
+
+    private fun Søker.håndterInnstilling(innstilling: InnstillingParagraf_11_6) {
+        håndterLøsning(innstilling, Vilkårsvurdering<*>::håndterInnstilling)
     }
 
     private fun Søker.håndterLøsning(løsning: LøsningParagraf_11_6) {
