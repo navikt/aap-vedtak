@@ -17,20 +17,30 @@ internal class OppfyltVisitorTest {
     }
 
     @Test
-    fun `SøknadMottatt er hverken oppylt eller ikkeOppfylt`() {
+    fun `AvventerMaskinellVurdering er hverken oppylt eller ikkeOppfylt`() {
         val visitor = OppfyltVisitor()
 
-        visitor.visitSøknadMottatt()
+        visitor.visitAvventerMaskinellVurdering()
 
         assertFalse(visitor.erOppfylt)
         assertFalse(visitor.erIkkeOppfylt)
     }
 
     @Test
-    fun `ManuellVurderingTrengs er hverken oppylt eller ikkeOppfylt`() {
+    fun `AvventerInnstilling er hverken oppylt eller ikkeOppfylt`() {
         val visitor = OppfyltVisitor()
 
-        visitor.visitManuellVurderingTrengs()
+        visitor.visitAvventerInnstilling()
+
+        assertFalse(visitor.erOppfylt)
+        assertFalse(visitor.erIkkeOppfylt)
+    }
+
+    @Test
+    fun `AvventerManuellVurdering er hverken oppylt eller ikkeOppfylt`() {
+        val visitor = OppfyltVisitor()
+
+        visitor.visitAvventerManuellVurdering()
 
         assertFalse(visitor.erOppfylt)
         assertFalse(visitor.erIkkeOppfylt)

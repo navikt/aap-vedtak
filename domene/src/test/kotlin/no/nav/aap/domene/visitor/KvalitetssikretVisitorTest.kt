@@ -17,20 +17,30 @@ internal class KvalitetssikretVisitorTest {
     }
 
     @Test
-    fun `SøknadMottatt er hverken kvalitetssikret eller i kvalitetssikring`() {
+    fun `AvventerMaskinellVurdering er hverken kvalitetssikret eller i kvalitetssikring`() {
         val visitor = KvalitetssikretVisitor()
 
-        visitor.visitSøknadMottatt()
+        visitor.visitAvventerMaskinellVurdering()
 
         assertFalse(visitor.erKvalitetssikret)
         assertTrue(visitor.erIkkeIKvalitetssikring)
     }
 
     @Test
-    fun `ManuellVurderingTrengs er hverken kvalitetssikret eller i kvalitetssikring`() {
+    fun `AvventerInnstilling er hverken kvalitetssikret eller i kvalitetssikring`() {
         val visitor = KvalitetssikretVisitor()
 
-        visitor.visitManuellVurderingTrengs()
+        visitor.visitAvventerInnstilling()
+
+        assertFalse(visitor.erKvalitetssikret)
+        assertTrue(visitor.erIkkeIKvalitetssikring)
+    }
+
+    @Test
+    fun `AvventerManuellVurdering er hverken kvalitetssikret eller i kvalitetssikring`() {
+        val visitor = KvalitetssikretVisitor()
+
+        visitor.visitAvventerManuellVurdering()
 
         assertFalse(visitor.erKvalitetssikret)
         assertTrue(visitor.erIkkeIKvalitetssikring)
@@ -164,7 +174,7 @@ internal class KvalitetssikretVisitorTest {
         val visitor = KvalitetssikretVisitor()
 
         visitor.visitOppfyltMaskinelt()
-        visitor.visitSøknadMottatt()
+        visitor.visitAvventerManuellVurdering()
         visitor.visitOppfyltMaskinelt()
 
         assertTrue(visitor.erIkkeIKvalitetssikring)

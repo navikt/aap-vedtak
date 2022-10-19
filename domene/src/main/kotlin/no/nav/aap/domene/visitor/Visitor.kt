@@ -20,8 +20,9 @@ internal interface SakstypeVisitor : VilkårsvurderingVisitor {
 
 internal interface VilkårsvurderingVisitor {
     fun visitIkkeVurdert() {}
-    fun visitSøknadMottatt() {}
-    fun visitManuellVurderingTrengs() {}
+    fun visitAvventerMaskinellVurdering() {}
+    fun visitAvventerInnstilling() {}
+    fun visitAvventerManuellVurdering() {}
     fun visitOppfyltMaskinelt() {}
     fun visitOppfyltMaskineltKvalitetssikret() {}
     fun visitIkkeOppfyltMaskinelt() {}

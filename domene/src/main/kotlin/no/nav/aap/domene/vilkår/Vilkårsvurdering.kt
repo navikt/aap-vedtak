@@ -252,15 +252,14 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
     ) {
         enum class Tilstandsnavn {
             IKKE_VURDERT,
-            SØKNAD_MOTTATT,
-            MANUELL_VURDERING_TRENGS,
-            OPPFYLT_MASKINELT,
+            AVVENTER_MASKINELL_VURDERING,
+            AVVENTER_INNSTILLING,
+            AVVENTER_MANUELL_VURDERING,
             OPPFYLT_MASKINELT_KVALITETSSIKRET,
-            IKKE_OPPFYLT_MASKINELT,
             IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
-            OPPFYLT_MANUELT,
+            OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
             OPPFYLT_MANUELT_KVALITETSSIKRET,
-            IKKE_OPPFYLT_MANUELT,
+            IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
             IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
             IKKE_RELEVANT,
         }
@@ -578,32 +577,32 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class SøknadMottatt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.SØKNAD_MOTTATT,
+        internal abstract class AvventerMaskinellVurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.AVVENTER_MASKINELL_VURDERING,
             vurdertMaskinelt = false
         ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
-                visitor.visitSøknadMottatt()
+                visitor.visitAvventerMaskinellVurdering()
                 accept(vilkårsvurdering, visitor)
             }
         }
 
-        internal abstract class ManuellVurderingTrengs<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.MANUELL_VURDERING_TRENGS,
+        internal abstract class AvventerInnstilling<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.AVVENTER_INNSTILLING,
             vurdertMaskinelt = false
         ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
-                visitor.visitManuellVurderingTrengs()
+                visitor.visitAvventerInnstilling()
                 accept(vilkårsvurdering, visitor)
             }
         }
 
-        internal abstract class OppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT,
-            vurdertMaskinelt = true
+        internal abstract class AvventerManuellVurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.AVVENTER_MANUELL_VURDERING,
+            vurdertMaskinelt = false
         ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
-                visitor.visitOppfyltMaskinelt()
+                visitor.visitAvventerManuellVurdering()
                 accept(vilkårsvurdering, visitor)
             }
         }
@@ -619,16 +618,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeOppfyltMaskinelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT,
-            vurdertMaskinelt = true
-        ) {
-            final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
-                visitor.visitIkkeOppfyltMaskinelt()
-                accept(vilkårsvurdering, visitor)
-            }
-        }
-
         internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
             Tilstand<PARAGRAF>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
@@ -640,8 +629,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class OppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT,
+        internal abstract class OppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
             vurdertMaskinelt = false
         ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
@@ -661,8 +650,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeOppfyltManuelt<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT,
+        internal abstract class IkkeOppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
+            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
             vurdertMaskinelt = false
         ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {

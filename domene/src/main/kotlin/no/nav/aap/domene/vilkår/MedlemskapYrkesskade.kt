@@ -39,14 +39,14 @@ internal class MedlemskapYrkesskade private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+            vilkårsvurdering.tilstand(AvventerMaskinellVurdering, søknad)
         }
 
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<MedlemskapYrkesskade>() {
+    object AvventerMaskinellVurdering : Tilstand.AvventerMaskinellVurdering<MedlemskapYrkesskade>() {
         override fun onEntry(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {
             //send ut behov for innhenting av maskinell medlemskapsvurdering
             hendelse.opprettBehov(Behov_11_2())
@@ -58,9 +58,9 @@ internal class MedlemskapYrkesskade private constructor(
         ) {
             vilkårsvurdering.maskinelleLøsninger.add(løsning)
             when {
-                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskinelt, løsning)
-                løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskinelt, løsning)
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
+                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskineltKvalitetssikret, løsning)
+                løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskineltKvalitetssikret, løsning)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, løsning)
             }
         }
 
@@ -80,15 +80,15 @@ internal class MedlemskapYrkesskade private constructor(
             )
     }
 
-    object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<MedlemskapYrkesskade>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<MedlemskapYrkesskade>() {
         override fun håndterLøsning(
             vilkårsvurdering: MedlemskapYrkesskade,
             løsning: LøsningManuellMedlemskapYrkesskade
         ) {
             vilkårsvurdering.manuelleLøsninger.add(løsning)
             when {
-                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManuelt, løsning)
-                else -> vilkårsvurdering.tilstand(IkkeOppfyltManuelt, løsning)
+                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManueltAvventerKvalitetssikring, løsning)
+                else -> vilkårsvurdering.tilstand(IkkeOppfyltManueltAvventerKvalitetssikring, løsning)
             }
         }
 
@@ -101,47 +101,6 @@ internal class MedlemskapYrkesskade private constructor(
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.IKKE_VURDERT,
-                vurdertMaskinelt = vurdertMaskinelt,
-                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-            )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: MedlemskapYrkesskade,
-            modellApi: MedlemskapYrkesskadeModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.settManuellLøsning(modellApi)
-            vilkårsvurdering.settKvalitetssikring(modellApi)
-        }
-    }
-
-    object OppfyltMaskinelt : Tilstand.OppfyltMaskinelt<MedlemskapYrkesskade>() {
-        override fun håndterKvalitetssikring(
-            vilkårsvurdering: MedlemskapYrkesskade,
-            kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
-        ) {
-            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
-            when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
-                    OppfyltMaskineltKvalitetssikret,
-                    kvalitetssikring
-                )
-
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
-            }
-        }
-
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
-            MedlemskapYrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = "maskinell saksbehandling",
-                kvalitetssikretAv = null,
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
-                utfall = Utfall.OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
                 løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
                 løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
@@ -163,7 +122,7 @@ internal class MedlemskapYrkesskade private constructor(
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",
-                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
+                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
@@ -184,22 +143,7 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object IkkeOppfyltMaskinelt : Tilstand.IkkeOppfyltMaskinelt<MedlemskapYrkesskade>() {
-        override fun håndterKvalitetssikring(
-            vilkårsvurdering: MedlemskapYrkesskade,
-            kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
-        ) {
-            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
-            when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
-                    IkkeOppfyltMaskineltKvalitetssikret,
-                    kvalitetssikring
-                )
-
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
-            }
-        }
-
+    object IkkeOppfyltMaskineltKvalitetssikret : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
         override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
@@ -225,33 +169,7 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object IkkeOppfyltMaskineltKvalitetssikret : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
-            MedlemskapYrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = "maskinell saksbehandling",
-                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
-                utfall = Utfall.IKKE_OPPFYLT,
-                vurdertMaskinelt = vurdertMaskinelt,
-                løsning_medlemskap_yrkesskade_maskinell = vilkårsvurdering.maskinelleLøsninger.toDto(),
-                løsning_medlemskap_yrkesskade_manuell = vilkårsvurdering.manuelleLøsninger.toDto(),
-                kvalitetssikringer_medlemskap_yrkesskade = vilkårsvurdering.kvalitetssikringer.toDto(),
-            )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: MedlemskapYrkesskade,
-            modellApi: MedlemskapYrkesskadeModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.settManuellLøsning(modellApi)
-            vilkårsvurdering.settKvalitetssikring(modellApi)
-        }
-    }
-
-    object OppfyltManuelt : Tilstand.OppfyltManuelt<MedlemskapYrkesskade>() {
+    object OppfyltManueltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<MedlemskapYrkesskade>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: MedlemskapYrkesskade,
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
@@ -263,7 +181,7 @@ internal class MedlemskapYrkesskade private constructor(
                     kvalitetssikring
                 )
 
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -318,7 +236,7 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object IkkeOppfyltManuelt : Tilstand.IkkeOppfyltManuelt<MedlemskapYrkesskade>() {
+    object IkkeOppfyltManueltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<MedlemskapYrkesskade>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: MedlemskapYrkesskade,
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
@@ -330,7 +248,7 @@ internal class MedlemskapYrkesskade private constructor(
                     kvalitetssikring
                 )
 
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -424,15 +342,13 @@ internal class MedlemskapYrkesskade private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
-            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT -> OppfyltMaskinelt
+            Tilstand.Tilstandsnavn.AVVENTER_MASKINELL_VURDERING -> AvventerMaskinellVurdering
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> OppfyltMaskineltKvalitetssikret
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT -> IkkeOppfyltMaskinelt
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfyltMaskineltKvalitetssikret
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> OppfyltManuelt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltManueltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltManueltKvalitetssikret
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfyltManuelt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> IkkeOppfyltManueltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltManueltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_2")
         }

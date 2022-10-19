@@ -39,7 +39,7 @@ internal class `§22-13 Test` {
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
     @Test
@@ -71,7 +71,7 @@ internal class `§22-13 Test` {
     }
 
     @Test
-    fun `Hvis tilstand oppfylt ikke blir godkjent av kvalitetssiker blir tilstand satt tilbake til søknad mottatt`() {
+    fun `Hvis tilstand oppfylt ikke blir godkjent av kvalitetssiker blir tilstand satt tilbake til avventer manuell vurdering`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -95,7 +95,7 @@ internal class `§22-13 Test` {
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.SØKNAD_MOTTATT, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
     @Test

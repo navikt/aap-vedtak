@@ -40,14 +40,14 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+            vilkårsvurdering.tilstand(AvventerMaskinellVurdering, søknad)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_27FørsteLedd>() {
+    object AvventerMaskinellVurdering : Tilstand.AvventerMaskinellVurdering<Paragraf_11_27FørsteLedd>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_27FørsteLedd, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_27())
         }
@@ -59,7 +59,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             vilkårsvurdering.løsninger.add(løsning)
 
             if (løsning.harEnFullYtelse()) {
-                vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
+                vilkårsvurdering.tilstand(AvventerManuellVurdering, løsning)
             } else {
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
             }
@@ -89,12 +89,12 @@ internal class Paragraf_11_27FørsteLedd private constructor(
         }
     }
 
-    object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_11_27FørsteLedd>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_27FørsteLedd>() {
 
         override fun håndterLøsning(vilkårsvurdering: Paragraf_11_27FørsteLedd, løsning: LøsningParagraf_22_13) {
             vilkårsvurdering.løsninger22_13.add(løsning)
             if (løsning.bestemmesAv11_27())
-                vilkårsvurdering.tilstand(Oppfylt, løsning)
+                vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
             else
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
@@ -123,7 +123,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
         }
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_27FørsteLedd>() {
+    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_27FørsteLedd>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_27FørsteLedd,
             kvalitetssikring: KvalitetssikringParagraf_22_13
@@ -131,7 +131,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerMaskinellVurdering, kvalitetssikring)
             }
         }
 
@@ -254,9 +254,9 @@ internal class Paragraf_11_27FørsteLedd private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.AVVENTER_MASKINELL_VURDERING -> AvventerMaskinellVurdering
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_27")

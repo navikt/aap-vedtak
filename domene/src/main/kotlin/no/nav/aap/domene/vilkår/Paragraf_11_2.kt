@@ -39,7 +39,7 @@ internal class Paragraf_11_2 private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+            vilkårsvurdering.tilstand(AvventerMaskinellVurdering, søknad)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_2): VilkårsvurderingModellApi {
@@ -47,7 +47,7 @@ internal class Paragraf_11_2 private constructor(
         }
     }
 
-    private object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_2>() {
+    private object AvventerMaskinellVurdering : Tilstand.AvventerMaskinellVurdering<Paragraf_11_2>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_2, hendelse: Hendelse) {
             //send ut behov for innhenting av maskinell medlemskapsvurdering
             hendelse.opprettBehov(Behov_11_2())
@@ -58,7 +58,7 @@ internal class Paragraf_11_2 private constructor(
             when {
                 løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltMaskineltKvalitetssikret, løsning)
                 løsning.erIkkeMedlem() -> vilkårsvurdering.tilstand(IkkeOppfyltMaskineltKvalitetssikret, løsning)
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, løsning)
             }
         }
 
@@ -77,13 +77,13 @@ internal class Paragraf_11_2 private constructor(
         )
     }
 
-    private object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_11_2>() {
+    private object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_2>() {
         override fun håndterLøsning(vilkårsvurdering: Paragraf_11_2, løsning: LøsningManuellParagraf_11_2) {
             vilkårsvurdering.manuelleLøsninger.add(løsning)
             when {
-                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManuelt, løsning)
+                løsning.erMedlem() -> vilkårsvurdering.tilstand(OppfyltManueltAvventerKvalitetssikring, løsning)
                 else -> vilkårsvurdering.tilstand(
-                    IkkeOppfyltManuelt,
+                    IkkeOppfyltManueltAvventerKvalitetssikring,
                     løsning
                 )
             }
@@ -163,7 +163,7 @@ internal class Paragraf_11_2 private constructor(
         }
     }
 
-    private object OppfyltManuelt : Tilstand.OppfyltManuelt<Paragraf_11_2>() {
+    private object OppfyltManueltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_2>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_2,
             kvalitetssikring: KvalitetssikringParagraf_11_2
@@ -175,7 +175,7 @@ internal class Paragraf_11_2 private constructor(
                     kvalitetssikring
                 )
 
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -228,7 +228,7 @@ internal class Paragraf_11_2 private constructor(
         }
     }
 
-    private object IkkeOppfyltManuelt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_2>() {
+    private object IkkeOppfyltManueltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_2>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_2,
             kvalitetssikring: KvalitetssikringParagraf_11_2
@@ -240,7 +240,7 @@ internal class Paragraf_11_2 private constructor(
                     kvalitetssikring
                 )
 
-                else -> vilkårsvurdering.tilstand(ManuellVurderingTrengs, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -333,13 +333,13 @@ internal class Paragraf_11_2 private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
+            Tilstand.Tilstandsnavn.AVVENTER_MASKINELL_VURDERING -> AvventerMaskinellVurdering
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
             Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> OppfyltMaskineltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfyltMaskineltKvalitetssikret
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> OppfyltManuelt
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltManueltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltManueltKvalitetssikret
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfyltManuelt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> IkkeOppfyltManueltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltManueltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_2")
         }

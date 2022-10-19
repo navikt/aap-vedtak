@@ -2,7 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.vilkår.Paragraf_11_19.SøknadMottatt
+import no.nav.aap.domene.vilkår.Paragraf_11_19.AvventerManuellVurdering
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_19.Companion.toDto
@@ -41,7 +41,7 @@ internal class Paragraf_11_19 private constructor(
             vurderingsdato: LocalDate,
         ) {
             søknad.opprettBehov(Behov_11_19())
-            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+            vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19): VilkårsvurderingModellApi {
@@ -49,13 +49,13 @@ internal class Paragraf_11_19 private constructor(
         }
     }
 
-    internal object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_19>() {
+    internal object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_19>() {
         override fun håndterLøsning(
             vilkårsvurdering: Paragraf_11_19,
             løsning: LøsningParagraf_11_19
         ) {
             vilkårsvurdering.løsninger.add(løsning)
-            vilkårsvurdering.tilstand(Oppfylt, løsning)
+            vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_19) =
@@ -73,7 +73,7 @@ internal class Paragraf_11_19 private constructor(
             )
     }
 
-    internal object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_19>() {
+    internal object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_19>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_19,
             kvalitetssikring: KvalitetssikringParagraf_11_19
@@ -81,7 +81,7 @@ internal class Paragraf_11_19 private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -178,8 +178,8 @@ internal class Paragraf_11_19 private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_19")
         }

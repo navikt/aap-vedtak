@@ -85,7 +85,7 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -133,7 +133,7 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_1
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
     }
 
     @Test
@@ -150,9 +150,9 @@ internal class SøkerComponentTest {
         //FIXME: Midlertidig fjernet 11-29
 //        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals(10, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
@@ -165,11 +165,11 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
-//        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_INNSTILLING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
+//        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -186,9 +186,9 @@ internal class SøkerComponentTest {
         //FIXME: Midlertidig fjernet 11-29
 //        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals(10, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
@@ -197,15 +197,15 @@ internal class SøkerComponentTest {
         )
         assertTilstand(
             vilkårsvurderinger,
-            "SØKNAD_MOTTATT",
+            "AVVENTER_MANUELL_VURDERING",
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
-//        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_INNSTILLING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
+//        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -234,9 +234,9 @@ internal class SøkerComponentTest {
         //FIXME: Midlertidig fjernet 11-29
 //        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals(10, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
@@ -249,11 +249,11 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
+        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_INNSTILLING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
 //        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test
@@ -278,9 +278,9 @@ internal class SøkerComponentTest {
         //FIXME: Midlertidig fjernet 11-29
 //        assertEquals(11, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
         assertEquals(10, vilkårsvurderinger.size) { "Feil antall vilkårsvurderinger" }
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_8_48)
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MASKINELT_KVALITETSSIKRET", Vilkårsvurdering.Paragraf.PARAGRAF_11_2)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_3)
         assertTilstand(
             vilkårsvurderinger,
             "OPPFYLT_MASKINELT_KVALITETSSIKRET",
@@ -293,11 +293,11 @@ internal class SøkerComponentTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
-//        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
-        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_INNSTILLING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
+//        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
     @Test

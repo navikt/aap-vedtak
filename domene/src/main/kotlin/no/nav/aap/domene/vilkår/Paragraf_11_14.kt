@@ -53,7 +53,7 @@ internal class Paragraf_11_14 private constructor(
         )
     }
 
-    object Oppfylt : Tilstand.OppfyltMaskinelt<Paragraf_11_14>() {
+    object Oppfylt : Tilstand.OppfyltMaskineltKvalitetssikret<Paragraf_11_14>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
@@ -66,7 +66,7 @@ internal class Paragraf_11_14 private constructor(
         )
     }
 
-    object IkkeOppfylt : Tilstand.IkkeOppfyltMaskinelt<Paragraf_11_14>() {
+    object IkkeOppfylt : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<Paragraf_11_14>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_14): VilkårsvurderingModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             vurdertAv = "maskinell saksbehandling",
@@ -85,8 +85,8 @@ internal class Paragraf_11_14 private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT -> Oppfylt
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT -> IkkeOppfylt
+            Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET -> Oppfylt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET -> IkkeOppfylt
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_14")
         }
     }

@@ -92,11 +92,11 @@ internal class `§11-27 Test` {
         assertHarIkkeBehov(løsning)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
     @Test
-    fun `Dersom paragrafen er i manuell vurdering trengs og virkningsdato skal settes etter svangerskapspenger, settes paragraf oppfylt`() {
+    fun `Dersom paragrafen er i avventer manuell vurdering og virkningsdato skal settes etter svangerskapspenger, settes paragraf oppfylt`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 
@@ -130,7 +130,7 @@ internal class `§11-27 Test` {
         assertHarIkkeBehov(løsning22_13)
         assertUtfall(Utfall.OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
     @Test
@@ -182,7 +182,7 @@ internal class `§11-27 Test` {
     }
 
     @Test
-    fun `Dersom paragrafen er i manuell vurdering trengs og virkningsdato skal settes etter maksdato på sykepenger, settes paragraf til ikke relevant`() {
+    fun `Dersom paragrafen er i avventer manuell vurdering og virkningsdato skal settes etter maksdato på sykepenger, settes paragraf til ikke relevant`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
 

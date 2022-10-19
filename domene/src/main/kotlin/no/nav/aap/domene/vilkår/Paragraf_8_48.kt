@@ -41,14 +41,14 @@ internal class Paragraf_8_48 private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+            vilkårsvurdering.tilstand(AvventerMaskinellVurdering, søknad)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_8_48): VilkårsvurderingModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_8_48>() {
+    object AvventerMaskinellVurdering : Tilstand.AvventerMaskinellVurdering<Paragraf_8_48>() {
         override fun onEntry(vilkårsvurdering: Paragraf_8_48, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_8_48AndreLedd())
         }
@@ -60,7 +60,7 @@ internal class Paragraf_8_48 private constructor(
             vilkårsvurdering.løsningSykepengedager.add(løsning)
 
             if (løsning.erRelevantFor8_48()) {
-                vilkårsvurdering.tilstand(ManuellVurderingTrengs, løsning)
+                vilkårsvurdering.tilstand(AvventerManuellVurdering, løsning)
             } else {
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
             }
@@ -89,12 +89,12 @@ internal class Paragraf_8_48 private constructor(
         }
     }
 
-    object ManuellVurderingTrengs : Tilstand.ManuellVurderingTrengs<Paragraf_8_48>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_8_48>() {
 
         override fun håndterLøsning(vilkårsvurdering: Paragraf_8_48, løsning: LøsningParagraf_22_13) {
             vilkårsvurdering.løsninger22_13.add(løsning)
             if (løsning.bestemmesAv8_48())
-                vilkårsvurdering.tilstand(Oppfylt, løsning)
+                vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
             else
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
@@ -122,7 +122,7 @@ internal class Paragraf_8_48 private constructor(
         }
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_8_48>() {
+    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_8_48>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_8_48,
             kvalitetssikring: KvalitetssikringParagraf_22_13
@@ -130,7 +130,7 @@ internal class Paragraf_8_48 private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerMaskinellVurdering, kvalitetssikring)
             }
         }
 
@@ -244,9 +244,9 @@ internal class Paragraf_8_48 private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.MANUELL_VURDERING_TRENGS -> ManuellVurderingTrengs
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.AVVENTER_MASKINELL_VURDERING -> AvventerMaskinellVurdering
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_8_48")

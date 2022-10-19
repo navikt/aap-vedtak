@@ -82,7 +82,7 @@ internal class `§11-19 Test` {
     }
 
     @Test
-    fun `Hvis tilstand oppfylt ikke blir godkjent av kvalitetssiker blir tilstand satt tilbake til søknad mottatt`() {
+    fun `Hvis tilstand oppfylt ikke blir godkjent av kvalitetssiker blir tilstand satt tilbake til avventer manuell vurdering`() {
         val personident = Personident("12345678910")
         val fødselsdato = Fødselsdato(1 januar 1980)
 
@@ -105,7 +105,7 @@ internal class `§11-19 Test` {
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
-        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.SØKNAD_MOTTATT, vilkår)
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_19) {

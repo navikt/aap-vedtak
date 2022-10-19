@@ -2,8 +2,8 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
+import no.nav.aap.domene.vilkår.Paragraf_22_13.AvventerManuellVurdering
 import no.nav.aap.domene.vilkår.Paragraf_22_13.IkkeRelevant
-import no.nav.aap.domene.vilkår.Paragraf_22_13.SøknadMottatt
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
@@ -42,14 +42,14 @@ internal class Paragraf_22_13 private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            vilkårsvurdering.tilstand(SøknadMottatt, søknad)
+            vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_22_13>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_22_13>() {
         override fun onEntry(vilkårsvurdering: Paragraf_22_13, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_22_13())
         }
@@ -60,7 +60,7 @@ internal class Paragraf_22_13 private constructor(
         ) {
             vilkårsvurdering.løsninger.add(løsning)
             if (løsning.bestemmesAv22_13())
-                vilkårsvurdering.tilstand(Oppfylt, løsning)
+                vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
             else
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
@@ -88,7 +88,7 @@ internal class Paragraf_22_13 private constructor(
         }
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_22_13>() {
+    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_22_13>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_22_13,
             kvalitetssikring: KvalitetssikringParagraf_22_13
@@ -96,7 +96,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -228,8 +228,8 @@ internal class Paragraf_22_13 private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_22_13")
         }

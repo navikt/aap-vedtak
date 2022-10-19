@@ -16,12 +16,17 @@ internal class KvalitetssikretVisitor : SakstypeVisitor {
         erIKvalitetssikring = false
     }
 
-    override fun visitSøknadMottatt() {
+    override fun visitAvventerMaskinellVurdering() {
         erKvalitetssikret = false
         erIKvalitetssikring = false
     }
 
-    override fun visitManuellVurderingTrengs() {
+    override fun visitAvventerInnstilling() {
+        erKvalitetssikret = false
+        erIKvalitetssikring = false
+    }
+
+    override fun visitAvventerManuellVurdering() {
         erKvalitetssikret = false
         erIKvalitetssikring = false
     }

@@ -15,12 +15,17 @@ internal class OppfyltVisitor : SakstypeVisitor {
         erIkkeOppfylt = false
     }
 
-    override fun visitSøknadMottatt() {
+    override fun visitAvventerMaskinellVurdering() {
         erOppfylt = false
         erIkkeOppfylt = false
     }
 
-    override fun visitManuellVurderingTrengs() {
+    override fun visitAvventerInnstilling() {
+        erOppfylt = false
+        erIkkeOppfylt = false
+    }
+
+    override fun visitAvventerManuellVurdering() {
         erOppfylt = false
         erIkkeOppfylt = false
     }

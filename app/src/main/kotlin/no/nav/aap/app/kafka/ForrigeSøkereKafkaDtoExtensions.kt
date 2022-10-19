@@ -47,7 +47,15 @@ private fun MedlemskapYrkesskade.toMedlemskapYrkesskade() = SøkereKafkaDto.Medl
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MASKINELL_VURDERING"
+        "MANUELL_VURDERING_TRENGS" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MASKINELT" -> "OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        "IKKE_OPPFYLT_MASKINELT" -> "IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_medlemskap_yrkesskade_maskinell =
@@ -64,7 +72,12 @@ private fun Paragraf_8_48.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MASKINELL_VURDERING"
+        "MANUELL_VURDERING_TRENGS" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_8_48_maskinell = løsning_8_48_maskinell.map(LøsningMaskinellParagraf_8_48::toDto),
@@ -78,7 +91,13 @@ private fun Paragraf_11_2.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MASKINELL_VURDERING"
+        "MANUELL_VURDERING_TRENGS" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_2_maskinell = løsning_11_2_maskinell.map(LøsningMaskinellParagraf_11_2::toDto),
@@ -92,7 +111,12 @@ private fun Paragraf_11_3.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_3_manuell = løsning_11_3_manuell.map(LøsningParagraf_11_3::toDto),
@@ -117,7 +141,12 @@ private fun Paragraf_11_4AndreOgTredjeLedd.toParagraf_11_4AndreOgTredjeLedd() =
         kvalitetssikretAv = kvalitetssikretAv,
         paragraf = paragraf,
         ledd = ledd,
-        tilstand = tilstand,
+        tilstand = when (tilstand) {
+            "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+            "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+            "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+            else -> tilstand
+        },
         utfall = utfall,
         vurdertMaskinelt = vurdertMaskinelt,
         løsning_11_4_ledd2_ledd3_manuell =
@@ -132,7 +161,12 @@ private fun Paragraf_11_5.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_5_manuell = løsning_11_5_manuell.map(LøsningParagraf_11_5::toDto),
@@ -145,7 +179,12 @@ private fun Paragraf_11_5Yrkesskade.toParagraf_11_5Yrkesskade() = SøkereKafkaDt
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell.map(LøsningParagraf_11_5_yrkesskade::toDto),
@@ -158,10 +197,16 @@ private fun Paragraf_11_6.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_INNSTILLING"
+        "MANUELL_VURDERING_TRENGS" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    innstillinger_11_6 = emptyList(),
+    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6::toDto),
     løsning_11_6_manuell = løsning_11_6_manuell.map(LøsningParagraf_11_6::toDto),
     kvalitetssikringer_11_6 = kvalitetssikringer_11_6.map(KvalitetssikringParagraf_11_6::toDto),
 )
@@ -172,7 +217,11 @@ private fun Paragraf_11_14.toParagraf_11_14() = SøkereKafkaDto.Paragraf_11_14(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "OPPFYLT_MASKINELT" -> "OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        "IKKE_OPPFYLT_MASKINELT" -> "IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
 )
@@ -183,7 +232,11 @@ private fun Paragraf_11_19.toParagraf_11_19() = SøkereKafkaDto.Paragraf_11_19(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_19_manuell = løsning_11_19_manuell.map(LøsningParagraf_11_19::toDto),
@@ -196,7 +249,12 @@ private fun Paragraf_11_22.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_22_manuell = løsning_11_22_manuell.map(LøsningParagraf_11_22::toDto),
@@ -209,7 +267,12 @@ private fun Paragraf_11_27FørsteLedd.toParagraf_11_27FørsteLedd() = SøkereKaf
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MASKINELL_VURDERING"
+        "MANUELL_VURDERING_TRENGS" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_27_maskinell = løsning_11_27_maskinell.map(LøsningMaskinellParagraf_11_27FørsteLedd::toDto),
@@ -223,7 +286,12 @@ private fun Paragraf_11_29.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        "IKKE_OPPFYLT_MANUELT" -> "IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_29_manuell = løsning_11_29_manuell.map(LøsningParagraf_11_29::toDto),
@@ -236,7 +304,11 @@ private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
     kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_MANUELL_VURDERING"
+        "OPPFYLT_MANUELT" -> "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING"
+        else -> tilstand
+    },
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toDto),
@@ -363,6 +435,15 @@ private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = SøkereKafkaDto.Kv
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
     begrunnelse = begrunnelse,
+)
+
+private fun InnstillingParagraf_11_6.toDto() = SøkereKafkaDto.InnstillingParagraf_11_6(
+    innstillingId = UUID.randomUUID(),
+    vurdertAv = vurdertAv,
+    tidspunktForVurdering = tidspunktForVurdering,
+    harBehovForBehandling = harBehovForBehandling,
+    harBehovForTiltak = harBehovForTiltak,
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
 )
 
 private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_6(

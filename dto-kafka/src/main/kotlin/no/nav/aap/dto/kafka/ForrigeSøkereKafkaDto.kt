@@ -156,6 +156,7 @@ data class ForrigeSøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
+        val innstillinger_11_6: List<InnstillingParagraf_11_6>,
         val løsning_11_6_manuell: List<LøsningParagraf_11_6>,
         val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6>,
     )
@@ -235,6 +236,15 @@ data class ForrigeSøkereKafkaDto(
         val vurdertMaskinelt: Boolean,
         val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
         val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
+    )
+
+    data class InnstillingParagraf_11_6(
+        val innstillingId: UUID,
+        val vurdertAv: String,
+        val tidspunktForVurdering: LocalDateTime,
+        val harBehovForBehandling: Boolean,
+        val harBehovForTiltak: Boolean,
+        val harMulighetForÅKommeIArbeid: Boolean
     )
 
     data class LøsningMaskinellMedlemskapYrkesskade(

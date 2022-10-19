@@ -2,7 +2,7 @@ package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
-import no.nav.aap.domene.vilkår.Paragraf_11_4AndreOgTredjeLedd.SøknadMottatt
+import no.nav.aap.domene.vilkår.Paragraf_11_4AndreOgTredjeLedd.AvventerManuellVurdering
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_4AndreOgTredjeLedd
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_4AndreOgTredjeLedd.Companion.toDto
@@ -37,7 +37,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         if (fødselsdato.erUnder62(vurderingsdato)) {
             tilstand(IkkeRelevant, hendelse)
         } else {
-            tilstand(SøknadMottatt, hendelse)
+            tilstand(AvventerManuellVurdering, hendelse)
         }
     }
 
@@ -55,7 +55,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object SøknadMottatt : Tilstand.SøknadMottatt<Paragraf_11_4AndreOgTredjeLedd>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_4AndreOgTredjeLedd>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_4AndreOgTredjeLedd())
         }
@@ -66,9 +66,9 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         ) {
             vilkårsvurdering.løsninger.add(løsning)
             if (løsning.erManueltOppfylt()) {
-                vilkårsvurdering.tilstand(Oppfylt, løsning)
+                vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
             } else {
-                vilkårsvurdering.tilstand(IkkeOppfylt, løsning)
+                vilkårsvurdering.tilstand(IkkeOppfyltAvventerKvalitetssikring, løsning)
             }
         }
 
@@ -94,7 +94,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         }
     }
 
-    object Oppfylt : Tilstand.OppfyltManuelt<Paragraf_11_4AndreOgTredjeLedd>() {
+    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_4AndreOgTredjeLedd>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
             kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd
@@ -102,7 +102,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -136,7 +136,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -162,7 +162,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
         }
     }
 
-    object IkkeOppfylt : Tilstand.IkkeOppfyltManuelt<Paragraf_11_4AndreOgTredjeLedd>() {
+    object IkkeOppfyltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_4AndreOgTredjeLedd>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_4AndreOgTredjeLedd,
             kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd
@@ -170,7 +170,7 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
             vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(IkkeOppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(SøknadMottatt, kvalitetssikring)
+                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -261,10 +261,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
-            Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> SøknadMottatt
-            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT -> Oppfylt
+            Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING -> AvventerManuellVurdering
+            Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> OppfyltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET -> OppfyltKvalitetssikret
-            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT -> IkkeOppfylt
+            Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING -> IkkeOppfyltAvventerKvalitetssikring
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltKvalitetssikret
             Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_4AndreOgTredjeLedd")
