@@ -14,7 +14,10 @@ internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
 
 private fun Sak.toDto() = SøkereKafkaDto.Sak(
     saksid = saksid,
-    tilstand = tilstand,
+    tilstand = when (tilstand) {
+        "SØKNAD_MOTTATT" -> "AVVENTER_VURDERING"
+        else -> tilstand
+    },
     vurderingsdato = vurderingsdato,
     sakstyper = sakstyper.map(Sakstype::toDto),
     søknadstidspunkt = søknadstidspunkt,

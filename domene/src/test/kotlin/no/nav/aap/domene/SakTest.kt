@@ -32,7 +32,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         val saker = listOf(sak).toDto()
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -74,7 +74,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -83,7 +83,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -92,7 +92,7 @@ internal class SakTest {
                 sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -105,7 +105,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -115,7 +115,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -128,7 +128,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -150,7 +150,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -163,7 +163,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -173,7 +173,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -215,7 +215,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellMedlemskapYrkesskade(
@@ -223,7 +223,7 @@ internal class SakTest {
                 LøsningMaskinellMedlemskapYrkesskade.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -233,7 +233,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5Yrkesskade(
@@ -244,7 +244,7 @@ internal class SakTest {
                 arbeidsevneErNedsattMedMinst30Prosent = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -266,7 +266,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -279,7 +279,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_22(
@@ -292,7 +292,7 @@ internal class SakTest {
                 antattÅrligArbeidsinntekt = 400000.beløp
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -302,7 +302,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -366,7 +366,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -375,7 +375,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -384,7 +384,7 @@ internal class SakTest {
                 sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -397,7 +397,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -407,7 +407,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -420,7 +420,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -442,7 +442,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -455,7 +455,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -465,7 +465,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -603,7 +603,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -612,7 +612,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -621,7 +621,7 @@ internal class SakTest {
                 sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -634,7 +634,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -644,7 +644,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -657,7 +657,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -679,7 +679,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -692,7 +692,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -702,7 +702,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -846,14 +846,14 @@ internal class SakTest {
     }
 
     @Test
-    fun `Underkjent kvalitetssikring sender saken tilbake til SØKNAD_MOTTATT og hindrer ikke videre kvalitetssikring`() {
+    fun `Underkjent kvalitetssikring sender saken tilbake til AVVENTER_VURDERING og hindrer ikke videre kvalitetssikring`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -862,7 +862,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -871,7 +871,7 @@ internal class SakTest {
                 sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -884,7 +884,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -894,7 +894,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -907,7 +907,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -929,7 +929,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -942,7 +942,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -952,7 +952,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -998,7 +998,7 @@ internal class SakTest {
                 "NEI"
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
@@ -1010,7 +1010,7 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_6(
@@ -1022,7 +1022,7 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_22_13(
@@ -1034,7 +1034,7 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_19(
@@ -1046,7 +1046,7 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_29(
@@ -1058,7 +1058,7 @@ internal class SakTest {
                 "JA"
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         // Behandle underkjent løsning på nytt
         sak.håndterLøsning(
@@ -1125,7 +1125,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -1134,7 +1134,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -1147,7 +1147,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -1160,7 +1160,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -1170,7 +1170,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -1183,7 +1183,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -1205,7 +1205,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -1218,7 +1218,7 @@ internal class SakTest {
                 manueltSattVirkningsdato = null
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -1228,7 +1228,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -1368,7 +1368,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -1377,7 +1377,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -1386,7 +1386,7 @@ internal class SakTest {
                 sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -1399,7 +1399,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -1409,7 +1409,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -1422,7 +1422,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -1444,7 +1444,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -1457,7 +1457,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -1467,7 +1467,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -1601,7 +1601,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -1610,7 +1610,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -1619,7 +1619,7 @@ internal class SakTest {
                 sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -1632,7 +1632,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -1642,7 +1642,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -1655,7 +1655,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -1677,7 +1677,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -1690,7 +1690,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -1700,7 +1700,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(
@@ -1833,7 +1833,7 @@ internal class SakTest {
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -1842,7 +1842,7 @@ internal class SakTest {
                 LøsningMaskinellParagraf_11_2.ErMedlem.JA
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningSykepengedager(
@@ -1855,7 +1855,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
@@ -1868,7 +1868,7 @@ internal class SakTest {
                 ),
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_3(
@@ -1878,7 +1878,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_5(
@@ -1891,7 +1891,7 @@ internal class SakTest {
                 )
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
@@ -1913,7 +1913,7 @@ internal class SakTest {
                 harMulighetForÅKommeIArbeid = true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_22_13(
@@ -1926,7 +1926,7 @@ internal class SakTest {
                 LocalDate.now()
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_29(
@@ -1936,7 +1936,7 @@ internal class SakTest {
                 true
             )
         )
-        assertTilstand("SØKNAD_MOTTATT", sak)
+        assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
             LøsningParagraf_11_19(

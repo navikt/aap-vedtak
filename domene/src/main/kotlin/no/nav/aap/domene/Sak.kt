@@ -66,13 +66,13 @@ internal class Sak private constructor(
     ) {
         enum class Tilstandsnavn {
             START,
-            SØKNAD_MOTTATT,
+            AVVENTER_VURDERING,
             BEREGN_INNTEKT,
             AVVENTER_KVALITETSSIKRING,
             VEDTAK_FATTET,
             VENTER_SYKEPENGER,
             VEDTAK_IVERKSATT,
-            IKKE_OPPFYLT
+            IKKE_OPPFYLT,
         }
 
         open fun onEntry(sak: Sak, hendelse: Hendelse) {}
@@ -147,12 +147,12 @@ internal class Sak private constructor(
             private fun vurderNestetilstand(sak: Sak, søknad: Søknad) {
                 when {
                     OppfyltVisitor().apply(sak.sakstype::accept).erIkkeOppfylt -> sak.tilstand(IkkeOppfylt, søknad)
-                    else -> sak.tilstand(SøknadMottatt, søknad)
+                    else -> sak.tilstand(AvventerVurdering, søknad)
                 }
             }
         }
 
-        object SøknadMottatt : Tilstand(Tilstandsnavn.SØKNAD_MOTTATT) {
+        object AvventerVurdering : Tilstand(Tilstandsnavn.AVVENTER_VURDERING) {
             override fun <T : Hendelse> håndterLøsning(
                 sak: Sak,
                 løsning: T,
@@ -247,7 +247,7 @@ internal class Sak private constructor(
                         sak.tilstand(VedtakFattet, hendelse)
 
                     visitor.erIkkeIKvalitetssikring ->
-                        sak.tilstand(SøknadMottatt, hendelse)
+                        sak.tilstand(AvventerVurdering, hendelse)
                 }
             }
         }
@@ -347,7 +347,7 @@ internal class Sak private constructor(
             saksid = sakModellApi.saksid,
             tilstand = when (Tilstand.Tilstandsnavn.valueOf(sakModellApi.tilstand)) {
                 Tilstand.Tilstandsnavn.START -> Tilstand.Start
-                Tilstand.Tilstandsnavn.SØKNAD_MOTTATT -> Tilstand.SøknadMottatt
+                Tilstand.Tilstandsnavn.AVVENTER_VURDERING -> Tilstand.AvventerVurdering
                 Tilstand.Tilstandsnavn.BEREGN_INNTEKT -> Tilstand.BeregnInntekt
                 Tilstand.Tilstandsnavn.AVVENTER_KVALITETSSIKRING -> Tilstand.AvventerKvalitetssikring
                 Tilstand.Tilstandsnavn.VEDTAK_FATTET -> Tilstand.VedtakFattet
