@@ -9,7 +9,6 @@ import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.kafka.streams.KStreamsConfig
 import no.nav.aap.kafka.streams.test.KafkaStreamsMock
-import no.nav.aap.kafka.streams.test.readAndAssert
 import no.nav.aap.kafka.streams.topology.Mermaid
 import no.nav.aap.modellapi.*
 import org.apache.kafka.clients.producer.MockProducer
@@ -31,31 +30,27 @@ internal class ApiTest {
                 topology = topology(SimpleMeterRegistry(), MockProducer())
             )
         }.use { kafka ->
-            val søknadTopic = kafka.inputTopic(Topics.søknad)
-            val medlemTopic = kafka.inputTopic(Topics.medlem)
-            val medlemOutputTopic = kafka.outputTopic(Topics.medlem)
-            val innstilling_11_6_Topic = kafka.inputTopic(Topics.innstilling_11_6)
-            val manuell_11_3_Topic = kafka.inputTopic(Topics.manuell_11_3)
-            val manuell_11_5_Topic = kafka.inputTopic(Topics.manuell_11_5)
-            val manuell_11_6_Topic = kafka.inputTopic(Topics.manuell_11_6)
-            val manuell_11_19_Topic = kafka.inputTopic(Topics.manuell_11_19)
-            val manuell_11_29_Topic = kafka.inputTopic(Topics.manuell_11_29)
-            val manuell_22_13_Topic = kafka.inputTopic(Topics.manuell_22_13)
-            val kvalitetssikring_11_2_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_2)
-            val kvalitetssikring_11_3_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_3)
-            val kvalitetssikring_11_5_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_5)
-            val kvalitetssikring_11_6_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_6)
-            val kvalitetssikring_11_19_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_19)
-            val kvalitetssikring_11_29_Topic = kafka.inputTopic(Topics.kvalitetssikring_11_29)
-            val kvalitetssikring_22_13_Topic = kafka.inputTopic(Topics.kvalitetssikring_22_13)
-            val andreFolketrygdsytelserTopic = kafka.inputTopic(Topics.andreFolketrygdsytelser)
-            val andreFolketrygdsytelserOutputTopic = kafka.outputTopic(Topics.andreFolketrygdsytelser)
-            val inntektTopic = kafka.inputTopic(Topics.inntekter)
-            val inntektOutputTopic = kafka.outputTopic(Topics.inntekter)
-            val sykepengedagerTopic = kafka.inputTopic(Topics.sykepengedager)
-            val sykepengedagerOutputTopic = kafka.outputTopic(Topics.sykepengedager)
-            val iverksettelseAvVedtakTopic = kafka.inputTopic(Topics.iverksettelseAvVedtak)
-            val iverksettVedtakTopic = kafka.outputTopic(Topics.vedtak)
+            val søknadTopic = kafka.testTopic(Topics.søknad)
+            val medlemTopic = kafka.testTopic(Topics.medlem)
+            val innstilling_11_6_Topic = kafka.testTopic(Topics.innstilling_11_6)
+            val manuell_11_3_Topic = kafka.testTopic(Topics.manuell_11_3)
+            val manuell_11_5_Topic = kafka.testTopic(Topics.manuell_11_5)
+            val manuell_11_6_Topic = kafka.testTopic(Topics.manuell_11_6)
+            val manuell_11_19_Topic = kafka.testTopic(Topics.manuell_11_19)
+            val manuell_11_29_Topic = kafka.testTopic(Topics.manuell_11_29)
+            val manuell_22_13_Topic = kafka.testTopic(Topics.manuell_22_13)
+            val kvalitetssikring_11_2_Topic = kafka.testTopic(Topics.kvalitetssikring_11_2)
+            val kvalitetssikring_11_3_Topic = kafka.testTopic(Topics.kvalitetssikring_11_3)
+            val kvalitetssikring_11_5_Topic = kafka.testTopic(Topics.kvalitetssikring_11_5)
+            val kvalitetssikring_11_6_Topic = kafka.testTopic(Topics.kvalitetssikring_11_6)
+            val kvalitetssikring_11_19_Topic = kafka.testTopic(Topics.kvalitetssikring_11_19)
+            val kvalitetssikring_11_29_Topic = kafka.testTopic(Topics.kvalitetssikring_11_29)
+            val kvalitetssikring_22_13_Topic = kafka.testTopic(Topics.kvalitetssikring_22_13)
+            val andreFolketrygdsytelserTopic = kafka.testTopic(Topics.andreFolketrygdsytelser)
+            val inntektTopic = kafka.testTopic(Topics.inntekter)
+            val sykepengedagerTopic = kafka.testTopic(Topics.sykepengedager)
+            val iverksettelseAvVedtakTopic = kafka.testTopic(Topics.iverksettelseAvVedtak)
+            val iverksettVedtakTopic = kafka.testTopic(Topics.vedtak)
             val stateStore = kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
 
             val fnr = "123"
@@ -64,7 +59,7 @@ internal class ApiTest {
                 SøknadKafkaDto(fødselsdato = LocalDate.now().minusYears(40))
             }
 
-            val medlemRequest = medlemOutputTopic.readValue()
+            val medlemRequest = medlemTopic.readValue()
             medlemTopic.produce(fnr) {
                 medlemRequest.copy(
                     response = MedlemKafkaDto.Response(
@@ -74,7 +69,7 @@ internal class ApiTest {
                 )
             }
 
-            val sykepengedagerRequest = sykepengedagerOutputTopic.readValue()
+            val sykepengedagerRequest = sykepengedagerTopic.readValue()
             sykepengedagerTopic.produce(fnr) {
                 sykepengedagerRequest.copy(
                     response = SykepengedagerKafkaDto.Response(
@@ -83,7 +78,7 @@ internal class ApiTest {
                 )
             }
 
-            val andreFolketrygdytelserRequest = andreFolketrygdsytelserOutputTopic.readValue()
+            val andreFolketrygdytelserRequest = andreFolketrygdsytelserTopic.readValue()
             andreFolketrygdsytelserTopic.produce(fnr) {
                 andreFolketrygdytelserRequest.copy(
                     response = AndreFolketrygdytelserKafkaDto.Response(
@@ -143,7 +138,7 @@ internal class ApiTest {
                 Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering, true)
             }
 
-            val inntekter: InntekterKafkaDto = inntektOutputTopic.readValue()
+            val inntekter: InntekterKafkaDto = inntektTopic.readValue()
             inntektTopic.produce(fnr) {
                 inntekter.copy(
                     response = InntekterKafkaDto.Response(
@@ -257,7 +252,7 @@ internal class ApiTest {
                 )
             }
 
-            iverksettVedtakTopic.readAndAssert()
+            iverksettVedtakTopic.assertThat()
                 .hasNumberOfRecords(1)
                 .hasKey(fnr)
                 .hasLastValueMatching { assertTrue(it?.innvilget ?: false) }
