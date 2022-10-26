@@ -1,4 +1,0 @@
-jdk:
-  - openjdk11
-#install:
-#  - ./gradlew clean dto-kafka:build -x test
