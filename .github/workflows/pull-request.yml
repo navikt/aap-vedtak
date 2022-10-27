@@ -7,9 +7,8 @@ permissions:
   checks: write
 
 jobs:
-   test:
+   build:
     runs-on: ubuntu-latest
-    name: Run Test
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-java@v3
@@ -24,7 +23,7 @@ jobs:
       - uses: dorny/test-reporter@v1.6.0
         if: success() || failure()
         with:
-          name: Test Result
+          name: test
           path: "**/build/test-results/test/TEST-*.xml"
           reporter: java-junit
           token: ${{ secrets.GITHUB_TOKEN }}

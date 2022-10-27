@@ -9,7 +9,6 @@ on:
 
 jobs:
   build:
-    name: Build
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -25,7 +24,7 @@ jobs:
       - uses: dorny/test-reporter@v1.6.0
         if: success() || failure()
         with:
-          name: Test Result
+          name: test
           path: "**/build/test-results/test/TEST-*.xml"
           reporter: java-junit
           token: ${{ secrets.GITHUB_TOKEN }}
