@@ -23,6 +23,7 @@ subprojects {
         withType<Test> {
             reports.html.required.set(false)
             useJUnitPlatform()
+            maxParallelForks = Runtime.getRuntime().availableProcessors()
         }
     }
 }
