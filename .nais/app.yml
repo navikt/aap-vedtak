@@ -20,20 +20,20 @@ spec:
   resources:
     limits:
       cpu: 4000m
-      memory: 5Gi
+      memory: 8Gi
     requests:
-      cpu: 2000m
-      memory: 4Gi
+      cpu: 4000m
+      memory: 8Gi
   liveness:
     path: /actuator/live
-    initialDelay: 3
-    periodSeconds: 3
-    failureThreshold: 21
+    initialDelay: 1
+    periodSeconds: 1
+    failureThreshold: 60
   readiness:
     path: /actuator/ready
-    initialDelay: 3
-    periodSeconds: 3
-    failureThreshold: 21
+    initialDelay: 1
+    periodSeconds: 1
+    failureThreshold: 60
   prometheus:
     enabled: true
     path: /actuator/metrics
