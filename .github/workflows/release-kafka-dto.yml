@@ -67,6 +67,6 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2.3.3
         with:
-          arguments: -Pdto-kafka.version=${{ steps.tag.outputs.version }} publish
+          arguments: -Pdto-kafka.version=${{ steps.tag.outputs.version }} publish  --no-build-cache
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
