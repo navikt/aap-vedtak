@@ -25,7 +25,12 @@ private fun Løsning_11_5_manuell.toModellApi() = LøsningParagraf_11_5ModellApi
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
-    nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade
+    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
+    nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+    kilder = kilder,
+    legeerklæringDato = legeerklæringDato,
+    sykmeldingDato = sykmeldingDato,
 )
 
 private fun Løsning_11_6_manuell.toModellApi() = LøsningParagraf_11_6ModellApi(
@@ -33,7 +38,8 @@ private fun Løsning_11_6_manuell.toModellApi() = LøsningParagraf_11_6ModellApi
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
-    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+    individuellBegrunnelse = individuellBegrunnelse,
 )
 
 private fun Løsning_22_13_manuell.toModellApi() = LøsningParagraf_22_13ModellApi(

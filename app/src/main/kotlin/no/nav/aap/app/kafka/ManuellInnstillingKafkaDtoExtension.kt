@@ -11,5 +11,6 @@ private fun Innstilling_11_6.toModellApi() = InnstillingParagraf_11_6ModellApi(
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
-    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+    individuellBegrunnelse = individuellBegrunnelse,
 )

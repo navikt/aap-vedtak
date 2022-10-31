@@ -3,6 +3,7 @@ package no.nav.aap.hendelse
 import no.nav.aap.domene.vilkår.Paragraf_11_5
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_5ModellApi
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -14,7 +15,12 @@ internal class LøsningParagraf_11_5(
 ) : Hendelse() {
     internal class NedsattArbeidsevnegrad(
         private val kravOmNedsattArbeidsevneErOppfylt: Boolean,
+        private val kravOmNedsattArbeidsevneErOppfyltBegrunnelse: String,
         private val nedsettelseSkyldesSykdomEllerSkade: Boolean,
+        private val nedsettelseSkyldesSykdomEllerSkadeBegrunnelse: String,
+        private val kilder: List<String>,
+        private val legeerklæringDato: LocalDate?,
+        private val sykmeldingDato: LocalDate?,
     ) {
 
         internal fun erOppfylt() = kravOmNedsattArbeidsevneErOppfylt && nedsettelseSkyldesSykdomEllerSkade
@@ -24,7 +30,12 @@ internal class LøsningParagraf_11_5(
             vurdertAv = vurdertAv,
             tidspunktForVurdering = tidspunktForVurdering,
             kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+            kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
             nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+            nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+            kilder = kilder,
+            legeerklæringDato = legeerklæringDato,
+            sykmeldingDato = sykmeldingDato,
         )
     }
 
@@ -47,7 +58,7 @@ internal class KvalitetssikringParagraf_11_5(
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
-    private val begrunnelse: String
+    private val begrunnelse: String?,
 ) : Hendelse() {
 
     internal companion object {

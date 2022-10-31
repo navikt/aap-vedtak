@@ -11,7 +11,8 @@ internal class InnstillingParagraf_11_6(
     private val tidspunktForVurdering: LocalDateTime,
     private val harBehovForBehandling: Boolean,
     private val harBehovForTiltak: Boolean,
-    private val harMulighetForÅKommeIArbeid: Boolean
+    private val harMulighetForÅKommeIArbeid: Boolean,
+    private val individuellBegrunnelse: String,
 ) : Hendelse() {
 
     internal companion object {
@@ -24,6 +25,7 @@ internal class InnstillingParagraf_11_6(
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+        individuellBegrunnelse = individuellBegrunnelse,
     )
 }

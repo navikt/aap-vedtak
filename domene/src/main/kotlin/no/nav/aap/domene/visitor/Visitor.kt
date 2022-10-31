@@ -89,8 +89,8 @@ internal interface VilkårsvurderingVisitor {
         vurdertAv: String,
         tidspunktForVurdering: LocalDateTime,
         bestemmesAv: LøsningParagraf_22_13.BestemmesAv,
-        unntak: String,
-        unntaksbegrunnelse: String,
+        unntak: String?,
+        unntaksbegrunnelse: String?,
         manueltSattVirkningsdato: LocalDate?
     ) {
     }

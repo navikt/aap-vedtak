@@ -42,7 +42,7 @@ data class KvalitetssikringParagraf_11_29ModellApi(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 ) {
 
     constructor(
@@ -50,7 +50,7 @@ data class KvalitetssikringParagraf_11_29ModellApi(
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
-        begrunnelse: String
+        begrunnelse: String?,
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
         løsningId = løsningId,

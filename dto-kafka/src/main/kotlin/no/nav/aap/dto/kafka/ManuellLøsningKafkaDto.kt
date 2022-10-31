@@ -25,7 +25,12 @@ data class Løsning_11_5_manuell(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val kravOmNedsattArbeidsevneErOppfylt: Boolean,
-    val nedsettelseSkyldesSykdomEllerSkade: Boolean
+    val kravOmNedsattArbeidsevneErOppfyltBegrunnelse: String,
+    val nedsettelseSkyldesSykdomEllerSkade: Boolean,
+    val nedsettelseSkyldesSykdomEllerSkadeBegrunnelse: String,
+    val kilder: List<String>,
+    val legeerklæringDato: LocalDate?,
+    val sykmeldingDato: LocalDate?,
 )
 
 data class Løsning_11_6_manuell(
@@ -33,16 +38,8 @@ data class Løsning_11_6_manuell(
     val tidspunktForVurdering: LocalDateTime,
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
-    val harMulighetForÅKommeIArbeid: Boolean
-)
-
-data class Løsning_22_13_manuell(
-    val vurdertAv: String,
-    val tidspunktForVurdering: LocalDateTime,
-    val bestemmesAv: String,
-    val unntak: String,
-    val unntaksbegrunnelse: String,
-    val manueltSattVirkningsdato: LocalDate
+    val harMulighetForÅKommeIArbeid: Boolean,
+    val individuellBegrunnelse: String,
 )
 
 data class Løsning_11_19_manuell(
@@ -55,4 +52,13 @@ data class Løsning_11_29_manuell(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean
+)
+
+data class Løsning_22_13_manuell(
+    val vurdertAv: String,
+    val tidspunktForVurdering: LocalDateTime,
+    val bestemmesAv: String,
+    val unntak: String?,
+    val unntaksbegrunnelse: String?,
+    val manueltSattVirkningsdato: LocalDate?,
 )

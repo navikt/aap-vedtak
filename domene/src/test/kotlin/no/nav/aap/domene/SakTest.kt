@@ -124,7 +124,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -137,7 +142,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -147,7 +153,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -253,7 +260,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -263,7 +271,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -416,7 +425,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -429,7 +443,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -439,7 +454,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -653,7 +669,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -666,7 +687,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -676,7 +698,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -903,7 +926,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -916,7 +944,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -926,7 +955,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -1179,7 +1209,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -1192,7 +1227,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -1202,7 +1238,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -1418,7 +1455,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -1431,7 +1473,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -1441,7 +1484,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -1651,7 +1695,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -1664,7 +1713,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -1674,7 +1724,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -1887,7 +1938,12 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -1900,7 +1956,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         sak.håndterLøsning(
@@ -1910,7 +1967,8 @@ internal class SakTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)

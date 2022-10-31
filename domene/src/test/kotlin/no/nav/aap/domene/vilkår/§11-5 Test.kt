@@ -31,8 +31,13 @@ internal class `§11-5 Test` {
             "veileder",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
             )
         )
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.AvventerManuellVurdering, vilkår)
@@ -57,7 +62,12 @@ internal class `§11-5 Test` {
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                 kravOmNedsattArbeidsevneErOppfylt = false,
-                nedsettelseSkyldesSykdomEllerSkade = true
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                nedsettelseSkyldesSykdomEllerSkade = true,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                kilder = emptyList(),
+                legeerklæringDato = null,
+                sykmeldingDato = null,
             )
         )
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.AvventerManuellVurdering, vilkår)
@@ -102,8 +112,13 @@ internal class `§11-5 Test` {
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -131,7 +146,12 @@ internal class `§11-5 Test` {
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                 kravOmNedsattArbeidsevneErOppfylt = false,
-                nedsettelseSkyldesSykdomEllerSkade = false
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                nedsettelseSkyldesSykdomEllerSkade = false,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                kilder = emptyList(),
+                legeerklæringDato = null,
+                sykmeldingDato = null,
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -158,8 +178,13 @@ internal class `§11-5 Test` {
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
             )
         )
         vilkår.håndterLøsning(løsning)
@@ -187,7 +212,12 @@ internal class `§11-5 Test` {
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                 kravOmNedsattArbeidsevneErOppfylt = false,
-                nedsettelseSkyldesSykdomEllerSkade = false
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                nedsettelseSkyldesSykdomEllerSkade = false,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                kilder = emptyList(),
+                legeerklæringDato = null,
+                sykmeldingDato = null,
             )
         )
         vilkår.håndterLøsning(løsning)

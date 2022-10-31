@@ -100,7 +100,12 @@ internal class ApiTest {
                     vurdertAv = "veileder",
                     tidspunktForVurdering = tidspunktForVurdering,
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             }
             innstilling_11_6_Topic.produce(fnr) {
@@ -109,7 +114,8 @@ internal class ApiTest {
                     tidspunktForVurdering = tidspunktForVurdering,
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
-                    harMulighetForÅKommeIArbeid = true
+                    harMulighetForÅKommeIArbeid = true,
+                    individuellBegrunnelse = "Begrunnelse",
                 )
             }
             manuell_11_6_Topic.produce(fnr) {
@@ -118,7 +124,8 @@ internal class ApiTest {
                     tidspunktForVurdering = tidspunktForVurdering,
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
-                    harMulighetForÅKommeIArbeid = true
+                    harMulighetForÅKommeIArbeid = true,
+                    individuellBegrunnelse = "Begrunnelse",
                 )
             }
             manuell_22_13_Topic.produce(fnr) {

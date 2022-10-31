@@ -31,7 +31,7 @@ internal class KvalitetssikringParagraf_11_2(
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
-    private val begrunnelse: String
+    private val begrunnelse: String?,
 ) : Hendelse() {
 
     internal companion object {

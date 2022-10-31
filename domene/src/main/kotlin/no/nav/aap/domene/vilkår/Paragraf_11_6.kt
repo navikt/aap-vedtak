@@ -251,7 +251,8 @@ internal class Paragraf_11_6 private constructor(
                 tidspunktForVurdering = it.tidspunktForVurdering,
                 harBehovForBehandling = it.harBehovForBehandling,
                 harBehovForTiltak = it.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid,
+                individuellBegrunnelse = it.individuellBegrunnelse,
             )
         })
     }
@@ -264,7 +265,8 @@ internal class Paragraf_11_6 private constructor(
                 tidspunktForVurdering = it.tidspunktForVurdering,
                 harBehovForBehandling = it.harBehovForBehandling,
                 harBehovForTiltak = it.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid
+                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid,
+                individuellBegrunnelse = it.individuellBegrunnelse,
             )
         })
     }

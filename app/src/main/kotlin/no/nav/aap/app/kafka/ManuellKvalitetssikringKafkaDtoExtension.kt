@@ -52,14 +52,6 @@ private fun Kvalitetssikring_11_6.toModellApi() = KvalitetssikringParagraf_11_6M
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_22_13.toModellApi() = KvalitetssikringParagraf_22_13ModellApi(
-    løsningId = løsningId,
-    kvalitetssikretAv = kvalitetssikretAv,
-    tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-    erGodkjent = erGodkjent,
-    begrunnelse = begrunnelse
-)
-
 private fun Kvalitetssikring_11_19.toModellApi() = KvalitetssikringParagraf_11_19ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -69,6 +61,14 @@ private fun Kvalitetssikring_11_19.toModellApi() = KvalitetssikringParagraf_11_1
 )
 
 private fun Kvalitetssikring_11_29.toModellApi() = KvalitetssikringParagraf_11_29ModellApi(
+    løsningId = løsningId,
+    kvalitetssikretAv = kvalitetssikretAv,
+    tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+    erGodkjent = erGodkjent,
+    begrunnelse = begrunnelse
+)
+
+private fun Kvalitetssikring_22_13.toModellApi() = KvalitetssikringParagraf_22_13ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,

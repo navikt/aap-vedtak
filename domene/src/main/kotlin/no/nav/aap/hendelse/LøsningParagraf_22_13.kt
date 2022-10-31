@@ -12,8 +12,8 @@ internal class LøsningParagraf_22_13(
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
     private val bestemmesAv: BestemmesAv,
-    private val unntak: String,
-    private val unntaksbegrunnelse: String,
+    private val unntak: String?,
+    private val unntaksbegrunnelse: String?,
     private val manueltSattVirkningsdato: LocalDate?,
 ) : Hendelse() {
     internal companion object {
@@ -83,7 +83,7 @@ internal class KvalitetssikringParagraf_22_13(
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
-    private val begrunnelse: String
+    private val begrunnelse: String?,
 ) : Hendelse() {
 
     internal companion object {

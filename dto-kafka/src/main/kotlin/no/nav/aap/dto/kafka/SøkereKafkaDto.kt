@@ -20,7 +20,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 14
+        const val VERSION = 15
         const val INIT_SEKVENS = 0L
     }
 
@@ -255,7 +255,8 @@ data class SøkereKafkaDto(
         val tidspunktForVurdering: LocalDateTime,
         val harBehovForBehandling: Boolean,
         val harBehovForTiltak: Boolean,
-        val harMulighetForÅKommeIArbeid: Boolean
+        val harMulighetForÅKommeIArbeid: Boolean,
+        val individuellBegrunnelse: String,
     )
 
     data class LøsningMaskinellMedlemskapYrkesskade(
@@ -314,7 +315,14 @@ data class SøkereKafkaDto(
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val kravOmNedsattArbeidsevneErOppfylt: Boolean,
-        val nedsettelseSkyldesSykdomEllerSkade: Boolean
+        val kravOmNedsattArbeidsevneErOppfyltBegrunnelse: String,
+        val nedsettelseSkyldesSykdomEllerSkade: Boolean,
+        val nedsettelseSkyldesSykdomEllerSkadeBegrunnelse: String,
+        val kilder: List<String>,
+        //FIXME: Skal denne være nullable?
+        val legeerklæringDato: LocalDate?,
+        //FIXME: Skal denne være nullable?
+        val sykmeldingDato: LocalDate?,
     )
 
     data class LøsningParagraf_11_5_yrkesskade(
@@ -331,7 +339,8 @@ data class SøkereKafkaDto(
         val tidspunktForVurdering: LocalDateTime,
         val harBehovForBehandling: Boolean,
         val harBehovForTiltak: Boolean,
-        val harMulighetForÅKommeIArbeid: Boolean
+        val harMulighetForÅKommeIArbeid: Boolean,
+        val individuellBegrunnelse: String,
     )
 
     data class LøsningParagraf_11_19(
@@ -376,8 +385,8 @@ data class SøkereKafkaDto(
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val bestemmesAv: String,
-        val unntak: String,
-        val unntaksbegrunnelse: String,
+        val unntak: String?,
+        val unntaksbegrunnelse: String?,
         val manueltSattVirkningsdato: LocalDate?,
     )
 
@@ -387,7 +396,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_2(
@@ -396,7 +405,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_3(
@@ -405,7 +414,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
@@ -414,7 +423,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_5(
@@ -423,7 +432,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_5Yrkesskade(
@@ -432,7 +441,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_6(
@@ -441,7 +450,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_22_13(
@@ -450,7 +459,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_22(
@@ -459,7 +468,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_19(
@@ -468,7 +477,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class KvalitetssikringParagraf_11_29(
@@ -477,7 +486,7 @@ data class SøkereKafkaDto(
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
         val erGodkjent: Boolean,
-        val begrunnelse: String
+        val begrunnelse: String?,
     )
 
     data class Vedtak(

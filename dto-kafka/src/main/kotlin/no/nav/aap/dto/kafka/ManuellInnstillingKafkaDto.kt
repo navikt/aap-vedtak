@@ -7,5 +7,6 @@ data class Innstilling_11_6(
     val tidspunktForVurdering: LocalDateTime,
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
-    val harMulighetForÅKommeIArbeid: Boolean
+    val harMulighetForÅKommeIArbeid: Boolean,
+    val individuellBegrunnelse: String,
 )

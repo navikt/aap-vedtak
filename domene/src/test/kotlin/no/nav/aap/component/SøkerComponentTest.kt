@@ -116,7 +116,12 @@ internal class SøkerComponentTest {
                 LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -223,7 +228,12 @@ internal class SøkerComponentTest {
                 LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -252,7 +262,7 @@ internal class SøkerComponentTest {
         assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
         assertTilstand(vilkårsvurderinger, "AVVENTER_INNSTILLING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
         assertTilstand(vilkårsvurderinger, "AVVENTER_MASKINELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_27)
-//        assertTilstand(vilkårsvurderinger, "SØKNAD_MOTTATT", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+//        assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
         assertTilstand(vilkårsvurderinger, "AVVENTER_MANUELL_VURDERING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
     }
 
@@ -348,7 +358,12 @@ internal class SøkerComponentTest {
                 LocalDateTime.now(),
                 LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = true,
-                    nedsettelseSkyldesSykdomEllerSkade = true
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
                 )
             )
         )
@@ -359,7 +374,8 @@ internal class SøkerComponentTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         søker.håndterLøsning(
@@ -369,7 +385,8 @@ internal class SøkerComponentTest {
                 tidspunktForVurdering = LocalDateTime.now(),
                 harBehovForBehandling = true,
                 harBehovForTiltak = true,
-                harMulighetForÅKommeIArbeid = true
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
             )
         )
         søker.håndterLøsning(
@@ -477,7 +494,12 @@ internal class SøkerComponentTest {
                     LocalDateTime.now(),
                     LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                         kravOmNedsattArbeidsevneErOppfylt = true,
-                        nedsettelseSkyldesSykdomEllerSkade = true
+                        kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                        nedsettelseSkyldesSykdomEllerSkade = true,
+                        nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                        kilder = emptyList(),
+                        legeerklæringDato = null,
+                        sykmeldingDato = null,
                     )
                 )
             )
@@ -490,7 +512,8 @@ internal class SøkerComponentTest {
                     tidspunktForVurdering = LocalDateTime.now(),
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
-                    harMulighetForÅKommeIArbeid = true
+                    harMulighetForÅKommeIArbeid = true,
+                    individuellBegrunnelse = "Begrunnelse",
                 )
             )
         }
@@ -502,7 +525,8 @@ internal class SøkerComponentTest {
                     tidspunktForVurdering = LocalDateTime.now(),
                     harBehovForBehandling = true,
                     harBehovForTiltak = true,
-                    harMulighetForÅKommeIArbeid = true
+                    harMulighetForÅKommeIArbeid = true,
+                    individuellBegrunnelse = "Begrunnelse",
                 )
             )
         }

@@ -4,6 +4,7 @@ import no.nav.aap.domene.Søker
 import no.nav.aap.domene.vilkår.Vilkårsvurdering
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.Behov.Companion.toDto
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
@@ -12,20 +13,35 @@ data class LøsningParagraf_11_5ModellApi(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val kravOmNedsattArbeidsevneErOppfylt: Boolean,
-    val nedsettelseSkyldesSykdomEllerSkade: Boolean
+    val kravOmNedsattArbeidsevneErOppfyltBegrunnelse: String,
+    val nedsettelseSkyldesSykdomEllerSkade: Boolean,
+    val nedsettelseSkyldesSykdomEllerSkadeBegrunnelse: String,
+    val kilder: List<String>,
+    val legeerklæringDato: LocalDate?,
+    val sykmeldingDato: LocalDate?,
 ) {
 
     constructor(
         vurdertAv: String,
         tidspunktForVurdering: LocalDateTime,
         kravOmNedsattArbeidsevneErOppfylt: Boolean,
-        nedsettelseSkyldesSykdomEllerSkade: Boolean
+        kravOmNedsattArbeidsevneErOppfyltBegrunnelse: String,
+        nedsettelseSkyldesSykdomEllerSkade: Boolean,
+        nedsettelseSkyldesSykdomEllerSkadeBegrunnelse: String,
+        kilder: List<String>,
+        legeerklæringDato: LocalDate?,
+        sykmeldingDato: LocalDate?,
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
-        nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade
+        kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
+        nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+        nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+        kilder = kilder,
+        legeerklæringDato = legeerklæringDato,
+        sykmeldingDato = sykmeldingDato,
     )
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
@@ -41,7 +57,12 @@ data class LøsningParagraf_11_5ModellApi(
         tidspunktForVurdering = tidspunktForVurdering,
         nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
             kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+            kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
             nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+            nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+            kilder = kilder,
+            legeerklæringDato = legeerklæringDato,
+            sykmeldingDato = sykmeldingDato,
         )
     )
 }
@@ -52,7 +73,7 @@ data class KvalitetssikringParagraf_11_5ModellApi(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 ) {
 
     constructor(
@@ -60,7 +81,7 @@ data class KvalitetssikringParagraf_11_5ModellApi(
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
-        begrunnelse: String
+        begrunnelse: String?,
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
         løsningId = løsningId,
@@ -117,7 +138,7 @@ data class KvalitetssikringParagraf_11_5YrkesskadeModellApi(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 ) {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {

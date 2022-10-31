@@ -11,7 +11,8 @@ internal class LøsningParagraf_11_6(
     private val tidspunktForVurdering: LocalDateTime,
     private val harBehovForBehandling: Boolean,
     private val harBehovForTiltak: Boolean,
-    private val harMulighetForÅKommeIArbeid: Boolean
+    private val harMulighetForÅKommeIArbeid: Boolean,
+    private val individuellBegrunnelse: String,
 ) : Hendelse() {
 
     internal companion object {
@@ -28,17 +29,18 @@ internal class LøsningParagraf_11_6(
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+        individuellBegrunnelse = individuellBegrunnelse,
     )
 }
 
 internal class KvalitetssikringParagraf_11_6(
-    private val kvalitetssikringId: UUID, 
-    private val løsningId: UUID, 
+    private val kvalitetssikringId: UUID,
+    private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
-    private val begrunnelse: String
+    private val begrunnelse: String?,
 ) : Hendelse() {
 
     internal companion object {

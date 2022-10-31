@@ -8,7 +8,7 @@ data class Kvalitetssikring_11_2(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_3(
@@ -16,7 +16,7 @@ data class Kvalitetssikring_11_3(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_4_ledd2_ledd3(
@@ -24,7 +24,7 @@ data class Kvalitetssikring_11_4_ledd2_ledd3(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_5(
@@ -32,7 +32,7 @@ data class Kvalitetssikring_11_5(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_6(
@@ -40,15 +40,7 @@ data class Kvalitetssikring_11_6(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
-)
-
-data class Kvalitetssikring_22_13(
-    val løsningId: UUID,
-    val kvalitetssikretAv: String,
-    val tidspunktForKvalitetssikring: LocalDateTime,
-    val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_19(
@@ -56,7 +48,7 @@ data class Kvalitetssikring_11_19(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_29(
@@ -64,5 +56,13 @@ data class Kvalitetssikring_11_29(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
+)
+
+data class Kvalitetssikring_22_13(
+    val løsningId: UUID,
+    val kvalitetssikretAv: String,
+    val tidspunktForKvalitetssikring: LocalDateTime,
+    val erGodkjent: Boolean,
+    val begrunnelse: String?,
 )

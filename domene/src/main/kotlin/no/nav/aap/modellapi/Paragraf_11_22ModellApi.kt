@@ -44,7 +44,7 @@ data class KvalitetssikringParagraf_11_22ModellApi(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 ) {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {

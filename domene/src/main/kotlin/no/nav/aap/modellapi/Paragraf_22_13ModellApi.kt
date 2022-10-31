@@ -14,8 +14,8 @@ data class LøsningParagraf_22_13ModellApi(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val bestemmesAv: String,
-    val unntak: String,
-    val unntaksbegrunnelse: String,
+    val unntak: String?,
+    val unntaksbegrunnelse: String?,
     val manueltSattVirkningsdato: LocalDate?,
 ) {
 
@@ -23,9 +23,9 @@ data class LøsningParagraf_22_13ModellApi(
         vurdertAv: String,
         tidspunktForVurdering: LocalDateTime,
         bestemmesAv: String,
-        unntak: String,
-        unntaksbegrunnelse: String,
-        manueltSattVirkningsdato: LocalDate
+        unntak: String?,
+        unntaksbegrunnelse: String?,
+        manueltSattVirkningsdato: LocalDate?,
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
@@ -69,7 +69,7 @@ data class KvalitetssikringParagraf_22_13ModellApi(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 ) {
 
     constructor(
@@ -77,7 +77,7 @@ data class KvalitetssikringParagraf_22_13ModellApi(
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
-        begrunnelse: String
+        begrunnelse: String?,
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
         løsningId = løsningId,

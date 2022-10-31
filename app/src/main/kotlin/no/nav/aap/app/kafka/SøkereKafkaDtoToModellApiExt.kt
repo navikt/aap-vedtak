@@ -250,7 +250,8 @@ private fun InnstillingParagraf_11_6.toModellApi() = InnstillingParagraf_11_6Mod
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
-    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+    individuellBegrunnelse = individuellBegrunnelse,
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toModellApi() = LøsningMaskinellMedlemskapYrkesskadeModellApi(
@@ -309,7 +310,12 @@ private fun LøsningParagraf_11_5.toModellApi() = LøsningParagraf_11_5ModellApi
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
     nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+    kilder = kilder,
+    legeerklæringDato = legeerklæringDato,
+    sykmeldingDato = sykmeldingDato,
 )
 
 private fun LøsningParagraf_11_5_yrkesskade.toModellApi() = LøsningParagraf_11_5YrkesskadeModellApi(
@@ -326,7 +332,8 @@ private fun LøsningParagraf_11_6.toModellApi() = LøsningParagraf_11_6ModellApi
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
-    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+    harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+    individuellBegrunnelse = individuellBegrunnelse,
 )
 
 private fun LøsningParagraf_11_19.toModellApi() = LøsningParagraf_11_19ModellApi(

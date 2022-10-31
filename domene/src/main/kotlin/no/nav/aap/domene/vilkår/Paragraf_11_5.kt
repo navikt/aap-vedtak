@@ -207,7 +207,12 @@ internal class Paragraf_11_5 private constructor(
                 tidspunktForVurdering = it.tidspunktForVurdering,
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
                     kravOmNedsattArbeidsevneErOppfylt = it.kravOmNedsattArbeidsevneErOppfylt,
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = it.kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
                     nedsettelseSkyldesSykdomEllerSkade = it.nedsettelseSkyldesSykdomEllerSkade,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = it.nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+                    kilder = it.kilder,
+                    legeerklæringDato = it.legeerklæringDato,
+                    sykmeldingDato = it.sykmeldingDato,
                 )
             )
         })

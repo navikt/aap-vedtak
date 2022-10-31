@@ -15,7 +15,8 @@ data class InnstillingParagraf_11_6ModellApi(
     val tidspunktForVurdering: LocalDateTime,
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
-    val harMulighetForÅKommeIArbeid: Boolean
+    val harMulighetForÅKommeIArbeid: Boolean,
+    val individuellBegrunnelse: String,
 ) {
 
     constructor(
@@ -23,14 +24,16 @@ data class InnstillingParagraf_11_6ModellApi(
         tidspunktForVurdering: LocalDateTime,
         harBehovForBehandling: Boolean,
         harBehovForTiltak: Boolean,
-        harMulighetForÅKommeIArbeid: Boolean
+        harMulighetForÅKommeIArbeid: Boolean,
+        individuellBegrunnelse: String,
     ) : this(
         innstillingId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+        individuellBegrunnelse = individuellBegrunnelse,
     )
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
@@ -46,7 +49,8 @@ data class InnstillingParagraf_11_6ModellApi(
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+        individuellBegrunnelse = individuellBegrunnelse,
     )
 }
 
@@ -56,7 +60,8 @@ data class LøsningParagraf_11_6ModellApi(
     val tidspunktForVurdering: LocalDateTime,
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
-    val harMulighetForÅKommeIArbeid: Boolean
+    val harMulighetForÅKommeIArbeid: Boolean,
+    val individuellBegrunnelse: String,
 ) {
 
     constructor(
@@ -64,14 +69,16 @@ data class LøsningParagraf_11_6ModellApi(
         tidspunktForVurdering: LocalDateTime,
         harBehovForBehandling: Boolean,
         harBehovForTiltak: Boolean,
-        harMulighetForÅKommeIArbeid: Boolean
+        harMulighetForÅKommeIArbeid: Boolean,
+        individuellBegrunnelse: String,
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+        individuellBegrunnelse = individuellBegrunnelse,
     )
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
@@ -87,7 +94,8 @@ data class LøsningParagraf_11_6ModellApi(
         tidspunktForVurdering = tidspunktForVurdering,
         harBehovForBehandling = harBehovForBehandling,
         harBehovForTiltak = harBehovForTiltak,
-        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid
+        harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
+        individuellBegrunnelse = individuellBegrunnelse,
     )
 }
 
@@ -97,7 +105,7 @@ data class KvalitetssikringParagraf_11_6ModellApi(
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
-    val begrunnelse: String
+    val begrunnelse: String?,
 ) {
 
     constructor(
@@ -105,7 +113,7 @@ data class KvalitetssikringParagraf_11_6ModellApi(
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
         erGodkjent: Boolean,
-        begrunnelse: String
+        begrunnelse: String?,
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
         løsningId = løsningId,

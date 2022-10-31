@@ -32,7 +32,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -56,7 +57,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -66,7 +68,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterLøsning(løsning)
 
@@ -90,7 +93,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -100,7 +104,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
             harBehovForTiltak = false,
-            harMulighetForÅKommeIArbeid = false
+            harMulighetForÅKommeIArbeid = false,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterLøsning(løsning)
 
@@ -124,7 +129,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -134,7 +140,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = false,
-            harMulighetForÅKommeIArbeid = false
+            harMulighetForÅKommeIArbeid = false,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterLøsning(løsning)
 
@@ -158,7 +165,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -168,7 +176,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = false
+            harMulighetForÅKommeIArbeid = false,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterLøsning(løsning)
 
@@ -192,7 +201,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -202,7 +212,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
             harBehovForTiltak = false,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterLøsning(løsning)
 
@@ -226,7 +237,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -236,7 +248,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
 
         vilkår.håndterLøsning(løsning)
@@ -265,7 +278,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -275,7 +289,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
             harBehovForTiltak = false,
-            harMulighetForÅKommeIArbeid = false
+            harMulighetForÅKommeIArbeid = false,
+            individuellBegrunnelse = "Begrunnelse",
         )
 
         vilkår.håndterLøsning(løsning)
@@ -304,7 +319,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -314,7 +330,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
 
         vilkår.håndterLøsning(løsning)
@@ -343,7 +360,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = true,
             harBehovForTiltak = true,
-            harMulighetForÅKommeIArbeid = true
+            harMulighetForÅKommeIArbeid = true,
+            individuellBegrunnelse = "Begrunnelse",
         )
         vilkår.håndterInnstilling(innstilling)
 
@@ -353,7 +371,8 @@ internal class `§11-6 Test` {
             tidspunktForVurdering = LocalDateTime.now(),
             harBehovForBehandling = false,
             harBehovForTiltak = false,
-            harMulighetForÅKommeIArbeid = false
+            harMulighetForÅKommeIArbeid = false,
+            individuellBegrunnelse = "Begrunnelse",
         )
 
         vilkår.håndterLøsning(løsning)
