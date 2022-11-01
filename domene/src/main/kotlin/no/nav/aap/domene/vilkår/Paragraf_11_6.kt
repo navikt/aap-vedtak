@@ -79,6 +79,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering: Paragraf_11_6,
             modellApi: Paragraf_11_6ModellApi
         ) {
+            vilkårsvurdering.settInnstillinger(modellApi)
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
         }
@@ -119,6 +120,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering: Paragraf_11_6,
             modellApi: Paragraf_11_6ModellApi
         ) {
+            vilkårsvurdering.settInnstillinger(modellApi)
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
         }
@@ -154,6 +156,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering: Paragraf_11_6,
             modellApi: Paragraf_11_6ModellApi
         ) {
+            vilkårsvurdering.settInnstillinger(modellApi)
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
         }
@@ -178,6 +181,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering: Paragraf_11_6,
             modellApi: Paragraf_11_6ModellApi
         ) {
+            vilkårsvurdering.settInnstillinger(modellApi)
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
         }
@@ -213,6 +217,7 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering: Paragraf_11_6,
             modellApi: Paragraf_11_6ModellApi
         ) {
+            vilkårsvurdering.settInnstillinger(modellApi)
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
         }
