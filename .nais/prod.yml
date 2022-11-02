@@ -1,5 +1,5 @@
 toggle:
-  lesSøknader: false
+  lesSøknader: "false"
 kafka:
   pool: nav-prod
   permanent-delete-topics: false
