@@ -37,3 +37,6 @@ spec:
   prometheus:
     enabled: true
     path: /actuator/metrics
+  env:
+    - name: TOGGLE_LES_SØKNADER
+      value: {{toggle.lesSøknader}}

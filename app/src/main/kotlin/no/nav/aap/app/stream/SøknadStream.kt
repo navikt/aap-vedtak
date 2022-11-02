@@ -13,8 +13,12 @@ import org.slf4j.LoggerFactory
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
-internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>, lesSøknader: Boolean) {
     val søkerOgBehov = consume(Topics.søknad)
+        .filterValues("filter-soknad-les-toggle") {
+            if (!lesSøknader) secureLog.info("leser ikke søknad da toggle for lesing er skrudd av")
+            lesSøknader
+        }
         .filterNotNull("filter-soknad-tombstone")
         .leftJoin(Topics.søknad with Topics.søkere, søkere)
         .filterValues("filter-soknad-ny") { (_, søkereKafkaDto) ->

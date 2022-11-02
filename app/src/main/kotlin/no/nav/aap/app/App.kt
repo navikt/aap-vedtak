@@ -33,11 +33,19 @@ fun main() {
     embeddedServer(Netty, port = 8080, module = Application::server).start(wait = true)
 }
 
-data class Config(val kafka: KStreamsConfig)
+data class Config(
+    val toggle: Toggle,
+    val kafka: KStreamsConfig,
+) {
+    data class Toggle(
+        val lesSøknader: Boolean,
+    )
+}
 
 internal fun Application.server(kafka: KStreams = KafkaStreams) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val config = loadConfig<Config>()
+    log.info("Starter med toggles: ${config.toggle}")
     val søkerProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søkere)
 
     install(MicrometerMetrics) { registry = prometheus }
@@ -52,7 +60,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     kafka.connect(
         config = config.kafka,
         registry = prometheus,
-        topology = topology(prometheus, søkerProducer),
+        topology = topology(prometheus, søkerProducer, config.toggle.lesSøknader),
     )
 
     routing {
@@ -60,7 +68,11 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
     }
 }
 
-internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, SøkereKafkaDto>): Topology {
+internal fun topology(
+    registry: MeterRegistry,
+    søkerProducer: Producer<String, SøkereKafkaDto>,
+    lesSøknader: Boolean
+): Topology {
     val streams = StreamsBuilder()
     val søkerKTable = streams
         // Setter timestamp for søkere tilbake ett år for å tvinge topologien å oppdatere tabellen før neste hendelse leses
@@ -70,7 +82,7 @@ internal fun topology(registry: MeterRegistry, søkerProducer: Producer<String, 
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
     søkerKTable.migrateStateStore(Tables.søkere, søkerProducer)
 
-    streams.søknadStream(søkerKTable)
+    streams.søknadStream(søkerKTable, lesSøknader)
     streams.medlemStream(søkerKTable)
     streams.inntekterStream(søkerKTable)
     streams.andreFolketrygdytelserStream(søkerKTable)

@@ -27,7 +27,7 @@ internal class ApiTest {
             connect(
                 config = KStreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
                 registry = SimpleMeterRegistry(),
-                topology = topology(SimpleMeterRegistry(), MockProducer())
+                topology = topology(SimpleMeterRegistry(), MockProducer(), true)
             )
         }.use { kafka ->
             val søknadTopic = kafka.testTopic(Topics.søknad)
@@ -280,7 +280,7 @@ internal class ApiTest {
 
     @Test
     fun `mermaid topic diagram`() {
-        val topology = topology(SimpleMeterRegistry(), MockProducer())
+        val topology = topology(SimpleMeterRegistry(), MockProducer(), true)
         val flowchart = Mermaid.graph("Vedtak", topology)
         val markdown = markdown(flowchart)
         File("../doc/topology.md").apply { writeText(markdown) }

@@ -1,3 +1,5 @@
+toggle:
+  lesSøknader: true
 kafka:
   pool: nav-dev
   permanent-delete-topics: true
