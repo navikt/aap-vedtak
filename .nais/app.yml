@@ -38,5 +38,5 @@ spec:
     enabled: true
     path: /actuator/metrics
   env:
-    - name: TOGGLE_LES_SØKNADER
+    - name: TOGGLE_LES_SOKNADER
       value: "{{toggle.lesSøknader}}"

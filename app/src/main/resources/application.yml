@@ -1,5 +1,5 @@
 toggle:
-  lesSøknader: ${TOGGLE_LES_SØKNADER}
+  lesSøknader: ${TOGGLE_LES_SOKNADER}
 kafka:
   application-id: ${KAFKA_STREAMS_APPLICATION_ID}
   brokers: ${KAFKA_BROKERS}
