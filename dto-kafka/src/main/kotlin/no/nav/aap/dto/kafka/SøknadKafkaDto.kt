@@ -5,19 +5,28 @@ import java.time.LocalDateTime
 import java.util.*
 
 data class SøknadKafkaDto(
+    val sykepenger: Boolean,
+    val ferie: Ferie?,
     val studier: Studier,
     val medlemsskap: Medlemskap,
     val registrerteBehandlere: List<RegistrertBehandler>,
     val andreBehandlere: List<AnnenBehandler>,
     val yrkesskadeType: Yrkesskade,
     val utbetalinger: Utbetalinger?,
+    val tilleggsopplysninger: String?,
     val registrerteBarn: List<BarnOgInntekt>,
     val andreBarn: List<AnnetBarnOgInntekt>,
-    val vedlegg: Vedlegg?,
+    val vedlegg: List<UUID> = emptyList(),
     val fødselsdato: LocalDate,
     val innsendingTidspunkt: LocalDateTime,
 ) {
     enum class Yrkesskade { JA, NEI }
+}
+
+data class Ferie(val ferietype: FerieType, var periode: Periode?, var dager: Int?) {
+    enum class FerieType {
+        PERIODE, DAGER, NEI
+    }
 }
 
 data class AnnenBehandler(
@@ -55,12 +64,10 @@ data class RegistrertBehandler(
     )
 }
 
-data class Vedlegg(val tittel: String?, val deler: List<UUID?>?)
-
 data class Studier(
     val erStudent: StudieSvar?,
     val kommeTilbake: RadioValg?,
-    val vedlegg: Vedlegg?
+    val vedlegg: List<UUID> = emptyList()
 ) {
 
     enum class StudieSvar {
@@ -90,7 +97,7 @@ data class AnnetBarnOgInntekt(
     val barn: Barn,
     val relasjon: Relasjon,
     val merEnnIG: Boolean?,
-    val vedlegg: Vedlegg?,
+    val vedlegg: List<UUID> = emptyList(),
 ) {
 
     enum class Relasjon {
@@ -112,13 +119,13 @@ data class Utbetalinger(
 
     data class FraArbeidsgiver(
         val fraArbeidsgiver: Boolean,
-        val vedlegg: Vedlegg?,
+        val vedlegg: List<UUID> = emptyList(),
     )
 
     data class AnnenStønad(
         val type: AnnenStønadstype,
         val hvemUtbetalerAFP: String?,
-        val vedlegg: Vedlegg?,
+        val vedlegg: List<UUID> = emptyList(),
     )
 
     enum class AnnenStønadstype {

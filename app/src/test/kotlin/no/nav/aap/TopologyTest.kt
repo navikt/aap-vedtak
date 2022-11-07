@@ -57,10 +57,12 @@ internal class ApiTest {
             val tidspunktForVurdering = LocalDateTime.now()
             søknadTopic.produce(fnr) {
                 SøknadKafkaDto(
+                    sykepenger = false,
+                    ferie = null,
                     studier = Studier(
                         erStudent = Studier.StudieSvar.NEI,
                         kommeTilbake = null,
-                        vedlegg = null,
+                        vedlegg = emptyList(),
                     ),
                     medlemsskap = Medlemskap(
                         boddINorgeSammenhengendeSiste5 = true,
@@ -73,9 +75,10 @@ internal class ApiTest {
                     andreBehandlere = emptyList(),
                     yrkesskadeType = SøknadKafkaDto.Yrkesskade.NEI,
                     utbetalinger = null,
+                    tilleggsopplysninger = null,
                     registrerteBarn = emptyList(),
                     andreBarn = emptyList(),
-                    vedlegg = null,
+                    vedlegg = emptyList(),
                     fødselsdato = LocalDate.now().minusYears(40),
                     innsendingTidspunkt = LocalDateTime.now(),
                 )
