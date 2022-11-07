@@ -1,5 +1,6 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.Vedtak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
@@ -682,9 +683,13 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         }
     }
 
+    internal open fun lagSnapshot(vedtak: Vedtak) {}
 
     internal companion object {
         private val log = LoggerFactory.getLogger("Vilkårsvurdering")
         internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
+        internal fun Iterable<Vilkårsvurdering<*>>.lagSnapshot(vedtak: Vedtak) {
+            forEach { it.lagSnapshot(vedtak) }
+        }
     }
 }

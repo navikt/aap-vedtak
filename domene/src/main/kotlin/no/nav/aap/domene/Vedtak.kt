@@ -1,6 +1,8 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
+import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5
+import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.modellapi.VedtakModellApi
 import java.time.LocalDate
 import java.util.*
@@ -12,6 +14,8 @@ internal class Vedtak(
     private val vedtaksdato: LocalDate,
     private val virkningsdato: LocalDate
 ) {
+    private val settAvVurderteVilkårSomHarFørtTilDetteVedtaket = mutableListOf<Any>()
+
     internal fun toDto() = VedtakModellApi(
         vedtaksid = vedtaksid,
         innvilget = innvilget,
@@ -56,4 +60,9 @@ internal class Vedtak(
 
     override fun toString() =
         "Vedtak(vedtaksid=$vedtaksid, innvilget=$innvilget, inntektsgrunnlag=$inntektsgrunnlag, vedtaksdato=$vedtaksdato, virkningsdato=$virkningsdato)"
+
+    fun leggTilLøsning(løsning: LøsningParagraf_11_5, kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        settAvVurderteVilkårSomHarFørtTilDetteVedtaket.add(løsning)
+        settAvVurderteVilkårSomHarFørtTilDetteVedtaket.add(kvalitetssikring)
+    }
 }

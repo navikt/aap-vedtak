@@ -254,6 +254,10 @@ internal class Sak private constructor(
 
         object VedtakFattet : Tilstand(Tilstandsnavn.VEDTAK_FATTET) {
 
+            override fun onEntry(sak: Sak, hendelse: Hendelse) {
+                sak.sakstype.lagSnapshot(sak.vedtak)
+            }
+
             override fun håndterIverksettelse(sak: Sak, iverksettelseAvVedtak: IverksettelseAvVedtak) {
                 vurderNesteTilstand(sak, iverksettelseAvVedtak)
             }

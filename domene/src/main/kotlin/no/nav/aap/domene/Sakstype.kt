@@ -3,6 +3,7 @@ package no.nav.aap.domene
 import no.nav.aap.domene.beregning.Inntektshistorikk
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.*
+import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.lagSnapshot
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.domene.visitor.BeregningsdatoVisitor
 import no.nav.aap.domene.visitor.SakstypeVisitor
@@ -208,6 +209,10 @@ internal abstract class Sakstype private constructor(
         aktiv = aktiv,
         vilkårsvurderinger = vilkårsvurderinger.toDto()
     )
+
+    internal fun lagSnapshot(vedtak: Vedtak) {
+        vilkårsvurderinger.lagSnapshot(vedtak)
+    }
 
     internal companion object {
         internal fun Iterable<Sakstype>.toDto() = map(Sakstype::toDto)
