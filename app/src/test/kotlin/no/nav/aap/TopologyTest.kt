@@ -56,7 +56,29 @@ internal class ApiTest {
             val fnr = "123"
             val tidspunktForVurdering = LocalDateTime.now()
             søknadTopic.produce(fnr) {
-                SøknadKafkaDto(fødselsdato = LocalDate.now().minusYears(40))
+                SøknadKafkaDto(
+                    studier = Studier(
+                        erStudent = Studier.StudieSvar.NEI,
+                        kommeTilbake = null,
+                        vedlegg = null,
+                    ),
+                    medlemsskap = Medlemskap(
+                        boddINorgeSammenhengendeSiste5 = true,
+                        jobbetUtenforNorgeFørSyk = false,
+                        jobbetSammenhengendeINorgeSiste5 = null,
+                        iTilleggArbeidUtenforNorge = null,
+                        utenlandsopphold = emptyList(),
+                    ),
+                    registrerteBehandlere = emptyList(),
+                    andreBehandlere = emptyList(),
+                    yrkesskadeType = SøknadKafkaDto.Yrkesskade.NEI,
+                    utbetalinger = null,
+                    registrerteBarn = emptyList(),
+                    andreBarn = emptyList(),
+                    vedlegg = null,
+                    fødselsdato = LocalDate.now().minusYears(40),
+                    innsendingTidspunkt = LocalDateTime.now(),
+                )
             }
 
             val medlemRequest = medlemTopic.readValue()

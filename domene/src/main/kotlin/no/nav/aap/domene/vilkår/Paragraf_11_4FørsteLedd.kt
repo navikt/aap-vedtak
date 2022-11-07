@@ -70,6 +70,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
+                //FIXME: Mangler lagring av løsning
             )
     }
 
