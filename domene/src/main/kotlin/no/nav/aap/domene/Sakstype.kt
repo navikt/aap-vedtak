@@ -195,6 +195,7 @@ internal abstract class Sakstype private constructor(
                 val vilkårsvurderinger = listOf(
                     Paragraf_11_14(),
                     Paragraf_11_19(),
+                    Paragraf_22_13(),
                 )
                 return Student(vilkårsvurderinger)
             }

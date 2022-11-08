@@ -208,9 +208,21 @@ internal class SakTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_5
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_6
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_22_13
+        )
 //        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
     }
 
@@ -338,11 +350,31 @@ internal class SakTest {
             Vilkårsvurdering.Paragraf.PARAGRAF_11_4,
             Vilkårsvurdering.Ledd.LEDD_2 + Vilkårsvurdering.Ledd.LEDD_3
         )
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_5_YRKESSKADE)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_6)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_22_13)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_22)
-        assertTilstand(vilkårsvurderinger, "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING", Vilkårsvurdering.Paragraf.PARAGRAF_11_29)
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_5_YRKESSKADE
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_6
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_22_13
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_22
+        )
+        assertTilstand(
+            vilkårsvurderinger,
+            "OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING",
+            Vilkårsvurdering.Paragraf.PARAGRAF_11_29
+        )
     }
 
     @Test
@@ -1401,7 +1433,11 @@ internal class SakTest {
     fun `Virkningsdato bestemmes av søknadsdato`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(
+            personident = personident,
+            fødselsdato = fødselsdato,
+            søknadstidspunkt = (25 oktober 2022).atTime(12, 0),
+        )
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -1627,8 +1663,7 @@ internal class SakTest {
 
         val saker = listOf(sak).toDto()
         val vedtak = saker[0].vedtak!!
-        //TODO: Sett spesifikk virkningsdato
-        assertEquals(LocalDate.now(), vedtak.virkningsdato)
+        assertEquals(25 oktober 2022, vedtak.virkningsdato)
 
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
         val vilkårsvurderinger = sakstype.flatMap { it.vilkårsvurderinger }

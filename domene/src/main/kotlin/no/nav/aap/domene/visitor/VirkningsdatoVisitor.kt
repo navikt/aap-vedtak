@@ -1,5 +1,6 @@
 package no.nav.aap.domene.visitor
 
+import no.nav.aap.domene.vilkår.Paragraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd
 import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.LøsningSykepengedager
@@ -10,9 +11,10 @@ import java.util.*
 internal class VirkningsdatoVisitor : SakstypeVisitor {
     internal lateinit var bestemmesAv: LøsningParagraf_22_13.BestemmesAv
         private set
-    internal var virkningsdato: LocalDate = LocalDate.now() //TODO: Finne søknadstidspunkt
+    internal lateinit var virkningsdato: LocalDate
         private set
 
+    private var virkningsdatoSøknad: LocalDate? = null
     private var virkningsdatoSykepenger: LocalDate? = null
     private var virkningsdatoSvangerskapspenger: LocalDate? = null
 
@@ -32,6 +34,10 @@ internal class VirkningsdatoVisitor : SakstypeVisitor {
         this.virkningsdatoSvangerskapspenger = svangerskapspenger.virkningsdato()
     }
 
+    override fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13, søknadstidspunkt: LocalDateTime) {
+        this.virkningsdatoSøknad = søknadstidspunkt.toLocalDate()
+    }
+
     override fun visitLøsningParagraf_22_13(
         løsning: LøsningParagraf_22_13,
         løsningId: UUID,
@@ -44,9 +50,19 @@ internal class VirkningsdatoVisitor : SakstypeVisitor {
     ) {
         this.bestemmesAv = bestemmesAv
         this.virkningsdato = when (bestemmesAv) {
+            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt -> requireNotNull(virkningsdatoSøknad)
             LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger -> requireNotNull(virkningsdatoSykepenger)
             LøsningParagraf_22_13.BestemmesAv.svangerskapspenger -> requireNotNull(virkningsdatoSvangerskapspenger)
-            else -> manueltSattVirkningsdato ?: LocalDate.now() //TODO: Finne søknadstidspunkt
+            LøsningParagraf_22_13.BestemmesAv.dagpenger,
+            LøsningParagraf_22_13.BestemmesAv.omsorgspenger,
+            LøsningParagraf_22_13.BestemmesAv.pleiepenger,
+            LøsningParagraf_22_13.BestemmesAv.opplæringspenger,
+            LøsningParagraf_22_13.BestemmesAv.foreldrepenger,
+            LøsningParagraf_22_13.BestemmesAv.ermiraSays,
+            LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret,
+            LøsningParagraf_22_13.BestemmesAv.unntaksvurderingMangelfull,
+            LøsningParagraf_22_13.BestemmesAv.etterSisteLoenn,
+            LøsningParagraf_22_13.BestemmesAv.annet -> requireNotNull(manueltSattVirkningsdato)
         }
     }
 }

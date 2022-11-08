@@ -597,6 +597,17 @@ internal class SøkerComponentTest {
             )
         )
         søker.håndterLøsning(
+            LøsningParagraf_22_13(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+                "INGEN",
+                "",
+                LocalDate.now()
+            )
+        )
+        søker.håndterLøsning(
             LøsningInntekter(
                 listOf(
                     Inntekt(ARBEIDSGIVER, januar(2020), 500000.beløp),

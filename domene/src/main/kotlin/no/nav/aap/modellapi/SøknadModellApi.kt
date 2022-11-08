@@ -5,10 +5,12 @@ import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov.Companion.toDto
 import java.time.LocalDate
+import java.time.LocalDateTime
 
 data class SøknadModellApi(
     val personident: String,
     val fødselsdato: LocalDate,
+    val søknadstidspunkt: LocalDateTime = LocalDateTime.now(),
     val erStudent: Boolean = false,
     val harTidligereYrkesskade: String = "NEI",
 ) {
@@ -16,6 +18,7 @@ data class SøknadModellApi(
         val søknad = Søknad(
             personident = Personident(personident),
             fødselsdato = Fødselsdato(fødselsdato),
+            søknadstidspunkt = søknadstidspunkt,
             erStudent = erStudent,
             harTidligereYrkesskade = enumValueOf(harTidligereYrkesskade)
         )

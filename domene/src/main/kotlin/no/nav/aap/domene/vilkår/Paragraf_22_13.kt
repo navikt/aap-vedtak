@@ -16,6 +16,7 @@ import no.nav.aap.modellapi.Paragraf_22_13ModellApi
 import no.nav.aap.modellapi.Utfall
 import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import java.time.LocalDate
+import java.time.LocalDateTime
 import java.util.*
 
 internal class Paragraf_22_13 private constructor(
@@ -30,6 +31,9 @@ internal class Paragraf_22_13 private constructor(
     ) {
     private val løsninger = mutableListOf<LøsningParagraf_22_13>()
     private val kvalitetssikringer = mutableListOf<KvalitetssikringParagraf_22_13>()
+    private val søknadstidspunkter = mutableListOf<LocalDateTime>()
+    private val søknadstidspunkt
+        get() = søknadstidspunkter.lastOrNull() ?: LocalDateTime.now() //TODO: Mangler serde av søknadstidspunkter
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -42,6 +46,7 @@ internal class Paragraf_22_13 private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
+            vilkårsvurdering.søknadstidspunkter.add(søknad.søknadstidspunkt())
             vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
@@ -101,11 +106,11 @@ internal class Paragraf_22_13 private constructor(
         }
 
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
-            visitor.preVisitParagraf_22_13(vilkårsvurdering)
+            visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
             visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
-            visitor.postVisitParagraf_22_13(vilkårsvurdering)
+            visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
@@ -133,11 +138,11 @@ internal class Paragraf_22_13 private constructor(
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_22_13>() {
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
-            visitor.preVisitParagraf_22_13(vilkårsvurdering)
+            visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
             visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
-            visitor.postVisitParagraf_22_13(vilkårsvurdering)
+            visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
@@ -165,11 +170,11 @@ internal class Paragraf_22_13 private constructor(
 
     object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_22_13>() {
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
-            visitor.preVisitParagraf_22_13(vilkårsvurdering)
+            visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
             vilkårsvurdering.løsninger.last().accept(visitor)
             visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
-            visitor.postVisitParagraf_22_13(vilkårsvurdering)
+            visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =

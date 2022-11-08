@@ -81,7 +81,7 @@ internal interface VilkårsvurderingVisitor {
     fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {}
     fun postVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27FørsteLedd) {}
 
-    fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
+    fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13, søknadstidspunkt: LocalDateTime) {}
     fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
     fun visitLøsningParagraf_22_13(
         løsning: LøsningParagraf_22_13,
@@ -96,5 +96,5 @@ internal interface VilkårsvurderingVisitor {
     }
 
     fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
-    fun postVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13) {}
+    fun postVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13, søknadstidspunkt: LocalDateTime) {}
 }
