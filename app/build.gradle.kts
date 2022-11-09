@@ -1,4 +1,4 @@
-val aapLibVersion = "3.5.27"
+val aapLibVersion = "3.5.28"
 val ktorVersion = "2.1.3"
 
 plugins {
@@ -24,12 +24,12 @@ dependencies {
     implementation("io.ktor:ktor-serialization-jackson:$ktorVersion")
     implementation("io.ktor:ktor-server-metrics-micrometer:$ktorVersion")
 
-    implementation("io.micrometer:micrometer-registry-prometheus:1.9.5")
+    implementation("io.micrometer:micrometer-registry-prometheus:1.10.0")
 
     implementation("ch.qos.logback:logback-classic:1.4.4")
     implementation("net.logstash.logback:logstash-logback-encoder:7.2")
 
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.13.4.2")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.0")
     implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.0")
 
     testImplementation(kotlin("test"))
