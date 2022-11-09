@@ -3,8 +3,6 @@ package no.nav.aap.app.kafka
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
-import java.time.LocalDateTime
-import java.util.*
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -244,12 +242,12 @@ private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     erMedlem = erMedlem
 )
 
 private fun LøsningManuellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningManuellMedlemskapYrkesskade(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
@@ -261,15 +259,12 @@ private fun KvalitetssikringMedlemskapYrkesskade.toDto() = SøkereKafkaDto.Kvali
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningMaskinellParagraf_8_48.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_8_48(
-    løsningId = UUID.randomUUID(),
-    tidspunktForVurdering = LocalDateTime.now(),
+    løsningId = løsningId,
+    tidspunktForVurdering = tidspunktForVurdering,
     sykepengedager = sykepengedager?.let { sykepenger ->
         SøkereKafkaDto.LøsningMaskinellParagraf_8_48.Sykepengedager(
             gjenståendeSykedager = sykepenger.gjenståendeSykedager,
@@ -280,13 +275,13 @@ private fun LøsningMaskinellParagraf_8_48.toDto() = SøkereKafkaDto.LøsningMas
 )
 
 private fun LøsningMaskinellParagraf_11_2.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_2(
-    løsningId = UUID.randomUUID(),
-    tidspunktForVurdering = LocalDateTime.now(),
+    løsningId = løsningId,
+    tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
 private fun LøsningManuellParagraf_11_2.toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
@@ -298,14 +293,11 @@ private fun KvalitetssikringParagraf_11_2.toDto() = SøkereKafkaDto.Kvalitetssik
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningParagraf_11_3.toDto() = SøkereKafkaDto.LøsningParagraf_11_3(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
@@ -317,14 +309,11 @@ private fun KvalitetssikringParagraf_11_3.toDto() = SøkereKafkaDto.Kvalitetssik
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningParagraf_11_4AndreOgTredjeLedd.toDto() = SøkereKafkaDto.LøsningParagraf_11_4AndreOgTredjeLedd(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
@@ -341,16 +330,16 @@ private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() =
     )
 
 private fun LøsningParagraf_11_5.toDto() = SøkereKafkaDto.LøsningParagraf_11_5(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
-    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Ugyldig begrunnelse",
+    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
     nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
-    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Ugyldig begrunnelse",
-    kilder = emptyList(),
-    legeerklæringDato = null,
-    sykmeldingDato = null,
+    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+    kilder = kilder,
+    legeerklæringDato = legeerklæringDato,
+    sykmeldingDato = sykmeldingDato,
 )
 
 private fun KvalitetssikringParagraf_11_5.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_5(
@@ -359,14 +348,11 @@ private fun KvalitetssikringParagraf_11_5.toDto() = SøkereKafkaDto.Kvalitetssik
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningParagraf_11_5_yrkesskade.toDto() = SøkereKafkaDto.LøsningParagraf_11_5_yrkesskade(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     arbeidsevneErNedsattMedMinst50Prosent = arbeidsevneErNedsattMedMinst50Prosent,
@@ -379,30 +365,33 @@ private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = SøkereKafkaDto.Kv
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun InnstillingParagraf_11_6.toDto() = SøkereKafkaDto.InnstillingParagraf_11_6(
-    innstillingId = UUID.randomUUID(),
+    innstillingId = innstillingId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
-    individuellBegrunnelse = "Ugyldig begrunnelse",
+    individuellBegrunnelse = when (individuellBegrunnelse) {
+        "<Mangler støtte for null backend>" -> null
+        else -> individuellBegrunnelse
+    },
 )
 
 private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_6(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
-    individuellBegrunnelse = "Ugyldig begrunnelse",
+    individuellBegrunnelse = when (individuellBegrunnelse) {
+        "<Mangler støtte for null backend>" -> null
+        else -> individuellBegrunnelse
+    },
 )
 
 private fun KvalitetssikringParagraf_11_6.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_6(
@@ -411,14 +400,11 @@ private fun KvalitetssikringParagraf_11_6.toDto() = SøkereKafkaDto.Kvalitetssik
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningParagraf_11_19.toDto() = SøkereKafkaDto.LøsningParagraf_11_19(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     beregningsdato = beregningsdato
@@ -430,14 +416,11 @@ private fun KvalitetssikringParagraf_11_19.toDto() = SøkereKafkaDto.Kvalitetssi
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningParagraf_11_22.toDto() = SøkereKafkaDto.LøsningParagraf_11_22(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt,
@@ -452,14 +435,11 @@ private fun KvalitetssikringParagraf_11_22.toDto() = SøkereKafkaDto.Kvalitetssi
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningMaskinellParagraf_11_27FørsteLedd.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_27FørsteLedd(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     svangerskapspenger = SøkereKafkaDto.LøsningMaskinellParagraf_11_27FørsteLedd.Svangerskapspenger(
         fom = svangerskapspenger.fom,
@@ -470,7 +450,7 @@ private fun LøsningMaskinellParagraf_11_27FørsteLedd.toDto() = SøkereKafkaDto
 )
 
 private fun LøsningParagraf_11_29.toDto() = SøkereKafkaDto.LøsningParagraf_11_29(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
@@ -482,25 +462,16 @@ private fun KvalitetssikringParagraf_11_29.toDto() = SøkereKafkaDto.Kvalitetssi
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun LøsningParagraf_22_13.toDto() = SøkereKafkaDto.LøsningParagraf_22_13(
-    løsningId = UUID.randomUUID(),
+    løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     bestemmesAv = bestemmesAv,
-    unntak = when (unntak) {
-        "<Mangler støtte for null backend>" -> null
-        else -> unntak
-    },
-    unntaksbegrunnelse = when (unntaksbegrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> unntaksbegrunnelse
-    },
+    unntak = unntak,
+    unntaksbegrunnelse = unntaksbegrunnelse,
     manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
@@ -510,10 +481,7 @@ private fun KvalitetssikringParagraf_22_13.toDto() = SøkereKafkaDto.Kvalitetssi
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
     erGodkjent = erGodkjent,
-    begrunnelse = when (begrunnelse) {
-        "<Mangler støtte for null backend>" -> null
-        else -> begrunnelse
-    },
+    begrunnelse = begrunnelse,
 )
 
 private fun Vedtak.toDto() = SøkereKafkaDto.Vedtak(

@@ -251,7 +251,10 @@ private fun InnstillingParagraf_11_6.toModellApi() = InnstillingParagraf_11_6Mod
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
-    individuellBegrunnelse = individuellBegrunnelse,
+    individuellBegrunnelse = when (individuellBegrunnelse) {
+        "<Mangler støtte for null backend>" -> null
+        else -> individuellBegrunnelse
+    },
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toModellApi() = LøsningMaskinellMedlemskapYrkesskadeModellApi(
@@ -333,7 +336,10 @@ private fun LøsningParagraf_11_6.toModellApi() = LøsningParagraf_11_6ModellApi
     harBehovForBehandling = harBehovForBehandling,
     harBehovForTiltak = harBehovForTiltak,
     harMulighetForÅKommeIArbeid = harMulighetForÅKommeIArbeid,
-    individuellBegrunnelse = individuellBegrunnelse,
+    individuellBegrunnelse = when (individuellBegrunnelse) {
+        "<Mangler støtte for null backend>" -> null
+        else -> individuellBegrunnelse
+    },
 )
 
 private fun LøsningParagraf_11_19.toModellApi() = LøsningParagraf_11_19ModellApi(

@@ -16,7 +16,7 @@ data class InnstillingParagraf_11_6ModellApi(
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
     val harMulighetForÅKommeIArbeid: Boolean,
-    val individuellBegrunnelse: String,
+    val individuellBegrunnelse: String?,
 ) {
 
     constructor(
@@ -25,7 +25,7 @@ data class InnstillingParagraf_11_6ModellApi(
         harBehovForBehandling: Boolean,
         harBehovForTiltak: Boolean,
         harMulighetForÅKommeIArbeid: Boolean,
-        individuellBegrunnelse: String,
+        individuellBegrunnelse: String?,
     ) : this(
         innstillingId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
@@ -61,7 +61,7 @@ data class LøsningParagraf_11_6ModellApi(
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
     val harMulighetForÅKommeIArbeid: Boolean,
-    val individuellBegrunnelse: String,
+    val individuellBegrunnelse: String?,
 ) {
 
     constructor(
@@ -70,7 +70,7 @@ data class LøsningParagraf_11_6ModellApi(
         harBehovForBehandling: Boolean,
         harBehovForTiltak: Boolean,
         harMulighetForÅKommeIArbeid: Boolean,
-        individuellBegrunnelse: String,
+        individuellBegrunnelse: String?,
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,

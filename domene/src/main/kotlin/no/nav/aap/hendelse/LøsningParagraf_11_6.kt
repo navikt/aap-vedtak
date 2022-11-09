@@ -12,7 +12,7 @@ internal class LøsningParagraf_11_6(
     private val harBehovForBehandling: Boolean,
     private val harBehovForTiltak: Boolean,
     private val harMulighetForÅKommeIArbeid: Boolean,
-    private val individuellBegrunnelse: String,
+    private val individuellBegrunnelse: String?,
 ) : Hendelse() {
 
     internal companion object {

@@ -20,7 +20,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 15
+        const val VERSION = 16
         const val INIT_SEKVENS = 0L
     }
 
@@ -256,7 +256,7 @@ data class SøkereKafkaDto(
         val harBehovForBehandling: Boolean,
         val harBehovForTiltak: Boolean,
         val harMulighetForÅKommeIArbeid: Boolean,
-        val individuellBegrunnelse: String,
+        val individuellBegrunnelse: String?,
     )
 
     data class LøsningMaskinellMedlemskapYrkesskade(
@@ -340,7 +340,7 @@ data class SøkereKafkaDto(
         val harBehovForBehandling: Boolean,
         val harBehovForTiltak: Boolean,
         val harMulighetForÅKommeIArbeid: Boolean,
-        val individuellBegrunnelse: String,
+        val individuellBegrunnelse: String?,
     )
 
     data class LøsningParagraf_11_19(
