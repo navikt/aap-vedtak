@@ -1,6 +1,7 @@
 package no.nav.aap.modellapi
 
 import no.nav.aap.domene.vilkår.*
+import java.time.LocalDateTime
 import java.util.*
 
 abstract class VilkårsvurderingModellApi {
@@ -370,7 +371,14 @@ data class Paragraf_22_13ModellApi(
     override val vurdertMaskinelt: Boolean,
     val løsning_22_13_manuell: List<LøsningParagraf_22_13ModellApi>,
     val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13ModellApi>,
+    val søknadsdata: List<SøknadsdataModellApi>,
 ) : VilkårsvurderingModellApi() {
+
+    data class SøknadsdataModellApi(
+        val søknadId: UUID,
+        val søknadstidspunkt: LocalDateTime,
+    )
+
     override fun gjenopprett(): Paragraf_22_13 {
         val paragraf = Paragraf_22_13.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
         paragraf.gjenopprettTilstand(this)

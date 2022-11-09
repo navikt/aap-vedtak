@@ -21,7 +21,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -43,7 +43,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -65,7 +65,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -90,7 +90,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
@@ -125,7 +125,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
@@ -166,7 +166,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         assertHarBehov(søknad)
@@ -182,7 +182,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
@@ -223,7 +223,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
@@ -263,7 +263,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =
@@ -304,7 +304,7 @@ internal class MedlemskapYrkesskadeTest {
 
         val vilkår = MedlemskapYrkesskade()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning =

@@ -21,7 +21,7 @@ internal class `§8-48 Test` {
 
         val vilkår = Paragraf_8_48()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val behov = søknad.behov()
@@ -36,7 +36,7 @@ internal class `§8-48 Test` {
 
         val vilkår = Paragraf_8_48()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -61,7 +61,7 @@ internal class `§8-48 Test` {
 
         val vilkår = Paragraf_8_48()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -90,7 +90,7 @@ internal class `§8-48 Test` {
 
         val vilkår = Paragraf_8_48()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -130,7 +130,7 @@ internal class `§8-48 Test` {
 
         val vilkår = Paragraf_8_48()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -180,7 +180,7 @@ internal class `§8-48 Test` {
 
         val vilkår = Paragraf_8_48()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)

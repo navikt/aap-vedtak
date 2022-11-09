@@ -23,6 +23,7 @@ internal class VirkningsdatoVisitorTest {
         val paragraf2213 = Paragraf_22_13()
         paragraf2213.håndterSøknad(
             søknad = Søknad(
+                søknadId = UUID.randomUUID(),
                 personident = Personident("12345678910"),
                 fødselsdato = Fødselsdato(16 juli 1985),
                 søknadstidspunkt = (28 september 2022).atTime(12, 0),

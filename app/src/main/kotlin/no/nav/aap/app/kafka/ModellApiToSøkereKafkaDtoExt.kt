@@ -323,6 +323,12 @@ private fun Paragraf_22_13ModellApi.toJson() = Paragraf_22_13(
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13ModellApi::toJson),
     kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13ModellApi::toJson),
+    søknadsdata = søknadsdata.map(Paragraf_22_13ModellApi.SøknadsdataModellApi::toJson),
+)
+
+private fun Paragraf_22_13ModellApi.SøknadsdataModellApi.toJson() = SøknadsdataParagraf_22_13(
+    søknadId = søknadId,
+    søknadstidspunkt = søknadstidspunkt,
 )
 
 private fun InnstillingParagraf_11_6ModellApi.toJson() = InnstillingParagraf_11_6(

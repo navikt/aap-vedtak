@@ -6,6 +6,7 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov.Companion.toDto
 import java.time.LocalDate
 import java.time.LocalDateTime
+import java.util.*
 
 data class SøknadModellApi(
     val personident: String,
@@ -16,6 +17,7 @@ data class SøknadModellApi(
 ) {
     fun håndter(): Pair<SøkerModellApi, List<BehovModellApi>> {
         val søknad = Søknad(
+            søknadId = UUID.randomUUID(), //TODO: Hente søknadId fra kafkameldingen. Mulig den mangler der også
             personident = Personident(personident),
             fødselsdato = Fødselsdato(fødselsdato),
             søknadstidspunkt = søknadstidspunkt,

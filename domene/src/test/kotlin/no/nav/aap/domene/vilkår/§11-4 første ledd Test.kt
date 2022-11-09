@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
+import java.util.*
 
 internal class `§11-4 første ledd Test` {
     @Test
@@ -20,7 +21,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
@@ -34,7 +35,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
@@ -48,7 +49,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
@@ -62,7 +63,7 @@ internal class `§11-4 første ledd Test` {
 
         val vilkår = Paragraf_11_4FørsteLedd()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
         assertIkkeKvalitetssikret(vilkår)

@@ -24,7 +24,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
             UUID.randomUUID(),
@@ -54,7 +54,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
             UUID.randomUUID(),
@@ -91,7 +91,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
@@ -105,7 +105,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
             UUID.randomUUID(),
@@ -138,7 +138,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
             UUID.randomUUID(),
@@ -171,7 +171,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
             UUID.randomUUID(),
@@ -204,7 +204,7 @@ internal class `§11-5 Test` {
 
         val vilkår = Paragraf_11_5()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_5(
             UUID.randomUUID(),

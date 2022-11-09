@@ -21,7 +21,7 @@ internal class `§11-19 Test` {
     @Test
     fun `Ved håndtering av søknad opprettes behov for vurdering av beregningsdato`() {
         val vilkår = Paragraf_11_19()
-        val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
+        val søknad = Søknad(UUID.randomUUID(), Personident("12345678910"), Fødselsdato(1 januar 1980))
         vilkår.håndterSøknad(søknad, Fødselsdato(1 januar 1980), 1 januar 2022)
 
         assertTrue(søknad.behov().isNotEmpty())
@@ -30,7 +30,7 @@ internal class `§11-19 Test` {
     @Test
     fun `Ved håndtering av løsning lagres beregningsdatoen`() {
         val vilkår = Paragraf_11_19()
-        val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
+        val søknad = Søknad(UUID.randomUUID(), Personident("12345678910"), Fødselsdato(1 januar 1980))
         vilkår.håndterSøknad(søknad, Fødselsdato(1 januar 1980), 1 januar 2022)
 
         vilkår.håndterLøsning(
@@ -48,7 +48,7 @@ internal class `§11-19 Test` {
     @Test
     fun `Kan ikke hente beregningsdato før løsningen er behandlet`() {
         val vilkår = Paragraf_11_19()
-        val søknad = Søknad(Personident("12345678910"), Fødselsdato(1 januar 1980))
+        val søknad = Søknad(UUID.randomUUID(), Personident("12345678910"), Fødselsdato(1 januar 1980))
         vilkår.håndterSøknad(søknad, Fødselsdato(1 januar 1980), 1 januar 2022)
 
         assertNull(BeregningsdatoVisitor().apply { vilkår.accept(this) }.beregningsdato)
@@ -61,7 +61,7 @@ internal class `§11-19 Test` {
 
         val vilkår = Paragraf_11_19()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         vilkår.håndterLøsning(
             LøsningParagraf_11_19(
@@ -88,7 +88,7 @@ internal class `§11-19 Test` {
 
         val vilkår = Paragraf_11_19()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         vilkår.håndterLøsning(
             LøsningParagraf_11_19(

@@ -31,9 +31,12 @@ internal class Paragraf_22_13 private constructor(
     ) {
     private val løsninger = mutableListOf<LøsningParagraf_22_13>()
     private val kvalitetssikringer = mutableListOf<KvalitetssikringParagraf_22_13>()
-    private val søknadstidspunkter = mutableListOf<LocalDateTime>()
-    private val søknadstidspunkt
-        get() = søknadstidspunkter.lastOrNull() ?: LocalDateTime.now() //TODO: Mangler serde av søknadstidspunkter
+    private val søknadstidspunkter = mutableListOf<Søknadsdata>()
+
+    private class Søknadsdata(val søknadId: UUID, val søknadstidspunkt: LocalDateTime)
+
+    private val søknadstidspunkt: LocalDateTime
+        get() = søknadstidspunkter.last().søknadstidspunkt
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
 
@@ -46,7 +49,7 @@ internal class Paragraf_22_13 private constructor(
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            vilkårsvurdering.søknadstidspunkter.add(søknad.søknadstidspunkt())
+            vilkårsvurdering.søknadstidspunkter.add(Søknadsdata(søknad.søknadId(), søknad.søknadstidspunkt()))
             vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
@@ -82,6 +85,12 @@ internal class Paragraf_22_13 private constructor(
                 vurdertMaskinelt = vurdertMaskinelt,
                 løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
+                    Paragraf_22_13ModellApi.SøknadsdataModellApi(
+                        søknadId = it.søknadId,
+                        søknadstidspunkt = it.søknadstidspunkt,
+                    )
+                }
             )
 
         override fun gjenopprettTilstand(
@@ -90,6 +99,7 @@ internal class Paragraf_22_13 private constructor(
         ) {
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
 
@@ -125,6 +135,12 @@ internal class Paragraf_22_13 private constructor(
                 vurdertMaskinelt = vurdertMaskinelt,
                 løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
+                    Paragraf_22_13ModellApi.SøknadsdataModellApi(
+                        søknadId = it.søknadId,
+                        søknadstidspunkt = it.søknadstidspunkt,
+                    )
+                }
             )
 
         override fun gjenopprettTilstand(
@@ -133,6 +149,7 @@ internal class Paragraf_22_13 private constructor(
         ) {
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
 
@@ -157,6 +174,12 @@ internal class Paragraf_22_13 private constructor(
                 vurdertMaskinelt = vurdertMaskinelt,
                 løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
+                    Paragraf_22_13ModellApi.SøknadsdataModellApi(
+                        søknadId = it.søknadId,
+                        søknadstidspunkt = it.søknadstidspunkt,
+                    )
+                }
             )
 
         override fun gjenopprettTilstand(
@@ -165,6 +188,7 @@ internal class Paragraf_22_13 private constructor(
         ) {
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
 
@@ -189,6 +213,12 @@ internal class Paragraf_22_13 private constructor(
                 vurdertMaskinelt = vurdertMaskinelt,
                 løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
                 kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
+                    Paragraf_22_13ModellApi.SøknadsdataModellApi(
+                        søknadId = it.søknadId,
+                        søknadstidspunkt = it.søknadstidspunkt,
+                    )
+                }
             )
 
         override fun gjenopprettTilstand(
@@ -197,6 +227,7 @@ internal class Paragraf_22_13 private constructor(
         ) {
             vilkårsvurdering.settManuellLøsning(modellApi)
             vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
 
@@ -209,7 +240,7 @@ internal class Paragraf_22_13 private constructor(
                 bestemmesAv = enumValueOf(it.bestemmesAv),
                 unntak = it.unntak,
                 unntaksbegrunnelse = it.unntaksbegrunnelse,
-                manueltSattVirkningsdato = it.manueltSattVirkningsdato
+                manueltSattVirkningsdato = it.manueltSattVirkningsdato,
             )
         })
     }
@@ -222,7 +253,16 @@ internal class Paragraf_22_13 private constructor(
                 tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
                 erGodkjent = it.erGodkjent,
                 begrunnelse = it.begrunnelse,
-                løsningId = it.løsningId
+                løsningId = it.løsningId,
+            )
+        })
+    }
+
+    private fun settSøknadsdata(vilkårsvurdering: Paragraf_22_13ModellApi) {
+        søknadstidspunkter.addAll(vilkårsvurdering.søknadsdata.map {
+            Søknadsdata(
+                søknadId = it.søknadId,
+                søknadstidspunkt = it.søknadstidspunkt,
             )
         })
     }

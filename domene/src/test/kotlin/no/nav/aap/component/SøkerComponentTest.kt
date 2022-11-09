@@ -31,7 +31,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -50,7 +50,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar en søknad der søker er under 18 år får vi et ikke-oppfylt aldersvilkår`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -69,7 +69,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -92,7 +92,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar en søknad skal behov om sykependedager opprettes`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
         val behov = søknad.behov()
@@ -105,7 +105,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar løsning på behov om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -145,7 +145,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne og medlemskap`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -181,7 +181,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar en søknad med bruker over 62 får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne og medlemskap`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(65))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -217,7 +217,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar løsning på behov om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt, men ikke vilkår om medlemskap`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -270,7 +270,7 @@ internal class SøkerComponentTest {
     fun `Hvis vi mottar løsning på behov om der bruker er medlem, blir vilkår om medlemskap oppfylt, men ikke vilkår om nedsatt arbeidsevne`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -314,7 +314,7 @@ internal class SøkerComponentTest {
     fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt`() {
         val fødselsdato = Fødselsdato(17 juli 1995)
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 
@@ -436,7 +436,7 @@ internal class SøkerComponentTest {
     fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt - med serialisering og deserialisering`() {
         val fødselsdato = Fødselsdato(17 juli 1995)
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         var søkerModellApi: SøkerModellApi = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
 
         fun medSøker(block: Søker.() -> Unit) {
@@ -584,7 +584,7 @@ internal class SøkerComponentTest {
     fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt for student`() {
         val fødselsdato = Fødselsdato(17 juli 1995)
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato, erStudent = true)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, erStudent = true)
         val søker = søknad.opprettSøker()
         søker.håndterSøknad(søknad)
 

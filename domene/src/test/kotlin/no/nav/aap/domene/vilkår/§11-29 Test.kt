@@ -23,7 +23,7 @@ internal class `§11-29 Test` {
 
         val vilkår = Paragraf_11_29()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_29(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
@@ -40,7 +40,7 @@ internal class `§11-29 Test` {
 
         val vilkår = Paragraf_11_29()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_29(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
@@ -57,7 +57,7 @@ internal class `§11-29 Test` {
 
         val vilkår = Paragraf_11_29()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_29(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
@@ -78,7 +78,7 @@ internal class `§11-29 Test` {
 
         val vilkår = Paragraf_11_29()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_29(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)
@@ -99,7 +99,7 @@ internal class `§11-29 Test` {
 
         val vilkår = Paragraf_11_29()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_29(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), true)
         vilkår.håndterLøsning(løsning)
@@ -120,7 +120,7 @@ internal class `§11-29 Test` {
 
         val vilkår = Paragraf_11_29()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_11_29(UUID.randomUUID(), "saksbehandler", LocalDateTime.now(), false)
         vilkår.håndterLøsning(løsning)

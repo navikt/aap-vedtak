@@ -28,7 +28,7 @@ internal class SakTest {
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -49,7 +49,7 @@ internal class SakTest {
     fun `Hvis vi mottar en søknad der søker er under 18 år får vi et ikke-oppfylt aldersvilkår`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -70,7 +70,7 @@ internal class SakTest {
     fun `Hvis vi mottar en søknad der søker er over 18 år, er medlem og har nedsatt arbeidsevne med 50 prosent vil saken gå videre i behandlingen`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -230,7 +230,7 @@ internal class SakTest {
     fun `Hvis vi mottar en søknad der søker har oppgitt yrkesskade`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato, harTidligereYrkesskade = Søknad.HarYrkesskade.JA)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, harTidligereYrkesskade = Søknad.HarYrkesskade.JA)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -381,7 +381,7 @@ internal class SakTest {
     fun `alle behov blir kansellert dersom et vilkår blir satt til ikke oppfylt`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -403,7 +403,7 @@ internal class SakTest {
     fun `Kvalitetssikrer vilkår før vedtak fattes`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -647,7 +647,7 @@ internal class SakTest {
     fun `Sender behov ved iverksetting`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -904,7 +904,7 @@ internal class SakTest {
     fun `Underkjent kvalitetssikring sender saken tilbake til AVVENTER_VURDERING og hindrer ikke videre kvalitetssikring`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -1183,7 +1183,7 @@ internal class SakTest {
     fun `Hvis virkningsdato skal bestemmes av når sykepenger er brukt opp, vil sak vente på at gjenstående sykedager er 0`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -1434,6 +1434,7 @@ internal class SakTest {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
         val søknad = Søknad(
+            søknadId = UUID.randomUUID(),
             personident = personident,
             fødselsdato = fødselsdato,
             søknadstidspunkt = (25 oktober 2022).atTime(12, 0),
@@ -1676,7 +1677,7 @@ internal class SakTest {
     fun `Virkningsdato bestemmes av svangerskapspenger`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -1915,7 +1916,7 @@ internal class SakTest {
     fun `Virkningsdato bestemmes av maksdato fra sykepenger`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)

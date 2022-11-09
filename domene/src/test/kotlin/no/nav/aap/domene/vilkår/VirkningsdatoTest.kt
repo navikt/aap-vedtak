@@ -26,7 +26,7 @@ internal class VirkningsdatoTest {
         val vilkår11_27 = Paragraf_11_27FørsteLedd()
         val vilkår22_13 = Paragraf_22_13()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår8_48.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         vilkår11_27.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         vilkår22_13.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -86,7 +86,7 @@ internal class VirkningsdatoTest {
         val vilkår11_27 = Paragraf_11_27FørsteLedd()
         val vilkår22_13 = Paragraf_22_13()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår8_48.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         vilkår11_27.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         vilkår22_13.håndterSøknad(søknad, fødselsdato, LocalDate.now())
@@ -146,7 +146,7 @@ internal class VirkningsdatoTest {
         val vilkår11_27 = Paragraf_11_27FørsteLedd()
         val vilkår22_13 = Paragraf_22_13()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår8_48.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         vilkår11_27.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         vilkår22_13.håndterSøknad(søknad, fødselsdato, LocalDate.now())

@@ -247,6 +247,12 @@ data class SøkereKafkaDto(
         val vurdertMaskinelt: Boolean,
         val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
         val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
+        val søknadsdata: List<SøknadsdataParagraf_22_13>,
+    )
+
+    data class SøknadsdataParagraf_22_13(
+        val søknadId: UUID,
+        val søknadstidspunkt: LocalDateTime,
     )
 
     data class InnstillingParagraf_11_6(

@@ -24,7 +24,7 @@ internal class `§22-13 Test` {
 
         val vilkår = Paragraf_22_13()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
             UUID.randomUUID(),
@@ -49,7 +49,7 @@ internal class `§22-13 Test` {
 
         val vilkår = Paragraf_22_13()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
             UUID.randomUUID(),
@@ -77,7 +77,7 @@ internal class `§22-13 Test` {
 
         val vilkår = Paragraf_22_13()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
             UUID.randomUUID(),
@@ -105,7 +105,7 @@ internal class `§22-13 Test` {
 
         val vilkår = Paragraf_22_13()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
             løsningId = UUID.randomUUID(),
@@ -131,7 +131,7 @@ internal class `§22-13 Test` {
 
         val vilkår = Paragraf_22_13()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val behov = søknad.behov()

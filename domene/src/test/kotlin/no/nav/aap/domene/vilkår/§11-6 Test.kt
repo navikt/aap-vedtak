@@ -24,7 +24,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -49,7 +49,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -85,7 +85,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -121,7 +121,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -157,7 +157,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -193,7 +193,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -229,7 +229,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -270,7 +270,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -311,7 +311,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),
@@ -352,7 +352,7 @@ internal class `§11-6 Test` {
 
         val vilkår = Paragraf_11_6()
 
-        vilkår.håndterSøknad(Søknad(personident, fødselsdato), fødselsdato, LocalDate.now())
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val innstilling = InnstillingParagraf_11_6(
             innstillingId = UUID.randomUUID(),

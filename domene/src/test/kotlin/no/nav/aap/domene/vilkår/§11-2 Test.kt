@@ -21,7 +21,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -46,7 +46,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -71,7 +71,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -96,7 +96,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
@@ -131,7 +131,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
 
@@ -173,7 +173,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         assertHarBehov(søknad)
@@ -189,7 +189,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(
@@ -224,7 +224,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(
@@ -259,7 +259,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(
@@ -294,7 +294,7 @@ internal class `§11-2 Test` {
 
         val vilkår = Paragraf_11_2()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
         val maskinellLøsning = LøsningMaskinellParagraf_11_2(

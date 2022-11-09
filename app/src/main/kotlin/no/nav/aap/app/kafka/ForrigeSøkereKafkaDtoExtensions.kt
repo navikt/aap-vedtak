@@ -3,6 +3,7 @@ package no.nav.aap.app.kafka
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
+import java.util.*
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -239,6 +240,13 @@ private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toDto),
     kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toDto),
+    //FIXME: Må fikses før neste migrering
+    søknadsdata = listOfNotNull(løsning_22_13_manuell.firstOrNull()?.tidspunktForVurdering?.let { caSøknadstidspunkt ->
+        SøkereKafkaDto.SøknadsdataParagraf_22_13(
+            søknadId = UUID.randomUUID(),
+            søknadstidspunkt = caSøknadstidspunkt,
+        )
+    }),
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(

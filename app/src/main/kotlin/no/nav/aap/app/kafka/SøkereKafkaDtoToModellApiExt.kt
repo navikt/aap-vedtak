@@ -242,6 +242,12 @@ private fun Paragraf_22_13.toModellApi() = Paragraf_22_13ModellApi(
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toModellApi),
     kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toModellApi),
+    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13::toModellApi),
+)
+
+private fun SøknadsdataParagraf_22_13.toModellApi() = Paragraf_22_13ModellApi.SøknadsdataModellApi(
+    søknadId = søknadId,
+    søknadstidspunkt = søknadstidspunkt,
 )
 
 private fun InnstillingParagraf_11_6.toModellApi() = InnstillingParagraf_11_6ModellApi(

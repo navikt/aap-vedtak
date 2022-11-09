@@ -21,7 +21,7 @@ internal class `§11-27 Test` {
 
         val vilkår = Paragraf_11_27FørsteLedd()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -48,7 +48,7 @@ internal class `§11-27 Test` {
 
         val vilkår = Paragraf_11_27FørsteLedd()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -75,7 +75,7 @@ internal class `§11-27 Test` {
 
         val vilkår = Paragraf_11_27FørsteLedd()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -102,7 +102,7 @@ internal class `§11-27 Test` {
 
         val vilkår = Paragraf_11_27FørsteLedd()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -140,7 +140,7 @@ internal class `§11-27 Test` {
 
         val vilkår = Paragraf_11_27FørsteLedd()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -188,7 +188,7 @@ internal class `§11-27 Test` {
 
         val vilkår = Paragraf_11_27FørsteLedd()
 
-        val søknad = Søknad(personident, fødselsdato)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
         assertHarBehov(søknad)
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
