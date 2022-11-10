@@ -1,6 +1,8 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException
+import no.nav.aap.domene.Vedtak
+import no.nav.aap.domene.beregning.Inntektsgrunnlag
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.entitet.Personident
 import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
@@ -226,6 +228,55 @@ internal class `§11-5 Test` {
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
+    }
+
+    @Test
+    fun `Hvis paragrafen får en kvalitetssikring og et vedtak, vil vedtaket inneholde en totrinnskontroll`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_5()
+
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsningId = UUID.randomUUID()
+        val løsning = LøsningParagraf_11_5(
+            løsningId,
+            "saksbehandler",
+            LocalDateTime.now(),
+            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                kravOmNedsattArbeidsevneErOppfylt = false,
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                nedsettelseSkyldesSykdomEllerSkade = false,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                kilder = emptyList(),
+                legeerklæringDato = null,
+                sykmeldingDato = null,
+            )
+        )
+        vilkår.håndterLøsning(løsning)
+
+        val kvalitetssikringId = UUID.randomUUID()
+        val kvalitetssikring = KvalitetssikringParagraf_11_5(kvalitetssikringId, løsningId, "X", LocalDateTime.now(), true, "NEI")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        val vedtak = Vedtak(
+            vedtaksid = UUID.randomUUID(),
+            innvilget = false,
+            inntektsgrunnlag = Inntektsgrunnlag.inntektsgrunnlag(
+                beregningsdato = LocalDate.now(),
+                inntekterSiste3Kalenderår = emptyList(),
+                fødselsdato = Fødselsdato(LocalDate.now())
+            ),
+            vedtaksdato = LocalDate.now(),
+            virkningsdato = LocalDate.now()
+        )
+
+        vilkår.lagSnapshot(vedtak)
+        val dto = vedtak.toDto()
+
+        assertEquals(løsningId, dto.etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket[0].løsning.løsningId)
+        assertEquals(kvalitetssikringId, dto.etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket[0].kvalitetssikring?.kvalitetssikringId)
     }
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_5) {

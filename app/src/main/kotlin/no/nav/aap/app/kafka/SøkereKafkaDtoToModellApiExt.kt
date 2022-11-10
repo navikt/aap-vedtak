@@ -500,6 +500,7 @@ private fun Vedtak.toModellApi() = VedtakModellApi(
     inntektsgrunnlag = inntektsgrunnlag.toModellApi(),
     vedtaksdato = vedtaksdato,
     virkningsdato = virkningsdato,
+    etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket = emptyList() // FIXME
 )
 
 private fun Inntektsgrunnlag.toModellApi() = InntektsgrunnlagModellApi(

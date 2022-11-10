@@ -30,7 +30,7 @@ internal class Paragraf_11_5 private constructor(
     override fun <T> callWithReceiver(block: Paragraf_11_5.() -> T) = this.block()
 
     override fun lagSnapshot(vedtak: Vedtak) {
-        //vedtak.leggTilLøsning(løsninger.last(), kvalitetssikringer.last())
+        vedtak.leggTilTotrinnskontroll(totrinnskontroller.last())
     }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_5>() {
