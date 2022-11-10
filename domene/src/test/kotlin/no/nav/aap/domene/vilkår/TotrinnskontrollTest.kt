@@ -11,10 +11,7 @@ import java.util.*
 
 internal class TotrinnskontrollTest {
     @Test
-    fun `Banan uten en Kvalitetssikring er ikke kvalitetssikret`() {
-
-
-        // Gitt en banan med en løsning og uten en Kvalitetssikring
+    fun `Totrinnskontroll uten en Kvalitetssikring er ikke kvalitetssikret`() {
         val anyLøsning = LøsningParagraf_11_5(
             løsningId = UUID.randomUUID(),
             vurdertAv = "anyVeileder",
@@ -31,19 +28,14 @@ internal class TotrinnskontrollTest {
         )
         val totrinnskontrollUtenKvalitetsikring = Totrinnskontroll(anyLøsning)
 
-        // når vi spør om bananen om løsningen er kvalitetssikret
         val resultat = totrinnskontrollUtenKvalitetsikring.erTotrinnskontrollGjennomført()
 
-        // så får vi svar nei
         assertFalse(resultat)
 
     }
 
     @Test
-    fun test() {
-        // Gitt en bananan med en løsning og en Kvalitetssikring
-        // når vi spør om bananen om løsningen er kvalitetssikret
-        // så får vi svar ja
+    fun `Totrinnskontroll med en Kvalitetssikring er kvalitetssikret`() {
         val løsningId = UUID.randomUUID()
         val anyLøsning = LøsningParagraf_11_5(
             løsningId = løsningId,
