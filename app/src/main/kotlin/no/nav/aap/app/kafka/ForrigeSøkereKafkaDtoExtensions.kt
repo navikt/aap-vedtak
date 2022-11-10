@@ -3,7 +3,7 @@ package no.nav.aap.app.kafka
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
-import java.util.*
+import no.nav.aap.dto.kafka.TotrinnskontrollKafkaDto
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -125,7 +125,7 @@ private fun Paragraf_11_4AndreOgTredjeLedd.toParagraf_11_4AndreOgTredjeLedd() =
         kvalitetssikringer_11_4_ledd2_ledd3.map(KvalitetssikringParagraf_11_4AndreOgTredjeLedd::toDto),
     )
 
-private fun Paragraf_11_5.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5(
+private fun Paragraf_11_5KafkaDto.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -134,8 +134,13 @@ private fun Paragraf_11_5.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5(
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_5_manuell = løsning_11_5_manuell.map(LøsningParagraf_11_5::toDto),
-    kvalitetssikringer_11_5 = kvalitetssikringer_11_5.map(KvalitetssikringParagraf_11_5::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_5_manuell.map {  løsning ->
+        TotrinnskontrollKafkaDto(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_5.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    }
 )
 
 private fun Paragraf_11_5Yrkesskade.toParagraf_11_5Yrkesskade() = SøkereKafkaDto.Paragraf_11_5Yrkesskade(
@@ -240,13 +245,12 @@ private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toDto),
     kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toDto),
-    //FIXME: Må fikses før neste migrering
-    søknadsdata = listOfNotNull(løsning_22_13_manuell.firstOrNull()?.tidspunktForVurdering?.let { caSøknadstidspunkt ->
-        SøkereKafkaDto.SøknadsdataParagraf_22_13(
-            søknadId = UUID.randomUUID(),
-            søknadstidspunkt = caSøknadstidspunkt,
-        )
-    }),
+    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13::toDto),
+)
+
+private fun SøknadsdataParagraf_22_13.toDto() = SøkereKafkaDto.SøknadsdataParagraf_22_13(
+    søknadId = søknadId,
+    søknadstidspunkt = søknadstidspunkt
 )
 
 private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskade(

@@ -20,7 +20,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 16
+        const val VERSION = 17
         const val INIT_SEKVENS = 0L
     }
 
@@ -42,7 +42,7 @@ data class SøkereKafkaDto(
         val paragraf_11_3: Paragraf_11_3?,
         val paragraf_11_4FørsteLedd: Paragraf_11_4FørsteLedd?,
         val paragraf_11_4AndreOgTredjeLedd: Paragraf_11_4AndreOgTredjeLedd?,
-        val paragraf_11_5: Paragraf_11_5?,
+        val paragraf_11_5: Paragraf_11_5KafkaDto?,
         val paragraf_11_5Yrkesskade: Paragraf_11_5Yrkesskade?,
         val paragraf_11_6: Paragraf_11_6?,
         val paragraf_11_14: Paragraf_11_14?,
@@ -132,7 +132,7 @@ data class SøkereKafkaDto(
         val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>,
     )
 
-    data class Paragraf_11_5(
+    data class Paragraf_11_5KafkaDto(
         val vilkårsvurderingsid: UUID,
         val vurdertAv: String?,
         val kvalitetssikretAv: String?,
@@ -141,8 +141,7 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_5_manuell: List<LøsningParagraf_11_5>,
-        val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto>
     )
 
     data class Paragraf_11_5Yrkesskade(

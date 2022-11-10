@@ -194,7 +194,7 @@ internal class ApiTest {
                 (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_3ModellApi).løsning_11_3_manuell[0].løsningId
 
             fun løsningsid5(index: Int) =
-                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_5ModellApi).løsning_11_5_manuell[0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_5ModellApi).totrinnskontroller[0].løsning.løsningId
 
             fun løsningsid6(index: Int) =
                 (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_6ModellApi).løsning_11_6_manuell[0].løsningId

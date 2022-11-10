@@ -1,5 +1,6 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.vilkår.Totrinnskontroll
 import no.nav.aap.domene.vilkår.Paragraf_11_5
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_5ModellApi
@@ -50,6 +51,10 @@ internal class LøsningParagraf_11_5(
     }
 
     internal fun toDto() = nedsattArbeidsevnegrad.toDto(løsningId, vurdertAv, tidspunktForVurdering)
+
+    internal fun matchMedKvalitetssikring(totrinnskontroll: Totrinnskontroll, kvalitetssikring: KvalitetssikringParagraf_11_5) {
+        kvalitetssikring.matchMedLøsning(totrinnskontroll, løsningId)
+    }
 }
 
 internal class KvalitetssikringParagraf_11_5(
@@ -75,5 +80,11 @@ internal class KvalitetssikringParagraf_11_5(
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
+
+    internal fun matchMedLøsning(totrinnskontroll: Totrinnskontroll, løsningId: UUID) {
+        if (løsningId == this.løsningId) {
+            totrinnskontroll.leggTilKvalitetssikring(this)
+        }
+    }
 }
 

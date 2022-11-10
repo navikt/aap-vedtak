@@ -2,6 +2,7 @@ package no.nav.aap.app.kafka
 
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto.*
+import no.nav.aap.dto.kafka.TotrinnskontrollKafkaDto
 import no.nav.aap.modellapi.*
 
 internal fun SøkereKafkaDto.toModellApi() = SøkerModellApi(
@@ -125,7 +126,7 @@ private fun Paragraf_11_4AndreOgTredjeLedd.toModellApi() = Paragraf_11_4AndreOgT
         .map(KvalitetssikringParagraf_11_4AndreOgTredjeLedd::toModellApi),
 )
 
-private fun Paragraf_11_5.toModellApi() = Paragraf_11_5ModellApi(
+private fun Paragraf_11_5KafkaDto.toModellApi() = Paragraf_11_5ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -134,8 +135,7 @@ private fun Paragraf_11_5.toModellApi() = Paragraf_11_5ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_5_manuell = løsning_11_5_manuell.map(LøsningParagraf_11_5::toModellApi),
-    kvalitetssikringer_11_5 = kvalitetssikringer_11_5.map(KvalitetssikringParagraf_11_5::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto::toModellApi)
 )
 
 private fun Paragraf_11_5Yrkesskade.toModellApi() = Paragraf_11_5YrkesskadeModellApi(
@@ -533,4 +533,9 @@ private fun InntektsgrunnlagForÅr.toModellApi() = InntektsgrunnlagForÅrModellA
 private fun Yrkesskade.toModellApi() = YrkesskadeModellApi(
     gradAvNedsattArbeidsevneKnyttetTilYrkesskade = gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
     inntektsgrunnlag = inntektsgrunnlag.toModellApi(),
+)
+
+private fun TotrinnskontrollKafkaDto.toModellApi() = TotrinnskontrollModellApi(
+    løsning = løsning.toModellApi(),
+    kvalitetssikring = kvalitetssikring?.toModellApi()
 )
