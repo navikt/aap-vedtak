@@ -51,7 +51,7 @@ data class LøsningParagraf_11_5ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() = LøsningParagraf_11_5(
+    internal fun toLøsning() = LøsningParagraf_11_5(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -98,7 +98,7 @@ data class KvalitetssikringParagraf_11_5ModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
+    internal fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

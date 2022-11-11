@@ -4,8 +4,8 @@ import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.Vedtak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_5.AvventerManuellVurdering
-import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.leggTilKvalitetssikring
-import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.toDto
+import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5.Companion.leggTilKvalitetssikring
+import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5.Companion.toDto
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5
 import no.nav.aap.hendelse.LøsningParagraf_11_5
@@ -22,7 +22,7 @@ internal class Paragraf_11_5 private constructor(
 ) : Vilkårsvurdering<Paragraf_11_5>(
     vilkårsvurderingsid, Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2, tilstand
 ) {
-    private val totrinnskontroller = mutableListOf<Totrinnskontroll>()
+    private val totrinnskontroller = mutableListOf<TotrinnskontrollParagraf_11_5>()
     private lateinit var nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
@@ -58,7 +58,7 @@ internal class Paragraf_11_5 private constructor(
             løsning: LøsningParagraf_11_5,
             nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
         ) {
-            vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
+            vilkårsvurdering.totrinnskontroller.add(TotrinnskontrollParagraf_11_5(løsning))
             vilkårsvurdering.nedsattArbeidsevnegrad = nedsattArbeidsevnegrad
             if (nedsattArbeidsevnegrad.erOppfylt()) {
                 vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
@@ -81,7 +81,7 @@ internal class Paragraf_11_5 private constructor(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(Totrinnskontroll.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
         }
     }
 
@@ -111,7 +111,7 @@ internal class Paragraf_11_5 private constructor(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(Totrinnskontroll.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
         }
     }
 
@@ -130,7 +130,7 @@ internal class Paragraf_11_5 private constructor(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(Totrinnskontroll.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
         }
     }
 
@@ -160,7 +160,7 @@ internal class Paragraf_11_5 private constructor(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(Totrinnskontroll.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
         }
     }
 
@@ -179,7 +179,7 @@ internal class Paragraf_11_5 private constructor(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(Totrinnskontroll.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
         }
     }
 
