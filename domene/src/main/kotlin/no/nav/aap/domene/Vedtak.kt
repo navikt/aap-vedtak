@@ -1,8 +1,8 @@
 package no.nav.aap.domene
 
 import no.nav.aap.domene.beregning.Inntektsgrunnlag
-import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5
-import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5.Companion.toDto
+import no.nav.aap.domene.vilkår.Totrinnskontroll
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.toDto
 import no.nav.aap.modellapi.VedtakModellApi
 import java.time.LocalDate
 import java.util.*
@@ -14,9 +14,9 @@ internal class Vedtak(
     private val vedtaksdato: LocalDate,
     private val virkningsdato: LocalDate
 ) {
-    private val etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket = mutableListOf<TotrinnskontrollParagraf_11_5>()
+    private val etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket = mutableListOf<Totrinnskontroll<*, *>>()
 
-    internal fun leggTilTotrinnskontroll(totrinnskontroll: TotrinnskontrollParagraf_11_5) {
+    internal fun leggTilTotrinnskontroll(totrinnskontroll: Totrinnskontroll<*, *>) {
         etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket.add(totrinnskontroll)
     }
 

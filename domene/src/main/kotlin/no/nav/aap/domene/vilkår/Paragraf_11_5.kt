@@ -4,16 +4,15 @@ import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.Vedtak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_5.AvventerManuellVurdering
-import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5.Companion.leggTilKvalitetssikring
-import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5.Companion.toDto
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.gjenopprett
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.leggTilKvalitetssikring
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.toDto
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5
 import no.nav.aap.hendelse.LøsningParagraf_11_5
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5
-import no.nav.aap.modellapi.Paragraf_11_5ModellApi
-import no.nav.aap.modellapi.Utfall
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.*
 import java.time.LocalDate
 import java.util.*
 
@@ -22,7 +21,8 @@ internal class Paragraf_11_5 private constructor(
 ) : Vilkårsvurdering<Paragraf_11_5>(
     vilkårsvurderingsid, Paragraf.PARAGRAF_11_5, Ledd.LEDD_1 + Ledd.LEDD_2, tilstand
 ) {
-    private val totrinnskontroller = mutableListOf<TotrinnskontrollParagraf_11_5>()
+    private val totrinnskontroller =
+        mutableListOf<Totrinnskontroll<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5>>()
     private lateinit var nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
 
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
@@ -58,7 +58,7 @@ internal class Paragraf_11_5 private constructor(
             løsning: LøsningParagraf_11_5,
             nedsattArbeidsevnegrad: LøsningParagraf_11_5.NedsattArbeidsevnegrad
         ) {
-            vilkårsvurdering.totrinnskontroller.add(TotrinnskontrollParagraf_11_5(løsning))
+            vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
             vilkårsvurdering.nedsattArbeidsevnegrad = nedsattArbeidsevnegrad
             if (nedsattArbeidsevnegrad.erOppfylt()) {
                 vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
@@ -74,14 +74,22 @@ internal class Paragraf_11_5 private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_VURDERT,
             vurdertMaskinelt = vurdertMaskinelt,
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto()
+            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                LøsningParagraf_11_5::toDto,
+                KvalitetssikringParagraf_11_5::toDto
+            )
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(
+                modellApi.totrinnskontroller.gjenopprett(
+                    LøsningParagraf_11_5ModellApi::toLøsning,
+                    KvalitetssikringParagraf_11_5ModellApi::toKvalitetssikring
+                )
+            )
         }
     }
 
@@ -104,14 +112,22 @@ internal class Paragraf_11_5 private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
             vurdertMaskinelt = vurdertMaskinelt,
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto()
+            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                LøsningParagraf_11_5::toDto,
+                KvalitetssikringParagraf_11_5::toDto
+            )
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(
+                modellApi.totrinnskontroller.gjenopprett(
+                    LøsningParagraf_11_5ModellApi::toLøsning,
+                    KvalitetssikringParagraf_11_5ModellApi::toKvalitetssikring
+                )
+            )
         }
     }
 
@@ -123,14 +139,22 @@ internal class Paragraf_11_5 private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.OPPFYLT,
             vurdertMaskinelt = vurdertMaskinelt,
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto()
+            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                LøsningParagraf_11_5::toDto,
+                KvalitetssikringParagraf_11_5::toDto
+            )
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(
+                modellApi.totrinnskontroller.gjenopprett(
+                    LøsningParagraf_11_5ModellApi::toLøsning,
+                    KvalitetssikringParagraf_11_5ModellApi::toKvalitetssikring
+                )
+            )
         }
     }
 
@@ -153,14 +177,22 @@ internal class Paragraf_11_5 private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
             vurdertMaskinelt = vurdertMaskinelt,
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto()
+            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                LøsningParagraf_11_5::toDto,
+                KvalitetssikringParagraf_11_5::toDto
+            )
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(
+                modellApi.totrinnskontroller.gjenopprett(
+                    LøsningParagraf_11_5ModellApi::toLøsning,
+                    KvalitetssikringParagraf_11_5ModellApi::toKvalitetssikring
+                )
+            )
         }
     }
 
@@ -172,14 +204,22 @@ internal class Paragraf_11_5 private constructor(
             tilstand = tilstandsnavn.name,
             utfall = Utfall.IKKE_OPPFYLT,
             vurdertMaskinelt = vurdertMaskinelt,
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto()
+            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                LøsningParagraf_11_5::toDto,
+                KvalitetssikringParagraf_11_5::toDto
+            )
         )
 
         override fun gjenopprettTilstand(
             vilkårsvurdering: Paragraf_11_5,
             modellApi: Paragraf_11_5ModellApi
         ) {
-            vilkårsvurdering.totrinnskontroller.addAll(TotrinnskontrollParagraf_11_5.gjenopprett(modellApi.totrinnskontroller))
+            vilkårsvurdering.totrinnskontroller.addAll(
+                modellApi.totrinnskontroller.gjenopprett(
+                    LøsningParagraf_11_5ModellApi::toLøsning,
+                    KvalitetssikringParagraf_11_5ModellApi::toKvalitetssikring
+                )
+            )
         }
     }
 

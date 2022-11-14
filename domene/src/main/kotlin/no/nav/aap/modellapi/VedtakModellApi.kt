@@ -17,7 +17,7 @@ data class VedtakModellApi(
     val inntektsgrunnlag: InntektsgrunnlagModellApi,
     val vedtaksdato: LocalDate,
     val virkningsdato: LocalDate,
-    val etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket: List<TotrinnskontrollModellApi>
+    val etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket: List<TotrinnskontrollModellApi<LøsningModellApi, KvalitetssikringModellApi>>
 )
 
 data class InntektsgrunnlagModellApi(

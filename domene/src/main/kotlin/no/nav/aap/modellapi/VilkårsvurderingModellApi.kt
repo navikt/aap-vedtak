@@ -6,8 +6,10 @@ import java.util.*
 
 abstract class VilkårsvurderingModellApi {
     abstract val vilkårsvurderingsid: UUID
+
     @Deprecated("Skal erstattes av totrinnskontroll, fjernes")
     abstract val vurdertAv: String?
+
     @Deprecated("Skal erstattes av totrinnskontroll, fjernes")
     abstract val kvalitetssikretAv: String?
     abstract val paragraf: String
@@ -178,9 +180,17 @@ data class Paragraf_11_4AndreOgTredjeLeddModellApi(
     }
 }
 
-data class TotrinnskontrollModellApi(
-    val løsning: LøsningParagraf_11_5ModellApi,
-    val kvalitetssikring: KvalitetssikringParagraf_11_5ModellApi?
+abstract class LøsningModellApi {
+    internal abstract fun toLøsning(): Løsning<*, *>
+}
+
+abstract class KvalitetssikringModellApi {
+    internal abstract fun toKvalitetssikring(): Kvalitetssikring<*, *>
+}
+
+data class TotrinnskontrollModellApi<LØSNING : LøsningModellApi, KVALITETSSIKRING : KvalitetssikringModellApi>(
+    val løsning: LØSNING,
+    val kvalitetssikring: KVALITETSSIKRING?
 )
 
 data class Paragraf_11_5ModellApi(
@@ -192,7 +202,7 @@ data class Paragraf_11_5ModellApi(
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val totrinnskontroller: List<TotrinnskontrollModellApi>
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_5ModellApi, KvalitetssikringParagraf_11_5ModellApi>>
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_5 {
         val paragraf = Paragraf_11_5.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))

@@ -1,7 +1,9 @@
 package no.nav.aap.hendelse
 
-import no.nav.aap.domene.vilkår.TotrinnskontrollParagraf_11_5
+import no.nav.aap.domene.vilkår.Kvalitetssikring
+import no.nav.aap.domene.vilkår.Løsning
 import no.nav.aap.domene.vilkår.Paragraf_11_5
+import no.nav.aap.domene.vilkår.Totrinnskontroll
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_5ModellApi
 import java.time.LocalDate
@@ -13,7 +15,7 @@ internal class LøsningParagraf_11_5(
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
     private val nedsattArbeidsevnegrad: NedsattArbeidsevnegrad
-) : Hendelse() {
+) : Hendelse(), Løsning<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5> {
     internal class NedsattArbeidsevnegrad(
         private val kravOmNedsattArbeidsevneErOppfylt: Boolean,
         private val kravOmNedsattArbeidsevneErOppfyltBegrunnelse: String,
@@ -50,11 +52,14 @@ internal class LøsningParagraf_11_5(
         vilkår.vurderNedsattArbeidsevne(vilkårsvurdering, this, nedsattArbeidsevnegrad)
     }
 
-    internal fun toDto() = nedsattArbeidsevnegrad.toDto(løsningId, vurdertAv, tidspunktForVurdering)
-
-    internal fun matchMedKvalitetssikring(totrinnskontroll: TotrinnskontrollParagraf_11_5, kvalitetssikring: KvalitetssikringParagraf_11_5) {
+    override fun matchMedKvalitetssikring(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5>,
+        kvalitetssikring: KvalitetssikringParagraf_11_5
+    ) {
         kvalitetssikring.matchMedLøsning(totrinnskontroll, løsningId)
     }
+
+    override fun toDto() = nedsattArbeidsevnegrad.toDto(løsningId, vurdertAv, tidspunktForVurdering)
 }
 
 internal class KvalitetssikringParagraf_11_5(
@@ -64,7 +69,7 @@ internal class KvalitetssikringParagraf_11_5(
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String?,
-) : Hendelse() {
+) : Hendelse(), Kvalitetssikring<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5> {
 
     internal companion object {
         internal fun Iterable<KvalitetssikringParagraf_11_5>.toDto() = map(KvalitetssikringParagraf_11_5::toDto)
@@ -72,7 +77,14 @@ internal class KvalitetssikringParagraf_11_5(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = KvalitetssikringParagraf_11_5ModellApi(
+
+    override fun matchMedLøsning(totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5>, løsningId: UUID) {
+        if (løsningId == this.løsningId) {
+            totrinnskontroll.leggTilKvalitetssikring(this)
+        }
+    }
+
+    override fun toDto() = KvalitetssikringParagraf_11_5ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
@@ -80,11 +92,5 @@ internal class KvalitetssikringParagraf_11_5(
         erGodkjent = erGodkjent,
         begrunnelse = begrunnelse
     )
-
-    internal fun matchMedLøsning(totrinnskontroll: TotrinnskontrollParagraf_11_5, løsningId: UUID) {
-        if (løsningId == this.løsningId) {
-            totrinnskontroll.leggTilKvalitetssikring(this)
-        }
-    }
 }
 

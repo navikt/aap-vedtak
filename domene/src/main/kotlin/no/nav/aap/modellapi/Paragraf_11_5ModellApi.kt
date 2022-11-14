@@ -19,7 +19,7 @@ data class LøsningParagraf_11_5ModellApi(
     val kilder: List<String>,
     val legeerklæringDato: LocalDate?,
     val sykmeldingDato: LocalDate?,
-) {
+) : LøsningModellApi() {
 
     constructor(
         vurdertAv: String,
@@ -51,7 +51,7 @@ data class LøsningParagraf_11_5ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    internal fun toLøsning() = LøsningParagraf_11_5(
+    override fun toLøsning(): LøsningParagraf_11_5 = LøsningParagraf_11_5(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -74,7 +74,7 @@ data class KvalitetssikringParagraf_11_5ModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String?,
-) {
+) : KvalitetssikringModellApi() {
 
     constructor(
         løsningId: UUID,
@@ -98,7 +98,7 @@ data class KvalitetssikringParagraf_11_5ModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    internal fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
+    override fun toKvalitetssikring() = KvalitetssikringParagraf_11_5(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

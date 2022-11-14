@@ -216,7 +216,8 @@ private fun Paragraf_11_5ModellApi.toJson() = Paragraf_11_5KafkaDto(
     tilstand = tilstand,
     utfall = utfall.name,
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollModellApi::toJson)
+    totrinnskontroller = totrinnskontroller
+        .map(TotrinnskontrollModellApi<LøsningParagraf_11_5ModellApi, KvalitetssikringParagraf_11_5ModellApi>::toJson)
 )
 
 private fun Paragraf_11_5YrkesskadeModellApi.toJson() = Paragraf_11_5Yrkesskade(
@@ -610,7 +611,8 @@ private fun YrkesskadeModellApi.toJson() = Yrkesskade(
     inntektsgrunnlag = inntektsgrunnlag.toJson(),
 )
 
-private fun TotrinnskontrollModellApi.toJson() = TotrinnskontrollKafkaDto(
-    løsning = løsning.toJson(),
-    kvalitetssikring = kvalitetssikring?.toJson()
-)
+private fun TotrinnskontrollModellApi<LøsningParagraf_11_5ModellApi, KvalitetssikringParagraf_11_5ModellApi>.toJson() =
+    TotrinnskontrollKafkaDto(
+        løsning = løsning.toJson(),
+        kvalitetssikring = kvalitetssikring?.toJson()
+    )
