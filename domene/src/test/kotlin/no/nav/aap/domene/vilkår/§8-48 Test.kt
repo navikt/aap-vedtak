@@ -169,7 +169,6 @@ internal class `§8-48 Test` {
 
         assertHarIkkeBehov(løsning22_13)
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertKvalitetssikretAv("saksbehandler", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -227,10 +226,6 @@ internal class `§8-48 Test` {
 
     private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_8_48) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_8_48) {
-        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_8_48) {

@@ -1,5 +1,8 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.vilkår.Kvalitetssikring
+import no.nav.aap.domene.vilkår.Løsning
+import no.nav.aap.domene.vilkår.Totrinnskontroll
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_6ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_6ModellApi
 import java.time.LocalDateTime
@@ -13,7 +16,7 @@ internal class LøsningParagraf_11_6(
     private val harBehovForTiltak: Boolean,
     private val harMulighetForÅKommeIArbeid: Boolean,
     private val individuellBegrunnelse: String?,
-) : Hendelse() {
+) : Hendelse(), Løsning<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6> {
 
     internal companion object {
         internal fun Iterable<LøsningParagraf_11_6>.toDto() = map(LøsningParagraf_11_6::toDto)
@@ -23,7 +26,14 @@ internal class LøsningParagraf_11_6(
     internal fun erManueltOppfylt(): Boolean =
         harBehovForBehandling || harBehovForTiltak || harMulighetForÅKommeIArbeid
 
-    internal fun toDto() = LøsningParagraf_11_6ModellApi(
+    override fun matchMedKvalitetssikring(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6>,
+        kvalitetssikring: KvalitetssikringParagraf_11_6
+    ) {
+        kvalitetssikring.matchMedLøsning(totrinnskontroll, løsningId)
+    }
+
+    override fun toDto() = LøsningParagraf_11_6ModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -41,7 +51,7 @@ internal class KvalitetssikringParagraf_11_6(
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String?,
-) : Hendelse() {
+) : Hendelse(), Kvalitetssikring<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6> {
 
     internal companion object {
         internal fun Iterable<KvalitetssikringParagraf_11_6>.toDto() = map(KvalitetssikringParagraf_11_6::toDto)
@@ -49,7 +59,17 @@ internal class KvalitetssikringParagraf_11_6(
 
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = KvalitetssikringParagraf_11_6ModellApi(
+
+    override fun matchMedLøsning(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6>,
+        løsningId: UUID
+    ) {
+        if (this.løsningId == løsningId) {
+            totrinnskontroll.leggTilKvalitetssikring(this)
+        }
+    }
+
+    override fun toDto() = KvalitetssikringParagraf_11_6ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

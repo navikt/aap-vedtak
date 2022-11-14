@@ -114,7 +114,7 @@ data class LøsningParagraf_11_5YrkesskadeModellApi(
     val tidspunktForVurdering: LocalDateTime,
     val arbeidsevneErNedsattMedMinst50Prosent: Boolean,
     val arbeidsevneErNedsattMedMinst30Prosent: Boolean
-) {
+) : LøsningModellApi() {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
@@ -123,7 +123,7 @@ data class LøsningParagraf_11_5YrkesskadeModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() = LøsningParagraf_11_5Yrkesskade(
+    override fun toLøsning() = LøsningParagraf_11_5Yrkesskade(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -139,7 +139,7 @@ data class KvalitetssikringParagraf_11_5YrkesskadeModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String?,
-) {
+) : KvalitetssikringModellApi() {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
@@ -148,7 +148,7 @@ data class KvalitetssikringParagraf_11_5YrkesskadeModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
+    override fun toKvalitetssikring() = KvalitetssikringParagraf_11_5Yrkesskade(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

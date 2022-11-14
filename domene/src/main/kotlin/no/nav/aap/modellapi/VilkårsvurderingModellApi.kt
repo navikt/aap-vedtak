@@ -43,16 +43,15 @@ interface VilkårsvurderingModellApiVisitor {
 
 data class MedlemskapYrkesskadeModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
     val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskadeModellApi>,
-    val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskadeModellApi>,
-    val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskadeModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningManuellMedlemskapYrkesskadeModellApi, KvalitetssikringMedlemskapYrkesskadeModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): MedlemskapYrkesskade {
         val medlemskapYrkesskade = MedlemskapYrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -67,16 +66,15 @@ data class MedlemskapYrkesskadeModellApi(
 
 data class Paragraf_8_48ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
     val løsning_8_48_maskinell: List<SykepengedagerModellApi>,
-    val løsning_22_13_manuell: List<LøsningParagraf_22_13ModellApi>,
-    val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_8_48 {
         val paragraf = Paragraf_8_48.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -91,16 +89,15 @@ data class Paragraf_8_48ModellApi(
 
 data class Paragraf_11_2ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
     val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2ModellApi>,
-    val løsning_11_2_manuell: List<LøsningParagraf_11_2ModellApi>,
-    val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_2ModellApi, KvalitetssikringParagraf_11_2ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_2 {
         val paragraf = Paragraf_11_2.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -115,15 +112,14 @@ data class Paragraf_11_2ModellApi(
 
 data class Paragraf_11_3ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_11_3_manuell: List<LøsningParagraf_11_3ModellApi>,
-    val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_3ModellApi, KvalitetssikringParagraf_11_3ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_3 {
         val paragraf = Paragraf_11_3.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -159,15 +155,14 @@ data class Paragraf_11_4FørsteLeddModellApi(
 
 data class Paragraf_11_4AndreOgTredjeLeddModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_11_4_ledd2_ledd3_manuell: List<LøsningParagraf_11_4AndreOgTredjeLeddModellApi>,
-    val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_4AndreOgTredjeLeddModellApi, KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_4AndreOgTredjeLedd {
         val paragraf = Paragraf_11_4AndreOgTredjeLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -217,15 +212,14 @@ data class Paragraf_11_5ModellApi(
 
 data class Paragraf_11_5YrkesskadeModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5YrkesskadeModellApi>,
-    val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5YrkesskadeModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_5YrkesskadeModellApi, KvalitetssikringParagraf_11_5YrkesskadeModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_5Yrkesskade {
         val paragraf = Paragraf_11_5Yrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -240,16 +234,15 @@ data class Paragraf_11_5YrkesskadeModellApi(
 
 data class Paragraf_11_6ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
     val innstillinger_11_6: List<InnstillingParagraf_11_6ModellApi>,
-    val løsning_11_6_manuell: List<LøsningParagraf_11_6ModellApi>,
-    val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_6ModellApi, KvalitetssikringParagraf_11_6ModellApi>>
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_6 {
         val paragraf = Paragraf_11_6.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -285,15 +278,14 @@ data class Paragraf_11_14ModellApi(
 
 data class Paragraf_11_19ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_11_19_manuell: List<LøsningParagraf_11_19ModellApi>,
-    val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_19ModellApi, KvalitetssikringParagraf_11_19ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_19 {
         val paragraf = Paragraf_11_19.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -308,15 +300,14 @@ data class Paragraf_11_19ModellApi(
 
 data class Paragraf_11_22ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_11_22_manuell: List<LøsningParagraf_11_22ModellApi>,
-    val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_22ModellApi, KvalitetssikringParagraf_11_22ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_22 {
         val paragraf = Paragraf_11_22.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -331,16 +322,15 @@ data class Paragraf_11_22ModellApi(
 
 data class Paragraf_11_27FørsteLeddModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
     val løsning_11_27_maskinell: List<LøsningParagraf_11_27_FørsteLedd_ModellApi>,
-    val løsning_22_13_manuell: List<LøsningParagraf_22_13ModellApi>,
-    val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_27FørsteLedd {
         val paragraf = Paragraf_11_27FørsteLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -355,15 +345,14 @@ data class Paragraf_11_27FørsteLeddModellApi(
 
 data class Paragraf_11_29ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_11_29_manuell: List<LøsningParagraf_11_29ModellApi>,
-    val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_29ModellApi, KvalitetssikringParagraf_11_29ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_29 {
         val paragraf = Paragraf_11_29.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
@@ -378,15 +367,14 @@ data class Paragraf_11_29ModellApi(
 
 data class Paragraf_22_13ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
+    override val vurdertAv: String? = null,
+    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
     override val utfall: Utfall,
     override val vurdertMaskinelt: Boolean,
-    val løsning_22_13_manuell: List<LøsningParagraf_22_13ModellApi>,
-    val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13ModellApi>,
+    val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>,
     val søknadsdata: List<SøknadsdataModellApi>,
 ) : VilkårsvurderingModellApi() {
 

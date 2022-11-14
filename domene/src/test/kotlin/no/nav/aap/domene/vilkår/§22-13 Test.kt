@@ -66,7 +66,6 @@ internal class `§22-13 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertKvalitetssikretAv("X", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -152,10 +151,6 @@ internal class `§22-13 Test` {
         vilkårsvurdering: Paragraf_22_13
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_22_13) {
-        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_22_13) {

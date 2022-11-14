@@ -1,5 +1,8 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.vilkår.Kvalitetssikring
+import no.nav.aap.domene.vilkår.Løsning
+import no.nav.aap.domene.vilkår.Totrinnskontroll
 import no.nav.aap.modellapi.KvalitetssikringMedlemskapYrkesskadeModellApi
 import no.nav.aap.modellapi.LøsningManuellMedlemskapYrkesskadeModellApi
 import java.time.LocalDateTime
@@ -10,7 +13,7 @@ internal class LøsningManuellMedlemskapYrkesskade(
     private val vurdertAv: String,
     private val tidspunktForVurdering: LocalDateTime,
     private val erMedlem: ErMedlem
-) : Hendelse() {
+) : Hendelse(), Løsning<LøsningManuellMedlemskapYrkesskade, KvalitetssikringMedlemskapYrkesskade> {
     internal enum class ErMedlem {
         JA, NEI
     }
@@ -20,29 +23,45 @@ internal class LøsningManuellMedlemskapYrkesskade(
             map(LøsningManuellMedlemskapYrkesskade::toDto)
     }
 
+    override fun matchMedKvalitetssikring(
+        totrinnskontroll: Totrinnskontroll<LøsningManuellMedlemskapYrkesskade, KvalitetssikringMedlemskapYrkesskade>,
+        kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
+    ) {
+        kvalitetssikring.matchMedLøsning(totrinnskontroll, løsningId)
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun erMedlem() = erMedlem == ErMedlem.JA
-    internal fun toDto() =
+    override fun toDto() =
         LøsningManuellMedlemskapYrkesskadeModellApi(løsningId, vurdertAv, tidspunktForVurdering, erMedlem.name)
 }
 
 internal class KvalitetssikringMedlemskapYrkesskade(
-    private val kvalitetssikringId: UUID, 
+    private val kvalitetssikringId: UUID,
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String?,
-) : Hendelse() {
+) : Hendelse(), Kvalitetssikring<LøsningManuellMedlemskapYrkesskade, KvalitetssikringMedlemskapYrkesskade> {
 
     internal companion object {
         internal fun Iterable<KvalitetssikringMedlemskapYrkesskade>.toDto() =
             map(KvalitetssikringMedlemskapYrkesskade::toDto)
     }
 
+    override fun matchMedLøsning(
+        totrinnskontroll: Totrinnskontroll<LøsningManuellMedlemskapYrkesskade, KvalitetssikringMedlemskapYrkesskade>,
+        løsningId: UUID
+    ) {
+        if (this.løsningId == løsningId) {
+            totrinnskontroll.leggTilKvalitetssikring(this)
+        }
+    }
+
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = KvalitetssikringMedlemskapYrkesskadeModellApi(
+    override fun toDto() = KvalitetssikringMedlemskapYrkesskadeModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

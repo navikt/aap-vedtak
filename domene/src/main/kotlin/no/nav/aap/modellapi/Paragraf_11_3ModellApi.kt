@@ -13,7 +13,7 @@ data class LøsningParagraf_11_3ModellApi(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erOppfylt: Boolean
-) {
+): LøsningModellApi() {
 
     constructor(
         vurdertAv: String,
@@ -33,7 +33,7 @@ data class LøsningParagraf_11_3ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() = LøsningParagraf_11_3(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
+    override fun toLøsning() = LøsningParagraf_11_3(løsningId, vurdertAv, tidspunktForVurdering, erOppfylt)
 }
 
 data class KvalitetssikringParagraf_11_3ModellApi(
@@ -43,7 +43,7 @@ data class KvalitetssikringParagraf_11_3ModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String?,
-) {
+): KvalitetssikringModellApi() {
 
     constructor(
         løsningId: UUID,
@@ -67,7 +67,7 @@ data class KvalitetssikringParagraf_11_3ModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
+    override fun toKvalitetssikring() = KvalitetssikringParagraf_11_3(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

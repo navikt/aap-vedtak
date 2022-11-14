@@ -1,28 +1,9 @@
 package no.nav.aap.domene.vilkår
 
+import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.KvalitetssikringModellApi
 import no.nav.aap.modellapi.LøsningModellApi
 import no.nav.aap.modellapi.TotrinnskontrollModellApi
-import java.util.*
-
-internal interface Løsning<LØSNING, KVALITETSSIKRING>
-        where LØSNING : Løsning<LØSNING, KVALITETSSIKRING>,
-              KVALITETSSIKRING : Kvalitetssikring<LØSNING, KVALITETSSIKRING> {
-    fun matchMedKvalitetssikring(
-        totrinnskontroll: Totrinnskontroll<LØSNING, KVALITETSSIKRING>,
-        kvalitetssikring: KVALITETSSIKRING
-    )
-
-    fun toDto(): LøsningModellApi
-}
-
-internal interface Kvalitetssikring<LØSNING, KVALITETSSIKRING>
-        where LØSNING : Løsning<LØSNING, KVALITETSSIKRING>,
-              KVALITETSSIKRING : Kvalitetssikring<LØSNING, KVALITETSSIKRING> {
-    fun matchMedLøsning(totrinnskontroll: Totrinnskontroll<LØSNING, KVALITETSSIKRING>, løsningId: UUID)
-
-    fun toDto(): KvalitetssikringModellApi
-}
 
 internal class Totrinnskontroll<LØSNING, KVALITETSSIKRING> private constructor(
     private val løsning: LØSNING,
@@ -36,6 +17,10 @@ internal class Totrinnskontroll<LØSNING, KVALITETSSIKRING> private constructor(
 
     internal fun leggTilKvalitetssikring(kvalitetssikring: KVALITETSSIKRING) {
         this.kvalitetssikring = kvalitetssikring
+    }
+
+    internal fun accept(visitor: VilkårsvurderingVisitor) {
+        løsning.accept(visitor)
     }
 
     internal fun <LØSNING_MODELL_API : LøsningModellApi, KVALITETSSIKRING_MODELL_API : KvalitetssikringModellApi> toDto(

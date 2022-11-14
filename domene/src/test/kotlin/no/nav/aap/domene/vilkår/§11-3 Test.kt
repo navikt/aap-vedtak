@@ -66,7 +66,6 @@ internal class `§11-3 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertKvalitetssikretAv("X", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -86,7 +85,6 @@ internal class `§11-3 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertKvalitetssikretAv("X", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -136,10 +134,6 @@ internal class `§11-3 Test` {
 
     private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_3) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_3) {
-        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_3) {

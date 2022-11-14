@@ -1,5 +1,8 @@
 package no.nav.aap.hendelse
 
+import no.nav.aap.domene.vilkår.Kvalitetssikring
+import no.nav.aap.domene.vilkår.Løsning
+import no.nav.aap.domene.vilkår.Totrinnskontroll
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.KvalitetssikringParagraf_22_13ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_22_13ModellApi
@@ -15,7 +18,7 @@ internal class LøsningParagraf_22_13(
     private val unntak: String?,
     private val unntaksbegrunnelse: String?,
     private val manueltSattVirkningsdato: LocalDate?,
-) : Hendelse() {
+) : Hendelse(), Løsning<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13> {
     internal companion object {
         internal fun Iterable<LøsningParagraf_22_13>.toDto() = map(LøsningParagraf_22_13::toDto)
     }
@@ -49,7 +52,7 @@ internal class LøsningParagraf_22_13(
     internal fun bestemmesAv22_13() = !bestemmesAv8_48() && !bestemmesAv11_27()
 
 
-    internal fun accept(visitor: VilkårsvurderingVisitor) {
+    override fun accept(visitor: VilkårsvurderingVisitor) {
         visitor.visitLøsningParagraf_22_13(
             this,
             løsningId,
@@ -62,11 +65,18 @@ internal class LøsningParagraf_22_13(
         )
     }
 
+    override fun matchMedKvalitetssikring(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>,
+        kvalitetssikring: KvalitetssikringParagraf_22_13
+    ) {
+        kvalitetssikring.matchMedLøsning(totrinnskontroll, løsningId)
+    }
+
     internal fun vurdertAv() = vurdertAv
     internal fun bestemmesAv() = bestemmesAv
     internal fun virkningsdato() = manueltSattVirkningsdato
 
-    private fun toDto() = LøsningParagraf_22_13ModellApi(
+    override fun toDto() = LøsningParagraf_22_13ModellApi(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -84,16 +94,25 @@ internal class KvalitetssikringParagraf_22_13(
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String?,
-) : Hendelse() {
+) : Hendelse(), Kvalitetssikring<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13> {
 
     internal companion object {
         internal fun Iterable<KvalitetssikringParagraf_22_13>.toDto() =
             map(KvalitetssikringParagraf_22_13::toDto)
     }
 
+    override fun matchMedLøsning(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>,
+        løsningId: UUID
+    ) {
+        if (this.løsningId == løsningId) {
+            totrinnskontroll.leggTilKvalitetssikring(this)
+        }
+    }
+
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = KvalitetssikringParagraf_22_13ModellApi(
+    override fun toDto() = KvalitetssikringParagraf_22_13ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

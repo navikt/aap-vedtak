@@ -130,8 +130,7 @@ data class ForrigeSøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_5_manuell: List<LøsningParagraf_11_5>,
-        val kvalitetssikringer_11_5: List<KvalitetssikringParagraf_11_5>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto>,
     )
 
     data class Paragraf_11_5Yrkesskade(
@@ -303,6 +302,11 @@ data class ForrigeSøkereKafkaDto(
         val vurdertAv: String,
         val tidspunktForVurdering: LocalDateTime,
         val erOppfylt: Boolean
+    )
+
+    data class TotrinnskontrollKafkaDto(
+        val løsning: LøsningParagraf_11_5,
+        val kvalitetssikring: KvalitetssikringParagraf_11_5?
     )
 
     data class LøsningParagraf_11_5(

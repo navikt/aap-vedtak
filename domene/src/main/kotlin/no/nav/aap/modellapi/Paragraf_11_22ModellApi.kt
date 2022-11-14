@@ -18,7 +18,7 @@ data class LøsningParagraf_11_22ModellApi(
     val andelNedsattArbeidsevne: Int,
     val år: Year,
     val antattÅrligArbeidsinntekt: Double
-) {
+) : LøsningModellApi() {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
@@ -27,7 +27,7 @@ data class LøsningParagraf_11_22ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() = LøsningParagraf_11_22(
+    override fun toLøsning() = LøsningParagraf_11_22(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -45,7 +45,7 @@ data class KvalitetssikringParagraf_11_22ModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String?,
-) {
+) : KvalitetssikringModellApi() {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
@@ -54,7 +54,7 @@ data class KvalitetssikringParagraf_11_22ModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
+    override fun toKvalitetssikring() = KvalitetssikringParagraf_11_22(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

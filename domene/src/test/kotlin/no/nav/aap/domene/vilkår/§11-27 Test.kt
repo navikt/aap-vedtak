@@ -177,7 +177,6 @@ internal class `§11-27 Test` {
 
         assertHarIkkeBehov(løsning22_13)
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertKvalitetssikretAv("saksbehandler", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -236,10 +235,6 @@ internal class `§11-27 Test` {
         vilkårsvurdering: Paragraf_11_27FørsteLedd
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_27FørsteLedd) {
-        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_27FørsteLedd) {

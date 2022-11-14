@@ -191,22 +191,22 @@ internal class ApiTest {
                 (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_2ModellApi).løsning_11_2_maskinell[0].løsningId
 
             fun løsningsid3(index: Int) =
-                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_3ModellApi).løsning_11_3_manuell[0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_3ModellApi).totrinnskontroller[0].løsning.løsningId
 
             fun løsningsid5(index: Int) =
                 (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_5ModellApi).totrinnskontroller[0].løsning.løsningId
 
             fun løsningsid6(index: Int) =
-                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_6ModellApi).løsning_11_6_manuell[0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_6ModellApi).totrinnskontroller[0].løsning.løsningId
 
             fun løsningsid19(index: Int) =
-                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_19ModellApi).løsning_11_19_manuell[0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_19ModellApi).totrinnskontroller[0].løsning.løsningId
 
             fun løsningsid29(index: Int) =
-                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_29ModellApi).løsning_11_29_manuell[0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_11_29ModellApi).totrinnskontroller[0].løsning.løsningId
 
             fun løsningsid2213(index: Int) =
-                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_22_13ModellApi).løsning_22_13_manuell[0].løsningId
+                (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_22_13ModellApi).totrinnskontroller[0].løsning.løsningId
 
             kvalitetssikring_11_2_Topic.produce(fnr) {
                 Kvalitetssikring_11_2(

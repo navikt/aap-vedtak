@@ -130,7 +130,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertKvalitetssikretAv("X", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -156,7 +155,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertKvalitetssikretAv("X", vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -221,10 +219,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkårsvurdering: Paragraf_11_5Yrkesskade
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertKvalitetssikretAv(kvalitetssikretAv: String, vilkårsvurdering: Paragraf_11_5Yrkesskade) {
-        assertEquals(kvalitetssikretAv, listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv)
     }
 
     private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_5Yrkesskade) {

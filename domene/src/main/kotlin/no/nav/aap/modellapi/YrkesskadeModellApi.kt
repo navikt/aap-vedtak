@@ -27,7 +27,7 @@ data class LøsningManuellMedlemskapYrkesskadeModellApi(
     val vurdertAv: String,
     val tidspunktForVurdering: LocalDateTime,
     val erMedlem: String
-) {
+) : LøsningModellApi() {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
@@ -36,7 +36,7 @@ data class LøsningManuellMedlemskapYrkesskadeModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() =
+    override fun toLøsning() =
         LøsningManuellMedlemskapYrkesskade(
             løsningId,
             vurdertAv,
@@ -52,7 +52,7 @@ data class KvalitetssikringMedlemskapYrkesskadeModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String?,
-) {
+) : KvalitetssikringModellApi() {
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
@@ -61,7 +61,7 @@ data class KvalitetssikringMedlemskapYrkesskadeModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
+    override fun toKvalitetssikring() = KvalitetssikringMedlemskapYrkesskade(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

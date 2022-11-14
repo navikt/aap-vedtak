@@ -28,18 +28,19 @@ internal class LøsningParagraf_11_5(
 
         internal fun erOppfylt() = kravOmNedsattArbeidsevneErOppfylt && nedsettelseSkyldesSykdomEllerSkade
 
-        internal fun toDto(løsningId: UUID, vurdertAv: String, tidspunktForVurdering: LocalDateTime) = LøsningParagraf_11_5ModellApi(
-            løsningId = løsningId,
-            vurdertAv = vurdertAv,
-            tidspunktForVurdering = tidspunktForVurdering,
-            kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
-            kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
-            nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
-            nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
-            kilder = kilder,
-            legeerklæringDato = legeerklæringDato,
-            sykmeldingDato = sykmeldingDato,
-        )
+        internal fun toDto(løsningId: UUID, vurdertAv: String, tidspunktForVurdering: LocalDateTime) =
+            LøsningParagraf_11_5ModellApi(
+                løsningId = løsningId,
+                vurdertAv = vurdertAv,
+                tidspunktForVurdering = tidspunktForVurdering,
+                kravOmNedsattArbeidsevneErOppfylt = kravOmNedsattArbeidsevneErOppfylt,
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = kravOmNedsattArbeidsevneErOppfyltBegrunnelse,
+                nedsettelseSkyldesSykdomEllerSkade = nedsettelseSkyldesSykdomEllerSkade,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeBegrunnelse,
+                kilder = kilder,
+                legeerklæringDato = legeerklæringDato,
+                sykmeldingDato = sykmeldingDato,
+            )
     }
 
     internal companion object {
@@ -48,7 +49,10 @@ internal class LøsningParagraf_11_5(
 
     internal fun vurdertAv() = vurdertAv
 
-    internal fun vurderNedsattArbeidsevne(vilkår: Paragraf_11_5.AvventerManuellVurdering, vilkårsvurdering: Paragraf_11_5) {
+    internal fun vurderNedsattArbeidsevne(
+        vilkår: Paragraf_11_5.AvventerManuellVurdering,
+        vilkårsvurdering: Paragraf_11_5
+    ) {
         vilkår.vurderNedsattArbeidsevne(vilkårsvurdering, this, nedsattArbeidsevnegrad)
     }
 
@@ -63,8 +67,8 @@ internal class LøsningParagraf_11_5(
 }
 
 internal class KvalitetssikringParagraf_11_5(
-    private val kvalitetssikringId: UUID, 
-    private val løsningId: UUID, 
+    private val kvalitetssikringId: UUID,
+    private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
@@ -78,8 +82,11 @@ internal class KvalitetssikringParagraf_11_5(
     internal fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
 
-    override fun matchMedLøsning(totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5>, løsningId: UUID) {
-        if (løsningId == this.løsningId) {
+    override fun matchMedLøsning(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5>,
+        løsningId: UUID
+    ) {
+        if (this.løsningId == løsningId) {
             totrinnskontroll.leggTilKvalitetssikring(this)
         }
     }

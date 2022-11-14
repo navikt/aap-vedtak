@@ -17,7 +17,7 @@ data class LøsningParagraf_22_13ModellApi(
     val unntak: String?,
     val unntaksbegrunnelse: String?,
     val manueltSattVirkningsdato: LocalDate?,
-) {
+) : LøsningModellApi() {
 
     constructor(
         vurdertAv: String,
@@ -43,7 +43,7 @@ data class LøsningParagraf_22_13ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() = LøsningParagraf_22_13(
+    override fun toLøsning() = LøsningParagraf_22_13(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -70,7 +70,7 @@ data class KvalitetssikringParagraf_22_13ModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String?,
-) {
+) : KvalitetssikringModellApi() {
 
     constructor(
         løsningId: UUID,
@@ -94,7 +94,7 @@ data class KvalitetssikringParagraf_22_13ModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_22_13(
+    override fun toKvalitetssikring() = KvalitetssikringParagraf_22_13(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

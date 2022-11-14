@@ -4,17 +4,16 @@ import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_22_13.AvventerManuellVurdering
 import no.nav.aap.domene.vilkår.Paragraf_22_13.IkkeRelevant
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.gjenopprett
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.leggTilKvalitetssikring
+import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.toDto
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.Hendelse
 import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
-import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13.Companion.toDto
 import no.nav.aap.hendelse.LøsningParagraf_22_13
-import no.nav.aap.hendelse.LøsningParagraf_22_13.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_22_13
-import no.nav.aap.modellapi.Paragraf_22_13ModellApi
-import no.nav.aap.modellapi.Utfall
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
+import no.nav.aap.modellapi.*
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
@@ -29,8 +28,8 @@ internal class Paragraf_22_13 private constructor(
         Ledd.LEDD_1,
         tilstand
     ) {
-    private val løsninger = mutableListOf<LøsningParagraf_22_13>()
-    private val kvalitetssikringer = mutableListOf<KvalitetssikringParagraf_22_13>()
+    private val totrinnskontroller =
+        mutableListOf<Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>>()
     private val søknadstidspunkter = mutableListOf<Søknadsdata>()
 
     private class Søknadsdata(val søknadId: UUID, val søknadstidspunkt: LocalDateTime)
@@ -66,7 +65,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             løsning: LøsningParagraf_22_13
         ) {
-            vilkårsvurdering.løsninger.add(løsning)
+            vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
             if (løsning.bestemmesAv22_13())
                 vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
             else
@@ -76,15 +75,15 @@ internal class Paragraf_22_13 private constructor(
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = null,
-                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.IKKE_VURDERT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
-                kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                    toLøsningDto = LøsningParagraf_22_13::toDto,
+                    toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
+                ),
                 søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
                     Paragraf_22_13ModellApi.SøknadsdataModellApi(
                         søknadId = it.søknadId,
@@ -97,8 +96,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(modellApi)
-            vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
             vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
@@ -108,7 +106,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             kvalitetssikring: KvalitetssikringParagraf_22_13
         ) {
-            vilkårsvurdering.kvalitetssikringer.add(kvalitetssikring)
+            vilkårsvurdering.totrinnskontroller.leggTilKvalitetssikring(kvalitetssikring)
             when {
                 kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
                 else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
@@ -117,24 +115,24 @@ internal class Paragraf_22_13 private constructor(
 
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
-            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
-            vilkårsvurdering.løsninger.last().accept(visitor)
-            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.preVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
+            vilkårsvurdering.totrinnskontroller.last().accept(visitor)
+            visitor.postVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
-                kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                    toLøsningDto = LøsningParagraf_22_13::toDto,
+                    toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
+                ),
                 søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
                     Paragraf_22_13ModellApi.SøknadsdataModellApi(
                         søknadId = it.søknadId,
@@ -147,8 +145,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(modellApi)
-            vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
             vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
@@ -156,24 +153,24 @@ internal class Paragraf_22_13 private constructor(
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_22_13>() {
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
-            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
-            vilkårsvurdering.løsninger.last().accept(visitor)
-            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.preVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
+            vilkårsvurdering.totrinnskontroller.last().accept(visitor)
+            visitor.postVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = vilkårsvurdering.løsninger.last().vurdertAv(),
-                kvalitetssikretAv = vilkårsvurdering.kvalitetssikringer.last().kvalitetssikretAv(),
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
-                kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                    toLøsningDto = LøsningParagraf_22_13::toDto,
+                    toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
+                ),
                 søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
                     Paragraf_22_13ModellApi.SøknadsdataModellApi(
                         søknadId = it.søknadId,
@@ -186,8 +183,7 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(modellApi)
-            vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
             vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
@@ -195,24 +191,24 @@ internal class Paragraf_22_13 private constructor(
     object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_22_13>() {
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
-            visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
-            vilkårsvurdering.løsninger.last().accept(visitor)
-            visitor.postVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
+            visitor.preVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
+            vilkårsvurdering.totrinnskontroller.last().accept(visitor)
+            visitor.postVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = null,
-                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
                 utfall = Utfall.IKKE_RELEVANT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                løsning_22_13_manuell = vilkårsvurdering.løsninger.toDto(),
-                kvalitetssikringer_22_13 = vilkårsvurdering.kvalitetssikringer.toDto(),
+                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
+                    toLøsningDto = LøsningParagraf_22_13::toDto,
+                    toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
+                ),
                 søknadsdata = vilkårsvurdering.søknadstidspunkter.map {
                     Paragraf_22_13ModellApi.SøknadsdataModellApi(
                         søknadId = it.søknadId,
@@ -225,37 +221,18 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering: Paragraf_22_13,
             modellApi: Paragraf_22_13ModellApi
         ) {
-            vilkårsvurdering.settManuellLøsning(modellApi)
-            vilkårsvurdering.settKvalitetssikring(modellApi)
+            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
             vilkårsvurdering.settSøknadsdata(modellApi)
         }
     }
 
-    private fun settManuellLøsning(vilkårsvurdering: Paragraf_22_13ModellApi) {
-        løsninger.addAll(vilkårsvurdering.løsning_22_13_manuell.map {
-            LøsningParagraf_22_13(
-                løsningId = it.løsningId,
-                vurdertAv = it.vurdertAv,
-                tidspunktForVurdering = it.tidspunktForVurdering,
-                bestemmesAv = enumValueOf(it.bestemmesAv),
-                unntak = it.unntak,
-                unntaksbegrunnelse = it.unntaksbegrunnelse,
-                manueltSattVirkningsdato = it.manueltSattVirkningsdato,
+    private fun gjenopprettTotrinnskontroller(modellApi: Paragraf_22_13ModellApi) {
+        totrinnskontroller.addAll(
+            modellApi.totrinnskontroller.gjenopprett(
+                LøsningParagraf_22_13ModellApi::toLøsning,
+                KvalitetssikringParagraf_22_13ModellApi::toKvalitetssikring
             )
-        })
-    }
-
-    private fun settKvalitetssikring(vilkårsvurdering: Paragraf_22_13ModellApi) {
-        kvalitetssikringer.addAll(vilkårsvurdering.kvalitetssikringer_22_13.map {
-            KvalitetssikringParagraf_22_13(
-                kvalitetssikringId = it.kvalitetssikringId,
-                kvalitetssikretAv = it.kvalitetssikretAv,
-                tidspunktForKvalitetssikring = it.tidspunktForKvalitetssikring,
-                erGodkjent = it.erGodkjent,
-                begrunnelse = it.begrunnelse,
-                løsningId = it.løsningId,
-            )
-        })
+        )
     }
 
     private fun settSøknadsdata(vilkårsvurdering: Paragraf_22_13ModellApi) {

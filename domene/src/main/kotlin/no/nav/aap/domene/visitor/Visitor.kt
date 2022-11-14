@@ -41,7 +41,7 @@ internal interface VilkårsvurderingVisitor {
     fun postVisitParagraf_8_48(vilkårsvurdering: Paragraf_8_48) {}
 
     fun preVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
-    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
+    fun preVisitGjeldendeTotrinnskontroll_11_19(totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_19, KvalitetssikringParagraf_11_19>) {}
 
     fun visitLøsningParagraf_11_19(
         løsning: LøsningParagraf_11_19,
@@ -52,11 +52,11 @@ internal interface VilkårsvurderingVisitor {
     ) {
     }
 
-    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_19) {}
+    fun postVisitGjeldendeTotrinnskontroll_11_19(totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_19, KvalitetssikringParagraf_11_19>) {}
     fun postVisitParagraf_11_19(vilkårsvurdering: Paragraf_11_19) {}
 
     fun preVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
-    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
+    fun preVisitGjeldendeTotrinnskontroll_11_22(totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_22, KvalitetssikringParagraf_11_22>) {}
 
     fun visitLøsningParagraf_11_22(
         løsning: LøsningParagraf_11_22,
@@ -66,7 +66,7 @@ internal interface VilkårsvurderingVisitor {
     ) {
     }
 
-    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_11_22) {}
+    fun postVisitGjeldendeTotrinnskontroll_11_22(totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_22, KvalitetssikringParagraf_11_22>) {}
     fun postVisitParagraf_11_22(vilkårsvurdering: Paragraf_11_22) {}
 
     fun preVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27FørsteLedd) {}
@@ -82,7 +82,7 @@ internal interface VilkårsvurderingVisitor {
     fun postVisitParagraf_11_27(vilkårsvurdering: Paragraf_11_27FørsteLedd) {}
 
     fun preVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13, søknadstidspunkt: LocalDateTime) {}
-    fun preVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
+    fun preVisitGjeldendeTotrinnskontroll_22_13(totrinnskontroll: Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>) {}
     fun visitLøsningParagraf_22_13(
         løsning: LøsningParagraf_22_13,
         løsningId: UUID,
@@ -95,6 +95,6 @@ internal interface VilkårsvurderingVisitor {
     ) {
     }
 
-    fun postVisitGjeldendeLøsning(løsning: LøsningParagraf_22_13) {}
+    fun postVisitGjeldendeTotrinnskontroll_22_13(totrinnskontroll: Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>) {}
     fun postVisitParagraf_22_13(vilkårsvurdering: Paragraf_22_13, søknadstidspunkt: LocalDateTime) {}
 }

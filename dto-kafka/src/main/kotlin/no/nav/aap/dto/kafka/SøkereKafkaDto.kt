@@ -20,7 +20,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 17
+        const val VERSION = 18
         const val INIT_SEKVENS = 0L
     }
 
@@ -63,8 +63,12 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskade>,
-        val løsning_medlemskap_yrkesskade_manuell: List<LøsningManuellMedlemskapYrkesskade>,
-        val kvalitetssikringer_medlemskap_yrkesskade: List<KvalitetssikringMedlemskapYrkesskade>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDtoMedlemskapYrkesskade>,
+    )
+
+    data class TotrinnskontrollKafkaDtoMedlemskapYrkesskade(
+        val løsning: LøsningManuellMedlemskapYrkesskade,
+        val kvalitetssikring: KvalitetssikringMedlemskapYrkesskade?
     )
 
     data class Paragraf_8_48(
@@ -77,8 +81,7 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val løsning_8_48_maskinell: List<LøsningMaskinellParagraf_8_48>,
-        val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
-        val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_22_13>,
     )
 
     data class Paragraf_11_2(
@@ -91,8 +94,12 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2>,
-        val løsning_11_2_manuell: List<LøsningManuellParagraf_11_2>,
-        val kvalitetssikringer_11_2: List<KvalitetssikringParagraf_11_2>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_2>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_2(
+        val løsning: LøsningManuellParagraf_11_2,
+        val kvalitetssikring: KvalitetssikringParagraf_11_2?
     )
 
     data class Paragraf_11_3(
@@ -104,8 +111,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_3_manuell: List<LøsningParagraf_11_3>,
-        val kvalitetssikringer_11_3: List<KvalitetssikringParagraf_11_3>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_3>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_3(
+        val løsning: LøsningParagraf_11_3,
+        val kvalitetssikring: KvalitetssikringParagraf_11_3?
     )
 
     data class Paragraf_11_4FørsteLedd(
@@ -128,8 +139,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_4_ledd2_ledd3_manuell: List<LøsningParagraf_11_4AndreOgTredjeLedd>,
-        val kvalitetssikringer_11_4_ledd2_ledd3: List<KvalitetssikringParagraf_11_4AndreOgTredjeLedd>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_4AndreOgTredjeLedd>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_4AndreOgTredjeLedd(
+        val løsning: LøsningParagraf_11_4AndreOgTredjeLedd,
+        val kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd?
     )
 
     data class Paragraf_11_5KafkaDto(
@@ -141,7 +156,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto>
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_5>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_5(
+        val løsning: LøsningParagraf_11_5,
+        val kvalitetssikring: KvalitetssikringParagraf_11_5?
     )
 
     data class Paragraf_11_5Yrkesskade(
@@ -153,8 +173,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_5_yrkesskade_manuell: List<LøsningParagraf_11_5_yrkesskade>,
-        val kvalitetssikringer_11_5_yrkesskade: List<KvalitetssikringParagraf_11_5Yrkesskade>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_5Yrkesskade>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_5Yrkesskade(
+        val løsning: LøsningParagraf_11_5_yrkesskade,
+        val kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade?
     )
 
     data class Paragraf_11_6(
@@ -167,8 +191,12 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val innstillinger_11_6: List<InnstillingParagraf_11_6>,
-        val løsning_11_6_manuell: List<LøsningParagraf_11_6>,
-        val kvalitetssikringer_11_6: List<KvalitetssikringParagraf_11_6>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_6>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_6(
+        val løsning: LøsningParagraf_11_6,
+        val kvalitetssikring: KvalitetssikringParagraf_11_6?
     )
 
     data class Paragraf_11_14(
@@ -191,8 +219,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_19_manuell: List<LøsningParagraf_11_19>,
-        val kvalitetssikringer_11_19: List<KvalitetssikringParagraf_11_19>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_19>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_19(
+        val løsning: LøsningParagraf_11_19,
+        val kvalitetssikring: KvalitetssikringParagraf_11_19?
     )
 
     data class Paragraf_11_22(
@@ -204,8 +236,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_22_manuell: List<LøsningParagraf_11_22>,
-        val kvalitetssikringer_11_22: List<KvalitetssikringParagraf_11_22>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_22>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_22(
+        val løsning: LøsningParagraf_11_22,
+        val kvalitetssikring: KvalitetssikringParagraf_11_22?
     )
 
     data class Paragraf_11_27FørsteLedd(
@@ -218,8 +254,7 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val løsning_11_27_maskinell: List<LøsningMaskinellParagraf_11_27FørsteLedd>,
-        val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
-        val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_22_13>,
     )
 
     data class Paragraf_11_29(
@@ -231,8 +266,12 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_11_29_manuell: List<LøsningParagraf_11_29>,
-        val kvalitetssikringer_11_29: List<KvalitetssikringParagraf_11_29>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_29>,
+    )
+
+    data class TotrinnskontrollKafkaDto_11_29(
+        val løsning: LøsningParagraf_11_29,
+        val kvalitetssikring: KvalitetssikringParagraf_11_29?
     )
 
     data class Paragraf_22_13(
@@ -244,9 +283,13 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val løsning_22_13_manuell: List<LøsningParagraf_22_13>,
-        val kvalitetssikringer_22_13: List<KvalitetssikringParagraf_22_13>,
+        val totrinnskontroller: List<TotrinnskontrollKafkaDto_22_13>,
         val søknadsdata: List<SøknadsdataParagraf_22_13>,
+    )
+
+    data class TotrinnskontrollKafkaDto_22_13(
+        val løsning: LøsningParagraf_22_13,
+        val kvalitetssikring: KvalitetssikringParagraf_22_13?
     )
 
     data class SøknadsdataParagraf_22_13(

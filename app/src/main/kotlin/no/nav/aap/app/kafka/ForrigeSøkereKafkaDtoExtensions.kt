@@ -3,7 +3,6 @@ package no.nav.aap.app.kafka
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
-import no.nav.aap.dto.kafka.TotrinnskontrollKafkaDto
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -51,10 +50,13 @@ private fun MedlemskapYrkesskade.toMedlemskapYrkesskade() = SøkereKafkaDto.Medl
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_medlemskap_yrkesskade_maskinell =
     løsning_medlemskap_yrkesskade_maskinell.map(LøsningMaskinellMedlemskapYrkesskade::toDto),
-    løsning_medlemskap_yrkesskade_manuell =
-    løsning_medlemskap_yrkesskade_manuell.map(LøsningManuellMedlemskapYrkesskade::toDto),
-    kvalitetssikringer_medlemskap_yrkesskade =
-    kvalitetssikringer_medlemskap_yrkesskade.map(KvalitetssikringMedlemskapYrkesskade::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_medlemskap_yrkesskade_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDtoMedlemskapYrkesskade(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_medlemskap_yrkesskade.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_8_48.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48(
@@ -67,8 +69,13 @@ private fun Paragraf_8_48.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48(
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_8_48_maskinell = løsning_8_48_maskinell.map(LøsningMaskinellParagraf_8_48::toDto),
-    løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toDto),
-    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_22_13_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_22_13(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_22_13.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_2.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2(
@@ -81,8 +88,13 @@ private fun Paragraf_11_2.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2(
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_2_maskinell = løsning_11_2_maskinell.map(LøsningMaskinellParagraf_11_2::toDto),
-    løsning_11_2_manuell = løsning_11_2_manuell.map(LøsningManuellParagraf_11_2::toDto),
-    kvalitetssikringer_11_2 = kvalitetssikringer_11_2.map(KvalitetssikringParagraf_11_2::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_2_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_2(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_2.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_3.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3(
@@ -94,8 +106,13 @@ private fun Paragraf_11_3.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3(
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_3_manuell = løsning_11_3_manuell.map(LøsningParagraf_11_3::toDto),
-    kvalitetssikringer_11_3 = kvalitetssikringer_11_3.map(KvalitetssikringParagraf_11_3::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_3_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_3(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_3.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_4FørsteLedd.toParagraf_11_4FørsteLedd() = SøkereKafkaDto.Paragraf_11_4FørsteLedd(
@@ -119,10 +136,13 @@ private fun Paragraf_11_4AndreOgTredjeLedd.toParagraf_11_4AndreOgTredjeLedd() =
         tilstand = tilstand,
         utfall = utfall,
         vurdertMaskinelt = vurdertMaskinelt,
-        løsning_11_4_ledd2_ledd3_manuell =
-        løsning_11_4_ledd2_ledd3_manuell.map(LøsningParagraf_11_4AndreOgTredjeLedd::toDto),
-        kvalitetssikringer_11_4_ledd2_ledd3 =
-        kvalitetssikringer_11_4_ledd2_ledd3.map(KvalitetssikringParagraf_11_4AndreOgTredjeLedd::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_4_ledd2_ledd3_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_4AndreOgTredjeLedd(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_4_ledd2_ledd3.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
     )
 
 private fun Paragraf_11_5KafkaDto.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5KafkaDto(
@@ -134,13 +154,12 @@ private fun Paragraf_11_5KafkaDto.toParagraf_11_5() = SøkereKafkaDto.Paragraf_1
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_5_manuell.map {  løsning ->
-        TotrinnskontrollKafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_5.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    }
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto::toDto)
+)
+
+private fun TotrinnskontrollKafkaDto.toDto() = SøkereKafkaDto.TotrinnskontrollKafkaDto_11_5(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
 )
 
 private fun Paragraf_11_5Yrkesskade.toParagraf_11_5Yrkesskade() = SøkereKafkaDto.Paragraf_11_5Yrkesskade(
@@ -152,8 +171,13 @@ private fun Paragraf_11_5Yrkesskade.toParagraf_11_5Yrkesskade() = SøkereKafkaDt
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_5_yrkesskade_manuell = løsning_11_5_yrkesskade_manuell.map(LøsningParagraf_11_5_yrkesskade::toDto),
-    kvalitetssikringer_11_5_yrkesskade = kvalitetssikringer_11_5_yrkesskade.map(KvalitetssikringParagraf_11_5Yrkesskade::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_5_yrkesskade_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_5Yrkesskade(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_5_yrkesskade.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_6.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6(
@@ -166,8 +190,13 @@ private fun Paragraf_11_6.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6(
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6::toDto),
-    løsning_11_6_manuell = løsning_11_6_manuell.map(LøsningParagraf_11_6::toDto),
-    kvalitetssikringer_11_6 = kvalitetssikringer_11_6.map(KvalitetssikringParagraf_11_6::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_6_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_6(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_6.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_14.toParagraf_11_14() = SøkereKafkaDto.Paragraf_11_14(
@@ -190,8 +219,13 @@ private fun Paragraf_11_19.toParagraf_11_19() = SøkereKafkaDto.Paragraf_11_19(
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_19_manuell = løsning_11_19_manuell.map(LøsningParagraf_11_19::toDto),
-    kvalitetssikringer_11_19 = kvalitetssikringer_11_19.map(KvalitetssikringParagraf_11_19::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_19_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_19(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_19.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_22.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22(
@@ -203,8 +237,13 @@ private fun Paragraf_11_22.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22(
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_22_manuell = løsning_11_22_manuell.map(LøsningParagraf_11_22::toDto),
-    kvalitetssikringer_11_22 = kvalitetssikringer_11_22.map(KvalitetssikringParagraf_11_22::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_22_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_22(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_22.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_27FørsteLedd.toParagraf_11_27FørsteLedd() = SøkereKafkaDto.Paragraf_11_27FørsteLedd(
@@ -217,8 +256,13 @@ private fun Paragraf_11_27FørsteLedd.toParagraf_11_27FørsteLedd() = SøkereKaf
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_11_27_maskinell = løsning_11_27_maskinell.map(LøsningMaskinellParagraf_11_27FørsteLedd::toDto),
-    løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toDto),
-    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_22_13_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_22_13(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_22_13.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_11_29.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29(
@@ -230,8 +274,13 @@ private fun Paragraf_11_29.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29(
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_29_manuell = løsning_11_29_manuell.map(LøsningParagraf_11_29::toDto),
-    kvalitetssikringer_11_29 = kvalitetssikringer_11_29.map(KvalitetssikringParagraf_11_29::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_11_29_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_29(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_11_29.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
 )
 
 private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
@@ -243,8 +292,13 @@ private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13(
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_22_13_manuell = løsning_22_13_manuell.map(LøsningParagraf_22_13::toDto),
-    kvalitetssikringer_22_13 = kvalitetssikringer_22_13.map(KvalitetssikringParagraf_22_13::toDto),
+    // FIXME, fiks ved neste migrering
+    totrinnskontroller = løsning_22_13_manuell.map {  løsning ->
+        SøkereKafkaDto.TotrinnskontrollKafkaDto_22_13(
+            løsning = løsning.toDto(),
+            kvalitetssikring = kvalitetssikringer_22_13.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
+        )
+    },
     søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13::toDto),
 )
 
