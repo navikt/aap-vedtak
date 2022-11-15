@@ -1,6 +1,6 @@
 # Flytdiagram for en sak
  - Blå: Tilstander
- - Grønn: Hendelser
+ - Grønn: Håndtering av hendelser
  - Gul: Valg
 
 ```mermaid
@@ -27,7 +27,7 @@ flowchart TD
     H61(Håndter løsning):::hendelse
     
     %% Valg
-    V1{Er sak ikke oppfylt?}:::valg
+    V1{Er sak oppfylt?}:::valg
     V2{Er sak oppfylt?}:::valg
     V4{Er sak kvalitetssikret?}:::valg
     V5{Bestemmes virkningsdato av sykepenger?}:::valg
@@ -36,8 +36,8 @@ flowchart TD
     %% Graf
     T1 --> |Søknad| H11
     H11 --> V1
-    V1 --> |Ja| T8
-    V1 --> |Nei| T2
+    V1 --> |Nei| T8
+    V1 --> |Ikke ferdig| T2
     T2 --> |Kvalitetssikring| H22
     T2 --> |Løsning| H21
     H21 --> V2
