@@ -1,4 +1,4 @@
-# Flytdiagram for en sak
+# Tilstandsdiagram for en sak
  - Blå: Tilstander
  - Grønn: Håndtering av hendelser
  - Gul: Valg

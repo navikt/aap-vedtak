@@ -1,4 +1,4 @@
-# Flytdiagram for paragraf 11-2 (medlemskap)
+# Tilstandsdiagram for paragraf 11-2 (medlemskap)
 - Blå: Tilstander
 - Grønn: Håndtering av hendelser
 - Gul: Valg
