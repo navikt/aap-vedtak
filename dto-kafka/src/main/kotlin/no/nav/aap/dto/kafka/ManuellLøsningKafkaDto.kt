@@ -39,7 +39,7 @@ data class Løsning_11_6_manuellKafkaDto(
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
     val harMulighetForÅKommeIArbeid: Boolean,
-    val individuellBegrunnelse: String,
+    val individuellBegrunnelse: String?,
 )
 
 data class Løsning_11_19_manuellKafkaDto(
