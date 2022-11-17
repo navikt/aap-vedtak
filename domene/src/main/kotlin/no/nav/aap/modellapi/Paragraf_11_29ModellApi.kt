@@ -29,7 +29,7 @@ data class LøsningParagraf_11_29ModellApi(
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
-        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
@@ -63,7 +63,7 @@ data class KvalitetssikringParagraf_11_29ModellApi(
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val kvalitetssikring = toKvalitetssikring()
-        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        modellSøker.håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 

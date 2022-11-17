@@ -18,7 +18,7 @@ abstract class VilkårsvurderingModellApi {
     abstract val utfall: Utfall
     abstract val vurdertMaskinelt: Boolean
 
-    internal abstract fun gjenopprett(): Vilkårsvurdering<*>
+    internal abstract fun gjenopprett(): Vilkårsvurdering<*, *>
 
     abstract fun accept(visitor: VilkårsvurderingModellApiVisitor)
 }

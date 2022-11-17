@@ -10,15 +10,18 @@ import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.LøsningParagraf_11_27_FørsteLedd.Companion.toDto
 import no.nav.aap.hendelse.behov.Behov_11_27
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringParagraf_22_13ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_22_13ModellApi
+import no.nav.aap.modellapi.Paragraf_11_27FørsteLeddModellApi
+import no.nav.aap.modellapi.Utfall
 import java.time.LocalDate
 import java.util.*
 
 internal class Paragraf_11_27FørsteLedd private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_27FørsteLedd>
+    tilstand: Tilstand<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>
 ) :
-    Vilkårsvurdering<Paragraf_11_27FørsteLedd>(
+    Vilkårsvurdering<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_27,
         Ledd.LEDD_1,
@@ -32,7 +35,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
 
     override fun <T> callWithReceiver(block: Paragraf_11_27FørsteLedd.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_27FørsteLedd>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_27FørsteLedd,
             søknad: Søknad,
@@ -42,11 +45,12 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             vilkårsvurdering.tilstand(AvventerMaskinellVurdering, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): Paragraf_11_27FørsteLeddModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerMaskinellVurdering : Tilstand.AvventerMaskinellVurdering<Paragraf_11_27FørsteLedd>() {
+    object AvventerMaskinellVurdering :
+        Tilstand.AvventerMaskinellVurdering<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_27FørsteLedd, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_27())
         }
@@ -64,7 +68,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): Paragraf_11_27FørsteLeddModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -88,7 +92,8 @@ internal class Paragraf_11_27FørsteLedd private constructor(
         }
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_27FørsteLedd>() {
+    object AvventerManuellVurdering :
+        Tilstand.AvventerManuellVurdering<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>() {
 
         override fun håndterLøsning(vilkårsvurdering: Paragraf_11_27FørsteLedd, løsning: LøsningParagraf_22_13) {
             vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
@@ -98,7 +103,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): Paragraf_11_27FørsteLeddModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -123,7 +128,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
     }
 
     object OppfyltAvventerKvalitetssikring :
-        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_27FørsteLedd>() {
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_27FørsteLedd,
             kvalitetssikring: KvalitetssikringParagraf_22_13
@@ -143,7 +148,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             visitor.postVisitParagraf_11_27(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): Paragraf_11_27FørsteLeddModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -167,7 +172,8 @@ internal class Paragraf_11_27FørsteLedd private constructor(
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_27FørsteLedd>() {
+    object OppfyltKvalitetssikret :
+        Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>() {
         override fun accept(vilkårsvurdering: Paragraf_11_27FørsteLedd, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_11_27(vilkårsvurdering)
             visitor.preVisitGjeldendeLøsning(vilkårsvurdering.løsninger.last())
@@ -176,7 +182,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
             visitor.postVisitParagraf_11_27(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): Paragraf_11_27FørsteLeddModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -200,8 +206,8 @@ internal class Paragraf_11_27FørsteLedd private constructor(
         }
     }
 
-    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_11_27FørsteLedd>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): VilkårsvurderingModellApi =
+    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_11_27FørsteLedd, Paragraf_11_27FørsteLeddModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_27FørsteLedd): Paragraf_11_27FørsteLeddModellApi =
             Paragraf_11_27FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,

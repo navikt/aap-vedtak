@@ -9,15 +9,18 @@ import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.toDto
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.LøsningMaskinellMedlemskapYrkesskade.Companion.toDto
 import no.nav.aap.hendelse.behov.Behov_11_2
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringMedlemskapYrkesskadeModellApi
+import no.nav.aap.modellapi.LøsningManuellMedlemskapYrkesskadeModellApi
+import no.nav.aap.modellapi.MedlemskapYrkesskadeModellApi
+import no.nav.aap.modellapi.Utfall
 import java.time.LocalDate
 import java.util.*
 
 internal class MedlemskapYrkesskade private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<MedlemskapYrkesskade>
+    tilstand: Tilstand<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>
 ) :
-    Vilkårsvurdering<MedlemskapYrkesskade>(
+    Vilkårsvurdering<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>(
         vilkårsvurderingsid,
         Paragraf.MEDLEMSKAP_YRKESSKADE,
         Ledd.LEDD_1 + Ledd.LEDD_2,
@@ -31,7 +34,7 @@ internal class MedlemskapYrkesskade private constructor(
 
     override fun <T> callWithReceiver(block: MedlemskapYrkesskade.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<MedlemskapYrkesskade>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: MedlemskapYrkesskade,
             søknad: Søknad,
@@ -41,11 +44,12 @@ internal class MedlemskapYrkesskade private constructor(
             vilkårsvurdering.tilstand(AvventerMaskinellVurdering, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerMaskinellVurdering : Tilstand.AvventerMaskinellVurdering<MedlemskapYrkesskade>() {
+    object AvventerMaskinellVurdering :
+        Tilstand.AvventerMaskinellVurdering<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
         override fun onEntry(vilkårsvurdering: MedlemskapYrkesskade, hendelse: Hendelse) {
             //send ut behov for innhenting av maskinell medlemskapsvurdering
             hendelse.opprettBehov(Behov_11_2())
@@ -63,7 +67,7 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -79,7 +83,8 @@ internal class MedlemskapYrkesskade private constructor(
             )
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<MedlemskapYrkesskade>() {
+    object AvventerManuellVurdering :
+        Tilstand.AvventerManuellVurdering<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
         override fun håndterLøsning(
             vilkårsvurdering: MedlemskapYrkesskade,
             løsning: LøsningManuellMedlemskapYrkesskade
@@ -91,7 +96,7 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -115,8 +120,9 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object OppfyltMaskineltKvalitetssikret : Tilstand.OppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+    object OppfyltMaskineltKvalitetssikret :
+        Tilstand.OppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -140,8 +146,9 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object IkkeOppfyltMaskineltKvalitetssikret : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+    object IkkeOppfyltMaskineltKvalitetssikret :
+        Tilstand.IkkeOppfyltMaskineltKvalitetssikret<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -166,7 +173,7 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     object OppfyltManueltAvventerKvalitetssikring :
-        Tilstand.OppfyltManueltAvventerKvalitetssikring<MedlemskapYrkesskade>() {
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: MedlemskapYrkesskade,
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
@@ -182,7 +189,7 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -206,8 +213,9 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object OppfyltManueltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+    object OppfyltManueltKvalitetssikret :
+        Tilstand.OppfyltManueltKvalitetssikret<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -232,7 +240,7 @@ internal class MedlemskapYrkesskade private constructor(
     }
 
     object IkkeOppfyltManueltAvventerKvalitetssikring :
-        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<MedlemskapYrkesskade>() {
+        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: MedlemskapYrkesskade,
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
@@ -248,7 +256,7 @@ internal class MedlemskapYrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -272,8 +280,9 @@ internal class MedlemskapYrkesskade private constructor(
         }
     }
 
-    object IkkeOppfyltManueltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<MedlemskapYrkesskade>() {
-        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): VilkårsvurderingModellApi =
+    object IkkeOppfyltManueltKvalitetssikret :
+        Tilstand.IkkeOppfyltManueltKvalitetssikret<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
+        override fun toDto(vilkårsvurdering: MedlemskapYrkesskade): MedlemskapYrkesskadeModellApi =
             MedlemskapYrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,

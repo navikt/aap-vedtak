@@ -10,17 +10,17 @@ import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
 
-internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
+internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi>(
     protected val vilkårsvurderingsid: UUID,
     protected val paragraf: Paragraf,
     protected val ledd: List<Ledd>,
-    private var tilstand: Tilstand<PARAGRAF>,
+    private var tilstand: Tilstand<PARAGRAF, PARAGRAF_MODELL_API>,
 ) {
     internal constructor(
         vilkårsvurderingsid: UUID,
         paragraf: Paragraf,
         ledd: Ledd,
-        tilstand: Tilstand<PARAGRAF>,
+        tilstand: Tilstand<PARAGRAF, PARAGRAF_MODELL_API>,
     ) : this(vilkårsvurderingsid, paragraf, listOf(ledd), tilstand)
 
     internal enum class Paragraf {
@@ -60,7 +60,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.onExit(this, hendelse)
     }
 
-    protected fun tilstand(nyTilstand: Tilstand<PARAGRAF>, hendelse: Hendelse) {
+    protected fun tilstand(nyTilstand: Tilstand<PARAGRAF, PARAGRAF_MODELL_API>, hendelse: Hendelse) {
         onExit(hendelse)
         this.tilstand = nyTilstand
         onEntry(hendelse)
@@ -187,67 +187,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
         tilstand.toDto(this)
     }
 
-    internal fun gjenopprettTilstand(modellApi: MedlemskapYrkesskadeModellApi) = callWithReceiver {
+    internal fun gjenopprettTilstand(modellApi: PARAGRAF_MODELL_API) = callWithReceiver {
         tilstand.gjenopprettTilstand(this, modellApi)
     }
 
-    internal fun gjenopprettTilstand(modellApi: Paragraf_8_48ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_2ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_3ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_4FørsteLeddModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_5ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_5YrkesskadeModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_6ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_14ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_19ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_22ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_27FørsteLeddModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_11_29ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal fun gjenopprettTilstand(modellApi: Paragraf_22_13ModellApi) = callWithReceiver {
-        tilstand.gjenopprettTilstand(this, modellApi)
-    }
-
-    internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF>>(
+    internal sealed class Tilstand<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> private constructor(
         protected val tilstandsnavn: Tilstandsnavn,
         protected val vurdertMaskinelt: Boolean
     ) {
@@ -273,95 +217,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
         internal open fun gjenopprettTilstand(
             vilkårsvurdering: PARAGRAF,
-            modellApi: MedlemskapYrkesskadeModellApi
+            modellApi: PARAGRAF_MODELL_API
         ) {
         }
 
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_8_48ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_2ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_3ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_4FørsteLeddModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_4AndreOgTredjeLeddModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_5ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_5YrkesskadeModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_14ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_19ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_22ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_27FørsteLeddModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_11_29ModellApi
-        ) {
-        }
-
-        internal open fun gjenopprettTilstand(
-            vilkårsvurdering: PARAGRAF,
-            modellApi: Paragraf_22_13ModellApi
-        ) {
-        }
-
-        internal abstract fun toDto(vilkårsvurdering: PARAGRAF): VilkårsvurderingModellApi
+        internal abstract fun toDto(vilkårsvurdering: PARAGRAF): PARAGRAF_MODELL_API
 
         internal open fun håndterSøknad(
             vilkårsvurdering: PARAGRAF,
@@ -568,48 +428,52 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
 
-        internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
+                tilstandsnavn = Tilstandsnavn.IKKE_VURDERT,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeVurdert()
                 accept(vilkårsvurdering, visitor)
             }
         }
 
-        internal abstract class AvventerMaskinellVurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.AVVENTER_MASKINELL_VURDERING,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class AvventerMaskinellVurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
+                tilstandsnavn = Tilstandsnavn.AVVENTER_MASKINELL_VURDERING,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitAvventerMaskinellVurdering()
                 accept(vilkårsvurdering, visitor)
             }
         }
 
-        internal abstract class AvventerInnstilling<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.AVVENTER_INNSTILLING,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class AvventerInnstilling<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
+                tilstandsnavn = Tilstandsnavn.AVVENTER_INNSTILLING,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitAvventerInnstilling()
                 accept(vilkårsvurdering, visitor)
             }
         }
 
-        internal abstract class AvventerManuellVurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.AVVENTER_MANUELL_VURDERING,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class AvventerManuellVurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
+                tilstandsnavn = Tilstandsnavn.AVVENTER_MANUELL_VURDERING,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitAvventerManuellVurdering()
                 accept(vilkårsvurdering, visitor)
             }
         }
 
-        internal abstract class OppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
-            Tilstand<PARAGRAF>(
+        internal abstract class OppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET,
                 vurdertMaskinelt = true
             ) {
@@ -619,8 +483,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
-            Tilstand<PARAGRAF>(
+        internal abstract class IkkeOppfyltMaskineltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET,
                 vurdertMaskinelt = true
             ) {
@@ -630,8 +494,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class OppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
-            Tilstand<PARAGRAF>(
+        internal abstract class OppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
                 vurdertMaskinelt = false
             ) {
@@ -641,8 +505,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class OppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
-            Tilstand<PARAGRAF>(
+        internal abstract class OppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
                 tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_KVALITETSSIKRET,
                 vurdertMaskinelt = false
             ) {
@@ -652,8 +516,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeOppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
-            Tilstand<PARAGRAF>(
+        internal abstract class IkkeOppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
                 vurdertMaskinelt = false
             ) {
@@ -663,8 +527,8 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeOppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
-            Tilstand<PARAGRAF>(
+        internal abstract class IkkeOppfyltManueltKvalitetssikret<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
                 tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET,
                 vurdertMaskinelt = false
             ) {
@@ -674,10 +538,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeRelevant<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.IKKE_RELEVANT,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class IkkeRelevant<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
+            Tilstand<PARAGRAF, PARAGRAF_MODELL_API>(
+                tilstandsnavn = Tilstandsnavn.IKKE_RELEVANT,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeRelevant()
                 accept(vilkårsvurdering, visitor)
@@ -689,9 +554,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal companion object {
         private val log = LoggerFactory.getLogger("Vilkårsvurdering")
-        internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map(Vilkårsvurdering<*>::toDto)
-        internal fun Iterable<Vilkårsvurdering<*>>.lagSnapshot(vedtak: Vedtak) {
-            forEach { it.lagSnapshot(vedtak) }
-        }
+        internal fun Iterable<Vilkårsvurdering<*, *>>.toDto() = map(Vilkårsvurdering<*, *>::toDto)
+        internal fun Iterable<Vilkårsvurdering<*, *>>.lagSnapshot(vedtak: Vedtak) = forEach { it.lagSnapshot(vedtak) }
     }
 }

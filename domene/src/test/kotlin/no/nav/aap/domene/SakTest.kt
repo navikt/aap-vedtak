@@ -2209,82 +2209,82 @@ internal class SakTest {
     ) = single { it.paragraf == paragraf.name && it.ledd == ledd.map(Vilkårsvurdering.Ledd::name) }
 
     private fun Sak.håndterLøsning(løsning: LøsningMaskinellParagraf_11_2) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_3) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_5) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterInnstilling(innstilling: InnstillingParagraf_11_6) {
-        håndterLøsning(innstilling, Vilkårsvurdering<*>::håndterInnstilling)
+        håndterLøsning(innstilling, Vilkårsvurdering<*, *>::håndterInnstilling)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_6) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_22_13) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_27_FørsteLedd) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_29) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_19) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningMaskinellMedlemskapYrkesskade) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_5Yrkesskade) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningParagraf_11_22) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterLøsning(løsning: LøsningSykepengedager) {
-        håndterLøsning(løsning, Vilkårsvurdering<*>::håndterLøsning)
+        håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_2) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_3) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_5) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_6) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_22_13) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_19) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 
     private fun Sak.håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) {
-        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*>::håndterKvalitetssikring)
+        håndterKvalitetssikring(kvalitetssikring, Vilkårsvurdering<*, *>::håndterKvalitetssikring)
     }
 }

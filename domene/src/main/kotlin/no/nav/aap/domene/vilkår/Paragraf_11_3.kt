@@ -11,13 +11,16 @@ import no.nav.aap.hendelse.KvalitetssikringParagraf_11_3
 import no.nav.aap.hendelse.LøsningParagraf_11_3
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_3
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_3ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_3ModellApi
+import no.nav.aap.modellapi.Paragraf_11_3ModellApi
+import no.nav.aap.modellapi.Utfall
 import java.time.LocalDate
 import java.util.*
 
 internal class Paragraf_11_3 private constructor(
-    vilkårsvurderingsid: UUID, tilstand: Tilstand<Paragraf_11_3>
-) : Vilkårsvurdering<Paragraf_11_3>(
+    vilkårsvurderingsid: UUID, tilstand: Tilstand<Paragraf_11_3, Paragraf_11_3ModellApi>
+) : Vilkårsvurdering<Paragraf_11_3, Paragraf_11_3ModellApi>(
     vilkårsvurderingsid, Paragraf.PARAGRAF_11_3, Ledd.LEDD_1 + Ledd.LEDD_2 + Ledd.LEDD_3, tilstand
 ) {
     private val totrinnskontroller =
@@ -27,18 +30,18 @@ internal class Paragraf_11_3 private constructor(
 
     override fun <T> callWithReceiver(block: Paragraf_11_3.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_3>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_3, Paragraf_11_3ModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_3, søknad: Søknad, fødselsdato: Fødselsdato, vurderingsdato: LocalDate
         ) {
             vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_3): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_3): Paragraf_11_3ModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_3>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_3, Paragraf_11_3ModellApi>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_3, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_3())
         }
@@ -54,7 +57,7 @@ internal class Paragraf_11_3 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_3): VilkårsvurderingModellApi = Paragraf_11_3ModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_3): Paragraf_11_3ModellApi = Paragraf_11_3ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -75,7 +78,8 @@ internal class Paragraf_11_3 private constructor(
         }
     }
 
-    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_3>() {
+    object OppfyltAvventerKvalitetssikring :
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_3, Paragraf_11_3ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_3,
             kvalitetssikring: KvalitetssikringParagraf_11_3
@@ -87,7 +91,7 @@ internal class Paragraf_11_3 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_3): VilkårsvurderingModellApi = Paragraf_11_3ModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_3): Paragraf_11_3ModellApi = Paragraf_11_3ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -108,8 +112,8 @@ internal class Paragraf_11_3 private constructor(
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_3>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_3): VilkårsvurderingModellApi = Paragraf_11_3ModellApi(
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_3, Paragraf_11_3ModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_3): Paragraf_11_3ModellApi = Paragraf_11_3ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -130,7 +134,8 @@ internal class Paragraf_11_3 private constructor(
         }
     }
 
-    object IkkeOppfyltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_3>() {
+    object IkkeOppfyltAvventerKvalitetssikring :
+        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_3, Paragraf_11_3ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_3,
             kvalitetssikring: KvalitetssikringParagraf_11_3
@@ -142,7 +147,7 @@ internal class Paragraf_11_3 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_3): VilkårsvurderingModellApi = Paragraf_11_3ModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_3): Paragraf_11_3ModellApi = Paragraf_11_3ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -163,8 +168,9 @@ internal class Paragraf_11_3 private constructor(
         }
     }
 
-    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_3>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_3): VilkårsvurderingModellApi = Paragraf_11_3ModellApi(
+    object IkkeOppfyltKvalitetssikret :
+        Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_3, Paragraf_11_3ModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_3): Paragraf_11_3ModellApi = Paragraf_11_3ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),

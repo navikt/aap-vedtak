@@ -11,15 +11,18 @@ import no.nav.aap.hendelse.KvalitetssikringParagraf_11_29
 import no.nav.aap.hendelse.LøsningParagraf_11_29
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_29
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_29ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_29ModellApi
+import no.nav.aap.modellapi.Paragraf_11_29ModellApi
+import no.nav.aap.modellapi.Utfall
 import java.time.LocalDate
 import java.util.*
 
 internal class Paragraf_11_29 private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_29>
+    tilstand: Tilstand<Paragraf_11_29, Paragraf_11_29ModellApi>
 ) :
-    Vilkårsvurdering<Paragraf_11_29>(
+    Vilkårsvurdering<Paragraf_11_29, Paragraf_11_29ModellApi>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_29,
         Ledd.LEDD_1,
@@ -32,7 +35,7 @@ internal class Paragraf_11_29 private constructor(
 
     override fun <T> callWithReceiver(block: Paragraf_11_29.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_29>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_29, Paragraf_11_29ModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_29,
             søknad: Søknad,
@@ -42,11 +45,11 @@ internal class Paragraf_11_29 private constructor(
             vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): Paragraf_11_29ModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_29>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_29, Paragraf_11_29ModellApi>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_29, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_29())
         }
@@ -63,7 +66,7 @@ internal class Paragraf_11_29 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): Paragraf_11_29ModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -84,7 +87,8 @@ internal class Paragraf_11_29 private constructor(
         }
     }
 
-    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_29>() {
+    object OppfyltAvventerKvalitetssikring :
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_29, Paragraf_11_29ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_29,
             kvalitetssikring: KvalitetssikringParagraf_11_29
@@ -96,7 +100,7 @@ internal class Paragraf_11_29 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): Paragraf_11_29ModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -117,8 +121,8 @@ internal class Paragraf_11_29 private constructor(
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_29>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_29, Paragraf_11_29ModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): Paragraf_11_29ModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -139,7 +143,8 @@ internal class Paragraf_11_29 private constructor(
         }
     }
 
-    object IkkeOppfyltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_29>() {
+    object IkkeOppfyltAvventerKvalitetssikring :
+        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_29, Paragraf_11_29ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_29,
             kvalitetssikring: KvalitetssikringParagraf_11_29
@@ -151,7 +156,7 @@ internal class Paragraf_11_29 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): Paragraf_11_29ModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
@@ -172,8 +177,9 @@ internal class Paragraf_11_29 private constructor(
         }
     }
 
-    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_29>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_29): VilkårsvurderingModellApi = Paragraf_11_29ModellApi(
+    object IkkeOppfyltKvalitetssikret :
+        Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_29, Paragraf_11_29ModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_29): Paragraf_11_29ModellApi = Paragraf_11_29ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),

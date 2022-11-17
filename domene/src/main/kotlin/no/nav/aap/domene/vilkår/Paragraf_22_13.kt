@@ -13,16 +13,19 @@ import no.nav.aap.hendelse.KvalitetssikringParagraf_22_13
 import no.nav.aap.hendelse.LøsningParagraf_22_13
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_22_13
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringParagraf_22_13ModellApi
+import no.nav.aap.modellapi.LøsningParagraf_22_13ModellApi
+import no.nav.aap.modellapi.Paragraf_22_13ModellApi
+import no.nav.aap.modellapi.Utfall
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.*
 
 internal class Paragraf_22_13 private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_22_13>
+    tilstand: Tilstand<Paragraf_22_13, Paragraf_22_13ModellApi>
 ) :
-    Vilkårsvurdering<Paragraf_22_13>(
+    Vilkårsvurdering<Paragraf_22_13, Paragraf_22_13ModellApi>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_22_13,
         Ledd.LEDD_1,
@@ -41,7 +44,7 @@ internal class Paragraf_22_13 private constructor(
 
     override fun <T> callWithReceiver(block: Paragraf_22_13.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_22_13>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_22_13, Paragraf_22_13ModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_22_13,
             søknad: Søknad,
@@ -52,11 +55,11 @@ internal class Paragraf_22_13 private constructor(
             vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_22_13): Paragraf_22_13ModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_22_13>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_22_13, Paragraf_22_13ModellApi>() {
         override fun onEntry(vilkårsvurdering: Paragraf_22_13, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_22_13())
         }
@@ -72,7 +75,7 @@ internal class Paragraf_22_13 private constructor(
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_22_13): Paragraf_22_13ModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -101,7 +104,8 @@ internal class Paragraf_22_13 private constructor(
         }
     }
 
-    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_22_13>() {
+    object OppfyltAvventerKvalitetssikring :
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_22_13, Paragraf_22_13ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_22_13,
             kvalitetssikring: KvalitetssikringParagraf_22_13
@@ -121,7 +125,7 @@ internal class Paragraf_22_13 private constructor(
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_22_13): Paragraf_22_13ModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -150,7 +154,7 @@ internal class Paragraf_22_13 private constructor(
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_22_13>() {
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_22_13, Paragraf_22_13ModellApi>() {
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
             visitor.preVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
@@ -159,7 +163,7 @@ internal class Paragraf_22_13 private constructor(
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_22_13): Paragraf_22_13ModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -188,7 +192,7 @@ internal class Paragraf_22_13 private constructor(
         }
     }
 
-    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_22_13>() {
+    object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_22_13, Paragraf_22_13ModellApi>() {
         override fun accept(vilkårsvurdering: Paragraf_22_13, visitor: VilkårsvurderingVisitor) {
             visitor.preVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
             visitor.preVisitGjeldendeTotrinnskontroll_22_13(vilkårsvurdering.totrinnskontroller.last())
@@ -197,7 +201,7 @@ internal class Paragraf_22_13 private constructor(
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_22_13): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_22_13): Paragraf_22_13ModellApi =
             Paragraf_22_13ModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,

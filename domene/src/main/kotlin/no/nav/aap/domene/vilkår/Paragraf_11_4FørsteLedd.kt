@@ -5,7 +5,6 @@ import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.Paragraf_11_4FørsteLeddModellApi
 import no.nav.aap.modellapi.Utfall
-import no.nav.aap.modellapi.VilkårsvurderingModellApi
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
 import java.util.*
@@ -14,9 +13,9 @@ private val log = LoggerFactory.getLogger("Paragraf_11_4FørsteLedd")
 
 internal class Paragraf_11_4FørsteLedd private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_4FørsteLedd>
+    tilstand: Tilstand<Paragraf_11_4FørsteLedd, Paragraf_11_4FørsteLeddModellApi>
 ) :
-    Vilkårsvurdering<Paragraf_11_4FørsteLedd>(
+    Vilkårsvurdering<Paragraf_11_4FørsteLedd, Paragraf_11_4FørsteLeddModellApi>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_4,
         Ledd.LEDD_1,
@@ -36,7 +35,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         else tilstand(IkkeOppfylt, søknad)
     }
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_4FørsteLedd>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_4FørsteLedd, Paragraf_11_4FørsteLeddModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
             søknad: Søknad,
@@ -46,11 +45,12 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             vilkårsvurdering.vurderAldersvilkår(søknad, fødselsdato, vurderingsdato)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): Paragraf_11_4FørsteLeddModellApi =
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object Oppfylt : Tilstand.OppfyltMaskineltKvalitetssikret<Paragraf_11_4FørsteLedd>() {
+    object Oppfylt :
+        Tilstand.OppfyltMaskineltKvalitetssikret<Paragraf_11_4FørsteLedd, Paragraf_11_4FørsteLeddModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
             søknad: Søknad,
@@ -60,7 +60,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             log.info("Vilkår allerede vurdert til oppfylt. Forventer ikke ny søknad")
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): Paragraf_11_4FørsteLeddModellApi =
             Paragraf_11_4FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",
@@ -74,7 +74,8 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             )
     }
 
-    object IkkeOppfylt : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<Paragraf_11_4FørsteLedd>() {
+    object IkkeOppfylt :
+        Tilstand.IkkeOppfyltMaskineltKvalitetssikret<Paragraf_11_4FørsteLedd, Paragraf_11_4FørsteLeddModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_4FørsteLedd,
             søknad: Søknad,
@@ -84,7 +85,7 @@ internal class Paragraf_11_4FørsteLedd private constructor(
             log.info("Vilkår allerede vurdert til ikke oppfylt. Forventer ikke ny søknad")
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): Paragraf_11_4FørsteLeddModellApi =
             Paragraf_11_4FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 vurdertAv = "maskinell saksbehandling",

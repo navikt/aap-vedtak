@@ -197,13 +197,13 @@ internal class VirkningsdatoTest {
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_RELEVANT, vilkår22_13)
     }
 
-    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Vilkårsvurdering<*>) {
+    private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Vilkårsvurdering<*, *>) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
     }
 
     private fun assertTilstand(
         tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn,
-        vilkårsvurdering: Vilkårsvurdering<*>
+        vilkårsvurdering: Vilkårsvurdering<*, *>
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
     }

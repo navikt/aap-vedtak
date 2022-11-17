@@ -35,7 +35,7 @@ internal class Sak private constructor(
         tilstand.håndterSøknad(this, søknad, fødselsdato)
     }
 
-    internal fun <T : Hendelse> håndterLøsning(løsning: T, håndter: Vilkårsvurdering<*>.(T) -> Unit) {
+    internal fun <T : Hendelse> håndterLøsning(løsning: T, håndter: Vilkårsvurdering<*, *>.(T) -> Unit) {
         tilstand.håndterLøsning(this, løsning, håndter)
     }
 
@@ -43,7 +43,7 @@ internal class Sak private constructor(
         tilstand.håndterLøsning(this, løsning, fødselsdato)
     }
 
-    internal fun <T : Hendelse> håndterKvalitetssikring(kvalitetssikring: T, håndter: Vilkårsvurdering<*>.(T) -> Unit) {
+    internal fun <T : Hendelse> håndterKvalitetssikring(kvalitetssikring: T, håndter: Vilkårsvurdering<*, *>.(T) -> Unit) {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring, håndter)
     }
 
@@ -81,7 +81,7 @@ internal class Sak private constructor(
             log.info("Forventet ikke søknad i tilstand ${tilstandsnavn.name}")
         }
 
-        open fun <T : Hendelse> håndterLøsning(sak: Sak, løsning: T, håndterLøsning: Vilkårsvurdering<*>.(T) -> Unit) {
+        open fun <T : Hendelse> håndterLøsning(sak: Sak, løsning: T, håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit) {
             log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
@@ -96,7 +96,7 @@ internal class Sak private constructor(
         open fun <T : Hendelse> håndterKvalitetssikring(
             sak: Sak,
             kvalitetssikring: T,
-            håndterKvalitetssikring: Vilkårsvurdering<*>.(T) -> Unit
+            håndterKvalitetssikring: Vilkårsvurdering<*, *>.(T) -> Unit
         ) {
             log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
@@ -156,14 +156,14 @@ internal class Sak private constructor(
             override fun <T : Hendelse> håndterLøsning(
                 sak: Sak,
                 løsning: T,
-                håndterLøsning: Vilkårsvurdering<*>.(T) -> Unit
+                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
             ) {
                 sak.sakstype.håndter(løsning, håndterLøsning)
                 vurderNesteTilstand(sak, løsning)
             }
 
             override fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
-                håndterLøsning(sak, løsning, Vilkårsvurdering<*>::håndterLøsning)
+                håndterLøsning(sak, løsning, Vilkårsvurdering<*, *>::håndterLøsning)
             }
 
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
@@ -180,7 +180,7 @@ internal class Sak private constructor(
             override fun <T : Hendelse> håndterKvalitetssikring(
                 sak: Sak,
                 kvalitetssikring: T,
-                håndterKvalitetssikring: Vilkårsvurdering<*>.(T) -> Unit
+                håndterKvalitetssikring: Vilkårsvurdering<*, *>.(T) -> Unit
             ) {
                 sak.sakstype.håndter(kvalitetssikring, håndterKvalitetssikring)
             }
@@ -218,7 +218,7 @@ internal class Sak private constructor(
             override fun <T : Hendelse> håndterKvalitetssikring(
                 sak: Sak,
                 kvalitetssikring: T,
-                håndterKvalitetssikring: Vilkårsvurdering<*>.(T) -> Unit
+                håndterKvalitetssikring: Vilkårsvurdering<*, *>.(T) -> Unit
             ) {
                 sak.sakstype.håndter(kvalitetssikring, håndterKvalitetssikring)
                 vurderNesteTilstand(sak, kvalitetssikring)

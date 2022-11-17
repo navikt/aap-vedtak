@@ -11,15 +11,18 @@ import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5Yrkesskade
-import no.nav.aap.modellapi.*
+import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5YrkesskadeModellApi
+import no.nav.aap.modellapi.LøsningParagraf_11_5YrkesskadeModellApi
+import no.nav.aap.modellapi.Paragraf_11_5YrkesskadeModellApi
+import no.nav.aap.modellapi.Utfall
 import java.time.LocalDate
 import java.util.*
 
 internal class Paragraf_11_5Yrkesskade private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_5Yrkesskade>
+    tilstand: Tilstand<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>
 ) :
-    Vilkårsvurdering<Paragraf_11_5Yrkesskade>(
+    Vilkårsvurdering<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_5_YRKESSKADE,
         Ledd.LEDD_1 + Ledd.LEDD_2,
@@ -32,7 +35,7 @@ internal class Paragraf_11_5Yrkesskade private constructor(
 
     override fun <T> callWithReceiver(block: Paragraf_11_5Yrkesskade.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_5Yrkesskade>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_5Yrkesskade,
             søknad: Søknad,
@@ -42,11 +45,12 @@ internal class Paragraf_11_5Yrkesskade private constructor(
             vilkårsvurdering.tilstand(AvventerManuellVurdering, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
             UlovligTilstandException.ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_5Yrkesskade>() {
+    object AvventerManuellVurdering :
+        Tilstand.AvventerManuellVurdering<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_5Yrkesskade, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_5Yrkesskade())
         }
@@ -63,7 +67,7 @@ internal class Paragraf_11_5Yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -86,7 +90,7 @@ internal class Paragraf_11_5Yrkesskade private constructor(
     }
 
     object OppfyltAvventerKvalitetssikring :
-        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_5Yrkesskade>() {
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_5Yrkesskade,
             kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade
@@ -98,7 +102,7 @@ internal class Paragraf_11_5Yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -120,8 +124,9 @@ internal class Paragraf_11_5Yrkesskade private constructor(
         }
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
+    object OppfyltKvalitetssikret :
+        Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -144,7 +149,7 @@ internal class Paragraf_11_5Yrkesskade private constructor(
     }
 
     object IkkeOppfyltAvventerKvalitetssikring :
-        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_5Yrkesskade>() {
+        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_5Yrkesskade,
             kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade
@@ -156,7 +161,7 @@ internal class Paragraf_11_5Yrkesskade private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,
@@ -178,8 +183,9 @@ internal class Paragraf_11_5Yrkesskade private constructor(
         }
     }
 
-    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade>() {
-        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): VilkårsvurderingModellApi =
+    object IkkeOppfyltKvalitetssikret :
+        Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
+        override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
             Paragraf_11_5YrkesskadeModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
                 paragraf = vilkårsvurdering.paragraf.name,

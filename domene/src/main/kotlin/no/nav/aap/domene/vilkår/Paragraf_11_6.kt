@@ -20,11 +20,11 @@ import java.util.*
 
 internal class Paragraf_11_6 private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_6>,
+    tilstand: Tilstand<Paragraf_11_6, Paragraf_11_6ModellApi>,
     innstillinger: List<InnstillingParagraf_11_6>,
     totrinnskontroller: List<Totrinnskontroll<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6>>,
 ) :
-    Vilkårsvurdering<Paragraf_11_6>(
+    Vilkårsvurdering<Paragraf_11_6, Paragraf_11_6ModellApi>(
         vilkårsvurderingsid,
         Paragraf.PARAGRAF_11_6,
         Ledd.LEDD_1,
@@ -37,7 +37,7 @@ internal class Paragraf_11_6 private constructor(
 
     override fun <T> callWithReceiver(block: Paragraf_11_6.() -> T) = this.block()
 
-    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_6>() {
+    object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_6, Paragraf_11_6ModellApi>() {
         override fun håndterSøknad(
             vilkårsvurdering: Paragraf_11_6,
             søknad: Søknad,
@@ -47,11 +47,11 @@ internal class Paragraf_11_6 private constructor(
             vilkårsvurdering.tilstand(AvventerInnstilling, søknad)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_11_6): VilkårsvurderingModellApi =
+        override fun toDto(vilkårsvurdering: Paragraf_11_6): Paragraf_11_6ModellApi =
             ulovligTilstand("IkkeVurdert skal håndtere søknad før serialisering")
     }
 
-    object AvventerInnstilling : Tilstand.AvventerInnstilling<Paragraf_11_6>() {
+    object AvventerInnstilling : Tilstand.AvventerInnstilling<Paragraf_11_6, Paragraf_11_6ModellApi>() {
 
         override fun håndterInnstilling(
             vilkårsvurdering: Paragraf_11_6,
@@ -69,7 +69,7 @@ internal class Paragraf_11_6 private constructor(
             )
     }
 
-    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_6>() {
+    object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_6, Paragraf_11_6ModellApi>() {
         override fun onEntry(vilkårsvurdering: Paragraf_11_6, hendelse: Hendelse) {
             hendelse.opprettBehov(Behov_11_6())
         }
@@ -94,7 +94,8 @@ internal class Paragraf_11_6 private constructor(
             )
     }
 
-    object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_6>() {
+    object OppfyltAvventerKvalitetssikring :
+        Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_6, Paragraf_11_6ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_6,
             kvalitetssikring: KvalitetssikringParagraf_11_6
@@ -114,7 +115,7 @@ internal class Paragraf_11_6 private constructor(
             )
     }
 
-    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_6>() {
+    object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_6, Paragraf_11_6ModellApi>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_6): Paragraf_11_6ModellApi =
             vilkårsvurdering.toParagraf_11_6ModellApi(
                 tilstandsnavn = tilstandsnavn,
@@ -123,7 +124,8 @@ internal class Paragraf_11_6 private constructor(
             )
     }
 
-    object IkkeOppfyltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_6>() {
+    object IkkeOppfyltAvventerKvalitetssikring :
+        Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_6, Paragraf_11_6ModellApi>() {
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_11_6,
             kvalitetssikring: KvalitetssikringParagraf_11_6
@@ -143,7 +145,8 @@ internal class Paragraf_11_6 private constructor(
             )
     }
 
-    object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_6>() {
+    object IkkeOppfyltKvalitetssikret :
+        Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_6, Paragraf_11_6ModellApi>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_6): Paragraf_11_6ModellApi =
             vilkårsvurdering.toParagraf_11_6ModellApi(
                 tilstandsnavn = tilstandsnavn,

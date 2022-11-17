@@ -24,7 +24,7 @@ internal class Søker private constructor(
         sak.håndterSøknad(søknad, fødselsdato)
     }
 
-    internal fun <T : Hendelse> håndterLøsning(løsning: T, håndter: Vilkårsvurdering<*>.(T) -> Unit) {
+    internal fun <T : Hendelse> håndterLøsning(løsning: T, håndter: Vilkårsvurdering<*, *>.(T) -> Unit) {
         saker.forEach { it.håndterLøsning(løsning, håndter) }
     }
 
@@ -32,7 +32,7 @@ internal class Søker private constructor(
         saker.forEach { it.håndterLøsning(løsning, fødselsdato) }
     }
 
-    internal fun <T : Hendelse> håndterKvalitetssikring(kvalitetssikring: T, håndter: Vilkårsvurdering<*>.(T) -> Unit) {
+    internal fun <T : Hendelse> håndterKvalitetssikring(kvalitetssikring: T, håndter: Vilkårsvurdering<*, *>.(T) -> Unit) {
         saker.forEach { it.håndterKvalitetssikring(kvalitetssikring, håndter) }
     }
 

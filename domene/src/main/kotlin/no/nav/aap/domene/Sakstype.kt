@@ -17,7 +17,7 @@ import java.util.*
 internal abstract class Sakstype private constructor(
     protected val type: Type,
     private var aktiv: Boolean,
-    protected val vilkårsvurderinger: List<Vilkårsvurdering<*>>
+    protected val vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
 ) {
 
     internal enum class Type {
@@ -30,7 +30,7 @@ internal abstract class Sakstype private constructor(
         vilkårsvurderinger.forEach { it.håndterSøknad(søknad, fødselsdato, vurderingsdato) }
     }
 
-    internal fun <T> håndter(løsning: T, håndter: Vilkårsvurdering<*>.(T) -> Unit) {
+    internal fun <T> håndter(løsning: T, håndter: Vilkårsvurdering<*, *>.(T) -> Unit) {
         vilkårsvurderinger.forEach { it.håndter(løsning) }
     }
 
@@ -43,7 +43,7 @@ internal abstract class Sakstype private constructor(
     ): Vedtak
 
     internal class Standard private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering<*>>
+        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
     ) : Sakstype(
         type = Type.STANDARD,
         aktiv = true,
@@ -95,13 +95,13 @@ internal abstract class Sakstype private constructor(
                 return Standard(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
+            internal fun gjenopprettStandard(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
                 Standard(vilkårsvurderinger)
         }
     }
 
     internal class Yrkesskade private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering<*>>
+        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
     ) : Sakstype(
         type = Type.YRKESSKADE,
         aktiv = true,
@@ -152,13 +152,13 @@ internal abstract class Sakstype private constructor(
                 return Yrkesskade(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
+            internal fun gjenopprettYrkesskade(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
                 Yrkesskade(vilkårsvurderinger)
         }
     }
 
     internal class Student private constructor(
-        vilkårsvurderinger: List<Vilkårsvurdering<*>>
+        vilkårsvurderinger: List<Vilkårsvurdering<*, *>>
     ) : Sakstype(
         type = Type.STUDENT,
         aktiv = true,
@@ -200,7 +200,7 @@ internal abstract class Sakstype private constructor(
                 return Student(vilkårsvurderinger)
             }
 
-            internal fun gjenopprettStudent(vilkårsvurderinger: List<Vilkårsvurdering<*>>) =
+            internal fun gjenopprettStudent(vilkårsvurderinger: List<Vilkårsvurdering<*, *>>) =
                 Student(vilkårsvurderinger)
         }
     }
