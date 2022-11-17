@@ -33,7 +33,7 @@ internal class Paragraf_11_6 private constructor(
     private val innstillinger = innstillinger.toMutableList()
     private val totrinnskontroller = totrinnskontroller.toMutableList()
 
-    internal constructor() : this(UUID.randomUUID(), IkkeVurdert, listOf(), listOf())
+    internal constructor() : this(UUID.randomUUID(), IkkeVurdert, emptyList(), emptyList())
 
     override fun <T> callWithReceiver(block: Paragraf_11_6.() -> T) = this.block()
 
@@ -179,13 +179,12 @@ internal class Paragraf_11_6 private constructor(
             tilstandsnavn: Tilstand.Tilstandsnavn,
             innstillinger: List<InnstillingParagraf_11_6ModellApi>,
             totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_6ModellApi, KvalitetssikringParagraf_11_6ModellApi>>
-        ) =
-            Paragraf_11_6(
-                vilkårsvurderingsid = vilkårsvurderingsid,
-                tilstand = tilknyttetTilstand(tilstandsnavn),
-                innstillinger = gjenopprettInnstillinger(innstillinger),
-                totrinnskontroller = gjenopprettTotrinnskontroller(totrinnskontroller)
-            )
+        ) = Paragraf_11_6(
+            vilkårsvurderingsid = vilkårsvurderingsid,
+            tilstand = tilknyttetTilstand(tilstandsnavn),
+            innstillinger = gjenopprettInnstillinger(innstillinger),
+            totrinnskontroller = gjenopprettTotrinnskontroller(totrinnskontroller),
+        )
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert

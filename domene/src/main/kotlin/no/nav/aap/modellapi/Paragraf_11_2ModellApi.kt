@@ -103,6 +103,6 @@ data class LøsningMaskinellParagraf_11_2ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() =
+    internal fun toLøsning() =
         LøsningMaskinellParagraf_11_2(løsningId, tidspunktForVurdering, enumValueOf(erMedlem.uppercase()))
 }

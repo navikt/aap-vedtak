@@ -11,16 +11,14 @@ import no.nav.aap.hendelse.KvalitetssikringParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.behov.Behov_11_5Yrkesskade
-import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5YrkesskadeModellApi
-import no.nav.aap.modellapi.LøsningParagraf_11_5YrkesskadeModellApi
-import no.nav.aap.modellapi.Paragraf_11_5YrkesskadeModellApi
-import no.nav.aap.modellapi.Utfall
+import no.nav.aap.modellapi.*
 import java.time.LocalDate
 import java.util.*
 
 internal class Paragraf_11_5Yrkesskade private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>
+    tilstand: Tilstand<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>,
+    totrinnskontroller: List<Totrinnskontroll<LøsningParagraf_11_5Yrkesskade, KvalitetssikringParagraf_11_5Yrkesskade>>,
 ) :
     Vilkårsvurdering<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>(
         vilkårsvurderingsid,
@@ -28,10 +26,9 @@ internal class Paragraf_11_5Yrkesskade private constructor(
         Ledd.LEDD_1 + Ledd.LEDD_2,
         tilstand
     ) {
-    private val totrinnskontroller =
-        mutableListOf<Totrinnskontroll<LøsningParagraf_11_5Yrkesskade, KvalitetssikringParagraf_11_5Yrkesskade>>()
+    private val totrinnskontroller = totrinnskontroller.toMutableList()
 
-    internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
+    internal constructor() : this(UUID.randomUUID(), IkkeVurdert, emptyList())
 
     override fun <T> callWithReceiver(block: Paragraf_11_5Yrkesskade.() -> T) = this.block()
 
@@ -68,25 +65,11 @@ internal class Paragraf_11_5Yrkesskade private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
-            Paragraf_11_5YrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
+            vilkårsvurdering.toParagraf_11_5YrkesskadeModellApi(
+                tilstandsnavn = tilstandsnavn,
                 utfall = Utfall.IKKE_VURDERT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                    toLøsningDto = LøsningParagraf_11_5Yrkesskade::toDto,
-                    toKvalitetssikringDto = KvalitetssikringParagraf_11_5Yrkesskade::toDto,
-                ),
             )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5Yrkesskade,
-            modellApi: Paragraf_11_5YrkesskadeModellApi
-        ) {
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
     }
 
     object OppfyltAvventerKvalitetssikring :
@@ -103,49 +86,21 @@ internal class Paragraf_11_5Yrkesskade private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
-            Paragraf_11_5YrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
+            vilkårsvurdering.toParagraf_11_5YrkesskadeModellApi(
+                tilstandsnavn = tilstandsnavn,
                 utfall = Utfall.OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                    toLøsningDto = LøsningParagraf_11_5Yrkesskade::toDto,
-                    toKvalitetssikringDto = KvalitetssikringParagraf_11_5Yrkesskade::toDto,
-                ),
             )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5Yrkesskade,
-            modellApi: Paragraf_11_5YrkesskadeModellApi
-        ) {
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
     }
 
     object OppfyltKvalitetssikret :
         Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
-            Paragraf_11_5YrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
+            vilkårsvurdering.toParagraf_11_5YrkesskadeModellApi(
+                tilstandsnavn = tilstandsnavn,
                 utfall = Utfall.OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                    toLøsningDto = LøsningParagraf_11_5Yrkesskade::toDto,
-                    toKvalitetssikringDto = KvalitetssikringParagraf_11_5Yrkesskade::toDto,
-                ),
             )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5Yrkesskade,
-            modellApi: Paragraf_11_5YrkesskadeModellApi
-        ) {
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
     }
 
     object IkkeOppfyltAvventerKvalitetssikring :
@@ -162,63 +117,50 @@ internal class Paragraf_11_5Yrkesskade private constructor(
         }
 
         override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
-            Paragraf_11_5YrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
+            vilkårsvurdering.toParagraf_11_5YrkesskadeModellApi(
+                tilstandsnavn = tilstandsnavn,
                 utfall = Utfall.IKKE_OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                    toLøsningDto = LøsningParagraf_11_5Yrkesskade::toDto,
-                    toKvalitetssikringDto = KvalitetssikringParagraf_11_5Yrkesskade::toDto,
-                ),
             )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5Yrkesskade,
-            modellApi: Paragraf_11_5YrkesskadeModellApi
-        ) {
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
     }
 
     object IkkeOppfyltKvalitetssikret :
         Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_5Yrkesskade, Paragraf_11_5YrkesskadeModellApi>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_5Yrkesskade): Paragraf_11_5YrkesskadeModellApi =
-            Paragraf_11_5YrkesskadeModellApi(
-                vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                paragraf = vilkårsvurdering.paragraf.name,
-                ledd = vilkårsvurdering.ledd.map(Ledd::name),
-                tilstand = tilstandsnavn.name,
+            vilkårsvurdering.toParagraf_11_5YrkesskadeModellApi(
+                tilstandsnavn = tilstandsnavn,
                 utfall = Utfall.IKKE_OPPFYLT,
                 vurdertMaskinelt = vurdertMaskinelt,
-                totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                    toLøsningDto = LøsningParagraf_11_5Yrkesskade::toDto,
-                    toKvalitetssikringDto = KvalitetssikringParagraf_11_5Yrkesskade::toDto,
-                ),
             )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_5Yrkesskade,
-            modellApi: Paragraf_11_5YrkesskadeModellApi
-        ) {
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
     }
 
-    private fun gjenopprettTotrinnskontroller(modellApi: Paragraf_11_5YrkesskadeModellApi) {
-        totrinnskontroller.addAll(
-            modellApi.totrinnskontroller.gjenopprett(
-                LøsningParagraf_11_5YrkesskadeModellApi::toLøsning,
-                KvalitetssikringParagraf_11_5YrkesskadeModellApi::toKvalitetssikring,
-            )
-        )
-    }
+    private fun toParagraf_11_5YrkesskadeModellApi(
+        tilstandsnavn: Tilstand.Tilstandsnavn,
+        utfall: Utfall,
+        vurdertMaskinelt: Boolean,
+    ) = Paragraf_11_5YrkesskadeModellApi(
+        vilkårsvurderingsid = vilkårsvurderingsid,
+        paragraf = paragraf.name,
+        ledd = ledd.map(Ledd::name),
+        tilstand = tilstandsnavn.name,
+        utfall = utfall,
+        vurdertMaskinelt = vurdertMaskinelt,
+        totrinnskontroller = totrinnskontroller.toDto(
+            toLøsningDto = LøsningParagraf_11_5Yrkesskade::toDto,
+            toKvalitetssikringDto = KvalitetssikringParagraf_11_5Yrkesskade::toDto,
+        ),
+    )
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
-            Paragraf_11_5Yrkesskade(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
+        internal fun gjenopprett(
+            vilkårsvurderingsid: UUID,
+            tilstandsnavn: Tilstand.Tilstandsnavn,
+            totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_5YrkesskadeModellApi, KvalitetssikringParagraf_11_5YrkesskadeModellApi>>
+        ) = Paragraf_11_5Yrkesskade(
+            vilkårsvurderingsid = vilkårsvurderingsid,
+            tilstand = tilknyttetTilstand(tilstandsnavn),
+            totrinnskontroller = gjenopprettTotrinnskontroller(totrinnskontroller)
+        )
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
@@ -229,5 +171,11 @@ internal class Paragraf_11_5Yrkesskade private constructor(
             Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_KVALITETSSIKRET -> IkkeOppfyltKvalitetssikret
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_5_yrkesskade")
         }
+
+        private fun gjenopprettTotrinnskontroller(totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_5YrkesskadeModellApi, KvalitetssikringParagraf_11_5YrkesskadeModellApi>>) =
+            totrinnskontroller.gjenopprett(
+                LøsningParagraf_11_5YrkesskadeModellApi::toLøsning,
+                KvalitetssikringParagraf_11_5YrkesskadeModellApi::toKvalitetssikring,
+            )
     }
 }

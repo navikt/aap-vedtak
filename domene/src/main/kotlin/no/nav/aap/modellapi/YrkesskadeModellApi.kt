@@ -19,7 +19,7 @@ data class LøsningMaskinellMedlemskapYrkesskadeModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(løsningId, enumValueOf(erMedlem.uppercase()))
+    internal fun toLøsning() = LøsningMaskinellMedlemskapYrkesskade(løsningId, enumValueOf(erMedlem.uppercase()))
 }
 
 data class LøsningManuellMedlemskapYrkesskadeModellApi(

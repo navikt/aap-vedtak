@@ -54,7 +54,7 @@ data class MedlemskapYrkesskadeModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningManuellMedlemskapYrkesskadeModellApi, KvalitetssikringMedlemskapYrkesskadeModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): MedlemskapYrkesskade {
-        val medlemskapYrkesskade = MedlemskapYrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val medlemskapYrkesskade = MedlemskapYrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), løsning_medlemskap_yrkesskade_maskinell, totrinnskontroller)
         medlemskapYrkesskade.gjenopprettTilstand(this)
         return medlemskapYrkesskade
     }
@@ -77,7 +77,7 @@ data class Paragraf_8_48ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_8_48 {
-        val paragraf = Paragraf_8_48.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_8_48.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), løsning_8_48_maskinell, totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -100,7 +100,7 @@ data class Paragraf_11_2ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_2ModellApi, KvalitetssikringParagraf_11_2ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_2 {
-        val paragraf = Paragraf_11_2.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_2.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), løsning_11_2_maskinell, totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -122,7 +122,7 @@ data class Paragraf_11_3ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_3ModellApi, KvalitetssikringParagraf_11_3ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_3 {
-        val paragraf = Paragraf_11_3.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_3.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -165,7 +165,7 @@ data class Paragraf_11_4AndreOgTredjeLeddModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_4AndreOgTredjeLeddModellApi, KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_4AndreOgTredjeLedd {
-        val paragraf = Paragraf_11_4AndreOgTredjeLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_4AndreOgTredjeLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -200,7 +200,7 @@ data class Paragraf_11_5ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_5ModellApi, KvalitetssikringParagraf_11_5ModellApi>>
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_5 {
-        val paragraf = Paragraf_11_5.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_5.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -222,7 +222,7 @@ data class Paragraf_11_5YrkesskadeModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_5YrkesskadeModellApi, KvalitetssikringParagraf_11_5YrkesskadeModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_5Yrkesskade {
-        val paragraf = Paragraf_11_5Yrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_5Yrkesskade.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -288,7 +288,7 @@ data class Paragraf_11_19ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_19ModellApi, KvalitetssikringParagraf_11_19ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_19 {
-        val paragraf = Paragraf_11_19.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_19.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -310,7 +310,7 @@ data class Paragraf_11_22ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_22ModellApi, KvalitetssikringParagraf_11_22ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_22 {
-        val paragraf = Paragraf_11_22.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_22.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -333,7 +333,7 @@ data class Paragraf_11_27FørsteLeddModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_27FørsteLedd {
-        val paragraf = Paragraf_11_27FørsteLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_27FørsteLedd.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), løsning_11_27_maskinell, totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -355,7 +355,7 @@ data class Paragraf_11_29ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_29ModellApi, KvalitetssikringParagraf_11_29ModellApi>>,
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_29 {
-        val paragraf = Paragraf_11_29.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_29.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }
@@ -384,7 +384,7 @@ data class Paragraf_22_13ModellApi(
     )
 
     override fun gjenopprett(): Paragraf_22_13 {
-        val paragraf = Paragraf_22_13.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_22_13.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), totrinnskontroller, søknadsdata)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }

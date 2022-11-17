@@ -16,7 +16,9 @@ import java.util.*
 
 internal class Paragraf_8_48 private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_8_48, Paragraf_8_48ModellApi>
+    tilstand: Tilstand<Paragraf_8_48, Paragraf_8_48ModellApi>,
+    løsningSykepengedager: List<LøsningSykepengedager>,
+    totrinnskontroller: List<Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>>,
 ) :
     Vilkårsvurdering<Paragraf_8_48, Paragraf_8_48ModellApi>(
         vilkårsvurderingsid,
@@ -24,11 +26,10 @@ internal class Paragraf_8_48 private constructor(
         Ledd.LEDD_1,
         tilstand
     ) {
-    private val løsningSykepengedager = mutableListOf<LøsningSykepengedager>()
-    private val totrinnskontroller =
-        mutableListOf<Totrinnskontroll<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13>>()
+    private val løsningSykepengedager = løsningSykepengedager.toMutableList()
+    private val totrinnskontroller = totrinnskontroller.toMutableList()
 
-    internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
+    internal constructor() : this(UUID.randomUUID(), IkkeVurdert, emptyList(), emptyList())
 
     override fun <T> callWithReceiver(block: Paragraf_8_48.() -> T) = this.block()
 
@@ -64,27 +65,12 @@ internal class Paragraf_8_48 private constructor(
             }
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi = Paragraf_8_48ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_8_48_maskinell = vilkårsvurdering.løsningSykepengedager.toDto(),
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                toLøsningDto = LøsningParagraf_22_13::toDto,
-                toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
-            ),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_8_48,
-            modellApi: Paragraf_8_48ModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
+        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi =
+            vilkårsvurdering.toParagraf_8_48ModellApi(
+                tilstandsnavn = tilstandsnavn,
+                utfall = Utfall.IKKE_VURDERT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_8_48, Paragraf_8_48ModellApi>() {
@@ -97,27 +83,12 @@ internal class Paragraf_8_48 private constructor(
                 vilkårsvurdering.tilstand(IkkeRelevant, løsning)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi = Paragraf_8_48ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_VURDERT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_8_48_maskinell = vilkårsvurdering.løsningSykepengedager.toDto(),
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                toLøsningDto = LøsningParagraf_22_13::toDto,
-                toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
-            ),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_8_48,
-            modellApi: Paragraf_8_48ModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
+        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi =
+            vilkårsvurdering.toParagraf_8_48ModellApi(
+                tilstandsnavn = tilstandsnavn,
+                utfall = Utfall.IKKE_VURDERT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     object OppfyltAvventerKvalitetssikring :
@@ -141,29 +112,12 @@ internal class Paragraf_8_48 private constructor(
             visitor.postVisitParagraf_8_48(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi = Paragraf_8_48ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_8_48_maskinell = vilkårsvurdering.løsningSykepengedager.toDto(),
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                toLøsningDto = LøsningParagraf_22_13::toDto,
-                toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
-            ),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_8_48,
-            modellApi: Paragraf_8_48ModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
+        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi =
+            vilkårsvurdering.toParagraf_8_48ModellApi(
+                tilstandsnavn = tilstandsnavn,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_8_48, Paragraf_8_48ModellApi>() {
@@ -175,71 +129,53 @@ internal class Paragraf_8_48 private constructor(
             visitor.postVisitParagraf_8_48(vilkårsvurdering)
         }
 
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi = Paragraf_8_48ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.OPPFYLT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_8_48_maskinell = vilkårsvurdering.løsningSykepengedager.toDto(),
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                toLøsningDto = LøsningParagraf_22_13::toDto,
-                toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
-            ),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_8_48,
-            modellApi: Paragraf_8_48ModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
+        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi =
+            vilkårsvurdering.toParagraf_8_48ModellApi(
+                tilstandsnavn = tilstandsnavn,
+                utfall = Utfall.OPPFYLT,
+                vurdertMaskinelt = vurdertMaskinelt,
+            )
     }
 
     object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_8_48, Paragraf_8_48ModellApi>() {
-        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi = Paragraf_8_48ModellApi(
-            vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
-            paragraf = vilkårsvurdering.paragraf.name,
-            ledd = vilkårsvurdering.ledd.map(Ledd::name),
-            tilstand = tilstandsnavn.name,
-            utfall = Utfall.IKKE_RELEVANT,
-            vurdertMaskinelt = vurdertMaskinelt,
-            løsning_8_48_maskinell = vilkårsvurdering.løsningSykepengedager.toDto(),
-            totrinnskontroller = vilkårsvurdering.totrinnskontroller.toDto(
-                toLøsningDto = LøsningParagraf_22_13::toDto,
-                toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
-            ),
-        )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_8_48,
-            modellApi: Paragraf_8_48ModellApi
-        ) {
-            vilkårsvurdering.settMaskinellLøsning(modellApi)
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
-    }
-
-    private fun settMaskinellLøsning(vilkårsvurdering: Paragraf_8_48ModellApi) {
-        løsningSykepengedager.addAll(vilkårsvurdering.løsning_8_48_maskinell.map(SykepengedagerModellApi::toLøsning))
-    }
-
-    private fun gjenopprettTotrinnskontroller(modellApi: Paragraf_8_48ModellApi) {
-        totrinnskontroller.addAll(
-            modellApi.totrinnskontroller.gjenopprett(
-                LøsningParagraf_22_13ModellApi::toLøsning,
-                KvalitetssikringParagraf_22_13ModellApi::toKvalitetssikring,
+        override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi =
+            vilkårsvurdering.toParagraf_8_48ModellApi(
+                tilstandsnavn = tilstandsnavn,
+                utfall = Utfall.IKKE_RELEVANT,
+                vurdertMaskinelt = vurdertMaskinelt,
             )
-        )
     }
+
+    private fun toParagraf_8_48ModellApi(
+        tilstandsnavn: Tilstand.Tilstandsnavn,
+        utfall: Utfall,
+        vurdertMaskinelt: Boolean,
+    ) = Paragraf_8_48ModellApi(
+        vilkårsvurderingsid = vilkårsvurderingsid,
+        paragraf = paragraf.name,
+        ledd = ledd.map(Ledd::name),
+        tilstand = tilstandsnavn.name,
+        utfall = utfall,
+        vurdertMaskinelt = vurdertMaskinelt,
+        løsning_8_48_maskinell = løsningSykepengedager.toDto(),
+        totrinnskontroller = totrinnskontroller.toDto(
+            toLøsningDto = LøsningParagraf_22_13::toDto,
+            toKvalitetssikringDto = KvalitetssikringParagraf_22_13::toDto,
+        ),
+    )
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
-            Paragraf_8_48(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
+        internal fun gjenopprett(
+            vilkårsvurderingsid: UUID,
+            tilstandsnavn: Tilstand.Tilstandsnavn,
+            maskinelleLøsninger: List<SykepengedagerModellApi>,
+            totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>
+        ) = Paragraf_8_48(
+            vilkårsvurderingsid = vilkårsvurderingsid,
+            tilstand = tilknyttetTilstand(tilstandsnavn),
+            løsningSykepengedager = gjenopprettMaskinelleLøsninger(maskinelleLøsninger),
+            totrinnskontroller = gjenopprettTotrinnskontroller(totrinnskontroller)
+        )
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
@@ -250,5 +186,14 @@ internal class Paragraf_8_48 private constructor(
             Tilstand.Tilstandsnavn.IKKE_RELEVANT -> IkkeRelevant
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_8_48")
         }
+
+        private fun gjenopprettMaskinelleLøsninger(maskinelleLøsninger: List<SykepengedagerModellApi>) =
+            maskinelleLøsninger.map(SykepengedagerModellApi::toLøsning)
+
+        private fun gjenopprettTotrinnskontroller(totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>) =
+            totrinnskontroller.gjenopprett(
+                LøsningParagraf_22_13ModellApi::toLøsning,
+                KvalitetssikringParagraf_22_13ModellApi::toKvalitetssikring,
+            )
     }
 }
