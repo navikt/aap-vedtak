@@ -1,12 +1,12 @@
 package no.nav.aap.app.kafka
 
-import no.nav.aap.dto.kafka.Innstilling_11_6
+import no.nav.aap.dto.kafka.Innstilling_11_6KafkaDto
 import no.nav.aap.modellapi.InnstillingParagraf_11_6ModellApi
 import no.nav.aap.modellapi.SøkerModellApi
 
-internal fun Innstilling_11_6.håndter(søker: SøkerModellApi) = toModellApi().håndter(søker)
+internal fun Innstilling_11_6KafkaDto.håndter(søker: SøkerModellApi) = toModellApi().håndter(søker)
 
-private fun Innstilling_11_6.toModellApi() = InnstillingParagraf_11_6ModellApi(
+private fun Innstilling_11_6KafkaDto.toModellApi() = InnstillingParagraf_11_6ModellApi(
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     harBehovForBehandling = harBehovForBehandling,

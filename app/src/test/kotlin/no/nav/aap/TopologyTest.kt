@@ -118,10 +118,10 @@ internal class ApiTest {
             }
 
             manuell_11_3_Topic.produce(fnr) {
-                Løsning_11_3_manuell("saksbehandler", tidspunktForVurdering, true)
+                Løsning_11_3_manuellKafkaDto("saksbehandler", tidspunktForVurdering, true)
             }
             manuell_11_5_Topic.produce(fnr) {
-                Løsning_11_5_manuell(
+                Løsning_11_5_manuellKafkaDto(
                     vurdertAv = "veileder",
                     tidspunktForVurdering = tidspunktForVurdering,
                     kravOmNedsattArbeidsevneErOppfylt = true,
@@ -134,7 +134,7 @@ internal class ApiTest {
                 )
             }
             innstilling_11_6_Topic.produce(fnr) {
-                Innstilling_11_6(
+                Innstilling_11_6KafkaDto(
                     vurdertAv = "veileder",
                     tidspunktForVurdering = tidspunktForVurdering,
                     harBehovForBehandling = true,
@@ -144,7 +144,7 @@ internal class ApiTest {
                 )
             }
             manuell_11_6_Topic.produce(fnr) {
-                Løsning_11_6_manuell(
+                Løsning_11_6_manuellKafkaDto(
                     vurdertAv = "saksbehandler",
                     tidspunktForVurdering = tidspunktForVurdering,
                     harBehovForBehandling = true,
@@ -154,7 +154,7 @@ internal class ApiTest {
                 )
             }
             manuell_22_13_Topic.produce(fnr) {
-                Løsning_22_13_manuell(
+                Løsning_22_13_manuellKafkaDto(
                     vurdertAv = "saksbehandler",
                     tidspunktForVurdering = tidspunktForVurdering,
                     bestemmesAv = "soknadstidspunkt",
@@ -164,10 +164,10 @@ internal class ApiTest {
                 )
             }
             manuell_11_19_Topic.produce(fnr) {
-                Løsning_11_19_manuell("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
+                Løsning_11_19_manuellKafkaDto("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
             }
             manuell_11_29_Topic.produce(fnr) {
-                Løsning_11_29_manuell("saksbehandler", tidspunktForVurdering, true)
+                Løsning_11_29_manuellKafkaDto("saksbehandler", tidspunktForVurdering, true)
             }
 
             val inntekter: InntekterKafkaDto = inntektTopic.readValue()
@@ -209,7 +209,7 @@ internal class ApiTest {
                 (actual.saker.first().sakstyper.first().vilkårsvurderinger[index] as Paragraf_22_13ModellApi).totrinnskontroller[0].løsning.løsningId
 
             kvalitetssikring_11_2_Topic.produce(fnr) {
-                Kvalitetssikring_11_2(
+                Kvalitetssikring_11_2KafkaDto(
                     løsningId = løsningsid2(1),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
@@ -219,7 +219,7 @@ internal class ApiTest {
             }
 
             kvalitetssikring_11_3_Topic.produce(fnr) {
-                Kvalitetssikring_11_3(
+                Kvalitetssikring_11_3KafkaDto(
                     løsningId = løsningsid3(2),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
@@ -229,7 +229,7 @@ internal class ApiTest {
             }
 
             kvalitetssikring_11_5_Topic.produce(fnr) {
-                Kvalitetssikring_11_5(
+                Kvalitetssikring_11_5KafkaDto(
                     løsningId = løsningsid5(5),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
@@ -239,7 +239,7 @@ internal class ApiTest {
             }
 
             kvalitetssikring_11_6_Topic.produce(fnr) {
-                Kvalitetssikring_11_6(
+                Kvalitetssikring_11_6KafkaDto(
                     løsningId = løsningsid6(6),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
@@ -249,7 +249,7 @@ internal class ApiTest {
             }
 
             kvalitetssikring_11_19_Topic.produce(fnr) {
-                Kvalitetssikring_11_19(
+                Kvalitetssikring_11_19KafkaDto(
                     løsningId = løsningsid19(7),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
@@ -269,7 +269,7 @@ internal class ApiTest {
 //            }
 
             kvalitetssikring_22_13_Topic.produce(fnr) {
-                Kvalitetssikring_22_13(
+                Kvalitetssikring_22_13KafkaDto(
                     løsningId = løsningsid2213(9),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
