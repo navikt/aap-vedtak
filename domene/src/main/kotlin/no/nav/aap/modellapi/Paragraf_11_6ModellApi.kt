@@ -43,7 +43,7 @@ data class InnstillingParagraf_11_6ModellApi(
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    private fun toInnstilling() = InnstillingParagraf_11_6(
+    internal fun toInnstilling() = InnstillingParagraf_11_6(
         innstillingId = innstillingId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
