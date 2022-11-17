@@ -7,19 +7,19 @@ import no.nav.aap.dto.kafka.SøkereKafkaDto
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
     fødselsdato = fødselsdato,
-    saker = saker.map(Sak::toDto),
+    saker = saker.map(SakKafkaDto::toDto),
 )
 
-private fun Sak.toDto() = SøkereKafkaDto.SakKafkaDto(
+private fun SakKafkaDto.toDto() = SøkereKafkaDto.SakKafkaDto(
     saksid = saksid,
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    sakstyper = sakstyper.map(Sakstype::toDto),
+    sakstyper = sakstyper.map(SakstypeKafkaDto::toDto),
     søknadstidspunkt = søknadstidspunkt,
     vedtak = vedtak?.toDto()
 )
 
-private fun Sakstype.toDto() = SøkereKafkaDto.SakstypeKafkaDto(
+private fun SakstypeKafkaDto.toDto() = SøkereKafkaDto.SakstypeKafkaDto(
     type = type,
     aktiv = aktiv,
     medlemskapYrkesskade = medlemskapYrkesskade?.toMedlemskapYrkesskade(),
@@ -39,7 +39,7 @@ private fun Sakstype.toDto() = SøkereKafkaDto.SakstypeKafkaDto(
     paragraf_22_13 = paragraf_22_13?.toParagraf_22_13(),
 )
 
-private fun MedlemskapYrkesskade.toMedlemskapYrkesskade() = SøkereKafkaDto.MedlemskapYrkesskadeKafkaDto(
+private fun MedlemskapYrkesskadeKafkaDto.toMedlemskapYrkesskade() = SøkereKafkaDto.MedlemskapYrkesskadeKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -49,17 +49,16 @@ private fun MedlemskapYrkesskade.toMedlemskapYrkesskade() = SøkereKafkaDto.Medl
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_medlemskap_yrkesskade_maskinell =
-    løsning_medlemskap_yrkesskade_maskinell.map(LøsningMaskinellMedlemskapYrkesskade::toDto),
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_medlemskap_yrkesskade_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDtoMedlemskapYrkesskadeKafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_medlemskap_yrkesskade.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+    løsning_medlemskap_yrkesskade_maskinell.map(LøsningMaskinellMedlemskapYrkesskadeKafkaDto::toDto),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollMedlemskapYrkesskadeKafkaDto::toDto),
 )
 
-private fun Paragraf_8_48.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48KafkaDto(
+private fun TotrinnskontrollMedlemskapYrkesskadeKafkaDto.toDto() = SøkereKafkaDto.TotrinnskontrollMedlemskapYrkesskadeKafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_8_48KafkaDto.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -68,17 +67,16 @@ private fun Paragraf_8_48.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48Kafka
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_8_48_maskinell = løsning_8_48_maskinell.map(LøsningMaskinellParagraf_8_48::toDto),
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_22_13_manuell.map {  løsning ->
-        SøkereKafkaDto.Totrinnskontroll_22_13KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_22_13.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+    løsning_8_48_maskinell = løsning_8_48_maskinell.map(LøsningMaskinellParagraf_8_48KafkaDto::toDto),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toDto),
 )
 
-private fun Paragraf_11_2.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2KafkaDto(
+private fun Totrinnskontroll_22_13KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_22_13KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_2KafkaDto.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -87,17 +85,16 @@ private fun Paragraf_11_2.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2Kafka
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_2_maskinell = løsning_11_2_maskinell.map(LøsningMaskinellParagraf_11_2::toDto),
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_2_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_2KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_2.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+    løsning_11_2_maskinell = løsning_11_2_maskinell.map(LøsningMaskinellParagraf_11_2KafkaDto::toDto),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_2KafkaDto::toDto),
 )
 
-private fun Paragraf_11_3.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3KafkaDto(
+private fun Totrinnskontroll_11_2KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_2KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_3KafkaDto.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -106,16 +103,15 @@ private fun Paragraf_11_3.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3Kafka
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_3_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_3KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_3.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_3KafkaDto::toDto),
 )
 
-private fun Paragraf_11_4FørsteLedd.toParagraf_11_4FørsteLedd() = SøkereKafkaDto.Paragraf_11_4FørsteLeddKafkaDto(
+private fun Totrinnskontroll_11_3KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_3KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_4FørsteLeddKafkaDto.toParagraf_11_4FørsteLedd() = SøkereKafkaDto.Paragraf_11_4FørsteLeddKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -126,7 +122,7 @@ private fun Paragraf_11_4FørsteLedd.toParagraf_11_4FørsteLedd() = SøkereKafka
     vurdertMaskinelt = vurdertMaskinelt,
 )
 
-private fun Paragraf_11_4AndreOgTredjeLedd.toParagraf_11_4AndreOgTredjeLedd() =
+private fun Paragraf_11_4AndreOgTredjeLeddKafkaDto.toParagraf_11_4AndreOgTredjeLedd() =
     SøkereKafkaDto.Paragraf_11_4AndreOgTredjeLeddKafkaDto(
         vilkårsvurderingsid = vilkårsvurderingsid,
         vurdertAv = vurdertAv,
@@ -136,14 +132,13 @@ private fun Paragraf_11_4AndreOgTredjeLedd.toParagraf_11_4AndreOgTredjeLedd() =
         tilstand = tilstand,
         utfall = utfall,
         vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_4_ledd2_ledd3_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_4AndreOgTredjeLeddKafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_4_ledd2_ledd3.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+        totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto::toDto)
     )
+
+private fun Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
 
 private fun Paragraf_11_5KafkaDto.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
@@ -154,15 +149,108 @@ private fun Paragraf_11_5KafkaDto.toParagraf_11_5() = SøkereKafkaDto.Paragraf_1
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto::toDto)
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_5KafkaDto::toDto)
 )
 
-private fun TotrinnskontrollKafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_5KafkaDto(
+private fun Totrinnskontroll_11_5KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_5KafkaDto(
     løsning = løsning.toDto(),
     kvalitetssikring = kvalitetssikring?.toDto(),
 )
 
-private fun Paragraf_11_5Yrkesskade.toParagraf_11_5Yrkesskade() = SøkereKafkaDto.Paragraf_11_5YrkesskadeKafkaDto(
+private fun Paragraf_11_5YrkesskadeKafkaDto.toParagraf_11_5Yrkesskade() = SøkereKafkaDto.Paragraf_11_5YrkesskadeKafkaDto(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_5YrkesskadeKafkaDto::toDto),
+)
+
+private fun Totrinnskontroll_11_5YrkesskadeKafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_5YrkesskadeKafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_6KafkaDto.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6KafkaDto(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6KafkaDto::toDto),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_6KafkaDto::toDto),
+)
+
+private fun Totrinnskontroll_11_6KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_6KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_14KafkaDto.toParagraf_11_14() = SøkereKafkaDto.Paragraf_11_14KafkaDto(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+)
+
+private fun Paragraf_11_19KafkaDto.toParagraf_11_19() = SøkereKafkaDto.Paragraf_11_19KafkaDto(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_19KafkaDto::toDto),
+)
+
+private fun Totrinnskontroll_11_19KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_19KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_22KafkaDto.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22KafkaDto(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_22KafkaDto::toDto),
+)
+
+private fun Totrinnskontroll_11_22KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_22KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_11_27FørsteLeddKafkaDto.toParagraf_11_27FørsteLedd() = SøkereKafkaDto.Paragraf_11_27FørsteLeddKafkaDto(
+    vilkårsvurderingsid = vilkårsvurderingsid,
+    vurdertAv = vurdertAv,
+    kvalitetssikretAv = kvalitetssikretAv,
+    paragraf = paragraf,
+    ledd = ledd,
+    tilstand = tilstand,
+    utfall = utfall,
+    vurdertMaskinelt = vurdertMaskinelt,
+    løsning_11_27_maskinell = løsning_11_27_maskinell.map(LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto::toDto),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toDto),
+)
+
+private fun Paragraf_11_29KafkaDto.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -172,15 +260,15 @@ private fun Paragraf_11_5Yrkesskade.toParagraf_11_5Yrkesskade() = SøkereKafkaDt
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
     // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_5_yrkesskade_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_5YrkesskadeKafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_5_yrkesskade.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_29KafkaDto::toDto),
 )
 
-private fun Paragraf_11_6.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6KafkaDto(
+private fun Totrinnskontroll_11_29KafkaDto.toDto() = SøkereKafkaDto.Totrinnskontroll_11_29KafkaDto(
+    løsning = løsning.toDto(),
+    kvalitetssikring = kvalitetssikring?.toDto(),
+)
+
+private fun Paragraf_22_13KafkaDto.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -189,137 +277,28 @@ private fun Paragraf_11_6.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6Kafka
     tilstand = tilstand,
     utfall = utfall,
     vurdertMaskinelt = vurdertMaskinelt,
-    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6::toDto),
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_6_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_6KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_6.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toDto),
+    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13KafkaDto::toDto),
 )
 
-private fun Paragraf_11_14.toParagraf_11_14() = SøkereKafkaDto.Paragraf_11_14KafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-)
-
-private fun Paragraf_11_19.toParagraf_11_19() = SøkereKafkaDto.Paragraf_11_19KafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_19_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_19KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_19.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
-)
-
-private fun Paragraf_11_22.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22KafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_22_manuell.map {  løsning ->
-        SøkereKafkaDto.TotrinnskontrollKafkaDto_11_22KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_22.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
-)
-
-private fun Paragraf_11_27FørsteLedd.toParagraf_11_27FørsteLedd() = SøkereKafkaDto.Paragraf_11_27FørsteLeddKafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_27_maskinell = løsning_11_27_maskinell.map(LøsningMaskinellParagraf_11_27FørsteLedd::toDto),
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_22_13_manuell.map {  løsning ->
-        SøkereKafkaDto.Totrinnskontroll_22_13KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_22_13.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
-)
-
-private fun Paragraf_11_29.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29KafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_11_29_manuell.map {  løsning ->
-        SøkereKafkaDto.Totrinnskontroll_11_29KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_11_29.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
-)
-
-private fun Paragraf_22_13.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13KafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-    // FIXME, fiks ved neste migrering
-    totrinnskontroller = løsning_22_13_manuell.map {  løsning ->
-        SøkereKafkaDto.Totrinnskontroll_22_13KafkaDto(
-            løsning = løsning.toDto(),
-            kvalitetssikring = kvalitetssikringer_22_13.firstOrNull { kvalitetssikring -> kvalitetssikring.løsningId == løsning.løsningId }?.toDto()
-        )
-    },
-    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13::toDto),
-)
-
-private fun SøknadsdataParagraf_22_13.toDto() = SøkereKafkaDto.SøknadsdataParagraf_22_13KafkaDto(
+private fun SøknadsdataParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.SøknadsdataParagraf_22_13KafkaDto(
     søknadId = søknadId,
     søknadstidspunkt = søknadstidspunkt
 )
 
-private fun LøsningMaskinellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskadeKafkaDto(
+private fun LøsningMaskinellMedlemskapYrkesskadeKafkaDto.toDto() = SøkereKafkaDto.LøsningMaskinellMedlemskapYrkesskadeKafkaDto(
     løsningId = løsningId,
     erMedlem = erMedlem
 )
 
-private fun LøsningManuellMedlemskapYrkesskade.toDto() = SøkereKafkaDto.LøsningManuellMedlemskapYrkesskadeKafkaDto(
+private fun LøsningManuellMedlemskapYrkesskadeKafkaDto.toDto() = SøkereKafkaDto.LøsningManuellMedlemskapYrkesskadeKafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun KvalitetssikringMedlemskapYrkesskade.toDto() = SøkereKafkaDto.KvalitetssikringMedlemskapYrkesskadeKafkaDto(
+private fun KvalitetssikringMedlemskapYrkesskadeKafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringMedlemskapYrkesskadeKafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -328,7 +307,7 @@ private fun KvalitetssikringMedlemskapYrkesskade.toDto() = SøkereKafkaDto.Kvali
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningMaskinellParagraf_8_48.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_8_48KafkaDto(
+private fun LøsningMaskinellParagraf_8_48KafkaDto.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_8_48KafkaDto(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     sykepengedager = sykepengedager?.let { sykepenger ->
@@ -340,20 +319,20 @@ private fun LøsningMaskinellParagraf_8_48.toDto() = SøkereKafkaDto.LøsningMas
     },
 )
 
-private fun LøsningMaskinellParagraf_11_2.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_2KafkaDto(
+private fun LøsningMaskinellParagraf_11_2KafkaDto.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_2KafkaDto(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningManuellParagraf_11_2.toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2KafkaDto(
+private fun LøsningManuellParagraf_11_2KafkaDto.toDto() = SøkereKafkaDto.LøsningManuellParagraf_11_2KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun KvalitetssikringParagraf_11_2.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_2KafkaDto(
+private fun KvalitetssikringParagraf_11_2KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_2KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -362,14 +341,14 @@ private fun KvalitetssikringParagraf_11_2.toDto() = SøkereKafkaDto.Kvalitetssik
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningParagraf_11_3.toDto() = SøkereKafkaDto.LøsningParagraf_11_3KafkaDto(
+private fun LøsningParagraf_11_3KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_3KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun KvalitetssikringParagraf_11_3.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_3KafkaDto(
+private fun KvalitetssikringParagraf_11_3KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_3KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -378,14 +357,14 @@ private fun KvalitetssikringParagraf_11_3.toDto() = SøkereKafkaDto.Kvalitetssik
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningParagraf_11_4AndreOgTredjeLedd.toDto() = SøkereKafkaDto.LøsningParagraf_11_4AndreOgTredjeLeddKafkaDto(
+private fun LøsningParagraf_11_4AndreOgTredjeLeddKafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_4AndreOgTredjeLeddKafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() =
+private fun KvalitetssikringParagraf_11_4AndreOgTredjeLeddKafkaDto.toDto() =
     SøkereKafkaDto.KvalitetssikringParagraf_11_4AndreOgTredjeLeddKafkaDto(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
@@ -395,7 +374,7 @@ private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toDto() =
         begrunnelse = begrunnelse,
     )
 
-private fun LøsningParagraf_11_5.toDto() = SøkereKafkaDto.LøsningParagraf_11_5KafkaDto(
+private fun LøsningParagraf_11_5KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_5KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -408,7 +387,7 @@ private fun LøsningParagraf_11_5.toDto() = SøkereKafkaDto.LøsningParagraf_11_
     sykmeldingDato = sykmeldingDato,
 )
 
-private fun KvalitetssikringParagraf_11_5.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_5KafkaDto(
+private fun KvalitetssikringParagraf_11_5KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_5KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -417,7 +396,7 @@ private fun KvalitetssikringParagraf_11_5.toDto() = SøkereKafkaDto.Kvalitetssik
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningParagraf_11_5_yrkesskade.toDto() = SøkereKafkaDto.LøsningParagraf_11_5_yrkesskadeKafkaDto(
+private fun LøsningParagraf_11_5_yrkesskadeKafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_5_yrkesskadeKafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -425,7 +404,7 @@ private fun LøsningParagraf_11_5_yrkesskade.toDto() = SøkereKafkaDto.LøsningP
     arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent,
 )
 
-private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_5YrkesskadeKafkaDto(
+private fun KvalitetssikringParagraf_11_5YrkesskadeKafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_5YrkesskadeKafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -434,7 +413,7 @@ private fun KvalitetssikringParagraf_11_5Yrkesskade.toDto() = SøkereKafkaDto.Kv
     begrunnelse = begrunnelse,
 )
 
-private fun InnstillingParagraf_11_6.toDto() = SøkereKafkaDto.InnstillingParagraf_11_6KafkaDto(
+private fun InnstillingParagraf_11_6KafkaDto.toDto() = SøkereKafkaDto.InnstillingParagraf_11_6KafkaDto(
     innstillingId = innstillingId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -447,7 +426,7 @@ private fun InnstillingParagraf_11_6.toDto() = SøkereKafkaDto.InnstillingParagr
     },
 )
 
-private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_6KafkaDto(
+private fun LøsningParagraf_11_6KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_6KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -460,7 +439,7 @@ private fun LøsningParagraf_11_6.toDto() = SøkereKafkaDto.LøsningParagraf_11_
     },
 )
 
-private fun KvalitetssikringParagraf_11_6.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_6KafkaDto(
+private fun KvalitetssikringParagraf_11_6KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_6KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -469,14 +448,14 @@ private fun KvalitetssikringParagraf_11_6.toDto() = SøkereKafkaDto.Kvalitetssik
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningParagraf_11_19.toDto() = SøkereKafkaDto.LøsningParagraf_11_19KafkaDto(
+private fun LøsningParagraf_11_19KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_19KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     beregningsdato = beregningsdato
 )
 
-private fun KvalitetssikringParagraf_11_19.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_19KafkaDto(
+private fun KvalitetssikringParagraf_11_19KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_19KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -485,7 +464,7 @@ private fun KvalitetssikringParagraf_11_19.toDto() = SøkereKafkaDto.Kvalitetssi
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningParagraf_11_22.toDto() = SøkereKafkaDto.LøsningParagraf_11_22KafkaDto(
+private fun LøsningParagraf_11_22KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_22KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -495,7 +474,7 @@ private fun LøsningParagraf_11_22.toDto() = SøkereKafkaDto.LøsningParagraf_11
     antattÅrligArbeidsinntekt = antattÅrligArbeidsinntekt,
 )
 
-private fun KvalitetssikringParagraf_11_22.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_22KafkaDto(
+private fun KvalitetssikringParagraf_11_22KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_22KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -504,7 +483,7 @@ private fun KvalitetssikringParagraf_11_22.toDto() = SøkereKafkaDto.Kvalitetssi
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningMaskinellParagraf_11_27FørsteLedd.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto(
+private fun LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto.toDto() = SøkereKafkaDto.LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     svangerskapspenger = SøkereKafkaDto.LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto.Svangerskapspenger(
@@ -515,14 +494,14 @@ private fun LøsningMaskinellParagraf_11_27FørsteLedd.toDto() = SøkereKafkaDto
     ),
 )
 
-private fun LøsningParagraf_11_29.toDto() = SøkereKafkaDto.LøsningParagraf_11_29KafkaDto(
+private fun LøsningParagraf_11_29KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_29KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun KvalitetssikringParagraf_11_29.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_29KafkaDto(
+private fun KvalitetssikringParagraf_11_29KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_11_29KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -531,7 +510,7 @@ private fun KvalitetssikringParagraf_11_29.toDto() = SøkereKafkaDto.Kvalitetssi
     begrunnelse = begrunnelse,
 )
 
-private fun LøsningParagraf_22_13.toDto() = SøkereKafkaDto.LøsningParagraf_22_13KafkaDto(
+private fun LøsningParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_22_13KafkaDto(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -541,7 +520,7 @@ private fun LøsningParagraf_22_13.toDto() = SøkereKafkaDto.LøsningParagraf_22
     manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
-private fun KvalitetssikringParagraf_22_13.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_22_13KafkaDto(
+private fun KvalitetssikringParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_22_13KafkaDto(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -550,7 +529,7 @@ private fun KvalitetssikringParagraf_22_13.toDto() = SøkereKafkaDto.Kvalitetssi
     begrunnelse = begrunnelse,
 )
 
-private fun Vedtak.toDto() = SøkereKafkaDto.VedtakKafkaDto(
+private fun VedtakKafkaDto.toDto() = SøkereKafkaDto.VedtakKafkaDto(
     vedtaksid = vedtaksid,
     innvilget = innvilget,
     inntektsgrunnlag = inntektsgrunnlag.toDto(),
@@ -558,27 +537,27 @@ private fun Vedtak.toDto() = SøkereKafkaDto.VedtakKafkaDto(
     virkningsdato = virkningsdato,
 )
 
-private fun Inntektsgrunnlag.toDto() = SøkereKafkaDto.InntektsgrunnlagKafkaDto(
+private fun InntektsgrunnlagKafkaDto.toDto() = SøkereKafkaDto.InntektsgrunnlagKafkaDto(
     beregningsdato = beregningsdato,
-    inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.map(InntekterForBeregning::toDto),
+    inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.map(InntekterForBeregningKafkaDto::toDto),
     yrkesskade = yrkesskade?.toDto(),
     fødselsdato = fødselsdato,
     sisteKalenderår = sisteKalenderår,
     grunnlagsfaktor = grunnlagsfaktor,
 )
 
-private fun InntekterForBeregning.toDto() = SøkereKafkaDto.InntekterForBeregningKafkaDto(
-    inntekter = inntekter.map(Inntekt::toDto),
+private fun InntekterForBeregningKafkaDto.toDto() = SøkereKafkaDto.InntekterForBeregningKafkaDto(
+    inntekter = inntekter.map(InntektKafkaDto::toDto),
     inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toDto(),
 )
 
-private fun Inntekt.toDto() = SøkereKafkaDto.InntektKafkaDto(
+private fun InntektKafkaDto.toDto() = SøkereKafkaDto.InntektKafkaDto(
     arbeidsgiver = arbeidsgiver,
     inntekstmåned = inntekstmåned,
     beløp = beløp,
 )
 
-private fun InntektsgrunnlagForÅr.toDto() = SøkereKafkaDto.InntektsgrunnlagForÅrKafkaDto(
+private fun InntektsgrunnlagForÅrKafkaDto.toDto() = SøkereKafkaDto.InntektsgrunnlagForÅrKafkaDto(
     år = år,
     beløpFørJustering = beløpFørJustering,
     beløpJustertFor6G = beløpJustertFor6G,
@@ -586,7 +565,7 @@ private fun InntektsgrunnlagForÅr.toDto() = SøkereKafkaDto.InntektsgrunnlagFor
     grunnlagsfaktor = grunnlagsfaktor,
 )
 
-private fun Yrkesskade.toDto() = SøkereKafkaDto.YrkesskadeKafkaDto(
+private fun YrkesskadeKafkaDto.toDto() = SøkereKafkaDto.YrkesskadeKafkaDto(
     gradAvNedsattArbeidsevneKnyttetTilYrkesskade = gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
     inntektsgrunnlag = inntektsgrunnlag.toDto(),
 )

@@ -63,10 +63,10 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val løsning_medlemskap_yrkesskade_maskinell: List<LøsningMaskinellMedlemskapYrkesskadeKafkaDto>,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDtoMedlemskapYrkesskadeKafkaDto>,
+        val totrinnskontroller: List<TotrinnskontrollMedlemskapYrkesskadeKafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDtoMedlemskapYrkesskadeKafkaDto(
+    data class TotrinnskontrollMedlemskapYrkesskadeKafkaDto(
         val løsning: LøsningManuellMedlemskapYrkesskadeKafkaDto,
         val kvalitetssikring: KvalitetssikringMedlemskapYrkesskadeKafkaDto?
     )
@@ -94,10 +94,10 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val løsning_11_2_maskinell: List<LøsningMaskinellParagraf_11_2KafkaDto>,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_2KafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_2KafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_2KafkaDto(
+    data class Totrinnskontroll_11_2KafkaDto(
         val løsning: LøsningManuellParagraf_11_2KafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_2KafkaDto?
     )
@@ -111,10 +111,10 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_3KafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_3KafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_3KafkaDto(
+    data class Totrinnskontroll_11_3KafkaDto(
         val løsning: LøsningParagraf_11_3KafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_3KafkaDto?
     )
@@ -139,10 +139,10 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_4AndreOgTredjeLeddKafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_4AndreOgTredjeLeddKafkaDto(
+    data class Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto(
         val løsning: LøsningParagraf_11_4AndreOgTredjeLeddKafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLeddKafkaDto?
     )
@@ -173,10 +173,10 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_5YrkesskadeKafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_5YrkesskadeKafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_5YrkesskadeKafkaDto(
+    data class Totrinnskontroll_11_5YrkesskadeKafkaDto(
         val løsning: LøsningParagraf_11_5_yrkesskadeKafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_5YrkesskadeKafkaDto?
     )
@@ -191,10 +191,10 @@ data class SøkereKafkaDto(
         val utfall: String,
         val vurdertMaskinelt: Boolean,
         val innstillinger_11_6: List<InnstillingParagraf_11_6KafkaDto>,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_6KafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_6KafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_6KafkaDto(
+    data class Totrinnskontroll_11_6KafkaDto(
         val løsning: LøsningParagraf_11_6KafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_6KafkaDto?
     )
@@ -219,10 +219,10 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_19KafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_19KafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_19KafkaDto(
+    data class Totrinnskontroll_11_19KafkaDto(
         val løsning: LøsningParagraf_11_19KafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_19KafkaDto?
     )
@@ -236,10 +236,10 @@ data class SøkereKafkaDto(
         val tilstand: String,
         val utfall: String,
         val vurdertMaskinelt: Boolean,
-        val totrinnskontroller: List<TotrinnskontrollKafkaDto_11_22KafkaDto>,
+        val totrinnskontroller: List<Totrinnskontroll_11_22KafkaDto>,
     )
 
-    data class TotrinnskontrollKafkaDto_11_22KafkaDto(
+    data class Totrinnskontroll_11_22KafkaDto(
         val løsning: LøsningParagraf_11_22KafkaDto,
         val kvalitetssikring: KvalitetssikringParagraf_11_22KafkaDto?
     )

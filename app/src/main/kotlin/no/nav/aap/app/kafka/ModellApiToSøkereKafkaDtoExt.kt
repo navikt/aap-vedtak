@@ -605,25 +605,25 @@ private fun YrkesskadeModellApi.toJson() = YrkesskadeKafkaDto(
 )
 
 private fun TotrinnskontrollModellApi<LøsningManuellMedlemskapYrkesskadeModellApi, KvalitetssikringMedlemskapYrkesskadeModellApi>.toJsonMedlemskapYrkesskade() =
-    TotrinnskontrollKafkaDtoMedlemskapYrkesskadeKafkaDto(
+    TotrinnskontrollMedlemskapYrkesskadeKafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_2ModellApi, KvalitetssikringParagraf_11_2ModellApi>.toJson_11_2() =
-    TotrinnskontrollKafkaDto_11_2KafkaDto(
+    Totrinnskontroll_11_2KafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_3ModellApi, KvalitetssikringParagraf_11_3ModellApi>.toJson_11_3() =
-    TotrinnskontrollKafkaDto_11_3KafkaDto(
+    Totrinnskontroll_11_3KafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_4AndreOgTredjeLeddModellApi, KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi>.toJson_11_4AndreOgTredjeLedd() =
-    TotrinnskontrollKafkaDto_11_4AndreOgTredjeLeddKafkaDto(
+    Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
@@ -635,25 +635,25 @@ private fun TotrinnskontrollModellApi<LøsningParagraf_11_5ModellApi, Kvalitetss
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_5YrkesskadeModellApi, KvalitetssikringParagraf_11_5YrkesskadeModellApi>.toJson_11_5Yrkesskade() =
-    TotrinnskontrollKafkaDto_11_5YrkesskadeKafkaDto(
+    Totrinnskontroll_11_5YrkesskadeKafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_6ModellApi, KvalitetssikringParagraf_11_6ModellApi>.toJson_11_6() =
-    TotrinnskontrollKafkaDto_11_6KafkaDto(
+    Totrinnskontroll_11_6KafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_19ModellApi, KvalitetssikringParagraf_11_19ModellApi>.toJson_11_19() =
-    TotrinnskontrollKafkaDto_11_19KafkaDto(
+    Totrinnskontroll_11_19KafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
 
 private fun TotrinnskontrollModellApi<LøsningParagraf_11_22ModellApi, KvalitetssikringParagraf_11_22ModellApi>.toJson_11_22() =
-    TotrinnskontrollKafkaDto_11_22KafkaDto(
+    Totrinnskontroll_11_22KafkaDto(
         løsning = løsning.toJson(),
         kvalitetssikring = kvalitetssikring?.toJson()
     )
