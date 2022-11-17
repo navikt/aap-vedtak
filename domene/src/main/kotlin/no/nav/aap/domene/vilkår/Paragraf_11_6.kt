@@ -20,7 +20,9 @@ import java.util.*
 
 internal class Paragraf_11_6 private constructor(
     vilkårsvurderingsid: UUID,
-    tilstand: Tilstand<Paragraf_11_6>
+    tilstand: Tilstand<Paragraf_11_6>,
+    innstillinger: List<InnstillingParagraf_11_6>,
+    totrinnskontroller: List<Totrinnskontroll<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6>>,
 ) :
     Vilkårsvurdering<Paragraf_11_6>(
         vilkårsvurderingsid,
@@ -28,11 +30,10 @@ internal class Paragraf_11_6 private constructor(
         Ledd.LEDD_1,
         tilstand
     ) {
-    private val innstillinger = mutableListOf<InnstillingParagraf_11_6>()
-    private val totrinnskontroller =
-        mutableListOf<Totrinnskontroll<LøsningParagraf_11_6, KvalitetssikringParagraf_11_6>>()
+    private val innstillinger = innstillinger.toMutableList()
+    private val totrinnskontroller = totrinnskontroller.toMutableList()
 
-    internal constructor() : this(UUID.randomUUID(), IkkeVurdert)
+    internal constructor() : this(UUID.randomUUID(), IkkeVurdert, listOf(), listOf())
 
     override fun <T> callWithReceiver(block: Paragraf_11_6.() -> T) = this.block()
 
@@ -62,8 +63,6 @@ internal class Paragraf_11_6 private constructor(
 
         override fun toDto(vilkårsvurdering: Paragraf_11_6): VilkårsvurderingModellApi = Paragraf_11_6ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -75,19 +74,6 @@ internal class Paragraf_11_6 private constructor(
                 toKvalitetssikringDto = KvalitetssikringParagraf_11_6::toDto
             ),
         )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_6,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-            vilkårsvurdering.settInnstillinger(modellApi)
-            vilkårsvurdering.totrinnskontroller.addAll(
-                modellApi.totrinnskontroller.gjenopprett(
-                    LøsningParagraf_11_6ModellApi::toLøsning,
-                    KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
-                )
-            )
-        }
     }
 
     object AvventerManuellVurdering : Tilstand.AvventerManuellVurdering<Paragraf_11_6>() {
@@ -120,19 +106,6 @@ internal class Paragraf_11_6 private constructor(
                 toKvalitetssikringDto = KvalitetssikringParagraf_11_6::toDto
             ),
         )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_6,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-            vilkårsvurdering.settInnstillinger(modellApi)
-            vilkårsvurdering.totrinnskontroller.addAll(
-                modellApi.totrinnskontroller.gjenopprett(
-                    LøsningParagraf_11_6ModellApi::toLøsning,
-                    KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
-                )
-            )
-        }
     }
 
     object OppfyltAvventerKvalitetssikring : Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_11_6>() {
@@ -160,19 +133,6 @@ internal class Paragraf_11_6 private constructor(
                 toKvalitetssikringDto = KvalitetssikringParagraf_11_6::toDto
             ),
         )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_6,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-            vilkårsvurdering.settInnstillinger(modellApi)
-            vilkårsvurdering.totrinnskontroller.addAll(
-                modellApi.totrinnskontroller.gjenopprett(
-                    LøsningParagraf_11_6ModellApi::toLøsning,
-                    KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
-                )
-            )
-        }
     }
 
     object OppfyltKvalitetssikret : Tilstand.OppfyltManueltKvalitetssikret<Paragraf_11_6>() {
@@ -189,19 +149,6 @@ internal class Paragraf_11_6 private constructor(
                 toKvalitetssikringDto = KvalitetssikringParagraf_11_6::toDto
             ),
         )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_6,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-            vilkårsvurdering.settInnstillinger(modellApi)
-            vilkårsvurdering.totrinnskontroller.addAll(
-                modellApi.totrinnskontroller.gjenopprett(
-                    LøsningParagraf_11_6ModellApi::toLøsning,
-                    KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
-                )
-            )
-        }
     }
 
     object IkkeOppfyltAvventerKvalitetssikring : Tilstand.IkkeOppfyltManueltAvventerKvalitetssikring<Paragraf_11_6>() {
@@ -229,19 +176,6 @@ internal class Paragraf_11_6 private constructor(
                 toKvalitetssikringDto = KvalitetssikringParagraf_11_6::toDto
             ),
         )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_6,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-            vilkårsvurdering.settInnstillinger(modellApi)
-            vilkårsvurdering.totrinnskontroller.addAll(
-                modellApi.totrinnskontroller.gjenopprett(
-                    LøsningParagraf_11_6ModellApi::toLøsning,
-                    KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
-                )
-            )
-        }
     }
 
     object IkkeOppfyltKvalitetssikret : Tilstand.IkkeOppfyltManueltKvalitetssikret<Paragraf_11_6>() {
@@ -258,42 +192,21 @@ internal class Paragraf_11_6 private constructor(
                 toKvalitetssikringDto = KvalitetssikringParagraf_11_6::toDto
             ),
         )
-
-        override fun gjenopprettTilstand(
-            vilkårsvurdering: Paragraf_11_6,
-            modellApi: Paragraf_11_6ModellApi
-        ) {
-            vilkårsvurdering.settInnstillinger(modellApi)
-            vilkårsvurdering.gjenopprettTotrinnskontroller(modellApi)
-        }
-    }
-
-    private fun settInnstillinger(vilkårsvurdering: Paragraf_11_6ModellApi) {
-        innstillinger.addAll(vilkårsvurdering.innstillinger_11_6.map {
-            InnstillingParagraf_11_6(
-                innstillingId = it.innstillingId,
-                vurdertAv = it.vurdertAv,
-                tidspunktForVurdering = it.tidspunktForVurdering,
-                harBehovForBehandling = it.harBehovForBehandling,
-                harBehovForTiltak = it.harBehovForTiltak,
-                harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid,
-                individuellBegrunnelse = it.individuellBegrunnelse,
-            )
-        })
-    }
-
-    private fun gjenopprettTotrinnskontroller(modellApi: Paragraf_11_6ModellApi) {
-        totrinnskontroller.addAll(
-            modellApi.totrinnskontroller.gjenopprett(
-                LøsningParagraf_11_6ModellApi::toLøsning,
-                KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
-            )
-        )
     }
 
     internal companion object {
-        internal fun gjenopprett(vilkårsvurderingsid: UUID, tilstandsnavn: Tilstand.Tilstandsnavn) =
-            Paragraf_11_6(vilkårsvurderingsid, tilknyttetTilstand(tilstandsnavn))
+        internal fun gjenopprett(
+            vilkårsvurderingsid: UUID,
+            tilstandsnavn: Tilstand.Tilstandsnavn,
+            innstillinger: List<InnstillingParagraf_11_6ModellApi>,
+            totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_6ModellApi, KvalitetssikringParagraf_11_6ModellApi>>
+        ) =
+            Paragraf_11_6(
+                vilkårsvurderingsid = vilkårsvurderingsid,
+                tilstand = tilknyttetTilstand(tilstandsnavn),
+                innstillinger = gjenopprettInnstillinger(innstillinger),
+                totrinnskontroller = gjenopprettTotrinnskontroller(totrinnskontroller)
+            )
 
         private fun tilknyttetTilstand(tilstandsnavn: Tilstand.Tilstandsnavn) = when (tilstandsnavn) {
             Tilstand.Tilstandsnavn.IKKE_VURDERT -> IkkeVurdert
@@ -306,5 +219,23 @@ internal class Paragraf_11_6 private constructor(
             else -> error("Tilstand ${tilstandsnavn.name} ikke i bruk i Paragraf_11_6")
         }
 
+        private fun gjenopprettInnstillinger(innstillinger: List<InnstillingParagraf_11_6ModellApi>) =
+            innstillinger.map {
+                InnstillingParagraf_11_6(
+                    innstillingId = it.innstillingId,
+                    vurdertAv = it.vurdertAv,
+                    tidspunktForVurdering = it.tidspunktForVurdering,
+                    harBehovForBehandling = it.harBehovForBehandling,
+                    harBehovForTiltak = it.harBehovForTiltak,
+                    harMulighetForÅKommeIArbeid = it.harMulighetForÅKommeIArbeid,
+                    individuellBegrunnelse = it.individuellBegrunnelse,
+                )
+            }
+
+        private fun gjenopprettTotrinnskontroller(totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_6ModellApi, KvalitetssikringParagraf_11_6ModellApi>>) =
+            totrinnskontroller.gjenopprett(
+                LøsningParagraf_11_6ModellApi::toLøsning,
+                KvalitetssikringParagraf_11_6ModellApi::toKvalitetssikring
+            )
     }
 }

@@ -245,7 +245,7 @@ data class Paragraf_11_6ModellApi(
     val totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_11_6ModellApi, KvalitetssikringParagraf_11_6ModellApi>>
 ) : VilkårsvurderingModellApi() {
     override fun gjenopprett(): Paragraf_11_6 {
-        val paragraf = Paragraf_11_6.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand))
+        val paragraf = Paragraf_11_6.gjenopprett(vilkårsvurderingsid, enumValueOf(tilstand), innstillinger_11_6, totrinnskontroller)
         paragraf.gjenopprettTilstand(this)
         return paragraf
     }

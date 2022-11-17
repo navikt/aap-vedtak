@@ -630,10 +630,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class OppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class OppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
+            Tilstand<PARAGRAF>(
+                tilstandsnavn = Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitOppfyltManuelt()
                 accept(vilkårsvurdering, visitor)
@@ -651,10 +652,11 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
             }
         }
 
-        internal abstract class IkkeOppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> : Tilstand<PARAGRAF>(
-            tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
-            vurdertMaskinelt = false
-        ) {
+        internal abstract class IkkeOppfyltManueltAvventerKvalitetssikring<PARAGRAF : Vilkårsvurdering<PARAGRAF>> :
+            Tilstand<PARAGRAF>(
+                tilstandsnavn = Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING,
+                vurdertMaskinelt = false
+            ) {
             final override fun preAccept(vilkårsvurdering: PARAGRAF, visitor: VilkårsvurderingVisitor) {
                 visitor.visitIkkeOppfyltManuelt()
                 accept(vilkårsvurdering, visitor)
@@ -687,7 +689,7 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF>
 
     internal companion object {
         private val log = LoggerFactory.getLogger("Vilkårsvurdering")
-        internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map { it.toDto() }
+        internal fun Iterable<Vilkårsvurdering<*>>.toDto() = map(Vilkårsvurdering<*>::toDto)
         internal fun Iterable<Vilkårsvurdering<*>>.lagSnapshot(vedtak: Vedtak) {
             forEach { it.lagSnapshot(vedtak) }
         }
