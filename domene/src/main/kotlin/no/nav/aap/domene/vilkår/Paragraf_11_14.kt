@@ -42,8 +42,6 @@ internal class Paragraf_11_14 private constructor(
 
         override fun toDto(vilkårsvurdering: Paragraf_11_14): Paragraf_11_14ModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = null,
-            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -55,8 +53,6 @@ internal class Paragraf_11_14 private constructor(
     object Oppfylt : Tilstand.OppfyltMaskineltKvalitetssikret<Paragraf_11_14, Paragraf_11_14ModellApi>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_14): Paragraf_11_14ModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,
@@ -68,8 +64,6 @@ internal class Paragraf_11_14 private constructor(
     object IkkeOppfylt : Tilstand.IkkeOppfyltMaskineltKvalitetssikret<Paragraf_11_14, Paragraf_11_14ModellApi>() {
         override fun toDto(vilkårsvurdering: Paragraf_11_14): Paragraf_11_14ModellApi = Paragraf_11_14ModellApi(
             vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-            vurdertAv = "maskinell saksbehandling",
-            kvalitetssikretAv = null,
             paragraf = vilkårsvurdering.paragraf.name,
             ledd = vilkårsvurdering.ledd.map(Ledd::name),
             tilstand = tilstandsnavn.name,

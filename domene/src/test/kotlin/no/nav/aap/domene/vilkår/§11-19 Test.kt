@@ -103,7 +103,6 @@ internal class `§11-19 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -113,10 +112,6 @@ internal class `§11-19 Test` {
 
     private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_19) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_19) {
-        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 
     private class BeregningsdatoVisitor : SakstypeVisitor {

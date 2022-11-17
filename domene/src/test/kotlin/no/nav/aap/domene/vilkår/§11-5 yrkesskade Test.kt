@@ -9,7 +9,6 @@ import no.nav.aap.hendelse.LøsningParagraf_11_5Yrkesskade
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
@@ -37,7 +36,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -60,7 +58,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -83,7 +80,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -104,7 +100,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -180,7 +175,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -206,7 +200,6 @@ internal class `§11-5 yrkesskade Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -219,9 +212,5 @@ internal class `§11-5 yrkesskade Test` {
         vilkårsvurdering: Paragraf_11_5Yrkesskade
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_5Yrkesskade) {
-        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

@@ -13,7 +13,6 @@ import no.nav.aap.modellapi.KvalitetssikringParagraf_11_5ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_5ModellApi
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
@@ -47,7 +46,6 @@ internal class `§11-5 Test` {
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.AvventerManuellVurdering, vilkår)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -77,7 +75,6 @@ internal class `§11-5 Test` {
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.AvventerManuellVurdering, vilkår)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -98,7 +95,6 @@ internal class `§11-5 Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -198,7 +194,6 @@ internal class `§11-5 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -232,7 +227,6 @@ internal class `§11-5 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -298,9 +292,5 @@ internal class `§11-5 Test` {
 
     private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_5) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_5) {
-        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

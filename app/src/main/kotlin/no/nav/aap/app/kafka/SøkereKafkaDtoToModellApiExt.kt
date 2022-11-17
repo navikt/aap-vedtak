@@ -43,8 +43,6 @@ private fun SakstypeKafkaDto.toModellApi() = SakstypeModellApi(
 
 private fun Paragraf_8_48KafkaDto.toModellApi() = Paragraf_8_48ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -56,8 +54,6 @@ private fun Paragraf_8_48KafkaDto.toModellApi() = Paragraf_8_48ModellApi(
 
 private fun MedlemskapYrkesskadeKafkaDto.toModellApi() = MedlemskapYrkesskadeModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -70,8 +66,6 @@ private fun MedlemskapYrkesskadeKafkaDto.toModellApi() = MedlemskapYrkesskadeMod
 
 private fun Paragraf_11_2KafkaDto.toModellApi() = Paragraf_11_2ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -83,8 +77,6 @@ private fun Paragraf_11_2KafkaDto.toModellApi() = Paragraf_11_2ModellApi(
 
 private fun Paragraf_11_3KafkaDto.toModellApi() = Paragraf_11_3ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -95,8 +87,6 @@ private fun Paragraf_11_3KafkaDto.toModellApi() = Paragraf_11_3ModellApi(
 
 private fun Paragraf_11_4FørsteLeddKafkaDto.toModellApi() = Paragraf_11_4FørsteLeddModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -106,8 +96,6 @@ private fun Paragraf_11_4FørsteLeddKafkaDto.toModellApi() = Paragraf_11_4Først
 
 private fun Paragraf_11_4AndreOgTredjeLeddKafkaDto.toModellApi() = Paragraf_11_4AndreOgTredjeLeddModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -118,8 +106,6 @@ private fun Paragraf_11_4AndreOgTredjeLeddKafkaDto.toModellApi() = Paragraf_11_4
 
 private fun Paragraf_11_5KafkaDto.toModellApi() = Paragraf_11_5ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -130,8 +116,6 @@ private fun Paragraf_11_5KafkaDto.toModellApi() = Paragraf_11_5ModellApi(
 
 private fun Paragraf_11_5YrkesskadeKafkaDto.toModellApi() = Paragraf_11_5YrkesskadeModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -142,8 +126,6 @@ private fun Paragraf_11_5YrkesskadeKafkaDto.toModellApi() = Paragraf_11_5Yrkessk
 
 private fun Paragraf_11_6KafkaDto.toModellApi() = Paragraf_11_6ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -155,8 +137,6 @@ private fun Paragraf_11_6KafkaDto.toModellApi() = Paragraf_11_6ModellApi(
 
 private fun Paragraf_11_14KafkaDto.toModellApi() = Paragraf_11_14ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -166,8 +146,6 @@ private fun Paragraf_11_14KafkaDto.toModellApi() = Paragraf_11_14ModellApi(
 
 private fun Paragraf_11_19KafkaDto.toModellApi() = Paragraf_11_19ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -178,8 +156,6 @@ private fun Paragraf_11_19KafkaDto.toModellApi() = Paragraf_11_19ModellApi(
 
 private fun Paragraf_11_22KafkaDto.toModellApi() = Paragraf_11_22ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -190,8 +166,6 @@ private fun Paragraf_11_22KafkaDto.toModellApi() = Paragraf_11_22ModellApi(
 
 private fun Paragraf_11_27FørsteLeddKafkaDto.toModellApi() = Paragraf_11_27FørsteLeddModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -203,8 +177,6 @@ private fun Paragraf_11_27FørsteLeddKafkaDto.toModellApi() = Paragraf_11_27Før
 
 private fun Paragraf_11_29KafkaDto.toModellApi() = Paragraf_11_29ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -215,8 +187,6 @@ private fun Paragraf_11_29KafkaDto.toModellApi() = Paragraf_11_29ModellApi(
 
 private fun Paragraf_22_13KafkaDto.toModellApi() = Paragraf_22_13ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,

@@ -124,8 +124,6 @@ private fun SakstypeModellApi.toJson(): SakstypeKafkaDto {
 
 private fun MedlemskapYrkesskadeModellApi.toJson() = MedlemskapYrkesskadeKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -139,8 +137,6 @@ private fun MedlemskapYrkesskadeModellApi.toJson() = MedlemskapYrkesskadeKafkaDt
 
 private fun Paragraf_8_48ModellApi.toJson() = Paragraf_8_48KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -153,8 +149,6 @@ private fun Paragraf_8_48ModellApi.toJson() = Paragraf_8_48KafkaDto(
 
 private fun Paragraf_11_2ModellApi.toJson() = Paragraf_11_2KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -167,8 +161,6 @@ private fun Paragraf_11_2ModellApi.toJson() = Paragraf_11_2KafkaDto(
 
 private fun Paragraf_11_3ModellApi.toJson() = Paragraf_11_3KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -180,8 +172,6 @@ private fun Paragraf_11_3ModellApi.toJson() = Paragraf_11_3KafkaDto(
 
 private fun Paragraf_11_4FørsteLeddModellApi.toJson() = Paragraf_11_4FørsteLeddKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -191,8 +181,6 @@ private fun Paragraf_11_4FørsteLeddModellApi.toJson() = Paragraf_11_4FørsteLed
 
 private fun Paragraf_11_4AndreOgTredjeLeddModellApi.toJson() = Paragraf_11_4AndreOgTredjeLeddKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -204,8 +192,6 @@ private fun Paragraf_11_4AndreOgTredjeLeddModellApi.toJson() = Paragraf_11_4Andr
 
 private fun Paragraf_11_5ModellApi.toJson() = Paragraf_11_5KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -217,8 +203,6 @@ private fun Paragraf_11_5ModellApi.toJson() = Paragraf_11_5KafkaDto(
 
 private fun Paragraf_11_5YrkesskadeModellApi.toJson() = Paragraf_11_5YrkesskadeKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -230,8 +214,6 @@ private fun Paragraf_11_5YrkesskadeModellApi.toJson() = Paragraf_11_5YrkesskadeK
 
 private fun Paragraf_11_6ModellApi.toJson() = Paragraf_11_6KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -244,8 +226,6 @@ private fun Paragraf_11_6ModellApi.toJson() = Paragraf_11_6KafkaDto(
 
 private fun Paragraf_11_14ModellApi.toJson() = Paragraf_11_14KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -255,8 +235,6 @@ private fun Paragraf_11_14ModellApi.toJson() = Paragraf_11_14KafkaDto(
 
 private fun Paragraf_11_19ModellApi.toJson() = Paragraf_11_19KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -268,8 +246,6 @@ private fun Paragraf_11_19ModellApi.toJson() = Paragraf_11_19KafkaDto(
 
 private fun Paragraf_11_22ModellApi.toJson() = Paragraf_11_22KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -281,8 +257,6 @@ private fun Paragraf_11_22ModellApi.toJson() = Paragraf_11_22KafkaDto(
 
 private fun Paragraf_11_27FørsteLeddModellApi.toJson() = Paragraf_11_27FørsteLeddKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -295,8 +269,6 @@ private fun Paragraf_11_27FørsteLeddModellApi.toJson() = Paragraf_11_27FørsteL
 
 private fun Paragraf_11_29ModellApi.toJson() = Paragraf_11_29KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -308,8 +280,6 @@ private fun Paragraf_11_29ModellApi.toJson() = Paragraf_11_29KafkaDto(
 
 private fun Paragraf_22_13ModellApi.toJson() = Paragraf_22_13KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,

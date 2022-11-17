@@ -7,7 +7,6 @@ import no.nav.aap.domene.vilkår.Vilkårsvurdering.Companion.toDto
 import no.nav.aap.hendelse.Søknad
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDate
@@ -24,7 +23,6 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -38,7 +36,6 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -52,7 +49,6 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -66,7 +62,6 @@ internal class `§11-4 første ledd Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MASKINELT_KVALITETSSIKRET, vilkår)
     }
 
@@ -86,9 +81,5 @@ internal class `§11-4 første ledd Test` {
         vilkårsvurdering: Paragraf_11_4FørsteLedd
     ) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_4FørsteLedd) {
-        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

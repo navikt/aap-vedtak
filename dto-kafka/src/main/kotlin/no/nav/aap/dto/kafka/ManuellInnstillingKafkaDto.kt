@@ -8,5 +8,5 @@ data class Innstilling_11_6KafkaDto(
     val harBehovForBehandling: Boolean,
     val harBehovForTiltak: Boolean,
     val harMulighetForÅKommeIArbeid: Boolean,
-    val individuellBegrunnelse: String,
+    val individuellBegrunnelse: String?,
 )

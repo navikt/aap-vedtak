@@ -41,8 +41,6 @@ private fun SakstypeKafkaDto.toDto() = SøkereKafkaDto.SakstypeKafkaDto(
 
 private fun MedlemskapYrkesskadeKafkaDto.toMedlemskapYrkesskade() = SøkereKafkaDto.MedlemskapYrkesskadeKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -60,8 +58,6 @@ private fun TotrinnskontrollMedlemskapYrkesskadeKafkaDto.toDto() = SøkereKafkaD
 
 private fun Paragraf_8_48KafkaDto.toParagraf_8_48() = SøkereKafkaDto.Paragraf_8_48KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -78,8 +74,6 @@ private fun Totrinnskontroll_22_13KafkaDto.toDto() = SøkereKafkaDto.Totrinnskon
 
 private fun Paragraf_11_2KafkaDto.toParagraf_11_2() = SøkereKafkaDto.Paragraf_11_2KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -96,8 +90,6 @@ private fun Totrinnskontroll_11_2KafkaDto.toDto() = SøkereKafkaDto.Totrinnskont
 
 private fun Paragraf_11_3KafkaDto.toParagraf_11_3() = SøkereKafkaDto.Paragraf_11_3KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -113,8 +105,6 @@ private fun Totrinnskontroll_11_3KafkaDto.toDto() = SøkereKafkaDto.Totrinnskont
 
 private fun Paragraf_11_4FørsteLeddKafkaDto.toParagraf_11_4FørsteLedd() = SøkereKafkaDto.Paragraf_11_4FørsteLeddKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -125,8 +115,6 @@ private fun Paragraf_11_4FørsteLeddKafkaDto.toParagraf_11_4FørsteLedd() = Søk
 private fun Paragraf_11_4AndreOgTredjeLeddKafkaDto.toParagraf_11_4AndreOgTredjeLedd() =
     SøkereKafkaDto.Paragraf_11_4AndreOgTredjeLeddKafkaDto(
         vilkårsvurderingsid = vilkårsvurderingsid,
-        vurdertAv = vurdertAv,
-        kvalitetssikretAv = kvalitetssikretAv,
         paragraf = paragraf,
         ledd = ledd,
         tilstand = tilstand,
@@ -142,8 +130,6 @@ private fun Totrinnskontroll_11_4AndreOgTredjeLeddKafkaDto.toDto() = SøkereKafk
 
 private fun Paragraf_11_5KafkaDto.toParagraf_11_5() = SøkereKafkaDto.Paragraf_11_5KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -159,8 +145,6 @@ private fun Totrinnskontroll_11_5KafkaDto.toDto() = SøkereKafkaDto.Totrinnskont
 
 private fun Paragraf_11_5YrkesskadeKafkaDto.toParagraf_11_5Yrkesskade() = SøkereKafkaDto.Paragraf_11_5YrkesskadeKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -176,8 +160,6 @@ private fun Totrinnskontroll_11_5YrkesskadeKafkaDto.toDto() = SøkereKafkaDto.To
 
 private fun Paragraf_11_6KafkaDto.toParagraf_11_6() = SøkereKafkaDto.Paragraf_11_6KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -194,8 +176,6 @@ private fun Totrinnskontroll_11_6KafkaDto.toDto() = SøkereKafkaDto.Totrinnskont
 
 private fun Paragraf_11_14KafkaDto.toParagraf_11_14() = SøkereKafkaDto.Paragraf_11_14KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -205,8 +185,6 @@ private fun Paragraf_11_14KafkaDto.toParagraf_11_14() = SøkereKafkaDto.Paragraf
 
 private fun Paragraf_11_19KafkaDto.toParagraf_11_19() = SøkereKafkaDto.Paragraf_11_19KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -222,8 +200,6 @@ private fun Totrinnskontroll_11_19KafkaDto.toDto() = SøkereKafkaDto.Totrinnskon
 
 private fun Paragraf_11_22KafkaDto.toParagraf_11_22() = SøkereKafkaDto.Paragraf_11_22KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -239,8 +215,6 @@ private fun Totrinnskontroll_11_22KafkaDto.toDto() = SøkereKafkaDto.Totrinnskon
 
 private fun Paragraf_11_27FørsteLeddKafkaDto.toParagraf_11_27FørsteLedd() = SøkereKafkaDto.Paragraf_11_27FørsteLeddKafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -252,8 +226,6 @@ private fun Paragraf_11_27FørsteLeddKafkaDto.toParagraf_11_27FørsteLedd() = S�
 
 private fun Paragraf_11_29KafkaDto.toParagraf_11_29() = SøkereKafkaDto.Paragraf_11_29KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,
@@ -270,8 +242,6 @@ private fun Totrinnskontroll_11_29KafkaDto.toDto() = SøkereKafkaDto.Totrinnskon
 
 private fun Paragraf_22_13KafkaDto.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13KafkaDto(
     vilkårsvurderingsid = vilkårsvurderingsid,
-    vurdertAv = vurdertAv,
-    kvalitetssikretAv = kvalitetssikretAv,
     paragraf = paragraf,
     ledd = ledd,
     tilstand = tilstand,

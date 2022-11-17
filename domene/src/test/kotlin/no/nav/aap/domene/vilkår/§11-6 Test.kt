@@ -9,7 +9,6 @@ import no.nav.aap.hendelse.Søknad
 import no.nav.aap.hendelse.innstilling.InnstillingParagraf_11_6
 import no.nav.aap.modellapi.Utfall
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Test
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -38,7 +37,6 @@ internal class `§11-6 Test` {
         vilkår.håndterInnstilling(innstilling)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -74,7 +72,6 @@ internal class `§11-6 Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -110,7 +107,6 @@ internal class `§11-6 Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -146,7 +142,6 @@ internal class `§11-6 Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -182,7 +177,6 @@ internal class `§11-6 Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -218,7 +212,6 @@ internal class `§11-6 Test` {
         vilkår.håndterLøsning(løsning)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
@@ -339,7 +332,6 @@ internal class `§11-6 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -380,7 +372,6 @@ internal class `§11-6 Test` {
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
-        assertIkkeKvalitetssikret(vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
     }
 
@@ -390,9 +381,5 @@ internal class `§11-6 Test` {
 
     private fun assertTilstand(tilstand: Vilkårsvurdering.Tilstand.Tilstandsnavn, vilkårsvurdering: Paragraf_11_6) {
         assertEquals(tilstand.name, listOf(vilkårsvurdering).toDto().first().tilstand)
-    }
-
-    private fun assertIkkeKvalitetssikret(vilkårsvurdering: Paragraf_11_6) {
-        assertNull(listOf(vilkårsvurdering).toDto().first().kvalitetssikretAv?.takeIf { it.isNotEmpty() })
     }
 }

@@ -63,8 +63,6 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): Paragraf_11_4FørsteLeddModellApi =
             Paragraf_11_4FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = "maskinell saksbehandling",
-                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,
@@ -88,8 +86,6 @@ internal class Paragraf_11_4FørsteLedd private constructor(
         override fun toDto(vilkårsvurdering: Paragraf_11_4FørsteLedd): Paragraf_11_4FørsteLeddModellApi =
             Paragraf_11_4FørsteLeddModellApi(
                 vilkårsvurderingsid = vilkårsvurdering.vilkårsvurderingsid,
-                vurdertAv = "maskinell saksbehandling",
-                kvalitetssikretAv = null,
                 paragraf = vilkårsvurdering.paragraf.name,
                 ledd = vilkårsvurdering.ledd.map(Ledd::name),
                 tilstand = tilstandsnavn.name,

@@ -44,8 +44,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class MedlemskapYrkesskadeKafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -62,8 +60,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_8_48KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -75,8 +71,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_2KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -93,8 +87,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_3KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -110,8 +102,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_4FørsteLeddKafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -121,8 +111,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_4AndreOgTredjeLeddKafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -138,8 +126,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_5KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -155,8 +141,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_5YrkesskadeKafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -172,8 +156,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_6KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -190,8 +172,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_14KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -201,8 +181,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_19KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -218,8 +196,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_22KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -235,8 +211,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_27FørsteLeddKafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -248,8 +222,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_11_29KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,
@@ -265,8 +237,6 @@ data class ForrigeSøkereKafkaDto(
 
     data class Paragraf_22_13KafkaDto(
         val vilkårsvurderingsid: UUID,
-        val vurdertAv: String?,
-        val kvalitetssikretAv: String?,
         val paragraf: String,
         val ledd: List<String>,
         val tilstand: String,

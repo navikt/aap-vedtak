@@ -6,12 +6,6 @@ import java.util.*
 
 abstract class VilkårsvurderingModellApi {
     abstract val vilkårsvurderingsid: UUID
-
-    @Deprecated("Skal erstattes av totrinnskontroll, fjernes")
-    abstract val vurdertAv: String?
-
-    @Deprecated("Skal erstattes av totrinnskontroll, fjernes")
-    abstract val kvalitetssikretAv: String?
     abstract val paragraf: String
     abstract val ledd: List<String>
     abstract val tilstand: String
@@ -43,8 +37,6 @@ interface VilkårsvurderingModellApiVisitor {
 
 data class MedlemskapYrkesskadeModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -66,8 +58,6 @@ data class MedlemskapYrkesskadeModellApi(
 
 data class Paragraf_8_48ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -89,8 +79,6 @@ data class Paragraf_8_48ModellApi(
 
 data class Paragraf_11_2ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -112,8 +100,6 @@ data class Paragraf_11_2ModellApi(
 
 data class Paragraf_11_3ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -134,8 +120,6 @@ data class Paragraf_11_3ModellApi(
 
 data class Paragraf_11_4FørsteLeddModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -155,8 +139,6 @@ data class Paragraf_11_4FørsteLeddModellApi(
 
 data class Paragraf_11_4AndreOgTredjeLeddModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -190,8 +172,6 @@ data class TotrinnskontrollModellApi<LØSNING : LøsningModellApi, KVALITETSSIKR
 
 data class Paragraf_11_5ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -212,8 +192,6 @@ data class Paragraf_11_5ModellApi(
 
 data class Paragraf_11_5YrkesskadeModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -234,8 +212,6 @@ data class Paragraf_11_5YrkesskadeModellApi(
 
 data class Paragraf_11_6ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -257,8 +233,6 @@ data class Paragraf_11_6ModellApi(
 
 data class Paragraf_11_14ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String?,
-    override val kvalitetssikretAv: String?,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -278,8 +252,6 @@ data class Paragraf_11_14ModellApi(
 
 data class Paragraf_11_19ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -300,8 +272,6 @@ data class Paragraf_11_19ModellApi(
 
 data class Paragraf_11_22ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -322,8 +292,6 @@ data class Paragraf_11_22ModellApi(
 
 data class Paragraf_11_27FørsteLeddModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -345,8 +313,6 @@ data class Paragraf_11_27FørsteLeddModellApi(
 
 data class Paragraf_11_29ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
@@ -367,8 +333,6 @@ data class Paragraf_11_29ModellApi(
 
 data class Paragraf_22_13ModellApi(
     override val vilkårsvurderingsid: UUID,
-    override val vurdertAv: String? = null,
-    override val kvalitetssikretAv: String? = null,
     override val paragraf: String,
     override val ledd: List<String>,
     override val tilstand: String,
