@@ -7,19 +7,19 @@ import no.nav.aap.modellapi.*
 internal fun SøkereKafkaDto.toModellApi() = SøkerModellApi(
     personident = personident,
     fødselsdato = fødselsdato,
-    saker = saker.map(Sak::toModellApi),
+    saker = saker.map(SakKafkaDto::toModellApi),
 )
 
-private fun Sak.toModellApi() = SakModellApi(
+private fun SakKafkaDto.toModellApi() = SakModellApi(
     saksid = saksid,
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    sakstyper = sakstyper.map(Sakstype::toModellApi),
+    sakstyper = sakstyper.map(SakstypeKafkaDto::toModellApi),
     søknadstidspunkt = søknadstidspunkt,
     vedtak = vedtak?.toModellApi()
 )
 
-private fun Sakstype.toModellApi() = SakstypeModellApi(
+private fun SakstypeKafkaDto.toModellApi() = SakstypeModellApi(
     type = type,
     aktiv = aktiv,
     vilkårsvurderinger = listOfNotNull(
@@ -41,7 +41,7 @@ private fun Sakstype.toModellApi() = SakstypeModellApi(
     )
 )
 
-private fun Paragraf_8_48.toModellApi() = Paragraf_8_48ModellApi(
+private fun Paragraf_8_48KafkaDto.toModellApi() = Paragraf_8_48ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -50,11 +50,11 @@ private fun Paragraf_8_48.toModellApi() = Paragraf_8_48ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_8_48_maskinell = løsning_8_48_maskinell.map(LøsningMaskinellParagraf_8_48::toModellApi),
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_22_13::toModellApi),
+    løsning_8_48_maskinell = løsning_8_48_maskinell.map(LøsningMaskinellParagraf_8_48KafkaDto::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toModellApi),
 )
 
-private fun MedlemskapYrkesskade.toModellApi() = MedlemskapYrkesskadeModellApi(
+private fun MedlemskapYrkesskadeKafkaDto.toModellApi() = MedlemskapYrkesskadeModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -64,11 +64,11 @@ private fun MedlemskapYrkesskade.toModellApi() = MedlemskapYrkesskadeModellApi(
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
     løsning_medlemskap_yrkesskade_maskinell = løsning_medlemskap_yrkesskade_maskinell
-        .map(LøsningMaskinellMedlemskapYrkesskade::toModellApi),
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDtoMedlemskapYrkesskade::toModellApi),
+        .map(LøsningMaskinellMedlemskapYrkesskadeKafkaDto::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDtoMedlemskapYrkesskadeKafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_2.toModellApi() = Paragraf_11_2ModellApi(
+private fun Paragraf_11_2KafkaDto.toModellApi() = Paragraf_11_2ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -77,11 +77,11 @@ private fun Paragraf_11_2.toModellApi() = Paragraf_11_2ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_2_maskinell = løsning_11_2_maskinell.map(LøsningMaskinellParagraf_11_2::toModellApi),
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_2::toModellApi),
+    løsning_11_2_maskinell = løsning_11_2_maskinell.map(LøsningMaskinellParagraf_11_2KafkaDto::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_2KafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_3.toModellApi() = Paragraf_11_3ModellApi(
+private fun Paragraf_11_3KafkaDto.toModellApi() = Paragraf_11_3ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -90,10 +90,10 @@ private fun Paragraf_11_3.toModellApi() = Paragraf_11_3ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_3::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_3KafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_4FørsteLedd.toModellApi() = Paragraf_11_4FørsteLeddModellApi(
+private fun Paragraf_11_4FørsteLeddKafkaDto.toModellApi() = Paragraf_11_4FørsteLeddModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -104,7 +104,7 @@ private fun Paragraf_11_4FørsteLedd.toModellApi() = Paragraf_11_4FørsteLeddMod
     vurdertMaskinelt = vurdertMaskinelt,
 )
 
-private fun Paragraf_11_4AndreOgTredjeLedd.toModellApi() = Paragraf_11_4AndreOgTredjeLeddModellApi(
+private fun Paragraf_11_4AndreOgTredjeLeddKafkaDto.toModellApi() = Paragraf_11_4AndreOgTredjeLeddModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -113,7 +113,7 @@ private fun Paragraf_11_4AndreOgTredjeLedd.toModellApi() = Paragraf_11_4AndreOgT
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_4AndreOgTredjeLedd::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_4AndreOgTredjeLeddKafkaDto::toModellApi),
 )
 
 private fun Paragraf_11_5KafkaDto.toModellApi() = Paragraf_11_5ModellApi(
@@ -125,10 +125,10 @@ private fun Paragraf_11_5KafkaDto.toModellApi() = Paragraf_11_5ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_5::toModellApi)
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_5KafkaDto::toModellApi)
 )
 
-private fun Paragraf_11_5Yrkesskade.toModellApi() = Paragraf_11_5YrkesskadeModellApi(
+private fun Paragraf_11_5YrkesskadeKafkaDto.toModellApi() = Paragraf_11_5YrkesskadeModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -137,10 +137,10 @@ private fun Paragraf_11_5Yrkesskade.toModellApi() = Paragraf_11_5YrkesskadeModel
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_5Yrkesskade::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_5YrkesskadeKafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_6.toModellApi() = Paragraf_11_6ModellApi(
+private fun Paragraf_11_6KafkaDto.toModellApi() = Paragraf_11_6ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -149,11 +149,11 @@ private fun Paragraf_11_6.toModellApi() = Paragraf_11_6ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6::toModellApi),
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_6::toModellApi),
+    innstillinger_11_6 = innstillinger_11_6.map(InnstillingParagraf_11_6KafkaDto::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_6KafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_14.toModellApi() = Paragraf_11_14ModellApi(
+private fun Paragraf_11_14KafkaDto.toModellApi() = Paragraf_11_14ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -164,7 +164,7 @@ private fun Paragraf_11_14.toModellApi() = Paragraf_11_14ModellApi(
     vurdertMaskinelt = vurdertMaskinelt,
 )
 
-private fun Paragraf_11_19.toModellApi() = Paragraf_11_19ModellApi(
+private fun Paragraf_11_19KafkaDto.toModellApi() = Paragraf_11_19ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -173,10 +173,10 @@ private fun Paragraf_11_19.toModellApi() = Paragraf_11_19ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_19::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_19KafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_22.toModellApi() = Paragraf_11_22ModellApi(
+private fun Paragraf_11_22KafkaDto.toModellApi() = Paragraf_11_22ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -185,10 +185,10 @@ private fun Paragraf_11_22.toModellApi() = Paragraf_11_22ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_22::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_22KafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_27FørsteLedd.toModellApi() = Paragraf_11_27FørsteLeddModellApi(
+private fun Paragraf_11_27FørsteLeddKafkaDto.toModellApi() = Paragraf_11_27FørsteLeddModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -197,11 +197,11 @@ private fun Paragraf_11_27FørsteLedd.toModellApi() = Paragraf_11_27FørsteLeddM
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    løsning_11_27_maskinell = løsning_11_27_maskinell.map(LøsningMaskinellParagraf_11_27FørsteLedd::toModellApi),
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_22_13::toModellApi),
+    løsning_11_27_maskinell = løsning_11_27_maskinell.map(LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toModellApi),
 )
 
-private fun Paragraf_11_29.toModellApi() = Paragraf_11_29ModellApi(
+private fun Paragraf_11_29KafkaDto.toModellApi() = Paragraf_11_29ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -210,10 +210,10 @@ private fun Paragraf_11_29.toModellApi() = Paragraf_11_29ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_11_29::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_11_29KafkaDto::toModellApi),
 )
 
-private fun Paragraf_22_13.toModellApi() = Paragraf_22_13ModellApi(
+private fun Paragraf_22_13KafkaDto.toModellApi() = Paragraf_22_13ModellApi(
     vilkårsvurderingsid = vilkårsvurderingsid,
     vurdertAv = vurdertAv,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -222,16 +222,16 @@ private fun Paragraf_22_13.toModellApi() = Paragraf_22_13ModellApi(
     tilstand = tilstand,
     utfall = enumValueOf(utfall),
     vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(TotrinnskontrollKafkaDto_22_13::toModellApi),
-    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13::toModellApi),
+    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toModellApi),
+    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13KafkaDto::toModellApi),
 )
 
-private fun SøknadsdataParagraf_22_13.toModellApi() = Paragraf_22_13ModellApi.SøknadsdataModellApi(
+private fun SøknadsdataParagraf_22_13KafkaDto.toModellApi() = Paragraf_22_13ModellApi.SøknadsdataModellApi(
     søknadId = søknadId,
     søknadstidspunkt = søknadstidspunkt,
 )
 
-private fun InnstillingParagraf_11_6.toModellApi() = InnstillingParagraf_11_6ModellApi(
+private fun InnstillingParagraf_11_6KafkaDto.toModellApi() = InnstillingParagraf_11_6ModellApi(
     innstillingId = innstillingId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -244,19 +244,19 @@ private fun InnstillingParagraf_11_6.toModellApi() = InnstillingParagraf_11_6Mod
     },
 )
 
-private fun LøsningMaskinellMedlemskapYrkesskade.toModellApi() = LøsningMaskinellMedlemskapYrkesskadeModellApi(
+private fun LøsningMaskinellMedlemskapYrkesskadeKafkaDto.toModellApi() = LøsningMaskinellMedlemskapYrkesskadeModellApi(
     løsningId = løsningId,
     erMedlem = erMedlem
 )
 
-private fun LøsningManuellMedlemskapYrkesskade.toModellApi() = LøsningManuellMedlemskapYrkesskadeModellApi(
+private fun LøsningManuellMedlemskapYrkesskadeKafkaDto.toModellApi() = LøsningManuellMedlemskapYrkesskadeModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningMaskinellParagraf_8_48.toModellApi() = SykepengedagerModellApi(
+private fun LøsningMaskinellParagraf_8_48KafkaDto.toModellApi() = SykepengedagerModellApi(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     sykepengedager = sykepengedager?.let { sykepengedager ->
@@ -268,34 +268,34 @@ private fun LøsningMaskinellParagraf_8_48.toModellApi() = SykepengedagerModellA
     }
 )
 
-private fun LøsningMaskinellParagraf_11_2.toModellApi() = LøsningMaskinellParagraf_11_2ModellApi(
+private fun LøsningMaskinellParagraf_11_2KafkaDto.toModellApi() = LøsningMaskinellParagraf_11_2ModellApi(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningManuellParagraf_11_2.toModellApi() = LøsningParagraf_11_2ModellApi(
+private fun LøsningManuellParagraf_11_2KafkaDto.toModellApi() = LøsningParagraf_11_2ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erMedlem = erMedlem
 )
 
-private fun LøsningParagraf_11_3.toModellApi() = LøsningParagraf_11_3ModellApi(
+private fun LøsningParagraf_11_3KafkaDto.toModellApi() = LøsningParagraf_11_3ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun LøsningParagraf_11_4AndreOgTredjeLedd.toModellApi() = LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
+private fun LøsningParagraf_11_4AndreOgTredjeLeddKafkaDto.toModellApi() = LøsningParagraf_11_4AndreOgTredjeLeddModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun LøsningParagraf_11_5.toModellApi() = LøsningParagraf_11_5ModellApi(
+private fun LøsningParagraf_11_5KafkaDto.toModellApi() = LøsningParagraf_11_5ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -308,7 +308,7 @@ private fun LøsningParagraf_11_5.toModellApi() = LøsningParagraf_11_5ModellApi
     sykmeldingDato = sykmeldingDato,
 )
 
-private fun LøsningParagraf_11_5_yrkesskade.toModellApi() = LøsningParagraf_11_5YrkesskadeModellApi(
+private fun LøsningParagraf_11_5_yrkesskadeKafkaDto.toModellApi() = LøsningParagraf_11_5YrkesskadeModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -316,7 +316,7 @@ private fun LøsningParagraf_11_5_yrkesskade.toModellApi() = LøsningParagraf_11
     arbeidsevneErNedsattMedMinst30Prosent = arbeidsevneErNedsattMedMinst30Prosent,
 )
 
-private fun LøsningParagraf_11_6.toModellApi() = LøsningParagraf_11_6ModellApi(
+private fun LøsningParagraf_11_6KafkaDto.toModellApi() = LøsningParagraf_11_6ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -329,14 +329,14 @@ private fun LøsningParagraf_11_6.toModellApi() = LøsningParagraf_11_6ModellApi
     },
 )
 
-private fun LøsningParagraf_11_19.toModellApi() = LøsningParagraf_11_19ModellApi(
+private fun LøsningParagraf_11_19KafkaDto.toModellApi() = LøsningParagraf_11_19ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     beregningsdato = beregningsdato
 )
 
-private fun LøsningParagraf_11_22.toModellApi() = LøsningParagraf_11_22ModellApi(
+private fun LøsningParagraf_11_22KafkaDto.toModellApi() = LøsningParagraf_11_22ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -346,7 +346,7 @@ private fun LøsningParagraf_11_22.toModellApi() = LøsningParagraf_11_22ModellA
     antattÅrligArbeidsinntekt = antattÅrligArbeidsinntekt,
 )
 
-private fun LøsningMaskinellParagraf_11_27FørsteLedd.toModellApi() = LøsningParagraf_11_27_FørsteLedd_ModellApi(
+private fun LøsningMaskinellParagraf_11_27FørsteLeddKafkaDto.toModellApi() = LøsningParagraf_11_27_FørsteLedd_ModellApi(
     løsningId = løsningId,
     tidspunktForVurdering = tidspunktForVurdering,
     svangerskapspenger = SvangerskapspengerModellApi(
@@ -357,14 +357,14 @@ private fun LøsningMaskinellParagraf_11_27FørsteLedd.toModellApi() = LøsningP
     )
 )
 
-private fun LøsningParagraf_11_29.toModellApi() = LøsningParagraf_11_29ModellApi(
+private fun LøsningParagraf_11_29KafkaDto.toModellApi() = LøsningParagraf_11_29ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
     erOppfylt = erOppfylt
 )
 
-private fun LøsningParagraf_22_13.toModellApi() = LøsningParagraf_22_13ModellApi(
+private fun LøsningParagraf_22_13KafkaDto.toModellApi() = LøsningParagraf_22_13ModellApi(
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
@@ -374,7 +374,7 @@ private fun LøsningParagraf_22_13.toModellApi() = LøsningParagraf_22_13ModellA
     manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
-private fun KvalitetssikringMedlemskapYrkesskade.toModellApi() = KvalitetssikringMedlemskapYrkesskadeModellApi(
+private fun KvalitetssikringMedlemskapYrkesskadeKafkaDto.toModellApi() = KvalitetssikringMedlemskapYrkesskadeModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -383,7 +383,7 @@ private fun KvalitetssikringMedlemskapYrkesskade.toModellApi() = Kvalitetssikrin
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_2.toModellApi() = KvalitetssikringParagraf_11_2ModellApi(
+private fun KvalitetssikringParagraf_11_2KafkaDto.toModellApi() = KvalitetssikringParagraf_11_2ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -392,7 +392,7 @@ private fun KvalitetssikringParagraf_11_2.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_3.toModellApi() = KvalitetssikringParagraf_11_3ModellApi(
+private fun KvalitetssikringParagraf_11_3KafkaDto.toModellApi() = KvalitetssikringParagraf_11_3ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -401,7 +401,7 @@ private fun KvalitetssikringParagraf_11_3.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toModellApi() =
+private fun KvalitetssikringParagraf_11_4AndreOgTredjeLeddKafkaDto.toModellApi() =
     KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
@@ -411,7 +411,7 @@ private fun KvalitetssikringParagraf_11_4AndreOgTredjeLedd.toModellApi() =
         begrunnelse = begrunnelse
     )
 
-private fun KvalitetssikringParagraf_11_5.toModellApi() = KvalitetssikringParagraf_11_5ModellApi(
+private fun KvalitetssikringParagraf_11_5KafkaDto.toModellApi() = KvalitetssikringParagraf_11_5ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -420,7 +420,7 @@ private fun KvalitetssikringParagraf_11_5.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_5Yrkesskade.toModellApi() = KvalitetssikringParagraf_11_5YrkesskadeModellApi(
+private fun KvalitetssikringParagraf_11_5YrkesskadeKafkaDto.toModellApi() = KvalitetssikringParagraf_11_5YrkesskadeModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -429,7 +429,7 @@ private fun KvalitetssikringParagraf_11_5Yrkesskade.toModellApi() = Kvalitetssik
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_6.toModellApi() = KvalitetssikringParagraf_11_6ModellApi(
+private fun KvalitetssikringParagraf_11_6KafkaDto.toModellApi() = KvalitetssikringParagraf_11_6ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -438,7 +438,7 @@ private fun KvalitetssikringParagraf_11_6.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_22_13.toModellApi() = KvalitetssikringParagraf_22_13ModellApi(
+private fun KvalitetssikringParagraf_22_13KafkaDto.toModellApi() = KvalitetssikringParagraf_22_13ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -447,7 +447,7 @@ private fun KvalitetssikringParagraf_22_13.toModellApi() = KvalitetssikringParag
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_19.toModellApi() = KvalitetssikringParagraf_11_19ModellApi(
+private fun KvalitetssikringParagraf_11_19KafkaDto.toModellApi() = KvalitetssikringParagraf_11_19ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -456,7 +456,7 @@ private fun KvalitetssikringParagraf_11_19.toModellApi() = KvalitetssikringParag
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_22.toModellApi() = KvalitetssikringParagraf_11_22ModellApi(
+private fun KvalitetssikringParagraf_11_22KafkaDto.toModellApi() = KvalitetssikringParagraf_11_22ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -465,7 +465,7 @@ private fun KvalitetssikringParagraf_11_22.toModellApi() = KvalitetssikringParag
     begrunnelse = begrunnelse
 )
 
-private fun KvalitetssikringParagraf_11_29.toModellApi() = KvalitetssikringParagraf_11_29ModellApi(
+private fun KvalitetssikringParagraf_11_29KafkaDto.toModellApi() = KvalitetssikringParagraf_11_29ModellApi(
     kvalitetssikringId = kvalitetssikringId,
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
@@ -475,7 +475,7 @@ private fun KvalitetssikringParagraf_11_29.toModellApi() = KvalitetssikringParag
 )
 
 
-private fun Vedtak.toModellApi() = VedtakModellApi(
+private fun VedtakKafkaDto.toModellApi() = VedtakModellApi(
     vedtaksid = vedtaksid,
     innvilget = innvilget,
     inntektsgrunnlag = inntektsgrunnlag.toModellApi(),
@@ -484,27 +484,27 @@ private fun Vedtak.toModellApi() = VedtakModellApi(
     etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket = emptyList() // FIXME
 )
 
-private fun Inntektsgrunnlag.toModellApi() = InntektsgrunnlagModellApi(
+private fun InntektsgrunnlagKafkaDto.toModellApi() = InntektsgrunnlagModellApi(
     beregningsdato = beregningsdato,
-    inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.map(InntekterForBeregning::toModellApi),
+    inntekterSiste3Kalenderår = inntekterSiste3Kalenderår.map(InntekterForBeregningKafkaDto::toModellApi),
     yrkesskade = yrkesskade?.toModellApi(),
     fødselsdato = fødselsdato,
     sisteKalenderår = sisteKalenderår,
     grunnlagsfaktor = grunnlagsfaktor,
 )
 
-private fun InntekterForBeregning.toModellApi() = InntekterForBeregningModellApi(
-    inntekter = inntekter.map(Inntekt::toModellApi),
+private fun InntekterForBeregningKafkaDto.toModellApi() = InntekterForBeregningModellApi(
+    inntekter = inntekter.map(InntektKafkaDto::toModellApi),
     inntektsgrunnlagForÅr = inntektsgrunnlagForÅr.toModellApi(),
 )
 
-private fun Inntekt.toModellApi() = InntektModellApi(
+private fun InntektKafkaDto.toModellApi() = InntektModellApi(
     arbeidsgiver = arbeidsgiver,
     inntekstmåned = inntekstmåned,
     beløp = beløp,
 )
 
-private fun InntektsgrunnlagForÅr.toModellApi() = InntektsgrunnlagForÅrModellApi(
+private fun InntektsgrunnlagForÅrKafkaDto.toModellApi() = InntektsgrunnlagForÅrModellApi(
     år = år,
     beløpFørJustering = beløpFørJustering,
     beløpJustertFor6G = beløpJustertFor6G,
@@ -512,62 +512,62 @@ private fun InntektsgrunnlagForÅr.toModellApi() = InntektsgrunnlagForÅrModellA
     grunnlagsfaktor = grunnlagsfaktor,
 )
 
-private fun Yrkesskade.toModellApi() = YrkesskadeModellApi(
+private fun YrkesskadeKafkaDto.toModellApi() = YrkesskadeModellApi(
     gradAvNedsattArbeidsevneKnyttetTilYrkesskade = gradAvNedsattArbeidsevneKnyttetTilYrkesskade,
     inntektsgrunnlag = inntektsgrunnlag.toModellApi(),
 )
 
-private fun TotrinnskontrollKafkaDtoMedlemskapYrkesskade.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDtoMedlemskapYrkesskadeKafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_2.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_2KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_3.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_3KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_4AndreOgTredjeLedd.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_4AndreOgTredjeLeddKafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_5.toModellApi() = TotrinnskontrollModellApi(
+private fun Totrinnskontroll_11_5KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_5Yrkesskade.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_5YrkesskadeKafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_6.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_6KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_19.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_19KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_22.toModellApi() = TotrinnskontrollModellApi(
+private fun TotrinnskontrollKafkaDto_11_22KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_11_29.toModellApi() = TotrinnskontrollModellApi(
+private fun Totrinnskontroll_11_29KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
 
-private fun TotrinnskontrollKafkaDto_22_13.toModellApi() = TotrinnskontrollModellApi(
+private fun Totrinnskontroll_22_13KafkaDto.toModellApi() = TotrinnskontrollModellApi(
     løsning = løsning.toModellApi(),
     kvalitetssikring = kvalitetssikring?.toModellApi()
 )
