@@ -230,7 +230,8 @@ internal class SakTest {
     fun `Hvis vi mottar en søknad der søker har oppgitt yrkesskade`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, harTidligereYrkesskade = Søknad.HarYrkesskade.JA)
+        val søknad =
+            Søknad(UUID.randomUUID(), personident, fødselsdato, harTidligereYrkesskade = Søknad.HarYrkesskade.JA)
         val sak = Sak()
 
         sak.håndterSøknad(søknad, fødselsdato)
@@ -450,9 +451,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -564,11 +566,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -694,9 +696,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -808,11 +811,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -951,9 +954,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -1065,11 +1069,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -1234,9 +1238,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -1348,11 +1353,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -1485,9 +1490,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -1599,11 +1605,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -1724,9 +1730,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -1838,11 +1845,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -1967,9 +1974,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
+        val løsningId_11_5 = UUID.randomUUID()
         sak.håndterLøsning(
             LøsningParagraf_11_5(
-                løsningId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
                 vurdertAv = "veileder",
                 tidspunktForVurdering = LocalDateTime.now(),
                 nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -2081,11 +2089,11 @@ internal class SakTest {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
-                UUID.randomUUID(),
-                "fatter",
-                LocalDateTime.now(),
-                true,
-                "JA"
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                erGodkjent = true,
+                begrunnelse = "JA"
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)

@@ -107,8 +107,9 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val løsningId = UUID.randomUUID()
         val løsning = LøsningParagraf_11_5(
-            UUID.randomUUID(),
+            løsningId,
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -124,7 +125,7 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -140,8 +141,9 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val løsningId = UUID.randomUUID()
         val løsning = LøsningParagraf_11_5(
-            UUID.randomUUID(),
+            løsningId,
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -157,7 +159,7 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), true, "JA")
+            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), true, "JA")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -173,8 +175,9 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val løsningId = UUID.randomUUID()
         val løsning = LøsningParagraf_11_5(
-            UUID.randomUUID(),
+            løsningId,
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -190,7 +193,7 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -206,8 +209,9 @@ internal class `§11-5 Test` {
 
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
+        val løsningId = UUID.randomUUID()
         val løsning = LøsningParagraf_11_5(
-            UUID.randomUUID(),
+            løsningId,
             "saksbehandler",
             LocalDateTime.now(),
             LøsningParagraf_11_5.NedsattArbeidsevnegrad(
@@ -223,7 +227,7 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), UUID.randomUUID(), "X", LocalDateTime.now(), false, "NEI")
+            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), false, "NEI")
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -284,6 +288,74 @@ internal class `§11-5 Test` {
             kvalitetssikringId,
             (dto.etSettAvVurderteVilkårSomHarFørtTilDetteVedtaket[0].kvalitetssikring as KvalitetssikringParagraf_11_5ModellApi?)?.kvalitetssikringId
         )
+    }
+
+    @Test
+    fun `I OppfyltAvventerKvalitetssikring, hvis vi mottar kvalitetssikring på en ukjent løsning, endres ikke tilstanden`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_5()
+
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsningId = UUID.randomUUID()
+        val ukjentLøsningId = UUID.randomUUID()
+        val løsning1 = LøsningParagraf_11_5(
+            løsningId,
+            "saksbehandler",
+            LocalDateTime.now(),
+            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                kravOmNedsattArbeidsevneErOppfylt = true,
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                nedsettelseSkyldesSykdomEllerSkade = true,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                kilder = emptyList(),
+                legeerklæringDato = null,
+                sykmeldingDato = null,
+            )
+        )
+        vilkår.håndterLøsning(løsning1)
+
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_5(UUID.randomUUID(), ukjentLøsningId, "X", LocalDateTime.now(), false, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
+    }
+
+    @Test
+    fun `I IkkeOppfyltAvventerKvalitetssikring, hvis vi mottar kvalitetssikring på en ukjent løsning, endres ikke tilstanden`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = Paragraf_11_5()
+
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val løsningId = UUID.randomUUID()
+        val ukjentLøsningId = UUID.randomUUID()
+        val løsning1 = LøsningParagraf_11_5(
+            løsningId,
+            "saksbehandler",
+            LocalDateTime.now(),
+            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                kravOmNedsattArbeidsevneErOppfylt = false,
+                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                nedsettelseSkyldesSykdomEllerSkade = false,
+                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                kilder = emptyList(),
+                legeerklæringDato = null,
+                sykmeldingDato = null,
+            )
+        )
+        vilkår.håndterLøsning(løsning1)
+
+        val kvalitetssikring =
+            KvalitetssikringParagraf_11_5(UUID.randomUUID(), ukjentLøsningId, "X", LocalDateTime.now(), false, "JA")
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_5) {

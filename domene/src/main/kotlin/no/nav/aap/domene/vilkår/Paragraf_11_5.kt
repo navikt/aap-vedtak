@@ -84,9 +84,13 @@ internal class Paragraf_11_5 private constructor(
             kvalitetssikring: KvalitetssikringParagraf_11_5
         ) {
             vilkårsvurdering.totrinnskontroller.leggTilKvalitetssikring(kvalitetssikring)
+            val totrinnskontroll = vilkårsvurdering.totrinnskontroller.last()
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
+                totrinnskontroll.erGodkjent() ->
+                    vilkårsvurdering.tilstand(OppfyltKvalitetssikret, kvalitetssikring)
+
+                totrinnskontroll.erTotrinnskontrollGjennomført() ->
+                    vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -114,9 +118,13 @@ internal class Paragraf_11_5 private constructor(
             kvalitetssikring: KvalitetssikringParagraf_11_5
         ) {
             vilkårsvurdering.totrinnskontroller.leggTilKvalitetssikring(kvalitetssikring)
+            val totrinnskontroll = vilkårsvurdering.totrinnskontroller.last()
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(IkkeOppfyltKvalitetssikret, kvalitetssikring)
-                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
+                totrinnskontroll.erGodkjent() ->
+                    vilkårsvurdering.tilstand(IkkeOppfyltKvalitetssikret, kvalitetssikring)
+
+                totrinnskontroll.erTotrinnskontrollGjennomført() ->
+                    vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
