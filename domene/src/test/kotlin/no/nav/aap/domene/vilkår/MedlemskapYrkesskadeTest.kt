@@ -180,29 +180,28 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(
-                løsningId = UUID.randomUUID(),
-                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
-            )
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(
+            løsningId = UUID.randomUUID(),
+            erMedlem = LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+        )
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val manuellLøsning =
-            LøsningManuellMedlemskapYrkesskade(
-                løsningId = UUID.randomUUID(),
-                "Y",
-                LocalDateTime.now(),
-                LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
-            )
+        val løsningId = UUID.randomUUID()
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
+            løsningId = løsningId,
+            vurdertAv = "Y",
+            tidspunktForVurdering = LocalDateTime.now(),
+            erMedlem = LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
+        )
         vilkår.håndterLøsning(manuellLøsning)
 
         val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
             kvalitetssikringId = UUID.randomUUID(),
-            UUID.randomUUID(),
-            "X",
-            LocalDateTime.now(),
-            true,
-            "JA"
+            løsningId = løsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = true,
+            begrunnelse = "JA"
         )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
@@ -220,28 +219,28 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(
-                løsningId = UUID.randomUUID(),
-                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
-            )
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(
+            løsningId = UUID.randomUUID(),
+            erMedlem = LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+        )
         vilkår.håndterLøsning(maskinellLøsning)
 
+        val løsningId = UUID.randomUUID()
         val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
-            løsningId = UUID.randomUUID(),
-            "Y",
-            LocalDateTime.now(),
-            LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
+            løsningId = løsningId,
+            vurdertAv = "Y",
+            tidspunktForVurdering = LocalDateTime.now(),
+            erMedlem = LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
         )
         vilkår.håndterLøsning(manuellLøsning)
 
         val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
             kvalitetssikringId = UUID.randomUUID(),
-            UUID.randomUUID(),
-            "X",
-            LocalDateTime.now(),
-            true,
-            "JA"
+            løsningId = løsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = true,
+            begrunnelse = "JA"
         )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
@@ -259,29 +258,28 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(
-                UUID.randomUUID(),
-                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
-            )
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(
+            løsningId = UUID.randomUUID(),
+            erMedlem = LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+        )
         vilkår.håndterLøsning(maskinellLøsning)
 
-        val manuellLøsning =
-            LøsningManuellMedlemskapYrkesskade(
-                UUID.randomUUID(),
-                "Y",
-                LocalDateTime.now(),
-                LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
-            )
+        val løsningId = UUID.randomUUID()
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
+            løsningId = løsningId,
+            vurdertAv = "Y",
+            tidspunktForVurdering = LocalDateTime.now(),
+            erMedlem = LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
+        )
         vilkår.håndterLøsning(manuellLøsning)
 
         val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            "X",
-            LocalDateTime.now(),
-            false,
-            "NEI"
+            kvalitetssikringId = UUID.randomUUID(),
+            løsningId = løsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = false,
+            begrunnelse = "NEI"
         )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
@@ -299,33 +297,111 @@ internal class MedlemskapYrkesskadeTest {
         val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
         vilkår.håndterSøknad(søknad, fødselsdato, LocalDate.now())
 
-        val maskinellLøsning =
-            LøsningMaskinellMedlemskapYrkesskade(
-                UUID.randomUUID(),
-                LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
-            )
+        val maskinellLøsning = LøsningMaskinellMedlemskapYrkesskade(
+            løsningId = UUID.randomUUID(),
+            erMedlem = LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+        )
         vilkår.håndterLøsning(maskinellLøsning)
 
+        val løsningId = UUID.randomUUID()
         val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
-            UUID.randomUUID(),
-            "Y",
-            LocalDateTime.now(),
-            LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
+            løsningId = løsningId,
+            vurdertAv = "Y",
+            tidspunktForVurdering = LocalDateTime.now(),
+            erMedlem = LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
         )
         vilkår.håndterLøsning(manuellLøsning)
 
         val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
-            UUID.randomUUID(),
-            UUID.randomUUID(),
-            "X",
-            LocalDateTime.now(),
-            false,
-            "NEI"
+            kvalitetssikringId = UUID.randomUUID(),
+            løsningId = løsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = false,
+            begrunnelse = "NEI"
         )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.AVVENTER_MANUELL_VURDERING, vilkår)
+    }
+
+    @Test
+    fun `I OppfyltManueltAvventerKvalitetssikring, hvis vi mottar kvalitetssikring på en ukjent løsning, endres ikke tilstanden`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                erMedlem = LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val løsningId = UUID.randomUUID()
+        val ukjentLøsningId = UUID.randomUUID()
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
+            løsningId = løsningId,
+            vurdertAv = "Y",
+            tidspunktForVurdering = LocalDateTime.now(),
+            erMedlem = LøsningManuellMedlemskapYrkesskade.ErMedlem.JA
+        )
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            kvalitetssikringId = UUID.randomUUID(),
+            løsningId = ukjentLøsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = false,
+            begrunnelse = "NEI"
+        )
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
+    }
+
+    @Test
+    fun `I IkkeOppfyltManueltAvventerKvalitetssikring, hvis vi mottar kvalitetssikring på en ukjent løsning, endres ikke tilstanden`() {
+        val personident = Personident("12345678910")
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(67))
+
+        val vilkår = MedlemskapYrkesskade()
+
+        vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
+
+        val maskinellLøsning =
+            LøsningMaskinellMedlemskapYrkesskade(
+                løsningId = UUID.randomUUID(),
+                erMedlem = LøsningMaskinellMedlemskapYrkesskade.ErMedlem.UAVKLART
+            )
+        vilkår.håndterLøsning(maskinellLøsning)
+
+        val løsningId = UUID.randomUUID()
+        val ukjentLøsningId = UUID.randomUUID()
+        val manuellLøsning = LøsningManuellMedlemskapYrkesskade(
+            løsningId = løsningId,
+            vurdertAv = "Y",
+            tidspunktForVurdering = LocalDateTime.now(),
+            erMedlem = LøsningManuellMedlemskapYrkesskade.ErMedlem.NEI
+        )
+        vilkår.håndterLøsning(manuellLøsning)
+
+        val kvalitetssikring = KvalitetssikringMedlemskapYrkesskade(
+            kvalitetssikringId = UUID.randomUUID(),
+            løsningId = ukjentLøsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            erGodkjent = false,
+            begrunnelse = "NEI"
+        )
+        vilkår.håndterKvalitetssikring(kvalitetssikring)
+
+        assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
 
     private fun assertHarBehov(hendelse: Hendelse) {

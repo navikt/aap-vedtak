@@ -126,13 +126,13 @@ internal class MedlemskapYrkesskade private constructor(
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
         ) {
             vilkårsvurdering.totrinnskontroller.leggTilKvalitetssikring(kvalitetssikring)
+            val totrinnskontroll = vilkårsvurdering.totrinnskontroller.last()
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
-                    OppfyltManueltKvalitetssikret,
-                    kvalitetssikring
-                )
+                totrinnskontroll.erGodkjent() ->
+                    vilkårsvurdering.tilstand(OppfyltManueltKvalitetssikret, kvalitetssikring)
 
-                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
+                totrinnskontroll.erTotrinnskontrollGjennomført() ->
+                    vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
@@ -161,13 +161,13 @@ internal class MedlemskapYrkesskade private constructor(
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
         ) {
             vilkårsvurdering.totrinnskontroller.leggTilKvalitetssikring(kvalitetssikring)
+            val totrinnskontroll = vilkårsvurdering.totrinnskontroller.last()
             when {
-                kvalitetssikring.erGodkjent() -> vilkårsvurdering.tilstand(
-                    IkkeOppfyltManueltKvalitetssikret,
-                    kvalitetssikring
-                )
+                totrinnskontroll.erGodkjent() ->
+                    vilkårsvurdering.tilstand(IkkeOppfyltManueltKvalitetssikret, kvalitetssikring)
 
-                else -> vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
+                totrinnskontroll.erTotrinnskontrollGjennomført() ->
+                    vilkårsvurdering.tilstand(AvventerManuellVurdering, kvalitetssikring)
             }
         }
 
