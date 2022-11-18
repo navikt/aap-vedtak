@@ -1,6 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException
+import no.nav.aap.domene.Vedtak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.MedlemskapYrkesskade.*
 import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.gjenopprett
@@ -31,6 +32,10 @@ internal class MedlemskapYrkesskade private constructor(
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert, emptyList(), emptyList())
 
     override fun <T> callWithReceiver(block: MedlemskapYrkesskade.() -> T) = this.block()
+
+    override fun lagSnapshot(vedtak: Vedtak) {
+        totrinnskontroller.lastOrNull()?.let(vedtak::leggTilTotrinnskontroll)
+    }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<MedlemskapYrkesskade, MedlemskapYrkesskadeModellApi>() {
         override fun håndterSøknad(

@@ -32,7 +32,7 @@ internal class Paragraf_11_5 private constructor(
     override fun <T> callWithReceiver(block: Paragraf_11_5.() -> T) = this.block()
 
     override fun lagSnapshot(vedtak: Vedtak) {
-        vedtak.leggTilTotrinnskontroll(totrinnskontroller.last())
+        totrinnskontroller.lastOrNull()?.let(vedtak::leggTilTotrinnskontroll)
     }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_11_5, Paragraf_11_5ModellApi>() {

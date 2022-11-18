@@ -1,6 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
+import no.nav.aap.domene.Vedtak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_11_4AndreOgTredjeLedd.AvventerManuellVurdering
 import no.nav.aap.domene.vilkår.Totrinnskontroll.Companion.gjenopprett
@@ -31,6 +32,10 @@ internal class Paragraf_11_4AndreOgTredjeLedd private constructor(
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert, emptyList())
 
     override fun <T> callWithReceiver(block: Paragraf_11_4AndreOgTredjeLedd.() -> T) = this.block()
+
+    override fun lagSnapshot(vedtak: Vedtak) {
+        totrinnskontroller.lastOrNull()?.let(vedtak::leggTilTotrinnskontroll)
+    }
 
     private fun vurderAlder(hendelse: Hendelse, fødselsdato: Fødselsdato, vurderingsdato: LocalDate) {
         if (fødselsdato.erUnder62(vurderingsdato)) {

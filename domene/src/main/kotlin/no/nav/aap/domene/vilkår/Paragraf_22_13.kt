@@ -1,6 +1,7 @@
 package no.nav.aap.domene.vilkår
 
 import no.nav.aap.domene.UlovligTilstandException.Companion.ulovligTilstand
+import no.nav.aap.domene.Vedtak
 import no.nav.aap.domene.entitet.Fødselsdato
 import no.nav.aap.domene.vilkår.Paragraf_22_13.AvventerManuellVurdering
 import no.nav.aap.domene.vilkår.Paragraf_22_13.IkkeRelevant
@@ -46,6 +47,10 @@ internal class Paragraf_22_13 private constructor(
     internal constructor() : this(UUID.randomUUID(), IkkeVurdert, emptyList(), emptyList())
 
     override fun <T> callWithReceiver(block: Paragraf_22_13.() -> T) = this.block()
+
+    override fun lagSnapshot(vedtak: Vedtak) {
+        totrinnskontroller.lastOrNull()?.let(vedtak::leggTilTotrinnskontroll)
+    }
 
     object IkkeVurdert : Tilstand.IkkeVurdert<Paragraf_22_13, Paragraf_22_13ModellApi>() {
         override fun håndterSøknad(

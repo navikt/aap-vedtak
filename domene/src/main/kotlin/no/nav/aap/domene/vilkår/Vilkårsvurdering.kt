@@ -48,6 +48,14 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF,
         internal operator fun plus(other: Ledd) = listOf(this, other)
     }
 
+    internal companion object {
+        private val log = LoggerFactory.getLogger("Vilkårsvurdering")
+        internal fun Iterable<Vilkårsvurdering<*, *>>.toDto() = map(Vilkårsvurdering<*, *>::toDto)
+        internal fun Iterable<Vilkårsvurdering<*, *>>.lagSnapshot(vedtak: Vedtak) = forEach { it.lagSnapshot(vedtak) }
+    }
+
+    internal open fun lagSnapshot(vedtak: Vedtak) {}
+
     internal fun accept(visitor: VilkårsvurderingVisitor) = callWithReceiver {
         tilstand.preAccept(this, visitor)
     }
@@ -181,7 +189,6 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF,
     internal fun håndterKvalitetssikring(kvalitetssikring: KvalitetssikringParagraf_11_29) = callWithReceiver {
         tilstand.håndterKvalitetssikring(this, kvalitetssikring)
     }
-
 
     protected fun toDto(): VilkårsvurderingModellApi = callWithReceiver {
         tilstand.toDto(this)
@@ -548,13 +555,5 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF,
                 accept(vilkårsvurdering, visitor)
             }
         }
-    }
-
-    internal open fun lagSnapshot(vedtak: Vedtak) {}
-
-    internal companion object {
-        private val log = LoggerFactory.getLogger("Vilkårsvurdering")
-        internal fun Iterable<Vilkårsvurdering<*, *>>.toDto() = map(Vilkårsvurdering<*, *>::toDto)
-        internal fun Iterable<Vilkårsvurdering<*, *>>.lagSnapshot(vedtak: Vedtak) = forEach { it.lagSnapshot(vedtak) }
     }
 }
