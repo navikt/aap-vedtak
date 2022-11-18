@@ -196,7 +196,7 @@ internal class Paragraf_11_27FørsteLedd private constructor(
         }
 
         private fun gjenopprettLøsninger(løsninger: List<LøsningParagraf_11_27_FørsteLedd_ModellApi>) =
-            løsninger.map(LøsningParagraf_11_27_FørsteLedd_ModellApi::gjenopprett)
+            løsninger.map(LøsningParagraf_11_27_FørsteLedd_ModellApi::toLøsning)
 
         private fun gjenopprettTotrinnskontroller(totrinnskontroller: List<TotrinnskontrollModellApi<LøsningParagraf_22_13ModellApi, KvalitetssikringParagraf_22_13ModellApi>>) =
             totrinnskontroller.gjenopprett(

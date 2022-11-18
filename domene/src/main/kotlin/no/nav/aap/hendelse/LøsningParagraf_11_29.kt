@@ -53,7 +53,7 @@ internal class KvalitetssikringParagraf_11_29(
         }
     }
 
-    internal fun erGodkjent() = erGodkjent
+    override fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     override fun toDto() = KvalitetssikringParagraf_11_29ModellApi(
         kvalitetssikringId = kvalitetssikringId,

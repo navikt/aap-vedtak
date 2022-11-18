@@ -15,6 +15,8 @@ internal class Totrinnskontroll<LØSNING, KVALITETSSIKRING> private constructor(
 
     internal fun erTotrinnskontrollGjennomført() = kvalitetssikring != null
 
+    internal fun erGodkjent() = kvalitetssikring?.erGodkjent() ?: false
+
     internal fun leggTilKvalitetssikring(kvalitetssikring: KVALITETSSIKRING) {
         this.kvalitetssikring = kvalitetssikring
     }

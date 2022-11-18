@@ -62,7 +62,7 @@ internal class KvalitetssikringParagraf_11_4AndreOgTredjeLedd(
         }
     }
 
-    internal fun erGodkjent() = erGodkjent
+    override fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     override fun toDto() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
         kvalitetssikringId = kvalitetssikringId,

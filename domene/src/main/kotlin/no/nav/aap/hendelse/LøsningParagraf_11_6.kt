@@ -57,7 +57,7 @@ internal class KvalitetssikringParagraf_11_6(
         internal fun Iterable<KvalitetssikringParagraf_11_6>.toDto() = map(KvalitetssikringParagraf_11_6::toDto)
     }
 
-    internal fun erGodkjent() = erGodkjent
+    override fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
 
     override fun matchMedLøsning(

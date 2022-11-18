@@ -14,7 +14,7 @@ data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
     val løsningId: UUID,
     val tidspunktForVurdering: LocalDateTime,
     val svangerskapspenger: SvangerskapspengerModellApi
-) {
+) : LøsningModellApi() {
     constructor(
         svangerskapspenger: SvangerskapspengerModellApi
     ) : this(
@@ -25,12 +25,12 @@ data class LøsningParagraf_11_27_FørsteLedd_ModellApi(
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
-        val løsning = gjenopprett()
+        val løsning = toLøsning()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    internal fun gjenopprett() = LøsningParagraf_11_27_FørsteLedd(
+    override fun toLøsning() = LøsningParagraf_11_27_FørsteLedd(
         løsningId = løsningId,
         tidspunktForVurdering = tidspunktForVurdering,
         svangerskapspenger = svangerskapspenger.gjenopprett()
@@ -57,7 +57,7 @@ data class KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi(
     val tidspunktForKvalitetssikring: LocalDateTime,
     val erGodkjent: Boolean,
     val begrunnelse: String
-) {
+) : KvalitetssikringModellApi() {
     constructor(
         løsningId: UUID,
         kvalitetssikretAv: String,
@@ -80,7 +80,7 @@ data class KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi(
         return modellSøker.toDto() to kvalitetssikring.behov().toDto(søker.personident)
     }
 
-    private fun toKvalitetssikring() = KvalitetssikringParagraf_11_27_FørsteLedd(
+    override fun toKvalitetssikring() = KvalitetssikringParagraf_11_27_FørsteLedd(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

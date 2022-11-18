@@ -1,6 +1,9 @@
 package no.nav.aap.hendelse
 
 import no.nav.aap.domene.entitet.Periode
+import no.nav.aap.domene.vilkår.Kvalitetssikring
+import no.nav.aap.domene.vilkår.Løsning
+import no.nav.aap.domene.vilkår.Totrinnskontroll
 import no.nav.aap.domene.visitor.VilkårsvurderingVisitor
 import no.nav.aap.modellapi.KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi
 import no.nav.aap.modellapi.LøsningParagraf_11_27_FørsteLedd_ModellApi
@@ -13,12 +16,12 @@ internal class LøsningParagraf_11_27_FørsteLedd(
     private val løsningId: UUID,
     private val tidspunktForVurdering: LocalDateTime,
     private val svangerskapspenger: Svangerskapspenger
-) : Hendelse() {
+) : Hendelse(), Løsning<LøsningParagraf_11_27_FørsteLedd, KvalitetssikringParagraf_11_27_FørsteLedd> {
     internal companion object {
         internal fun Iterable<LøsningParagraf_11_27_FørsteLedd>.toDto() = map(LøsningParagraf_11_27_FørsteLedd::toDto)
     }
 
-    internal fun accept(visitor: VilkårsvurderingVisitor) {
+    override fun accept(visitor: VilkårsvurderingVisitor) {
         visitor.visitLøsningParagraf_11_27(
             løsning = this,
             løsningId = løsningId,
@@ -28,7 +31,14 @@ internal class LøsningParagraf_11_27_FørsteLedd(
 
     internal fun harEnFullYtelse() = svangerskapspenger.erFullYtelse()
 
-    internal fun toDto() = LøsningParagraf_11_27_FørsteLedd_ModellApi(
+    override fun matchMedKvalitetssikring(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_27_FørsteLedd, KvalitetssikringParagraf_11_27_FørsteLedd>,
+        kvalitetssikring: KvalitetssikringParagraf_11_27_FørsteLedd
+    ) {
+        kvalitetssikring.matchMedLøsning(totrinnskontroll, løsningId)
+    }
+
+    override fun toDto() = LøsningParagraf_11_27_FørsteLedd_ModellApi(
         løsningId = løsningId,
         tidspunktForVurdering = tidspunktForVurdering,
         svangerskapspenger = svangerskapspenger.toModellApi()
@@ -60,16 +70,25 @@ internal class KvalitetssikringParagraf_11_27_FørsteLedd(
     private val tidspunktForKvalitetssikring: LocalDateTime,
     private val erGodkjent: Boolean,
     private val begrunnelse: String
-) : Hendelse() {
+) : Hendelse(), Kvalitetssikring<LøsningParagraf_11_27_FørsteLedd, KvalitetssikringParagraf_11_27_FørsteLedd> {
 
     internal companion object {
         internal fun Iterable<KvalitetssikringParagraf_11_27_FørsteLedd>.toDto() =
             map(KvalitetssikringParagraf_11_27_FørsteLedd::toDto)
     }
 
-    internal fun erGodkjent() = erGodkjent
+    override fun matchMedLøsning(
+        totrinnskontroll: Totrinnskontroll<LøsningParagraf_11_27_FørsteLedd, KvalitetssikringParagraf_11_27_FørsteLedd>,
+        løsningId: UUID
+    ) {
+        if(this.løsningId == løsningId){
+            totrinnskontroll.leggTilKvalitetssikring(this)
+        }
+    }
+
+    override fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
-    internal fun toDto() = KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi(
+    override fun toDto() = KvalitetssikringParagraf_11_27_FørsteLedd_ModellApi(
         kvalitetssikringId = kvalitetssikringId,
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,

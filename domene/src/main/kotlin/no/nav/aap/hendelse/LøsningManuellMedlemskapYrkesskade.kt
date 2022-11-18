@@ -59,7 +59,7 @@ internal class KvalitetssikringMedlemskapYrkesskade(
         }
     }
 
-    internal fun erGodkjent() = erGodkjent
+    override fun erGodkjent() = erGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
     override fun toDto() = KvalitetssikringMedlemskapYrkesskadeModellApi(
         kvalitetssikringId = kvalitetssikringId,
