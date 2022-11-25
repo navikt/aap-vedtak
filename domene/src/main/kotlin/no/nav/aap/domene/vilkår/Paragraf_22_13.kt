@@ -129,6 +129,14 @@ internal class Paragraf_22_13 private constructor(
             visitor.postVisitParagraf_22_13(vilkårsvurdering, vilkårsvurdering.søknadstidspunkt)
         }
 
+        override fun håndterLøsning(vilkårsvurdering: Paragraf_22_13, løsning: LøsningParagraf_22_13) {
+            vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
+            if (løsning.bestemmesAv22_13())
+                vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
+            else
+                vilkårsvurdering.tilstand(IkkeRelevant, løsning)
+        }
+
         override fun toDto(vilkårsvurdering: Paragraf_22_13): Paragraf_22_13ModellApi =
             vilkårsvurdering.toParagraf_22_13ModellApi(
                 tilstandsnavn = tilstandsnavn,

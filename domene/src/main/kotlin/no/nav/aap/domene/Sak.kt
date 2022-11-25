@@ -318,6 +318,15 @@ internal class Sak private constructor(
                 hendelse.opprettBehov(BehovIverksettVedtak(sak.vedtak))
             }
 
+            override fun <T : Hendelse> håndterLøsning(
+                sak: Sak,
+                løsning: T,
+                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
+            ) {
+                sak.sakstype.håndter(løsning, håndterLøsning)
+                sak.tilstand(BeregnInntekt, løsning)
+            }
+
             override fun toDto(sak: Sak) = SakModellApi(
                 saksid = sak.saksid,
                 tilstand = tilstandsnavn.name,
