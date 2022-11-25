@@ -233,8 +233,10 @@ internal class ApiTest {
                     løsningId = løsningsid5(5),
                     kvalitetssikretAv = "X",
                     tidspunktForKvalitetssikring = LocalDateTime.now(),
-                    erGodkjent = true,
-                    begrunnelse = ""
+                    kravOmNedsattArbeidsevneErGodkjent = true,
+                    kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+                    nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                    nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
                 )
             }
 

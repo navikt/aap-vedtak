@@ -125,7 +125,16 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), true, "JA")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = løsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -159,7 +168,16 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), true, "JA")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = løsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -193,7 +211,16 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), false, "NEI")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = løsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = false,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -227,7 +254,16 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), løsningId, "X", LocalDateTime.now(), false, "NEI")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = løsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = false,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -262,7 +298,16 @@ internal class `§11-5 Test` {
 
         val kvalitetssikringId = UUID.randomUUID()
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(kvalitetssikringId, løsningId, "X", LocalDateTime.now(), true, "NEI")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = kvalitetssikringId,
+                løsningId = løsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         val vedtak = Vedtak(
@@ -318,7 +363,16 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning1)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), ukjentLøsningId, "X", LocalDateTime.now(), false, "JA")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = ukjentLøsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = false,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
@@ -352,7 +406,16 @@ internal class `§11-5 Test` {
         vilkår.håndterLøsning(løsning1)
 
         val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(UUID.randomUUID(), ukjentLøsningId, "X", LocalDateTime.now(), false, "JA")
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = ukjentLøsningId,
+                kvalitetssikretAv = "X",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = false,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
+            )
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)

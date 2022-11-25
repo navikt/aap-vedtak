@@ -20,7 +20,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 18
+        const val VERSION = 19
         const val INIT_SEKVENS = 0L
     }
 
@@ -449,8 +449,10 @@ data class SøkereKafkaDto(
         val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
-        val erGodkjent: Boolean,
-        val begrunnelse: String?,
+        val kravOmNedsattArbeidsevneErGodkjent: Boolean,
+        val kravOmNedsattArbeidsevneErGodkjentBegrunnelse: String?,
+        val nedsettelseSkyldesSykdomEllerSkadeErGodkjent: Boolean,
+        val nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse: String?
     )
 
     data class KvalitetssikringParagraf_11_5YrkesskadeKafkaDto(

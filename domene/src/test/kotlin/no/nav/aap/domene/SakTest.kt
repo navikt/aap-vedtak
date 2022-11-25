@@ -569,8 +569,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -814,8 +816,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -1072,8 +1076,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_VURDERING", sak)
@@ -1356,8 +1362,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -1608,8 +1616,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -1848,8 +1858,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
@@ -2092,8 +2104,10 @@ internal class SakTest {
                 løsningId = løsningId_11_5,
                 kvalitetssikretAv = "fatter",
                 tidspunktForKvalitetssikring = LocalDateTime.now(),
-                erGodkjent = true,
-                begrunnelse = "JA"
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
             )
         )
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)

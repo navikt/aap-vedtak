@@ -28,20 +28,23 @@ private fun Kvalitetssikring_11_3KafkaDto.toModellApi() = KvalitetssikringParagr
     begrunnelse = begrunnelse
 )
 
-private fun Kvalitetssikring_11_4_ledd2_ledd3KafkaDto.toModellApi() = KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
-    løsningId = løsningId,
-    kvalitetssikretAv = kvalitetssikretAv,
-    tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-    erGodkjent = erGodkjent,
-    begrunnelse = begrunnelse
-)
+private fun Kvalitetssikring_11_4_ledd2_ledd3KafkaDto.toModellApi() =
+    KvalitetssikringParagraf_11_4AndreOgTredjeLeddModellApi(
+        løsningId = løsningId,
+        kvalitetssikretAv = kvalitetssikretAv,
+        tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
+        erGodkjent = erGodkjent,
+        begrunnelse = begrunnelse
+    )
 
 private fun Kvalitetssikring_11_5KafkaDto.toModellApi() = KvalitetssikringParagraf_11_5ModellApi(
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-    erGodkjent = erGodkjent,
-    begrunnelse = begrunnelse
+    kravOmNedsattArbeidsevneErGodkjent = kravOmNedsattArbeidsevneErGodkjent,
+    kravOmNedsattArbeidsevneErGodkjentBegrunnelse = kravOmNedsattArbeidsevneErGodkjentBegrunnelse,
+    nedsettelseSkyldesSykdomEllerSkadeErGodkjent = nedsettelseSkyldesSykdomEllerSkadeErGodkjent,
+    nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse,
 )
 
 private fun Kvalitetssikring_11_6KafkaDto.toModellApi() = KvalitetssikringParagraf_11_6ModellApi(

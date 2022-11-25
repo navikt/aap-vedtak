@@ -58,8 +58,10 @@ internal class TotrinnskontrollTest {
             løsningId = løsningId,
             kvalitetssikretAv = "",
             tidspunktForKvalitetssikring = LocalDateTime.now(),
-            erGodkjent = true,
-            begrunnelse = null
+            kravOmNedsattArbeidsevneErGodkjent = true,
+            kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
         )
 
         listOf(totrinnskontroll).leggTilKvalitetssikring(kvalitetssikring)
@@ -91,8 +93,10 @@ internal class TotrinnskontrollTest {
             løsningId = løsningId,
             kvalitetssikretAv = "",
             tidspunktForKvalitetssikring = LocalDateTime.now(),
-            erGodkjent = true,
-            begrunnelse = null
+            kravOmNedsattArbeidsevneErGodkjent = true,
+            kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
         )
 
         listOf(totrinnskontroll).leggTilKvalitetssikring(kvalitetssikring)
@@ -124,8 +128,10 @@ internal class TotrinnskontrollTest {
             løsningId = løsningId,
             kvalitetssikretAv = "",
             tidspunktForKvalitetssikring = LocalDateTime.now(),
-            erGodkjent = false,
-            begrunnelse = null
+            kravOmNedsattArbeidsevneErGodkjent = false,
+            kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "anyString",
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "anyString",
         )
 
         listOf(totrinnskontroll).leggTilKvalitetssikring(kvalitetssikring)

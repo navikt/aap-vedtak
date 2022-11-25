@@ -71,15 +71,17 @@ internal class KvalitetssikringParagraf_11_5(
     private val løsningId: UUID,
     private val kvalitetssikretAv: String,
     private val tidspunktForKvalitetssikring: LocalDateTime,
-    private val erGodkjent: Boolean,
-    private val begrunnelse: String?,
+    private val kravOmNedsattArbeidsevneErGodkjent: Boolean,
+    private val kravOmNedsattArbeidsevneErGodkjentBegrunnelse: String?,
+    private val nedsettelseSkyldesSykdomEllerSkadeErGodkjent: Boolean,
+    private val nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse: String?
 ) : Hendelse(), Kvalitetssikring<LøsningParagraf_11_5, KvalitetssikringParagraf_11_5> {
 
     internal companion object {
         internal fun Iterable<KvalitetssikringParagraf_11_5>.toDto() = map(KvalitetssikringParagraf_11_5::toDto)
     }
 
-    override fun erGodkjent() = erGodkjent
+    override fun erGodkjent() = kravOmNedsattArbeidsevneErGodkjent && nedsettelseSkyldesSykdomEllerSkadeErGodkjent
     internal fun kvalitetssikretAv() = kvalitetssikretAv
 
     override fun matchMedLøsning(
@@ -96,8 +98,9 @@ internal class KvalitetssikringParagraf_11_5(
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-        erGodkjent = erGodkjent,
-        begrunnelse = begrunnelse
+        kravOmNedsattArbeidsevneErGodkjent = kravOmNedsattArbeidsevneErGodkjent,
+        kravOmNedsattArbeidsevneErGodkjentBegrunnelse = kravOmNedsattArbeidsevneErGodkjentBegrunnelse,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjent = nedsettelseSkyldesSykdomEllerSkadeErGodkjent,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse,
     )
 }
-

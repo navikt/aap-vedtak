@@ -72,23 +72,29 @@ data class KvalitetssikringParagraf_11_5ModellApi(
     val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
-    val erGodkjent: Boolean,
-    val begrunnelse: String?,
+    val kravOmNedsattArbeidsevneErGodkjent: Boolean,
+    val kravOmNedsattArbeidsevneErGodkjentBegrunnelse: String?,
+    val nedsettelseSkyldesSykdomEllerSkadeErGodkjent: Boolean,
+    val nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse: String?
 ) : KvalitetssikringModellApi() {
 
     constructor(
         løsningId: UUID,
         kvalitetssikretAv: String,
         tidspunktForKvalitetssikring: LocalDateTime,
-        erGodkjent: Boolean,
-        begrunnelse: String?,
+        kravOmNedsattArbeidsevneErGodkjent: Boolean,
+        kravOmNedsattArbeidsevneErGodkjentBegrunnelse: String?,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjent: Boolean,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse: String?
     ) : this(
         kvalitetssikringId = UUID.randomUUID(),
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-        erGodkjent = erGodkjent,
-        begrunnelse = begrunnelse
+        kravOmNedsattArbeidsevneErGodkjent = kravOmNedsattArbeidsevneErGodkjent,
+        kravOmNedsattArbeidsevneErGodkjentBegrunnelse = kravOmNedsattArbeidsevneErGodkjentBegrunnelse,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjent = nedsettelseSkyldesSykdomEllerSkadeErGodkjent,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse,
     )
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
@@ -103,8 +109,10 @@ data class KvalitetssikringParagraf_11_5ModellApi(
         løsningId = løsningId,
         kvalitetssikretAv = kvalitetssikretAv,
         tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-        erGodkjent = erGodkjent,
-        begrunnelse = begrunnelse
+        kravOmNedsattArbeidsevneErGodkjent = kravOmNedsattArbeidsevneErGodkjent,
+        kravOmNedsattArbeidsevneErGodkjentBegrunnelse = kravOmNedsattArbeidsevneErGodkjentBegrunnelse,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjent = nedsettelseSkyldesSykdomEllerSkadeErGodkjent,
+        nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse,
     )
 }
 

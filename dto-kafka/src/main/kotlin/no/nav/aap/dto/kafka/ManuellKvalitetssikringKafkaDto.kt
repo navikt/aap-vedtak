@@ -31,8 +31,10 @@ data class Kvalitetssikring_11_5KafkaDto(
     val løsningId: UUID,
     val kvalitetssikretAv: String,
     val tidspunktForKvalitetssikring: LocalDateTime,
-    val erGodkjent: Boolean,
-    val begrunnelse: String?,
+    val kravOmNedsattArbeidsevneErGodkjent: Boolean,
+    val kravOmNedsattArbeidsevneErGodkjentBegrunnelse: String?,
+    val nedsettelseSkyldesSykdomEllerSkadeErGodkjent: Boolean,
+    val nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse: String?,
 )
 
 data class Kvalitetssikring_11_6KafkaDto(
