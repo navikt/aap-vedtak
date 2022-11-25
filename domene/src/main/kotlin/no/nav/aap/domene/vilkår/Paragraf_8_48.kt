@@ -143,6 +143,14 @@ internal class Paragraf_8_48 private constructor(
     }
 
     object IkkeRelevant : Tilstand.IkkeRelevant<Paragraf_8_48, Paragraf_8_48ModellApi>() {
+        override fun håndterLøsning(vilkårsvurdering: Paragraf_8_48, løsning: LøsningParagraf_22_13) {
+            if (løsning.bestemmesAv8_48()) {
+
+                vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
+                vilkårsvurdering.tilstand(OppfyltAvventerKvalitetssikring, løsning)
+            }
+        }
+
         override fun toDto(vilkårsvurdering: Paragraf_8_48): Paragraf_8_48ModellApi =
             vilkårsvurdering.toParagraf_8_48ModellApi(
                 tilstandsnavn = tilstandsnavn,
