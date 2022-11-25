@@ -11,6 +11,7 @@ import no.nav.aap.domene.visitor.VirkningsdatoVisitor
 import no.nav.aap.hendelse.*
 import no.nav.aap.hendelse.behov.BehovInntekter
 import no.nav.aap.hendelse.behov.BehovIverksettVedtak
+import no.nav.aap.hendelse.behov.Behov_8_48AndreLedd
 import no.nav.aap.modellapi.SakModellApi
 import org.slf4j.LoggerFactory
 import java.time.LocalDate
@@ -290,6 +291,10 @@ internal class Sak private constructor(
         }
 
         object VenterSykepenger : Tilstand(Tilstandsnavn.VENTER_SYKEPENGER) {
+            override fun onEntry(sak: Sak, hendelse: Hendelse) {
+                hendelse.opprettBehov(Behov_8_48AndreLedd())
+            }
+
             override fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
                 if (løsning.gjenståendeSykedager() == 0) {
                     sak.tilstand(VedtakIverksatt, løsning)
