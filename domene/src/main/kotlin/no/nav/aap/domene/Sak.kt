@@ -212,6 +212,14 @@ internal class Sak private constructor(
 
                 sak.tilstand(AvventerKvalitetssikring, løsning)
             }
+
+            override fun <T : Hendelse> håndterLøsning(
+                sak: Sak,
+                løsning: T,
+                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
+            ) {
+                sak.sakstype.håndter(løsning, håndterLøsning)
+            }
         }
 
         object AvventerKvalitetssikring : Tilstand(Tilstandsnavn.AVVENTER_KVALITETSSIKRING) {

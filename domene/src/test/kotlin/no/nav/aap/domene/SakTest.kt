@@ -1165,6 +1165,273 @@ internal class SakTest {
     }
 
     @Test
+    fun `Kan sende inn endring to ganger etter hverandre på et iverksatt vedtak før løsningen på inntekter beregner nytt vedtak`() {
+        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
+        val personident = Personident("12345678910")
+        val søknadstidspunkt = LocalDateTime.now()
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, søknadstidspunkt)
+        val sak = Sak()
+
+        sak.håndterSøknad(søknad, fødselsdato)
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningMaskinellParagraf_11_2(
+                UUID.randomUUID(),
+                LocalDateTime.now(),
+                LøsningMaskinellParagraf_11_2.ErMedlem.JA
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.HarIkke
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_27_FørsteLedd(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                svangerskapspenger = LøsningParagraf_11_27_FørsteLedd.Svangerskapspenger(
+                    periode = null,
+                    grad = null,
+                    vedtaksdato = null,
+                ),
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_3(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        val løsningId_11_5 = UUID.randomUUID()
+        sak.håndterLøsning(
+            LøsningParagraf_11_5(
+                løsningId = løsningId_11_5,
+                vurdertAv = "veileder",
+                tidspunktForVurdering = LocalDateTime.now(),
+                nedsattArbeidsevnegrad = LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+                    kravOmNedsattArbeidsevneErOppfylt = true,
+                    kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+                    nedsettelseSkyldesSykdomEllerSkade = true,
+                    nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+                    kilder = emptyList(),
+                    legeerklæringDato = null,
+                    sykmeldingDato = null,
+                )
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterInnstilling(
+            InnstillingParagraf_11_6(
+                innstillingId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
+            )
+        )
+        sak.håndterLøsning(
+            LøsningParagraf_11_6(
+                løsningId = UUID.randomUUID(),
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                harBehovForBehandling = true,
+                harBehovForTiltak = true,
+                harMulighetForÅKommeIArbeid = true,
+                individuellBegrunnelse = "Begrunnelse",
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_22_13(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+                "INGEN",
+                "",
+                null
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_29(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                true
+            )
+        )
+        assertTilstand("AVVENTER_VURDERING", sak)
+
+        sak.håndterLøsning(
+            LøsningParagraf_11_19(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                13 september 2021
+            )
+        )
+        assertTilstand("BEREGN_INNTEKT", sak)
+
+        sak.håndterLøsning(
+            LøsningInntekter(
+                listOf(
+                    Inntekt(Arbeidsgiver("123456789"), januar(2020), 500000.beløp),
+                    Inntekt(Arbeidsgiver("123456789"), januar(2019), 500000.beløp),
+                    Inntekt(Arbeidsgiver("123456789"), januar(2018), 500000.beløp)
+                )
+            ),
+            fødselsdato
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_2(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_3(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_5(
+                kvalitetssikringId = UUID.randomUUID(),
+                løsningId = løsningId_11_5,
+                kvalitetssikretAv = "fatter",
+                tidspunktForKvalitetssikring = LocalDateTime.now(),
+                kravOmNedsattArbeidsevneErGodkjent = true,
+                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "JA",
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "JA",
+            )
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_6(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_22_13(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        sak.håndterKvalitetssikring(
+            KvalitetssikringParagraf_11_19(
+                kvalitetssikringId = UUID.randomUUID(),
+                UUID.randomUUID(),
+                "beslutter",
+                LocalDateTime.now(),
+                true,
+                "JA"
+            )
+        )
+
+        assertTilstand("VEDTAK_FATTET", sak)
+
+        val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
+        sak.håndterIverksettelse(iverksettelse)
+
+        assertTilstand("VEDTAK_IVERKSATT", sak)
+
+        val sakerFørEndring = listOf(sak).toDto()
+        val vedtakFørEndring = requireNotNull(sakerFørEndring.single().vedtak) { "Det skal være ett vedtak" }
+        assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
+
+        val endretVirkningsdato = LocalDate.now().minusDays(10)
+        sak.håndterLøsning(
+            LøsningParagraf_22_13(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_22_13.BestemmesAv.ermiraSays,
+                "INGEN",
+                "",
+                endretVirkningsdato
+            )
+        )
+        assertTilstand("BEREGN_INNTEKT", sak)
+        sak.håndterLøsning(
+            LøsningParagraf_22_13(
+                løsningId = UUID.randomUUID(),
+                "saksbehandler",
+                LocalDateTime.now(),
+                LøsningParagraf_22_13.BestemmesAv.ermiraSays,
+                "INGEN",
+                "",
+                endretVirkningsdato.plusDays(1)
+            )
+        )
+        assertTilstand("BEREGN_INNTEKT", sak)
+
+        sak.håndterLøsning(
+            LøsningInntekter(
+                listOf(
+                    Inntekt(Arbeidsgiver("123456789"), januar(2020), 500000.beløp),
+                    Inntekt(Arbeidsgiver("123456789"), januar(2019), 500000.beløp),
+                    Inntekt(Arbeidsgiver("123456789"), januar(2018), 500000.beløp)
+                )
+            ),
+            fødselsdato
+        )
+        assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
+
+        val saker = listOf(sak).toDto()
+        val vedtak = requireNotNull(saker.single().vedtak) { "Det skal være ett vedtak" }
+        assertEquals(endretVirkningsdato.plusDays(1), vedtak.virkningsdato)
+    }
+
+    @Test
     fun `Kan endre virkningstidspunkt fra søknadstidspunkt til maksdato på sykepenger på et iverksatt vedtak`() {
         val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
         val personident = Personident("12345678910")
