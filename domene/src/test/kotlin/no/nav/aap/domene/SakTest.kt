@@ -291,7 +291,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val saker = listOf(sak).toDto()
@@ -367,7 +367,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -456,7 +456,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -533,7 +533,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -624,7 +624,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -711,7 +711,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -801,7 +801,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         // Behandle underkjent løsning på nytt
@@ -898,7 +898,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         sak.håndterIverksettelse(
@@ -977,7 +977,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1058,7 +1058,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1139,7 +1139,7 @@ internal class SakTest {
         kjør22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjørStandard11_19Kvalitetssikring(sak)
+        kjør11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1389,7 +1389,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjørStandard11_19Kvalitetssikring(sak: Sak) {
+    private fun kjør11_19KvalitetssikringGodkjent(sak: Sak) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_19(
                 kvalitetssikringId = UUID.randomUUID(),
