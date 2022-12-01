@@ -29,11 +29,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(18), "12345678910")
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -48,11 +44,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar en søknad der søker er under 18 år får vi et ikke-oppfylt aldersvilkår`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(17))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(17), "12345678910")
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -67,11 +59,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(18), "12345678910")
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -103,11 +91,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar løsning på behov om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(18), "12345678910")
 
         søker.håndterLøsning(
             LøsningParagraf_11_5(
@@ -143,11 +127,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar en søknad får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne og medlemskap`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(18), "12345678910")
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -179,11 +159,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar en søknad med bruker over 62 får vi et oppfylt aldersvilkår og venter på løsning på behov om nedsatt arbeidsevne og medlemskap`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(65))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(65), "12345678910")
 
         val saker = søker.toDto().saker
         val sakstype = requireNotNull(saker.first().sakstyper) { "Mangler sakstype" }
@@ -215,11 +191,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar løsning på behov om nedsatt arbeidsevne med 50 prosent, blir vilkår om nedsatt arbeidsevne oppfylt, men ikke vilkår om medlemskap`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(18), "12345678910")
 
         søker.håndterLøsning(
             LøsningParagraf_11_5(
@@ -268,11 +240,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Hvis vi mottar løsning på behov om der bruker er medlem, blir vilkår om medlemskap oppfylt, men ikke vilkår om nedsatt arbeidsevne`() {
-        val fødselsdato = Fødselsdato(LocalDate.now().minusYears(18))
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(LocalDate.now().minusYears(18), "12345678910")
 
         søker.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -312,11 +280,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt`() {
-        val fødselsdato = Fødselsdato(17 juli 1995)
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(17 juli 1995, "12345678910")
 
         søker.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
@@ -434,10 +398,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt - med serialisering og deserialisering`() {
-        val fødselsdato = Fødselsdato(17 juli 1995)
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato)
-        var søkerModellApi: SøkerModellApi = søknad.opprettSøker().apply { håndterSøknad(søknad) }.toDto()
+        var søkerModellApi: SøkerModellApi = opprettSøkerMedSøknad(17 juli 1995, "12345678910").toDto()
 
         fun medSøker(block: Søker.() -> Unit) {
             val søker = Søker.gjenopprett(søkerModellApi)
@@ -582,11 +543,7 @@ internal class SøkerComponentTest {
 
     @Test
     fun `Alle relevante vilkår blir oppfylt og at vi beregner inntekt for student`() {
-        val fødselsdato = Fødselsdato(17 juli 1995)
-        val personident = Personident("12345678910")
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, erStudent = true)
-        val søker = søknad.opprettSøker()
-        søker.håndterSøknad(søknad)
+        val søker = opprettSøkerMedSøknad(17 juli 1995, "12345678910", erStudent = true)
 
         søker.håndterLøsning(
             LøsningParagraf_11_19(
@@ -622,6 +579,19 @@ internal class SøkerComponentTest {
         assertEquals("AVVENTER_KVALITETSSIKRING", dtoSøker.saker.single().tilstand)
         assertEquals("STUDENT", dtoSøker.saker.single().sakstyper.last().type)
         assertEquals(5.078089, dtoSøker.saker.single().vedtak?.inntektsgrunnlag?.grunnlagsfaktor)
+    }
+
+    private fun opprettSøkerMedSøknad(
+        dato: LocalDate,
+        ident: String,
+        søknadstidspunkt: LocalDateTime = LocalDateTime.now(),
+        erStudent: Boolean = false,
+        harTidligereYrkesskade: Søknad.HarYrkesskade = Søknad.HarYrkesskade.NEI
+    ): Søker {
+        val fødselsdato = Fødselsdato(dato)
+        val personident = Personident(ident)
+        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, søknadstidspunkt, erStudent, harTidligereYrkesskade)
+        return søknad.opprettSøker().apply { håndterSøknad(søknad) }
     }
 
     private fun assertTilstand(
