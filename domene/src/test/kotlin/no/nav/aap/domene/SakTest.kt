@@ -63,31 +63,31 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(Fødselsdato(LocalDate.now().minusYears(18)), "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_5LøsningNedsettelseTrue(sak, UUID.randomUUID())
+        håndter11_5LøsningNedsettelseTrue(sak, UUID.randomUUID())
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -136,7 +136,7 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
@@ -150,10 +150,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
@@ -169,10 +169,10 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
         val saker = listOf(sak).toDto()
@@ -245,53 +245,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val saker = listOf(sak).toDto()
@@ -321,53 +321,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -410,53 +410,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910", søknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -469,10 +469,10 @@ internal class SakTest {
         assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
 
         val endretVirkningsdato = LocalDate.now().minusDays(10)
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         val saker = listOf(sak).toDto()
@@ -487,53 +487,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910", søknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -546,13 +546,13 @@ internal class SakTest {
         assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
 
         val endretVirkningsdato = LocalDate.now().minusDays(10)
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato.plusDays(1))
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato.plusDays(1))
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         val saker = listOf(sak).toDto()
@@ -567,64 +567,54 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910", søknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val sisteDagMedSykepenger = LocalDate.now().plusDays(5)
-        sak.håndterLøsning(
-            LøsningSykepengedager(
-                løsningId = UUID.randomUUID(),
-                tidspunktForVurdering = LocalDateTime.now(),
-                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
-                    gjenståendeSykedager = 5,
-                    foreløpigBeregnetSluttPåSykepenger = sisteDagMedSykepenger,
-                    kilde = LøsningSykepengedager.Kilde.SPLEIS
-                )
-            )
-        )
+        håndterSykepengeløsningMedHar(sak, 5, sisteDagMedSykepenger)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -636,10 +626,10 @@ internal class SakTest {
         val vedtakFørEndring = requireNotNull(sakerFørEndring.single().vedtak) { "Det skal være ett vedtak" }
         assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         val saker = listOf(sak).toDto()
@@ -654,64 +644,54 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910", søknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val sisteDagMedSykepenger = LocalDate.now().plusDays(5)
-        sak.håndterLøsning(
-            LøsningSykepengedager(
-                løsningId = UUID.randomUUID(),
-                tidspunktForVurdering = LocalDateTime.now(),
-                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
-                    gjenståendeSykedager = 5,
-                    foreløpigBeregnetSluttPåSykepenger = sisteDagMedSykepenger,
-                    kilde = LøsningSykepengedager.Kilde.SPLEIS
-                )
-            )
-        )
+        håndterSykepengeløsningMedHar(sak, 5, sisteDagMedSykepenger)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -723,13 +703,13 @@ internal class SakTest {
         val vedtakFørEndring = requireNotNull(sakerFørEndring.single().vedtak) { "Det skal være ett vedtak" }
         assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelseEtterEndring = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -746,38 +726,38 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
         sak.håndterKvalitetssikring(
@@ -792,26 +772,26 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         // Behandle underkjent løsning på nytt
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val saker = listOf(sak).toDto()
@@ -842,63 +822,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        sak.håndterLøsning(
-            LøsningSykepengedager(
-                løsningId = UUID.randomUUID(),
-                tidspunktForVurdering = LocalDateTime.now(),
-                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
-                    gjenståendeSykedager = 0,
-                    foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
-                    kilde = LøsningSykepengedager.Kilde.SPLEIS,
-                )
-            )
-        )
+        håndterSykepengeløsningMedHar(sak, 0, LocalDate.now())
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         sak.håndterIverksettelse(
@@ -909,18 +879,7 @@ internal class SakTest {
 
         assertTilstand("VENTER_SYKEPENGER", sak)
 
-        sak.håndterLøsning(
-            LøsningSykepengedager(
-                løsningId = UUID.randomUUID(),
-                tidspunktForVurdering = LocalDateTime.now(),
-                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
-                    gjenståendeSykedager = 0,
-                    foreløpigBeregnetSluttPåSykepenger = LocalDate.now(),
-                    kilde = LøsningSykepengedager.Kilde.SPLEIS,
-                )
-            )
-        )
-
+        håndterSykepengeløsningMedHar(sak, 0, LocalDate.now())
         assertTilstand("VEDTAK_IVERKSATT", sak)
     }
 
@@ -931,53 +890,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910", søknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1002,10 +961,10 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørSykepengeLøsningMedHarIkke(sak)
+        håndterSykepengeLøsningMedHarIkke(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
@@ -1021,44 +980,44 @@ internal class SakTest {
         )
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.svangerskapspenger)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.svangerskapspenger)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1083,63 +1042,53 @@ internal class SakTest {
         val sak = opprettSakOgHåndterSøknad(fødselsdato, "12345678910")
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjørMaskinellMedlemskapLøsningMedJa(sak)
+        håndterMaskinellMedlemskapLøsningMedJa(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        sak.håndterLøsning(
-            LøsningSykepengedager(
-                løsningId = UUID.randomUUID(),
-                tidspunktForVurdering = LocalDateTime.now(),
-                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
-                    gjenståendeSykedager = 0,
-                    foreløpigBeregnetSluttPåSykepenger = 30 september 2022,
-                    kilde = LøsningSykepengedager.Kilde.SPLEIS
-                )
-            )
-        )
+        håndterSykepengeløsningMedHar(sak, 0, 30 september 2022)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_27LøsningMedTommeSvangerskapspenger(sak)
+        håndter11_27LøsningMedTommeSvangerskapspenger(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_3LøsningOppfyltTrue(sak)
+        håndter11_3LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
         val løsningId_11_5 = UUID.randomUUID()
-        kjør11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
+        håndter11_5LøsningNedsettelseTrue(sak, løsningId_11_5)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_6LøsningOgInnstillingAltTrue(sak)
+        håndter11_6LøsningOgInnstillingAltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_29LøsningOppfyltTrue(sak)
+        håndter11_29LøsningOppfyltTrue(sak)
         assertTilstand("AVVENTER_VURDERING", sak)
 
-        kjør11_19Løsning(sak)
+        håndter11_19Løsning(sak)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        kjørStandardInntektLøsning(sak, fødselsdato)
+        håndterInntektLøsning500K(sak, fødselsdato)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_2KvalitetssikringGodkjent(sak)
+        håndter11_2KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_3KvalitetssikringGodkjent(sak)
+        håndter11_3KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
+        håndter11_5KvalitetssikringGodkjent(sak, løsningId_11_5)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_6KvalitetssikringGodkjent(sak)
+        håndter11_6KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør22_13KvalitetssikringGodkjent(sak)
+        håndter22_13KvalitetssikringGodkjent(sak)
         assertTilstand("AVVENTER_KVALITETSSIKRING", sak)
 
-        kjør11_19KvalitetssikringGodkjent(sak)
+        håndter11_19KvalitetssikringGodkjent(sak)
         assertTilstand("VEDTAK_FATTET", sak)
 
         val iverksettelse = IverksettelseAvVedtak("saksbehandler@nav.no")
@@ -1147,18 +1096,7 @@ internal class SakTest {
 
         assertTilstand("VENTER_SYKEPENGER", sak)
 
-        sak.håndterLøsning(
-            LøsningSykepengedager(
-                løsningId = UUID.randomUUID(),
-                tidspunktForVurdering = LocalDateTime.now(),
-                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
-                    gjenståendeSykedager = 0,
-                    foreløpigBeregnetSluttPåSykepenger = 30 september 2022,
-                    kilde = LøsningSykepengedager.Kilde.SPLEIS
-                )
-            )
-        )
-
+        håndterSykepengeløsningMedHar(sak, 0, 30 september 2022)
         assertTilstand("VEDTAK_IVERKSATT", sak)
 
         val saker = listOf(sak).toDto()
@@ -1184,7 +1122,7 @@ internal class SakTest {
         return Sak().apply { håndterSøknad(søknad, fødselsdato) }
     }
 
-    private fun kjørMaskinellMedlemskapLøsningMedJa(sak: Sak) {
+    private fun håndterMaskinellMedlemskapLøsningMedJa(sak: Sak) {
         sak.håndterLøsning(
             LøsningMaskinellParagraf_11_2(
                 UUID.randomUUID(),
@@ -1194,7 +1132,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjørSykepengeLøsningMedHarIkke(sak: Sak) {
+    private fun håndterSykepengeLøsningMedHarIkke(sak: Sak) {
         sak.håndterLøsning(
             LøsningSykepengedager(
                 løsningId = UUID.randomUUID(),
@@ -1204,7 +1142,21 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_27LøsningMedTommeSvangerskapspenger(sak: Sak) {
+    private fun håndterSykepengeløsningMedHar(sak: Sak, gjenståendeSykedager: Int, foreløpigBeregnetSluttPåSykepenger: LocalDate) {
+        sak.håndterLøsning(
+            LøsningSykepengedager(
+                løsningId = UUID.randomUUID(),
+                tidspunktForVurdering = LocalDateTime.now(),
+                sykepengedager = LøsningSykepengedager.Sykepengedager.Har(
+                    gjenståendeSykedager = gjenståendeSykedager,
+                    foreløpigBeregnetSluttPåSykepenger = foreløpigBeregnetSluttPåSykepenger,
+                    kilde = LøsningSykepengedager.Kilde.SPLEIS
+                )
+            )
+        )
+    }
+
+    private fun håndter11_27LøsningMedTommeSvangerskapspenger(sak: Sak) {
         sak.håndterLøsning(
             LøsningParagraf_11_27_FørsteLedd(
                 løsningId = UUID.randomUUID(),
@@ -1218,7 +1170,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_3LøsningOppfyltTrue(sak: Sak) {
+    private fun håndter11_3LøsningOppfyltTrue(sak: Sak) {
         sak.håndterLøsning(
             LøsningParagraf_11_3(
                 løsningId = UUID.randomUUID(),
@@ -1229,7 +1181,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_5LøsningNedsettelseTrue(sak: Sak, løsningId_11_5: UUID) {
+    private fun håndter11_5LøsningNedsettelseTrue(sak: Sak, løsningId_11_5: UUID) {
         sak.håndterLøsning(
             LøsningParagraf_11_5(
                 løsningId = løsningId_11_5,
@@ -1248,7 +1200,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_6LøsningOgInnstillingAltTrue(sak: Sak) {
+    private fun håndter11_6LøsningOgInnstillingAltTrue(sak: Sak) {
         sak.håndterInnstilling(
             InnstillingParagraf_11_6(
                 innstillingId = UUID.randomUUID(),
@@ -1273,7 +1225,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør22_13Løsning(sak: Sak, bestemmesAv: LøsningParagraf_22_13.BestemmesAv, manueltSattVirkningsdato: LocalDate = LocalDate.now()) {
+    private fun håndter22_13Løsning(sak: Sak, bestemmesAv: LøsningParagraf_22_13.BestemmesAv, manueltSattVirkningsdato: LocalDate = LocalDate.now()) {
         sak.håndterLøsning(
             LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
@@ -1287,7 +1239,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_29LøsningOppfyltTrue(sak: Sak) {
+    private fun håndter11_29LøsningOppfyltTrue(sak: Sak) {
         sak.håndterLøsning(
             LøsningParagraf_11_29(
                 løsningId = UUID.randomUUID(),
@@ -1298,7 +1250,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_19Løsning(sak: Sak) {
+    private fun håndter11_19Løsning(sak: Sak) {
         sak.håndterLøsning(
             LøsningParagraf_11_19(
                 løsningId = UUID.randomUUID(),
@@ -1309,7 +1261,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjørStandardInntektLøsning(sak: Sak, fødselsdato: Fødselsdato) {
+    private fun håndterInntektLøsning500K(sak: Sak, fødselsdato: Fødselsdato) {
         sak.håndterLøsning(
             LøsningInntekter(
                 listOf(
@@ -1322,7 +1274,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_2KvalitetssikringGodkjent(sak: Sak) {
+    private fun håndter11_2KvalitetssikringGodkjent(sak: Sak) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_2(
                 kvalitetssikringId = UUID.randomUUID(),
@@ -1335,7 +1287,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_3KvalitetssikringGodkjent(sak: Sak) {
+    private fun håndter11_3KvalitetssikringGodkjent(sak: Sak) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_3(
                 kvalitetssikringId = UUID.randomUUID(),
@@ -1348,7 +1300,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_5KvalitetssikringGodkjent(sak: Sak, løsningId_11_5: UUID) {
+    private fun håndter11_5KvalitetssikringGodkjent(sak: Sak, løsningId_11_5: UUID) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_5(
                 kvalitetssikringId = UUID.randomUUID(),
@@ -1363,7 +1315,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_6KvalitetssikringGodkjent(sak: Sak) {
+    private fun håndter11_6KvalitetssikringGodkjent(sak: Sak) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_6(
                 kvalitetssikringId = UUID.randomUUID(),
@@ -1376,7 +1328,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør22_13KvalitetssikringGodkjent(sak: Sak) {
+    private fun håndter22_13KvalitetssikringGodkjent(sak: Sak) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_22_13(
                 kvalitetssikringId = UUID.randomUUID(),
@@ -1389,7 +1341,7 @@ internal class SakTest {
         )
     }
 
-    private fun kjør11_19KvalitetssikringGodkjent(sak: Sak) {
+    private fun håndter11_19KvalitetssikringGodkjent(sak: Sak) {
         sak.håndterKvalitetssikring(
             KvalitetssikringParagraf_11_19(
                 kvalitetssikringId = UUID.randomUUID(),
