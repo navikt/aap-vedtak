@@ -38,12 +38,12 @@ data class LøsningParagraf_22_13ModellApi(
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
-        val løsning = toLøsning()
+        val løsning = toLøsningMedMigreringAvBestemmesAv()
         modellSøker.håndterLøsning(løsning, Vilkårsvurdering<*, *>::håndterLøsning)
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }
 
-    override fun toLøsning() = LøsningParagraf_22_13(
+    private fun toLøsningMedMigreringAvBestemmesAv() = LøsningParagraf_22_13(
         løsningId = løsningId,
         vurdertAv = vurdertAv,
         tidspunktForVurdering = tidspunktForVurdering,
@@ -57,6 +57,16 @@ data class LøsningParagraf_22_13ModellApi(
             bestemmesAv == "annet" -> LøsningParagraf_22_13.BestemmesAv.annet
             else -> error("Ukjent bestemmesAv: $bestemmesAv og unntak: $unntak")
         },
+        unntak = unntak,
+        unntaksbegrunnelse = unntaksbegrunnelse,
+        manueltSattVirkningsdato = manueltSattVirkningsdato
+    )
+
+    override fun toLøsning() = LøsningParagraf_22_13(
+        løsningId = løsningId,
+        vurdertAv = vurdertAv,
+        tidspunktForVurdering = tidspunktForVurdering,
+        bestemmesAv = enumValueOf(bestemmesAv),
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
         manueltSattVirkningsdato = manueltSattVirkningsdato
