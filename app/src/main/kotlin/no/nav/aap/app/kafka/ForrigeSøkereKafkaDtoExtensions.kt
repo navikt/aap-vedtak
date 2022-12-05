@@ -3,6 +3,8 @@ package no.nav.aap.app.kafka
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto.*
 import no.nav.aap.dto.kafka.SøkereKafkaDto
+import java.time.LocalDateTime
+import java.util.*
 
 internal fun ForrigeSøkereKafkaDto.toDto() = SøkereKafkaDto(
     personident = personident,
@@ -14,12 +16,12 @@ private fun SakKafkaDto.toDto() = SøkereKafkaDto.SakKafkaDto(
     saksid = saksid,
     tilstand = tilstand,
     vurderingsdato = vurderingsdato,
-    sakstyper = sakstyper.map(SakstypeKafkaDto::toDto),
+    sakstyper = sakstyper.map { it.toDto(søknadstidspunkt) }, // fixme: fjern søknadstidspunkt parameteret
     søknadstidspunkt = søknadstidspunkt,
     vedtak = vedtak?.toDto()
 )
 
-private fun SakstypeKafkaDto.toDto() = SøkereKafkaDto.SakstypeKafkaDto(
+private fun SakstypeKafkaDto.toDto(søknadstidspunkt: LocalDateTime) = SøkereKafkaDto.SakstypeKafkaDto(
     type = type,
     aktiv = aktiv,
     medlemskapYrkesskade = medlemskapYrkesskade?.toMedlemskapYrkesskade(),
@@ -36,7 +38,7 @@ private fun SakstypeKafkaDto.toDto() = SøkereKafkaDto.SakstypeKafkaDto(
     paragraf_11_22 = paragraf_11_22?.toParagraf_11_22(),
     paragraf_11_27FørsteLedd = paragraf_11_27FørsteLedd?.toParagraf_11_27FørsteLedd(),
     paragraf_11_29 = paragraf_11_29?.toParagraf_11_29(),
-    paragraf_22_13 = paragraf_22_13?.toParagraf_22_13(),
+    paragraf_22_13 = paragraf_22_13?.toParagraf_22_13(søknadstidspunkt), // fixme: fjern søknadstidspunkt parameteret
 )
 
 private fun MedlemskapYrkesskadeKafkaDto.toMedlemskapYrkesskade() = SøkereKafkaDto.MedlemskapYrkesskadeKafkaDto(
@@ -244,16 +246,20 @@ private fun Totrinnskontroll_11_29KafkaDto.toDto() = SøkereKafkaDto.Totrinnskon
     kvalitetssikring = kvalitetssikring?.toDto(),
 )
 
-private fun Paragraf_22_13KafkaDto.toParagraf_22_13() = SøkereKafkaDto.Paragraf_22_13KafkaDto(
-    vilkårsvurderingsid = vilkårsvurderingsid,
-    paragraf = paragraf,
-    ledd = ledd,
-    tilstand = tilstand,
-    utfall = utfall,
-    vurdertMaskinelt = vurdertMaskinelt,
-    totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toDto),
-    søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13KafkaDto::toDto),
-)
+// fixme: fjern søknadstidspunkt parameteret
+private fun Paragraf_22_13KafkaDto.toParagraf_22_13(søknadstidspunkt: LocalDateTime) =
+    SøkereKafkaDto.Paragraf_22_13KafkaDto(
+        vilkårsvurderingsid = vilkårsvurderingsid,
+        paragraf = paragraf,
+        ledd = ledd,
+        tilstand = tilstand,
+        utfall = utfall,
+        vurdertMaskinelt = vurdertMaskinelt,
+        totrinnskontroller = totrinnskontroller.map(Totrinnskontroll_22_13KafkaDto::toDto),
+        søknadsdata = søknadsdata.map(SøknadsdataParagraf_22_13KafkaDto::toDto).takeUnless { it.isEmpty() } ?: listOf(
+            SøkereKafkaDto.SøknadsdataParagraf_22_13KafkaDto(UUID.randomUUID(), søknadstidspunkt)
+        )
+    )
 
 private fun SøknadsdataParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.SøknadsdataParagraf_22_13KafkaDto(
     søknadId = søknadId,
