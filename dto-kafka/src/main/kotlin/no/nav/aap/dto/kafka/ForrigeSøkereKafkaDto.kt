@@ -436,8 +436,10 @@ data class ForrigeSøkereKafkaDto(
         val løsningId: UUID,
         val kvalitetssikretAv: String,
         val tidspunktForKvalitetssikring: LocalDateTime,
-        val erGodkjent: Boolean,
-        val begrunnelse: String?,
+        val kravOmNedsattArbeidsevneErGodkjent: Boolean,
+        val kravOmNedsattArbeidsevneErGodkjentBegrunnelse: String?,
+        val nedsettelseSkyldesSykdomEllerSkadeErGodkjent: Boolean,
+        val nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse: String?
     )
 
     data class KvalitetssikringParagraf_11_5YrkesskadeKafkaDto(

@@ -370,10 +370,10 @@ private fun KvalitetssikringParagraf_11_5KafkaDto.toDto() = SøkereKafkaDto.Kval
     løsningId = løsningId,
     kvalitetssikretAv = kvalitetssikretAv,
     tidspunktForKvalitetssikring = tidspunktForKvalitetssikring,
-    kravOmNedsattArbeidsevneErGodkjent = erGodkjent,
-    kravOmNedsattArbeidsevneErGodkjentBegrunnelse = begrunnelse,
-    nedsettelseSkyldesSykdomEllerSkadeErGodkjent = erGodkjent,
-    nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = begrunnelse,
+    kravOmNedsattArbeidsevneErGodkjent = kravOmNedsattArbeidsevneErGodkjent,
+    kravOmNedsattArbeidsevneErGodkjentBegrunnelse = kravOmNedsattArbeidsevneErGodkjentBegrunnelse,
+    nedsettelseSkyldesSykdomEllerSkadeErGodkjent = nedsettelseSkyldesSykdomEllerSkadeErGodkjent,
+    nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse,
 )
 
 private fun LøsningParagraf_11_5_yrkesskadeKafkaDto.toDto() = SøkereKafkaDto.LøsningParagraf_11_5_yrkesskadeKafkaDto(
@@ -490,7 +490,12 @@ private fun LøsningParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.LøsningPar
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
-    bestemmesAv = bestemmesAv,
+    //FIXME: Fjern when()
+    bestemmesAv = when (bestemmesAv) {
+        "unntaksvurderingForhindret" -> "unntaksvurdering"
+        "unntaksvurderingMangelfull" -> "unntaksvurdering"
+        else -> bestemmesAv
+    },
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
     manueltSattVirkningsdato = manueltSattVirkningsdato

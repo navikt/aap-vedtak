@@ -20,7 +20,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 19
+        const val VERSION = 20
         const val INIT_SEKVENS = 0L
     }
 
