@@ -33,15 +33,7 @@ internal class `§11-5 Test` {
             UUID.randomUUID(),
             "veileder",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = true,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradOppfylt()
         )
         løsning.vurderNedsattArbeidsevne(Paragraf_11_5.AvventerManuellVurdering, vilkår)
 
@@ -112,29 +104,11 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = true,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradOppfylt()
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = løsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = true,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
-            )
+        val kvalitetssikring = kvalitetssikringOppfylt(løsningId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.OPPFYLT, vilkår)
@@ -155,29 +129,11 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = false,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = false,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradIkkeOppfylt()
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = løsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = true,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
-            )
+        val kvalitetssikring = kvalitetssikringOppfylt(løsningId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_OPPFYLT, vilkår)
@@ -198,29 +154,11 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = true,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradOppfylt()
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = løsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = false,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
-            )
+        val kvalitetssikring = kvalitetssikringIkkeOppfylt(løsningId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -241,29 +179,11 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = false,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = false,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradIkkeOppfylt()
         )
         vilkår.håndterLøsning(løsning)
 
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = løsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = false,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
-            )
+        val kvalitetssikring = kvalitetssikringIkkeOppfylt(løsningId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertUtfall(Utfall.IKKE_VURDERT, vilkår)
@@ -284,30 +204,12 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = false,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = false,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradIkkeOppfylt()
         )
         vilkår.håndterLøsning(løsning)
 
         val kvalitetssikringId = UUID.randomUUID()
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = kvalitetssikringId,
-                løsningId = løsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = true,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
-            )
+        val kvalitetssikring = kvalitetssikringOppfylt(løsningId, kvalitetssikringId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         val vedtak = Vedtak(
@@ -350,29 +252,11 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = true,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = true,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradOppfylt()
         )
         vilkår.håndterLøsning(løsning1)
 
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = ukjentLøsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = false,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
-            )
+        val kvalitetssikring = kvalitetssikringIkkeOppfylt(ukjentLøsningId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
@@ -393,33 +277,61 @@ internal class `§11-5 Test` {
             løsningId,
             "saksbehandler",
             LocalDateTime.now(),
-            LøsningParagraf_11_5.NedsattArbeidsevnegrad(
-                kravOmNedsattArbeidsevneErOppfylt = false,
-                kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
-                nedsettelseSkyldesSykdomEllerSkade = false,
-                nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
-                kilder = emptyList(),
-                legeerklæringDato = null,
-                sykmeldingDato = null,
-            )
+            løsningNedsattArbeidsevnegradIkkeOppfylt()
         )
         vilkår.håndterLøsning(løsning1)
 
-        val kvalitetssikring =
-            KvalitetssikringParagraf_11_5(
-                kvalitetssikringId = UUID.randomUUID(),
-                løsningId = ukjentLøsningId,
-                kvalitetssikretAv = "X",
-                tidspunktForKvalitetssikring = LocalDateTime.now(),
-                kravOmNedsattArbeidsevneErGodkjent = false,
-                kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
-                nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
-            )
+        val kvalitetssikring = kvalitetssikringIkkeOppfylt(ukjentLøsningId)
         vilkår.håndterKvalitetssikring(kvalitetssikring)
 
         assertTilstand(Vilkårsvurdering.Tilstand.Tilstandsnavn.IKKE_OPPFYLT_MANUELT_AVVENTER_KVALITETSSIKRING, vilkår)
     }
+
+    private fun løsningNedsattArbeidsevnegradIkkeOppfylt() =
+        LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+            kravOmNedsattArbeidsevneErOppfylt = false,
+            kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+            nedsettelseSkyldesSykdomEllerSkade = false,
+            nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+            kilder = emptyList(),
+            legeerklæringDato = null,
+            sykmeldingDato = null,
+        )
+
+    private fun løsningNedsattArbeidsevnegradOppfylt() =
+        LøsningParagraf_11_5.NedsattArbeidsevnegrad(
+            kravOmNedsattArbeidsevneErOppfylt = true,
+            kravOmNedsattArbeidsevneErOppfyltBegrunnelse = "Begrunnelse",
+            nedsettelseSkyldesSykdomEllerSkade = true,
+            nedsettelseSkyldesSykdomEllerSkadeBegrunnelse = "Begrunnelse",
+            kilder = emptyList(),
+            legeerklæringDato = null,
+            sykmeldingDato = null,
+        )
+
+    private fun kvalitetssikringOppfylt(løsningId: UUID, kvalitetssikringId: UUID = UUID.randomUUID()) =
+        KvalitetssikringParagraf_11_5(
+            kvalitetssikringId = kvalitetssikringId,
+            løsningId = løsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            kravOmNedsattArbeidsevneErGodkjent = true,
+            kravOmNedsattArbeidsevneErGodkjentBegrunnelse = null,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjent = true,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = null,
+        )
+
+    private fun kvalitetssikringIkkeOppfylt(løsningId: UUID) =
+        KvalitetssikringParagraf_11_5(
+            kvalitetssikringId = UUID.randomUUID(),
+            løsningId = løsningId,
+            kvalitetssikretAv = "X",
+            tidspunktForKvalitetssikring = LocalDateTime.now(),
+            kravOmNedsattArbeidsevneErGodkjent = false,
+            kravOmNedsattArbeidsevneErGodkjentBegrunnelse = "NEI",
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjent = false,
+            nedsettelseSkyldesSykdomEllerSkadeErGodkjentBegrunnelse = "NEI",
+        )
 
     private fun assertUtfall(utfall: Utfall, vilkårsvurdering: Paragraf_11_5) {
         assertEquals(utfall, listOf(vilkårsvurdering).toDto().first().utfall)
