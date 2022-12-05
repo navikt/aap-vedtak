@@ -50,9 +50,9 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - uses: dorny/test-reporter@v1.6.0
-          if: success() || failure()
-          with:
-            name: test
-            path: "**/build/test-results/test/TEST-*.xml"
-            reporter: java-junit
-            token: ${{ secrets.GITHUB_TOKEN }}
+        if: success() || failure()
+        with:
+          name: test
+          path: "**/build/test-results/test/TEST-*.xml"
+          reporter: java-junit
+          token: ${{ secrets.GITHUB_TOKEN }}
