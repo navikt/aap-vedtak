@@ -492,11 +492,11 @@ private fun LøsningParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.LøsningPar
     løsningId = løsningId,
     vurdertAv = vurdertAv,
     tidspunktForVurdering = tidspunktForVurdering,
-    bestemmesAv = bestemmesAv,
+    // FIXME TODO: fjern if else
+    bestemmesAv = if(bestemmesAv == "ermiraSays") "annet" else bestemmesAv,
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
-    // fixme: sett til manueltSattVirkningsdato
-    manueltSattVirkningsdato = if (bestemmesAv == "annet" && manueltSattVirkningsdato == null) LocalDate.now() else manueltSattVirkningsdato
+    manueltSattVirkningsdato = manueltSattVirkningsdato
 )
 
 private fun KvalitetssikringParagraf_22_13KafkaDto.toDto() = SøkereKafkaDto.KvalitetssikringParagraf_22_13KafkaDto(

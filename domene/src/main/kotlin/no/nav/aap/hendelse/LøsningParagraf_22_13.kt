@@ -19,6 +19,23 @@ internal class LøsningParagraf_22_13(
     private val unntaksbegrunnelse: String?,
     private val manueltSattVirkningsdato: LocalDate?,
 ) : Hendelse(), Løsning<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13> {
+
+    init {
+        if (bestemmesAv == BestemmesAv.annet) {
+            requireNotNull(manueltSattVirkningsdato)
+        }
+
+        if (bestemmesAv in listOf(BestemmesAv.unntaksvurderingForhindret, BestemmesAv.unntaksvurderingMangelfull)) {
+            requireNotNull(unntak)
+            requireNotNull(unntaksbegrunnelse)
+            requireNotNull(manueltSattVirkningsdato)
+        }
+
+        if (bestemmesAv == BestemmesAv.etterSisteLoenn) {
+            requireNotNull(manueltSattVirkningsdato)
+        }
+    }
+
     internal companion object {
         internal fun Iterable<LøsningParagraf_22_13>.toDto() = map(LøsningParagraf_22_13::toDto)
     }
@@ -32,7 +49,6 @@ internal class LøsningParagraf_22_13(
         opplæringspenger,
         foreldrepenger,
         svangerskapspenger,
-        ermiraSays,
         unntaksvurderingForhindret,
         unntaksvurderingMangelfull,
         etterSisteLoenn,

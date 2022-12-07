@@ -469,7 +469,7 @@ internal class SakTest {
         assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
 
         val endretVirkningsdato = LocalDate.now().minusDays(10)
-        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.annet, endretVirkningsdato)
         assertTilstand("BEREGN_INNTEKT", sak)
 
         håndterInntektLøsning500K(sak, fødselsdato)
@@ -546,10 +546,10 @@ internal class SakTest {
         assertEquals(søknadstidspunkt.toLocalDate(), vedtakFørEndring.virkningsdato)
 
         val endretVirkningsdato = LocalDate.now().minusDays(10)
-        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato)
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.annet, endretVirkningsdato)
         assertTilstand("BEREGN_INNTEKT", sak)
 
-        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.ermiraSays, endretVirkningsdato.plusDays(1))
+        håndter22_13Løsning(sak, LøsningParagraf_22_13.BestemmesAv.annet, endretVirkningsdato.plusDays(1))
         assertTilstand("BEREGN_INNTEKT", sak)
 
         håndterInntektLøsning500K(sak, fødselsdato)
@@ -635,7 +635,7 @@ internal class SakTest {
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_22_13.BestemmesAv.ermiraSays,
+                LøsningParagraf_22_13.BestemmesAv.annet,
                 "INGEN",
                 "",
                 endretVirkningsdato
@@ -660,7 +660,7 @@ internal class SakTest {
                 løsningId = UUID.randomUUID(),
                 "saksbehandler",
                 LocalDateTime.now(),
-                LøsningParagraf_22_13.BestemmesAv.ermiraSays,
+                LøsningParagraf_22_13.BestemmesAv.annet,
                 "INGEN",
                 "",
                 endretVirkningsdato.plusDays(1)

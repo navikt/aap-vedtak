@@ -50,7 +50,6 @@ data class LøsningParagraf_22_13ModellApi(
         bestemmesAv = when {
             bestemmesAv == "soknadstidspunkt" -> LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt
             bestemmesAv == "maksdatoSykepenger" -> LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger
-            bestemmesAv == "ermiraSays" -> LøsningParagraf_22_13.BestemmesAv.ermiraSays
             bestemmesAv == "unntaksvurdering" && unntak == "forhindret" -> LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret
             bestemmesAv == "unntaksvurdering" && unntak == "mangelfull" -> LøsningParagraf_22_13.BestemmesAv.unntaksvurderingMangelfull
             bestemmesAv == "etterSisteLoenn" -> LøsningParagraf_22_13.BestemmesAv.etterSisteLoenn

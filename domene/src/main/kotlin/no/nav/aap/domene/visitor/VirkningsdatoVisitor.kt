@@ -58,7 +58,6 @@ internal class VirkningsdatoVisitor : SakstypeVisitor {
             LøsningParagraf_22_13.BestemmesAv.pleiepenger,
             LøsningParagraf_22_13.BestemmesAv.opplæringspenger,
             LøsningParagraf_22_13.BestemmesAv.foreldrepenger,
-            LøsningParagraf_22_13.BestemmesAv.ermiraSays,
             LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret,
             LøsningParagraf_22_13.BestemmesAv.unntaksvurderingMangelfull,
             LøsningParagraf_22_13.BestemmesAv.etterSisteLoenn,
