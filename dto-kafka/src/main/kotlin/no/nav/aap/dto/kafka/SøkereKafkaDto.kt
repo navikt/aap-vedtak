@@ -11,8 +11,7 @@ import java.util.*
 data class SøkereKafkaDtoHistorikk(
     val søkereKafkaDto: SøkereKafkaDto,
     val forrigeSøkereKafkaDto: ForrigeSøkereKafkaDto,
-    val version: Int = søkereKafkaDto.version,
-): Migratable by søkereKafkaDto, Bufferable<SøkereKafkaDtoHistorikk> {
+) : Migratable by søkereKafkaDto, Bufferable<SøkereKafkaDtoHistorikk> {
     override fun erNyere(other: SøkereKafkaDtoHistorikk) = søkereKafkaDto.erNyere(other.søkereKafkaDto)
 }
 
@@ -27,7 +26,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 24
+        const val VERSION = 25
         const val INIT_SEKVENS = 0L
     }
 

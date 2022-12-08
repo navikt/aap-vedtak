@@ -8,7 +8,6 @@ import java.util.*
 
 data class ForrigeSøkereKafkaDtoHistorikk(
     val søkereKafkaDto: ForrigeSøkereKafkaDto,
-    val version: Int = søkereKafkaDto.version,
 )
 
 data class ForrigeSøkereKafkaDto(
