@@ -1,9 +1,15 @@
 package no.nav.aap
 
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.serialization.jackson.*
+import io.ktor.server.config.*
+import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
+import no.nav.aap.app.server
 import no.nav.aap.app.topology
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
@@ -18,6 +24,7 @@ import org.junit.jupiter.api.Test
 import java.io.File
 import java.time.LocalDate
 import java.time.LocalDateTime
+import kotlin.test.Ignore
 
 internal class ApiTest {
 
@@ -290,6 +297,54 @@ internal class ApiTest {
                 .hasNumberOfRecords(1)
                 .hasKey(fnr)
                 .hasLastValueMatching { assertTrue(it?.innvilget ?: false) }
+        }
+    }
+
+    @Test
+    @Ignore
+    fun `Tester metrikker`() {
+        val kafka = KafkaStreamsMock()
+        testApplication{
+            environment { config = MapApplicationConfig(
+                "TOGGLE_LES_SOKNADER" to "true",
+                "KAFKA_STREAMS_APPLICATION_ID" to "test",
+                "KAFKA_BROKERS" to "mock://kafka",
+                "KAFKA_TRUSTSTORE_PATH" to "",
+                "KAFKA_KEYSTORE_PATH" to "",
+                "KAFKA_CREDSTORE_PASSWORD" to ""
+            ) }
+            application {
+                server(kafka)
+                val soknadTopic = kafka.testTopic(Topics.søknad)
+                soknadTopic.produce("123"){ SøknadKafkaDto(
+                    sykepenger = false,
+                    ferie = null,
+                    studier = Studier(
+                        erStudent = Studier.StudieSvar.NEI,
+                        kommeTilbake = null,
+                        vedlegg = emptyList(),
+                    ),
+                    medlemsskap = Medlemskap(
+                        boddINorgeSammenhengendeSiste5 = true,
+                        jobbetUtenforNorgeFørSyk = false,
+                        jobbetSammenhengendeINorgeSiste5 = null,
+                        iTilleggArbeidUtenforNorge = null,
+                        utenlandsopphold = emptyList(),
+                    ),
+                    registrerteBehandlere = emptyList(),
+                    andreBehandlere = emptyList(),
+                    yrkesskadeType = SøknadKafkaDto.Yrkesskade.NEI,
+                    utbetalinger = null,
+                    tilleggsopplysninger = null,
+                    registrerteBarn = emptyList(),
+                    andreBarn = emptyList(),
+                    vedlegg = emptyList(),
+                    fødselsdato = LocalDate.now().minusYears(40),
+                    innsendingTidspunkt = LocalDateTime.now(),
+                )}
+            }
+            val client = createClient { install(ContentNegotiation){jackson {  }} }
+            client.get("/actuator/metrics")
         }
     }
 

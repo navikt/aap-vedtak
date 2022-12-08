@@ -82,7 +82,7 @@ internal fun topology(
     søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
     søkerKTable.migrateStateStore(Tables.søkere, søkerProducer)
 
-    streams.søknadStream(søkerKTable, lesSøknader)
+    streams.søknadStream(søkerKTable, lesSøknader, registry)
     streams.medlemStream(søkerKTable)
     streams.inntekterStream(søkerKTable)
     streams.andreFolketrygdytelserStream(søkerKTable)

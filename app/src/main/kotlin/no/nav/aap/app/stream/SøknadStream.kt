@@ -1,5 +1,6 @@
 package no.nav.aap.app.stream
 
+import io.micrometer.core.instrument.MeterRegistry
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.kafka.toForrigeDto
@@ -14,19 +15,21 @@ import org.slf4j.LoggerFactory
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
-internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>, lesSøknader: Boolean) {
+internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>, lesSøknader: Boolean, registry: MeterRegistry) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterValues("filter-soknad-les-toggle") {
             if (!lesSøknader) secureLog.info("leser ikke søknad da toggle for lesing er skrudd av")
             lesSøknader
         }
         .filterNotNull("filter-soknad-tombstone")
+        .peek{_, value -> registry.counter("soknad_motatt").increment()}
         .leftJoin(Topics.søknad with Topics.søkere, søkere)
         .filterValues("filter-soknad-ny") { (_, søkereKafkaDto) ->
             if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
 
             søkereKafkaDto == null
         }
+        .peek{_, value -> registry.counter("forstegangssoker").increment()}
         .firstPairValue("soknad-hent-ut-soknad-fra-join")
         .mapValues("soknad-opprett-soker-og-handter", opprettSøker)
 
