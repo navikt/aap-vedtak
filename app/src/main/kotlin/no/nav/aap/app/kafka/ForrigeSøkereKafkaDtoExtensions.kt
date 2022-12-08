@@ -5,15 +5,6 @@ import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto as Fra
 import no.nav.aap.dto.kafka.SøkereKafkaDto as Til
 
-internal fun Fra.toDtoPremigrering() = SøkereKafkaDtoHistorikk(
-    søkereKafkaDto = Til(
-        personident = personident,
-        fødselsdato = fødselsdato,
-        saker = saker.map(Fra.SakKafkaDto::toDto),
-    ),
-    forrigeSøkereKafkaDto = this,
-)
-
 internal fun ForrigeSøkereKafkaDtoHistorikk.toDto() = SøkereKafkaDtoHistorikk(
     søkereKafkaDto = søkereKafkaDto.toDto(),
     forrigeSøkereKafkaDto = this.søkereKafkaDto,
