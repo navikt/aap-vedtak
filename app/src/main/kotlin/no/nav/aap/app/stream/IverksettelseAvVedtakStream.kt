@@ -2,13 +2,13 @@ package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.*
 import no.nav.aap.dto.kafka.IverksettelseAvVedtakKafkaDto
-import no.nav.aap.dto.kafka.SøkereKafkaDto
+import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.kafka.streams.extension.*
 import no.nav.aap.modellapi.BehovModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.iverksettelseAvVedtakStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.iverksettelseAvVedtakStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
     val søkerOgBehov = consume(Topics.iverksettelseAvVedtak)
         .filterNotNull("filter-iverksettelse-av-vedtak-tombstone")
         .join(Topics.iverksettelseAvVedtak with Topics.søkere, søkere, ::håndter)
@@ -25,9 +25,11 @@ internal fun StreamsBuilder.iverksettelseAvVedtakStream(søkere: KTable<String, 
 
 private fun håndter(
     iverksettelseAvVedtakKafkaDto: IverksettelseAvVedtakKafkaDto,
-    søkereKafkaDto: SøkereKafkaDto
-): Pair<SøkereKafkaDto, List<BehovModellApi>> {
-    val søker = søkereKafkaDto.toModellApi()
+    søkereKafkaDtoHistorikk: SøkereKafkaDtoHistorikk
+): Pair<SøkereKafkaDtoHistorikk, List<BehovModellApi>> {
+    val søker = søkereKafkaDtoHistorikk.søkereKafkaDto.toModellApi()
     val (endretSøker, dtoBehov) = iverksettelseAvVedtakKafkaDto.håndter(søker)
-    return endretSøker.toJson(søkereKafkaDto.sekvensnummer) to dtoBehov
+    val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDtoHistorikk.søkereKafkaDto.sekvensnummer)
+    val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
+    return SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto) to dtoBehov
 }

@@ -1,6 +1,6 @@
 package no.nav.aap.dto.kafka
 
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 internal class SøkereKafkaDtoTest {
@@ -9,6 +9,6 @@ internal class SøkereKafkaDtoTest {
 
     @Test
     fun `test versjonsnummer`() {
-        assertEquals(23, SøkereKafkaDto.VERSION)
+        assertEquals(24, SøkereKafkaDto.VERSION)
     }
 }

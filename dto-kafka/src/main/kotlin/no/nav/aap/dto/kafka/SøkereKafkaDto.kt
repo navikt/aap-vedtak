@@ -8,6 +8,13 @@ import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
+data class SøkereKafkaDtoHistorikk(
+    val søkereKafkaDto: SøkereKafkaDto,
+    val forrigeSøkereKafkaDto: ForrigeSøkereKafkaDto,
+    val version: Int = søkereKafkaDto.version,
+): Migratable by søkereKafkaDto, Bufferable<SøkereKafkaDtoHistorikk> {
+    override fun erNyere(other: SøkereKafkaDtoHistorikk) = søkereKafkaDto.erNyere(other.søkereKafkaDto)
+}
 
 data class SøkereKafkaDto(
     val personident: String,
@@ -20,7 +27,7 @@ data class SøkereKafkaDto(
     private var erMigrertAkkuratNå: Boolean = false
 
     companion object {
-        const val VERSION = 23
+        const val VERSION = 24
         const val INIT_SEKVENS = 0L
     }
 

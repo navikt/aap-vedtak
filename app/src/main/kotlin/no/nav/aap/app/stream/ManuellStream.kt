@@ -9,11 +9,11 @@ import no.nav.aap.modellapi.SøkerModellApi
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.manuellInnstillingStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.manuellInnstillingStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
     stream(søkere, Topics.innstilling_11_6, "innstilling-11-6", Innstilling_11_6KafkaDto::håndter)
 }
 
-internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
     stream(søkere, Topics.manuell_11_2, "manuell-11-2", Løsning_11_2_manuellKafkaDto::håndter)
     stream(søkere, Topics.manuell_11_3, "manuell-11-3", Løsning_11_3_manuellKafkaDto::håndter)
     stream(søkere, Topics.manuell_11_4, "manuell-11-4", Løsning_11_4_ledd2_ledd3_manuellKafkaDto::håndter)
@@ -24,7 +24,7 @@ internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, Søker
     stream(søkere, Topics.manuell_11_29, "manuell-11-29", Løsning_11_29_manuellKafkaDto::håndter)
 }
 
-internal fun StreamsBuilder.manuellKvalitetssikringStream(søkere: KTable<String, SøkereKafkaDto>) {
+internal fun StreamsBuilder.manuellKvalitetssikringStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
     stream(søkere, Topics.kvalitetssikring_11_2, "kvalitetssikring-11-2", Kvalitetssikring_11_2KafkaDto::håndter)
     stream(søkere, Topics.kvalitetssikring_11_3, "kvalitetssikring-11-3", Kvalitetssikring_11_3KafkaDto::håndter)
     stream(søkere, Topics.kvalitetssikring_11_4, "kvalitetssikring-11-4", Kvalitetssikring_11_4_ledd2_ledd3KafkaDto::håndter)
@@ -36,7 +36,7 @@ internal fun StreamsBuilder.manuellKvalitetssikringStream(søkere: KTable<String
 }
 
 private fun <T> StreamsBuilder.stream(
-    søkere: KTable<String, SøkereKafkaDto>,
+    søkere: KTable<String, SøkereKafkaDtoHistorikk>,
     topic: Topic<T & Any>,
     kafkaNameFilter: String,
     håndter: (T & Any).(SøkerModellApi) -> Pair<SøkerModellApi, List<BehovModellApi>>,
@@ -58,10 +58,13 @@ private fun <T> StreamsBuilder.stream(
 
 private fun <T> håndter(
     manuellKafkaDto: T,
-    søkereKafkaDto: SøkereKafkaDto,
+    søkereKafkaDtoHistorikk: SøkereKafkaDtoHistorikk,
     håndter: T.(SøkerModellApi) -> Pair<SøkerModellApi, List<BehovModellApi>>,
-): Pair<SøkereKafkaDto, List<BehovModellApi>> {
+): Pair<SøkereKafkaDtoHistorikk, List<BehovModellApi>> {
+    val (søkereKafkaDto) = søkereKafkaDtoHistorikk
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker, dtoBehov) = manuellKafkaDto.håndter(søker)
-    return endretSøker.toJson(søkereKafkaDto.sekvensnummer) to dtoBehov
+    val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDto.sekvensnummer)
+    val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
+    return SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto) to dtoBehov
 }

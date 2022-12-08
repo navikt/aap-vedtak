@@ -6,6 +6,11 @@ import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
+data class ForrigeSøkereKafkaDtoHistorikk(
+    val søkereKafkaDto: ForrigeSøkereKafkaDto,
+    val version: Int = søkereKafkaDto.version,
+)
+
 data class ForrigeSøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,

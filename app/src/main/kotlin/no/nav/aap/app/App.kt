@@ -14,7 +14,7 @@ import io.micrometer.prometheus.PrometheusMeterRegistry
 import no.nav.aap.app.kafka.Tables
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.stream.*
-import no.nav.aap.dto.kafka.SøkereKafkaDto
+import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.kafka.streams.KStreams
 import no.nav.aap.kafka.streams.KStreamsConfig
 import no.nav.aap.kafka.streams.KafkaStreams
@@ -70,7 +70,7 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 
 internal fun topology(
     registry: MeterRegistry,
-    søkerProducer: Producer<String, SøkereKafkaDto>,
+    søkerProducer: Producer<String, SøkereKafkaDtoHistorikk>,
     lesSøknader: Boolean
 ): Topology {
     val streams = StreamsBuilder()

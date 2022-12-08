@@ -2,8 +2,9 @@ package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.sendBehov
+import no.nav.aap.app.kafka.toForrigeDto
 import no.nav.aap.app.kafka.toJson
-import no.nav.aap.dto.kafka.SøkereKafkaDto
+import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.SøknadKafkaDto
 import no.nav.aap.kafka.streams.extension.*
 import no.nav.aap.modellapi.SøknadModellApi
@@ -13,7 +14,7 @@ import org.slf4j.LoggerFactory
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
-internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDto>, lesSøknader: Boolean) {
+internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>, lesSøknader: Boolean) {
     val søkerOgBehov = consume(Topics.søknad)
         .filterValues("filter-soknad-les-toggle") {
             if (!lesSøknader) secureLog.info("leser ikke søknad da toggle for lesing er skrudd av")
@@ -42,5 +43,7 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
 private val opprettSøker = { ident: String, jsonSøknad: SøknadKafkaDto ->
     val søknad = SøknadModellApi(ident, jsonSøknad.fødselsdato, jsonSøknad.innsendingTidspunkt)
     val (endretSøker, dtoBehov) = søknad.håndter()
-    endretSøker.toJson(0) to dtoBehov
+    val søkereKafkaDto = endretSøker.toJson(0)
+    val forrigeSøkereKafkaDto = søkereKafkaDto.toForrigeDto()
+    SøkereKafkaDtoHistorikk(søkereKafkaDto, forrigeSøkereKafkaDto) to dtoBehov
 }

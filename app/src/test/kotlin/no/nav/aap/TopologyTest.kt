@@ -51,7 +51,7 @@ internal class ApiTest {
             val sykepengedagerTopic = kafka.testTopic(Topics.sykepengedager)
             val iverksettelseAvVedtakTopic = kafka.testTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = kafka.testTopic(Topics.vedtak)
-            val stateStore = kafka.getStore<SøkereKafkaDto>(SØKERE_STORE_NAME)
+            val stateStore = kafka.getStore<SøkereKafkaDtoHistorikk>(SØKERE_STORE_NAME)
 
             val fnr = "123"
             val tidspunktForVurdering = LocalDateTime.now()
@@ -183,7 +183,7 @@ internal class ApiTest {
                 )
             }
 
-            val søker = stateStore[fnr]
+            val søker = stateStore[fnr].søkereKafkaDto
             assertNotNull(søker)
             val actual = søker.toModellApi()
 
