@@ -61,10 +61,8 @@ private fun <T> håndter(
     søkereKafkaDtoHistorikk: SøkereKafkaDtoHistorikk,
     håndter: T.(SøkerModellApi) -> Pair<SøkerModellApi, List<BehovModellApi>>,
 ): Pair<SøkereKafkaDtoHistorikk, List<BehovModellApi>> {
-    val (søkereKafkaDto) = søkereKafkaDtoHistorikk
+    val (søkereKafkaDto, _, gammeltSekvensnummer) = søkereKafkaDtoHistorikk
     val søker = søkereKafkaDto.toModellApi()
     val (endretSøker, dtoBehov) = manuellKafkaDto.håndter(søker)
-    val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDto.sekvensnummer)
-    val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
-    return SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto) to dtoBehov
+    return endretSøker.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer) to dtoBehov
 }

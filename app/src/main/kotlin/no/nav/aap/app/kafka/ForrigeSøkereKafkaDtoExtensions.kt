@@ -7,7 +7,7 @@ import no.nav.aap.dto.kafka.SøkereKafkaDto as Til
 
 internal fun ForrigeSøkereKafkaDtoHistorikk.toDto() = SøkereKafkaDtoHistorikk(
     søkereKafkaDto = søkereKafkaDto.toDto(),
-    forrigeSøkereKafkaDto = this.søkereKafkaDto,
+    forrigeSøkereKafkaDto = søkereKafkaDto,
 )
 
 private fun Fra.toDto() = Til(

@@ -3,8 +3,7 @@ package no.nav.aap.app.stream
 import io.micrometer.core.instrument.MeterRegistry
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.sendBehov
-import no.nav.aap.app.kafka.toForrigeDto
-import no.nav.aap.app.kafka.toJson
+import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.SøknadKafkaDto
 import no.nav.aap.kafka.streams.extension.*
@@ -46,7 +45,5 @@ internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDt
 private val opprettSøker = { ident: String, jsonSøknad: SøknadKafkaDto ->
     val søknad = SøknadModellApi(ident, jsonSøknad.fødselsdato, jsonSøknad.innsendingTidspunkt)
     val (endretSøker, dtoBehov) = søknad.håndter()
-    val søkereKafkaDto = endretSøker.toJson(0)
-    val forrigeSøkereKafkaDto = søkereKafkaDto.toForrigeDto()
-    SøkereKafkaDtoHistorikk(søkereKafkaDto, forrigeSøkereKafkaDto) to dtoBehov
+    endretSøker.toSøkereKafkaDtoHistorikk(0) to dtoBehov
 }

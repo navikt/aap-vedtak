@@ -1,9 +1,8 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.toForrigeDto
-import no.nav.aap.app.kafka.toJson
 import no.nav.aap.app.kafka.toModellApi
+import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.AndreFolketrygdytelserKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.kafka.streams.extension.consume
@@ -22,12 +21,10 @@ internal fun StreamsBuilder.andreFolketrygdytelserStream(søkere: KTable<String,
 }
 
 private val håndterAndreFolketrygdytelser =
-    { andreFolketrygdytelser: AndreFolketrygdytelserKafkaDto, (søkereKafkaDto): SøkereKafkaDtoHistorikk ->
+    { andreFolketrygdytelser: AndreFolketrygdytelserKafkaDto, (søkereKafkaDto, _, gammeltSekvensnummer): SøkereKafkaDtoHistorikk ->
         val søker = søkereKafkaDto.toModellApi()
         val (endretSøker) = andreFolketrygdytelser.toModellApi().håndter(søker)
-        val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDto.sekvensnummer)
-        val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
-        SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto)
+        endretSøker.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer)
     }
 
 internal fun StreamsBuilder.andreFolketrygdsytelserResponseMockStream() = this

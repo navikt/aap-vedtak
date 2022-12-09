@@ -11,23 +11,32 @@ import java.util.*
 data class SøkereKafkaDtoHistorikk(
     val søkereKafkaDto: SøkereKafkaDto,
     val forrigeSøkereKafkaDto: ForrigeSøkereKafkaDto,
-) : Migratable by søkereKafkaDto, Bufferable<SøkereKafkaDtoHistorikk> {
-    override fun erNyere(other: SøkereKafkaDtoHistorikk) = søkereKafkaDto.erNyere(other.søkereKafkaDto)
+    val sekvensnummer: Long = INIT_SEKVENS,
+) : Migratable, Bufferable<SøkereKafkaDtoHistorikk> {
+    override fun erNyere(other: SøkereKafkaDtoHistorikk): Boolean = sekvensnummer > other.sekvensnummer
+
+    private var erMigrertAkkuratNå: Boolean = false
+
+    private companion object {
+        private const val INIT_SEKVENS = 0L
+    }
+
+    override fun markerSomMigrertAkkuratNå() {
+        erMigrertAkkuratNå = true
+    }
+
+    override fun erMigrertAkkuratNå(): Boolean = erMigrertAkkuratNå
 }
 
 data class SøkereKafkaDto(
     val personident: String,
     val fødselsdato: LocalDate,
     val saker: List<SakKafkaDto>,
-    val sekvensnummer: Long = INIT_SEKVENS,
     val version: Int = VERSION, // Denne bumpes ved hver migrering
-) : Migratable, Bufferable<SøkereKafkaDto> {
-
-    private var erMigrertAkkuratNå: Boolean = false
-
+) {
     companion object {
-        const val VERSION = 25
-        const val INIT_SEKVENS = 0L
+        //Husk å oppdatere andre konsumenter etter migrering
+        const val VERSION = 26
     }
 
     data class SakKafkaDto(
@@ -555,12 +564,4 @@ data class SøkereKafkaDto(
         val gradAvNedsattArbeidsevneKnyttetTilYrkesskade: Double,
         val inntektsgrunnlag: InntektsgrunnlagForÅrKafkaDto
     )
-
-    override fun markerSomMigrertAkkuratNå() {
-        erMigrertAkkuratNå = true
-    }
-
-    override fun erMigrertAkkuratNå(): Boolean = erMigrertAkkuratNå
-
-    override fun erNyere(other: SøkereKafkaDto): Boolean = sekvensnummer > other.sekvensnummer
 }

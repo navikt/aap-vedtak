@@ -1,9 +1,8 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.toForrigeDto
-import no.nav.aap.app.kafka.toJson
 import no.nav.aap.app.kafka.toModellApi
+import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.MedlemKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.kafka.streams.extension.*
@@ -18,10 +17,9 @@ internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDto
         .produce(Topics.søkere, "produced-soker-med-medlem")
 }
 
-private val håndterMedlem = { medlemKafkaDto: MedlemKafkaDto, (søkereKafkaDto): SøkereKafkaDtoHistorikk ->
-    val søker = søkereKafkaDto.toModellApi()
-    val (endretSøker) = medlemKafkaDto.toModellApi().håndter(søker)
-    val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDto.sekvensnummer)
-    val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
-    SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto)
-}
+private val håndterMedlem =
+    { medlemKafkaDto: MedlemKafkaDto, (søkereKafkaDto, _, gammeltSekvensnummer): SøkereKafkaDtoHistorikk ->
+        val søker = søkereKafkaDto.toModellApi()
+        val (endretSøker) = medlemKafkaDto.toModellApi().håndter(søker)
+        endretSøker.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer)
+    }

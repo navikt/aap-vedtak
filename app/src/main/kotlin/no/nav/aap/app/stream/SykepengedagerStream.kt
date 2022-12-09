@@ -27,11 +27,9 @@ private fun håndter(
     sykepengedagerKafkaDto: SykepengedagerKafkaDto,
     søkereKafkaDtoHistorikk: SøkereKafkaDtoHistorikk
 ): Pair<SøkereKafkaDtoHistorikk, List<BehovModellApi>> {
-    val (søkereKafkaDto) = søkereKafkaDtoHistorikk
+    val (søkereKafkaDto, _, gammeltSekvensnummer) = søkereKafkaDtoHistorikk
     val søker = søkereKafkaDto.toModellApi()
     val response = requireNotNull(sykepengedagerKafkaDto.response) { "response==null skal være filtrert vekk her." }
     val (endretSøker, dtoBehov) = response.håndter(søker)
-    val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDto.sekvensnummer)
-    val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
-    return SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto) to dtoBehov
+    return endretSøker.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer) to dtoBehov
 }

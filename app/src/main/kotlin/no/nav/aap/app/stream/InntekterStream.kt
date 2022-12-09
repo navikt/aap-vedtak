@@ -1,9 +1,8 @@
 package no.nav.aap.app.stream
 
 import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.toForrigeDto
-import no.nav.aap.app.kafka.toJson
 import no.nav.aap.app.kafka.toModellApi
+import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.InntekterKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.kafka.streams.extension.consume
@@ -20,10 +19,9 @@ internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafka
         .produce(Topics.søkere, "produced-soker-med-handtert-inntekter")
 }
 
-private val håndterInntekter = { inntekterKafkaDto: InntekterKafkaDto, (søkereKafkaDto): SøkereKafkaDtoHistorikk ->
-    val søker = søkereKafkaDto.toModellApi()
-    val (endretSøker) = inntekterKafkaDto.toModellApi().håndter(søker)
-    val endretSøkereKafkaDto = endretSøker.toJson(søkereKafkaDto.sekvensnummer)
-    val forrigeSøkereKafkaDto = endretSøkereKafkaDto.toForrigeDto()
-    SøkereKafkaDtoHistorikk(endretSøkereKafkaDto, forrigeSøkereKafkaDto)
-}
+private val håndterInntekter =
+    { inntekterKafkaDto: InntekterKafkaDto, (søkereKafkaDto, _, gammeltSekvensnummer): SøkereKafkaDtoHistorikk ->
+        val søker = søkereKafkaDto.toModellApi()
+        val (endretSøker) = inntekterKafkaDto.toModellApi().håndter(søker)
+        endretSøker.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer)
+    }

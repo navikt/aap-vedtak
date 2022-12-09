@@ -2,12 +2,22 @@ package no.nav.aap.app.kafka
 
 import no.nav.aap.dto.kafka.SøkereKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDto.*
+import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.modellapi.*
 
-internal fun SøkerModellApi.toJson(gammelSekvensnummer: Long) = SøkereKafkaDto(
+internal fun SøkerModellApi.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer: Long): SøkereKafkaDtoHistorikk {
+    val søkereKafkaDto = toJson()
+    val forrigeSøkereKafkaDto = søkereKafkaDto.toForrigeDto()
+    return SøkereKafkaDtoHistorikk(
+        søkereKafkaDto = søkereKafkaDto,
+        forrigeSøkereKafkaDto = forrigeSøkereKafkaDto,
+        sekvensnummer = gammeltSekvensnummer + 1
+    )
+}
+
+private fun SøkerModellApi.toJson() = SøkereKafkaDto(
     personident = personident,
     fødselsdato = fødselsdato,
-    sekvensnummer = gammelSekvensnummer + 1,
     saker = saker.map(SakModellApi::toJson),
 )
 
