@@ -342,7 +342,8 @@ private fun LøsningParagraf_22_13KafkaDto.toModellApi() = LøsningParagraf_22_1
     bestemmesAv = bestemmesAv,
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
-    manueltSattVirkningsdato = manueltSattVirkningsdato
+    manueltSattVirkningsdato = manueltSattVirkningsdato,
+    begrunnelseForAnnet = begrunnelseForAnnet,
 )
 
 private fun KvalitetssikringMedlemskapYrkesskadeKafkaDto.toModellApi() = KvalitetssikringMedlemskapYrkesskadeModellApi(

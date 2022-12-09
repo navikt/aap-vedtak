@@ -122,6 +122,7 @@ internal class `§11-27 Test` {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning22_13)
 
@@ -159,6 +160,7 @@ internal class `§11-27 Test` {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning22_13)
 
@@ -206,6 +208,7 @@ internal class `§11-27 Test` {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning22_13)
 

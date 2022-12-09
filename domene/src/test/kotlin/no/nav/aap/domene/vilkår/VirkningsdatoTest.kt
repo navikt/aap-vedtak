@@ -63,6 +63,7 @@ internal class VirkningsdatoTest {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår8_48.håndterLøsning(løsning22_13)
         vilkår11_27.håndterLøsning(løsning22_13)
@@ -123,6 +124,7 @@ internal class VirkningsdatoTest {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår8_48.håndterLøsning(løsning22_13)
         vilkår11_27.håndterLøsning(løsning22_13)
@@ -183,6 +185,7 @@ internal class VirkningsdatoTest {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår8_48.håndterLøsning(løsning22_13)
         vilkår11_27.håndterLøsning(løsning22_13)

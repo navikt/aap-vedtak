@@ -61,4 +61,5 @@ data class Løsning_22_13_manuellKafkaDto(
     val unntak: String?,
     val unntaksbegrunnelse: String?,
     val manueltSattVirkningsdato: LocalDate?,
+    val begrunnelseForAnnet: String?,
 )

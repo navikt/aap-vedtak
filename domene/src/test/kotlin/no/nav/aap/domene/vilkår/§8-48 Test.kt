@@ -113,6 +113,7 @@ internal class `§8-48 Test` {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning22_13)
 
@@ -152,6 +153,7 @@ internal class `§8-48 Test` {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning22_13)
 
@@ -201,6 +203,7 @@ internal class `§8-48 Test` {
             unntaksbegrunnelse = "",
             unntak = "",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning22_13)
 

@@ -18,6 +18,7 @@ internal class LøsningParagraf_22_13(
     private val unntak: String?,
     private val unntaksbegrunnelse: String?,
     private val manueltSattVirkningsdato: LocalDate?,
+    private val begrunnelseForAnnet: String?,
 ) : Hendelse(), Løsning<LøsningParagraf_22_13, KvalitetssikringParagraf_22_13> {
 
     init {
@@ -99,7 +100,8 @@ internal class LøsningParagraf_22_13(
         bestemmesAv = bestemmesAv.name,
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
-        manueltSattVirkningsdato = manueltSattVirkningsdato
+        manueltSattVirkningsdato = manueltSattVirkningsdato,
+        begrunnelseForAnnet = begrunnelseForAnnet,
     )
 }
 

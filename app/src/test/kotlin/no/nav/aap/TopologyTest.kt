@@ -167,7 +167,8 @@ internal class ApiTest {
                     bestemmesAv = "soknadstidspunkt",
                     unntak = "INGEN",
                     unntaksbegrunnelse = "",
-                    manueltSattVirkningsdato = LocalDate.now()
+                    manueltSattVirkningsdato = LocalDate.now(),
+                    begrunnelseForAnnet = null,
                 )
             }
             manuell_11_19_Topic.produce(fnr) {

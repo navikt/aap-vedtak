@@ -40,6 +40,7 @@ internal class VirkningsdatoVisitorTest {
                 unntak = "unntak",
                 unntaksbegrunnelse = "unntaksbegrunnelse",
                 manueltSattVirkningsdato = null,
+                begrunnelseForAnnet = null,
             )
         )
         paragraf2213.accept(visitor)
@@ -68,6 +69,7 @@ internal class VirkningsdatoVisitorTest {
             unntak = "unntak",
             unntaksbegrunnelse = "unntaksbegrunnelse",
             manueltSattVirkningsdato = null,
+            begrunnelseForAnnet = null,
         ).accept(visitor)
 
         assertEquals(LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger, visitor.bestemmesAv)
@@ -85,6 +87,7 @@ internal class VirkningsdatoVisitorTest {
             unntak = "unntak",
             unntaksbegrunnelse = "unntaksbegrunnelse",
             manueltSattVirkningsdato = 15 september 2022,
+            begrunnelseForAnnet = null,
         ).accept(visitor)
 
         assertEquals(LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret, visitor.bestemmesAv)

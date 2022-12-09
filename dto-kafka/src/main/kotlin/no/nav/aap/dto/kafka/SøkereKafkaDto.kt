@@ -36,7 +36,7 @@ data class SøkereKafkaDto(
 ) {
     companion object {
         //Husk å oppdatere andre konsumenter etter migrering
-        const val VERSION = 26
+        const val VERSION = 27
     }
 
     data class SakKafkaDto(
@@ -421,6 +421,7 @@ data class SøkereKafkaDto(
         val unntak: String?,
         val unntaksbegrunnelse: String?,
         val manueltSattVirkningsdato: LocalDate?,
+        val begrunnelseForAnnet: String?,
     )
 
     data class KvalitetssikringMedlemskapYrkesskadeKafkaDto(

@@ -439,7 +439,8 @@ private fun LøsningParagraf_22_13ModellApi.toJson() = LøsningParagraf_22_13Kaf
     bestemmesAv = bestemmesAv,
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
-    manueltSattVirkningsdato = manueltSattVirkningsdato
+    manueltSattVirkningsdato = manueltSattVirkningsdato,
+    begrunnelseForAnnet = begrunnelseForAnnet,
 )
 
 private fun KvalitetssikringMedlemskapYrkesskadeModellApi.toJson() = KvalitetssikringMedlemskapYrkesskadeKafkaDto(

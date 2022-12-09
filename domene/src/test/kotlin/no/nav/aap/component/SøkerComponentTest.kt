@@ -356,12 +356,13 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
-                "saksbehandler",
-                LocalDateTime.now(),
-                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
-                "INGEN",
-                "",
-                LocalDate.now()
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                bestemmesAv = LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+                unntak = "INGEN",
+                unntaksbegrunnelse = "",
+                manueltSattVirkningsdato = LocalDate.now(),
+                begrunnelseForAnnet = null,
             )
         )
         søker.håndterLøsning(
@@ -495,12 +496,13 @@ internal class SøkerComponentTest {
             håndterLøsning(
                 LøsningParagraf_22_13(
                     løsningId = UUID.randomUUID(),
-                    "saksbehandler",
-                    LocalDateTime.now(),
-                    LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
-                    "INGEN",
-                    "",
-                    LocalDate.now()
+                    vurdertAv = "saksbehandler",
+                    tidspunktForVurdering = LocalDateTime.now(),
+                    bestemmesAv = LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+                    unntak = "INGEN",
+                    unntaksbegrunnelse = "",
+                    manueltSattVirkningsdato = LocalDate.now(),
+                    begrunnelseForAnnet = null,
                 )
             )
         }
@@ -556,12 +558,13 @@ internal class SøkerComponentTest {
         søker.håndterLøsning(
             LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
-                "saksbehandler",
-                LocalDateTime.now(),
-                LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
-                "INGEN",
-                "",
-                LocalDate.now()
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                bestemmesAv = LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+                unntak = "INGEN",
+                unntaksbegrunnelse = "",
+                manueltSattVirkningsdato = LocalDate.now(),
+                begrunnelseForAnnet = null,
             )
         )
         søker.håndterLøsning(

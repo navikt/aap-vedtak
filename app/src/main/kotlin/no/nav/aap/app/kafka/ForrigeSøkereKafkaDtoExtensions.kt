@@ -500,7 +500,9 @@ private fun Fra.LøsningParagraf_22_13KafkaDto.toDto() = Til.LøsningParagraf_22
     bestemmesAv = bestemmesAv,
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
-    manueltSattVirkningsdato = manueltSattVirkningsdato
+    manueltSattVirkningsdato = manueltSattVirkningsdato,
+    //FIXME: Skal mappes fra "begrunnelseForAnnet"
+    begrunnelseForAnnet = if(bestemmesAv == "annet") "<En annen begrunnelse>" else null
 )
 
 private fun Fra.KvalitetssikringParagraf_22_13KafkaDto.toDto() = Til.KvalitetssikringParagraf_22_13KafkaDto(

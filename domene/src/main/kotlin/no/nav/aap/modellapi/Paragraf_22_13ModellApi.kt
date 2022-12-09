@@ -17,6 +17,7 @@ data class LøsningParagraf_22_13ModellApi(
     val unntak: String?,
     val unntaksbegrunnelse: String?,
     val manueltSattVirkningsdato: LocalDate?,
+    val begrunnelseForAnnet: String?,
 ) : LøsningModellApi() {
 
     constructor(
@@ -26,6 +27,7 @@ data class LøsningParagraf_22_13ModellApi(
         unntak: String?,
         unntaksbegrunnelse: String?,
         manueltSattVirkningsdato: LocalDate?,
+        begrunnelseForAnnet: String?,
     ) : this(
         løsningId = UUID.randomUUID(),
         vurdertAv = vurdertAv,
@@ -33,7 +35,8 @@ data class LøsningParagraf_22_13ModellApi(
         bestemmesAv = bestemmesAv,
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
-        manueltSattVirkningsdato = manueltSattVirkningsdato
+        manueltSattVirkningsdato = manueltSattVirkningsdato,
+        begrunnelseForAnnet = begrunnelseForAnnet,
     )
 
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
@@ -58,7 +61,8 @@ data class LøsningParagraf_22_13ModellApi(
         },
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
-        manueltSattVirkningsdato = manueltSattVirkningsdato
+        manueltSattVirkningsdato = manueltSattVirkningsdato,
+        begrunnelseForAnnet = begrunnelseForAnnet,
     )
 
     override fun toLøsning() = LøsningParagraf_22_13(
@@ -68,7 +72,8 @@ data class LøsningParagraf_22_13ModellApi(
         bestemmesAv = enumValueOf(bestemmesAv),
         unntak = unntak,
         unntaksbegrunnelse = unntaksbegrunnelse,
-        manueltSattVirkningsdato = manueltSattVirkningsdato
+        manueltSattVirkningsdato = manueltSattVirkningsdato,
+        begrunnelseForAnnet = begrunnelseForAnnet,
     )
 }
 

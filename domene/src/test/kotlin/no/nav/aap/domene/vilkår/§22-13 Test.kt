@@ -28,13 +28,14 @@ internal class `§22-13 Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
-            UUID.randomUUID(),
-            "saksbehandler",
-            LocalDateTime.now(),
-            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
-            "INGEN",
-            "",
-            LocalDate.now()
+            løsningId = UUID.randomUUID(),
+            vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
+            bestemmesAv = LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+            unntak = "INGEN",
+            unntaksbegrunnelse = "",
+            manueltSattVirkningsdato = LocalDate.now(),
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning)
 
@@ -52,13 +53,14 @@ internal class `§22-13 Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
-            UUID.randomUUID(),
-            "saksbehandler",
-            LocalDateTime.now(),
-            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
-            "INGEN",
-            "",
-            LocalDate.now()
+            løsningId = UUID.randomUUID(),
+            vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
+            bestemmesAv = LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+            unntak = "INGEN",
+            unntaksbegrunnelse = "",
+            manueltSattVirkningsdato = LocalDate.now(),
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning)
 
@@ -79,13 +81,14 @@ internal class `§22-13 Test` {
         vilkår.håndterSøknad(Søknad(UUID.randomUUID(), personident, fødselsdato), fødselsdato, LocalDate.now())
 
         val løsning = LøsningParagraf_22_13(
-            UUID.randomUUID(),
-            "saksbehandler",
-            LocalDateTime.now(),
-            LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
-            "INGEN",
-            "",
-            LocalDate.now()
+            løsningId = UUID.randomUUID(),
+            vurdertAv = "saksbehandler",
+            tidspunktForVurdering = LocalDateTime.now(),
+            bestemmesAv = LøsningParagraf_22_13.BestemmesAv.soknadstidspunkt,
+            unntak = "INGEN",
+            unntaksbegrunnelse = "",
+            manueltSattVirkningsdato = LocalDate.now(),
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning)
 
@@ -112,7 +115,8 @@ internal class `§22-13 Test` {
             bestemmesAv = LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger,
             unntak = "INGEN",
             unntaksbegrunnelse = "",
-            manueltSattVirkningsdato = LocalDate.now()
+            manueltSattVirkningsdato = LocalDate.now(),
+            begrunnelseForAnnet = null,
         )
         vilkår.håndterLøsning(løsning)
 

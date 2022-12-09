@@ -125,7 +125,11 @@ internal class SakTest {
 
     @Test
     fun `Hvis vi mottar en søknad der søker har oppgitt yrkesskade`() {
-        val sak = opprettSakOgHåndterSøknad(Fødselsdato(LocalDate.now().minusYears(18)), "12345678910", harTidligereYrkesskade = Søknad.HarYrkesskade.JA)
+        val sak = opprettSakOgHåndterSøknad(
+            Fødselsdato(LocalDate.now().minusYears(18)),
+            "12345678910",
+            harTidligereYrkesskade = Søknad.HarYrkesskade.JA
+        )
         assertTilstand("AVVENTER_VURDERING", sak)
 
         sak.håndterLøsning(
@@ -633,12 +637,13 @@ internal class SakTest {
         sak.håndterLøsning(
             LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
-                "saksbehandler",
-                LocalDateTime.now(),
-                LøsningParagraf_22_13.BestemmesAv.annet,
-                "INGEN",
-                "",
-                endretVirkningsdato
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                bestemmesAv = LøsningParagraf_22_13.BestemmesAv.annet,
+                unntak = "INGEN",
+                unntaksbegrunnelse = "",
+                manueltSattVirkningsdato = endretVirkningsdato,
+                begrunnelseForAnnet = "Begrunnelse for annet",
             )
         )
         assertTilstand("BEREGN_INNTEKT", sak)
@@ -658,12 +663,13 @@ internal class SakTest {
         sak.håndterLøsning(
             LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
-                "saksbehandler",
-                LocalDateTime.now(),
-                LøsningParagraf_22_13.BestemmesAv.annet,
-                "INGEN",
-                "",
-                endretVirkningsdato.plusDays(1)
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                bestemmesAv = LøsningParagraf_22_13.BestemmesAv.annet,
+                unntak = "INGEN",
+                unntaksbegrunnelse = "",
+                manueltSattVirkningsdato = endretVirkningsdato.plusDays(1),
+                begrunnelseForAnnet = "Begrunnelse for annet",
             )
         )
         assertTilstand("BEREGN_INNTEKT", sak)
@@ -1243,7 +1249,8 @@ internal class SakTest {
         harTidligereYrkesskade: Søknad.HarYrkesskade = Søknad.HarYrkesskade.NEI
     ): Sak {
         val personident = Personident(ident)
-        val søknad = Søknad(UUID.randomUUID(), personident, fødselsdato, søknadstidspunkt, erStudent, harTidligereYrkesskade)
+        val søknad =
+            Søknad(UUID.randomUUID(), personident, fødselsdato, søknadstidspunkt, erStudent, harTidligereYrkesskade)
         return Sak().apply { håndterSøknad(søknad, fødselsdato) }
     }
 
@@ -1267,7 +1274,11 @@ internal class SakTest {
         )
     }
 
-    private fun håndterSykepengeløsningMedHar(sak: Sak, gjenståendeSykedager: Int, foreløpigBeregnetSluttPåSykepenger: LocalDate) {
+    private fun håndterSykepengeløsningMedHar(
+        sak: Sak,
+        gjenståendeSykedager: Int,
+        foreløpigBeregnetSluttPåSykepenger: LocalDate
+    ) {
         sak.håndterLøsning(
             LøsningSykepengedager(
                 løsningId = UUID.randomUUID(),
@@ -1350,16 +1361,21 @@ internal class SakTest {
         )
     }
 
-    private fun håndter22_13Løsning(sak: Sak, bestemmesAv: LøsningParagraf_22_13.BestemmesAv, manueltSattVirkningsdato: LocalDate = LocalDate.now()) {
+    private fun håndter22_13Løsning(
+        sak: Sak,
+        bestemmesAv: LøsningParagraf_22_13.BestemmesAv,
+        manueltSattVirkningsdato: LocalDate = LocalDate.now()
+    ) {
         sak.håndterLøsning(
             LøsningParagraf_22_13(
                 løsningId = UUID.randomUUID(),
-                "saksbehandler",
-                LocalDateTime.now(),
-                bestemmesAv,
-                "INGEN",
-                "",
-                manueltSattVirkningsdato
+                vurdertAv = "saksbehandler",
+                tidspunktForVurdering = LocalDateTime.now(),
+                bestemmesAv = bestemmesAv,
+                unntak = "INGEN",
+                unntaksbegrunnelse = "",
+                manueltSattVirkningsdato = manueltSattVirkningsdato,
+                begrunnelseForAnnet = if (bestemmesAv == LøsningParagraf_22_13.BestemmesAv.annet) "Begrunnelse for annet" else null,
             )
         )
     }

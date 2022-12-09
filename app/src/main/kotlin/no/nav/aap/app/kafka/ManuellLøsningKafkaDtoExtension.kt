@@ -48,7 +48,8 @@ private fun Løsning_22_13_manuellKafkaDto.toModellApi() = LøsningParagraf_22_1
     bestemmesAv = bestemmesAv,
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
-    manueltSattVirkningsdato = manueltSattVirkningsdato
+    manueltSattVirkningsdato = manueltSattVirkningsdato,
+    begrunnelseForAnnet = begrunnelseForAnnet,
 )
 
 private fun Løsning_11_19_manuellKafkaDto.toModellApi() = LøsningParagraf_11_19ModellApi(vurdertAv, tidspunktForVurdering, beregningsdato)
