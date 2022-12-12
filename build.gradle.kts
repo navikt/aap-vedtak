@@ -2,7 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.7.22"
-    id("io.ktor.plugin") version "2.1.3" apply false
+    id("io.ktor.plugin") version "2.2.1" apply false
 }
 
 allprojects {
