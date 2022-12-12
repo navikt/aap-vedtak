@@ -1,5 +1,6 @@
 package no.nav.aap.app.stream
 
+import io.micrometer.core.instrument.MeterRegistry
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toForrigeDto
 import no.nav.aap.app.kafka.toJson
@@ -10,9 +11,10 @@ import no.nav.aap.kafka.streams.extension.*
 import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>, registry: MeterRegistry) {
     consume(Topics.medlem)
         .filterNotNullBy("medlem-filter-tombstones-og-responses") { medlem -> medlem.response }
+        .peek{_, value -> registry.counter("medlem_folketrygden").increment()}
         .selectKey("keyed_personident") { _, value -> value.personident }
         .join(Topics.medlem with Topics.søkere, søkere, håndterMedlem)
         .produce(Topics.søkere, "produced-soker-med-medlem")

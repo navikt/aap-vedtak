@@ -1,5 +1,6 @@
 package no.nav.aap.app.stream
 
+import io.micrometer.core.instrument.MeterRegistry
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toForrigeDto
 import no.nav.aap.app.kafka.toJson
@@ -14,9 +15,10 @@ import org.apache.kafka.streams.StreamsBuilder
 import org.apache.kafka.streams.kstream.Consumed
 import org.apache.kafka.streams.kstream.KTable
 
-internal fun StreamsBuilder.andreFolketrygdytelserStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun StreamsBuilder.andreFolketrygdytelserStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>, registry: MeterRegistry) {
     consume(Topics.andreFolketrygdsytelser)
         .filterNotNullBy("andre-folketrygdytelser-filter-tombstones-og-responses") { ytelser -> ytelser.response }
+        .peek{_, value -> registry.counter("mottar_andre_ytelser").increment()}
         .join(Topics.andreFolketrygdsytelser with Topics.søkere, søkere, håndterAndreFolketrygdytelser)
         .produce(Topics.søkere, "produced-soker-med-handtert-andre-folketrygdytelser")
 }

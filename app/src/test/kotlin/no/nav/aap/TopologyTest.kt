@@ -301,7 +301,7 @@ internal class ApiTest {
     }
 
     @Test
-    @Ignore
+    //@Ignore
     fun `Tester metrikker`() {
         val kafka = KafkaStreamsMock()
         testApplication{
@@ -342,6 +342,65 @@ internal class ApiTest {
                     fødselsdato = LocalDate.now().minusYears(40),
                     innsendingTidspunkt = LocalDateTime.now(),
                 )}
+
+            }
+            val client = createClient { install(ContentNegotiation){jackson {  }} }
+            client.get("/actuator/metrics")
+        }
+    }
+
+    @Test
+    //@Ignore
+    fun `Tester metrikker andre ytelser`() {
+        val kafka = KafkaStreamsMock()
+        testApplication{
+            environment { config = MapApplicationConfig(
+                "TOGGLE_LES_SOKNADER" to "true",
+                "KAFKA_STREAMS_APPLICATION_ID" to "test",
+                "KAFKA_BROKERS" to "mock://kafka",
+                "KAFKA_TRUSTSTORE_PATH" to "",
+                "KAFKA_KEYSTORE_PATH" to "",
+                "KAFKA_CREDSTORE_PASSWORD" to ""
+            ) }
+            application {
+                server(kafka)
+                val soknadTopic = kafka.testTopic(Topics.søknad)
+                soknadTopic.produce("123"){ SøknadKafkaDto(
+                    sykepenger = false,
+                    ferie = null,
+                    studier = Studier(
+                        erStudent = Studier.StudieSvar.NEI,
+                        kommeTilbake = null,
+                        vedlegg = emptyList(),
+                    ),
+                    medlemsskap = Medlemskap(
+                        boddINorgeSammenhengendeSiste5 = true,
+                        jobbetUtenforNorgeFørSyk = false,
+                        jobbetSammenhengendeINorgeSiste5 = null,
+                        iTilleggArbeidUtenforNorge = null,
+                        utenlandsopphold = emptyList(),
+                    ),
+                    registrerteBehandlere = emptyList(),
+                    andreBehandlere = emptyList(),
+                    yrkesskadeType = SøknadKafkaDto.Yrkesskade.NEI,
+                    utbetalinger = Utbetalinger(
+                        ekstraFraArbeidsgiver = Utbetalinger.FraArbeidsgiver(
+                            fraArbeidsgiver = false
+                        ),
+                        andreStønader = listOf(Utbetalinger.AnnenStønad(
+                            type = Utbetalinger.AnnenStønadstype.STIPEND,
+                            hvemUtbetalerAFP = null,
+                            vedlegg = emptyList())
+                        )
+                    ),
+                    tilleggsopplysninger = null,
+                    registrerteBarn = emptyList(),
+                    andreBarn = emptyList(),
+                    vedlegg = emptyList(),
+                    fødselsdato = LocalDate.now().minusYears(40),
+                    innsendingTidspunkt = LocalDateTime.now(),
+                )}
+
             }
             val client = createClient { install(ContentNegotiation){jackson {  }} }
             client.get("/actuator/metrics")
