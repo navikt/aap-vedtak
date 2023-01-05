@@ -1,8 +1,8 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    kotlin("jvm") version "1.7.22"
-    id("io.ktor.plugin") version "2.2.1" apply false
+    kotlin("jvm") version "1.8.0"
+    id("io.ktor.plugin") version "2.2.2" apply false
 }
 
 allprojects {
@@ -17,7 +17,7 @@ subprojects {
 
     tasks {
         withType<KotlinCompile> {
-            kotlinOptions.jvmTarget = "18"
+            kotlinOptions.jvmTarget = "19"
         }
 
         withType<Test> {

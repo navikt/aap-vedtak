@@ -20,7 +20,7 @@ jobs:
           fetch-depth: 0 # include git tags
       - uses: actions/setup-java@v3
         with:
-          java-version: 18
+          java-version: 19
           distribution: 'temurin'
 
       - uses: paulhatch/semantic-version@v5.0.2
