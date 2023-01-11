@@ -23,7 +23,7 @@ jobs:
           java-version: 19
           distribution: 'temurin'
 
-      - uses: paulhatch/semantic-version@v5.0.2
+      - uses: paulhatch/semantic-version@v5.0.3
         id: tag
         with:
           bump_each_commit: true
