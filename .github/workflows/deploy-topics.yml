@@ -18,6 +18,7 @@ jobs:
           - topic-medlem.yml
           - topic-søkere.yml
           - topic-innstilling-11-6.yml
+          - topic-arena-sistevedtak.yml
           - topic-manuell-11-2.yml
           - topic-manuell-11-3.yml
           - topic-manuell-11-4.yml
