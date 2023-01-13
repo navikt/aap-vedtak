@@ -32,7 +32,7 @@ spec:
       application: bot
       access: read
     - team: aap
-      application: arenadata
+      application: saksinfo
       access: read
   {{#each kafka.acl.dev as |dev|}}
     - team: "{{dev.team}}"
