@@ -34,6 +34,9 @@ spec:
     - team: aap
       application: arenadata
       access: read
+    - team: aap
+      application: bigquery
+      access: read
   {{#each kafka.acl.dev as |dev|}}
     - team: "{{dev.team}}"
       application: "{{dev.application}}"
