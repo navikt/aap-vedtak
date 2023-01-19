@@ -21,7 +21,7 @@ spec:
       application: vedtak
       access: readwrite
     - team: aap
-      application: arenadata
+      application: saksinfo
       access: readwrite
   {{#each kafka.acl.dev as |dev|}}
     - team: "{{dev.team}}"

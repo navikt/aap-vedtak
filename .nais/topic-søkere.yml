@@ -28,6 +28,9 @@ spec:
     - team: aap
       application: bot
       access: read
+    - team: aap
+      application: personopplysninger
+      access: read
   {{#each kafka.acl.dev as |dev|}}
     - team: "{{dev.team}}"
       application: "{{dev.application}}"
