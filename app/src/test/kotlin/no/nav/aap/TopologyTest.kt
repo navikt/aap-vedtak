@@ -51,7 +51,7 @@ internal class ApiTest {
             val kvalitetssikring_11_5_Topic = kafka.testTopic(Topics.kvalitetssikring_11_5)
             val kvalitetssikring_11_6_Topic = kafka.testTopic(Topics.kvalitetssikring_11_6)
             val kvalitetssikring_11_19_Topic = kafka.testTopic(Topics.kvalitetssikring_11_19)
-            val kvalitetssikring_11_29_Topic = kafka.testTopic(Topics.kvalitetssikring_11_29)
+            kafka.testTopic(Topics.kvalitetssikring_11_29)
             val kvalitetssikring_22_13_Topic = kafka.testTopic(Topics.kvalitetssikring_22_13)
             val andreFolketrygdsytelserTopic = kafka.testTopic(Topics.andreFolketrygdsytelser)
             val inntektTopic = kafka.testTopic(Topics.inntekter)
@@ -305,46 +305,50 @@ internal class ApiTest {
     @Ignore
     fun `Tester metrikker`() {
         val kafka = KafkaStreamsMock()
-        testApplication{
-            environment { config = MapApplicationConfig(
-                "TOGGLE_LES_SOKNADER" to "true",
-                "KAFKA_STREAMS_APPLICATION_ID" to "test",
-                "KAFKA_BROKERS" to "mock://kafka",
-                "KAFKA_TRUSTSTORE_PATH" to "",
-                "KAFKA_KEYSTORE_PATH" to "",
-                "KAFKA_CREDSTORE_PASSWORD" to ""
-            ) }
+        testApplication {
+            environment {
+                config = MapApplicationConfig(
+                    "TOGGLE_LES_SOKNADER" to "true",
+                    "KAFKA_STREAMS_APPLICATION_ID" to "test",
+                    "KAFKA_BROKERS" to "mock://kafka",
+                    "KAFKA_TRUSTSTORE_PATH" to "",
+                    "KAFKA_KEYSTORE_PATH" to "",
+                    "KAFKA_CREDSTORE_PASSWORD" to ""
+                )
+            }
             application {
                 server(kafka)
                 val soknadTopic = kafka.testTopic(Topics.søknad)
-                soknadTopic.produce("123"){ SøknadKafkaDto(
-                    sykepenger = false,
-                    ferie = null,
-                    studier = Studier(
-                        erStudent = Studier.StudieSvar.NEI,
-                        kommeTilbake = null,
+                soknadTopic.produce("123") {
+                    SøknadKafkaDto(
+                        sykepenger = false,
+                        ferie = null,
+                        studier = Studier(
+                            erStudent = Studier.StudieSvar.NEI,
+                            kommeTilbake = null,
+                            vedlegg = emptyList(),
+                        ),
+                        medlemsskap = Medlemskap(
+                            boddINorgeSammenhengendeSiste5 = true,
+                            jobbetUtenforNorgeFørSyk = false,
+                            jobbetSammenhengendeINorgeSiste5 = null,
+                            iTilleggArbeidUtenforNorge = null,
+                            utenlandsopphold = emptyList(),
+                        ),
+                        registrerteBehandlere = emptyList(),
+                        andreBehandlere = emptyList(),
+                        yrkesskadeType = SøknadKafkaDto.Yrkesskade.NEI,
+                        utbetalinger = null,
+                        tilleggsopplysninger = null,
+                        registrerteBarn = emptyList(),
+                        andreBarn = emptyList(),
                         vedlegg = emptyList(),
-                    ),
-                    medlemsskap = Medlemskap(
-                        boddINorgeSammenhengendeSiste5 = true,
-                        jobbetUtenforNorgeFørSyk = false,
-                        jobbetSammenhengendeINorgeSiste5 = null,
-                        iTilleggArbeidUtenforNorge = null,
-                        utenlandsopphold = emptyList(),
-                    ),
-                    registrerteBehandlere = emptyList(),
-                    andreBehandlere = emptyList(),
-                    yrkesskadeType = SøknadKafkaDto.Yrkesskade.NEI,
-                    utbetalinger = null,
-                    tilleggsopplysninger = null,
-                    registrerteBarn = emptyList(),
-                    andreBarn = emptyList(),
-                    vedlegg = emptyList(),
-                    fødselsdato = LocalDate.now().minusYears(40),
-                    innsendingTidspunkt = LocalDateTime.now(),
-                )}
+                        fødselsdato = LocalDate.now().minusYears(40),
+                        innsendingTidspunkt = LocalDateTime.now(),
+                    )
+                }
             }
-            val client = createClient { install(ContentNegotiation){jackson {  }} }
+            val client = createClient { install(ContentNegotiation) { jackson { } } }
             client.get("/actuator/metrics")
         }
     }
@@ -368,6 +372,41 @@ internal class ApiTest {
         val markdown = markdown(flowchart)
         File("../doc/topology.md").apply { writeText(markdown) }
         File("../doc/topology.mermaid").apply { writeText(flowchart) }
+    }
+
+    @Test
+    fun `oppdaterer søker med ny personident`() {
+        KafkaStreamsMock().apply {
+            connect(
+                config = KStreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                registry = SimpleMeterRegistry(),
+                topology = topology(SimpleMeterRegistry(), MockProducer(), true)
+            )
+        }.use { kafka ->
+            val søkere = kafka.testTopic(Topics.søkere)
+            val endredePersonidenter = kafka.testTopic(Topics.endredePersonidenter)
+            val søker = SøkereKafkaDtoHistorikk(
+                søkereKafkaDto = SøkereKafkaDto(
+                    personident = "123",
+                    fødselsdato = LocalDate.now(),
+                    saker = emptyList()
+                ),
+                forrigeSøkereKafkaDto = ForrigeSøkereKafkaDto(
+                    personident = "123",
+                    fødselsdato = LocalDate.now(),
+                    saker = emptyList()
+                )
+            )
+
+            søkere.produce("123") { søker }
+            endredePersonidenter.produce("123") { "456" }
+
+            søkere.assertThat()
+                .hasNumberOfRecords(2)
+                .containsTombstone("123")
+                .hasValuesForPredicate("456") { it == søker }
+        }
+
     }
 }
 

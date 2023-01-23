@@ -8,6 +8,7 @@ import no.nav.aap.hendelse.*
 import no.nav.aap.modellapi.SøkerModellApi
 
 internal class Søker private constructor(
+    // TODO: skal den slettes?
     private val personident: Personident,
     private val fødselsdato: Fødselsdato,
     private val saker: MutableList<Sak>
