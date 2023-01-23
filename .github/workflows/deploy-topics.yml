@@ -41,6 +41,7 @@ jobs:
           - topic-andre-folketrygdytelser.yml
           - topic-iverksettelse-av-vedtak.yml
           - topic-vedtak.yml
+          - topic-yrkesskade.yml
         cluster:
           - dev-gcp
           - prod-gcp

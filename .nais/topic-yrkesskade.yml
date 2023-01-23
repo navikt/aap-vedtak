@@ -1,0 +1,30 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: yrkesskade.v1
+  namespace: aap
+  labels:
+    team: aap
+  annotations:
+    kafka.nais.io/removeDataWhenResourceIsDeleted: "{{kafka.permanent-delete-topics}}"
+    kafka.format: json
+    kafka.state: "false"
+    github.url: https://github.com/navikt/aap-vedtak
+spec:
+  pool: {{kafka.pool}}
+  config:
+    cleanupPolicy: compact,delete
+    partitions: 12
+    retentionHours: 168
+  acl:
+    - team: aap
+      application: vedtak
+      access: readwrite
+    - team: aap
+      application: yrkesskade
+      access: readwrite
+  {{#each kafka.acl.dev as |dev|}}
+    - team: "{{dev.team}}"
+      application: "{{dev.application}}"
+      access: "{{dev.access}}"
+  {{/each}}
