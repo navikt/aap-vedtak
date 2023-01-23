@@ -91,9 +91,9 @@ internal fun topology(
     streams.manuellInnstillingStream(søkerKTable)
     streams.manuellLøsningStream(søkerKTable)
     streams.manuellKvalitetssikringStream(søkerKTable)
+    streams.endredePersonidenterStream(søkerKTable)
 
     streams.andreFolketrygdsytelserResponseMockStream()
-    streams.endredePersonidenterStream(søkerKTable)
 
     return streams.build()
 }

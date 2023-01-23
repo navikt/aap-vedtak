@@ -29,6 +29,7 @@ subgraph Vedtak
 	aap.sykepengedager.v1([aap.sykepengedager.v1])
 	aap.andre-folketrygdytelser.v1([aap.andre-folketrygdytelser.v1])
 	aap.sokere.v1([aap.sokere.v1])
+	aap.endrede-personidenter.v1([aap.endrede-personidenter.v1])
 	aap.inntekter.v1([aap.inntekter.v1])
 	aap.sokere.v1-buffered-joined-aap.medlem.v1-repartition([aap.sokere.v1-buffered-joined-aap.medlem.v1-repartition])
 	aap.medlem.v1([aap.medlem.v1])
@@ -58,6 +59,7 @@ subgraph Vedtak
 	join-20{join}
 	join-21{join}
 	join-22{join}
+	join-23{join}
     
     %% STATE STORES
     soker-state-store-v2[(soker-state-store-v2)]
@@ -230,12 +232,15 @@ subgraph Vedtak
 	aap.andre-folketrygdytelser.v1 --> join-20
 	soker-state-store-v2 --> join-20
 	join-20 --> |produced-soker-med-handtert-andre-folketrygdytelser-buffered| aap.sokere.v1
-	aap.inntekter.v1 --> join-21
+	aap.endrede-personidenter.v1 --> join-21
 	soker-state-store-v2 --> join-21
-	join-21 --> |produced-soker-med-handtert-inntekter-buffered| aap.sokere.v1
-	aap.sokere.v1-buffered-joined-aap.medlem.v1-repartition --> join-22
+	join-21 --> |produce-soker-with-ny-personident| aap.sokere.v1
+	aap.inntekter.v1 --> join-22
 	soker-state-store-v2 --> join-22
-	join-22 --> |produced-soker-med-medlem-buffered| aap.sokere.v1
+	join-22 --> |produced-soker-med-handtert-inntekter-buffered| aap.sokere.v1
+	aap.sokere.v1-buffered-joined-aap.medlem.v1-repartition --> join-23
+	soker-state-store-v2 --> join-23
+	join-23 --> |produced-soker-med-medlem-buffered| aap.sokere.v1
     
     %% JOB STREAMS
     metrics-soker-state-store-v2 --> soker-state-store-v2
@@ -275,6 +280,7 @@ style aap.manuell.22-13.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color
 style aap.sykepengedager.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.andre-folketrygdytelser.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.endrede-personidenter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.sokere.v1-buffered-joined-aap.medlem.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
