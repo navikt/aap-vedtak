@@ -369,6 +369,65 @@ internal class ApiTest {
         File("../doc/topology.md").apply { writeText(markdown) }
         File("../doc/topology.mermaid").apply { writeText(flowchart) }
     }
+
+    @Test
+    fun `oppdaterer søker med ny personident`() {
+        KafkaStreamsMock().apply {
+            connect(
+                config = KStreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                registry = SimpleMeterRegistry(),
+                topology = topology(SimpleMeterRegistry(), MockProducer(), true)
+            )
+        }.use { kafka ->
+            val søknadTopic = kafka.testTopic(Topics.søknad)
+            val medlemTopic = kafka.testTopic(Topics.medlem)
+            val innstilling_11_6_Topic = kafka.testTopic(Topics.innstilling_11_6)
+            val manuell_11_3_Topic = kafka.testTopic(Topics.manuell_11_3)
+            val manuell_11_5_Topic = kafka.testTopic(Topics.manuell_11_5)
+            val manuell_11_6_Topic = kafka.testTopic(Topics.manuell_11_6)
+            val manuell_11_19_Topic = kafka.testTopic(Topics.manuell_11_19)
+            val manuell_11_29_Topic = kafka.testTopic(Topics.manuell_11_29)
+            val manuell_22_13_Topic = kafka.testTopic(Topics.manuell_22_13)
+            val kvalitetssikring_11_2_Topic = kafka.testTopic(Topics.kvalitetssikring_11_2)
+            val kvalitetssikring_11_3_Topic = kafka.testTopic(Topics.kvalitetssikring_11_3)
+            val kvalitetssikring_11_5_Topic = kafka.testTopic(Topics.kvalitetssikring_11_5)
+            val kvalitetssikring_11_6_Topic = kafka.testTopic(Topics.kvalitetssikring_11_6)
+            val kvalitetssikring_11_19_Topic = kafka.testTopic(Topics.kvalitetssikring_11_19)
+            val kvalitetssikring_11_29_Topic = kafka.testTopic(Topics.kvalitetssikring_11_29)
+            val kvalitetssikring_22_13_Topic = kafka.testTopic(Topics.kvalitetssikring_22_13)
+            val andreFolketrygdsytelserTopic = kafka.testTopic(Topics.andreFolketrygdsytelser)
+            val inntektTopic = kafka.testTopic(Topics.inntekter)
+            val sykepengedagerTopic = kafka.testTopic(Topics.sykepengedager)
+            val iverksettelseAvVedtakTopic = kafka.testTopic(Topics.iverksettelseAvVedtak)
+            val iverksettVedtakTopic = kafka.testTopic(Topics.vedtak)
+            val stateStore = kafka.getStore<SøkereKafkaDtoHistorikk>(SØKERE_STORE_NAME)
+            val søkere = kafka.testTopic(Topics.søkere)
+            val endredePersonidenter = kafka.testTopic(Topics.endredePersonidenter)
+            val søker = SøkereKafkaDtoHistorikk(
+                søkereKafkaDto = SøkereKafkaDto(
+                    personident = "123",
+                    fødselsdato = LocalDate.now(),
+                    saker = emptyList()
+                ),
+                forrigeSøkereKafkaDto = ForrigeSøkereKafkaDto(
+                    personident = "123",
+                    fødselsdato = LocalDate.now(),
+                    saker = emptyList()
+                ),
+
+                )
+        søkere.produce("123"){
+            søker
+        }
+            endredePersonidenter.produce("123"){ "456" }
+            søkere.assertThat()
+                .hasNumberOfRecords(1)
+                .hasValuesForPredicate("456"){
+                    it == søker
+                }
+        }
+
+    }
 }
 
 inline fun <reified V : Any> TestInputTopic<String, V>.produce(key: String, value: () -> V) = pipeInput(key, value())

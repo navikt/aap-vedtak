@@ -5,6 +5,7 @@ import no.nav.aap.kafka.serde.json.JsonSerde
 import no.nav.aap.kafka.streams.BufferableTopic
 import no.nav.aap.kafka.streams.Topic
 import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
+import org.apache.kafka.common.serialization.Serdes.StringSerde
 
 object Topics {
     private val buffer = RaceConditionBuffer<String, SøkereKafkaDtoHistorikk>(logRecordValues = true)
@@ -26,6 +27,7 @@ object Topics {
     val sykepengedager = Topic("aap.sykepengedager.v1", JsonSerde.jackson<SykepengedagerKafkaDto>())
     val iverksettelseAvVedtak =
         Topic("aap.iverksettelse-av-vedtak.v1", JsonSerde.jackson<IverksettelseAvVedtakKafkaDto>())
+    val endredePersonidenter = Topic("aap.endrede-personidenter.v1", StringSerde())
 
     val innstilling_11_6 = Topic("aap.innstilling.11-6.v1", JsonSerde.jackson<Innstilling_11_6KafkaDto>())
 
