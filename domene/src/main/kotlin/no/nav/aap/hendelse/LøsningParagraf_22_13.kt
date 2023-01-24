@@ -54,6 +54,7 @@ internal class LøsningParagraf_22_13(
         unntaksvurderingMangelfull,
         etterSisteLoenn,
         annet,
+        unntaksvurdering,
     }
 
     internal fun bestemmesAv8_48() = bestemmesAv == BestemmesAv.maksdatoSykepenger
