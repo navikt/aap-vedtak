@@ -61,7 +61,6 @@ internal class VirkningsdatoVisitor : SakstypeVisitor {
             LøsningParagraf_22_13.BestemmesAv.unntaksvurderingForhindret,
             LøsningParagraf_22_13.BestemmesAv.unntaksvurderingMangelfull,
             LøsningParagraf_22_13.BestemmesAv.etterSisteLoenn,
-            LøsningParagraf_22_13.BestemmesAv.unntaksvurdering,
             LøsningParagraf_22_13.BestemmesAv.annet -> requireNotNull(manueltSattVirkningsdato)
         }
     }

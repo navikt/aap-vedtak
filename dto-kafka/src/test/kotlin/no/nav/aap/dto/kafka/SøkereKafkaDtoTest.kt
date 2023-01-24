@@ -9,6 +9,6 @@ internal class SøkereKafkaDtoTest {
 
     @Test
     fun `test versjonsnummer`() {
-        assertEquals(27, SøkereKafkaDto.VERSION)
+        assertEquals(28, SøkereKafkaDto.VERSION)
     }
 }

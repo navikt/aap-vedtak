@@ -397,6 +397,7 @@ data class ForrigeSøkereKafkaDto(
         val unntak: String?,
         val unntaksbegrunnelse: String?,
         val manueltSattVirkningsdato: LocalDate?,
+        val begrunnelseForAnnet: String?,
     )
 
     data class KvalitetssikringMedlemskapYrkesskadeKafkaDto(

@@ -494,7 +494,7 @@ private fun Fra.LøsningParagraf_22_13KafkaDto.toDto() = Til.LøsningParagraf_22
     unntak = unntak,
     unntaksbegrunnelse = unntaksbegrunnelse,
     manueltSattVirkningsdato = manueltSattVirkningsdato,
-    //FIXME: Legg til mapping av "begrunnelseForAnnet"
+    begrunnelseForAnnet = begrunnelseForAnnet
 )
 
 private fun Fra.KvalitetssikringParagraf_22_13KafkaDto.toDto() = Til.KvalitetssikringParagraf_22_13KafkaDto(
