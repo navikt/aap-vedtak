@@ -25,7 +25,7 @@ spec:
       access: readwrite
     - team: aap
       application: arenadata
-      access: read
+      access: readwrite
   {{#each kafka.acl.dev as |dev|}}
     - team: "{{dev.team}}"
       application: "{{dev.application}}"
