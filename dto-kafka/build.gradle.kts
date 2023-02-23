@@ -8,7 +8,7 @@ dependencies {
     testImplementation(kotlin("test"))
 }
 
-group = "com.github.navikt"
+group = "com.github.navikt.aap-vedtak"
 
 tasks {
     withType<Jar> {
@@ -24,7 +24,7 @@ java {
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            artifactId = "aap-vedtak"
+            artifactId = "kafka-dto"
             version = project.findProperty("dto-kafka.version").toString()
             from(components["java"])
         }
