@@ -1,4 +1,4 @@
-val aapLibVersion = "3.6.7"
+val aapLibVersion = "3.6.9"
 val ktorVersion = "2.2.3"
 
 plugins {
