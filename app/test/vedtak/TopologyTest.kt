@@ -1,4 +1,4 @@
-package no.nav.aap
+package vedtak
 
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
@@ -9,8 +9,6 @@ import io.micrometer.core.instrument.simple.SimpleMeterRegistry
 import no.nav.aap.app.kafka.SØKERE_STORE_NAME
 import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
-import no.nav.aap.app.server
-import no.nav.aap.app.topology
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.kafka.streams.KStreamsConfig
@@ -370,8 +368,7 @@ internal class ApiTest {
         val topology = topology(SimpleMeterRegistry(), MockProducer(), true)
         val flowchart = Mermaid.graph("Vedtak", topology)
         val markdown = markdown(flowchart)
-        File("../doc/topology.md").apply { writeText(markdown) }
-        File("../doc/topology.mermaid").apply { writeText(flowchart) }
+        File("../docs/topology.mmd").apply { writeText(markdown) }
     }
 
     @Test

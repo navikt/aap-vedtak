@@ -1,10 +1,6 @@
-![img](doc/logo.jpg)
+![img](docs/logo.jpg)
 
 Vedtaksapplikasjon for AAP
-
-# Topology
-See mermaid representation of the topology: <br>
-[doc/topology.md](doc/topology.md)
 
 # Migrering
 Hvis man skal gjøre endringer i SøkereKafkaDto, vil dette føre til en migrering.
@@ -19,3 +15,6 @@ Hvis man skal gjøre endringer i SøkereKafkaDto, vil dette føre til en migreri
  - Rydd opp i det som er annotert med FIXME fra forrige migrering
  - Gjør migreringslogikk i ForrigeSøkereKafkaDtoExtensions
  - Annoter denne logikken med en FIXME
+
+## Arkitektur
+[docs/arkitektur.md](docs/arkitektur.md)

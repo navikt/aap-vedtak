@@ -1,4 +1,4 @@
-package no.nav.aap.app
+package vedtak
 
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -1,4 +1,4 @@
-package no.nav.aap.app
+package vedtak
 
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import io.ktor.serialization.jackson.*
