@@ -6,7 +6,7 @@ plugins {
 }
 
 application {
-    mainClass.set("no.nav.aap.app.AppKt")
+    mainClass.set("vedtak.AppKt")
 }
 
 dependencies {
