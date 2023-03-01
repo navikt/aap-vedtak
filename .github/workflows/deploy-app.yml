@@ -25,7 +25,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2.4.0
         with:
-          arguments: test app:buildFatJar --continue --no-daemon
+          arguments: test app:buildFatJar --continue --no-daemon --configuration-cache
 
       - uses: dorny/test-reporter@v1.6.0
         if: success() || failure()
