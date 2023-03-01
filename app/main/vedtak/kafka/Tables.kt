@@ -1,9 +1,7 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
-import no.nav.aap.kafka.streams.Table
-
-internal const val SØKERE_STORE_NAME = "soker-state-store-v2"
+import no.nav.aap.kafka.streams.v2.Table
 
 object Tables {
-    val søkere = Table("sokere", Topics.søkere, false, SØKERE_STORE_NAME)
+    val søkere = Table(Topics.søkere, stateStoreName = "soker-state-store-v2")
 }

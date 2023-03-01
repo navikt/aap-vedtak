@@ -1,23 +1,21 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
+import no.nav.aap.app.kafka.toDto
 import no.nav.aap.dto.kafka.*
-import no.nav.aap.kafka.serde.json.JsonSerde
-import no.nav.aap.kafka.streams.BufferableTopic
-import no.nav.aap.kafka.streams.Topic
-import no.nav.aap.kafka.streams.concurrency.RaceConditionBuffer
-import org.apache.kafka.common.serialization.Serdes.StringSerde
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.Topic
+import no.nav.aap.kafka.streams.v2.concurrency.RaceConditionBuffer
+import no.nav.aap.kafka.streams.v2.serde.JsonSerde
+import no.nav.aap.kafka.streams.v2.serde.StringSerde
 
 object Topics {
-    private val buffer = RaceConditionBuffer<String, SøkereKafkaDtoHistorikk>(logRecordValues = true)
-
     val søknad = Topic("aap.soknad-sendt.v1", JsonSerde.jackson<SøknadKafkaDto>())
-    val søkere = BufferableTopic(
+    val søkere = Topic(
         name = "aap.sokere.v1",
         valueSerde = JsonSerde.jackson(
             dtoVersion = SøkereKafkaDto.VERSION,
             migrate = ForrigeSøkereKafkaDtoHistorikk::toDto
         ) { json -> json.get("søkereKafkaDto")?.get("version")?.takeIf { it.isNumber }?.intValue() },
-        buffer = buffer
     )
     val medlem = Topic("aap.medlem.v1", JsonSerde.jackson<MedlemKafkaDto>())
     val inntekter = Topic("aap.inntekter.v1", JsonSerde.jackson<InntekterKafkaDto>())
@@ -25,7 +23,7 @@ object Topics {
     val vedtak = Topic("aap.vedtak.v1", JsonSerde.jackson<IverksettVedtakKafkaDto>())
     val sykepengedager = Topic("aap.sykepengedager.v1", JsonSerde.jackson<SykepengedagerKafkaDto>())
     val iverksettelseAvVedtak = Topic("aap.iverksettelse-av-vedtak.v1", JsonSerde.jackson<IverksettelseAvVedtakKafkaDto>())
-    val endredePersonidenter = Topic("aap.endrede-personidenter.v1", StringSerde())
+    val endredePersonidenter = Topic("aap.endrede-personidenter.v1", StringSerde)
 
     val innstilling_11_6 = Topic("aap.innstilling.11-6.v1", JsonSerde.jackson<Innstilling_11_6KafkaDto>())
 
@@ -46,4 +44,8 @@ object Topics {
     val kvalitetssikring_11_19 = Topic("aap.kvalitetssikring.11-19.v1", JsonSerde.jackson<Kvalitetssikring_11_19KafkaDto>())
     val kvalitetssikring_11_29 = Topic("aap.kvalitetssikring.11-29.v1", JsonSerde.jackson<Kvalitetssikring_11_29KafkaDto>())
     val kvalitetssikring_22_13 = Topic("aap.kvalitetssikring.22-13.v1", JsonSerde.jackson<Kvalitetssikring_22_13KafkaDto>())
+}
+
+internal val KTable<SøkereKafkaDtoHistorikk>.buffer by lazy {
+    RaceConditionBuffer<SøkereKafkaDtoHistorikk>(logRecordValues = true)
 }

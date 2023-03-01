@@ -11,22 +11,23 @@ import io.ktor.server.routing.*
 import io.micrometer.core.instrument.MeterRegistry
 import io.micrometer.prometheus.PrometheusConfig
 import io.micrometer.prometheus.PrometheusMeterRegistry
-import no.nav.aap.app.kafka.Tables
-import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.stream.*
+import vedtak.kafka.Tables
+import vedtak.kafka.Topics
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
-import no.nav.aap.kafka.streams.KStreams
-import no.nav.aap.kafka.streams.KStreamsConfig
-import no.nav.aap.kafka.streams.KafkaStreams
-import no.nav.aap.kafka.streams.extension.consume
-import no.nav.aap.kafka.streams.extension.produce
-import no.nav.aap.kafka.streams.store.migrateStateStore
-import no.nav.aap.kafka.streams.store.scheduleMetrics
-import no.nav.aap.kafka.vanilla.KafkaConfig
+import no.nav.aap.kafka.streams.v2.KStreams
+import no.nav.aap.kafka.streams.v2.KafkaStreams
+import no.nav.aap.kafka.streams.v2.Topology
+import no.nav.aap.kafka.streams.v2.config.StreamsConfig
+import no.nav.aap.kafka.streams.v2.processor.state.GaugeStoreEntriesStateScheduleProcessor
+import no.nav.aap.kafka.streams.v2.processor.state.MigrateStateInitProcessor
+import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
 import org.apache.kafka.clients.producer.Producer
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.Topology
+import vedtak.stream.*
+import vedtak.stream.andreFolketrygdytelserStream
+import vedtak.stream.inntekterStream
+import vedtak.stream.medlemStream
+import vedtak.stream.søknadStream
 import kotlin.time.Duration.Companion.minutes
 
 fun main() {
@@ -35,18 +36,18 @@ fun main() {
 
 data class Config(
     val toggle: Toggle,
-    val kafka: KStreamsConfig,
+    val kafka: StreamsConfig,
 ) {
     data class Toggle(
         val lesSøknader: Boolean,
     )
 }
 
-internal fun Application.server(kafka: KStreams = KafkaStreams) {
+internal fun Application.server(kafka: KStreams = KafkaStreams()) {
     val prometheus = PrometheusMeterRegistry(PrometheusConfig.DEFAULT)
     val config = loadConfig<Config>()
     log.info("Starter med toggles: ${config.toggle}")
-    val søkerProducer = kafka.createProducer(KafkaConfig.copyFrom(config.kafka), Topics.søkere)
+    val søkerProducer = kafka.createProducer(config.kafka, Topics.søkere)
 
     install(MicrometerMetrics) { registry = prometheus }
     install(ContentNegotiation) { jackson { registerModule(JavaTimeModule()) } }
@@ -69,31 +70,37 @@ internal fun Application.server(kafka: KStreams = KafkaStreams) {
 }
 
 internal fun topology(
-    registry: MeterRegistry,
+    prometheus: MeterRegistry,
     søkerProducer: Producer<String, SøkereKafkaDtoHistorikk>,
     lesSøknader: Boolean
-): Topology {
-    val streams = StreamsBuilder()
-    val søkerKTable = streams
-        // Setter timestamp for søkere tilbake ett år for å tvinge topologien å oppdatere tabellen før neste hendelse leses
-        .consume(Topics.søkere, { record, _ -> record.timestamp() - 365L * 24L * 3600L * 1000L })
-        .produce(Tables.søkere)
+): Topology = topology {
 
-    søkerKTable.scheduleMetrics(Tables.søkere, 2.minutes, registry)
-    søkerKTable.migrateStateStore(Tables.søkere, søkerProducer)
+    val søkerKTable = consume(Topics.søkere).produce(Tables.søkere)
 
-    streams.søknadStream(søkerKTable, lesSøknader, registry)
-    streams.medlemStream(søkerKTable)
-    streams.inntekterStream(søkerKTable)
-    streams.andreFolketrygdytelserStream(søkerKTable)
-    streams.iverksettelseAvVedtakStream(søkerKTable)
-    streams.sykepengedagerStream(søkerKTable)
-    streams.manuellInnstillingStream(søkerKTable)
-    streams.manuellLøsningStream(søkerKTable)
-    streams.manuellKvalitetssikringStream(søkerKTable)
-    streams.endredePersonidenterStream(søkerKTable)
+    søkerKTable.schedule(
+        GaugeStoreEntriesStateScheduleProcessor(
+            ktable = søkerKTable,
+            interval = 2.minutes,
+            registry = prometheus,
+        )
+    )
 
-    streams.andreFolketrygdsytelserResponseMockStream()
+    søkerKTable.init(
+        MigrateStateInitProcessor(
+            ktable = søkerKTable,
+            producer = søkerProducer,
+            logValue = true,
+        )
+    )
 
-    return streams.build()
+    søknadStream(søkerKTable, lesSøknader, prometheus)
+    medlemStream(søkerKTable)
+    inntekterStream(søkerKTable)
+    andreFolketrygdytelserStream(søkerKTable)
+    iverksettelseAvVedtakStream(søkerKTable)
+    sykepengedagerStream(søkerKTable)
+    manuellInnstillingStream(søkerKTable)
+    manuellLøsningStream(søkerKTable)
+    manuellKvalitetssikringStream(søkerKTable)
+    endredePersonidenterStream(søkerKTable)
 }

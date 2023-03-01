@@ -1,22 +1,20 @@
-package no.nav.aap.app.stream
+package vedtak.stream
 
-import no.nav.aap.app.kafka.Topics
+import vedtak.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.InntekterKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
-import no.nav.aap.kafka.streams.extension.consume
-import no.nav.aap.kafka.streams.extension.filterNotNullBy
-import no.nav.aap.kafka.streams.extension.join
-import no.nav.aap.kafka.streams.extension.produce
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.KTable
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.Topology
+import vedtak.kafka.buffer
 
-internal fun StreamsBuilder.inntekterStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.inntekterStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     consume(Topics.inntekter)
-        .filterNotNullBy("inntekter-filter-tombstones-og-responses") { inntekter -> inntekter.response }
-        .join(Topics.inntekter with Topics.søkere, søkere, håndterInntekter)
-        .produce(Topics.søkere, "produced-soker-med-handtert-inntekter")
+        .filter { inntekter -> inntekter.response != null }
+        .joinWith(søkere, søkere.buffer)
+        .map(håndterInntekter)
+        .produce(Topics.søkere, søkere.buffer) { it }
 }
 
 private val håndterInntekter =

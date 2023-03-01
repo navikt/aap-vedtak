@@ -1,20 +1,21 @@
-package no.nav.aap.app.stream
+package vedtak.stream
 
-import no.nav.aap.app.kafka.Topics
+import vedtak.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.MedlemKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
-import no.nav.aap.kafka.streams.extension.*
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.KTable
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.Topology
+import vedtak.kafka.buffer
 
-internal fun StreamsBuilder.medlemStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.medlemStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     consume(Topics.medlem)
-        .filterNotNullBy("medlem-filter-tombstones-og-responses") { medlem -> medlem.response }
-        .selectKey("keyed_personident") { _, value -> value.personident }
-        .join(Topics.medlem with Topics.søkere, søkere, håndterMedlem)
-        .produce(Topics.søkere, "produced-soker-med-medlem")
+        .filter { medlem -> medlem.response != null }
+        .rekey { medlem -> medlem.personident }
+        .joinWith(søkere, søkere.buffer)
+        .map(håndterMedlem)
+        .produce(Topics.søkere, søkere.buffer) { it }
 }
 
 private val håndterMedlem =

@@ -1,4 +1,4 @@
-val aapLibVersion = "3.6.20"
+val aapLibVersion = "3.6.25"
 val ktorVersion = "2.2.4"
 
 plugins {
@@ -13,9 +13,11 @@ dependencies {
     implementation(project(":domene"))
     implementation(project(":dto-kafka"))
 
-    implementation("com.github.navikt:aap-sykepengedager:1.0.145")
+    implementation("com.github.navikt.aap-sykepengedager:kafka-dto:1.0.161")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
-    implementation("com.github.navikt.aap-libs:kafka:$aapLibVersion")
+    implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
+
+    implementation("org.apache.kafka:kafka-clients:3.4.0")
 
     implementation("io.ktor:ktor-server-core:$ktorVersion")
     implementation("io.ktor:ktor-server-netty:$ktorVersion")
@@ -32,5 +34,5 @@ dependencies {
 
     testImplementation(kotlin("test"))
     testImplementation("io.ktor:ktor-server-test-host:$ktorVersion")
-    testImplementation("com.github.navikt.aap-libs:kafka-test:$aapLibVersion")
+    testImplementation("com.github.navikt.aap-libs:kafka-test-2:$aapLibVersion")
 }

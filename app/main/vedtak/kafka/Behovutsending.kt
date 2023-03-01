@@ -1,33 +1,47 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
 import no.nav.aap.dto.kafka.*
-import no.nav.aap.kafka.streams.Behov
-import no.nav.aap.kafka.streams.BehovExtractor
-import no.nav.aap.kafka.streams.branch
-import no.nav.aap.kafka.streams.extension.mapValues
-import no.nav.aap.kafka.streams.sendBehov
+import no.nav.aap.kafka.streams.v2.behov.Behov
+import no.nav.aap.kafka.streams.v2.behov.BehovExtractor
+import no.nav.aap.kafka.streams.v2.stream.MappedKStream
 import no.nav.aap.modellapi.BehovModellApi
 import no.nav.aap.modellapi.LytterModellApi
 import no.nav.aap.modellapi.VedtakModellApi
-import org.apache.kafka.streams.kstream.KStream
 import java.time.LocalDate
 import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
-internal fun KStream<String, BehovModellApi>.sendBehov(name: String) {
+internal fun MappedKStream<BehovModellApiWrapper>.sendBehov() {
     this
-        .mapValues("$name-wrap-behov", ::BehovModellApiWrapper)
-        .sendBehov(name) {
-            branch(Topics.medlem, "$name-medlem", BehovModellApiWrapper::erMedlem, ::ToMedlemKafkaDto)
-            branch(Topics.inntekter, "$name-inntekter", BehovModellApiWrapper::erInntekter, ::ToInntekterKafkaDto)
-            branch(Topics.andreFolketrygdsytelser, "$name-andre-folketrygdytelser", BehovModellApiWrapper::erAnderFolketrygdytelser, ::ToAndreFolketrygdytelserKafkaDto)
-            branch(Topics.vedtak, "$name-vedtak", BehovModellApiWrapper::erIverksettVedtak, ::ToIverksettVedtakKafkaDto)
-            branch(Topics.sykepengedager, "$name-sykepengedager", BehovModellApiWrapper::erSykepengedager, ::ToSykepengedagerKafkaDto)
+        .branch(BehovModellApiWrapper::erMedlem) { stream ->
+            stream
+                .map { value -> ToMedlemKafkaDto().also(value::accept).toJson() }
+                .produce(Topics.medlem)
+        }
+        .branch(BehovModellApiWrapper::erInntekter) { stream ->
+            stream
+                .map { value -> ToInntekterKafkaDto().also(value::accept).toJson() }
+                .produce(Topics.inntekter)
+        }
+        .branch(BehovModellApiWrapper::erAnderFolketrygdytelser) { stream ->
+            stream
+                .map { value -> ToAndreFolketrygdytelserKafkaDto().also(value::accept).toJson() }
+                .produce(Topics.andreFolketrygdsytelser)
+        }
+        .branch(BehovModellApiWrapper::erIverksettVedtak) { stream ->
+            stream
+                .map { value -> ToIverksettVedtakKafkaDto().also(value::accept).toJson() }
+                .produce(Topics.vedtak)
+        }
+        .branch(BehovModellApiWrapper::erSykepengedager) { stream ->
+            stream
+                .map { value -> ToSykepengedagerKafkaDto().also(value::accept).toJson() }
+                .produce(Topics.sykepengedager)
         }
 }
 
-private class BehovModellApiWrapper(private val behovModellApi: BehovModellApi) : Behov<LytterModellApi> {
+internal class BehovModellApiWrapper(private val behovModellApi: BehovModellApi) : Behov<LytterModellApi> {
     override fun accept(visitor: LytterModellApi) = behovModellApi.accept(visitor)
 
     fun erMedlem() = Sjekk.ErMedlem().apply(this::accept).er()
@@ -72,7 +86,7 @@ private sealed class Sjekk : LytterModellApi {
     }
 }
 
-private class ToMedlemKafkaDto : LytterModellApi, BehovExtractor<MedlemKafkaDto> {
+internal class ToMedlemKafkaDto : LytterModellApi, BehovExtractor<MedlemKafkaDto> {
     private lateinit var ident: String
 
     override fun medlem(ident: String) {
@@ -92,11 +106,11 @@ private class ToMedlemKafkaDto : LytterModellApi, BehovExtractor<MedlemKafkaDto>
         )
 }
 
-private class ToSykepengedagerKafkaDto : LytterModellApi, BehovExtractor<SykepengedagerKafkaDto> {
+internal class ToSykepengedagerKafkaDto : LytterModellApi, BehovExtractor<SykepengedagerKafkaDto> {
     override fun toJson(): SykepengedagerKafkaDto = SykepengedagerKafkaDto(response = null)
 }
 
-private class ToInntekterKafkaDto : LytterModellApi, BehovExtractor<InntekterKafkaDto> {
+internal class ToInntekterKafkaDto : LytterModellApi, BehovExtractor<InntekterKafkaDto> {
     private lateinit var ident: String
     private lateinit var fom: YearMonth
     private lateinit var tom: YearMonth
@@ -114,11 +128,11 @@ private class ToInntekterKafkaDto : LytterModellApi, BehovExtractor<InntekterKaf
     )
 }
 
-private class ToAndreFolketrygdytelserKafkaDto : LytterModellApi, BehovExtractor<AndreFolketrygdytelserKafkaDto> {
+internal class ToAndreFolketrygdytelserKafkaDto : LytterModellApi, BehovExtractor<AndreFolketrygdytelserKafkaDto> {
     override fun toJson() = AndreFolketrygdytelserKafkaDto(response = null)
 }
 
-private class ToIverksettVedtakKafkaDto : LytterModellApi, BehovExtractor<IverksettVedtakKafkaDto> {
+internal class ToIverksettVedtakKafkaDto : LytterModellApi, BehovExtractor<IverksettVedtakKafkaDto> {
     private lateinit var vedtaksid: UUID
     private lateinit var innvilget: Innvilget
     private lateinit var grunnlagsfaktor: Grunnlagsfaktor

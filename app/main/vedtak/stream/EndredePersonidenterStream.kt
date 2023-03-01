@@ -1,32 +1,23 @@
-package no.nav.aap.app.stream
+package vedtak.stream
 
-import no.nav.aap.app.kafka.Topics
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
-import no.nav.aap.kafka.streams.extension.*
-import org.apache.kafka.streams.KeyValue
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.KTable
-import org.apache.kafka.streams.kstream.Produced
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.KeyValue
+import no.nav.aap.kafka.streams.v2.Topology
+import vedtak.kafka.Topics
+import vedtak.kafka.buffer
 
-internal fun StreamsBuilder.endredePersonidenterStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.endredePersonidenterStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     consume(Topics.endredePersonidenter)
-        .filterNotNull("filter-endrede-personidenter-tombstone")
-        .join(Topics.endredePersonidenter with Topics.søkere, søkere, ::Pair)
-        .flatMap { forrigePersonident, (endretPersonidenter, søker) ->
+        .joinWith(søkere, søkere.buffer)
+        .flatMapKeyValue { forrigePersonident, endretPersonidenter, søker ->
             listOf(
                 KeyValue(endretPersonidenter, søker),
-                KeyValue(forrigePersonident, null)
+                KeyValue(forrigePersonident, søker) // TODO: skal vi sende tombstone her?
             )
         }
-        .peek { key, value -> log.trace("Bytter key på søker fra ${value?.søkereKafkaDto?.personident} til $key") }
-        .to(Topics.søkere.name, søkereSerde)
+        .secureLogWithKey { key, value ->
+            trace("Bytter key på søker fra ${value.søkereKafkaDto.personident} til $key")
+        }
+        .produce(Topics.søkere, søkere.buffer) { it }
 }
-
-private val søkereSerde get() =
-    Produced
-        .with(Topics.søkere.keySerde, Topics.søkere.valueSerde)
-        .withName("produce-soker-with-ny-personident")
-
-private val log: Logger = LoggerFactory.getLogger("secureLog")

@@ -6,20 +6,17 @@ import io.ktor.serialization.jackson.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import no.nav.aap.app.kafka.SØKERE_STORE_NAME
-import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
-import no.nav.aap.kafka.streams.KStreamsConfig
-import no.nav.aap.kafka.streams.test.KafkaStreamsMock
-import no.nav.aap.kafka.streams.topology.Mermaid
+import no.nav.aap.kafka.streams.v2.config.StreamsConfig
+import no.nav.aap.kafka.streams.v2.test.KStreamsMock
 import no.nav.aap.modellapi.*
 import org.apache.kafka.clients.producer.MockProducer
-import org.apache.kafka.streams.TestInputTopic
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.io.File
+import vedtak.kafka.Tables
+import vedtak.kafka.Topics
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.Ignore
@@ -28,9 +25,9 @@ internal class ApiTest {
 
     @Test
     fun `søker får innvilget vedtak`() {
-        KafkaStreamsMock().apply {
+        KStreamsMock().apply {
             connect(
-                config = KStreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                config = StreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
                 registry = SimpleMeterRegistry(),
                 topology = topology(SimpleMeterRegistry(), MockProducer(), true)
             )
@@ -56,7 +53,7 @@ internal class ApiTest {
             val sykepengedagerTopic = kafka.testTopic(Topics.sykepengedager)
             val iverksettelseAvVedtakTopic = kafka.testTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = kafka.testTopic(Topics.vedtak)
-            val stateStore = kafka.getStore<SøkereKafkaDtoHistorikk>(SØKERE_STORE_NAME)
+            val stateStore = kafka.getStore(Tables.søkere)
 
             val fnr = "123"
             val tidspunktForVurdering = LocalDateTime.now()
@@ -189,7 +186,7 @@ internal class ApiTest {
                 )
             }
 
-            val søker = stateStore[fnr].søkereKafkaDto
+            val søker = requireNotNull(stateStore[fnr]).søkereKafkaDto
             assertNotNull(søker)
             val actual = søker.toModellApi()
 
@@ -302,7 +299,7 @@ internal class ApiTest {
     @Test
     @Ignore
     fun `Tester metrikker`() {
-        val kafka = KafkaStreamsMock()
+        val kafka = KStreamsMock()
         testApplication {
             environment {
                 config = MapApplicationConfig(
@@ -364,18 +361,10 @@ internal class ApiTest {
     }
 
     @Test
-    fun `mermaid topic diagram`() {
-        val topology = topology(SimpleMeterRegistry(), MockProducer(), true)
-        val flowchart = Mermaid.graph("Vedtak", topology)
-        val markdown = markdown(flowchart)
-        File("../docs/topology.mmd").apply { writeText(markdown) }
-    }
-
-    @Test
     fun `oppdaterer søker med ny personident`() {
-        KafkaStreamsMock().apply {
+        KStreamsMock().apply {
             connect(
-                config = KStreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                config = StreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
                 registry = SimpleMeterRegistry(),
                 topology = topology(SimpleMeterRegistry(), MockProducer(), true)
             )
@@ -400,17 +389,10 @@ internal class ApiTest {
 
             søkere.assertThat()
                 .hasNumberOfRecords(2)
-                .containsTombstone("123")
+//                .containsTombstone("123") // TODO: husk å asserte denne hvis vi sender tombstone likevel
                 .hasValuesForPredicate("456") { it == søker }
+                .hasValuesForPredicate("123") { it == søker }
         }
 
     }
 }
-
-inline fun <reified V : Any> TestInputTopic<String, V>.produce(key: String, value: () -> V) = pipeInput(key, value())
-
-private fun markdown(mermaid: String) = """
-```mermaid
-$mermaid
-```
-"""

@@ -1,23 +1,24 @@
-package no.nav.aap.app.stream
+package vedtak.stream
 
-import no.nav.aap.app.kafka.Topics
 import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.AndreFolketrygdytelserKafkaDto
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
-import no.nav.aap.kafka.streams.extension.consume
-import no.nav.aap.kafka.streams.extension.filterNotNullBy
-import no.nav.aap.kafka.streams.extension.join
-import no.nav.aap.kafka.streams.extension.produce
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.Consumed
-import org.apache.kafka.streams.kstream.KTable
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.Topology
+import no.nav.aap.kafka.streams.v2.stream.ConsumedKStream
+import vedtak.kafka.Topics
+import vedtak.kafka.buffer
 
-internal fun StreamsBuilder.andreFolketrygdytelserStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.andreFolketrygdytelserStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     consume(Topics.andreFolketrygdsytelser)
-        .filterNotNullBy("andre-folketrygdytelser-filter-tombstones-og-responses") { ytelser -> ytelser.response }
-        .join(Topics.andreFolketrygdsytelser with Topics.søkere, søkere, håndterAndreFolketrygdytelser)
-        .produce(Topics.søkere, "produced-soker-med-handtert-andre-folketrygdytelser")
+        .branch({ ytelser -> ytelser.response != null }) { stream ->
+            stream
+                .joinWith(søkere, søkere.buffer)
+                .map(håndterAndreFolketrygdytelser)
+                .produce(Topics.søkere, søkere.buffer) { it }
+        }
+        .branch({ ytelser -> ytelser.response == null }, ::mockResponse)
 }
 
 private val håndterAndreFolketrygdytelser =
@@ -27,24 +28,21 @@ private val håndterAndreFolketrygdytelser =
         endretSøker.toSøkereKafkaDtoHistorikk(gammeltSekvensnummer)
     }
 
-internal fun StreamsBuilder.andreFolketrygdsytelserResponseMockStream() = this
-    .stream(Topics.andreFolketrygdsytelser.name, consumedAndreFolketrygdytelser())
-    .filter { ident, ytelser -> ytelser?.response == null && ident != "123" } // 123 brukes i testene som mocker selv
-    .mapValues { ytelser ->
-        ytelser!!.copy(
-            response = AndreFolketrygdytelserKafkaDto.Response(
-                svangerskapspenger = AndreFolketrygdytelserKafkaDto.Response.Svangerskapspenger(
-                    fom = null,
-                    tom = null,
-                    grad = null,
-                    vedtaksdato = null,
+private fun mockResponse(stream: ConsumedKStream<AndreFolketrygdytelserKafkaDto>) {
+    stream
+        .filterKey { ident -> ident != "123" } // 123 brukes i testene som mocker selv
+        .filter { ytelser -> ytelser.response == null }
+        .map { ytelser ->
+            ytelser.copy(
+                response = AndreFolketrygdytelserKafkaDto.Response(
+                    svangerskapspenger = AndreFolketrygdytelserKafkaDto.Response.Svangerskapspenger(
+                        fom = null,
+                        tom = null,
+                        grad = null,
+                        vedtaksdato = null,
+                    )
                 )
             )
-        )
-    }
-    .produce(Topics.andreFolketrygdsytelser, "produce-andre-folketrygdytelser-mock-response")
-
-private fun consumedAndreFolketrygdytelser(): Consumed<String, AndreFolketrygdytelserKafkaDto?> = Consumed
-    .with(Topics.andreFolketrygdsytelser.keySerde, Topics.andreFolketrygdsytelser.valueSerde)
-    .withName("consumed-andre-folketrygdytelser-again")
-
+        }
+        .produce(Topics.andreFolketrygdsytelser)
+}

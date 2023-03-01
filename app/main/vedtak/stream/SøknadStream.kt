@@ -1,49 +1,46 @@
-package no.nav.aap.app.stream
+package vedtak.stream
 
 import io.micrometer.core.instrument.MeterRegistry
-import no.nav.aap.app.kafka.Topics
-import no.nav.aap.app.kafka.sendBehov
 import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
-import no.nav.aap.dto.kafka.SøknadKafkaDto
-import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.Topology
+import no.nav.aap.kafka.streams.v2.stream.MappedKStream
+import no.nav.aap.modellapi.BehovModellApi
 import no.nav.aap.modellapi.SøknadModellApi
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.KTable
 import org.slf4j.LoggerFactory
+import vedtak.kafka.*
 
 private val secureLog = LoggerFactory.getLogger("secureLog")
 
-internal fun StreamsBuilder.søknadStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>, lesSøknader: Boolean, registry: MeterRegistry) {
+internal fun Topology.søknadStream(
+    søkere: KTable<SøkereKafkaDtoHistorikk>,
+    lesSøknader: Boolean,
+    registry: MeterRegistry
+) {
     val søkerOgBehov = consume(Topics.søknad)
-        .filterValues("filter-soknad-les-toggle") {
+        .filter {
             if (!lesSøknader) secureLog.info("leser ikke søknad da toggle for lesing er skrudd av")
             lesSøknader
         }
-        .filterNotNull("filter-soknad-tombstone")
-        .peek{_, _ -> registry.counter("soknad_motatt").increment()}
-        .leftJoin(Topics.søknad with Topics.søkere, søkere)
-        .filterValues("filter-soknad-ny") { (_, søkereKafkaDto) ->
+        .processor(KafkaCounter(registry, "soknad_mottatt"))
+        .leftJoinWith(søkere, søkere.buffer)
+        .filter { (_, søkereKafkaDto) ->
             if (søkereKafkaDto != null) secureLog.warn("oppretter ikke ny søker pga eksisterende: $søkereKafkaDto")
-
             søkereKafkaDto == null
         }
-        .peek{_, _ -> registry.counter("forstegangssoker").increment()}
-        .firstPairValue("soknad-hent-ut-soknad-fra-join")
-        .mapValues("soknad-opprett-soker-og-handter", opprettSøker)
+        .processor(KafkaCounter(registry, "forstegangssoker"))
+        .map { personident, søknadKafkaDto, _ ->
+            val søknad = SøknadModellApi(personident, søknadKafkaDto.fødselsdato, søknadKafkaDto.innsendingTidspunkt)
+            val (endretSøker, dtoBehov) = søknad.håndter()
+            endretSøker.toSøkereKafkaDtoHistorikk(0) to dtoBehov
+        }
 
     søkerOgBehov
-        .firstPairValue("soknad-hent-ut-soker")
-        .produce(Topics.søkere, "produced-ny-soker")
+        .map(Pair<SøkereKafkaDtoHistorikk, List<BehovModellApi>>::first)
+        .produce(Topics.søkere, søkere.buffer) { it }
 
     søkerOgBehov
-        .secondPairValue("soknad-hent-ut-behov")
-        .flatten("soknad-flatten-behov")
-        .sendBehov("soknad")
-}
-
-private val opprettSøker = { ident: String, jsonSøknad: SøknadKafkaDto ->
-    val søknad = SøknadModellApi(ident, jsonSøknad.fødselsdato, jsonSøknad.innsendingTidspunkt)
-    val (endretSøker, dtoBehov) = søknad.håndter()
-    endretSøker.toSøkereKafkaDtoHistorikk(0) to dtoBehov
+        .flatMap { (_, behov) -> behov.map(::BehovModellApiWrapper) }
+        .sendBehov()
 }

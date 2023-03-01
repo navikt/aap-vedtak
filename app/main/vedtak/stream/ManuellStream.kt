@@ -1,19 +1,22 @@
-package no.nav.aap.app.stream
+package vedtak.stream
 
 import no.nav.aap.app.kafka.*
 import no.nav.aap.dto.kafka.*
-import no.nav.aap.kafka.streams.Topic
-import no.nav.aap.kafka.streams.extension.*
+import no.nav.aap.kafka.streams.v2.KTable
+import no.nav.aap.kafka.streams.v2.Topic
+import no.nav.aap.kafka.streams.v2.Topology
 import no.nav.aap.modellapi.BehovModellApi
 import no.nav.aap.modellapi.SøkerModellApi
-import org.apache.kafka.streams.StreamsBuilder
-import org.apache.kafka.streams.kstream.KTable
+import vedtak.kafka.BehovModellApiWrapper
+import vedtak.kafka.Topics
+import vedtak.kafka.buffer
+import vedtak.kafka.sendBehov
 
-internal fun StreamsBuilder.manuellInnstillingStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.manuellInnstillingStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     stream(søkere, Topics.innstilling_11_6, "innstilling-11-6", Innstilling_11_6KafkaDto::håndter)
 }
 
-internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.manuellLøsningStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     stream(søkere, Topics.manuell_11_2, "manuell-11-2", Løsning_11_2_manuellKafkaDto::håndter)
     stream(søkere, Topics.manuell_11_3, "manuell-11-3", Løsning_11_3_manuellKafkaDto::håndter)
     stream(søkere, Topics.manuell_11_4, "manuell-11-4", Løsning_11_4_ledd2_ledd3_manuellKafkaDto::håndter)
@@ -24,7 +27,7 @@ internal fun StreamsBuilder.manuellLøsningStream(søkere: KTable<String, Søker
     stream(søkere, Topics.manuell_11_29, "manuell-11-29", Løsning_11_29_manuellKafkaDto::håndter)
 }
 
-internal fun StreamsBuilder.manuellKvalitetssikringStream(søkere: KTable<String, SøkereKafkaDtoHistorikk>) {
+internal fun Topology.manuellKvalitetssikringStream(søkere: KTable<SøkereKafkaDtoHistorikk>) {
     stream(søkere, Topics.kvalitetssikring_11_2, "kvalitetssikring-11-2", Kvalitetssikring_11_2KafkaDto::håndter)
     stream(søkere, Topics.kvalitetssikring_11_3, "kvalitetssikring-11-3", Kvalitetssikring_11_3KafkaDto::håndter)
     stream(søkere, Topics.kvalitetssikring_11_4, "kvalitetssikring-11-4", Kvalitetssikring_11_4_ledd2_ledd3KafkaDto::håndter)
@@ -35,25 +38,24 @@ internal fun StreamsBuilder.manuellKvalitetssikringStream(søkere: KTable<String
     stream(søkere, Topics.kvalitetssikring_11_29, "kvalitetssikring-11-29", Kvalitetssikring_11_29KafkaDto::håndter)
 }
 
-private fun <T> StreamsBuilder.stream(
-    søkere: KTable<String, SøkereKafkaDtoHistorikk>,
+private fun <T> Topology.stream(
+    søkere: KTable<SøkereKafkaDtoHistorikk>,
     topic: Topic<T & Any>,
     kafkaNameFilter: String,
     håndter: (T & Any).(SøkerModellApi) -> Pair<SøkerModellApi, List<BehovModellApi>>,
 ) {
     val søkerOgBehov =
         consume(topic)
-            .filterNotNull("filter-$kafkaNameFilter-tombstones")
-            .join(topic with Topics.søkere, søkere) { løsning, søker -> håndter(løsning, søker, håndter) }
+            .joinWith(søkere, søkere.buffer)
+            .map { løsning, søker -> håndter(løsning, søker, håndter) }
 
     søkerOgBehov
-        .firstPairValue("$kafkaNameFilter-hent-ut-soker")
-        .produce(Topics.søkere, "produced-soker-med-$kafkaNameFilter", true)
+        .map(Pair<SøkereKafkaDtoHistorikk, List<BehovModellApi>>::first)
+        .produce(Topics.søkere, søkere.buffer) { it }
 
     søkerOgBehov
-        .secondPairValue("$kafkaNameFilter-hent-ut-behov")
-        .flatten("$kafkaNameFilter-flatten-behov")
-        .sendBehov(kafkaNameFilter)
+        .flatMap { (_, behov) -> behov.map(::BehovModellApiWrapper) }
+        .sendBehov()
 }
 
 private fun <T> håndter(
