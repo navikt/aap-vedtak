@@ -5,6 +5,7 @@ metadata:
   namespace: aap
   labels:
     team: aap
+    sub: vedtak
 spec:
   image: {{image}}
   secureLogs:
