@@ -75,7 +75,7 @@ internal fun topology(
     lesSøknader: Boolean
 ): Topology = topology {
 
-    val søkerKTable = consume(Topics.søkere).produce(Tables.søkere)
+    val søkerKTable = consume(Tables.søkere)
 
     søkerKTable.schedule(
         GaugeStoreEntriesStateScheduleProcessor(

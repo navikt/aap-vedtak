@@ -26,9 +26,9 @@ subgraph Topologi
 	aap.manuell.11-6.v1([aap.manuell.11-6.v1])
 	aap.manuell.22-13.v1([aap.manuell.22-13.v1])
 	aap.andre-folketrygdytelser.v1([aap.andre-folketrygdytelser.v1])
-	aap.sokere.v1([aap.sokere.v1])
 	aap.endrede-personidenter.v1([aap.endrede-personidenter.v1])
 	aap.inntekter.v1([aap.inntekter.v1])
+	aap.sokere.v1([aap.sokere.v1])
 	aap.medlem.v1-join-aap.sokere.v1-repartition([aap.medlem.v1-join-aap.sokere.v1-repartition])
 	aap.medlem.v1([aap.medlem.v1])
 	aap.vedtak.v1([aap.vedtak.v1])
@@ -79,8 +79,8 @@ subgraph Topologi
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.sykepengedager.v1
+	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.innstilling.11-6.v1 --> aap.innstilling.11-6.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.innstilling.11-6.v1-join-aap.sokere.v1
@@ -165,11 +165,11 @@ subgraph Topologi
 	aap.manuell.11-19.v1 --> aap.manuell.11-19.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.manuell.11-19.v1-join-aap.sokere.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
+	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.sykepengedager.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.inntekter.v1
+	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-2.v1 --> aap.manuell.11-2.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.manuell.11-2.v1-join-aap.sokere.v1
 	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.sokere.v1
@@ -258,8 +258,8 @@ subgraph Topologi
     aap.soknad-sendt.v1 --> aap.inntekter.v1
 	aap.soknad-sendt.v1 --> aap.medlem.v1
 	aap.soknad-sendt.v1 --> aap.andre-folketrygdytelser.v1
-	aap.soknad-sendt.v1 --> aap.vedtak.v1
 	aap.soknad-sendt.v1 --> aap.sykepengedager.v1
+	aap.soknad-sendt.v1 --> aap.vedtak.v1
 	aap.soknad-sendt.v1 --> aap.sokere.v1
 	aap.innstilling.11-6.v1 --> aap.inntekter.v1
 	aap.innstilling.11-6.v1 --> aap.medlem.v1
@@ -311,11 +311,11 @@ subgraph Topologi
 	aap.kvalitetssikring.22-13.v1 --> aap.medlem.v1
 	aap.kvalitetssikring.22-13.v1 --> aap.andre-folketrygdytelser.v1
 	aap.kvalitetssikring.22-13.v1 --> aap.sykepengedager.v1
-	aap.manuell.11-19.v1 --> aap.andre-folketrygdytelser.v1
+	aap.manuell.11-19.v1 --> aap.medlem.v1
 	aap.manuell.11-19.v1 --> aap.vedtak.v1
 	aap.manuell.11-19.v1 --> aap.sykepengedager.v1
-	aap.manuell.11-19.v1 --> aap.medlem.v1
 	aap.manuell.11-19.v1 --> aap.inntekter.v1
+	aap.manuell.11-19.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-2.v1 --> aap.medlem.v1
 	aap.manuell.11-2.v1 --> aap.inntekter.v1
 	aap.manuell.11-2.v1 --> aap.andre-folketrygdytelser.v1
@@ -354,8 +354,8 @@ subgraph Topologi
 	aap.soknad-sendt.v1 --> aap.inntekter.v1
 	aap.soknad-sendt.v1 --> aap.medlem.v1
 	aap.soknad-sendt.v1 --> aap.andre-folketrygdytelser.v1
-	aap.soknad-sendt.v1 --> aap.vedtak.v1
 	aap.soknad-sendt.v1 --> aap.sykepengedager.v1
+	aap.soknad-sendt.v1 --> aap.vedtak.v1
 	aap.sykepengedager.v1 --> aap.inntekter.v1
 	aap.sykepengedager.v1 --> aap.vedtak.v1
 	aap.sykepengedager.v1 --> aap.sykepengedager.v1
@@ -403,9 +403,9 @@ style aap.manuell.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:
 style aap.manuell.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.22-13.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.andre-folketrygdytelser.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.endrede-personidenter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1-join-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.vedtak.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
