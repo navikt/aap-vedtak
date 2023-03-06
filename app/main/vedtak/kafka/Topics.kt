@@ -5,6 +5,7 @@ import no.nav.aap.dto.kafka.*
 import no.nav.aap.kafka.streams.v2.KTable
 import no.nav.aap.kafka.streams.v2.Topic
 import no.nav.aap.kafka.streams.v2.concurrency.RaceConditionBuffer
+import no.nav.aap.kafka.streams.v2.serde.ByteArraySerde
 import no.nav.aap.kafka.streams.v2.serde.JsonSerde
 import no.nav.aap.kafka.streams.v2.serde.StringSerde
 
@@ -22,6 +23,8 @@ object Topics {
     val andreFolketrygdsytelser = Topic("aap.andre-folketrygdytelser.v1", JsonSerde.jackson<AndreFolketrygdytelserKafkaDto>())
     val vedtak = Topic("aap.vedtak.v1", JsonSerde.jackson<IverksettVedtakKafkaDto>())
     val sykepengedager = Topic("aap.sykepengedager.v1", JsonSerde.jackson<SykepengedagerKafkaDto>())
+    val subscribeSykepengedager = Topic("aap.subscribe-sykepengedager.v1", ByteArraySerde)
+
     val iverksettelseAvVedtak = Topic("aap.iverksettelse-av-vedtak.v1", JsonSerde.jackson<IverksettelseAvVedtakKafkaDto>())
     val endredePersonidenter = Topic("aap.endrede-personidenter.v1", StringSerde)
 

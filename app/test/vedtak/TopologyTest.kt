@@ -51,6 +51,7 @@ internal class ApiTest {
             val andreFolketrygdsytelserTopic = kafka.testTopic(Topics.andreFolketrygdsytelser)
             val inntektTopic = kafka.testTopic(Topics.inntekter)
             val sykepengedagerTopic = kafka.testTopic(Topics.sykepengedager)
+            kafka.testTopic(Topics.subscribeSykepengedager)
             val iverksettelseAvVedtakTopic = kafka.testTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = kafka.testTopic(Topics.vedtak)
             val stateStore = kafka.getStore(Tables.søkere)
@@ -96,9 +97,8 @@ internal class ApiTest {
                 )
             }
 
-            val sykepengedagerRequest = sykepengedagerTopic.readValue()
             sykepengedagerTopic.produce(fnr) {
-                sykepengedagerRequest.copy(
+                SykepengedagerKafkaDto(
                     response = SykepengedagerKafkaDto.Response(
                         sykepengedager = null
                     )

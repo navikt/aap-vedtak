@@ -1,6 +1,9 @@
 package vedtak.kafka
 
-import no.nav.aap.dto.kafka.*
+import no.nav.aap.dto.kafka.AndreFolketrygdytelserKafkaDto
+import no.nav.aap.dto.kafka.InntekterKafkaDto
+import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
+import no.nav.aap.dto.kafka.MedlemKafkaDto
 import no.nav.aap.kafka.streams.v2.behov.Behov
 import no.nav.aap.kafka.streams.v2.behov.BehovExtractor
 import no.nav.aap.kafka.streams.v2.stream.MappedKStream
@@ -36,8 +39,9 @@ internal fun MappedKStream<BehovModellApiWrapper>.sendBehov() {
         }
         .branch(BehovModellApiWrapper::erSykepengedager) { stream ->
             stream
-                .map { value -> ToSykepengedagerKafkaDto().also(value::accept).toJson() }
-                .produce(Topics.sykepengedager)
+//                .map { value -> ToSykepengedagerKafkaDto().also(value::accept).toJson() }
+                .map { _ -> "".toByteArray() }
+                .produce(Topics.subscribeSykepengedager)
         }
 }
 
@@ -104,10 +108,6 @@ internal class ToMedlemKafkaDto : LytterModellApi, BehovExtractor<MedlemKafkaDto
                 arbeidetUtenlands = false
             ),
         )
-}
-
-internal class ToSykepengedagerKafkaDto : LytterModellApi, BehovExtractor<SykepengedagerKafkaDto> {
-    override fun toJson(): SykepengedagerKafkaDto = SykepengedagerKafkaDto(response = null)
 }
 
 internal class ToInntekterKafkaDto : LytterModellApi, BehovExtractor<InntekterKafkaDto> {
