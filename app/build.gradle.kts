@@ -13,7 +13,7 @@ dependencies {
     implementation(project(":domene"))
     implementation(project(":dto-kafka"))
 
-    implementation("com.github.navikt.aap-sykepengedager:kafka-dto:1.0.161")
+    implementation("com.github.navikt.aap-sykepengedager:kafka-dto:1.0.166")
     implementation("com.github.navikt.aap-libs:ktor-utils:$aapLibVersion")
     implementation("com.github.navikt.aap-libs:kafka-2:$aapLibVersion")
 
