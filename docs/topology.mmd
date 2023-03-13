@@ -141,12 +141,12 @@ subgraph Topologi
 	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.kvalitetssikring.11-5.v1 --> aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1
+	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.kvalitetssikring.11-6.v1 --> aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1
 	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.medlem.v1
@@ -157,28 +157,28 @@ subgraph Topologi
 	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.kvalitetssikring.22-13.v1 --> aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1
+	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.manuell.11-19.v1 --> aap.manuell.11-19.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.manuell.11-19.v1-join-aap.sokere.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.sokere.v1
+	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.medlem.v1
+	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-2.v1 --> aap.manuell.11-2.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.manuell.11-2.v1-join-aap.sokere.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
+	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.manuell.11-29.v1 --> aap.manuell.11-29.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.manuell.11-29.v1-join-aap.sokere.v1
 	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
@@ -216,17 +216,17 @@ subgraph Topologi
 	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
 	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.vedtak.v1
+	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
 	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.manuell.22-13.v1 --> aap.manuell.22-13.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.manuell.22-13.v1-join-aap.sokere.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.vedtak.v1
 	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
+	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.sokere.v1
 	aap.sykepengedager.v1 --> aap.sykepengedager.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.sykepengedager.v1-join-aap.sokere.v1
 	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.sokere.v1
@@ -312,11 +312,11 @@ subgraph Topologi
 	aap.kvalitetssikring.22-13.v1 --> aap.medlem.v1
 	aap.kvalitetssikring.22-13.v1 --> aap.andre-folketrygdytelser.v1
 	aap.kvalitetssikring.22-13.v1 --> aap.subscribe-sykepengedager.v1
+	aap.manuell.11-19.v1 --> aap.inntekter.v1
 	aap.manuell.11-19.v1 --> aap.medlem.v1
+	aap.manuell.11-19.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-19.v1 --> aap.vedtak.v1
 	aap.manuell.11-19.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-19.v1 --> aap.inntekter.v1
-	aap.manuell.11-19.v1 --> aap.andre-folketrygdytelser.v1
 	aap.manuell.11-2.v1 --> aap.medlem.v1
 	aap.manuell.11-2.v1 --> aap.inntekter.v1
 	aap.manuell.11-2.v1 --> aap.andre-folketrygdytelser.v1
@@ -345,8 +345,8 @@ subgraph Topologi
 	aap.manuell.11-6.v1 --> aap.medlem.v1
 	aap.manuell.11-6.v1 --> aap.inntekter.v1
 	aap.manuell.11-6.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-6.v1 --> aap.subscribe-sykepengedager.v1
 	aap.manuell.11-6.v1 --> aap.vedtak.v1
+	aap.manuell.11-6.v1 --> aap.subscribe-sykepengedager.v1
 	aap.manuell.22-13.v1 --> aap.medlem.v1
 	aap.manuell.22-13.v1 --> aap.inntekter.v1
 	aap.manuell.22-13.v1 --> aap.andre-folketrygdytelser.v1
@@ -362,8 +362,6 @@ subgraph Topologi
 	aap.sykepengedager.v1 --> aap.subscribe-sykepengedager.v1
 	aap.sykepengedager.v1 --> aap.medlem.v1
 	aap.sykepengedager.v1 --> aap.andre-folketrygdytelser.v1
-	aap.andre-folketrygdytelser.v1 --> aap.andre-folketrygdytelser.v1
-	aap.andre-folketrygdytelser.v1 --> aap.sokere.v1
 
     %% REPARTITION STREAMS
     
