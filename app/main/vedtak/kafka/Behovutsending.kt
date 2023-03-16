@@ -6,7 +6,7 @@ import no.nav.aap.dto.kafka.IverksettVedtakKafkaDto
 import no.nav.aap.dto.kafka.MedlemKafkaDto
 import no.nav.aap.kafka.streams.v2.behov.Behov
 import no.nav.aap.kafka.streams.v2.behov.BehovExtractor
-import no.nav.aap.kafka.streams.v2.stream.MappedKStream
+import no.nav.aap.kafka.streams.v2.stream.MappedStream
 import no.nav.aap.modellapi.BehovModellApi
 import no.nav.aap.modellapi.LytterModellApi
 import no.nav.aap.modellapi.VedtakModellApi
@@ -15,7 +15,7 @@ import java.time.Year
 import java.time.YearMonth
 import java.util.*
 
-internal fun MappedKStream<BehovModellApiWrapper>.sendBehov() {
+internal fun MappedStream<BehovModellApiWrapper>.sendBehov() {
     this
         .branch(BehovModellApiWrapper::erMedlem) { stream ->
             stream
@@ -39,7 +39,6 @@ internal fun MappedKStream<BehovModellApiWrapper>.sendBehov() {
         }
         .branch(BehovModellApiWrapper::erSykepengedager) { stream ->
             stream
-//                .map { value -> ToSykepengedagerKafkaDto().also(value::accept).toJson() }
                 .map { _ -> "".toByteArray() }
                 .produce(Topics.subscribeSykepengedager)
         }

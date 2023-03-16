@@ -9,7 +9,7 @@ import no.nav.aap.kafka.streams.v2.serde.ByteArraySerde
 import no.nav.aap.kafka.streams.v2.serde.JsonSerde
 import no.nav.aap.kafka.streams.v2.serde.StringSerde
 
-object Topics {
+internal object Topics {
     val søknad = Topic("aap.soknad-sendt.v1", JsonSerde.jackson<SøknadKafkaDto>())
     val søkere = Topic(
         name = "aap.sokere.v1",
@@ -18,6 +18,8 @@ object Topics {
             migrate = ForrigeSøkereKafkaDtoHistorikk::toDto
         ) { json -> json.get("søkereKafkaDto")?.get("version")?.takeIf { it.isNumber }?.intValue() },
     )
+    val monade = Topic("aap.monade.v1", JsonSerde.jackson<MonadeKafkaDto>())
+
     val medlem = Topic("aap.medlem.v1", JsonSerde.jackson<MedlemKafkaDto>())
     val inntekter = Topic("aap.inntekter.v1", JsonSerde.jackson<InntekterKafkaDto>())
     val andreFolketrygdsytelser = Topic("aap.andre-folketrygdytelser.v1", JsonSerde.jackson<AndreFolketrygdytelserKafkaDto>())
