@@ -1,4 +1,4 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
 import no.nav.aap.dto.kafka.Innstilling_11_6KafkaDto
 import no.nav.aap.modellapi.InnstillingParagraf_11_6ModellApi

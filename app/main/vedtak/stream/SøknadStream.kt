@@ -1,7 +1,7 @@
 package vedtak.stream
 
 import io.micrometer.core.instrument.MeterRegistry
-import no.nav.aap.app.kafka.toSøkereKafkaDtoHistorikk
+import vedtak.kafka.toSøkereKafkaDtoHistorikk
 import no.nav.aap.dto.kafka.SøkereKafkaDtoHistorikk
 import no.nav.aap.kafka.streams.v2.KTable
 import no.nav.aap.kafka.streams.v2.Topology

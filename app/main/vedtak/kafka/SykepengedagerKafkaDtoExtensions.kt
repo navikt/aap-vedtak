@@ -1,20 +1,21 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
 import no.nav.aap.dto.kafka.SykepengedagerKafkaDto
 import no.nav.aap.modellapi.SykepengedagerModellApi
 import no.nav.aap.modellapi.SøkerModellApi
 
-internal fun SykepengedagerKafkaDto.Response.håndter(søker: SøkerModellApi) = toModellApi().håndter(søker)
+internal fun SykepengedagerKafkaDto.håndter(søker: SøkerModellApi) = toModellApi().håndter(søker)
 
-private fun SykepengedagerKafkaDto.Response.toModellApi(): SykepengedagerModellApi {
-    return if(sykepengedager == null) {
+private fun SykepengedagerKafkaDto.toModellApi(): SykepengedagerModellApi {
+    val response = requireNotNull(response) { "når sykepengedager sin respons er null skal vi ikke være her" }
+    return if (response.sykepengedager == null) {
         SykepengedagerModellApi(sykepengedager = null)
     } else {
         SykepengedagerModellApi(
             sykepengedager = SykepengedagerModellApi.Sykepengedager(
-                gjenståendeSykedager = sykepengedager!!.gjenståendeSykedager,
-                foreløpigBeregnetSluttPåSykepenger = sykepengedager!!.foreløpigBeregnetSluttPåSykepenger,
-                kilde = sykepengedager!!.kilde.name
+                gjenståendeSykedager = response.sykepengedager!!.gjenståendeSykedager,
+                foreløpigBeregnetSluttPåSykepenger = response.sykepengedager!!.foreløpigBeregnetSluttPåSykepenger,
+                kilde = response.sykepengedager!!.kilde.name
             )
         )
     }

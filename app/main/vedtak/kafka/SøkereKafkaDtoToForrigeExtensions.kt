@@ -1,4 +1,4 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
 import no.nav.aap.dto.kafka.ForrigeSøkereKafkaDto as Til
 import no.nav.aap.dto.kafka.SøkereKafkaDto as Fra

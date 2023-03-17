@@ -6,7 +6,7 @@ import io.ktor.serialization.jackson.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import no.nav.aap.app.kafka.toModellApi
+import vedtak.kafka.toModellApi
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
 import no.nav.aap.kafka.streams.v2.config.StreamsConfig
@@ -27,7 +27,7 @@ internal class ApiTest {
     fun `søker får innvilget vedtak`() {
         KStreamsMock().apply {
             connect(
-                config = StreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                config = StreamsConfig("vedtak", "mock://aiven"),
                 registry = SimpleMeterRegistry(),
                 topology = topology(SimpleMeterRegistry(), MockProducer(), true)
             )
@@ -364,7 +364,7 @@ internal class ApiTest {
     fun `oppdaterer søker med ny personident`() {
         KStreamsMock().apply {
             connect(
-                config = StreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                config = StreamsConfig("vedtak", "mock://aiven"),
                 registry = SimpleMeterRegistry(),
                 topology = topology(SimpleMeterRegistry(), MockProducer(), true)
             )

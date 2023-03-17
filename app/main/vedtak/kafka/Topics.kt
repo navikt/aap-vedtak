@@ -1,6 +1,5 @@
 package vedtak.kafka
 
-import no.nav.aap.app.kafka.toDto
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.kafka.streams.v2.KTable
 import no.nav.aap.kafka.streams.v2.Topic
