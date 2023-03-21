@@ -6,65 +6,46 @@ graph LR
 subgraph Topologi
     %% TOPICS
     aap.soknad-sendt.v1([aap.soknad-sendt.v1])
+	aap.monade.v1-join-aap.sokere.v1-repartition([aap.monade.v1-join-aap.sokere.v1-repartition])
+	aap.endrede-personidenter.v1([aap.endrede-personidenter.v1])
+	aap.sokere.v1([aap.sokere.v1])
+	aap.andre-folketrygdytelser.v1([aap.andre-folketrygdytelser.v1])
+	aap.inntekter.v1([aap.inntekter.v1])
+	aap.medlem.v1([aap.medlem.v1])
+	aap.subscribe-sykepengedager.v1([aap.subscribe-sykepengedager.v1])
+	aap.vedtak.v1([aap.vedtak.v1])
+	aap.monade.v1([aap.monade.v1])
 	aap.sykepengedager.v1([aap.sykepengedager.v1])
-	aap.innstilling.11-6.v1([aap.innstilling.11-6.v1])
 	aap.iverksettelse-av-vedtak.v1([aap.iverksettelse-av-vedtak.v1])
-	aap.kvalitetssikring.11-19.v1([aap.kvalitetssikring.11-19.v1])
-	aap.kvalitetssikring.11-2.v1([aap.kvalitetssikring.11-2.v1])
-	aap.kvalitetssikring.11-29.v1([aap.kvalitetssikring.11-29.v1])
-	aap.kvalitetssikring.11-3.v1([aap.kvalitetssikring.11-3.v1])
-	aap.kvalitetssikring.11-4.v1([aap.kvalitetssikring.11-4.v1])
-	aap.kvalitetssikring.11-5.v1([aap.kvalitetssikring.11-5.v1])
-	aap.kvalitetssikring.11-6.v1([aap.kvalitetssikring.11-6.v1])
-	aap.kvalitetssikring.22-13.v1([aap.kvalitetssikring.22-13.v1])
-	aap.manuell.11-19.v1([aap.manuell.11-19.v1])
+	aap.innstilling.11-6.v1([aap.innstilling.11-6.v1])
 	aap.manuell.11-2.v1([aap.manuell.11-2.v1])
-	aap.manuell.11-29.v1([aap.manuell.11-29.v1])
 	aap.manuell.11-3.v1([aap.manuell.11-3.v1])
 	aap.manuell.11-4.v1([aap.manuell.11-4.v1])
 	aap.manuell.11-5.v1([aap.manuell.11-5.v1])
 	aap.manuell.11-6.v1([aap.manuell.11-6.v1])
+	aap.manuell.11-19.v1([aap.manuell.11-19.v1])
+	aap.manuell.11-29.v1([aap.manuell.11-29.v1])
 	aap.manuell.22-13.v1([aap.manuell.22-13.v1])
-	aap.andre-folketrygdytelser.v1([aap.andre-folketrygdytelser.v1])
-	aap.endrede-personidenter.v1([aap.endrede-personidenter.v1])
-	aap.inntekter.v1([aap.inntekter.v1])
-	aap.sokere.v1([aap.sokere.v1])
-	aap.medlem.v1-join-aap.sokere.v1-repartition([aap.medlem.v1-join-aap.sokere.v1-repartition])
-	aap.medlem.v1([aap.medlem.v1])
-	aap.subscribe-sykepengedager.v1([aap.subscribe-sykepengedager.v1])
-	aap.vedtak.v1([aap.vedtak.v1])
+	aap.kvalitetssikring.11-2.v1([aap.kvalitetssikring.11-2.v1])
+	aap.kvalitetssikring.11-3.v1([aap.kvalitetssikring.11-3.v1])
+	aap.kvalitetssikring.11-4.v1([aap.kvalitetssikring.11-4.v1])
+	aap.kvalitetssikring.11-5.v1([aap.kvalitetssikring.11-5.v1])
+	aap.kvalitetssikring.11-6.v1([aap.kvalitetssikring.11-6.v1])
+	aap.kvalitetssikring.11-19.v1([aap.kvalitetssikring.11-19.v1])
+	aap.kvalitetssikring.11-29.v1([aap.kvalitetssikring.11-29.v1])
+	aap.kvalitetssikring.22-13.v1([aap.kvalitetssikring.22-13.v1])
 
     %% JOINS
     aap.soknad-sendt.v1-left-join-aap.sokere.v1{left-join}
-	aap.innstilling.11-6.v1-join-aap.sokere.v1{join}
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1{join}
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-19.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-2.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-29.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-3.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-4.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-5.v1-join-aap.sokere.v1{join}
-	aap.manuell.11-6.v1-join-aap.sokere.v1{join}
-	aap.manuell.22-13.v1-join-aap.sokere.v1{join}
-	aap.sykepengedager.v1-join-aap.sokere.v1{join}
+	aap.monade.v1-join-aap.sokere.v1{join}
 	aap.endrede-personidenter.v1-join-aap.sokere.v1{join}
-	aap.andre-folketrygdytelser.v1-join-aap.sokere.v1{join}
-	aap.inntekter.v1-join-aap.sokere.v1{join}
-	aap.medlem.v1-join-aap.sokere.v1{join}
 
     %% STATE PROCESSORS
-    
+    from-aap.monade.v1-operation-reduced{operation}
     
     %% STATE STORES
     soker-state-store-v2[(soker-state-store-v2)]
+	from-aap.monade.v1-reduced-store[(from-aap.monade.v1-reduced-store)]
     
     %% DATABASES
     
@@ -77,176 +58,23 @@ subgraph Topologi
     %% JOIN STREAMS
     aap.soknad-sendt.v1 --> aap.soknad-sendt.v1-left-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.soknad-sendt.v1-left-join-aap.sokere.v1
-	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.medlem.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.vedtak.v1
+	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.medlem.v1
+	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.inntekter.v1
 	aap.soknad-sendt.v1-left-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.innstilling.11-6.v1 --> aap.innstilling.11-6.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.innstilling.11-6.v1-join-aap.sokere.v1
-	aap.innstilling.11-6.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.innstilling.11-6.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.innstilling.11-6.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.innstilling.11-6.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.innstilling.11-6.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.innstilling.11-6.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.iverksettelse-av-vedtak.v1 --> aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.iverksettelse-av-vedtak.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-19.v1 --> aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-19.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.11-2.v1 --> aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-2.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.11-29.v1 --> aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-29.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.11-3.v1 --> aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-3.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.11-4.v1 --> aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-4.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.11-5.v1 --> aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-5.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-6.v1 --> aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-6.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.22-13.v1 --> aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.22-13.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-19.v1 --> aap.manuell.11-19.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-19.v1-join-aap.sokere.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-19.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-2.v1 --> aap.manuell.11-2.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-2.v1-join-aap.sokere.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-2.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-29.v1 --> aap.manuell.11-29.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-29.v1-join-aap.sokere.v1
-	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-29.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-3.v1 --> aap.manuell.11-3.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-3.v1-join-aap.sokere.v1
-	aap.manuell.11-3.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-3.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-3.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-3.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-3.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-3.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-4.v1 --> aap.manuell.11-4.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-4.v1-join-aap.sokere.v1
-	aap.manuell.11-4.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-4.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-4.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-4.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-4.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-4.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-5.v1 --> aap.manuell.11-5.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-5.v1-join-aap.sokere.v1
-	aap.manuell.11-5.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-5.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-5.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-5.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-5.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-5.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.11-6.v1 --> aap.manuell.11-6.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.11-6.v1-join-aap.sokere.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-6.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.manuell.22-13.v1 --> aap.manuell.22-13.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.manuell.22-13.v1-join-aap.sokere.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.22-13.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.sykepengedager.v1 --> aap.sykepengedager.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.sykepengedager.v1-join-aap.sokere.v1
-	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.inntekter.v1
-	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.vedtak.v1
-	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
-	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.medlem.v1
-	aap.sykepengedager.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.monade.v1-join-aap.sokere.v1
+	soker-state-store-v2 --> aap.monade.v1-join-aap.sokere.v1
+	aap.monade.v1-join-aap.sokere.v1 --> aap.sokere.v1
+	aap.monade.v1-join-aap.sokere.v1 --> aap.inntekter.v1
+	aap.monade.v1-join-aap.sokere.v1 --> aap.medlem.v1
+	aap.monade.v1-join-aap.sokere.v1 --> aap.andre-folketrygdytelser.v1
+	aap.monade.v1-join-aap.sokere.v1 --> aap.vedtak.v1
+	aap.monade.v1-join-aap.sokere.v1 --> aap.subscribe-sykepengedager.v1
 	aap.endrede-personidenter.v1 --> aap.endrede-personidenter.v1-join-aap.sokere.v1
 	soker-state-store-v2 --> aap.endrede-personidenter.v1-join-aap.sokere.v1
 	aap.endrede-personidenter.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.andre-folketrygdytelser.v1 --> aap.andre-folketrygdytelser.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.andre-folketrygdytelser.v1-join-aap.sokere.v1
-	aap.andre-folketrygdytelser.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.inntekter.v1 --> aap.inntekter.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.inntekter.v1-join-aap.sokere.v1
-	aap.inntekter.v1-join-aap.sokere.v1 --> aap.sokere.v1
-	aap.medlem.v1-join-aap.sokere.v1-repartition --> aap.medlem.v1-join-aap.sokere.v1
-	soker-state-store-v2 --> aap.medlem.v1-join-aap.sokere.v1
-	aap.medlem.v1-join-aap.sokere.v1 --> aap.sokere.v1
 
     %% TABLE STREAMS
     aap.sokere.v1 --> soker-state-store-v2
@@ -256,121 +84,60 @@ subgraph Topologi
 	migrate-soker-state-store-v2 --> soker-state-store-v2
     
     %% BRANCH STREAMS
-    aap.soknad-sendt.v1 --> aap.inntekter.v1
-	aap.soknad-sendt.v1 --> aap.medlem.v1
-	aap.soknad-sendt.v1 --> aap.andre-folketrygdytelser.v1
+    aap.soknad-sendt.v1 --> aap.andre-folketrygdytelser.v1
 	aap.soknad-sendt.v1 --> aap.subscribe-sykepengedager.v1
 	aap.soknad-sendt.v1 --> aap.vedtak.v1
-	aap.soknad-sendt.v1 --> aap.sokere.v1
-	aap.innstilling.11-6.v1 --> aap.inntekter.v1
-	aap.innstilling.11-6.v1 --> aap.subscribe-sykepengedager.v1
-	aap.innstilling.11-6.v1 --> aap.medlem.v1
-	aap.innstilling.11-6.v1 --> aap.andre-folketrygdytelser.v1
-	aap.innstilling.11-6.v1 --> aap.vedtak.v1
-	aap.iverksettelse-av-vedtak.v1 --> aap.medlem.v1
-	aap.iverksettelse-av-vedtak.v1 --> aap.inntekter.v1
-	aap.iverksettelse-av-vedtak.v1 --> aap.vedtak.v1
-	aap.iverksettelse-av-vedtak.v1 --> aap.subscribe-sykepengedager.v1
-	aap.iverksettelse-av-vedtak.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-19.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-19.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-19.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-19.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-19.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-2.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-2.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-2.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-2.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-2.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-29.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-29.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-29.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-29.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-29.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-3.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-3.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-3.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-3.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-3.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-4.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-4.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-4.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-4.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-4.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-5.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-5.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-5.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.11-5.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-5.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-6.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.11-6.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.11-6.v1 --> aap.subscribe-sykepengedager.v1
-	aap.kvalitetssikring.11-6.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.11-6.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.22-13.v1 --> aap.inntekter.v1
-	aap.kvalitetssikring.22-13.v1 --> aap.vedtak.v1
-	aap.kvalitetssikring.22-13.v1 --> aap.medlem.v1
-	aap.kvalitetssikring.22-13.v1 --> aap.andre-folketrygdytelser.v1
-	aap.kvalitetssikring.22-13.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-19.v1 --> aap.inntekter.v1
-	aap.manuell.11-19.v1 --> aap.medlem.v1
-	aap.manuell.11-19.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-19.v1 --> aap.vedtak.v1
-	aap.manuell.11-19.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-2.v1 --> aap.medlem.v1
-	aap.manuell.11-2.v1 --> aap.inntekter.v1
-	aap.manuell.11-2.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-2.v1 --> aap.vedtak.v1
-	aap.manuell.11-2.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-29.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-29.v1 --> aap.vedtak.v1
-	aap.manuell.11-29.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-29.v1 --> aap.medlem.v1
-	aap.manuell.11-29.v1 --> aap.inntekter.v1
-	aap.manuell.11-3.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-3.v1 --> aap.vedtak.v1
-	aap.manuell.11-3.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-3.v1 --> aap.inntekter.v1
-	aap.manuell.11-3.v1 --> aap.medlem.v1
-	aap.manuell.11-4.v1 --> aap.medlem.v1
-	aap.manuell.11-4.v1 --> aap.inntekter.v1
-	aap.manuell.11-4.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-4.v1 --> aap.vedtak.v1
-	aap.manuell.11-4.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-5.v1 --> aap.inntekter.v1
-	aap.manuell.11-5.v1 --> aap.vedtak.v1
-	aap.manuell.11-5.v1 --> aap.medlem.v1
-	aap.manuell.11-5.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.11-5.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-6.v1 --> aap.medlem.v1
-	aap.manuell.11-6.v1 --> aap.inntekter.v1
-	aap.manuell.11-6.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.11-6.v1 --> aap.vedtak.v1
-	aap.manuell.11-6.v1 --> aap.subscribe-sykepengedager.v1
-	aap.manuell.22-13.v1 --> aap.medlem.v1
-	aap.manuell.22-13.v1 --> aap.inntekter.v1
-	aap.manuell.22-13.v1 --> aap.andre-folketrygdytelser.v1
-	aap.manuell.22-13.v1 --> aap.vedtak.v1
-	aap.manuell.22-13.v1 --> aap.subscribe-sykepengedager.v1
+	aap.soknad-sendt.v1 --> aap.medlem.v1
 	aap.soknad-sendt.v1 --> aap.inntekter.v1
-	aap.soknad-sendt.v1 --> aap.medlem.v1
+	aap.soknad-sendt.v1 --> aap.sokere.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.sokere.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.inntekter.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.medlem.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.andre-folketrygdytelser.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.vedtak.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.subscribe-sykepengedager.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.inntekter.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.medlem.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.andre-folketrygdytelser.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.vedtak.v1
+	aap.monade.v1-join-aap.sokere.v1-repartition --> aap.subscribe-sykepengedager.v1
 	aap.soknad-sendt.v1 --> aap.andre-folketrygdytelser.v1
 	aap.soknad-sendt.v1 --> aap.subscribe-sykepengedager.v1
 	aap.soknad-sendt.v1 --> aap.vedtak.v1
-	aap.sykepengedager.v1 --> aap.inntekter.v1
-	aap.sykepengedager.v1 --> aap.vedtak.v1
-	aap.sykepengedager.v1 --> aap.subscribe-sykepengedager.v1
-	aap.sykepengedager.v1 --> aap.medlem.v1
-	aap.sykepengedager.v1 --> aap.andre-folketrygdytelser.v1
+	aap.soknad-sendt.v1 --> aap.medlem.v1
+	aap.soknad-sendt.v1 --> aap.inntekter.v1
 
     %% REPARTITION STREAMS
-    
+    aap.monade.v1 --> |rekey| aap.monade.v1-join-aap.sokere.v1-repartition
     
     %% BASIC STREAMS
-    aap.medlem.v1 --> aap.medlem.v1-join-aap.sokere.v1-repartition
+    aap.medlem.v1 --> aap.monade.v1
+	aap.inntekter.v1 --> aap.monade.v1
+	aap.andre-folketrygdytelser.v1 --> aap.monade.v1
+	aap.sykepengedager.v1 --> aap.monade.v1
+	aap.iverksettelse-av-vedtak.v1 --> aap.monade.v1
+	aap.innstilling.11-6.v1 --> aap.monade.v1
+	aap.manuell.11-2.v1 --> aap.monade.v1
+	aap.manuell.11-3.v1 --> aap.monade.v1
+	aap.manuell.11-4.v1 --> aap.monade.v1
+	aap.manuell.11-5.v1 --> aap.monade.v1
+	aap.manuell.11-6.v1 --> aap.monade.v1
+	aap.manuell.11-19.v1 --> aap.monade.v1
+	aap.manuell.11-29.v1 --> aap.monade.v1
+	aap.manuell.22-13.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-2.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-3.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-4.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-5.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-6.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-19.v1 --> aap.monade.v1
+	aap.kvalitetssikring.11-29.v1 --> aap.monade.v1
+	aap.kvalitetssikring.22-13.v1 --> aap.monade.v1
     
     %% CUSTOM PROCESS STREAMS
-    
+    aap.monade.v1 --> from-aap.monade.v1-operation-reduced
+	from-aap.monade.v1-reduced-store --> from-aap.monade.v1-operation-reduced
+	from-aap.monade.v1-operation-reduced --> aap.monade.v1-join-aap.sokere.v1-repartition
 end
 
 %% COLORS
@@ -382,33 +149,35 @@ end
 
 %% STYLES
 style aap.soknad-sendt.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.monade.v1-join-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.endrede-personidenter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.andre-folketrygdytelser.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.subscribe-sykepengedager.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.vedtak.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.monade.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.sykepengedager.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.innstilling.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.iverksettelse-av-vedtak.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-19.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-2.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-29.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-3.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-4.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.kvalitetssikring.22-13.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.manuell.11-19.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.innstilling.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-2.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.manuell.11-29.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-3.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-4.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.manuell.11-19.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.manuell.11-29.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style aap.manuell.22-13.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.andre-folketrygdytelser.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.endrede-personidenter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.inntekter.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.sokere.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.medlem.v1-join-aap.sokere.v1-repartition fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.medlem.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.subscribe-sykepengedager.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
-style aap.vedtak.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-2.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-3.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-4.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-5.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-6.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-19.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.11-29.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style aap.kvalitetssikring.22-13.v1 fill:#c233b4, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
+style from-aap.monade.v1-reduced-store fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style gauge-soker-state-store-v2-entries fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a
 style migrate-soker-state-store-v2 fill:#78369f, stroke:#2a204a, stroke-width:2px, color:#2a204a

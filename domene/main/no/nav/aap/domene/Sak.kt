@@ -170,11 +170,8 @@ internal class Sak private constructor(
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 val visitor = OppfyltVisitor().apply(sak.sakstype::accept)
                 when {
-                    visitor.erOppfylt ->
-                        sak.tilstand(BeregnInntekt, hendelse)
-
-                    visitor.erIkkeOppfylt ->
-                        sak.tilstand(IkkeOppfylt, hendelse)
+                    visitor.erOppfylt -> sak.tilstand(BeregnInntekt, hendelse)
+                    visitor.erIkkeOppfylt -> sak.tilstand(IkkeOppfylt, hendelse)
                 }
             }
 
@@ -197,6 +194,7 @@ internal class Sak private constructor(
                         tom = Year.from(beregningsdato).minusYears(1)
                     )
                 )
+                println("opprettet behov om inntekter, ved inngangen til beregn inntekt.")
             }
 
             override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
@@ -210,6 +208,7 @@ internal class Sak private constructor(
                     virkningsdato = virkningsdato
                 )
 
+                println("Sak lagret inntekter, opprettet vedtak og setter tilstand til avventer kvalitetssikring")
                 sak.tilstand(AvventerKvalitetssikring, løsning)
             }
 
@@ -224,14 +223,14 @@ internal class Sak private constructor(
 
         object AvventerKvalitetssikring : Tilstand(Tilstandsnavn.AVVENTER_KVALITETSSIKRING) {
 
-            override fun <T : Hendelse> håndterLøsning(
-                sak: Sak,
-                løsning: T,
-                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
-            ) {
-                sak.sakstype.håndter(løsning, håndterLøsning)
-                sak.tilstand(BeregnInntekt, løsning)
-            }
+//            override fun <T : Hendelse> håndterLøsning(
+//                sak: Sak,
+//                løsning: T,
+//                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
+//            ) {
+//                sak.sakstype.håndter(løsning, håndterLøsning)
+//                sak.tilstand(BeregnInntekt, løsning)
+//            }
 
             override fun <T : Hendelse> håndterKvalitetssikring(
                 sak: Sak,
@@ -299,9 +298,7 @@ internal class Sak private constructor(
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 val visitor = VirkningsdatoVisitor().apply(sak.sakstype::accept)
                 when (visitor.bestemmesAv) {
-                    LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger ->
-                        sak.tilstand(VenterSykepenger, hendelse)
-
+                    LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger -> sak.tilstand(VenterSykepenger, hendelse)
                     else -> sak.tilstand(VedtakIverksatt, hendelse)
                 }
             }

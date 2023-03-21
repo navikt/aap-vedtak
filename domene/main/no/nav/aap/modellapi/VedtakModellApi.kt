@@ -60,6 +60,7 @@ data class InntekterModellApi(
     fun håndter(søker: SøkerModellApi): Pair<SøkerModellApi, List<BehovModellApi>> {
         val modellSøker = Søker.gjenopprett(søker)
         val løsning = toLøsning()
+        println("Håndterer løsning for inntekt: $løsning")
         modellSøker.håndterLøsning(løsning)
         return modellSøker.toDto() to løsning.behov().toDto(søker.personident)
     }

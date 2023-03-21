@@ -1,0 +1,625 @@
+@startuml
+!theme black-knight
+queue "aap.andre-folketrygdytelser.v1" <<topic>> as aap_andre_folketrygdytelser_v1
+queue "aap.inntekter.v1" <<topic>> as aap_inntekter_v1
+queue "aap.medlem.v1" <<topic>> as aap_medlem_v1
+queue "aap.subscribe-sykepengedager.v1" <<topic>> as aap_subscribe_sykepengedager_v1
+queue "aap.vedtak.v1" <<topic>> as aap_vedtak_v1
+queue "aap.sokere.v1" <<topic>> as aap_sokere_v1
+queue "aap.soknad-sendt.v1" <<topic>> as aap_soknad_sendt_v1
+queue "aap.monade.v1-join-aap.sokere.v1-repartition" <<topic>> as aap_monade_v1_join_aap_sokere_v1_repartition
+queue "aap.endrede-personidenter.v1" <<topic>> as aap_endrede_personidenter_v1
+queue "aap.monade.v1" <<topic>> as aap_monade_v1
+queue "aap.sykepengedager.v1" <<topic>> as aap_sykepengedager_v1
+queue "aap.iverksettelse-av-vedtak.v1" <<topic>> as aap_iverksettelse_av_vedtak_v1
+queue "aap.innstilling.11-6.v1" <<topic>> as aap_innstilling_11_6_v1
+queue "aap.manuell.11-2.v1" <<topic>> as aap_manuell_11_2_v1
+queue "aap.manuell.11-3.v1" <<topic>> as aap_manuell_11_3_v1
+queue "aap.manuell.11-4.v1" <<topic>> as aap_manuell_11_4_v1
+queue "aap.manuell.11-5.v1" <<topic>> as aap_manuell_11_5_v1
+queue "aap.manuell.11-6.v1" <<topic>> as aap_manuell_11_6_v1
+queue "aap.manuell.11-19.v1" <<topic>> as aap_manuell_11_19_v1
+queue "aap.manuell.11-29.v1" <<topic>> as aap_manuell_11_29_v1
+queue "aap.manuell.22-13.v1" <<topic>> as aap_manuell_22_13_v1
+queue "aap.kvalitetssikring.11-2.v1" <<topic>> as aap_kvalitetssikring_11_2_v1
+queue "aap.kvalitetssikring.11-3.v1" <<topic>> as aap_kvalitetssikring_11_3_v1
+queue "aap.kvalitetssikring.11-4.v1" <<topic>> as aap_kvalitetssikring_11_4_v1
+queue "aap.kvalitetssikring.11-5.v1" <<topic>> as aap_kvalitetssikring_11_5_v1
+queue "aap.kvalitetssikring.11-6.v1" <<topic>> as aap_kvalitetssikring_11_6_v1
+queue "aap.kvalitetssikring.11-19.v1" <<topic>> as aap_kvalitetssikring_11_19_v1
+queue "aap.kvalitetssikring.11-29.v1" <<topic>> as aap_kvalitetssikring_11_29_v1
+queue "aap.kvalitetssikring.22-13.v1" <<topic>> as aap_kvalitetssikring_22_13_v1
+package "Sub-topology: 0" {
+	database "soker-state-store-v2" <<State Store>> as soker_state_store_v2
+	agent "consume-aap.soknad-sendt.v1" <<Source>> as consume_aap_soknad_sendt_v1
+	agent "stateless-operation-log-consume-aap.soknad-sendt.v1" <<Processor>> as stateless_operation_log_consume_aap_soknad_sendt_v1
+	agent "skip-aap.soknad-sendt.v1-tombstone" <<Processor>> as skip_aap_soknad_sendt_v1_tombstone
+	agent "KSTREAM-FILTER-0000000006" <<Processor>> as KSTREAM_FILTER_0000000006
+	agent "stateless-operation-soknad_mottatt-counter" <<Processor>> as stateless_operation_soknad_mottatt_counter
+	agent "aap.monade.v1-join-aap.sokere.v1-repartition-source" <<Source>> as aap_monade_v1_join_aap_sokere_v1_repartition_source
+	agent "aap.soknad-sendt.v1-left-join-aap.sokere.v1" <<Processor>> as aap_soknad_sendt_v1_left_join_aap_sokere_v1
+	agent "KSTREAM-FILTER-0000000008" <<Processor>> as KSTREAM_FILTER_0000000008
+	agent "aap.monade.v1-join-aap.sokere.v1" <<Processor>> as aap_monade_v1_join_aap_sokere_v1
+	agent "KSTREAM-FILTER-0000000140" <<Processor>> as KSTREAM_FILTER_0000000140
+	agent "stateless-operation-forstegangssoker-counter" <<Processor>> as stateless_operation_forstegangssoker_counter
+	agent "KSTREAM-MAPVALUES-0000000009" <<Processor>> as KSTREAM_MAPVALUES_0000000009
+	agent "KSTREAM-MAPVALUES-0000000141" <<Processor>> as KSTREAM_MAPVALUES_0000000141
+	agent "KSTREAM-FLATMAPVALUES-0000000013" <<Processor>> as KSTREAM_FLATMAPVALUES_0000000013
+	agent "KSTREAM-FLATMAPVALUES-0000000145" <<Processor>> as KSTREAM_FLATMAPVALUES_0000000145
+	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "consume-aap.endrede-personidenter.v1" <<Source>> as consume_aap_endrede_personidenter_v1
+	agent "consume-aap.sokere.v1" <<Source>> as consume_aap_sokere_v1
+	agent "stateless-operation-log-consume-aap.endrede-personidenter.v1" <<Processor>> as stateless_operation_log_consume_aap_endrede_personidenter_v1
+	agent "stateless-operation-log-consume-aap.sokere.v1" <<Processor>> as stateless_operation_log_consume_aap_sokere_v1
+	agent "skip-aap.endrede-personidenter.v1-tombstone" <<Processor>> as skip_aap_endrede_personidenter_v1_tombstone
+	agent "stateless-operation-log-produced-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_sokere_v1
+	agent "aap.endrede-personidenter.v1-join-aap.sokere.v1" <<Processor>> as aap_endrede_personidenter_v1_join_aap_sokere_v1
+	agent "aap.sokere.v1-to-table" <<Processor>> as aap_sokere_v1_to_table
+	agent "KSTREAM-FLATMAP-0000000034" <<Processor>> as KSTREAM_FLATMAP_0000000034
+	agent "KSTREAM-MAPVALUES-0000000010" <<Processor>> as KSTREAM_MAPVALUES_0000000010
+	agent "KSTREAM-MAPVALUES-0000000142" <<Processor>> as KSTREAM_MAPVALUES_0000000142
+	agent "KSTREAM-PEEK-0000000035" <<Processor>> as KSTREAM_PEEK_0000000035
+	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-1" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1
+	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-2" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2
+	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-3" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_3
+	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-4" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_4
+	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-5" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_5
+	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1-branch-1" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_1
+	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1-branch-2" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_2
+	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1-branch-3" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_3
+	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1-branch-4" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_4
+	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1-branch-5" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_5
+	agent "KSTREAM-MAPVALUES-0000000011" <<Processor>> as KSTREAM_MAPVALUES_0000000011
+	agent "KSTREAM-MAPVALUES-0000000016" <<Processor>> as KSTREAM_MAPVALUES_0000000016
+	agent "KSTREAM-MAPVALUES-0000000019" <<Processor>> as KSTREAM_MAPVALUES_0000000019
+	agent "KSTREAM-MAPVALUES-0000000022" <<Processor>> as KSTREAM_MAPVALUES_0000000022
+	agent "KSTREAM-MAPVALUES-0000000025" <<Processor>> as KSTREAM_MAPVALUES_0000000025
+	agent "KSTREAM-MAPVALUES-0000000028" <<Processor>> as KSTREAM_MAPVALUES_0000000028
+	agent "KSTREAM-MAPVALUES-0000000036" <<Processor>> as KSTREAM_MAPVALUES_0000000036
+	agent "KSTREAM-MAPVALUES-0000000143" <<Processor>> as KSTREAM_MAPVALUES_0000000143
+	agent "KSTREAM-MAPVALUES-0000000148" <<Processor>> as KSTREAM_MAPVALUES_0000000148
+	agent "KSTREAM-MAPVALUES-0000000151" <<Processor>> as KSTREAM_MAPVALUES_0000000151
+	agent "KSTREAM-MAPVALUES-0000000154" <<Processor>> as KSTREAM_MAPVALUES_0000000154
+	agent "KSTREAM-MAPVALUES-0000000157" <<Processor>> as KSTREAM_MAPVALUES_0000000157
+	agent "KSTREAM-MAPVALUES-0000000160" <<Processor>> as KSTREAM_MAPVALUES_0000000160
+	agent "KTABLE-TOSTREAM-0000000002" <<Processor>> as KTABLE_TOSTREAM_0000000002
+	agent "KTABLE-TOSTREAM-0000000003" <<Processor>> as KTABLE_TOSTREAM_0000000003
+	agent "stateless-operation-log-produced-aap.andre-folketrygdytelser.v1-via-branch-3-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.andre-folketrygdytelser.v1-via-branch-3-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.inntekter.v1-via-branch-2-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.inntekter.v1-via-branch-2-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.medlem.v1-via-branch-1-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.medlem.v1-via-branch-1-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.subscribe-sykepengedager.v1-via-branch-5-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.subscribe-sykepengedager.v1-via-branch-5-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.vedtak.v1-via-branch-4-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-aap.vedtak.v1-via-branch-4-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-bufferable-aap.sokere.v1-aap.endrede-personidenter.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-bufferable-aap.sokere.v1-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "stateless-operation-log-produced-bufferable-aap.sokere.v1-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "gauge-soker-state-store-v2-entries" <<Processor>> as gauge_soker_state_store_v2_entries
+	agent "migrate-soker-state-store-v2" <<Processor>> as migrate_soker_state_store_v2
+	agent "produced-aap.andre-folketrygdytelser.v1-via-branch-3-aap.monade.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "produced-aap.andre-folketrygdytelser.v1-via-branch-3-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "produced-aap.inntekter.v1-via-branch-2-aap.monade.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "produced-aap.inntekter.v1-via-branch-2-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_aap_inntekter_v1_via_branch_2_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "produced-aap.medlem.v1-via-branch-1-aap.monade.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "produced-aap.medlem.v1-via-branch-1-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_aap_medlem_v1_via_branch_1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "produced-aap.subscribe-sykepengedager.v1-via-branch-5-aap.monade.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "produced-aap.subscribe-sykepengedager.v1-via-branch-5-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "produced-aap.vedtak.v1-via-branch-4-aap.monade.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "produced-aap.vedtak.v1-via-branch-4-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "produced-bufferable-aap.sokere.v1-aap.endrede-personidenter.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1
+	agent "produced-bufferable-aap.sokere.v1-aap.monade.v1-buffered-join-aap.sokere.v1" <<Sink>> as produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
+	agent "produced-bufferable-aap.sokere.v1-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	agent "skip-table-aap.sokere.v1-tombstone" <<Processor>> as skip_table_aap_sokere_v1_tombstone
+	aap_soknad_sendt_v1 --> consume_aap_soknad_sendt_v1
+	aap_monade_v1_join_aap_sokere_v1_repartition --> aap_monade_v1_join_aap_sokere_v1_repartition_source
+	soker_state_store_v2 -- aap_soknad_sendt_v1_left_join_aap_sokere_v1
+	soker_state_store_v2 -- aap_monade_v1_join_aap_sokere_v1
+	aap_endrede_personidenter_v1 --> consume_aap_endrede_personidenter_v1
+	aap_sokere_v1 --> consume_aap_sokere_v1
+	soker_state_store_v2 -- aap_endrede_personidenter_v1_join_aap_sokere_v1
+	soker_state_store_v2 -- aap_sokere_v1_to_table
+	soker_state_store_v2 -- gauge_soker_state_store_v2_entries
+	soker_state_store_v2 -- migrate_soker_state_store_v2
+	aap_andre_folketrygdytelser_v1 <-- produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
+	aap_andre_folketrygdytelser_v1 <-- produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	aap_inntekter_v1 <-- produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
+	aap_inntekter_v1 <-- produced_aap_inntekter_v1_via_branch_2_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	aap_medlem_v1 <-- produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
+	aap_medlem_v1 <-- produced_aap_medlem_v1_via_branch_1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	aap_subscribe_sykepengedager_v1 <-- produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
+	aap_subscribe_sykepengedager_v1 <-- produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	aap_vedtak_v1 <-- produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
+	aap_vedtak_v1 <-- produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	aap_sokere_v1 <-- produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1
+	aap_sokere_v1 <-- produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
+	aap_sokere_v1 <-- produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	consume_aap_soknad_sendt_v1 --> stateless_operation_log_consume_aap_soknad_sendt_v1
+	stateless_operation_log_consume_aap_soknad_sendt_v1 --> skip_aap_soknad_sendt_v1_tombstone
+	skip_aap_soknad_sendt_v1_tombstone --> KSTREAM_FILTER_0000000006
+	KSTREAM_FILTER_0000000006 --> stateless_operation_soknad_mottatt_counter
+	stateless_operation_soknad_mottatt_counter --> aap_soknad_sendt_v1_left_join_aap_sokere_v1
+	aap_monade_v1_join_aap_sokere_v1_repartition_source --> aap_monade_v1_join_aap_sokere_v1
+	aap_soknad_sendt_v1_left_join_aap_sokere_v1 --> KSTREAM_FILTER_0000000008
+	KSTREAM_FILTER_0000000008 --> stateless_operation_forstegangssoker_counter
+	aap_monade_v1_join_aap_sokere_v1 --> KSTREAM_FILTER_0000000140
+	KSTREAM_FILTER_0000000140 --> KSTREAM_MAPVALUES_0000000141
+	stateless_operation_forstegangssoker_counter --> KSTREAM_MAPVALUES_0000000009
+	KSTREAM_MAPVALUES_0000000009 --> KSTREAM_FLATMAPVALUES_0000000013
+	KSTREAM_MAPVALUES_0000000009 --> KSTREAM_MAPVALUES_0000000010
+	KSTREAM_MAPVALUES_0000000141 --> KSTREAM_MAPVALUES_0000000142
+	KSTREAM_MAPVALUES_0000000141 --> KSTREAM_FLATMAPVALUES_0000000145
+	KSTREAM_FLATMAPVALUES_0000000013 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_FLATMAPVALUES_0000000145 --> split_aap_monade_v1_buffered_join_aap_sokere_v1
+	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2
+	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1
+	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_3
+	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_4
+	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_5
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_3
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_5
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_4
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_1
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_2
+	consume_aap_endrede_personidenter_v1 --> stateless_operation_log_consume_aap_endrede_personidenter_v1
+	consume_aap_sokere_v1 --> stateless_operation_log_consume_aap_sokere_v1
+	stateless_operation_log_consume_aap_endrede_personidenter_v1 --> skip_aap_endrede_personidenter_v1_tombstone
+	stateless_operation_log_consume_aap_sokere_v1 --> stateless_operation_log_produced_aap_sokere_v1
+	skip_aap_endrede_personidenter_v1_tombstone --> aap_endrede_personidenter_v1_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_sokere_v1 --> aap_sokere_v1_to_table
+	aap_endrede_personidenter_v1_join_aap_sokere_v1 --> KSTREAM_FLATMAP_0000000034
+	aap_sokere_v1_to_table --> KTABLE_TOSTREAM_0000000003
+	aap_sokere_v1_to_table --> KTABLE_TOSTREAM_0000000002
+	aap_sokere_v1_to_table --> skip_table_aap_sokere_v1_tombstone
+	KSTREAM_FLATMAP_0000000034 --> KSTREAM_PEEK_0000000035
+	KSTREAM_MAPVALUES_0000000010 --> KSTREAM_MAPVALUES_0000000011
+	KSTREAM_MAPVALUES_0000000142 --> KSTREAM_MAPVALUES_0000000143
+	KSTREAM_PEEK_0000000035 --> KSTREAM_MAPVALUES_0000000036
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1 --> KSTREAM_MAPVALUES_0000000148
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2 --> KSTREAM_MAPVALUES_0000000151
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_3 --> KSTREAM_MAPVALUES_0000000154
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_4 --> KSTREAM_MAPVALUES_0000000157
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_5 --> KSTREAM_MAPVALUES_0000000160
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_1 --> KSTREAM_MAPVALUES_0000000016
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_2 --> KSTREAM_MAPVALUES_0000000019
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_3 --> KSTREAM_MAPVALUES_0000000022
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_4 --> KSTREAM_MAPVALUES_0000000025
+	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_5 --> KSTREAM_MAPVALUES_0000000028
+	KSTREAM_MAPVALUES_0000000011 --> stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000016 --> stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000019 --> stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000022 --> stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000025 --> stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000028 --> stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000036 --> stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000143 --> stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000148 --> stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000151 --> stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000154 --> stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000157 --> stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000160 --> stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
+	KTABLE_TOSTREAM_0000000002 --> gauge_soker_state_store_v2_entries
+	KTABLE_TOSTREAM_0000000003 --> migrate_soker_state_store_v2
+	stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> produced_aap_inntekter_v1_via_branch_2_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> produced_aap_medlem_v1_via_branch_1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+	stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1 --> produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
+	stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1 --> produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
+}
+package "Sub-topology: 1" {
+	agent "consume-aap.medlem.v1" <<Source>> as consume_aap_medlem_v1
+	agent "stateless-operation-log-consume-aap.medlem.v1" <<Processor>> as stateless_operation_log_consume_aap_medlem_v1
+	agent "skip-aap.medlem.v1-tombstone" <<Processor>> as skip_aap_medlem_v1_tombstone
+	agent "KSTREAM-FILTER-0000000040" <<Processor>> as KSTREAM_FILTER_0000000040
+	agent "KSTREAM-KEY-SELECT-0000000041" <<Processor>> as KSTREAM_KEY_SELECT_0000000041
+	agent "stateless-operation-from-aap.medlem.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_medlem_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000042" <<Processor>> as KSTREAM_MAPVALUES_0000000042
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.medlem.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_medlem_v1
+	agent "produced-aap.monade.v1-from-aap.medlem.v1" <<Sink>> as produced_aap_monade_v1_from_aap_medlem_v1
+	aap_medlem_v1 --> consume_aap_medlem_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_medlem_v1
+	consume_aap_medlem_v1 --> stateless_operation_log_consume_aap_medlem_v1
+	stateless_operation_log_consume_aap_medlem_v1 --> skip_aap_medlem_v1_tombstone
+	skip_aap_medlem_v1_tombstone --> KSTREAM_FILTER_0000000040
+	KSTREAM_FILTER_0000000040 --> KSTREAM_KEY_SELECT_0000000041
+	KSTREAM_KEY_SELECT_0000000041 --> stateless_operation_from_aap_medlem_v1_enrich_metadata
+	stateless_operation_from_aap_medlem_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000042
+	KSTREAM_MAPVALUES_0000000042 --> stateless_operation_log_produced_aap_monade_v1_from_aap_medlem_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_medlem_v1 --> produced_aap_monade_v1_from_aap_medlem_v1
+}
+package "Sub-topology: 2" {
+	agent "consume-aap.inntekter.v1" <<Source>> as consume_aap_inntekter_v1
+	agent "stateless-operation-log-consume-aap.inntekter.v1" <<Processor>> as stateless_operation_log_consume_aap_inntekter_v1
+	agent "skip-aap.inntekter.v1-tombstone" <<Processor>> as skip_aap_inntekter_v1_tombstone
+	agent "KSTREAM-FILTER-0000000046" <<Processor>> as KSTREAM_FILTER_0000000046
+	agent "stateless-operation-from-aap.inntekter.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_inntekter_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000047" <<Processor>> as KSTREAM_MAPVALUES_0000000047
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.inntekter.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_inntekter_v1
+	agent "produced-aap.monade.v1-from-aap.inntekter.v1" <<Sink>> as produced_aap_monade_v1_from_aap_inntekter_v1
+	aap_inntekter_v1 --> consume_aap_inntekter_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_inntekter_v1
+	consume_aap_inntekter_v1 --> stateless_operation_log_consume_aap_inntekter_v1
+	stateless_operation_log_consume_aap_inntekter_v1 --> skip_aap_inntekter_v1_tombstone
+	skip_aap_inntekter_v1_tombstone --> KSTREAM_FILTER_0000000046
+	KSTREAM_FILTER_0000000046 --> stateless_operation_from_aap_inntekter_v1_enrich_metadata
+	stateless_operation_from_aap_inntekter_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000047
+	KSTREAM_MAPVALUES_0000000047 --> stateless_operation_log_produced_aap_monade_v1_from_aap_inntekter_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_inntekter_v1 --> produced_aap_monade_v1_from_aap_inntekter_v1
+}
+package "Sub-topology: 3" {
+	agent "consume-aap.andre-folketrygdytelser.v1" <<Source>> as consume_aap_andre_folketrygdytelser_v1
+	agent "stateless-operation-log-consume-aap.andre-folketrygdytelser.v1" <<Processor>> as stateless_operation_log_consume_aap_andre_folketrygdytelser_v1
+	agent "skip-aap.andre-folketrygdytelser.v1-tombstone" <<Processor>> as skip_aap_andre_folketrygdytelser_v1_tombstone
+	agent "KSTREAM-FILTER-0000000051" <<Processor>> as KSTREAM_FILTER_0000000051
+	agent "stateless-operation-from-aap.andre-folketrygdytelser.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_andre_folketrygdytelser_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000052" <<Processor>> as KSTREAM_MAPVALUES_0000000052
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.andre-folketrygdytelser.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_andre_folketrygdytelser_v1
+	agent "produced-aap.monade.v1-from-aap.andre-folketrygdytelser.v1" <<Sink>> as produced_aap_monade_v1_from_aap_andre_folketrygdytelser_v1
+	aap_andre_folketrygdytelser_v1 --> consume_aap_andre_folketrygdytelser_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_andre_folketrygdytelser_v1
+	consume_aap_andre_folketrygdytelser_v1 --> stateless_operation_log_consume_aap_andre_folketrygdytelser_v1
+	stateless_operation_log_consume_aap_andre_folketrygdytelser_v1 --> skip_aap_andre_folketrygdytelser_v1_tombstone
+	skip_aap_andre_folketrygdytelser_v1_tombstone --> KSTREAM_FILTER_0000000051
+	KSTREAM_FILTER_0000000051 --> stateless_operation_from_aap_andre_folketrygdytelser_v1_enrich_metadata
+	stateless_operation_from_aap_andre_folketrygdytelser_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000052
+	KSTREAM_MAPVALUES_0000000052 --> stateless_operation_log_produced_aap_monade_v1_from_aap_andre_folketrygdytelser_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_andre_folketrygdytelser_v1 --> produced_aap_monade_v1_from_aap_andre_folketrygdytelser_v1
+}
+package "Sub-topology: 4" {
+	agent "consume-aap.sykepengedager.v1" <<Source>> as consume_aap_sykepengedager_v1
+	agent "stateless-operation-log-consume-aap.sykepengedager.v1" <<Processor>> as stateless_operation_log_consume_aap_sykepengedager_v1
+	agent "skip-aap.sykepengedager.v1-tombstone" <<Processor>> as skip_aap_sykepengedager_v1_tombstone
+	agent "KSTREAM-FILTER-0000000056" <<Processor>> as KSTREAM_FILTER_0000000056
+	agent "stateless-operation-from-aap.sykepengedager.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_sykepengedager_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000057" <<Processor>> as KSTREAM_MAPVALUES_0000000057
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.sykepengedager.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_sykepengedager_v1
+	agent "produced-aap.monade.v1-from-aap.sykepengedager.v1" <<Sink>> as produced_aap_monade_v1_from_aap_sykepengedager_v1
+	aap_sykepengedager_v1 --> consume_aap_sykepengedager_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_sykepengedager_v1
+	consume_aap_sykepengedager_v1 --> stateless_operation_log_consume_aap_sykepengedager_v1
+	stateless_operation_log_consume_aap_sykepengedager_v1 --> skip_aap_sykepengedager_v1_tombstone
+	skip_aap_sykepengedager_v1_tombstone --> KSTREAM_FILTER_0000000056
+	KSTREAM_FILTER_0000000056 --> stateless_operation_from_aap_sykepengedager_v1_enrich_metadata
+	stateless_operation_from_aap_sykepengedager_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000057
+	KSTREAM_MAPVALUES_0000000057 --> stateless_operation_log_produced_aap_monade_v1_from_aap_sykepengedager_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_sykepengedager_v1 --> produced_aap_monade_v1_from_aap_sykepengedager_v1
+}
+package "Sub-topology: 5" {
+	agent "consume-aap.iverksettelse-av-vedtak.v1" <<Source>> as consume_aap_iverksettelse_av_vedtak_v1
+	agent "stateless-operation-log-consume-aap.iverksettelse-av-vedtak.v1" <<Processor>> as stateless_operation_log_consume_aap_iverksettelse_av_vedtak_v1
+	agent "skip-aap.iverksettelse-av-vedtak.v1-tombstone" <<Processor>> as skip_aap_iverksettelse_av_vedtak_v1_tombstone
+	agent "stateless-operation-from-aap.iverksettelse-av-vedtak.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_iverksettelse_av_vedtak_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000061" <<Processor>> as KSTREAM_MAPVALUES_0000000061
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.iverksettelse-av-vedtak.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_iverksettelse_av_vedtak_v1
+	agent "produced-aap.monade.v1-from-aap.iverksettelse-av-vedtak.v1" <<Sink>> as produced_aap_monade_v1_from_aap_iverksettelse_av_vedtak_v1
+	aap_iverksettelse_av_vedtak_v1 --> consume_aap_iverksettelse_av_vedtak_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_iverksettelse_av_vedtak_v1
+	consume_aap_iverksettelse_av_vedtak_v1 --> stateless_operation_log_consume_aap_iverksettelse_av_vedtak_v1
+	stateless_operation_log_consume_aap_iverksettelse_av_vedtak_v1 --> skip_aap_iverksettelse_av_vedtak_v1_tombstone
+	skip_aap_iverksettelse_av_vedtak_v1_tombstone --> stateless_operation_from_aap_iverksettelse_av_vedtak_v1_enrich_metadata
+	stateless_operation_from_aap_iverksettelse_av_vedtak_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000061
+	KSTREAM_MAPVALUES_0000000061 --> stateless_operation_log_produced_aap_monade_v1_from_aap_iverksettelse_av_vedtak_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_iverksettelse_av_vedtak_v1 --> produced_aap_monade_v1_from_aap_iverksettelse_av_vedtak_v1
+}
+package "Sub-topology: 6" {
+	agent "consume-aap.innstilling.11-6.v1" <<Source>> as consume_aap_innstilling_11_6_v1
+	agent "stateless-operation-log-consume-aap.innstilling.11-6.v1" <<Processor>> as stateless_operation_log_consume_aap_innstilling_11_6_v1
+	agent "skip-aap.innstilling.11-6.v1-tombstone" <<Processor>> as skip_aap_innstilling_11_6_v1_tombstone
+	agent "stateless-operation-from-aap.innstilling.11-6.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_innstilling_11_6_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000065" <<Processor>> as KSTREAM_MAPVALUES_0000000065
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.innstilling.11-6.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_innstilling_11_6_v1
+	agent "produced-aap.monade.v1-from-aap.innstilling.11-6.v1" <<Sink>> as produced_aap_monade_v1_from_aap_innstilling_11_6_v1
+	aap_innstilling_11_6_v1 --> consume_aap_innstilling_11_6_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_innstilling_11_6_v1
+	consume_aap_innstilling_11_6_v1 --> stateless_operation_log_consume_aap_innstilling_11_6_v1
+	stateless_operation_log_consume_aap_innstilling_11_6_v1 --> skip_aap_innstilling_11_6_v1_tombstone
+	skip_aap_innstilling_11_6_v1_tombstone --> stateless_operation_from_aap_innstilling_11_6_v1_enrich_metadata
+	stateless_operation_from_aap_innstilling_11_6_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000065
+	KSTREAM_MAPVALUES_0000000065 --> stateless_operation_log_produced_aap_monade_v1_from_aap_innstilling_11_6_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_innstilling_11_6_v1 --> produced_aap_monade_v1_from_aap_innstilling_11_6_v1
+}
+package "Sub-topology: 7" {
+	agent "consume-aap.manuell.11-2.v1" <<Source>> as consume_aap_manuell_11_2_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-2.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_2_v1
+	agent "skip-aap.manuell.11-2.v1-tombstone" <<Processor>> as skip_aap_manuell_11_2_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-2.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_2_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000069" <<Processor>> as KSTREAM_MAPVALUES_0000000069
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-2.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_2_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-2.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_2_v1
+	aap_manuell_11_2_v1 --> consume_aap_manuell_11_2_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_2_v1
+	consume_aap_manuell_11_2_v1 --> stateless_operation_log_consume_aap_manuell_11_2_v1
+	stateless_operation_log_consume_aap_manuell_11_2_v1 --> skip_aap_manuell_11_2_v1_tombstone
+	skip_aap_manuell_11_2_v1_tombstone --> stateless_operation_from_aap_manuell_11_2_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_2_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000069
+	KSTREAM_MAPVALUES_0000000069 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_2_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_2_v1 --> produced_aap_monade_v1_from_aap_manuell_11_2_v1
+}
+package "Sub-topology: 8" {
+	agent "consume-aap.manuell.11-3.v1" <<Source>> as consume_aap_manuell_11_3_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-3.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_3_v1
+	agent "skip-aap.manuell.11-3.v1-tombstone" <<Processor>> as skip_aap_manuell_11_3_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-3.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_3_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000073" <<Processor>> as KSTREAM_MAPVALUES_0000000073
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-3.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_3_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-3.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_3_v1
+	aap_manuell_11_3_v1 --> consume_aap_manuell_11_3_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_3_v1
+	consume_aap_manuell_11_3_v1 --> stateless_operation_log_consume_aap_manuell_11_3_v1
+	stateless_operation_log_consume_aap_manuell_11_3_v1 --> skip_aap_manuell_11_3_v1_tombstone
+	skip_aap_manuell_11_3_v1_tombstone --> stateless_operation_from_aap_manuell_11_3_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_3_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000073
+	KSTREAM_MAPVALUES_0000000073 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_3_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_3_v1 --> produced_aap_monade_v1_from_aap_manuell_11_3_v1
+}
+package "Sub-topology: 9" {
+	agent "consume-aap.manuell.11-4.v1" <<Source>> as consume_aap_manuell_11_4_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-4.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_4_v1
+	agent "skip-aap.manuell.11-4.v1-tombstone" <<Processor>> as skip_aap_manuell_11_4_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-4.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_4_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000077" <<Processor>> as KSTREAM_MAPVALUES_0000000077
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-4.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_4_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-4.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_4_v1
+	aap_manuell_11_4_v1 --> consume_aap_manuell_11_4_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_4_v1
+	consume_aap_manuell_11_4_v1 --> stateless_operation_log_consume_aap_manuell_11_4_v1
+	stateless_operation_log_consume_aap_manuell_11_4_v1 --> skip_aap_manuell_11_4_v1_tombstone
+	skip_aap_manuell_11_4_v1_tombstone --> stateless_operation_from_aap_manuell_11_4_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_4_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000077
+	KSTREAM_MAPVALUES_0000000077 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_4_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_4_v1 --> produced_aap_monade_v1_from_aap_manuell_11_4_v1
+}
+package "Sub-topology: 10" {
+	agent "consume-aap.manuell.11-5.v1" <<Source>> as consume_aap_manuell_11_5_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-5.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_5_v1
+	agent "skip-aap.manuell.11-5.v1-tombstone" <<Processor>> as skip_aap_manuell_11_5_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-5.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_5_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000081" <<Processor>> as KSTREAM_MAPVALUES_0000000081
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-5.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_5_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-5.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_5_v1
+	aap_manuell_11_5_v1 --> consume_aap_manuell_11_5_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_5_v1
+	consume_aap_manuell_11_5_v1 --> stateless_operation_log_consume_aap_manuell_11_5_v1
+	stateless_operation_log_consume_aap_manuell_11_5_v1 --> skip_aap_manuell_11_5_v1_tombstone
+	skip_aap_manuell_11_5_v1_tombstone --> stateless_operation_from_aap_manuell_11_5_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_5_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000081
+	KSTREAM_MAPVALUES_0000000081 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_5_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_5_v1 --> produced_aap_monade_v1_from_aap_manuell_11_5_v1
+}
+package "Sub-topology: 11" {
+	agent "consume-aap.manuell.11-6.v1" <<Source>> as consume_aap_manuell_11_6_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-6.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_6_v1
+	agent "skip-aap.manuell.11-6.v1-tombstone" <<Processor>> as skip_aap_manuell_11_6_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-6.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_6_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000085" <<Processor>> as KSTREAM_MAPVALUES_0000000085
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-6.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_6_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-6.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_6_v1
+	aap_manuell_11_6_v1 --> consume_aap_manuell_11_6_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_6_v1
+	consume_aap_manuell_11_6_v1 --> stateless_operation_log_consume_aap_manuell_11_6_v1
+	stateless_operation_log_consume_aap_manuell_11_6_v1 --> skip_aap_manuell_11_6_v1_tombstone
+	skip_aap_manuell_11_6_v1_tombstone --> stateless_operation_from_aap_manuell_11_6_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_6_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000085
+	KSTREAM_MAPVALUES_0000000085 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_6_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_6_v1 --> produced_aap_monade_v1_from_aap_manuell_11_6_v1
+}
+package "Sub-topology: 12" {
+	agent "consume-aap.manuell.11-19.v1" <<Source>> as consume_aap_manuell_11_19_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-19.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_19_v1
+	agent "skip-aap.manuell.11-19.v1-tombstone" <<Processor>> as skip_aap_manuell_11_19_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-19.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_19_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000089" <<Processor>> as KSTREAM_MAPVALUES_0000000089
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-19.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_19_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-19.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_19_v1
+	aap_manuell_11_19_v1 --> consume_aap_manuell_11_19_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_19_v1
+	consume_aap_manuell_11_19_v1 --> stateless_operation_log_consume_aap_manuell_11_19_v1
+	stateless_operation_log_consume_aap_manuell_11_19_v1 --> skip_aap_manuell_11_19_v1_tombstone
+	skip_aap_manuell_11_19_v1_tombstone --> stateless_operation_from_aap_manuell_11_19_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_19_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000089
+	KSTREAM_MAPVALUES_0000000089 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_19_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_19_v1 --> produced_aap_monade_v1_from_aap_manuell_11_19_v1
+}
+package "Sub-topology: 13" {
+	agent "consume-aap.manuell.11-29.v1" <<Source>> as consume_aap_manuell_11_29_v1
+	agent "stateless-operation-log-consume-aap.manuell.11-29.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_11_29_v1
+	agent "skip-aap.manuell.11-29.v1-tombstone" <<Processor>> as skip_aap_manuell_11_29_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.11-29.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_11_29_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000093" <<Processor>> as KSTREAM_MAPVALUES_0000000093
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.11-29.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_29_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.11-29.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_11_29_v1
+	aap_manuell_11_29_v1 --> consume_aap_manuell_11_29_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_11_29_v1
+	consume_aap_manuell_11_29_v1 --> stateless_operation_log_consume_aap_manuell_11_29_v1
+	stateless_operation_log_consume_aap_manuell_11_29_v1 --> skip_aap_manuell_11_29_v1_tombstone
+	skip_aap_manuell_11_29_v1_tombstone --> stateless_operation_from_aap_manuell_11_29_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_11_29_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000093
+	KSTREAM_MAPVALUES_0000000093 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_29_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_11_29_v1 --> produced_aap_monade_v1_from_aap_manuell_11_29_v1
+}
+package "Sub-topology: 14" {
+	agent "consume-aap.manuell.22-13.v1" <<Source>> as consume_aap_manuell_22_13_v1
+	agent "stateless-operation-log-consume-aap.manuell.22-13.v1" <<Processor>> as stateless_operation_log_consume_aap_manuell_22_13_v1
+	agent "skip-aap.manuell.22-13.v1-tombstone" <<Processor>> as skip_aap_manuell_22_13_v1_tombstone
+	agent "stateless-operation-from-aap.manuell.22-13.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_manuell_22_13_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000097" <<Processor>> as KSTREAM_MAPVALUES_0000000097
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.manuell.22-13.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_22_13_v1
+	agent "produced-aap.monade.v1-from-aap.manuell.22-13.v1" <<Sink>> as produced_aap_monade_v1_from_aap_manuell_22_13_v1
+	aap_manuell_22_13_v1 --> consume_aap_manuell_22_13_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_manuell_22_13_v1
+	consume_aap_manuell_22_13_v1 --> stateless_operation_log_consume_aap_manuell_22_13_v1
+	stateless_operation_log_consume_aap_manuell_22_13_v1 --> skip_aap_manuell_22_13_v1_tombstone
+	skip_aap_manuell_22_13_v1_tombstone --> stateless_operation_from_aap_manuell_22_13_v1_enrich_metadata
+	stateless_operation_from_aap_manuell_22_13_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000097
+	KSTREAM_MAPVALUES_0000000097 --> stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_22_13_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_manuell_22_13_v1 --> produced_aap_monade_v1_from_aap_manuell_22_13_v1
+}
+package "Sub-topology: 15" {
+	agent "consume-aap.kvalitetssikring.11-2.v1" <<Source>> as consume_aap_kvalitetssikring_11_2_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-2.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_2_v1
+	agent "skip-aap.kvalitetssikring.11-2.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_2_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-2.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_2_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000101" <<Processor>> as KSTREAM_MAPVALUES_0000000101
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-2.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_2_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-2.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_2_v1
+	aap_kvalitetssikring_11_2_v1 --> consume_aap_kvalitetssikring_11_2_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_2_v1
+	consume_aap_kvalitetssikring_11_2_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_2_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_2_v1 --> skip_aap_kvalitetssikring_11_2_v1_tombstone
+	skip_aap_kvalitetssikring_11_2_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_2_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_2_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000101
+	KSTREAM_MAPVALUES_0000000101 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_2_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_2_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_2_v1
+}
+package "Sub-topology: 16" {
+	agent "consume-aap.kvalitetssikring.11-3.v1" <<Source>> as consume_aap_kvalitetssikring_11_3_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-3.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_3_v1
+	agent "skip-aap.kvalitetssikring.11-3.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_3_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-3.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_3_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000105" <<Processor>> as KSTREAM_MAPVALUES_0000000105
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-3.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_3_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-3.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_3_v1
+	aap_kvalitetssikring_11_3_v1 --> consume_aap_kvalitetssikring_11_3_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_3_v1
+	consume_aap_kvalitetssikring_11_3_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_3_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_3_v1 --> skip_aap_kvalitetssikring_11_3_v1_tombstone
+	skip_aap_kvalitetssikring_11_3_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_3_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_3_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000105
+	KSTREAM_MAPVALUES_0000000105 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_3_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_3_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_3_v1
+}
+package "Sub-topology: 17" {
+	agent "consume-aap.kvalitetssikring.11-4.v1" <<Source>> as consume_aap_kvalitetssikring_11_4_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-4.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_4_v1
+	agent "skip-aap.kvalitetssikring.11-4.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_4_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-4.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_4_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000109" <<Processor>> as KSTREAM_MAPVALUES_0000000109
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-4.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_4_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-4.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_4_v1
+	aap_kvalitetssikring_11_4_v1 --> consume_aap_kvalitetssikring_11_4_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_4_v1
+	consume_aap_kvalitetssikring_11_4_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_4_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_4_v1 --> skip_aap_kvalitetssikring_11_4_v1_tombstone
+	skip_aap_kvalitetssikring_11_4_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_4_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_4_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000109
+	KSTREAM_MAPVALUES_0000000109 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_4_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_4_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_4_v1
+}
+package "Sub-topology: 18" {
+	agent "consume-aap.kvalitetssikring.11-5.v1" <<Source>> as consume_aap_kvalitetssikring_11_5_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-5.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_5_v1
+	agent "skip-aap.kvalitetssikring.11-5.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_5_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-5.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_5_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000113" <<Processor>> as KSTREAM_MAPVALUES_0000000113
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-5.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_5_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-5.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_5_v1
+	aap_kvalitetssikring_11_5_v1 --> consume_aap_kvalitetssikring_11_5_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_5_v1
+	consume_aap_kvalitetssikring_11_5_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_5_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_5_v1 --> skip_aap_kvalitetssikring_11_5_v1_tombstone
+	skip_aap_kvalitetssikring_11_5_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_5_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_5_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000113
+	KSTREAM_MAPVALUES_0000000113 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_5_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_5_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_5_v1
+}
+package "Sub-topology: 19" {
+	agent "consume-aap.kvalitetssikring.11-6.v1" <<Source>> as consume_aap_kvalitetssikring_11_6_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-6.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_6_v1
+	agent "skip-aap.kvalitetssikring.11-6.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_6_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-6.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_6_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000117" <<Processor>> as KSTREAM_MAPVALUES_0000000117
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-6.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_6_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-6.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_6_v1
+	aap_kvalitetssikring_11_6_v1 --> consume_aap_kvalitetssikring_11_6_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_6_v1
+	consume_aap_kvalitetssikring_11_6_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_6_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_6_v1 --> skip_aap_kvalitetssikring_11_6_v1_tombstone
+	skip_aap_kvalitetssikring_11_6_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_6_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_6_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000117
+	KSTREAM_MAPVALUES_0000000117 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_6_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_6_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_6_v1
+}
+package "Sub-topology: 20" {
+	agent "consume-aap.kvalitetssikring.11-19.v1" <<Source>> as consume_aap_kvalitetssikring_11_19_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-19.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_19_v1
+	agent "skip-aap.kvalitetssikring.11-19.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_19_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-19.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_19_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000121" <<Processor>> as KSTREAM_MAPVALUES_0000000121
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-19.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_19_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-19.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_19_v1
+	aap_kvalitetssikring_11_19_v1 --> consume_aap_kvalitetssikring_11_19_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_19_v1
+	consume_aap_kvalitetssikring_11_19_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_19_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_19_v1 --> skip_aap_kvalitetssikring_11_19_v1_tombstone
+	skip_aap_kvalitetssikring_11_19_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_19_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_19_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000121
+	KSTREAM_MAPVALUES_0000000121 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_19_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_19_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_19_v1
+}
+package "Sub-topology: 21" {
+	agent "consume-aap.kvalitetssikring.11-29.v1" <<Source>> as consume_aap_kvalitetssikring_11_29_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.11-29.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_11_29_v1
+	agent "skip-aap.kvalitetssikring.11-29.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_11_29_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.11-29.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_11_29_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000125" <<Processor>> as KSTREAM_MAPVALUES_0000000125
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.11-29.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_29_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.11-29.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_11_29_v1
+	aap_kvalitetssikring_11_29_v1 --> consume_aap_kvalitetssikring_11_29_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_11_29_v1
+	consume_aap_kvalitetssikring_11_29_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_11_29_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_11_29_v1 --> skip_aap_kvalitetssikring_11_29_v1_tombstone
+	skip_aap_kvalitetssikring_11_29_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_11_29_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_11_29_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000125
+	KSTREAM_MAPVALUES_0000000125 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_29_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_11_29_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_11_29_v1
+}
+package "Sub-topology: 22" {
+	agent "consume-aap.kvalitetssikring.22-13.v1" <<Source>> as consume_aap_kvalitetssikring_22_13_v1
+	agent "stateless-operation-log-consume-aap.kvalitetssikring.22-13.v1" <<Processor>> as stateless_operation_log_consume_aap_kvalitetssikring_22_13_v1
+	agent "skip-aap.kvalitetssikring.22-13.v1-tombstone" <<Processor>> as skip_aap_kvalitetssikring_22_13_v1_tombstone
+	agent "stateless-operation-from-aap.kvalitetssikring.22-13.v1-enrich-metadata" <<Processor>> as stateless_operation_from_aap_kvalitetssikring_22_13_v1_enrich_metadata
+	agent "KSTREAM-MAPVALUES-0000000129" <<Processor>> as KSTREAM_MAPVALUES_0000000129
+	agent "stateless-operation-log-produced-aap.monade.v1-from-aap.kvalitetssikring.22-13.v1" <<Processor>> as stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_22_13_v1
+	agent "produced-aap.monade.v1-from-aap.kvalitetssikring.22-13.v1" <<Sink>> as produced_aap_monade_v1_from_aap_kvalitetssikring_22_13_v1
+	aap_kvalitetssikring_22_13_v1 --> consume_aap_kvalitetssikring_22_13_v1
+	aap_monade_v1 <-- produced_aap_monade_v1_from_aap_kvalitetssikring_22_13_v1
+	consume_aap_kvalitetssikring_22_13_v1 --> stateless_operation_log_consume_aap_kvalitetssikring_22_13_v1
+	stateless_operation_log_consume_aap_kvalitetssikring_22_13_v1 --> skip_aap_kvalitetssikring_22_13_v1_tombstone
+	skip_aap_kvalitetssikring_22_13_v1_tombstone --> stateless_operation_from_aap_kvalitetssikring_22_13_v1_enrich_metadata
+	stateless_operation_from_aap_kvalitetssikring_22_13_v1_enrich_metadata --> KSTREAM_MAPVALUES_0000000129
+	KSTREAM_MAPVALUES_0000000129 --> stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_22_13_v1
+	stateless_operation_log_produced_aap_monade_v1_from_aap_kvalitetssikring_22_13_v1 --> produced_aap_monade_v1_from_aap_kvalitetssikring_22_13_v1
+}
+package "Sub-topology: 23" {
+	database "from-aap.monade.v1-reduced-store" <<State Store>> as from_aap_monade_v1_reduced_store
+	agent "consume-aap.monade.v1" <<Source>> as consume_aap_monade_v1
+	agent "stateless-operation-log-consume-aap.monade.v1" <<Processor>> as stateless_operation_log_consume_aap_monade_v1
+	agent "skip-aap.monade.v1-tombstone" <<Processor>> as skip_aap_monade_v1_tombstone
+	agent "from-aap.monade.v1-operation-reduced" <<Processor>> as from_aap_monade_v1_operation_reduced
+	agent "KTABLE-TOSTREAM-0000000134" <<Processor>> as KTABLE_TOSTREAM_0000000134
+	agent "KSTREAM-KEY-SELECT-0000000135" <<Processor>> as KSTREAM_KEY_SELECT_0000000135
+	agent "aap.monade.v1-join-aap.sokere.v1-repartition-filter" <<Processor>> as aap_monade_v1_join_aap_sokere_v1_repartition_filter
+	agent "aap.monade.v1-join-aap.sokere.v1-repartition-sink" <<Sink>> as aap_monade_v1_join_aap_sokere_v1_repartition_sink
+	aap_monade_v1 --> consume_aap_monade_v1
+	from_aap_monade_v1_reduced_store -- from_aap_monade_v1_operation_reduced
+	aap_monade_v1_join_aap_sokere_v1_repartition <-- aap_monade_v1_join_aap_sokere_v1_repartition_sink
+	consume_aap_monade_v1 --> stateless_operation_log_consume_aap_monade_v1
+	stateless_operation_log_consume_aap_monade_v1 --> skip_aap_monade_v1_tombstone
+	skip_aap_monade_v1_tombstone --> from_aap_monade_v1_operation_reduced
+	from_aap_monade_v1_operation_reduced --> KTABLE_TOSTREAM_0000000134
+	KTABLE_TOSTREAM_0000000134 --> KSTREAM_KEY_SELECT_0000000135
+	KSTREAM_KEY_SELECT_0000000135 --> aap_monade_v1_join_aap_sokere_v1_repartition_filter
+	aap_monade_v1_join_aap_sokere_v1_repartition_filter --> aap_monade_v1_join_aap_sokere_v1_repartition_sink
+}
+@enduml

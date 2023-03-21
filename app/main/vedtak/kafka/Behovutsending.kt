@@ -24,7 +24,9 @@ internal fun MappedStream<BehovModellApiWrapper>.sendBehov() {
         }
         .branch(BehovModellApiWrapper::erInntekter) { stream ->
             stream
-                .map { value -> ToInntekterKafkaDto().also(value::accept).toJson() }
+                .map { value ->
+                    ToInntekterKafkaDto().also(value::accept).toJson()
+                }
                 .produce(Topics.inntekter)
         }
         .branch(BehovModellApiWrapper::erAnderFolketrygdytelser) { stream ->
