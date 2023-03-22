@@ -1,8 +1,6 @@
 package vedtak
 
-import com.fasterxml.jackson.databind.SerializationFeature
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
-import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import io.ktor.serialization.jackson.*
 import io.ktor.server.application.*
 import io.ktor.server.engine.*
@@ -23,7 +21,6 @@ import no.nav.aap.kafka.streams.v2.processor.state.MigrateStateInitProcessor
 import no.nav.aap.kafka.streams.v2.topology
 import no.nav.aap.ktor.config.loadConfig
 import no.nav.aap.modellapi.BehovModellApi
-import no.nav.aap.modellapi.SøkerModellApi
 import org.apache.kafka.clients.producer.Producer
 import vedtak.kafka.*
 import vedtak.stream.endredePersonidenterStream
@@ -138,31 +135,33 @@ internal fun topology(
     consume(Topics.kvalitetssikring_11_29).mapWithMetadata{ dto, metadata -> MonadeKafkaDto(kvalitetssikring_11_29 = listOf(Kvalitetssikring_11_29Monoide(metadata, dto)))}.produce(Topics.monade)
     consume(Topics.kvalitetssikring_22_13).mapWithMetadata{ dto, metadata -> MonadeKafkaDto(kvalitetssikring_22_13 = listOf(Kvalitetssikring_22_13Monoide(metadata, dto)))}.produce(Topics.monade)
 
-    val jackson = jacksonObjectMapper().registerModule(JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+//    val jackson = jacksonObjectMapper().registerModule(JavaTimeModule()).disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+
     val søkerOgBehov = consume(Topics.monade)
-//        .sessionWindow(50.toDuration(DurationUnit.MILLISECONDS)) // bør være større en roundtrippen fra produce til søkere topic og consume igjen inn til ktablen.
-        .tumblingWindow(100.toDuration(DurationUnit.MILLISECONDS))
+//        .tumblingWindow(100.toDuration(DurationUnit.MILLISECONDS))
+        .sessionWindow(5.toDuration(DurationUnit.SECONDS))
         .reduce { monade, nextMonade -> monade + nextMonade }
         .joinWith(søkerKTable, søkerKTable.buffer)
-        .filter { (_, søkerKafkaDto) -> søkerKafkaDto.søkereKafkaDto.saker.single().tilstand != "VEDTAK_IVERKSATT" } // TODO: quick fix
         .map { monade, søkerKafkaDto ->
-            println("Starter å endrer på DTO:${søkerKafkaDto.sekvensnummer} i tilstand ${søkerKafkaDto.søkereKafkaDto.saker.single().tilstand} med monade:${jackson.writeValueAsString(monade)}")
+//            println("Starter å endrer på DTO:${søkerKafkaDto.sekvensnummer} i tilstand ${søkerKafkaDto.søkereKafkaDto.saker.single().tilstand} med monade:${jackson.writeValueAsString(monade)}")
 
             val hendelser: List<Håndterbar> = monade.sorted()
 
             val (søker, alleBehov) = hendelser.fold(søkerKafkaDto.søkereKafkaDto.toModellApi() to emptyList<BehovModellApi>()) { (søker, akkumulerteBehov), hendelse ->
+
+                // TODO: Bytt til å sjekke om løsningID er utført, for å hindre domenemodellen i å endre state uten at noe nytt har skjedd
                 if (akkumulerteBehov.filterIsInstance<BehovModellApi.BehovIverksettVedtakModellApi>().isEmpty()) {
-                    println("Skal håndtere $hendelse")
+//                    println("Skal håndtere $hendelse")
                     val (oppdatertSøker, nyeBehov) = hendelse.håndter(søker)
-                    println("Håndterte $hendelse. Nye behov:$nyeBehov. Akkumulerte behov:$akkumulerteBehov")
+//                    println("Håndterte $hendelse. Nye behov:$nyeBehov. Akkumulerte behov:$akkumulerteBehov")
                     oppdatertSøker to akkumulerteBehov + nyeBehov
                 } else {
-                    println("Fant behov om iverksettelse, dropper resten av monaden")
+//                    println("Fant behov om iverksettelse, dropper resten av monaden")
                     søker to akkumulerteBehov
                 }
             }
 
-            println("Ferdig å endre på DTO:${søkerKafkaDto.sekvensnummer}. Ny tilstand: ${søker.saker.single().tilstand}. Nytt sekvensnummer blir:${søkerKafkaDto.sekvensnummer + 1}")
+//            println("Ferdig å endre på DTO:${søkerKafkaDto.sekvensnummer}. Ny tilstand: ${søker.saker.single().tilstand}. Nytt sekvensnummer blir:${søkerKafkaDto.sekvensnummer + 1}")
 
             søker.toSøkereKafkaDtoHistorikk(søkerKafkaDto.sekvensnummer) to alleBehov
         }

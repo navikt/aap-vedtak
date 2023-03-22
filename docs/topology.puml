@@ -36,16 +36,15 @@ package "Sub-topology: 0" {
 	agent "skip-aap.soknad-sendt.v1-tombstone" <<Processor>> as skip_aap_soknad_sendt_v1_tombstone
 	agent "KSTREAM-FILTER-0000000006" <<Processor>> as KSTREAM_FILTER_0000000006
 	agent "stateless-operation-soknad_mottatt-counter" <<Processor>> as stateless_operation_soknad_mottatt_counter
-	agent "aap.monade.v1-join-aap.sokere.v1-repartition-source" <<Source>> as aap_monade_v1_join_aap_sokere_v1_repartition_source
 	agent "aap.soknad-sendt.v1-left-join-aap.sokere.v1" <<Processor>> as aap_soknad_sendt_v1_left_join_aap_sokere_v1
 	agent "KSTREAM-FILTER-0000000008" <<Processor>> as KSTREAM_FILTER_0000000008
+	agent "aap.monade.v1-join-aap.sokere.v1-repartition-source" <<Source>> as aap_monade_v1_join_aap_sokere_v1_repartition_source
 	agent "aap.monade.v1-join-aap.sokere.v1" <<Processor>> as aap_monade_v1_join_aap_sokere_v1
-	agent "KSTREAM-FILTER-0000000140" <<Processor>> as KSTREAM_FILTER_0000000140
 	agent "stateless-operation-forstegangssoker-counter" <<Processor>> as stateless_operation_forstegangssoker_counter
 	agent "KSTREAM-MAPVALUES-0000000009" <<Processor>> as KSTREAM_MAPVALUES_0000000009
-	agent "KSTREAM-MAPVALUES-0000000141" <<Processor>> as KSTREAM_MAPVALUES_0000000141
+	agent "KSTREAM-MAPVALUES-0000000140" <<Processor>> as KSTREAM_MAPVALUES_0000000140
 	agent "KSTREAM-FLATMAPVALUES-0000000013" <<Processor>> as KSTREAM_FLATMAPVALUES_0000000013
-	agent "KSTREAM-FLATMAPVALUES-0000000145" <<Processor>> as KSTREAM_FLATMAPVALUES_0000000145
+	agent "KSTREAM-FLATMAPVALUES-0000000144" <<Processor>> as KSTREAM_FLATMAPVALUES_0000000144
 	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1
 	agent "split-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Processor>> as split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
 	agent "consume-aap.endrede-personidenter.v1" <<Source>> as consume_aap_endrede_personidenter_v1
@@ -58,7 +57,7 @@ package "Sub-topology: 0" {
 	agent "aap.sokere.v1-to-table" <<Processor>> as aap_sokere_v1_to_table
 	agent "KSTREAM-FLATMAP-0000000034" <<Processor>> as KSTREAM_FLATMAP_0000000034
 	agent "KSTREAM-MAPVALUES-0000000010" <<Processor>> as KSTREAM_MAPVALUES_0000000010
-	agent "KSTREAM-MAPVALUES-0000000142" <<Processor>> as KSTREAM_MAPVALUES_0000000142
+	agent "KSTREAM-MAPVALUES-0000000141" <<Processor>> as KSTREAM_MAPVALUES_0000000141
 	agent "KSTREAM-PEEK-0000000035" <<Processor>> as KSTREAM_PEEK_0000000035
 	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-1" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1
 	agent "split-aap.monade.v1-buffered-join-aap.sokere.v1-branch-2" <<Processor>> as split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2
@@ -77,12 +76,12 @@ package "Sub-topology: 0" {
 	agent "KSTREAM-MAPVALUES-0000000025" <<Processor>> as KSTREAM_MAPVALUES_0000000025
 	agent "KSTREAM-MAPVALUES-0000000028" <<Processor>> as KSTREAM_MAPVALUES_0000000028
 	agent "KSTREAM-MAPVALUES-0000000036" <<Processor>> as KSTREAM_MAPVALUES_0000000036
-	agent "KSTREAM-MAPVALUES-0000000143" <<Processor>> as KSTREAM_MAPVALUES_0000000143
-	agent "KSTREAM-MAPVALUES-0000000148" <<Processor>> as KSTREAM_MAPVALUES_0000000148
-	agent "KSTREAM-MAPVALUES-0000000151" <<Processor>> as KSTREAM_MAPVALUES_0000000151
-	agent "KSTREAM-MAPVALUES-0000000154" <<Processor>> as KSTREAM_MAPVALUES_0000000154
-	agent "KSTREAM-MAPVALUES-0000000157" <<Processor>> as KSTREAM_MAPVALUES_0000000157
-	agent "KSTREAM-MAPVALUES-0000000160" <<Processor>> as KSTREAM_MAPVALUES_0000000160
+	agent "KSTREAM-MAPVALUES-0000000142" <<Processor>> as KSTREAM_MAPVALUES_0000000142
+	agent "KSTREAM-MAPVALUES-0000000147" <<Processor>> as KSTREAM_MAPVALUES_0000000147
+	agent "KSTREAM-MAPVALUES-0000000150" <<Processor>> as KSTREAM_MAPVALUES_0000000150
+	agent "KSTREAM-MAPVALUES-0000000153" <<Processor>> as KSTREAM_MAPVALUES_0000000153
+	agent "KSTREAM-MAPVALUES-0000000156" <<Processor>> as KSTREAM_MAPVALUES_0000000156
+	agent "KSTREAM-MAPVALUES-0000000159" <<Processor>> as KSTREAM_MAPVALUES_0000000159
 	agent "KTABLE-TOSTREAM-0000000002" <<Processor>> as KTABLE_TOSTREAM_0000000002
 	agent "KTABLE-TOSTREAM-0000000003" <<Processor>> as KTABLE_TOSTREAM_0000000003
 	agent "stateless-operation-log-produced-aap.andre-folketrygdytelser.v1-via-branch-3-aap.monade.v1-buffered-join-aap.sokere.v1" <<Processor>> as stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
@@ -115,8 +114,8 @@ package "Sub-topology: 0" {
 	agent "produced-bufferable-aap.sokere.v1-aap.soknad-sendt.v1-buffered-left-join-aap.sokere.v1" <<Sink>> as produced_bufferable_aap_sokere_v1_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
 	agent "skip-table-aap.sokere.v1-tombstone" <<Processor>> as skip_table_aap_sokere_v1_tombstone
 	aap_soknad_sendt_v1 --> consume_aap_soknad_sendt_v1
-	aap_monade_v1_join_aap_sokere_v1_repartition --> aap_monade_v1_join_aap_sokere_v1_repartition_source
 	soker_state_store_v2 -- aap_soknad_sendt_v1_left_join_aap_sokere_v1
+	aap_monade_v1_join_aap_sokere_v1_repartition --> aap_monade_v1_join_aap_sokere_v1_repartition_source
 	soker_state_store_v2 -- aap_monade_v1_join_aap_sokere_v1
 	aap_endrede_personidenter_v1 --> consume_aap_endrede_personidenter_v1
 	aap_sokere_v1 --> consume_aap_sokere_v1
@@ -142,18 +141,17 @@ package "Sub-topology: 0" {
 	skip_aap_soknad_sendt_v1_tombstone --> KSTREAM_FILTER_0000000006
 	KSTREAM_FILTER_0000000006 --> stateless_operation_soknad_mottatt_counter
 	stateless_operation_soknad_mottatt_counter --> aap_soknad_sendt_v1_left_join_aap_sokere_v1
-	aap_monade_v1_join_aap_sokere_v1_repartition_source --> aap_monade_v1_join_aap_sokere_v1
 	aap_soknad_sendt_v1_left_join_aap_sokere_v1 --> KSTREAM_FILTER_0000000008
 	KSTREAM_FILTER_0000000008 --> stateless_operation_forstegangssoker_counter
-	aap_monade_v1_join_aap_sokere_v1 --> KSTREAM_FILTER_0000000140
-	KSTREAM_FILTER_0000000140 --> KSTREAM_MAPVALUES_0000000141
+	aap_monade_v1_join_aap_sokere_v1_repartition_source --> aap_monade_v1_join_aap_sokere_v1
+	aap_monade_v1_join_aap_sokere_v1 --> KSTREAM_MAPVALUES_0000000140
 	stateless_operation_forstegangssoker_counter --> KSTREAM_MAPVALUES_0000000009
 	KSTREAM_MAPVALUES_0000000009 --> KSTREAM_FLATMAPVALUES_0000000013
 	KSTREAM_MAPVALUES_0000000009 --> KSTREAM_MAPVALUES_0000000010
-	KSTREAM_MAPVALUES_0000000141 --> KSTREAM_MAPVALUES_0000000142
-	KSTREAM_MAPVALUES_0000000141 --> KSTREAM_FLATMAPVALUES_0000000145
+	KSTREAM_MAPVALUES_0000000140 --> KSTREAM_MAPVALUES_0000000141
+	KSTREAM_MAPVALUES_0000000140 --> KSTREAM_FLATMAPVALUES_0000000144
 	KSTREAM_FLATMAPVALUES_0000000013 --> split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
-	KSTREAM_FLATMAPVALUES_0000000145 --> split_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_FLATMAPVALUES_0000000144 --> split_aap_monade_v1_buffered_join_aap_sokere_v1
 	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2
 	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1
 	split_aap_monade_v1_buffered_join_aap_sokere_v1 --> split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_3
@@ -176,13 +174,13 @@ package "Sub-topology: 0" {
 	aap_sokere_v1_to_table --> skip_table_aap_sokere_v1_tombstone
 	KSTREAM_FLATMAP_0000000034 --> KSTREAM_PEEK_0000000035
 	KSTREAM_MAPVALUES_0000000010 --> KSTREAM_MAPVALUES_0000000011
-	KSTREAM_MAPVALUES_0000000142 --> KSTREAM_MAPVALUES_0000000143
+	KSTREAM_MAPVALUES_0000000141 --> KSTREAM_MAPVALUES_0000000142
 	KSTREAM_PEEK_0000000035 --> KSTREAM_MAPVALUES_0000000036
-	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1 --> KSTREAM_MAPVALUES_0000000148
-	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2 --> KSTREAM_MAPVALUES_0000000151
-	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_3 --> KSTREAM_MAPVALUES_0000000154
-	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_4 --> KSTREAM_MAPVALUES_0000000157
-	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_5 --> KSTREAM_MAPVALUES_0000000160
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_1 --> KSTREAM_MAPVALUES_0000000147
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_2 --> KSTREAM_MAPVALUES_0000000150
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_3 --> KSTREAM_MAPVALUES_0000000153
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_4 --> KSTREAM_MAPVALUES_0000000156
+	split_aap_monade_v1_buffered_join_aap_sokere_v1_branch_5 --> KSTREAM_MAPVALUES_0000000159
 	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_1 --> KSTREAM_MAPVALUES_0000000016
 	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_2 --> KSTREAM_MAPVALUES_0000000019
 	split_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1_branch_3 --> KSTREAM_MAPVALUES_0000000022
@@ -195,12 +193,12 @@ package "Sub-topology: 0" {
 	KSTREAM_MAPVALUES_0000000025 --> stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
 	KSTREAM_MAPVALUES_0000000028 --> stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_soknad_sendt_v1_buffered_left_join_aap_sokere_v1
 	KSTREAM_MAPVALUES_0000000036 --> stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_endrede_personidenter_v1_buffered_join_aap_sokere_v1
-	KSTREAM_MAPVALUES_0000000143 --> stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
-	KSTREAM_MAPVALUES_0000000148 --> stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
-	KSTREAM_MAPVALUES_0000000151 --> stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
-	KSTREAM_MAPVALUES_0000000154 --> stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
-	KSTREAM_MAPVALUES_0000000157 --> stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
-	KSTREAM_MAPVALUES_0000000160 --> stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000142 --> stateless_operation_log_produced_bufferable_aap_sokere_v1_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000147 --> stateless_operation_log_produced_aap_medlem_v1_via_branch_1_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000150 --> stateless_operation_log_produced_aap_inntekter_v1_via_branch_2_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000153 --> stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000156 --> stateless_operation_log_produced_aap_vedtak_v1_via_branch_4_aap_monade_v1_buffered_join_aap_sokere_v1
+	KSTREAM_MAPVALUES_0000000159 --> stateless_operation_log_produced_aap_subscribe_sykepengedager_v1_via_branch_5_aap_monade_v1_buffered_join_aap_sokere_v1
 	KTABLE_TOSTREAM_0000000002 --> gauge_soker_state_store_v2_entries
 	KTABLE_TOSTREAM_0000000003 --> migrate_soker_state_store_v2
 	stateless_operation_log_produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1 --> produced_aap_andre_folketrygdytelser_v1_via_branch_3_aap_monade_v1_buffered_join_aap_sokere_v1

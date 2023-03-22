@@ -57,6 +57,7 @@ internal class Sak private constructor(
     }
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
+//        println("Går fra $tilstand til $nyTilstand")
         nyTilstand.onExit(this, hendelse)
         tilstand = nyTilstand
         tilstand.onEntry(this, hendelse)
@@ -83,15 +84,15 @@ internal class Sak private constructor(
         }
 
         open fun <T : Hendelse> håndterLøsning(sak: Sak, løsning: T, håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
-            log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
-            log.info("Forventet ikke løsning på sykepengedager i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke løsning på sykepengedager i tilstand ${tilstandsnavn.name}")
         }
 
         open fun <T : Hendelse> håndterKvalitetssikring(
@@ -99,11 +100,11 @@ internal class Sak private constructor(
             kvalitetssikring: T,
             håndterKvalitetssikring: Vilkårsvurdering<*, *>.(T) -> Unit
         ) {
-            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterIverksettelse(sak: Sak, iverksettelseAvVedtak: IverksettelseAvVedtak) {
-            log.info("Forventet ikke iverksettelse i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke iverksettelse i tilstand ${tilstandsnavn.name}")
         }
 
         open fun toDto(sak: Sak) = SakModellApi(
@@ -194,7 +195,6 @@ internal class Sak private constructor(
                         tom = Year.from(beregningsdato).minusYears(1)
                     )
                 )
-                println("opprettet behov om inntekter, ved inngangen til beregn inntekt.")
             }
 
             override fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
@@ -208,7 +208,6 @@ internal class Sak private constructor(
                     virkningsdato = virkningsdato
                 )
 
-                println("Sak lagret inntekter, opprettet vedtak og setter tilstand til avventer kvalitetssikring")
                 sak.tilstand(AvventerKvalitetssikring, løsning)
             }
 

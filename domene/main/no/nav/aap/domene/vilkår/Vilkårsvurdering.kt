@@ -236,203 +236,204 @@ internal abstract class Vilkårsvurdering<PARAGRAF : Vilkårsvurdering<PARAGRAF,
             fødselsdato: Fødselsdato,
             vurderingsdato: LocalDate
         ) {
-            log.info("Søknad for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Søknad for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterInnstilling(
             vilkårsvurdering: PARAGRAF,
             løsning: InnstillingParagraf_11_6
         ) {
-            log.info("Innstilling for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Innstilling for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningMaskinellParagraf_11_2
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningManuellParagraf_11_2
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf}skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf}skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningMaskinellMedlemskapYrkesskade
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf}skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf}skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningManuellMedlemskapYrkesskade
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningSykepengedager
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_3
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_4AndreOgTredjeLedd
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_5
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_5Yrkesskade
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_6
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_22_13
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_19
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_22
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_27_FørsteLedd
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterLøsning(
             vilkårsvurdering: PARAGRAF,
             løsning: LøsningParagraf_11_29
         ) {
-            log.info("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
+            log.debug("Oppgave for ${vilkårsvurdering.paragraf} skal ikke håndteres i tilstand $tilstandsnavn")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringMedlemskapYrkesskade
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_2
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_3
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_4AndreOgTredjeLedd
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_5
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_5Yrkesskade
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_6
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_22_13
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
+        // TODO: når vi sjekker for idempotense, så kan disse flippes tilbake til log.info eller til og med log.warn
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_19
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_22
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_27_FørsteLedd
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal open fun håndterKvalitetssikring(
             vilkårsvurdering: PARAGRAF,
             kvalitetssikring: KvalitetssikringParagraf_11_29
         ) {
-            log.info("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring på ${vilkårsvurdering.paragraf} i tilstand ${tilstandsnavn.name}")
         }
 
         internal abstract class IkkeVurdert<PARAGRAF : Vilkårsvurdering<PARAGRAF, PARAGRAF_MODELL_API>, PARAGRAF_MODELL_API : VilkårsvurderingModellApi> :
