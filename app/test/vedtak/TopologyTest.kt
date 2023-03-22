@@ -29,16 +29,16 @@ internal class ApiTest {
 
         fun mockKafkaResponses(topology: Topology) {
             topology
-                .consume(Topics.subscribeSykepengedager, namedSuffix = "mock")
+                .consumeAgain(Topics.subscribeSykepengedager)
                 .map { _ -> SykepengedagerKafkaDto(response = SykepengedagerKafkaDto.Response(sykepengedager = null)) }
                 .produce(Topics.sykepengedager)
 
-            topology.consume(Topics.medlem, namedSuffix = "mock")
+            topology.consumeAgain(Topics.medlem)
                 .filter { it.response == null }
                 .map { req -> req.copy(response = MedlemKafkaDto.Response(MedlemKafkaDto.ErMedlem.JA, null)) }
                 .produce(Topics.medlem)
 
-            topology.consume(Topics.andreFolketrygdsytelser, namedSuffix = "mock")
+            topology.consumeAgain(Topics.andreFolketrygdsytelser)
                 .filter { it.response == null }
                 .map { req ->
                     req.copy(
@@ -50,7 +50,7 @@ internal class ApiTest {
                 .produce(Topics.andreFolketrygdsytelser)
 
 
-            topology.consume(Topics.inntekter, namedSuffix = "mock")
+            topology.consumeAgain(Topics.inntekter)
                 .filter { it.response == null }
                 .map { inntekter ->
                     inntekter.copy(
