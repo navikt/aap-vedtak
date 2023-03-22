@@ -1,0 +1,22 @@
+apiVersion: kafka.nais.io/v1
+kind: Topic
+metadata:
+  name: monade.v1
+  namespace: aap
+  labels:
+    team: aap
+spec:
+  pool: {{kafka.pool}}
+  config:
+    cleanupPolicy: delete
+    retentionHours: 168 # 1 uke
+    partitions: 12
+  acl:
+    - team: aap
+      application: vedtak
+      access: readwrite
+  {{#each kafka.acl.dev as |dev|}}
+    - team: "{{dev.team}}"
+      application: "{{dev.application}}"
+      access: "{{dev.access}}"
+  {{/each}}

@@ -57,6 +57,7 @@ internal class Sak private constructor(
     }
 
     private fun tilstand(nyTilstand: Tilstand, hendelse: Hendelse) {
+//        println("Går fra $tilstand til $nyTilstand")
         nyTilstand.onExit(this, hendelse)
         tilstand = nyTilstand
         tilstand.onEntry(this, hendelse)
@@ -83,15 +84,15 @@ internal class Sak private constructor(
         }
 
         open fun <T : Hendelse> håndterLøsning(sak: Sak, løsning: T, håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit) {
-            log.info("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke løsning i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningInntekter, fødselsdato: Fødselsdato) {
-            log.info("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke løsning på inntekter i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterLøsning(sak: Sak, løsning: LøsningSykepengedager) {
-            log.info("Forventet ikke løsning på sykepengedager i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke løsning på sykepengedager i tilstand ${tilstandsnavn.name}")
         }
 
         open fun <T : Hendelse> håndterKvalitetssikring(
@@ -99,11 +100,11 @@ internal class Sak private constructor(
             kvalitetssikring: T,
             håndterKvalitetssikring: Vilkårsvurdering<*, *>.(T) -> Unit
         ) {
-            log.info("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke kvalitetssikring i tilstand ${tilstandsnavn.name}")
         }
 
         open fun håndterIverksettelse(sak: Sak, iverksettelseAvVedtak: IverksettelseAvVedtak) {
-            log.info("Forventet ikke iverksettelse i tilstand ${tilstandsnavn.name}")
+            log.debug("Forventet ikke iverksettelse i tilstand ${tilstandsnavn.name}")
         }
 
         open fun toDto(sak: Sak) = SakModellApi(
@@ -170,11 +171,8 @@ internal class Sak private constructor(
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 val visitor = OppfyltVisitor().apply(sak.sakstype::accept)
                 when {
-                    visitor.erOppfylt ->
-                        sak.tilstand(BeregnInntekt, hendelse)
-
-                    visitor.erIkkeOppfylt ->
-                        sak.tilstand(IkkeOppfylt, hendelse)
+                    visitor.erOppfylt -> sak.tilstand(BeregnInntekt, hendelse)
+                    visitor.erIkkeOppfylt -> sak.tilstand(IkkeOppfylt, hendelse)
                 }
             }
 
@@ -224,14 +222,14 @@ internal class Sak private constructor(
 
         object AvventerKvalitetssikring : Tilstand(Tilstandsnavn.AVVENTER_KVALITETSSIKRING) {
 
-            override fun <T : Hendelse> håndterLøsning(
-                sak: Sak,
-                løsning: T,
-                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
-            ) {
-                sak.sakstype.håndter(løsning, håndterLøsning)
-                sak.tilstand(BeregnInntekt, løsning)
-            }
+//            override fun <T : Hendelse> håndterLøsning(
+//                sak: Sak,
+//                løsning: T,
+//                håndterLøsning: Vilkårsvurdering<*, *>.(T) -> Unit
+//            ) {
+//                sak.sakstype.håndter(løsning, håndterLøsning)
+//                sak.tilstand(BeregnInntekt, løsning)
+//            }
 
             override fun <T : Hendelse> håndterKvalitetssikring(
                 sak: Sak,
@@ -299,9 +297,7 @@ internal class Sak private constructor(
             private fun vurderNesteTilstand(sak: Sak, hendelse: Hendelse) {
                 val visitor = VirkningsdatoVisitor().apply(sak.sakstype::accept)
                 when (visitor.bestemmesAv) {
-                    LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger ->
-                        sak.tilstand(VenterSykepenger, hendelse)
-
+                    LøsningParagraf_22_13.BestemmesAv.maksdatoSykepenger -> sak.tilstand(VenterSykepenger, hendelse)
                     else -> sak.tilstand(VedtakIverksatt, hendelse)
                 }
             }

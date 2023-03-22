@@ -94,9 +94,9 @@ internal class Paragraf_22_13 private constructor(
     object OppfyltAvventerKvalitetssikring :
         Tilstand.OppfyltManueltAvventerKvalitetssikring<Paragraf_22_13, Paragraf_22_13ModellApi>() {
 
-        override fun håndterLøsning(vilkårsvurdering: Paragraf_22_13, løsning: LøsningParagraf_22_13) {
-            vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
-        }
+//        override fun håndterLøsning(vilkårsvurdering: Paragraf_22_13, løsning: LøsningParagraf_22_13) {
+//            vilkårsvurdering.totrinnskontroller.add(Totrinnskontroll(løsning))
+//        }
 
         override fun håndterKvalitetssikring(
             vilkårsvurdering: Paragraf_22_13,

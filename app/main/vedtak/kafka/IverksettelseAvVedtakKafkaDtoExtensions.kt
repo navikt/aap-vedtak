@@ -1,4 +1,4 @@
-package no.nav.aap.app.kafka
+package vedtak.kafka
 
 import no.nav.aap.dto.kafka.IverksettelseAvVedtakKafkaDto
 import no.nav.aap.modellapi.IverksettelseAvVedtakModellApi

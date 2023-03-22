@@ -6,17 +6,18 @@ import io.ktor.serialization.jackson.*
 import io.ktor.server.config.*
 import io.ktor.server.testing.*
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry
-import no.nav.aap.app.kafka.toModellApi
 import no.nav.aap.dto.kafka.*
 import no.nav.aap.dto.kafka.InntekterKafkaDto.Response.Inntekt
+import no.nav.aap.kafka.streams.v2.Topology
 import no.nav.aap.kafka.streams.v2.config.StreamsConfig
-import no.nav.aap.kafka.streams.v2.test.KStreamsMock
+import no.nav.aap.kafka.streams.v2.test.StreamsMock
 import no.nav.aap.modellapi.*
 import org.apache.kafka.clients.producer.MockProducer
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import vedtak.kafka.Tables
 import vedtak.kafka.Topics
+import vedtak.kafka.toModellApi
 import java.time.LocalDate
 import java.time.LocalDateTime
 import kotlin.test.Ignore
@@ -25,15 +26,60 @@ internal class ApiTest {
 
     @Test
     fun `søker får innvilget vedtak`() {
-        KStreamsMock().apply {
+
+        fun mockKafkaResponses(topology: Topology) {
+            topology
+                .consumeAgain(Topics.subscribeSykepengedager)
+                .map { _ -> SykepengedagerKafkaDto(response = SykepengedagerKafkaDto.Response(sykepengedager = null)) }
+                .produce(Topics.sykepengedager)
+
+            topology.consumeAgain(Topics.medlem)
+                .filter { it.response == null }
+                .map { req -> req.copy(response = MedlemKafkaDto.Response(MedlemKafkaDto.ErMedlem.JA, null)) }
+                .produce(Topics.medlem)
+
+            topology.consumeAgain(Topics.andreFolketrygdsytelser)
+                .filter { it.response == null }
+                .map { req ->
+                    req.copy(
+                        response = AndreFolketrygdytelserKafkaDto.Response(
+                            AndreFolketrygdytelserKafkaDto.Response.Svangerskapspenger(null, null, null, null)
+                        )
+                    )
+                }
+                .produce(Topics.andreFolketrygdsytelser)
+
+
+            topology.consumeAgain(Topics.inntekter)
+                .filter { it.response == null }
+                .map { inntekter ->
+                    inntekter.copy(
+                        response = InntekterKafkaDto.Response(
+                            listOf(
+                                Inntekt("321", inntekter.request.fom.plusYears(2), 400000.0),
+                                Inntekt("321", inntekter.request.fom.plusYears(1), 400000.0),
+                                Inntekt("321", inntekter.request.fom, 400000.0),
+                            )
+                        )
+                    )
+                }
+                .produce(Topics.inntekter)
+        }
+
+        StreamsMock().apply {
             connect(
-                config = StreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                config = StreamsConfig("vedtak", "mock://aiven"),
                 registry = SimpleMeterRegistry(),
-                topology = topology(SimpleMeterRegistry(), MockProducer(), true)
+                topology = topology(SimpleMeterRegistry(), MockProducer(), true).apply(::mockKafkaResponses)
             )
         }.use { kafka ->
+            kafka.testTopic(Topics.sykepengedager)
+            kafka.testTopic(Topics.subscribeSykepengedager)
+            kafka.testTopic(Topics.medlem)
+            kafka.testTopic(Topics.andreFolketrygdsytelser)
+            kafka.testTopic(Topics.inntekter)
+
             val søknadTopic = kafka.testTopic(Topics.søknad)
-            val medlemTopic = kafka.testTopic(Topics.medlem)
             val innstilling_11_6_Topic = kafka.testTopic(Topics.innstilling_11_6)
             val manuell_11_3_Topic = kafka.testTopic(Topics.manuell_11_3)
             val manuell_11_5_Topic = kafka.testTopic(Topics.manuell_11_5)
@@ -48,10 +94,6 @@ internal class ApiTest {
             val kvalitetssikring_11_19_Topic = kafka.testTopic(Topics.kvalitetssikring_11_19)
             kafka.testTopic(Topics.kvalitetssikring_11_29)
             val kvalitetssikring_22_13_Topic = kafka.testTopic(Topics.kvalitetssikring_22_13)
-            val andreFolketrygdsytelserTopic = kafka.testTopic(Topics.andreFolketrygdsytelser)
-            val inntektTopic = kafka.testTopic(Topics.inntekter)
-            val sykepengedagerTopic = kafka.testTopic(Topics.sykepengedager)
-            kafka.testTopic(Topics.subscribeSykepengedager)
             val iverksettelseAvVedtakTopic = kafka.testTopic(Topics.iverksettelseAvVedtak)
             val iverksettVedtakTopic = kafka.testTopic(Topics.vedtak)
             val stateStore = kafka.getStore(Tables.søkere)
@@ -87,41 +129,10 @@ internal class ApiTest {
                 )
             }
 
-            val medlemRequest = medlemTopic.readValue()
-            medlemTopic.produce(fnr) {
-                medlemRequest.copy(
-                    response = MedlemKafkaDto.Response(
-                        erMedlem = MedlemKafkaDto.ErMedlem.JA,
-                        begrunnelse = null
-                    )
-                )
-            }
-
-            sykepengedagerTopic.produce(fnr) {
-                SykepengedagerKafkaDto(
-                    response = SykepengedagerKafkaDto.Response(
-                        sykepengedager = null
-                    )
-                )
-            }
-
-            val andreFolketrygdytelserRequest = andreFolketrygdsytelserTopic.readValue()
-            andreFolketrygdsytelserTopic.produce(fnr) {
-                andreFolketrygdytelserRequest.copy(
-                    response = AndreFolketrygdytelserKafkaDto.Response(
-                        svangerskapspenger = AndreFolketrygdytelserKafkaDto.Response.Svangerskapspenger(
-                            fom = null,
-                            tom = null,
-                            grad = null,
-                            vedtaksdato = null,
-                        )
-                    )
-                )
-            }
-
             manuell_11_3_Topic.produce(fnr) {
                 Løsning_11_3_manuellKafkaDto("saksbehandler", tidspunktForVurdering, true)
             }
+
             manuell_11_5_Topic.produce(fnr) {
                 Løsning_11_5_manuellKafkaDto(
                     vurdertAv = "veileder",
@@ -135,6 +146,7 @@ internal class ApiTest {
                     sykmeldingDato = null,
                 )
             }
+
             innstilling_11_6_Topic.produce(fnr) {
                 Innstilling_11_6KafkaDto(
                     vurdertAv = "veileder",
@@ -145,6 +157,7 @@ internal class ApiTest {
                     individuellBegrunnelse = "Begrunnelse",
                 )
             }
+
             manuell_11_6_Topic.produce(fnr) {
                 Løsning_11_6_manuellKafkaDto(
                     vurdertAv = "saksbehandler",
@@ -155,6 +168,7 @@ internal class ApiTest {
                     individuellBegrunnelse = "Begrunnelse",
                 )
             }
+
             manuell_22_13_Topic.produce(fnr) {
                 Løsning_22_13_manuellKafkaDto(
                     vurdertAv = "saksbehandler",
@@ -166,24 +180,13 @@ internal class ApiTest {
                     begrunnelseForAnnet = null,
                 )
             }
+
             manuell_11_19_Topic.produce(fnr) {
                 Løsning_11_19_manuellKafkaDto("saksbehandler", tidspunktForVurdering, LocalDate.of(2022, 1, 1))
             }
+
             manuell_11_29_Topic.produce(fnr) {
                 Løsning_11_29_manuellKafkaDto("saksbehandler", tidspunktForVurdering, true)
-            }
-
-            val inntekter: InntekterKafkaDto = inntektTopic.readValue()
-            inntektTopic.produce(fnr) {
-                inntekter.copy(
-                    response = InntekterKafkaDto.Response(
-                        listOf(
-                            Inntekt("321", inntekter.request.fom.plusYears(2), 400000.0),
-                            Inntekt("321", inntekter.request.fom.plusYears(1), 400000.0),
-                            Inntekt("321", inntekter.request.fom, 400000.0),
-                        )
-                    )
-                )
             }
 
             val søker = requireNotNull(stateStore[fnr]).søkereKafkaDto
@@ -299,7 +302,7 @@ internal class ApiTest {
     @Test
     @Ignore
     fun `Tester metrikker`() {
-        val kafka = KStreamsMock()
+        val kafka = StreamsMock()
         testApplication {
             environment {
                 config = MapApplicationConfig(
@@ -362,9 +365,9 @@ internal class ApiTest {
 
     @Test
     fun `oppdaterer søker med ny personident`() {
-        KStreamsMock().apply {
+        StreamsMock().apply {
             connect(
-                config = StreamsConfig("vedtak", "mock://aiven", commitIntervalMs = 0),
+                config = StreamsConfig("vedtak", "mock://aiven"),
                 registry = SimpleMeterRegistry(),
                 topology = topology(SimpleMeterRegistry(), MockProducer(), true)
             )
