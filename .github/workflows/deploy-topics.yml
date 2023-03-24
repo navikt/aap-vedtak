@@ -15,6 +15,7 @@ jobs:
     strategy:
       matrix:
         name:
+          - topic-monade.yml
           - topic-medlem.yml
           - topic-søkere.yml
           - topic-innstilling-11-6.yml
