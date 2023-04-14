@@ -42,6 +42,9 @@ jobs:
 
   deploy:
     needs: build
+    permissions:
+      contents: read
+      id-token: write
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
