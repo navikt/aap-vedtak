@@ -20,8 +20,7 @@ spec:
     min: 1
   resources:
     limits:
-      cpu: 4000m
-      memory: 8Gi
+      memory: 16Gi
     requests:
       cpu: 4000m
       memory: 8Gi
