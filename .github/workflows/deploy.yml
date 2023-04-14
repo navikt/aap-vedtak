@@ -40,9 +40,8 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           tag: ${{ github.sha }}
 
-  deploy-dev:
+  deploy:
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
-      image: ${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}:${{ github.sha }}
       cluster: dev-gcp
