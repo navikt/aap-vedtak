@@ -41,25 +41,8 @@ jobs:
           tag: ${{ github.sha }}
 
   deploy-dev:
-    name: deploy dev
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      contents: read
-      id-token: write
-    steps:
-      - uses: actions/checkout@v3
-      - uses: nais/login@v0
-        id: login
-        with:
-          team: aap
-          identity_provider: ${{ secrets.NAIS_WORKLOAD_IDENTITY_PROVIDER }}
-          project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
-      - uses: nais/deploy/actions/deploy@v1
-        env:
-          PRINT_PAYLOAD: true
-          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: dev-gcp
-          RESOURCE: .nais/app.yml
-          VARS: .nais/dev.yml
-          VAR: image=${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}:${{ github.sha }}
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    secrets: inherit
+    with:
+      image: ${{ steps.login.outputs.registry }}/${{ github.event.repository.name }}:${{ github.sha }}
+      cluster: dev-gcp
