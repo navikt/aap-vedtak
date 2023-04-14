@@ -41,6 +41,7 @@ jobs:
           tag: ${{ github.sha }}
 
   deploy:
+    needs: build
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
