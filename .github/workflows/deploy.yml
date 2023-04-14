@@ -40,7 +40,7 @@ jobs:
           project_id: ${{ vars.NAIS_MANAGEMENT_PROJECT_ID }}
           tag: ${{ github.sha }}
 
-  deploy:
+  dev:
     needs: build
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     secrets: inherit
