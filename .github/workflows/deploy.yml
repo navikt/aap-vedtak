@@ -46,10 +46,3 @@ jobs:
     secrets: inherit
     with:
       cluster: dev-gcp
-
-  deploy:
-    needs: build
-    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
-    secrets: inherit
-    with:
-      cluster: prud-gcp
