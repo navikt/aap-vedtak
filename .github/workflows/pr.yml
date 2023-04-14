@@ -1,5 +1,4 @@
 on: [ pull_request ]
-name: Pull Request
 
 permissions:
   contents: write
@@ -7,7 +6,7 @@ permissions:
   checks: write
 
 jobs:
-   build:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
