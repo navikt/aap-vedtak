@@ -22,7 +22,7 @@ jobs:
 
       - uses: gradle/gradle-build-action@v2.4.1
         with:
-          arguments: test app:buildFatJar --continue --no-daemon --configuration-cache
+          arguments: test app:buildFatJar --continue --no-daemon
 
       - uses: dorny/test-reporter@v1.6.0
         if: success() || failure()
