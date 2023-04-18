@@ -1,4 +1,4 @@
-name: Release Kafka DTO
+name: Kafka DTO
 
 on:
   push:

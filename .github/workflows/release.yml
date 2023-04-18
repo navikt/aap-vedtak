@@ -1,0 +1,19 @@
+name: release
+on:
+  push:
+    branches: [ main ]
+    paths-ignore:
+      - '.nais/topic-*.yml'
+      - '.github/workflows/deploy-topics.yml'
+
+jobs:
+  gradle:
+    uses: navikt/aap-workflows/.github/workflows/gradle-build.yml@main
+    secrets: inherit
+
+  dev:
+    needs: build
+    uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
+    secrets: inherit
+    with:
+      cluster: dev-gcp

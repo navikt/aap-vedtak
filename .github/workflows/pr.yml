@@ -1,35 +1,7 @@
-on: [ pull_request ]
-
-permissions:
-  contents: write
-  pull-requests: write
-  checks: write
+name: pr
+on: pull_request
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-java@v3
-        with:
-          java-version: 19
-          distribution: 'temurin'
-
-      - uses: gradle/gradle-build-action@v2.4.2
-        with:
-          arguments: test --continue --no-daemon --configuration-cache
-
-      - uses: dorny/test-reporter@v1.6.0
-        if: success() || failure()
-        with:
-          name: test
-          path: "**/build/test-results/test/TEST-*.xml"
-          reporter: java-junit
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Auto-merge Dependabot's pull request
-        if: ${{ github.actor == 'dependabot[bot]' }}
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+  gradle:
+    uses: navikt/aap-workflows/.github/workflows/gradle-pr.yml@main
+    secrets: inherit
