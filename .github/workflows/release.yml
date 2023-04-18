@@ -4,7 +4,7 @@ on:
     branches: [ main ]
     paths-ignore:
       - '.nais/topic-*.yml'
-      - '.github/workflows/deploy-topics.yml'
+      - '.github/workflows/topics.yml'
 
 jobs:
   gradle:

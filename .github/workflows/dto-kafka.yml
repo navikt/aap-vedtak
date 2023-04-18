@@ -5,7 +5,7 @@ on:
     branches: [ main ]
     paths:
       - 'dto-kafka/**'
-      - '.github/workflows/release-kafka-dto.yml'
+      - '.github/workflows/dto-kafka.yml'
 
 jobs:
   release:

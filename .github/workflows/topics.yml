@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - '.nais/topic-*.yml'
-      - '.github/workflows/deploy-topics.yml'
+      - '.github/workflows/topics.yml'
       - '.nais/dev.yml'
       - '.nais/prod.yml'
 
