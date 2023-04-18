@@ -12,7 +12,7 @@ jobs:
     secrets: inherit
 
   dev:
-    needs: build
+    needs: gradle
     uses: navikt/aap-workflows/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
