@@ -1,6 +1,6 @@
 plugins {
     kotlin("jvm") version "1.8.21"
-    id("io.ktor.plugin") version "2.2.4" apply false
+    id("io.ktor.plugin") version "2.3.0" apply false
 }
 
 allprojects {
