@@ -1,5 +1,5 @@
 
 dependencies {
-    api("ch.qos.logback:logback-classic:1.4.6")
+    api("ch.qos.logback:logback-classic:1.4.7")
     testImplementation(kotlin("test"))
 }
