@@ -1,5 +1,5 @@
 val aapLibVersion = "3.7.44"
-val ktorVersion = "2.3.0"
+val ktorVersion = "2.3.1"
 
 plugins {
     id("io.ktor.plugin")
