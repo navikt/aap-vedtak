@@ -47,7 +47,7 @@ jobs:
             Changes in this Release
             ${{ steps.notes.outputs.CHANGELOG }}
 
-      - uses: gradle/gradle-build-action@v2.5.1
+      - uses: gradle/gradle-build-action@v2.6.0
         with:
           arguments: -Pdto-kafka.version=${{ steps.tag.outputs.version }} dto-kafka:test dto-kafka:publish --no-configuration-cache
         env:
